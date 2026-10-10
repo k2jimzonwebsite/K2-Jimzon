@@ -1,0 +1,105 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "scope": "Genuine isolated local Auth2.196.0/PostgREST14.17/captured PostgreSQL17.6 through production router with exact temporary tariff SQLSTATE overlay; synthetic stale-only requests, current-unconfigured head; no publication/browser/hosted/provider acceptance",
+  "providerWrites": false,
+  "deployed": false,
+  "source": {
+    "path": "supabase/prepared/customer_tariff_version_conflict_transport.sql",
+    "sha256": "efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166",
+    "beforeDefinitionSha256": "15f0d4d3373ae753c062d37c70d91def0dc6bb1d292f99f6935e2d2db26fbb81",
+    "change": "One exact named business40001→P0001; all pg_proc metadata except exactprosrc transition conserved"
+  },
+  "case": "oci-tariff04",
+  "nativeSession": 21904,
+  "native": {
+    "pid": 11788,
+    "exit": 0,
+    "guestSuccess": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true
+  },
+  "transport": {
+    "refusals": [
+      {
+        "status": 409,
+        "code": "CUSTOMER_TARIFF_VERSION_STALE",
+        "elapsedMs": 41
+      },
+      {
+        "status": 409,
+        "code": "CUSTOMER_TARIFF_VERSION_STALE",
+        "elapsedMs": 39
+      }
+    ],
+    "expectedVersion": 1,
+    "currentVersion": 0,
+    "scope": "Actual routed signed stale and same-key fresh-signature retry with exact temporary guarded tariff SQLSTATE overlay; no publication",
+    "rpcDiagnostics": [
+      {
+        "status": 400,
+        "code": "P0001",
+        "message": "K2_CUSTOMER_TARIFF_VERSION_STALE"
+      },
+      {
+        "status": 400,
+        "code": "P0001",
+        "message": "K2_CUSTOMER_TARIFF_VERSION_STALE"
+      }
+    ],
+    "csrfRefusalPassed": true,
+    "currentReadbackUnchanged": true,
+    "retryMeaning": "Second stale refusal with same idempotency key and fresh signature; not successful receipt replay"
+  },
+  "hashes": {
+    "executed-source.mjs": "59d805611b8ef77c70174832393e8f0c4351c03d44cf9bc01442e8ee9a88df9a",
+    "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+    "runner-source.mjs": "56ae97e60807f2fc59b54e21a3c87f7a374562fe23f6937b607cffa9aacd718b",
+    "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+    "bff-helper.mjs": "12a2674cc024ea62893f0b431407168de771cdce3974cb3d0c045726d622ae33",
+    "preparation.json": "232ab19a380a362fae1eb58631cf89694f2375c2bcb23db73d685ed9f6473a0f",
+    "execution01/result.json": "9899cafbf77ffe5952f4c7990036e5092ff11875d0148b40a2cfdc41a6b931a0",
+    "execution01/serial.log": "3c669d2190b78586cb33383a5f896bb89be7e0185a9ed27e2fa1bba9491cb5fa",
+    "host-driver-result.json": "2e8311fb210423a89c0df663dfa4bb3612b87b635ada8597b8e7c13e66cef4b0"
+  },
+  "recovery": {
+    "tariffRows": [
+      "da641bf6009c5b97f629d3f38b7212d0731ea14defc708d352ea581f7fb8ae19  /tmp/tariff-heads-before.rows",
+      "da641bf6009c5b97f629d3f38b7212d0731ea14defc708d352ea581f7fb8ae19  /tmp/tariff-heads-after.rows",
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /tmp/tariff-versions-before.rows",
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /tmp/tariff-versions-after.rows"
+    ],
+    "originalProjection": [
+      "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-before.json",
+      "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-after.json"
+    ],
+    "fullCatalog": [
+      "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-before.json",
+      "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-after.json"
+    ],
+    "globalManagedAuthorityMarkers": 2,
+    "privateAuthBffRowsSequences": true,
+    "functionRestored": true,
+    "shutdown": {
+      "pid": 11788,
+      "processPresent": false,
+      "listeners": 0,
+      "readOnlyActualHostCheck": true
+    }
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "sessionId": 18397,
+    "exit": 0
+  },
+  "reviewPreparation": "Important staged-overlay lineage gap fixed before native execution; exact file hash/byte equality and two RPC diagnostics asserted",
+  "limits": "03 baseline actual client timeout is retained separately;04 proves this named stale path returns promptly under the corrected overlay. No measured original retry mechanism, published tariff version/history, successful receipt replay, all149-relation history recovery, overlay replay/drift/cold qualification or integrated revised guarded full-package acceptance. Uses prepared local session/telemetry/preauth and explicit local unconfigured bot opt-in; no Cloudflare/provider acceptance.",
+  "remaining": "MAP-018 owns successful signed tariff publication and receipt replay, guarded whole-package composition/replay/drift/data-retaining recovery plus remaining business conflicts/authority/provider/real-host gates.",
+  "recoveryPath": "Retain private04 and prior failures; never reuse disposed guest. Recreate a fresh successor from pinned source. Source revert removes only this prepared tariff overlay with evidence retained; no provider rollback.",
+  "independentReview": {
+    "reviewer": "auth_migration_review",
+    "critical": 0,
+    "important": 0,
+    "verified": "Nine artifact pins, exact overlay/staged bytes, two actual HTTP/RPC refusals, serial recovery scopes and evidence limits"
+  }
+}
