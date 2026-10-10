@@ -1,0 +1,103 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-tariff-order05",
+  "classification": "Fresh05 session connection deadline correction with actual SECURITY INVOKER caller headers; canonical guards/roles/ownership/recovery unchanged, no native execution",
+  "sourceCommit": "679cf94",
+  "artifactPins": [
+    {
+      "file": "executed-source.mjs",
+      "sha256": "6d8b7e39ff3be35565ec544ee8448cf4bd6a21046b742d77697fd3f256195ebf"
+    },
+    {
+      "file": "executed-derivation.mjs",
+      "sha256": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "28e6855b6a919a59877c0807d7ef842adfc31dfb3939b194012ff5183ae8868c"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "87c44ef188ce678595caa8e27138b5cdb6133cd0e13faf42cb2b589a596d47c3"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "d206e61499c17f9ae94f3240b3c95ca5167f7ed6b7440a4722ca58b326bac19b"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "760dbb770a2544dca8d0bc2656dea2b34193dbdf77d259e65a2bd83c5ceb1905"
+    },
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "8f8b5bb15782cf5cff3f935bd8ff80c7b394c8515b5ea11c57a2337229bb08b5"
+    },
+    {
+      "file": "staging/k2/connected-fixture.sql",
+      "sha256": "d693fa687e904ab60ad4a8bf4dd42167534a42538373e3bb8f9db7a6a4233995"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "2f9127b932e3c34682e1083d6462620b9f6ab11fc7e0604f5f21b570d698fa55"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "67853d5f5e69542fbfb3e5dd02ab155180ff336ee3cf105f47a0cd36f8b92102"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-tariff-runtime/fixture-setup.sql",
+      "sha256": "a9391f35a9dc133d5154831fea437bdd76a4763050900107a4cc9c3b099f5ad0"
+    },
+    {
+      "file": "docs/evidence/20261010-tariff-runtime/fixture-observer.sql",
+      "sha256": "900b383bcbd59ffc2f9e7cca69039a581204a8bd3c7fb74e3c6d96e50430ef77"
+    },
+    {
+      "file": "docs/evidence/20261010-tariff-runtime/fixture-context.sql",
+      "sha256": "75fe41ebbafc004b52712cde5ed704ea0e33720827a6bbe05b7f914d2da711bc"
+    },
+    {
+      "file": ".tools/derive-connected-tariff05.mjs",
+      "sha256": "085684729e38bd8c356e8ddbcaa093254735c7ac3f2a07630eee8305531515cb"
+    }
+  ],
+  "checks": {
+    "exactCombinedSql": true,
+    "explicitStagingCopyBeforeChroot": true,
+    "exactRetainedParentDriver": true,
+    "helperAndProbePins": true,
+    "syntaxFourModules": true,
+    "independentTwoVersionOrderChargeStockGuard": true,
+    "existingOriginalArchiveRecoveryRetained": true,
+    "loopbackRestrictedNetwork": true
+  },
+  "review": {
+    "status": "reviewed-preexecution-no-critical-important",
+    "reviewer": "auth_migration_review",
+    "verified": "12artifact/4sourcepins;7filesidentical04;soleSQLchangeexistingservice_roleEXECUTEondisposableinvokerhook;deadlineURIandnative/recoveryguardsretained;executionabsent",
+    "limits": "Actualdeadlines/connectedorders/originalrecoveryunverified",
+    "resolved": [
+      "canonical lowercase website listing",
+      "explicit connected SQL staging copy"
+    ]
+  },
+  "nativeExecuted": false,
+  "connectedRuntimeVerified": false,
+  "providerWrites": false,
+  "deployed": false,
+  "observerScope": "Complete defined synthetic orders/snapshots/items/reservations/events/conversations/messages/batches/inventory-events plus stock balance/product; no all-database or customer/grant-state conservation claim",
+  "scope": "Imported02 plus temporary tariff overlay and existing exact Auth/BFF prerequisites; not combined all-three23, deployed artifacts, concurrent publication or populated history data-retaining recovery",
+  "recovery": "Do not reuse disposed parents08/23. Run only fresh pinned successor after complete review; existing guest original-captured archive/schema/row/authority reconstruction retained. If native run fails, retain artifacts/results and inspect exact recovery and terminal/PID/listeners before any successor.",
+  "nextAction": "Complete staged review, independently confirm five ports free, then execute this exact pinned runner once; inspect actual connected/protected observer/native charge/stock evidence plus full original recovery and terminal/PID/listeners before runtime acceptance."
+}

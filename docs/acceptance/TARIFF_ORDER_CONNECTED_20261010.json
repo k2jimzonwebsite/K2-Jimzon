@@ -1,0 +1,358 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-tariff-order05",
+  "sourceCommit": "679cf94",
+  "classification": "Sequential genuine local signed tariff publication, accepted-order charge preservation, stale quote refusal and exact disposable recovery verified",
+  "command": "node .tools/run-connected-tariff05.mjs",
+  "session": 9586,
+  "native": {
+    "pid": 17768,
+    "runnerExit": 0,
+    "vmExit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "moduleGucs": true,
+    "processStopped": true,
+    "postgresVersion": "17.6"
+  },
+  "host": {
+    "passed": true,
+    "checks": 40,
+    "connected": {
+      "versions": [
+        1,
+        2
+      ],
+      "feesMinor": [
+        15000,
+        20000
+      ],
+      "acceptedOrders": 2,
+      "acceptedAStateSha256": "dfdf369416793d7b18eecc34fcbd60b1b298fc7bd331de94002157de816f8666",
+      "finalStateSha256": "6078a9838e878ac282bdf50f4f92cefe7158890242a4787f15248bf49e97b6c4",
+      "exactReceiptReplay": true,
+      "publicationAndReplayConserved": true,
+      "freshStaleAcceptance409": true,
+      "oldChargeRetained": true,
+      "scope": "Sequential genuine local routes and protected complete synthetic business rows; no concurrent, provider, hosted or populated recovery claim",
+      "protectedObserverCalls": 6
+    },
+    "deadlineContexts": [
+      {
+        "rpc": "k2_fixture_tariff_setup_v1",
+        "status": 200,
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "authenticated",
+        "sessionRole": "authenticator"
+      },
+      {
+        "rpc": "execute_customer_delivery_rates_v1",
+        "status": 400,
+        "lockMs": null,
+        "statementMs": null,
+        "role": null,
+        "sessionRole": null
+      },
+      {
+        "rpc": "execute_customer_delivery_rates_v1",
+        "status": 400,
+        "lockMs": null,
+        "statementMs": null,
+        "role": null,
+        "sessionRole": null
+      },
+      {
+        "rpc": "execute_customer_delivery_rates_v1",
+        "status": 200,
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "authenticated",
+        "sessionRole": "authenticator"
+      },
+      {
+        "rpc": "execute_customer_delivery_rates_v1",
+        "status": 200,
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "authenticated",
+        "sessionRole": "authenticator"
+      },
+      {
+        "rpc": "execute_customer_delivery_rates_v1",
+        "status": 400,
+        "lockMs": null,
+        "statementMs": null,
+        "role": null,
+        "sessionRole": null
+      },
+      {
+        "rpc": "execute_customer_delivery_rates_v1",
+        "status": 400,
+        "lockMs": null,
+        "statementMs": null,
+        "role": null,
+        "sessionRole": null
+      },
+      {
+        "rpc": "quote_customer_delivery_v1",
+        "status": 200,
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "anon",
+        "sessionRole": "authenticator"
+      },
+      {
+        "rpc": "submit_guest_order_v1",
+        "status": 200,
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "anon",
+        "sessionRole": "authenticator"
+      },
+      {
+        "rpc": "execute_customer_delivery_rates_v1",
+        "status": 200,
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "authenticated",
+        "sessionRole": "authenticator"
+      },
+      {
+        "rpc": "submit_guest_order_v1",
+        "status": 200,
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "anon",
+        "sessionRole": "authenticator"
+      },
+      {
+        "rpc": "submit_guest_order_v1",
+        "status": 400,
+        "lockMs": null,
+        "statementMs": null,
+        "role": null,
+        "sessionRole": null
+      },
+      {
+        "rpc": "quote_customer_delivery_v1",
+        "status": 200,
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "anon",
+        "sessionRole": "authenticator"
+      },
+      {
+        "rpc": "submit_guest_order_v1",
+        "status": 200,
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "anon",
+        "sessionRole": "authenticator"
+      }
+    ],
+    "guestRpcDiagnostics": [
+      {
+        "status": 200,
+        "code": null,
+        "message": null
+      },
+      {
+        "status": 200,
+        "code": null,
+        "message": null
+      },
+      {
+        "status": 200,
+        "code": null,
+        "message": null
+      },
+      {
+        "status": 400,
+        "code": "22023",
+        "message": "K2_DELIVERY_QUOTE_CHANGED"
+      },
+      {
+        "status": 200,
+        "code": null,
+        "message": null
+      },
+      {
+        "status": 200,
+        "code": null,
+        "message": null
+      }
+    ]
+  },
+  "independentNativeGuard": "Exact two immutable tariff versions/head; two accepted orders with saved version1/fee15000 and version2/fee20000; no stale-key order; physical10/reserved2 and canonical batch10/reserved2.",
+  "recovery": {
+    "type": "Owned RAM captured archive reconstruction, then exact accepted imported02 installation, not populated business-data retaining recovery",
+    "original88TablesAndTwoSequencesSha256": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+    "restoredImportedBaselineCatalogSha256": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+    "completeCapturedBaselineAndLocale": true,
+    "globalManagedAuthorityWitnesses": 2,
+    "markers": [
+      "K2_CONNECTED_TARIFF_NATIVE_ROWS_OK",
+      "K2_TARIFF_DISPOSABLE_CAPTURED_RECONSTRUCTION_OK",
+      "K2_TARIFF_ARCHIVE_PROJECTION_CATALOG_RECOVERY_OK",
+      "K2_AUTH_STARTUP_CONSERVATION_OK"
+    ],
+    "suffixUnchanged": "Original target-bound database reconstruction and cold authority checks retained from03/04."
+  },
+  "closure": {
+    "independentlyCheckedPid": 17768,
+    "processPresent": false,
+    "ports": [
+      54392,
+      54393,
+      54394,
+      54395,
+      54396
+    ],
+    "listeners": []
+  },
+  "artifactPins": [
+    {
+      "file": "executed-source.mjs",
+      "sha256": "6d8b7e39ff3be35565ec544ee8448cf4bd6a21046b742d77697fd3f256195ebf"
+    },
+    {
+      "file": "executed-derivation.mjs",
+      "sha256": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "28e6855b6a919a59877c0807d7ef842adfc31dfb3939b194012ff5183ae8868c"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "87c44ef188ce678595caa8e27138b5cdb6133cd0e13faf42cb2b589a596d47c3"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "d206e61499c17f9ae94f3240b3c95ca5167f7ed6b7440a4722ca58b326bac19b"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "760dbb770a2544dca8d0bc2656dea2b34193dbdf77d259e65a2bd83c5ceb1905"
+    },
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "8f8b5bb15782cf5cff3f935bd8ff80c7b394c8515b5ea11c57a2337229bb08b5"
+    },
+    {
+      "file": "staging/k2/connected-fixture.sql",
+      "sha256": "d693fa687e904ab60ad4a8bf4dd42167534a42538373e3bb8f9db7a6a4233995"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "2f9127b932e3c34682e1083d6462620b9f6ab11fc7e0604f5f21b570d698fa55"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "67853d5f5e69542fbfb3e5dd02ab155180ff336ee3cf105f47a0cd36f8b92102"
+    },
+    {
+      "file": "execution01/result.json",
+      "sha256": "066d6020eda976b80f83fd60d806cef7ad17af8eb73267117898fb4bb4d06a89"
+    },
+    {
+      "file": "execution01/serial.log",
+      "sha256": "1cc34bdd5857b986a3b213f86336d9e46a0e955d45407d2e8055966dac274e79"
+    },
+    {
+      "file": "host-driver-result.json",
+      "sha256": "5ccb274777bf37e0364bb587626877cac6156571ededd3712f9c810a6a234d9a"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-tariff-runtime/fixture-setup.sql",
+      "sha256": "a9391f35a9dc133d5154831fea437bdd76a4763050900107a4cc9c3b099f5ad0"
+    },
+    {
+      "file": "docs/evidence/20261010-tariff-runtime/fixture-observer.sql",
+      "sha256": "900b383bcbd59ffc2f9e7cca69039a581204a8bd3c7fb74e3c6d96e50430ef77"
+    },
+    {
+      "file": "docs/evidence/20261010-tariff-runtime/fixture-context.sql",
+      "sha256": "75fe41ebbafc004b52712cde5ed704ea0e33720827a6bbe05b7f914d2da711bc"
+    },
+    {
+      "file": ".tools/derive-connected-tariff05.mjs",
+      "sha256": "085684729e38bd8c356e8ddbcaa093254735c7ac3f2a07630eee8305531515cb"
+    }
+  ],
+  "productionSourcePins": [
+    {
+      "file": "api/storefront/index.js",
+      "sha256": "4ee180cab32cebf5d38f1c38d642266112613b5e0cea626446e9eeb43e889b15"
+    },
+    {
+      "file": "server/storefront-bff/router.js",
+      "sha256": "4009362f65f5b0c086ac7467fa2441df1ce6e9e410136378f8aa6c77e847758d"
+    },
+    {
+      "file": "prepared-api/storefront/delivery/quote.js",
+      "sha256": "62c6832f10166e29d655010109ea40b077d752fdd45b613e5124976614ea20ee"
+    },
+    {
+      "file": "prepared-api/storefront/order.js",
+      "sha256": "eefdb744330a837ee19333979fecfe9a61aab2c78dd9e8bdb08adafeb173d9bf"
+    },
+    {
+      "file": "server/storefront-bff/security.js",
+      "sha256": "0ab0526f2cac681bdc425fc8249b6d82161cb3dcd4734d9b745cfb64fa8ad663"
+    },
+    {
+      "file": "server/storefront-bff/supabase.js",
+      "sha256": "739fd2853bf30b0bbe780099063450a5c1527202a5dca5aca189a4b3a276e94e"
+    },
+    {
+      "file": "server/admin-bff/customer-delivery-rates.js",
+      "sha256": "b96c5eddc7befaaaa468d467881b2a09bfedd5f90e287993510f50420cd1438f"
+    },
+    {
+      "file": "supabase/prepared/customer_delivery_rates.sql",
+      "sha256": "f9492e20fcb330d3108c18479d7a07ac9c8e850b2adcef67f96e937700e5df4c"
+    },
+    {
+      "file": "supabase/prepared/customer_tariff_version_conflict_transport.sql",
+      "sha256": "efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166"
+    },
+    {
+      "file": "supabase/prepared/customer_delivery_quote_core.sql",
+      "sha256": "e133a41b94258f534695096c8fa5ea84012c17fd8ccf26b763a9c763faae66dc"
+    },
+    {
+      "file": "tests/guest-commerce-bff-contract.spec.js",
+      "sha256": "1baa240ac5c9386de3f05414beaee5c4a8b0ac6bdc4e722ef740b12c5d52da2e"
+    }
+  ],
+  "review": {
+    "status": "reviewed-no-critical-important",
+    "reviewer": "auth_migration_review",
+    "verified": "15artifact/4source/11productionpins;40actualchecks;9successfuldeadlinecontexts;6completeobservercalls;nativecharge-stockguard;identical03recoverysuffix;originalrows/cataloghashesand2authoritywitnesses",
+    "hostClosureEvidence": "Primary independently observed PID17768 and five listeners absent; reviewer did not repeat host inspection."
+  },
+  "scope": "Imported02 plus exact temporary tariff conflict overlay and existing Auth/BFF prerequisites; sequential genuine local Admin/Storefront routes, fixed complete synthetic business observer. No all-customer/grant/database conservation, all-three combined runtime, concurrent publication, browser, deployed separate artifacts, provider or human acceptance claim.",
+  "limits": [
+    "Failed responses roll back fixture response headers; null context is not an observed failed-call timeout value. Successful setup/publication/quote/order callers are observed.",
+    "No emergency editing pause/drain is implemented or needed under owner decision.",
+    "Captured authority-through-commit understanding remains unanswered; production request timeout context remains unverified.",
+    "Populated history/heads/receipts and accepted orders need separately reviewed data-retaining recovery; this disposable reconstruction is not that proof."
+  ],
+  "nextAction": "MAP-018 owns review/qualification of exact populated category/tariff/receipt/accepted-order data-retaining recovery, then remaining combined installation, real-host/product/listing and owner/provider gates. Reuse this accepted sequential local evidence; never rerun disposed01/02/03/05 or rejected unexecuted04.",
+  "providerWrites": false,
+  "productionSourceChanged": false,
+  "deployed": false
+}

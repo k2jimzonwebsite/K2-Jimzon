@@ -1,0 +1,99 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-tariff-order04",
+  "classification": "Fresh04 session connection deadline correction with actual SECURITY INVOKER caller headers; canonical guards/roles/ownership/recovery unchanged, no native execution",
+  "sourceCommit": "679cf94",
+  "artifactPins": [
+    {
+      "file": "executed-source.mjs",
+      "sha256": "0ac66e56322de4e26f270198af66389aeba846c8ace51b00b6a6413ece86c3f4"
+    },
+    {
+      "file": "executed-derivation.mjs",
+      "sha256": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "e7ef3f2f726dffdb666b3fe26ddbb5db82bcb6d2620a8dd0b90ec00941e50065"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "87c44ef188ce678595caa8e27138b5cdb6133cd0e13faf42cb2b589a596d47c3"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "d206e61499c17f9ae94f3240b3c95ca5167f7ed6b7440a4722ca58b326bac19b"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "760dbb770a2544dca8d0bc2656dea2b34193dbdf77d259e65a2bd83c5ceb1905"
+    },
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "8f8b5bb15782cf5cff3f935bd8ff80c7b394c8515b5ea11c57a2337229bb08b5"
+    },
+    {
+      "file": "staging/k2/connected-fixture.sql",
+      "sha256": "6c403b54213fabc93237ff577fd6800243245c755b5aed62d71bbe518d7f4d3a"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "32d6e5811c7fd90a648e1f712a05482697d27e7396369d4ff2e3288c5669dbdf"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "4b050368c04306284ded909c92dab7e118151b497249cb767c4a41ac3d203117"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-tariff-runtime/fixture-setup.sql",
+      "sha256": "a9391f35a9dc133d5154831fea437bdd76a4763050900107a4cc9c3b099f5ad0"
+    },
+    {
+      "file": "docs/evidence/20261010-tariff-runtime/fixture-observer.sql",
+      "sha256": "900b383bcbd59ffc2f9e7cca69039a581204a8bd3c7fb74e3c6d96e50430ef77"
+    },
+    {
+      "file": "docs/evidence/20261010-tariff-runtime/fixture-context.sql",
+      "sha256": "8a726face963ec5bdcd593594ac77ebc51344aa224972aeecede0c735d62de0d"
+    },
+    {
+      "file": ".tools/derive-connected-tariff04.mjs",
+      "sha256": "a40a167364bfee94fab45a57a0400fb62e93cac4f4406cc41d1c381a4cab72a1"
+    }
+  ],
+  "checks": {
+    "exactCombinedSql": true,
+    "explicitStagingCopyBeforeChroot": true,
+    "exactRetainedParentDriver": true,
+    "helperAndProbePins": true,
+    "syntaxFourModules": true,
+    "independentTwoVersionOrderChargeStockGuard": true,
+    "existingOriginalArchiveRecoveryRetained": true,
+    "loopbackRestrictedNetwork": true
+  },
+  "review": {
+    "status": "preexecution-refused-important-resolved-in-fresh05",
+    "reviewer": "auth_migration_review",
+    "finding": "Global pre-request hook denied existing service_role profile/cleanup calls. Canonical grants unchanged; fresh05 adds only disposable hook EXECUTE for service_role.",
+    "historicalSourcePinLimit": "fixture-context.sql corrected after this immutable staging; archived04 combined SQL retains the exact old context body."
+  },
+  "nativeExecuted": false,
+  "connectedRuntimeVerified": false,
+  "providerWrites": false,
+  "deployed": false,
+  "observerScope": "Complete defined synthetic orders/snapshots/items/reservations/events/conversations/messages/batches/inventory-events plus stock balance/product; no all-database or customer/grant-state conservation claim",
+  "scope": "Imported02 plus temporary tariff overlay and existing exact Auth/BFF prerequisites; not combined all-three23, deployed artifacts, concurrent publication or populated history data-retaining recovery",
+  "recovery": "Do not reuse disposed parents08/23. Run only fresh pinned successor after complete review; existing guest original-captured archive/schema/row/authority reconstruction retained. If native run fails, retain artifacts/results and inspect exact recovery and terminal/PID/listeners before any successor.",
+  "nextAction": "Do not launch04. Retain its exact unexecuted artifacts; reviewed corrected fresh05 is the successor."
+}
