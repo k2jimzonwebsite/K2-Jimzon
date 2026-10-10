@@ -1,0 +1,63 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "classification": "Read-only reconciliation of existing local installation and retained-repair evidence; no new execution or activation",
+  "checkedAt": "2026-10-10T17:05:21.863Z",
+  "sourceHead": "2c246c3",
+  "receiptPins": [
+    {
+      "file": "docs/acceptance/CATEGORY_POLICY_COMBINED_INSTALLATION_20261010.json",
+      "sha256": "7e534f935af4f60191cd3d768aad00fb52b566c35a6710024b3c1bda3219f97c"
+    },
+    {
+      "file": "docs/acceptance/CATEGORY_POLICY_REVISED_RECOVERY_20261010.json",
+      "sha256": "702bac7b3f0be64ac04ae93152c085bce67a9814f3ac7d06e58fe7a7f886d65a"
+    },
+    {
+      "file": "docs/acceptance/RETAINED_POPULATED_REPAIR_20261011.json",
+      "sha256": "eb07d87865d3670e086e86cb1898a107df2aa18910e08fbc5e4f200685f8f137"
+    },
+    {
+      "file": "docs/acceptance/RETAINED_DRIFT_REFUSAL_20261011.json",
+      "sha256": "b125a4209251a09416f98bddc30c3c4c287b50ce0d557fc1c58e8b931e411163"
+    },
+    {
+      "file": "docs/acceptance/RETAINED_RESUMPTION_20261011.json",
+      "sha256": "cf7490fe3ac49232990e1b70a3126c5dafab6a2b7d298d4acc7521d43f74f50c"
+    },
+    {
+      "file": "docs/acceptance/AUTHORITY_THROUGH_COMMIT_SOURCE_AUDIT_20261010.json",
+      "sha256": "3fc3674099ad8effa6c94baa8df71d4f98471b394344bf5171e0dc92dd060d1c"
+    }
+  ],
+  "verification": {
+    "currentCompositionPinsMatched": 14,
+    "actualPrivateStagedPinsMatched": 22,
+    "actualPrivateCatalogFramesMatched": 3,
+    "actualSerialHashMatched": true,
+    "actualGuardedSqlHashMatched": true,
+    "recordedNativeExit": 0,
+    "recordedControls": 16,
+    "sqlSha256": "ea8e212e648615611f4bc09ed36c7610c875f1779c84510e5556c448ff3a01f4",
+    "payloadSha256": "1827099d14153f9d4cf55e43213341c609692d36aac234033dc96cb71e8717b9",
+    "installedCatalogSha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+    "method": "Fresh read-only Node SHA-256 comparisons of current composition inputs, private imported23 qualification-staging/k2 files, actual before/after/rollback catalog bytes, serial and guarded-package SQL; receipt19/23 package equality checked. Earlier lookup without k2 subdirectory failed ENOENT and made no changes; corrected complete comparison exits0."
+  },
+  "completedScope": [
+    "Existing combined all-three installer fresh application and exact replay",
+    "Recorded final-precommit interruption and installed body/security/ACL/owner/search_path refusals, with149-selection conservation",
+    "Recorded row-cleared original-schema cold application/replay and original archive/catalog recovery",
+    "Later signed-populated known repair, unknown-drift refusals and actual retained-request resumption remain qualified by their separate receipts"
+  ],
+  "limits": [
+    "No new VM execution; historical native controls are reused with freshly matched source/artifact identity",
+    "149 installer selection and168 populated repair relations describe different fixtures and are not interchangeable",
+    "Final-precommit interruption is not mid-fragment fault coverage; row-cleared original schema is not independent schema-only restoration",
+    "No concurrent administrative authority-through-commit guarantee; counterexample remains unresolved",
+    "No API transaction/history/unknown-outcome qualification, rendered full product workflow, hosted or production acceptance"
+  ],
+  "providerWrites": false,
+  "deployed": false,
+  "nextAction": "MAP-018: clarify required concurrent administrative authority boundary and qualify accepted protection; independently complete canonical reference/product Draft-to-listing workflow, then provider transport and owner-authorized activation/real-host gates",
+  "recovery": "Documentation-only reconciliation; retain all original receipts and immutable private fixtures. Revert this receipt and MAP/current-reference edits if incorrect; no provider rollback."
+}
