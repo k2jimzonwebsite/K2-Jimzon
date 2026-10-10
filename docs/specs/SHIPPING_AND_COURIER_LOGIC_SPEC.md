@@ -1842,6 +1842,8 @@ no native HTTP/authenticated host/real staff/provider or deployment claim.
 
 ## 10 October tariff recovery approach review — IDEA-20261010-08 / MAP-018
 
+**Current disposition:** the proposed pause/drain below is withdrawn by the owner simplification recorded later in this section. Owner now explicitly confirms retained software repair, available shopping, saved rates/orders preserved and local-first tests without an emergency pause. Detailed candidate is `RETAINED_OPERATIONAL_CODE_REPAIR_SPEC.md`; structured review and local populated qualification remain pending, with no repair SQL/provider authorization. The paragraphs below are superseded proposal history.
+
 Owner decision: "Yes, keep shopping available." During emergency rate-edit recovery, customers retain the last valid rates and existing orders retain agreed charges. Understanding confirmed; approach selection and detailed design remain pending. No implementation or provider authorization.
 
 Recommended approach: a database-enforced editing pause separate from the active tariff head. Each publication cooperates with the pause boundary; recovery waits for already-admitted edits to finish before confirming paused state, within existing2s lock/10s statement limits. If it cannot establish the pause within the bound, it reports failure and does not claim completion. Retained rate reads/quotes continue. Resumption restores editing without replacing heads/history/receipts. Existing accepted charges are preserved. This introduces a small protected control and synchronization contract, requiring installation/replay/drift/concurrency/data-retaining recovery evidence. It avoids relying on an operator guessing that an edit finished. No final choice of SQL mechanism is accepted yet.
