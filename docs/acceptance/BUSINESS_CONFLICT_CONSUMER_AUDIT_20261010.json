@@ -1,0 +1,253 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "scope": "Read-only semantic source follow-up to BUSINESS_CONFLICT_SOURCE_AUDIT_20261010.json; no runtime or SQL modification",
+  "catalogSha256": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+  "sources": [
+    {
+      "path": "server/express-delivery-contract.js",
+      "sha256": "5df399b4393f4ac43bbc0781fd6d4bc867c2f8c17ef5150499e6ae45f0d993b9",
+      "anchors": [
+        {
+          "text": "message.includes('K2_EXPRESS_QUOTE_STALE')",
+          "line": 45
+        },
+        {
+          "text": "return [409, 'EXPRESS_QUOTE_STALE']",
+          "line": 45
+        }
+      ]
+    },
+    {
+      "path": "server/admin-bff/express-delivery.js",
+      "sha256": "3f847e7e38da20c8767f4f2b673eb372eade4ccbae6b1891661f44c91d70a47e",
+      "anchors": [
+        {
+          "text": "execute_express_delivery_quote_v1",
+          "line": 37
+        },
+        {
+          "text": "expressDeliveryFailure(error)",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "path": "server/storefront-bff/express-delivery.js",
+      "sha256": "344285238b1e45188469dc79fc25c087103ddeafef4db43e63db575af5e548ce",
+      "anchors": [
+        {
+          "text": "accept_account_express_delivery_v1",
+          "line": 22
+        },
+        {
+          "text": "accept_guest_express_delivery_v1",
+          "line": 23
+        },
+        {
+          "text": "expressDeliveryFailure(error)",
+          "line": 25
+        }
+      ]
+    },
+    {
+      "path": "src/services/adminGlobeCmsService.js",
+      "sha256": "de19f0aa49be363c158b7f0e2a85c903c566ee3230bd2e98aab28889d394665e",
+      "anchors": [
+        {
+          "text": "K2_ADMIN_GLOBE_STALE",
+          "line": 4
+        },
+        {
+          "text": "K2_ADMIN_REVIEW_STALE",
+          "line": 4
+        },
+        {
+          "text": "execute_admin_globe_review_direct_v1",
+          "line": 24
+        }
+      ]
+    },
+    {
+      "path": "server/admin-bff/globe-cms.js",
+      "sha256": "ee18ea00a2b5bee8629fd1a3a29792e7f6a7c220d6b3f2c1887b1f730102e429",
+      "anchors": [
+        {
+          "text": "GLOBE_REVIEW_STALE",
+          "line": 102
+        },
+        {
+          "text": "execute_admin_globe_review_command_v1",
+          "line": 130
+        }
+      ]
+    },
+    {
+      "path": "src/services/productIntakeService.js",
+      "sha256": "d44cda86d09ccc891c64363cb783131d3b56cf0a7892fb42d0b4c44cf43587b8",
+      "anchors": [
+        {
+          "text": "create_product_draft_server",
+          "line": 468
+        },
+        {
+          "text": "throw commandError('DRAFT_CREATE_FAILED'",
+          "line": 476
+        }
+      ]
+    },
+    {
+      "path": "server/admin-bff/product-intake.js",
+      "sha256": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37",
+      "anchors": [
+        {
+          "text": "K2_IMPORTED_DRAFT_VERSION_CONFLICT",
+          "line": 233
+        },
+        {
+          "text": "'intake_evidence_register'",
+          "line": 424
+        },
+        {
+          "text": "classifyEvidenceRegistrationFailure(command.error)",
+          "line": 430
+        }
+      ]
+    },
+    {
+      "path": "server/admin-bff/intake-ai-jobs.js",
+      "sha256": "fce0fab7f53d3b2813c1b4c280877e3c9612383dec9726eecdfbdfa8e9027efc",
+      "anchors": [
+        {
+          "text": "const RPC = 'execute_admin_intake_ai_v1'",
+          "line": 8
+        },
+        {
+          "text": "AI_JOB_UNAVAILABLE",
+          "line": 9
+        }
+      ]
+    },
+    {
+      "path": "server/admin-bff/staff-access.js",
+      "sha256": "57330678adc8f480e223ec2639ede7dac9d198d656288d1cca73cb00d4801678",
+      "anchors": [
+        {
+          "text": "K2_AI_SPEND_VERSION_CONFLICT",
+          "line": 37
+        },
+        {
+          "text": "execute_admin_ai_spend_controls_command_v1",
+          "line": 74
+        }
+      ]
+    },
+    {
+      "path": "server/admin-bff/customer-delivery-rates.js",
+      "sha256": "8156da8d18ebc53260dd8bc62381e3cf7d401c34124e0f338e6c2b564f35d5c8",
+      "anchors": [
+        {
+          "text": "error.code === '40001'",
+          "line": 61
+        },
+        {
+          "text": "CUSTOMER_TARIFF_VERSION_STALE",
+          "line": 61
+        }
+      ]
+    }
+  ],
+  "composedHelperInvocations": {
+    "importedDraft": [
+      {
+        "identity": "public.create_product_draft_server(p_session_id uuid, p_request_id uuid, p_reviewed_payload jsonb, p_field_decisions jsonb)",
+        "definitionSha256": "4a935cbe1902d99fbe2d6396c832a40bb87d09b5aca6f6201a10404a9cfc1c1a"
+      },
+      {
+        "identity": "public.execute_admin_product_intake_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+        "definitionSha256": "41564a99d35f5f71d7f8b0630cfeaadeac75934bccbbac5e5241c2282f425d15"
+      }
+    ],
+    "expressAcceptance": [
+      {
+        "identity": "public.accept_account_express_delivery_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text)",
+        "definitionSha256": "c41f123db02ce934f88e58021f4b36bb1b0b57b8a2538eb7277765af97fb2df9"
+      },
+      {
+        "identity": "public.accept_guest_express_delivery_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+        "definitionSha256": "8a076f44d3190674b982db4963e3871e2449742315594cfeeea3b6eff128eee7"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "message": "K2_EXPRESS_QUOTE_STALE",
+      "consumer": "Admin quote RPC and account/guest Storefront acceptance RPCs use the shared expressDeliveryFailure named-message mapping to409/EXPRESS_QUOTE_STALE. Both acceptance wrappers call the same private helper."
+    },
+    {
+      "message": "K2_ADMIN_GLOBE_STALE / K2_ADMIN_REVIEW_STALE",
+      "consumer": "Signed BFF maps409/GLOBE_REVIEW_STALE; direct browser RPC returns a refresh/review error string through directError, without a BFF HTTP status. Qualify both SQL entry points and consumers."
+    },
+    {
+      "message": "K2_IMPORTED_DRAFT_VERSION_CONFLICT",
+      "consumer": "Composed helper has two direct callers: create_product_draft_server and execute_admin_product_intake_command_v1. Signed intake_draft also calls create_product_draft_server; intake_session_create existingProduct calls helper directly. Ordinary intake BFF maps409/IMPORTED_DRAFT_VERSION_CONFLICT. Direct productIntakeService wraps draft refusal as DRAFT_CREATE_FAILED, retaining underlying error argument."
+    },
+    {
+      "message": "K2_IMPORTED_DRAFT_VERSION_CONFLICT",
+      "excludedPaths": "The composed execute_admin_intake_ai_v1 definition does not invoke this helper; it must not be counted solely because the preparation fragment replaces it. Evidence upload uses intake_evidence_register; that branch does not invoke the version helper or create_product_draft_server. Its distinct cleanup classifier is not evidence of a missing reachable stale mapping."
+    },
+    {
+      "message": "K2_AI_SPEND_VERSION_CONFLICT",
+      "consumer": "Actual staff-access commandError maps409/AI_SPEND_CONTROLS_VERSION_CONFLICT. The ai-spend-controls code helper alone does not prove HTTP status."
+    },
+    {
+      "message": "K2_CUSTOMER_TARIFF_VERSION_STALE",
+      "consumer": "Current tariff handler maps40001 alone to409. Named-message mapping and focused refusal evidence must precede its SQLSTATE correction; real transient serialization must remain distinct."
+    }
+  ],
+  "limits": "Source anchors and exact retained SQL definitions establish these scoped call relationships only. No new PostgREST/Auth/BFF HTTP/browser/provider/deployment proof; no paid AI calls. Remaining16 SQL business raises still need actual transport and full-package/recovery qualification. No complete dynamic call graph is claimed.",
+  "providerWrites": false,
+  "runtimeChanges": false,
+  "recovery": "Revert only this receipt and associated documentation; preserve prior native receipts and source. Remaining work lives in MAP-018.",
+  "verification": {
+    "sourceHashesVerified": 10,
+    "pureFunctionOnly": {
+      "module": "server/express-delivery-contract.js",
+      "cases": [
+        {
+          "code": "40001",
+          "message": "K2_EXPRESS_QUOTE_STALE",
+          "result": [
+            409,
+            "EXPRESS_QUOTE_STALE"
+          ]
+        },
+        {
+          "code": "P0001",
+          "message": "K2_EXPRESS_QUOTE_STALE",
+          "result": [
+            409,
+            "EXPRESS_QUOTE_STALE"
+          ]
+        },
+        {
+          "code": "40001",
+          "message": "could not serialize access due to concurrent update",
+          "result": [
+            503,
+            "EXPRESS_DELIVERY_UNAVAILABLE"
+          ]
+        }
+      ],
+      "assertionsPassed": 3,
+      "httpProof": false
+    },
+    "applicationGate": "Not repeated: documentation-only change",
+    "independentReview": {
+      "reviewer": "auth_migration_review",
+      "critical": 0,
+      "important": 0,
+      "scope": "Ten source hashes/anchors, retained catalog and four caller definitions, source semantics and evidence limits"
+    }
+  }
+}
