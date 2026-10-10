@@ -58,7 +58,7 @@ export async function handleCustomerDeliveryRates(req, res) {
       ? await authorized.client.rpc('execute_customer_delivery_rates_v1', args)
       : await authorized.client.rpc('read_customer_delivery_rates_v1', args)
     if (error) {
-      if (error.code === '40001') return safeJson(res, 409, { error: { code: 'CUSTOMER_TARIFF_VERSION_STALE' } })
+      if (String(error.message).includes('K2_CUSTOMER_TARIFF_VERSION_STALE')) return safeJson(res, 409, { error: { code: 'CUSTOMER_TARIFF_VERSION_STALE' } })
       if (String(error.message).includes('K2_ADMIN_IDEMPOTENCY_CONFLICT')) return safeJson(res, 409, { error: { code: 'IDEMPOTENCY_CONFLICT' } })
       if (error.code === '42501') return safeJson(res, 403, { error: { code: 'CUSTOMER_TARIFF_STAFF_REQUIRED' } })
       if (error.code === '22023') return safeJson(res, 400, { error: { code: 'REQUEST_INVALID' } })

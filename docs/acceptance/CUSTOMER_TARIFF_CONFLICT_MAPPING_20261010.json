@@ -1,0 +1,50 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "scope": "Local tariff BFF named business-conflict mapping prerequisite; authorization/RPC test doubles, actual response handler and signing/validation on POST; no genuine HTTP or database qualification",
+  "changedSources": [
+    {
+      "path": "server/admin-bff/customer-delivery-rates.js",
+      "sha256": "b96c5eddc7befaaaa468d467881b2a09bfedd5f90e287993510f50420cd1438f"
+    },
+    {
+      "path": "tests/customer-tariff-conflict.test.mjs",
+      "sha256": "b42b7d82b65fbc05a6dd888fd31f8ad8f75cf8d65205b5ccf1199da7397c0827"
+    }
+  ],
+  "behavior": "Named K2_CUSTOMER_TARIFF_VERSION_STALE preserves409/CUSTOMER_TARIFF_VERSION_STALE under40001 orP0001. Generic40001 follows503/CUSTOMER_TARIFF_UNAVAILABLE instead of claiming optimistic-version staleness. Other refusal mappings unchanged.",
+  "focusedCommand": "node --experimental-test-module-mocks --test tests/customer-tariff-conflict.test.mjs",
+  "red": {
+    "exit": 1,
+    "tests": 11,
+    "passed": 7,
+    "failed": 4,
+    "reason": "GET/POST namedP0001 returned503; generic40001 returned409"
+  },
+  "green": {
+    "exit": 0,
+    "tests": 11,
+    "passed": 11,
+    "failed": 0
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "sessionId": 43598,
+    "exit": 0
+  },
+  "testRuntime": {
+    "node": "v24.16.0",
+    "experimentalWarning": "Node module mocking requires --experimental-test-module-mocks; warning observed, no deprecated API warning after exports correction"
+  },
+  "sqlChanged": false,
+  "providerWrites": false,
+  "deployed": false,
+  "remaining": "Actual tariff stale failure over PostgREST, exact guarded SQLSTATE overlay, complete package/replay/recovery and other remaining business-conflict transport qualifications remain MAP-018. Authority design confirmation and all provider authorization gates unchanged.",
+  "recovery": "Revert only the tariff handler/test slice; retain this receipt and prior source audits. No database rollback applies.",
+  "independentReview": {
+    "reviewer": "auth_migration_review",
+    "critical": 0,
+    "important": 0,
+    "minor": "Focused suite is outside recurring package gate; exact experimental-flag invocation retained. Development receipt does not claim this suite ran automatically."
+  }
+}
