@@ -13,11 +13,17 @@ begin
  insert into k2_private.category_policy_command_config(singleton,maximum_depth) values(true,8)
  on conflict(singleton) do update set maximum_depth=excluded.maximum_depth;
  perform k2_private.start_category_lot_context_v1(8);
+ -- The captured fixture has no operational central hub. Add synthetic fixture
+ -- prerequisites without altering an existing hub or weakening lot eligibility.
+ insert into public.hubs(id,name,code,country,role)
+ values('HUB-MNL-CENTRAL','Synthetic local Manila qualification hub','MAP018-TARIFF-MNL','PH','warehouse')
+ on conflict(id) do nothing;
  if not exists(select 1 from public.hubs where id='HUB-MNL-CENTRAL' and country='PH') then
-  raise exception 'K2_FIXTURE_CENTRAL_HUB_ABSENT';
+  raise exception 'K2_FIXTURE_CENTRAL_HUB_INVALID';
  end if;
- select id into v_custodian from public.custodians where hub_id='HUB-MNL-CENTRAL' order by id limit 1;
- if v_custodian is null then raise exception 'K2_FIXTURE_CUSTODIAN_ABSENT';end if;
+ v_custodian:='MAP018-TARIFF-CUSTODIAN';
+ insert into public.custodians(id,name,role,hub_id)
+ values(v_custodian,'Synthetic local tariff custodian','warehouse','HUB-MNL-CENTRAL');
  insert into public.categories(id,name) values('76000000-0000-4000-8000-000000000020','Synthetic tariff runtime category');
  insert into public.products(sku,name,status,is_human_reviewed,primary_image_url,srp,shipping_weight_g,category_id)
  values('MAP018-TARIFF-ORDER-01','Synthetic tariff runtime product','Unlisted',true,

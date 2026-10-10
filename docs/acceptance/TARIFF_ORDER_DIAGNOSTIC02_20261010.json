@@ -1,0 +1,90 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-tariff-order02",
+  "classification": "Native diagnostic establishes missing synthetic hub prerequisite; connected orders and recovery unverified",
+  "sourceCommit": "45ecfc0",
+  "session": 5037,
+  "command": "node .tools/run-connected-tariff-diagnostic02.mjs",
+  "native": {
+    "pid": 19228,
+    "vmExit": 0,
+    "runnerExit": 1,
+    "timedOut": false,
+    "processStopped": true,
+    "guestSuccess": false,
+    "moduleGucs": false
+  },
+  "host": {
+    "passed": false,
+    "checks": 26,
+    "stage": "fixture_setup_rpc",
+    "setupDiagnostic": {
+      "status": 400,
+      "code": "P0001",
+      "namedError": "K2_FIXTURE_CENTRAL_HUB_ABSENT",
+      "identifierError": null
+    }
+  },
+  "rootCause": "Protected synthetic setup RPC raised its explicit K2_FIXTURE_CENTRAL_HUB_ABSENT guard. The disposable captured database lacks the required PH HUB-MNL-CENTRAL; restored Auth/staff identity/registry assertions passed before setup.",
+  "closure": {
+    "independentlyCheckedPid": 19228,
+    "processPresent": false,
+    "ports": [
+      54392,
+      54393,
+      54394,
+      54395,
+      54396
+    ],
+    "listeners": []
+  },
+  "exactOriginalRecoveryVerified": false,
+  "connectedRuntimeVerified": false,
+  "retainedPins": [
+    {
+      "file": "executed-source.mjs",
+      "sha256": "ff70c8bea2388b3cf7fdae7ab4f21a4d71e370ac7b047994c84c91f8c6e6a3b3"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "05c6f35e39712a327626b44cb7211d1d0cc4ba52a1a2fc29bf1a7d02e8e7e388"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "efbe4e124eec00ed690ad11760692f1bb58147be343856ffa2da24d579b3ae05"
+    },
+    {
+      "file": "staging/k2/connected-fixture.sql",
+      "sha256": "d6ed535f1a2005dc074643ebedd8ab0225c004949414fa9153065ab1d27bbd1e"
+    },
+    {
+      "file": "execution01/result.json",
+      "sha256": "d8884f817746a12cc3e78a5e6eaf1c19e466e8c678991a3e093fc04f9351ec88"
+    },
+    {
+      "file": "execution01/serial.log",
+      "sha256": "7251cec5bd3619e916f84fad10bda1bdcea4c99ca3681befacff8f9cc12ba923"
+    },
+    {
+      "file": "host-driver-result.json",
+      "sha256": "04dbaf6617ab7d45044d0cdf91c3438d49a0a8db04457c4c96455eb83df19260"
+    }
+  ],
+  "preparedCorrection": {
+    "file": "docs/evidence/20261010-tariff-runtime/fixture-setup.sql",
+    "sha256": "a9391f35a9dc133d5154831fea437bdd76a4763050900107a4cc9c3b099f5ad0",
+    "scope": "Synthetic-only missing hub insert with on-conflict do-nothing plus PH guard; fresh fixed synthetic custodian linked to that hub. Existing hub not rewritten; lot eligibility and all commands unchanged.",
+    "nativeVerified": false
+  },
+  "review": {
+    "status": "reviewed-no-critical-important",
+    "reviewer": "auth_migration_review",
+    "scope": "All7actualartifactpins,rootcauseguard,sourcecorrectionhash and installedhub/custodianconstraintcompatibility independentlyverified; correctionstillnativeunverified"
+  },
+  "nextAction": "Review prepared synthetic prerequisite correction, derive fresh03 from immutable02 with exact changed SQL/pins only, stage/review and run once. If another prerequisite fails inspect its genuine diagnostic before correction. Require actual quote/order, protected observer, native fee/stock guards, exact original archive/schema/row recovery and independent terminal/PID/listeners before acceptance.",
+  "recovery": "Preserve failed disposed01/02 unchanged, never reuse execution. Stopped RAM disposal is not exact restoration. No production change; fresh successful successor must supply original-state recovery evidence.",
+  "providerWrites": false,
+  "productionSourceChanged": false,
+  "deployed": false
+}
