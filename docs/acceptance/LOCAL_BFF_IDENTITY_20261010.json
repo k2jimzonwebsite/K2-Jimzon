@@ -1,0 +1,1573 @@
+{
+  "owningMap": "MAP-018",
+  "ideas": [
+    "IDEA-20261009-11",
+    "IDEA-20261010-01",
+    "IDEA-20261010-02"
+  ],
+  "providerWrites": false,
+  "scope": "Actual production BFF modules with request/response envelopes, genuine local Auth/PostgREST, temporarily prepared seven-day public routine and controlled host clock +60000ms; renewed cookie and full restoration qualified. No routed API/browser/hosted/provider/full-migration claim.",
+  "cases": [
+    {
+      "case": "oci-auth-bff01",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff01\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 20084,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "2779662c33d56d3e7dfb88186f370266ca0dc8f44fe6daaf09f7ea0a9bf04d01"
+      },
+      "host": null,
+      "hashes": {
+        "executed-source.mjs": "0d3f8bd6f0db5b8190f1bd80ad806928938361743919cd037369f613d9c5cb3e",
+        "executed-derivation.mjs": "a1e4dd944c154b998359308fb153a54d0f416db66c362ee0a6582aba3860a280",
+        "runner-source.mjs": "179c18e635e3074ce083d076942e4f62e8e33858c646c599f5ce672a3d05b904",
+        "host-driver.mjs": "39d04d5d503cae0d7fa3d46bb4bbaac4907fab6f1440e257b5d9c05035436ab4",
+        "bff-helper.mjs": "b6c0444eef32a962c72be51e1c0def2c1171f9904b92f88de6c4a1cb58cf0abe",
+        "preparation.json": "67838cba6b651dc0d451760c088f64c58dd3b9761683c4f6065db83073456784",
+        "execution01/result.json": "185eef7ea9fb543037ce789c9fa10795893c8ec500c73b3e01cb42294b731b8f",
+        "execution01/serial.log": "2779662c33d56d3e7dfb88186f370266ca0dc8f44fe6daaf09f7ea0a9bf04d01"
+      },
+      "recovery": {
+        "private": false,
+        "original": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      }
+    },
+    {
+      "case": "oci-auth-bff02",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff02\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 4824,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "aa85a6808a55b38b909848a835f0630509f74813a7a77eee2a31a950c35f28d7"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "passed": false,
+        "error": {
+          "name": "Error",
+          "stage": "assertion_or_transport_failure"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "c704341608bd0d5344627259bf89560d0c0cca036f63e7bf743a3f08cccba9a2",
+        "executed-derivation.mjs": "87529956f694b272a12bf51a52ec63ac03ebee4ede7c60268222ab0e1076325b",
+        "runner-source.mjs": "dd69fb44aae53384c4d83c7babf52cb63133827618b693fccb8f55f1c5812e86",
+        "host-driver.mjs": "39d04d5d503cae0d7fa3d46bb4bbaac4907fab6f1440e257b5d9c05035436ab4",
+        "bff-helper.mjs": "fa4744c1b9414f944435f6f090ba3288f63e8fbb73d9d18314443a86295c0dcf",
+        "preparation.json": "ad0432278a84839a6fb847ab0bd12451ceaae37e5f9cff50b5e3cfd8e0418578",
+        "execution01/result.json": "8a6fd5666f4123c314f1b31ca9f45c8c17cb3de7e5543b3a56eb592ed7ce2d80",
+        "execution01/serial.log": "aa85a6808a55b38b909848a835f0630509f74813a7a77eee2a31a950c35f28d7",
+        "host-driver-result.json": "c0d611734375dc12265c8f01c4edb84c6f7b0cad33fa24db36db82f69be18698"
+      },
+      "recovery": {
+        "private": false,
+        "original": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      }
+    },
+    {
+      "case": "oci-auth-bff03",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff03\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 10116,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "4f84c4a95cdbb22c13a30df801f970fb0b918576f7b2f39317630db41822b61e"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "bffStage": "real_auth_and_staff_restored",
+        "passed": false,
+        "error": {
+          "name": "Error",
+          "stage": "AUTH_SESSION_INVALID"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "5528aaf5006e6947eb2829cbbc2a35f3eb7260b98cdaa47b8c44211e62adeab4",
+        "executed-derivation.mjs": "5708260f5620e30073e45fc513ef4f9e43d750ad448f8571f5b5eaebcf3b49d8",
+        "runner-source.mjs": "33a079c09bda403c765286e1cac1bf14164e63328d324d0685f94c671331a640",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "92e8bc18402351b8f8b3836c882a9fd5f5ad48dcca2447f8a82b67844bc494fa",
+        "preparation.json": "ad0432278a84839a6fb847ab0bd12451ceaae37e5f9cff50b5e3cfd8e0418578",
+        "execution01/result.json": "82271120552518bdb6d5a709866fb35549bc2d585ad2e428b3f97fcfd73c9094",
+        "execution01/serial.log": "4f84c4a95cdbb22c13a30df801f970fb0b918576f7b2f39317630db41822b61e",
+        "host-driver-result.json": "5e7f0a3ab3ccf6f6bd63a4145e1b9b18865627261fb1cfed7fea9b9c9da28458"
+      },
+      "recovery": {
+        "private": false,
+        "original": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      }
+    },
+    {
+      "case": "oci-auth-bff04",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff04\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 19996,
+        "exit": 4294967295,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "994c9bc1061732d08580fd2be24c4567ac841e7e186f5e68c3f4cc8fd9e23273"
+      },
+      "host": null,
+      "hashes": {
+        "executed-source.mjs": "abcc4e8def7ec4d15b96f0f83f54f2965ffd2a48369574eaa083797cb92ca64d",
+        "executed-derivation.mjs": "2047a44c71e2572a620f816e69cf367cd95daeeec253e0d6e4ef6ee042a47ec4",
+        "runner-source.mjs": "21511dcb849bf4f86020e540a47d78a0ed724074e2fc11cd9400566d12d7066f",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "3206a8daf2e2fe8cc2d0de17375898cd99be2730c7e374015e28b51ccf9c8b24",
+        "preparation.json": "ad0432278a84839a6fb847ab0bd12451ceaae37e5f9cff50b5e3cfd8e0418578",
+        "execution01/result.json": "6413ca6ab00b183cd7a4bb5d3d746bcace8849675da50f6512da331e87d921b7",
+        "execution01/serial.log": "994c9bc1061732d08580fd2be24c4567ac841e7e186f5e68c3f4cc8fd9e23273"
+      },
+      "recovery": {
+        "private": false,
+        "original": false,
+        "authorityWitnessCount": 0,
+        "hashPairs": {}
+      }
+    },
+    {
+      "case": "oci-auth-bff05",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff05\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 13676,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "fab90bc91678cb33898c59769f6ad7b59013c02d09087410cf04dc63e25a511c"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "bffStage": "real_auth_and_staff_restored",
+        "authShape": {
+          "accessTokenLength": 685,
+          "refreshTokenLength": 12,
+          "expiryType": "number",
+          "expiryFinite": true
+        },
+        "passed": false,
+        "error": {
+          "name": "Error",
+          "stage": "AUTH_SESSION_INVALID"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "90ed227829aa31563b36e8b1193f3daade25934cbf482991490e3ec051cddebf",
+        "executed-derivation.mjs": "fab4fa147d1637c7daff0a50fd045910f24d365e59cdd75f114f0cc97ae2422a",
+        "runner-source.mjs": "fbe40264bf8ab8b5cf681fcbfab8555748e2decc6d36f43d5c28e91d18402d08",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "3206a8daf2e2fe8cc2d0de17375898cd99be2730c7e374015e28b51ccf9c8b24",
+        "preparation.json": "ad0432278a84839a6fb847ab0bd12451ceaae37e5f9cff50b5e3cfd8e0418578",
+        "execution01/result.json": "a582a3fdd96c3dbf126de35e146959f1e8e8d19f3ccd31328cf76ff6c25466df",
+        "execution01/serial.log": "fab90bc91678cb33898c59769f6ad7b59013c02d09087410cf04dc63e25a511c",
+        "host-driver-result.json": "5c35a9d017c7209f00e3b18e7f0ca286b779fd9750165ee06324a873e7e6851a"
+      },
+      "recovery": {
+        "private": false,
+        "original": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      }
+    },
+    {
+      "case": "oci-auth-bff06",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff06\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 18884,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "8117e5add26287c6a7e75bba0e10d478f8ee93cf8a3e2d9c567577caacdb4473"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "bffStage": "cookies_prepared",
+        "authShape": {
+          "accessTokenLength": 685,
+          "refreshTokenLength": 12,
+          "expiryType": "number",
+          "expiryFinite": true
+        },
+        "passed": false,
+        "error": {
+          "name": "Error",
+          "stage": "SESSION_REGISTRY_UNAVAILABLE"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "88d01cefb7e46efcd1c27392bc0386e2cdd69a1b0619ee45a41f4aa75414910b",
+        "executed-derivation.mjs": "ead56c85aff3caa50b21f1d6c210f12e281eb07bcb0fb6bfdfce58e8909c225e",
+        "runner-source.mjs": "a039845299de9f0b7fa403957637cb5f5efaaf4934b9bebfa68ffa7a80d16dd5",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "3206a8daf2e2fe8cc2d0de17375898cd99be2730c7e374015e28b51ccf9c8b24",
+        "preparation.json": "ad0432278a84839a6fb847ab0bd12451ceaae37e5f9cff50b5e3cfd8e0418578",
+        "execution01/result.json": "d04db113181ebc3f249338e1fe5c4bbf6358da9b1943cb4e5e0b171d93e07cf5",
+        "execution01/serial.log": "8117e5add26287c6a7e75bba0e10d478f8ee93cf8a3e2d9c567577caacdb4473",
+        "host-driver-result.json": "5e3df1d8975778c28f1e5124ece54d59472e8590e40871d9c2c12ea668baceef"
+      },
+      "recovery": {
+        "private": false,
+        "original": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      }
+    },
+    {
+      "case": "oci-auth-bff07",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff07\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 22840,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "3a99c9f0fe952e011ebfe24931b3f2db545c903f49550e027f47a2cf0ef97055"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "bffStage": "cookies_prepared",
+        "authShape": {
+          "accessTokenLength": 685,
+          "refreshTokenLength": 12,
+          "expiryType": "number",
+          "expiryFinite": true
+        },
+        "registryDiagnostic": {
+          "code": "22023",
+          "reason": "K2_ADMIN_SESSION_LIFETIME_INVALID"
+        },
+        "passed": false,
+        "error": {
+          "name": "Error",
+          "stage": "SESSION_REGISTRY_UNAVAILABLE"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "37675355fae7de3e1970cc1c4a8795159ef77472ee9eeccf6126a724d8a50b2d",
+        "executed-derivation.mjs": "6e6389729656d0956c161846e39a32e4bf9401ad83ab17a5f4c9c8a061dbd545",
+        "runner-source.mjs": "7056951664170691191c9795b6ad856f7dc71705b27230109e900b07bcd68888",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "74b05c7dbe631a607dd4cf00b9ef3ba65b245648f6d8bceeed346a0597d84ef2",
+        "preparation.json": "ad0432278a84839a6fb847ab0bd12451ceaae37e5f9cff50b5e3cfd8e0418578",
+        "execution01/result.json": "c11046ae8e78be30b7f835e8f8a37eec9d7a2b566d97bea0b213b3893eb49f3f",
+        "execution01/serial.log": "3a99c9f0fe952e011ebfe24931b3f2db545c903f49550e027f47a2cf0ef97055",
+        "host-driver-result.json": "3f34a7a7725fc53d065697eca3c07ff7671746cdde7e91d4c03ca5b1495ecae9"
+      },
+      "recovery": {
+        "private": false,
+        "original": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      }
+    },
+    {
+      "case": "oci-auth-bff08",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff08\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 14928,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "eaa1397b20e5779b12930189e56e96f9a82cd4c2608b59a4735371db2122669b"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "real_signed_bff_registry_registration"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "bffStage": "cookies_prepared",
+        "authShape": {
+          "accessTokenLength": 685,
+          "refreshTokenLength": 12,
+          "expiryType": "number",
+          "expiryFinite": true
+        },
+        "passed": false,
+        "error": {
+          "name": "AssertionError",
+          "stage": "assertion_or_transport_failure",
+          "code": "ERR_ASSERTION"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "c731841ba4f224dd3b1c0df673b47add0f218828f6d0aa35b50f9e417b38f8ef",
+        "executed-derivation.mjs": "0dd44a43113e0140868678217b194804e7ca069b27ba0081d993405872e6f699",
+        "runner-source.mjs": "d4c077739b226dc7bd67b48b351ce6669e53c98e425abd837d641333e8e69e5a",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "74b05c7dbe631a607dd4cf00b9ef3ba65b245648f6d8bceeed346a0597d84ef2",
+        "preparation.json": "569077c3640626831ed1f1e6c89998f8d72576fb749c88ae2fd82314d10dadd0",
+        "execution01/result.json": "1332b4d1c204135b21a011f26c694eb8d47e7b12361a97ff163797d3802e4c0e",
+        "execution01/serial.log": "eaa1397b20e5779b12930189e56e96f9a82cd4c2608b59a4735371db2122669b",
+        "host-driver-result.json": "fdcc29897100a36dde87db032780b6512f8ab8d8702fa6cda53fabd57f15db56"
+      },
+      "recovery": {
+        "private": false,
+        "original": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      }
+    },
+    {
+      "case": "oci-auth-bff09",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff09\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 3988,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "1b98383492e97662b3243304bd32b8af33637500d9aa2d2885a28bbdba7190ab"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "real_signed_bff_registry_registration"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "bffStage": "registry_registered",
+        "authShape": {
+          "accessTokenLength": 685,
+          "refreshTokenLength": 12,
+          "expiryType": "number",
+          "expiryFinite": true
+        },
+        "authorizationDiagnostic": {
+          "status": 503,
+          "code": "ADMIN_SERVICE_UNAVAILABLE"
+        },
+        "passed": false,
+        "error": {
+          "name": "AssertionError",
+          "stage": "assertion_or_transport_failure",
+          "code": "ERR_ASSERTION"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "bc80a68ec4a6ed41960dac82facf293e75787988bfcb79b5e01e2964a25c7882",
+        "executed-derivation.mjs": "a01877611e6586676fb25c2e1c4d303ed53b3e59d9d2fc5f65eefc05e6dc7feb",
+        "runner-source.mjs": "61249aa0c1166f7e25ad2be6c618e4cd3e92df639feac5ac5ba45e0e2fe16de7",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "9c9c8c024dd2a09e8d0769c780921b8c9cf93f9819b0fbe1ac1b0c763a353fba",
+        "preparation.json": "569077c3640626831ed1f1e6c89998f8d72576fb749c88ae2fd82314d10dadd0",
+        "execution01/result.json": "16ced46fe5562f6948ca1b0e4cad6731b22371a6a80b5161e40d45f6ef3342a2",
+        "execution01/serial.log": "1b98383492e97662b3243304bd32b8af33637500d9aa2d2885a28bbdba7190ab",
+        "host-driver-result.json": "73e56976207422d562bc34f5b5aa540744eb611844a302162b833fa38f6f65f9"
+      },
+      "recovery": {
+        "private": false,
+        "original": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      }
+    },
+    {
+      "case": "oci-auth-bff10",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff10\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 20164,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "c8147f93c856c6fecb0b39291f4490f923e9a0a72b2892fed2980e67b67032a7"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "real_signed_bff_registry_registration"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "bffStage": "registry_registered",
+        "authShape": {
+          "accessTokenLength": 685,
+          "refreshTokenLength": 12,
+          "expiryType": "number",
+          "expiryFinite": true
+        },
+        "validationDiagnostic": {
+          "code": "23514",
+          "reason": "no_named_boundary_error"
+        },
+        "passed": false,
+        "error": {
+          "name": "Error",
+          "stage": "SESSION_REGISTRY_UNAVAILABLE"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "4e45df9864d3dab6ea91bbeeabbadd90d933699f3e237829d54c5b7ac4133064",
+        "executed-derivation.mjs": "ecbdc18c3c690ed4282be90ad121948aa08a17da5dc4b62b5b1603a6a4aa0294",
+        "runner-source.mjs": "c9b694e01d8096a999c5b49de2ee197249f35a6aad415027645fa22f91838853",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "806431da20f82b9681ffe37d8a7a66bbbafbaee26dbc56fded26707bcdaaf266",
+        "preparation.json": "569077c3640626831ed1f1e6c89998f8d72576fb749c88ae2fd82314d10dadd0",
+        "execution01/result.json": "d77940d26fdfa08b1265d42604e28f92bd9047b778fa21913f7401465382d81f",
+        "execution01/serial.log": "c8147f93c856c6fecb0b39291f4490f923e9a0a72b2892fed2980e67b67032a7",
+        "host-driver-result.json": "e835bd62d67ff74f3d6d9a6723c16833d3096a630ed33d078069d7a79cc9de02"
+      },
+      "recovery": {
+        "private": false,
+        "original": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      }
+    },
+    {
+      "case": "oci-auth-bff11",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff11\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 15332,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "c8e90a89a67da661e4abda822bf58540ccaa4f38e458321d76cde4dd7515a4ac"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "real_signed_bff_registry_registration"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "bffStage": "registry_registered",
+        "authShape": {
+          "accessTokenLength": 685,
+          "refreshTokenLength": 12,
+          "expiryType": "number",
+          "expiryFinite": true
+        },
+        "validationDiagnostic": {
+          "constraint": "admin_sessions_check1",
+          "code": "23514",
+          "reason": "no_named_boundary_error"
+        },
+        "passed": false,
+        "error": {
+          "name": "Error",
+          "stage": "SESSION_REGISTRY_UNAVAILABLE"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "be8c62329e9735275ab7e0f5e4faf96de36b570007ff6da97ddaba7b031fefe6",
+        "executed-derivation.mjs": "3817fcd12043c3e763c8bb8d7599b854dd9d8d8a9eebe1718352630c9b59ef9e",
+        "runner-source.mjs": "176cb15736b0539211a702b39bb0f04eb50291a1a4d4adceccf01d7e9f5deda5",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "69c9613e23a5e6b872dc13d2d4f4775d891c5a25d71233456eb2f552bd7c0f02",
+        "preparation.json": "81bf1d3bff1e273cb5d80bf2955d569471fdda3a8c2e83fc4d8187299429b1fb",
+        "execution01/result.json": "d173c96651adeeb805c0a814dc81c32f4e4ddd5c275d33e0e2dda5b271447ed7",
+        "execution01/serial.log": "c8e90a89a67da661e4abda822bf58540ccaa4f38e458321d76cde4dd7515a4ac",
+        "host-driver-result.json": "e63411f223d0cba639c2e56dd79d2594c6942aad9cdc9b82011554723c0bcc5f"
+      },
+      "recovery": {
+        "private": false,
+        "original": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      }
+    },
+    {
+      "case": "oci-auth-bff12",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff12\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 11280,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "1638a2bffe754a1af71e9c4d8a90035a33b8e7b029072e4628b54b3efc9da5de"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "real_signed_bff_registry_registration"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "bffStage": "registry_registered",
+        "authShape": {
+          "accessTokenLength": 685,
+          "refreshTokenLength": 12,
+          "expiryType": "number",
+          "expiryFinite": true
+        },
+        "controlledCreationClockAheadMs": 60000,
+        "validationDiagnostic": {
+          "constraint": "admin_sessions_check1",
+          "code": "23514",
+          "reason": "no_named_boundary_error"
+        },
+        "passed": false,
+        "error": {
+          "name": "Error",
+          "stage": "SESSION_REGISTRY_UNAVAILABLE"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "7984662d9f44a3c8528284526ce39e6ebaa1d167d46d13a6ac3ccd81fedc79b3",
+        "executed-derivation.mjs": "ff0874ebc61591ee3b9ceda9f8d26bcba1f480b4ba085c2b9265e62c380a1fef",
+        "runner-source.mjs": "1203bb9fb14053e009412540efdeaddf6f53eb04b140d5e88ccc9b6e05c4aa9c",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "a97de26314c05291788b970cc0331866b746bcb1e3efec8d5d33153dcf28da7b",
+        "preparation.json": "679c8fdcb49b173af91f232fd4c2dbf1053bdec89d41a09e3872d568c193ed1d",
+        "execution01/result.json": "3c1de4a711e85e9c696bc23f414f284304fdb52005f4b2b93283e9af7f914865",
+        "execution01/serial.log": "1638a2bffe754a1af71e9c4d8a90035a33b8e7b029072e4628b54b3efc9da5de",
+        "host-driver-result.json": "a7bf6ee2224b23baafa17749e2f1a5404c52ae9fbba72d7421ccd1781ad0577b"
+      },
+      "recovery": {
+        "private": true,
+        "original": true,
+        "authorityWitnessCount": 2,
+        "hashPairs": {
+          "bff-before-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-sequence-recovery.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "auth-rows-before.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-schema-before.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+          "auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+        }
+      }
+    },
+    {
+      "case": "oci-auth-bff13",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff13\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 22524,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": true,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": true,
+        "processStopped": true,
+        "serialSha256": "e51ec2c2f7d6516b72dfeea399bce3d12f0b10a5e77e409c195ff2d138d96730"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "real_signed_bff_registry_registration",
+          "real_cookie_aal2_registry_csrf_admission",
+          "bff_admitted_real_postgrest_options",
+          "bff_missing_csrf_refused",
+          "auth_still_valid_registry_explicitly_inactive",
+          "bff_revoked_registry_refused",
+          "global_logout",
+          "logout_refresh_refused",
+          "admin_hard_delete_user"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "bffStage": "registry_registered",
+        "authShape": {
+          "accessTokenLength": 685,
+          "refreshTokenLength": 12,
+          "expiryType": "number",
+          "expiryFinite": true
+        },
+        "controlledCreationClockAheadMs": 60000,
+        "bffTransport": {
+          "calls": {
+            "auth": 4,
+            "rest": 12
+          },
+          "scope": "Actual production modules invoked with request/response envelopes and genuine proxy HTTP; no hosted route/browser proof"
+        },
+        "logoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "passed": true
+      },
+      "hashes": {
+        "executed-source.mjs": "8661b5e234815c9b2afa109475695d500718e9a0866defb371cb42a42b31bc86",
+        "executed-derivation.mjs": "8c2fa87fb773bef1f0e7a931f36422532e8c68f21be080f4186e6c6a50349dad",
+        "runner-source.mjs": "c6fa04f2306280a43c85121693133cf9d991bed8343c3525d575cf897b64e79f",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "a97de26314c05291788b970cc0331866b746bcb1e3efec8d5d33153dcf28da7b",
+        "preparation.json": "b8130c919b428321f661b145bab5046d2a955c51e488e23b7d3dca68aeb78813",
+        "execution01/result.json": "e7b6b56920216a7e090e84b2ece7ba0da1530068660225204671b84e7652de79",
+        "execution01/serial.log": "e51ec2c2f7d6516b72dfeea399bce3d12f0b10a5e77e409c195ff2d138d96730",
+        "host-driver-result.json": "15f50638396d6d66ea1ea305d9a991a746621113d2d0bbe66fabd6e231d1bac7"
+      },
+      "recovery": {
+        "private": true,
+        "original": true,
+        "authorityWitnessCount": 2,
+        "hashPairs": {
+          "bff-before-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-sequence-recovery.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "auth-rows-before.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-schema-before.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+          "auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+        }
+      }
+    },
+    {
+      "case": "oci-auth-bff14",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Actual local BFF cookie/registry/CSRF production modules with genuine Auth/PostgREST and full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-bff14\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 23608,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": true,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": true,
+        "processStopped": true,
+        "serialSha256": "0de41e159411d9a667e33d1163330d6cca230fe6842111e83003fc5da409628f"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "real_signed_bff_registry_registration",
+          "real_cookie_aal2_registry_csrf_admission",
+          "bff_admitted_real_postgrest_options",
+          "renewed_cookie_decoded_and_readmitted_without_lifetime_extension",
+          "bff_missing_csrf_refused",
+          "auth_still_valid_registry_explicitly_inactive",
+          "bff_revoked_registry_refused",
+          "global_logout",
+          "logout_refresh_refused",
+          "admin_hard_delete_user"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "bffStage": "registry_registered",
+        "authShape": {
+          "accessTokenLength": 685,
+          "refreshTokenLength": 12,
+          "expiryType": "number",
+          "expiryFinite": true
+        },
+        "controlledHostClockAheadMs": 60000,
+        "bffTransport": {
+          "calls": {
+            "auth": 5,
+            "rest": 14
+          },
+          "scope": "Actual production modules invoked with request/response envelopes and genuine proxy HTTP; no hosted route/browser proof"
+        },
+        "logoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "passed": true
+      },
+      "hashes": {
+        "executed-source.mjs": "da268c286ef10b7e852c5f58ec4dc78fcbc99637d5d24db34fecad330d626f7b",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "3b74e36397ffa4620fe3e37de2429f9dfff149fe8bd03d39d8109fec05ba3123",
+        "host-driver.mjs": "49bc20eb1b64563f4fc861165168d3f031d1890fa49585c707c048cc9ba034a4",
+        "bff-helper.mjs": "265e745e8e472af08295cf57330d6ef7ff5bb720a538600c576f632b18d6fe80",
+        "preparation.json": "b8130c919b428321f661b145bab5046d2a955c51e488e23b7d3dca68aeb78813",
+        "execution01/result.json": "85ffb451b36f73754dfac3b579cdec3cffb19b920c4944008d6d865cbe3f987b",
+        "execution01/serial.log": "0de41e159411d9a667e33d1163330d6cca230fe6842111e83003fc5da409628f",
+        "host-driver-result.json": "acd6ba6abc7403016ee7323fcc22842a4d2f87c59e759fc807a71e96f1af6ce2"
+      },
+      "recovery": {
+        "private": true,
+        "original": true,
+        "authorityWitnessCount": 2,
+        "hashPairs": {
+          "bff-before-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-sequence-recovery.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "auth-rows-before.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-schema-before.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+          "auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+        }
+      }
+    }
+  ],
+  "sourceHashes": {
+    "server/admin-bff/security.js": "2c296644a5bfbba1747739bbe7ea3bd761e49afdf22272689b6f94bdb6141b77",
+    "supabase/migrations/20260822_admin_session_registry.sql": "4b3d99f393ca7df1efe18a18ea8c7b22928ad527918d7c3135a3eca95469502f",
+    "tests/admin-bff-refresh-token.test.mjs": "3e1b4b54c6aa0c69572b6dae34ef739942f3e041d17b44ead49197e7aa3c8f13",
+    "package.json": "1c94b0a613ebd9f505a9b0db328f6b42844f9ba2cd840713f19dc56ad2ba509d",
+    ".tools/prepare-auth-bff-probe.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+    ".tools/probe-local-bff-boundary.mjs": "265e745e8e472af08295cf57330d6ef7ff5bb720a538600c576f632b18d6fe80",
+    ".tools/record-local-bff.mjs": "f4533cd56c5f19d74366c6cc5417629f75887a5ef0937fcf6c8e8efcc7318fad"
+  },
+  "verification": {
+    "refreshRegression": {
+      "red": "1 pass/1 fail AUTH_SESSION_INVALID",
+      "green": "2/2"
+    },
+    "focusedContracts": {
+      "session": 82222,
+      "passed": 117,
+      "sandboxLoopbackFailures": 5,
+      "retrySession": 11758,
+      "retryPassed": 5
+    },
+    "development": {
+      "initialSession": 59024,
+      "finalSession": 99058,
+      "exit": 0
+    },
+    "review": "Independent production source and final14 native/hash review: no Critical/Important findings"
+  },
+  "shutdown": {
+    "independentPidsBeforeSuccessor": true,
+    "finalPidAbsence": true,
+    "ports": [
+      54392,
+      54393,
+      54394,
+      54395
+    ],
+    "finalPortsAbsent": true
+  },
+  "limitations": [
+    "Captured public routine enforces eight hours; prepared seven-day routine is temporary and original restored.",
+    "Case01 missing optional telemetry relation;02/03/05 refresh contract refusals;04 owned pre-init prompt termination;06/07 captured lifetime refusal;08-11 validation constraint/refusal, without full recovery;11 recovery boolean refusal.",
+    "Case12 intentionally fails controlled future-creation validation but full recovery passes;13 passes BFF checks, renewed cookie only observed present;14 proves renewed cookie decode/readmission using consistent host skew.",
+    "Case11 derived-source quoting refused once before guest creation.",
+    "Auth/PostgREST source-pinned versions do not establish deployed versions; no real staff, browser or hosted product acceptance."
+  ],
+  "nextAction": "MAP-018: genuine routed BFF login/MFA/fresh-browser taxonomy reference reproduction, then remaining installation/transport/provider/project/owner/real-host gates."
+}

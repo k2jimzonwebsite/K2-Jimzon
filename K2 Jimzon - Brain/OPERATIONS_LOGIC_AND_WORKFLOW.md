@@ -1,5 +1,7 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+Admin Auth refresh tokens require their own protocol-valid12/16384 bound; access tokens retain16/16384. Keep encryption, server identity/AAL2, lifetime, registry/revocation and CSRF controls. Session validation must preserve last_seen_at >= created_at despite the explicitly accepted creation-clock skew, without extending expiry. Qualify captured versus temporarily prepared routine state separately; require renewed-cookie decode/readmission and complete private/original row/schema/sequence/authority recovery. Failed witnesses must run recovery and retain their failed status. Local receipt LOCAL_BFF_IDENTITY_20261010.json; routed/browser/hosted acceptance remains MAP-018.
+
 PostgREST permission acceptance requires real signed Auth tokens, exact positive role statements and negative anonymous/customer/tampered-token refusals, followed by complete captured conservation. Fixture profile promotion, token AAL2 use and source-configured public versions are separate from actual staff/BFF/browser/deployed acceptance. Local receipt: LOCAL_AUTH_POSTGREST_20261010.json; remaining MAP-018.
 
 Local identity acceptance requires actual signed JWT, server user and real TOTP verification, plus server refresh refusal after logout. Preserve failure cases and API deletion versus complete native conservation distinctions; never infer BFF/staff/hosted acceptance. Local evidence: LOCAL_AUTH_IDENTITY_20261010.json; remaining work MAP-018.

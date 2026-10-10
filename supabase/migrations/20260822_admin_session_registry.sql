@@ -308,7 +308,8 @@ begin
       );
       return jsonb_build_object('active', false);
     end if;
-    update k2_private.admin_sessions set last_seen_at = clock_timestamp()
+    -- Registration permits bounded client clock skew; retain the creation floor.
+    update k2_private.admin_sessions set last_seen_at = greatest(clock_timestamp(), created_at)
     where session_id = v_session_id and user_id = v_actor;
     if p_action = 'admin_session_list' then
       return jsonb_build_object(

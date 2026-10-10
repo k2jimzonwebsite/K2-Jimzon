@@ -54,6 +54,11 @@ function validToken(value) {
   return typeof value === 'string' && value.length >= 16 && value.length <= 16_384
 }
 
+function validRefreshToken(value) {
+  // Auth issues opaque 12-character refresh tokens; access JWTs keep their bound.
+  return typeof value === 'string' && value.length >= 12 && value.length <= 16_384
+}
+
 function validTimestamp(value) {
   return Number.isFinite(value) && value > 0
 }
@@ -63,7 +68,7 @@ function validPendingSession(session) {
     && session.version === 1
     && UUID.test(session.pendingId || '')
     && validToken(session.accessToken)
-    && validToken(session.refreshToken)
+    && validRefreshToken(session.refreshToken)
     && validTimestamp(session.expiresAt)
     && validTimestamp(session.createdAt)
     && validTimestamp(session.expiresHardAt)
@@ -79,7 +84,7 @@ function validActiveSession(session) {
     && session.aal === 'aal2'
     && TOKEN_HASH.test(session.csrfHash || '')
     && validToken(session.accessToken)
-    && validToken(session.refreshToken)
+    && validRefreshToken(session.refreshToken)
     && validTimestamp(session.expiresAt)
     && validTimestamp(session.createdAt)
     && validTimestamp(session.lastSeenAt)
@@ -97,7 +102,7 @@ function validRecoverySession(session) {
     && STAFF_ROLES.has(session.role)
     && TOKEN_HASH.test(session.csrfHash || '')
     && validToken(session.accessToken)
-    && validToken(session.refreshToken)
+    && validRefreshToken(session.refreshToken)
     && validTimestamp(session.expiresAt)
     && validTimestamp(session.createdAt)
     && validTimestamp(session.expiresHardAt)
@@ -106,7 +111,7 @@ function validRecoverySession(session) {
 
 function requireAuthSession(authSession) {
   const expiresAt = Number(authSession?.expires_at) * 1000
-  if (!validToken(authSession?.access_token) || !validToken(authSession?.refresh_token)
+  if (!validToken(authSession?.access_token) || !validRefreshToken(authSession?.refresh_token)
       || !validTimestamp(expiresAt)) throw new Error('AUTH_SESSION_INVALID')
   return expiresAt
 }
