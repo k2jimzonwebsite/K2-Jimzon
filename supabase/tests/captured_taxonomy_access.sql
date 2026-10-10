@@ -8,6 +8,29 @@ do $owned$ begin
  or current_setting('data_directory')<>'/tmp/k2-managed-data'
  or inet_server_addr() is not null then raise exception 'OWNED_RAM_TAXONOMY_REQUIRED';end if;
 end $owned$;
+set local role anon;
+do $anonymous$ begin
+ if current_user<>'anon'
+ or not has_table_privilege(current_user,'public.brands','SELECT')
+ or not has_table_privilege(current_user,'public.categories','SELECT')
+ or has_table_privilege(current_user,'public.brands','INSERT')
+ or has_table_privilege(current_user,'public.categories','INSERT')
+ then raise exception 'EXACT_ANON_TAXONOMY_BOUNDARY_REQUIRED';end if;
+ begin
+  insert into public.brands(id,name) values('ee000000-0000-4000-8000-000000000007','Synthetic anonymous brand');
+  raise exception 'ANONYMOUS_BRAND_WRITE_ADMITTED';
+ exception when insufficient_privilege then null;
+ end;
+ begin
+  insert into public.categories(id,name) values('ee000000-0000-4000-8000-000000000008','Synthetic anonymous category');
+  raise exception 'ANONYMOUS_CATEGORY_WRITE_ADMITTED';
+ exception when insufficient_privilege then null;
+ end;
+end $anonymous$;
+select id,name from public.brands order by name asc limit 501;
+select id,name from public.categories order by name asc limit 501;
+select 'K2_CAPTURED_ANON_OPTIONS_WRITE_DENIAL_OK';
+reset role;
 insert into auth.users(id) values('ee000000-0000-4000-8000-000000000001'),('ee000000-0000-4000-8000-000000000002');
 insert into public.user_profiles(id,role) values
  ('ee000000-0000-4000-8000-000000000001','Staff'),

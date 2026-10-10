@@ -1,0 +1,88 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "date": "2026-10-10",
+  "scope": "Read-only current source identity-chain audit; no hosted/Auth/PostgREST observation",
+  "providerWrites": false,
+  "liveDefectClaimed": false,
+  "sources": [
+    {
+      "file": "src/context/useAdminAuthRuntime.js",
+      "sha256": "92bb94a43ce688c78781c95894b8e08babe96aa135c6edc1415ea7516fb1d246"
+    },
+    {
+      "file": "src/views/admin/useReferenceOptions.js",
+      "sha256": "dadeb3eec22fbc096357bd81ce93c74ec6ec73ce72642a0a0c5218c0c14a7bfc"
+    },
+    {
+      "file": "src/views/admin/Sheet.jsx",
+      "sha256": "45606bc3dddb8f32beeef19e6424f587a58db42f7a7b74fec4dde4b45abb53db"
+    },
+    {
+      "file": "src/views/admin/BulkCsvImportModal.jsx",
+      "sha256": "eadbe772a1277c6b36c2b3426456efe30c31e18e431e7254bd20f2693bdc2fa4"
+    },
+    {
+      "file": "src/services/adminBffService.js",
+      "sha256": "44e78103f856869a821b572eb032dfd12797253c485ecca5d7f0fe48444e2384"
+    },
+    {
+      "file": "server/admin-bff/authorize.js",
+      "sha256": "21113ca8d3a7f3526e140ddcd1193ef854db5698674f8f0b317306060976461c"
+    },
+    {
+      "file": "server/admin-bff/supabase.js",
+      "sha256": "3281a0952f350b1c53806168eb8d7c467f8f0c197cbf192ecc04ba21530ef746"
+    },
+    {
+      "file": "server/admin-bff/sessions.js",
+      "sha256": "4498ef853c55cb40b4f7705936d2085d4c82fe77d4134df6ef40d39d53cb2510"
+    },
+    {
+      "file": "server/admin-bff/product-master.js",
+      "sha256": "a1de8a00f29e683388061cff68d401ecf2273bdd9bd80b0f4b40a784096eb400"
+    },
+    {
+      "file": "server/admin-bff/product-intake.js",
+      "sha256": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37"
+    },
+    {
+      "file": "server/admin-bff/router.js",
+      "sha256": "ebb0921f3435663540da4d5f828055660ee0102ef3fde36a9c7f822a0de3cadb"
+    },
+    {
+      "file": "tests/admin-product-master-ui.spec.js",
+      "sha256": "d4475066f65bcf8c2281e8ba129f767f13d89a1f831efef9bcd45bc1f493dfdd"
+    }
+  ],
+  "findings": [
+    {
+      "path": "product-master",
+      "authority": "Admin/SuperAdmin after BFF session restoration, current staff profile, AAL2 and signed registry validation",
+      "queries": "canonical product and stock/evidence then bounded exact-count brand/category options"
+    },
+    {
+      "path": "product-intake",
+      "authority": "Staff/Admin/SuperAdmin with BFF origin/cookie/session/AAL2/registry/CSRF and signed command actor; no additional Admin-only check",
+      "queries": "existing intake dispatcher and canonical imported draft target/version checks"
+    },
+    {
+      "path": "Sheet/CSV reference tables",
+      "authority": "direct browser Supabase client session, independent of BFF cookie",
+      "queries": "useReferenceOptions lists/inserts brands/categories directly",
+      "gap": "BFF login/MFA apply user state; no browser supabase.auth.setSession. Fresh BFF-only browser may use anon; qualify exact mode and real HTTP before correction."
+    },
+    {
+      "path": "UI evidence",
+      "authority": "intercepted route.fulfill responses for product-master",
+      "gap": "cannot qualify actual BFF Auth/PostgREST/options/concurrent signed operations"
+    }
+  ],
+  "runtimeObservations": {
+    "dockerCommand": false,
+    "podmanCommand": false,
+    "wsl": "list command reports WSL not installed",
+    "acceptedQemuNetwork": "-nic none; no HTTP/Auth gateway included or reached by accepted SQL witness"
+  },
+  "nextAction": "Native actual anon taxonomy read/write refusal and preservation, then reproduce fresh BFF-only identity behavior against genuine local Auth/PostgREST with exact captured authority; retain no token exposure/anon grant and independent signed concurrency/real-host gates."
+}

@@ -2,6 +2,64 @@
 
 ## 10 October — combined imported installation and recovery
 
+### 10 October — BFF/reference identity boundary audit
+
+MAP-018 / IDEA-20261009-11: source audit pins12 current files in
+`docs/acceptance/BFF_TAXONOMY_IDENTITY_AUDIT_20261010.json`. Product Master
+adds Admin/SuperAdmin authority after BFF authorization. Intake accepts the
+existing staff identities through origin/cookie/restored Auth/AAL2/signed
+session-registry/CSRF and signed dispatcher checks. BFF login/MFA applies returned
+user state in the browser, with server cookies; it does not call that browser
+Supabase client's `auth.setSession`. Sheet and CSV `useReferenceOptions` directly
+list/insert brands/categories through that browser client. With no pre-existing
+browser Auth session, the calls may use anon. This is an explicit source-backed
+inference, not an observed deployed defect or authorization to widen grants.
+Existing Product Master UI tests intercept the route with `route.fulfill`, so
+their passing responses do not qualify this actual identity chain.
+
+Extended native SQL test runs in fresh immutable `oci-taxonomy02` via
+`node scripts/rehearse-captured-taxonomy.mjs --case=oci-taxonomy02`:
+session77988 **exit0**, PostgreSQL17.6/no timeout, runtime19404 stopped/absent.
+Actual `anon` role verifies SELECT present/INSERT absent, performs ordered options
+reads and attempts both inserts. Each actual insert raises insufficient_privilege;
+unexpected admission raises a different uncaught exception. Staff/Admin checks,
+four actual inserts/readbacks and entire synthetic auth/profile/taxonomy rollback
+remain. Complete schema is exact accepted e9ff1868... before/after; all original
+88-table/two-sequence projections remain bc485716...; two separate complete
+global/managed authority checks pass. Primary independently verified exact anon,
+Staff/Admin/authority markers, native byte-comparison hash pairs, current/staged
+SQL hash, terminal serial hash and all12 source pins. The report's historical
+marker aggregate alone does not include the anon marker; this explicit independent
+check is required for the anonymous claim.
+
+Private terminal result SHA256
+`0e48f85d585b2f88468787acd63fe040811cc84e53aff09d69183d9eccee4117`;
+serial SHA256 `6d779ab9683278798a44de125d6f01841342f593babecf96195ecdd48b230d8c`;
+executed SQL SHA256 `cf9034687d506e81f162984381c78ba76b1cdfa21e7095215131a96c7fef3e4c`.
+Prior01 sources/results remain immutable. Final development8276 exits0; no
+application/browser/release repeat. No product code, provider, permission,
+token-storage or main/deployment change. Runtime is RAM-only/stopped; preserve
+all source image/archive/case/serial/result files. Source revert recovers the
+witness; the retained original captured archive remains database recovery.
+
+Independent review finds no Critical/Important issue: all12 source pins,
+current/staged SQL, terminal result/serial, PID absence, exact anonymous/Staff/Admin
+markers and full conservation pairs were reproduced from retained evidence.
+Audit JSON SHA256 `881e5ba39022f919b8e4dfccc37fad9c2088d380a21081907cdcc08210e19f8f`.
+
+**Exact next MAP-018 action:** reproduce the fresh BFF-only browser identity
+through genuine local Auth/PostgREST and current BFF routes with the exact captured
+database authority, then select the smallest correction that preserves server-held
+tokens and authenticated staff authority. Do not return tokens to the browser,
+grant anonymous writes, weaken session/AAL2/CSRF or substitute intercepted HTTP
+success. No genuine local HTTP Auth/PostgREST stack has been reached: Docker and
+Podman commands are unavailable, WSL reports uninstalled, accepted QEMU launch
+has `-nic none` and SQL-only evidence. These are setup gaps, not proof that an
+isolated gateway cannot be prepared. Prepare that owned runtime next without
+changing production settings; hosted/provider write gates remain separate.
+Signed product concurrency, missing policy-clear/fallback/review/stock schedules,
+ACL through-commit, transport/unknown-outcome and full real-host acceptance remain.
+
 ### 10 October — effective captured-authority taxonomy
 
 MAP-018 / IDEA-20261009-11: `node scripts/rehearse-captured-taxonomy.mjs
