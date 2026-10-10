@@ -1,0 +1,435 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "providerWrites": false,
+  "scope": "Native Node HTTP through production api/admin/index.js, actual local Auth v2.196.0/PostgREST v14.17/captured PostgreSQL17.6. Temporary exact prepared public session routine and complete security-event/preauth migrations; captured original fully restored. No browser/hosted/real staff/full migration/provider acceptance.",
+  "cases": [
+    {
+      "case": "oci-routed-auth01",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "pid": 2176,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "336285ed81448dff8e894ffd6c85b635288e38d4ae2a169d2744d036ceed97ad"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "routedStage": "POST_auth_login",
+        "lastRoutedResponse": {
+          "status": 400,
+          "code": "INVALID_JSON"
+        },
+        "passed": false,
+        "error": {
+          "name": "AssertionError",
+          "stage": "assertion_or_transport_failure",
+          "code": "ERR_ASSERTION"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "136fb02d9e55d3d34000aee32d9608d9b38233382021a22f39e99ac157fa4093",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "bc1f683013157630bef271c1522926e3d8cf458426a3c62d756adc37ee20504b",
+        "host-driver.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+        "bff-helper.mjs": "77b2bc0846532b2ae9878f67a0e0ba0a61ac9a96653cd5620f78ae4976b937b0",
+        "preparation.json": "90b6d5d16f093deea450f284749c8b43fde99cbd8e3b8b92c67ba81ecf94ab92",
+        "execution01/result.json": "d91d1cb01cc73a71fa15469c98927072b0c4e4f96ee9ad9bedd8bea9451836c2",
+        "execution01/serial.log": "336285ed81448dff8e894ffd6c85b635288e38d4ae2a169d2744d036ceed97ad",
+        "host-driver-result.json": "aae77edc14310c749cb840b47f6b478ac5d0786037e545d467a11ad47677d1a6"
+      },
+      "recovery": {
+        "exactPrerequisitesInstalled": true,
+        "private": true,
+        "original": true,
+        "authorityWitnessCount": 2,
+        "hashPairs": {
+          "bff-before-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-sequence-recovery.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "auth-rows-before.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-schema-before.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+          "auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+        }
+      }
+    },
+    {
+      "case": "oci-routed-auth02",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "pid": 6308,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "46ac2df864d5d4044fcb041100f7713c7256173783a4515c34fa487ba8f1384c"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "routedStage": "POST_auth_mfa",
+        "lastRoutedResponse": {
+          "status": 401,
+          "code": "MFA_SESSION_EXPIRED"
+        },
+        "botScope": "Missing-secret refusal real; positive local flow explicitly allows unconfigured provider. No Cloudflare/provider acceptance.",
+        "passed": false,
+        "error": {
+          "name": "AssertionError",
+          "stage": "assertion_or_transport_failure",
+          "code": "ERR_ASSERTION"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "b19c88b3d2a263254a105b69ecebc331f0f1700619e4980db7b77c74440f6a22",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "ebe2526099ffad004e33dbf9cd612a1a92e906d831ad106892f056d40137244e",
+        "host-driver.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+        "bff-helper.mjs": "f072fbb32075fb863785634df7f9de1b488159b5671b7b971e7ef76c3eef58b2",
+        "preparation.json": "90b6d5d16f093deea450f284749c8b43fde99cbd8e3b8b92c67ba81ecf94ab92",
+        "execution01/result.json": "91b03fdf73f96b21f08406dc7f8fbb5ffe867a4540e8d47a5c5ee02474526d62",
+        "execution01/serial.log": "46ac2df864d5d4044fcb041100f7713c7256173783a4515c34fa487ba8f1384c",
+        "host-driver-result.json": "57c34718f59506e7197c7bdea053b3ba26d4c61001375561fe26234c4d5973f4"
+      },
+      "recovery": {
+        "exactPrerequisitesInstalled": true,
+        "private": true,
+        "original": true,
+        "authorityWitnessCount": 2,
+        "hashPairs": {
+          "bff-before-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-sequence-recovery.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "auth-rows-before.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-schema-before.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+          "auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+        }
+      }
+    },
+    {
+      "case": "oci-routed-auth03",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "pid": 2936,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": true,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": true,
+        "processStopped": true,
+        "serialSha256": "477c5ac3b1534af3687e60e3474768ed2e832413a40441bd1e801dbb5314c929"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused",
+          "routed_logout_registry_inactive_server_refresh_refused",
+          "routed_saved_old_cookie_refused_after_logout",
+          "routed_logout_cleared_cookie_refused",
+          "global_logout",
+          "logout_refresh_refused",
+          "admin_hard_delete_user"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "routedStage": "GET_session",
+        "lastRoutedResponse": {
+          "status": 401,
+          "code": "SESSION_EXPIRED"
+        },
+        "botScope": "Missing-secret refusal real; positive local flow explicitly allows unconfigured provider. No Cloudflare/provider acceptance.",
+        "routedLogoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "routedTransport": {
+          "calls": {
+            "auth": 18,
+            "rest": 25,
+            "routed": 14
+          },
+          "scope": "Native Node request/response streams through production api/admin/index.js and real Auth/PostgREST; no hosted Vercel or browser-cookie-jar proof"
+        },
+        "logoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "passed": true
+      },
+      "hashes": {
+        "executed-source.mjs": "c692ee611b798742094795580fe03ee33efd47218f9e6f0edff1478f1af7540f",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "524e483157d5fa2ed31f3a9864dd04fe82e12bb452f4e3f04a29f11e494bc520",
+        "host-driver.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+        "bff-helper.mjs": "e55753a0502c7f76de1613393f24ef76eb2e3c417c79c22428a4f78a69acd0ae",
+        "preparation.json": "90b6d5d16f093deea450f284749c8b43fde99cbd8e3b8b92c67ba81ecf94ab92",
+        "execution01/result.json": "a62d93b6760a1dfd4444f6a6e40c37e1b4d48a7d64c56273a34b844aa89021b0",
+        "execution01/serial.log": "477c5ac3b1534af3687e60e3474768ed2e832413a40441bd1e801dbb5314c929",
+        "host-driver-result.json": "f1006a7085b3d7423871274fde99a00ac7f5d76800f1dfa046d808b620abe487"
+      },
+      "recovery": {
+        "exactPrerequisitesInstalled": true,
+        "private": true,
+        "original": true,
+        "authorityWitnessCount": 2,
+        "hashPairs": {
+          "bff-before-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-sequence-recovery.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "auth-rows-before.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-schema-before.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+          "auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+        }
+      }
+    }
+  ],
+  "sourceHashes": {
+    "api/admin/index.js": "d832229d172ddb3adae66862647a4fa75ebaac1178f980c242a59ee94d2b722f",
+    "supabase/migrations/20260822_admin_session_registry.sql": "4b3d99f393ca7df1efe18a18ea8c7b22928ad527918d7c3135a3eca95469502f",
+    "supabase/migrations/20260822_security_event_boundary.sql": "0b57de0ba371d55527c6e076be8988ba081e88fc1421ca18c6e0811076bc2fa7",
+    "supabase/migrations/20260825_admin_preauth_rate_boundary.sql": "f82320cd5731d65944663516ca7433eeaab9be94c4be9281ce241ba5187e1cfc",
+    ".tools/prepare-auth-bff-probe.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+    ".tools/prepare-routed-auth-probe.mjs": "8ae330b6515ef28ce463587d548390bc378719d20b231b852f36f0c866db28ae",
+    ".tools/probe-local-routed-boundary.mjs": "e55753a0502c7f76de1613393f24ef76eb2e3c417c79c22428a4f78a69acd0ae",
+    ".tools/drive-local-routed-auth.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+    ".tools/record-local-routed.mjs": "955034ffd3a65f8ffdb91ffe63a44102720e2252a8d59a41143325dce80e98f5",
+    "server/admin-bff/ai-spend-controls.js": "55cd7e8f5052dd2ff4f42bc333ddebe0dac26283b2df53d9ece33c50bf0f0258",
+    "server/admin-bff/authorize.js": "21113ca8d3a7f3526e140ddcd1193ef854db5698674f8f0b317306060976461c",
+    "server/admin-bff/barcode-catalog.js": "0dfc508e82a4ad55b7b577f06a9271e3f5a371ceb33f9b0c2c7851c3521aed45",
+    "server/admin-bff/catalog-spreadsheet.js": "48463a6d90b7af0d535034ff82182c08d728911a23bf6cae423ffa490c827d62",
+    "server/admin-bff/channels.js": "36418ddff9378ebf2c40f4568a53b1f9c9136100640524cf0ba8ab5e32f72186",
+    "server/admin-bff/consignments.js": "fa40f7147c926bc13d61a586ba3c006efcd5ce4b7a57fa9788e87782f7c7107c",
+    "server/admin-bff/coupons.js": "55265e335db699a3cb9b59c81415178d7a44ce421e6623cf5ac078975d342ea3",
+    "server/admin-bff/customer-delivery-rates.js": "8156da8d18ebc53260dd8bc62381e3cf7d401c34124e0f338e6c2b564f35d5c8",
+    "server/admin-bff/customers.js": "f26cdf3a1e114bfd307ed9f526bddb82a30c20cdd068fd8aead1de3c707a6b89",
+    "server/admin-bff/delivery.js": "1da63726ef7ee2c0ea5dcde6959a8fc7f9ae53b7b58b74bc840e9137d2aa8f6a",
+    "server/admin-bff/evidence-cleanup-policy.js": "865f8a78ca41a7e5b5355f728e6ac4ba9f608c0b6a5d0426daaffb731d45fa64",
+    "server/admin-bff/express-delivery.js": "3f847e7e38da20c8767f4f2b673eb372eade4ccbae6b1891661f44c91d70a47e",
+    "server/admin-bff/fulfillment.js": "cdd6b21eaf295865e7ff4801f216f8c21bdce6ce878ed848a3269a5a576c4faa",
+    "server/admin-bff/gemini-public-draft.js": "9742fd91dce08eb69ce79c6b4ed70ef76793fc99ecfce5cce28a7a5154914437",
+    "server/admin-bff/globe-cms.js": "ee18ea00a2b5bee8629fd1a3a29792e7f6a7c220d6b3f2c1887b1f730102e429",
+    "server/admin-bff/inbox.js": "78739172b871116dc9f5fd5a5375f2e21f5264b9fd746d3f6d20b11d9002d741",
+    "server/admin-bff/intake-ai-jobs.js": "fce0fab7f53d3b2813c1b4c280877e3c9612383dec9726eecdfbdfa8e9027efc",
+    "server/admin-bff/intake-ai-provider.js": "1bda07ff9ce987b4212a9675d299ccfc605c86e4283a688ab902c46e7342ba66",
+    "server/admin-bff/lots.js": "24c2067ceac6a59fbdf73fe0afc9170da077e5b26412bd1fc9ea8292c125c5b7",
+    "server/admin-bff/marketplace-snapshots.js": "da205addeb245a8df8f3fd8603d5e372856390b913f09437485b24dad0004300",
+    "server/admin-bff/mfa-enrollment.js": "7ee01f8a258e1635bf858f8a12cb92844b74220f19c23094a1b69726bef5f5dd",
+    "server/admin-bff/mfa-replacement-handler.js": "cd27089b44d664236e70f34572c402974f6440dddda7122c380ad6732f885466",
+    "server/admin-bff/mfa-replacement.js": "5c74cbdedc51e3c54b7ddd11a9a2db1ff09badf2962372770a8dcd65dd7bc9e0",
+    "server/admin-bff/pasabuy.js": "9978cff90584fff9662184a49eeb5b652898f38c0117c490a4234b7eee8c62c4",
+    "server/admin-bff/password-recovery.js": "7bfbccacf9ce97fce1ac99a84928a9928f1d3c5a8a81ad66622b64ffbe1212c9",
+    "server/admin-bff/preauth-rate.js": "f7dd96186cdda89f0556db18ef65985bc77197980a80bcc89aaf3b80c0f2e209",
+    "server/admin-bff/procurement.js": "9c3b9e6a0363e92e8cd06ca616b0367ac6522b7eb4bc70515fa5b34c868ade48",
+    "server/admin-bff/product-intake.js": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37",
+    "server/admin-bff/product-knowledge.js": "5f9ae3aecd84de214616e391a5cd4fa240ba552b2e2b0062a5b9ad5f96c5e630",
+    "server/admin-bff/product-master.js": "a1de8a00f29e683388061cff68d401ecf2273bdd9bd80b0f4b40a784096eb400",
+    "server/admin-bff/product-media.js": "9eda473df524a8a06cc003873e88d4b0e4607f0c4d651844791fd4dbbbac7d72",
+    "server/admin-bff/request-deadline.js": "1f2b9f1b7d1446cb5f570be21c08ad6256d02367443a54a0e7a0ff3a3444850b",
+    "server/admin-bff/reservations.js": "f1e01100b640a88a335e8f0a75a5147fc1f90b6d694887e7ee56f178e5d12f09",
+    "server/admin-bff/router.js": "ebb0921f3435663540da4d5f828055660ee0102ef3fde36a9c7f822a0de3cadb",
+    "server/admin-bff/security-events.js": "902cc96a392557cdf0f1b719787239520e81604c87443d546af814307b411fe0",
+    "server/admin-bff/security.js": "2c296644a5bfbba1747739bbe7ea3bd761e49afdf22272689b6f94bdb6141b77",
+    "server/admin-bff/sessions.js": "4498ef853c55cb40b4f7705936d2085d4c82fe77d4134df6ef40d39d53cb2510",
+    "server/admin-bff/staff-access.js": "57330678adc8f480e223ec2639ede7dac9d198d656288d1cca73cb00d4801678",
+    "server/admin-bff/staff-invitations.js": "d0bdb0f5ccc6c183d6affccccc42a9dc3936b35036a03849b83a7d5a68d363d4",
+    "server/admin-bff/supabase.js": "3281a0952f350b1c53806168eb8d7c467f8f0c197cbf192ecc04ba21530ef746",
+    "server/admin-bff/system-readiness.js": "25a51f78fac0e3f1343ee4c67c407bf53502b5ba2ed742c3b50d3322d204a55a",
+    "server/admin-bff/wholesale-inquiries.js": "56c87847c239c86135fc99b4c291a469f6e8d3fd3c0841b7cf8b4849caf0bde5"
+  },
+  "composition": {
+    "tablesInitiallyAbsent": [
+      "security_event_nonces",
+      "security_events",
+      "security_event_noise_buckets",
+      "admin_preauth_rate_nonces",
+      "admin_preauth_rate_buckets"
+    ],
+    "newFunctionCount": 4,
+    "absenceGuards": true,
+    "exactDropWithoutCascade": true,
+    "originalRoutineRestored": true
+  },
+  "shutdown": {
+    "independentlyAbsentPids": [
+      2176,
+      6308,
+      2936
+    ],
+    "ports": [
+      54392,
+      54393,
+      54394,
+      54395,
+      54396
+    ],
+    "portsIndependentlyAbsentAfterEachCase": true
+  },
+  "verification": {
+    "nativeSession": 63336,
+    "terminalExit": 0,
+    "development": "No production code edits in this routed rehearsal; prior final production batch session99058 exit0 remains applicable.",
+    "review": "Independent final source/native review: qualified acceptance; no Critical or Important findings. Earlier pending-cookie/logout witness findings resolved."
+  },
+  "limitations": [
+    "Case01 terminal1/guest0: native stream lacked framework req.body, INVALID_JSON; complete recovery passed.",
+    "Case02 terminal1/guest0: pending-session refusal clears pending cookie; subsequent MFA expired; complete recovery passed.",
+    "Case03 bounded raw-body adapter preserves UTF8 request body; re-login after intentional pending-cookie clearing recovers; real HTTP statuses and cookies, actual password/TOTP/registry/security review/CSRF/logout refusal pass.",
+    "Positive bot challenge is explicitly local ALLOW_UNCONFIGURED fixture; missing-secret default refusal is verified. No Cloudflare verification or provider configuration claim.",
+    "Native cookie jar is manual; no browser SameSite/HttpOnly/Secure, hosted Vercel envelope or visible UI acceptance.",
+    "Captured session routine is eight hours; exact prepared seven-day public definition composed and restored. Complete dependency migrations staged only for preauth/telemetry in disposable RAM guest, not full installation rehearsal."
+  ],
+  "recovery": "Dispose completed guest. Recreate fresh owned guest from pinned private source for successor. Original row/schema/sequence/private/authority hashes match; do not resume disposed state.",
+  "nextAction": "MAP-018: fresh-browser actual BFF login/MFA and brand/category reference reproduction, then remaining installation/transport/provider/project/owner/real-host gates."
+}
