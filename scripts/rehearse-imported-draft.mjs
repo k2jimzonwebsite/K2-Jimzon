@@ -26,6 +26,9 @@ const brand = 'ed000000-0000-4000-8000-000000000004'
 const q = v => "'" + String(v).replaceAll("'", "''") + "'"
 const sha = v => createHash('sha256').update(v).digest('hex')
 const report = { scope: 'Synthetic owned PG17.11 clone, no provider/Auth/media acceptance', out, db, marker, checks: [] }
+const runnerSource = fs.readFileSync(new URL(import.meta.url))
+report.runnerSha256 = sha(runnerSource)
+fs.writeFileSync(path.join(out,'executed-rehearsal.mjs'),runnerSource,{flag:'wx'})
 let n = 0, started = false, created = false
 const pendingSql = new Set(), asyncErrors = []
 const ctl = args => spawnSync(path.join(bin, 'pg_ctl.exe'), args, { windowsHide: true, stdio: 'ignore' }).status
@@ -38,12 +41,17 @@ function sql(database, text) {
 }
 const good = (database, text) => { const r = sql(database, text); if (r.exit !== 0) throw Error(r.stderr); return r.stdout }
 const parsed = s => JSON.parse(s.split('\n').at(-1))
+const nativeReceipt = (stdout, key) => {
+  const replies = stdout.split('\n').filter(line => line.startsWith('{')).map(line => JSON.parse(line)).filter(value => Object.hasOwn(value,key))
+  if (replies.length !== 1) throw Error('NATIVE_COMMAND_RECEIPT_SHAPE_INVALID')
+  return replies[0]
+}
 const check = (label, pass) => { report.checks.push({ label, pass: !!pass }); if (!pass) throw Error(label) }
 const context = (user = actor, aal = 'aal2') => `begin; set local search_path=''; set local lock_timeout='2s'; set local statement_timeout='10s'; select set_config('request.jwt.claim.sub',${q(user)},true); select set_config('request.jwt.claims',${q(JSON.stringify({ aal }))},true);set local role authenticated;`
 function commandSql(action, payload, key = randomUUID(), user = actor, aal = 'aal2', beforeCommit = '') {
   const a = signedAdminCommandArguments(action, user, key, payload)
   const fn = action === 'catalog_import_chunk' ? 'execute_admin_catalog_import_v1'
-    : action.startsWith('product_master_') ? 'execute_admin_product_master_command_v1'
+    : action.startsWith('product_master_') || action.startsWith('category_policy_') ? 'execute_admin_product_master_command_v1'
     : action === 'website_listing_set' ? 'execute_admin_website_listing_command_v1'
     : action.startsWith('intake_ai_') ? 'execute_admin_intake_ai_v1'
     : ['payment_status','confirm_order','packing_scan','fulfill_order'].includes(action) ? 'execute_admin_fulfillment_command_v1'
@@ -218,21 +226,40 @@ try {
   check('complete imported chain consumes exactly one unit and one ownership event',final.physical===5 && final.reserved===0 && final.ownershipEvents===1)
   report.connectedOrder={...report.connectedOrder,finalStock:final,scope:'Actual signed native commands and maintained validators; synthetic actor, media registration, payment and physical inventory'}
   if (process.argv.includes('--qualify-writers')) {
-    const pair = async (firstSql, secondSql) => {
+    const pair = async (firstSql, secondSql, policyModes = null) => {
       const firstName = 'k2import_first_' + randomUUID(), secondName = 'k2import_second_' + randomUUID()
-      const first = asyncSql('set application_name=' + q(firstName) + ';' + firstSql)
+      let boundary = null
+      if (policyModes) {
+        const now = Number(good(db, 'select extract(epoch from clock_timestamp());'))
+        const edge = (Math.floor(now / 60) + 1) * 60
+        console.log(JSON.stringify({ phase:'policy admission at genuine minute edge', secondsUntilAdmission:Math.max(0, edge - now - 0.7) }))
+        await new Promise(resolve => setTimeout(resolve, Math.max(1, (edge - now - 0.7) * 1000)))
+        boundary = { edge, admissionEpoch:Number(good(db, 'select extract(epoch from clock_timestamp());')) }
+        check('policy schedule admits holder in preceding genuine signer minute', Math.floor(boundary.admissionEpoch / 60) === Math.floor(edge / 60) - 1)
+      }
+      const first = asyncSql('set application_name=' + q(firstName) + ';' + (typeof firstSql === 'function' ? firstSql() : firstSql))
       let held = false
       for (let i = 0; i < 30 && !held; i++) held = good(db, 'select exists(select 1 from pg_stat_activity where datname=' + q(db) + ' and application_name=' + q(firstName) + " and wait_event='PgSleep');") === 't'
       check('actual signed writer has completed its body while retaining transaction locks', held)
-      const second = asyncSql('set application_name=' + q(secondName) + ';' + secondSql)
+      if (boundary) {
+        const now = Number(good(db, 'select extract(epoch from clock_timestamp());'))
+        if (now < boundary.edge) await new Promise(resolve => setTimeout(resolve, (boundary.edge - now) * 1000 + 30))
+        boundary.contenderEpoch = Number(good(db, 'select extract(epoch from clock_timestamp());'))
+        check('policy contender uses a distinct genuine signer minute', Math.floor(boundary.contenderEpoch / 60) > Math.floor(boundary.admissionEpoch / 60))
+      }
+      const second = asyncSql('set application_name=' + q(secondName) + ';' + (typeof secondSql === 'function' ? secondSql() : secondSql))
       let observation = null
       for (let i = 0; i < 30 && !observation; i++) {
         const seen = good(db, 'select jsonb_build_object(\'heldPid\',a.pid,\'waitingPid\',b.pid,\'waitType\',b.wait_event_type,\'waitEvent\',b.wait_event,\'blockingPids\',pg_blocking_pids(b.pid)) from pg_stat_activity a cross join pg_stat_activity b where a.datname=' + q(db) + ' and b.datname=' + q(db) + ' and a.application_name=' + q(firstName) + ' and b.application_name=' + q(secondName) + " and a.wait_event='PgSleep' and b.wait_event_type='Lock' and a.pid=any(pg_blocking_pids(b.pid));")
         if (seen) observation = JSON.parse(seen)
       }
       check('independent contender is observed waiting on the exact held writer PID', observation?.heldPid > 0 && observation?.waitingPid > 0 && observation.waitType === 'Lock' && observation.blockingPids.includes(observation.heldPid))
+      if (policyModes) {
+        observation.policyLocks = parsed(good(db, `select coalesce(jsonb_agg(jsonb_build_object('pid',pid,'mode',mode,'granted',granted,'classid',classid,'objid',objid,'objsubid',objsubid) order by pid,mode),'[]'::jsonb) from pg_catalog.pg_locks where pid in(${observation.heldPid},${observation.waitingPid}) and locktype='advisory' and classid=1261585232::oid and objid=1347374169::oid and objsubid=2;`))
+        check('policy wait is actual advisory contention with exact holder/waiter modes', observation.waitEvent === 'advisory' && observation.policyLocks.some(l => l.pid === observation.heldPid && l.granted && l.mode === policyModes[0]) && observation.policyLocks.some(l => l.pid === observation.waitingPid && !l.granted && l.mode === policyModes[1]))
+      }
       const [firstResult, secondResult] = await Promise.all([first, second])
-      return { firstResult, secondResult, observation }
+      return { firstResult, secondResult, observation, boundary }
     }
     const fixture = name => {
       const requestId = randomUUID()
@@ -271,6 +298,83 @@ try {
     check('second first-inventory request refuses without any committed application mutation', duplicateResult.exit === 3 && duplicateResult.stderr.includes('K2_FIRST_INVENTORY_ALREADY_RECORDED') && isDeepStrictEqual(duplicateBefore, fingerprint()))
     check('queued inventory records exactly six units once', Number(good(db, 'select sum(quantity) from public.product_batches where sku=' + q(f.product.sku) + ';')) === 6)
     report.writerRaces.push({ kind:'inventory', direction:'review before first inventory', reviewExit:reviewResult.exit, inventoryExit:stockResult.exit, duplicateExit:duplicateResult.exit, observation:race.observation })
+    const policyRead = () => parsed(good(db, `select jsonb_build_object('minimum',minimum_days,'version',version::text,'events',(select count(*) from k2_private.category_shelf_life_events where category_id=${q(category)})) from k2_private.category_shelf_life_policy where category_id=${q(category)};`))
+    const policyPayload = minimumDays => ({ categoryId:category, minimumDays, expectedVersion:policyRead().version, reason:'Explicit synthetic concurrent policy qualification' })
+    const signingTables = ['k2_private.admin_request_nonces','k2_private.admin_request_rate_buckets','k2_private.admin_command_receipts']
+    const policyTables = ['k2_private.category_shelf_life_policy','k2_private.category_shelf_life_events']
+    const unrelatedFilters = (f, policyBefore) => ({
+      ...Object.fromEntries(signingTables.map(table => [table,'false'])),
+      'public.products':'id is distinct from ' + q(f.product.id),
+      'public.product_intake_sessions':'id is distinct from ' + q(f.sid),
+      'public.audit_logs':'record_id is distinct from ' + q(f.product.id) + ' and record_id is distinct from ' + q(f.sid),
+      'public.product_batches':'sku is distinct from ' + q(f.product.sku),
+      'public.batch_change_events':'sku is distinct from ' + q(f.product.sku),
+      'public.inventory_balances':'sku is distinct from ' + q(f.product.sku),
+      'k2_private.category_shelf_life_policy':'category_id is distinct from ' + q(category),
+      // Only the expected new event is excluded; old target-category history remains.
+      'k2_private.category_shelf_life_events':'not(category_id=' + q(category) + ' and version=' + (BigInt(policyBefore.version) + 1n) + ')',
+    })
+    const unrelatedRows = filters => {
+      let query = rowsQuery
+      for (const [table, condition] of Object.entries(filters)) {
+        const [schema, name] = table.split('.'), anchor = ' from ' + qi(schema) + '.' + qi(name) + ' t'
+        if (query.split(anchor).length !== 2) throw Error('UNRELATED_ROW_PROJECTION_ANCHOR_DRIFT')
+        query = query.replace(anchor, anchor + ' where ' + condition)
+      }
+      return parsed(good(db,query))
+    }
+    const conserve = (before, allowed, label) => {
+      const after = fingerprint(), changed = after.rows.filter((row, i) => !isDeepStrictEqual(row, before.rows[i])).map(row => row.table)
+      check(label + ' retains full metadata and every unrelated application row', before.metadata === after.metadata && changed.every(table => allowed.includes(table)))
+      return changed
+    }
+    for (const policyFirst of [true,false]) {
+      const f = fixture(policyFirst ? 'Fennel policy review' : 'Ginger review policy')
+      const before = fingerprint(), policyBefore = policyRead(), body = policyPayload(155), policyKey = randomUUID(), reviewKey = randomUUID()
+      const filters = unrelatedFilters(f,policyBefore), unrelatedBefore = unrelatedRows(filters)
+      const policySql = hold => commandSql('category_policy_set', body, policyKey, admin, 'aal2', hold ? 'select pg_sleep(1.5);' : '')
+      const reviewSql = hold => commandSql('intake_draft', f.candidate, reviewKey, actor, 'aal2', hold ? 'select pg_sleep(1.5);' : '')
+      const race = await pair(() => policyFirst ? policySql(true) : reviewSql(true), () => policyFirst ? reviewSql(false) : policySql(false), ['ExclusiveLock','ExclusiveLock'])
+      check('policy and imported review each commit once in ' + (policyFirst ? 'policy-first' : 'review-first') + ' order', race.firstResult.exit === 0 && race.secondResult.exit === 0)
+      const afterPolicy = policyRead(), afterProduct = productRead(f.product.id)
+      check('policy/review preserves imported identity and one association/version', sessionRead(f.sid).product_id === f.product.id && afterProduct.sku === f.product.sku && afterProduct.catalog_id === f.product.catalog_id && afterProduct.primary_image_url === f.product.primary_image_url && Number(afterProduct.catalog_record_version) === Number(f.product.catalog_record_version) + 1)
+      check('policy/review writes exactly one current policy version/event', afterPolicy.minimum === 155 && BigInt(afterPolicy.version) === BigInt(policyBefore.version) + 1n && afterPolicy.events === policyBefore.events + 1)
+      const changedTables = conserve(before, [...signingTables,...policyTables,'public.products','public.product_intake_sessions','public.audit_logs'], 'policy/review')
+      const unrelatedAfter = unrelatedRows(filters)
+      check('policy/review retains every row outside exact synthetic identities and original event history', isDeepStrictEqual(unrelatedBefore,unrelatedAfter))
+      const prior = fingerprint(), result = saved('category_policy_set', body, policyKey, admin)
+      const originalReceipt = nativeReceipt((policyFirst ? race.firstResult : race.secondResult).stdout,'categoryId')
+      check('genuine saved policy retry retains entire original receipt and exact event', isDeepStrictEqual(result,originalReceipt) && result.version === afterPolicy.version && isDeepStrictEqual(policyRead(),afterPolicy))
+      conserve(prior, signingTables, 'saved policy retry')
+      refuse('stale policy after imported review refuses', 'category_policy_set', { ...body, reason:'Explicit synthetic stale policy request' }, 'K2_CATEGORY_POLICY_VERSION_CONFLICT', admin)
+      report.writerRaces.push({ kind:'policy/review', direction:policyFirst ? 'policy before review' : 'review before policy', firstExit:race.firstResult.exit, secondExit:race.secondResult.exit, boundary:race.boundary, observation:race.observation, changedTables, conservation:{ filters,before:unrelatedBefore,after:unrelatedAfter }, policyBefore, policyAfter:afterPolicy })
+    }
+    for (const policyFirst of [true,false]) {
+      saved('category_policy_set', policyPayload(150), randomUUID(), admin)
+      const f = fixture(policyFirst ? 'Hazelnut policy stock' : 'Iris stock policy')
+      saved('intake_draft', f.candidate)
+      const stock = { ...inventory, sessionId:f.sid, inventoryRequestId:randomUUID(), inventory:{ ...inventory.inventory, boxCode:'SYN-POLICY-' + (policyFirst ? 'FIRST' : 'SECOND'), batchCode:'SYN-POLICY-LOT' } }
+      const before = fingerprint(), policyBefore = policyRead(), body = policyPayload(210), policyKey = randomUUID(), stockKey = randomUUID()
+      const filters = unrelatedFilters(f,policyBefore), unrelatedBefore = unrelatedRows(filters)
+      const policySql = hold => commandSql('category_policy_set', body, policyKey, admin, 'aal2', hold ? 'select pg_sleep(1.5);' : '')
+      const stockSql = hold => commandSql('intake_inventory', stock, stockKey, admin, 'aal2', hold ? 'select pg_sleep(1.5);' : '')
+      const race = await pair(() => policyFirst ? policySql(true) : stockSql(true), () => policyFirst ? stockSql(false) : policySql(false), policyFirst ? ['ExclusiveLock','ShareLock'] : ['ShareLock','ExclusiveLock'])
+      check('policy and first stock each commit once in ' + (policyFirst ? 'policy-first' : 'stock-first') + ' order', race.firstResult.exit === 0 && race.secondResult.exit === 0)
+      const state = parsed(good(db, `select jsonb_build_object('physical',(select sum(quantity) from public.product_batches where sku=${q(f.product.sku)}),'reserved',(select sum(reserved_quantity) from public.product_batches where sku=${q(f.product.sku)}),'balance',(select on_hand from public.inventory_balances where sku=${q(f.product.sku)} and location_code='MANILA_MAIN'),'eligible',(select coalesce(sum(case when k2_private.lot_is_eligible_for_category_v1(b,10,statement_timestamp()) then quantity-reserved_quantity else 0 end),0) from public.product_batches b where sku=${q(f.product.sku)}),'stockSources',(select count(*) from public.audit_logs where record_id=${q(f.sid)} and new_data->>'operation'='CREATE_FIRST_INVENTORY_SOURCE'));`))
+      check('policy/stock preserves six physical units and one source while stricter current policy excludes sale', state.physical === 6 && state.reserved === 0 && state.balance === 6 && state.eligible === 0 && state.stockSources === 1)
+      check('first stock projection reflects the policy admitted before its own command', Number(productRead(f.product.id).stock_available) === (policyFirst ? 0 : 6))
+      check('anonymous stock reader excludes prior published imported product under current stricter policy', good(db, 'begin;set local role anon;select stock_from_batches from public.get_public_product_stock() where sku=' + q(baseline.sku) + ';commit;') === '0')
+      const afterPolicy = policyRead()
+      check('policy/stock retains exact stricter version/event', afterPolicy.minimum === 210 && BigInt(afterPolicy.version) === BigInt(policyBefore.version) + 1n && afterPolicy.events === policyBefore.events + 1)
+      const changedTables = conserve(before, [...signingTables,...policyTables,'public.products','public.product_batches','public.batch_change_events','public.inventory_balances','public.product_intake_sessions','public.audit_logs'], 'policy/stock')
+      const unrelatedAfter = unrelatedRows(filters)
+      check('policy/stock retains every row outside exact synthetic identities and original event history', isDeepStrictEqual(unrelatedBefore,unrelatedAfter))
+      const prior = fingerprint(), originalReceipt = nativeReceipt((policyFirst ? race.secondResult : race.firstResult).stdout,'success')
+      check('genuine saved first-stock retry retains original receipt', isDeepStrictEqual(saved('intake_inventory',stock,stockKey,admin),originalReceipt))
+      conserve(prior, signingTables, 'saved first-stock retry')
+      refuse('second policy-qualified first-stock request refuses', 'intake_inventory', { ...stock, inventoryRequestId:randomUUID() }, 'K2_FIRST_INVENTORY_ALREADY_RECORDED', admin)
+      report.writerRaces.push({ kind:'policy/inventory', direction:policyFirst ? 'policy before first inventory' : 'first inventory before policy', firstExit:race.firstResult.exit, secondExit:race.secondResult.exit, boundary:race.boundary, observation:race.observation, changedTables, conservation:{ filters,before:unrelatedBefore,after:unrelatedAfter }, stock:state, policyBefore, policyAfter:afterPolicy })
+    }
   }
 } catch (error) { report.error = error.message; process.exitCode = 1 }
 finally {

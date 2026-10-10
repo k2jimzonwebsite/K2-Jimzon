@@ -4,6 +4,66 @@
 
 ### 10 October — observed current-writer schedules
 
+**Current policy/stock extension, locally verified:** MAP-018 /
+IDEA-20261009-11 / IDEA-20261007-01. The maintained combined rehearsal now exits0 with
+**185 checks, zero failures** and nine observed native connection schedules.
+The four added pairs reach advisory key1261585232/1347374169, with actual granted
+holder/ungranted waiter modes: policy/review ExclusiveLock/ExclusiveLock in both
+directions; policy/first stock ExclusiveLock/ShareLock and its reverse. Both
+commands commit in each pair. Lazy signing follows actual distinct server-minute
+buckets; original2s lock/10s statement limits and all signers remain unchanged.
+
+Policy/review retains the same UUID/SKU/catalog/photo, one reviewed association
+and catalog-version change, one policy version/event, exact saved policy reply,
+and complete stale-policy refusal. Policy/stock retains six physical units,
+zero reserved, on-hand6 and one stock-source audit. Policy-first intake projects
+zero sellable; stock-first intake retains its admitted projection6 while the
+current anonymous stock reader returns0 after stricter policy. The independently
+resolved lot eligibility is0; physical custody is not erased by policy changes.
+This tests current anonymous stock, not every catalog/Admin reader or actual host.
+
+Full metadata and all rows outside exact synthetic identities are retained.
+The105 public/private table projections preserve existing target-category event
+history and null audit identities; normal nonce/rate/command-receipt effects are
+explicitly excluded from these business-row projections. Exact filters and both
+count/hash maps are retained in the result. Independent review corrected the
+earlier table-only allowlist and partial policy-reply checks before acceptance.
+
+Command: node scripts/rehearse-imported-draft.mjs
+--recovery-root=D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc
+--qualify-installation --qualify-writers.
+Final session61495 terminal0; immutable private root
+D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/imported-draft-025b3682-3b76-465e-bd2a-5c2c0c597314.
+ResultSHA2562a3dba7e597c3199e0b6540d9386b17ab15b9b86ab0feebb9a536f4464e2f36a;
+archived/current runnerSHA25600ced3261c399bddf19627a341dbbecb1bfd548f1794648a487eaa5700a95b00.
+Combined package remains11532586bytes/abc2abd5...; populated backup
+SHA25699fe7799c59f096534d70c6f994ae883deb2fa497aab3ab4906a381eea502bad.
+Current/cold installation/replay/drift/rollback/populated recovery and connected
+dummy order/handover checks pass. Independent readback confirms all185 passes,
+nine schedules, exact key/modes/minute ordering, all four projected maps equal,
+source hashes equal, child settlement/all clones removed/stopped mirror/original
+and manifest3602; both postmaster.pid files are absent. JSON OID identity fields
+are exact decimal strings; the independent checker corrected its numeric-type
+expectation without altering source or native evidence.
+
+Preserved diagnostics: 2a1acf25... session13009 terminal1/160pass1fail selected
+the AAL-context JSON instead of the stock receipt; resultSHA8eb4f05290fb....
+535acc58... session15251 terminal1/161 preceding checks pass; the new anonymous
+query used the wrong return column stock_available; resultSHA23298392b5f5....
+Actual contract stock_from_batches is retained. Both diagnostics settle children,
+remove clones, stop runtimes and preserve all3602 originals. No product SQL changed.
+Final npm run verify:development session9947 exits0 after final source edits;
+unaffected42-contract/26-UI/1396-CI and previous SQL evidence are retained.
+No new full browser suite, release gate, provider call or live promotion.
+
+Remaining MAP-018: other taxonomy/stock schedules and actual BFF/Auth concurrency,
+genuine captured17.6/supautils composition, ACL through-commit protection,
+management transaction/unknown-outcome, current backup/offsite and hosted/human
+acceptance. No global authority or real Auth/media/physical stock claim.
+Recovery is scoped harness-source rollback and the retained whole local backup,
+never an inverse merge over staff edits. This completed witness leaves the active
+queue; the full MAP item remains open.
+
 **Final CI observation, 10 October:** [Run38009805472](https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/38009805472)
 is completed/SUCCESS, attempt2, head d9cd9245fe6a2435eca2c7bbbb1a4bb78aec6c3e.
 Actions tested PR merge1a4336192a1dbfae9730bcdd1f283603fceacd76 against base
