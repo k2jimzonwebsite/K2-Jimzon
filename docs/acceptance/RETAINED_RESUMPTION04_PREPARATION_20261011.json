@@ -1,0 +1,97 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-resumption04",
+  "marker": "9b9bb642-ae60-4f1a-a9cb-00d4b3801c18",
+  "baseCase": "oci-retained-populated04",
+  "classification": "Fresh signed-populated genuine post-repair receipt/quote/order resumption fixture preparation only",
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "6a9c20f85fdda4c990879bc19c1dda304a79aea87ed368cc29f2611f674137ce"
+    },
+    {
+      "file": "staging/k2/retained-matrix.sh",
+      "sha256": "e67d8d8acc763624a71cb01fea1aa1da9236e11f373ca41e6302c0435f38dd32"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "8c821905094875d9f9876a7811012d74af1ca07cbc5d296477b68f2b2ad627c5"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/retained-state-0.sql",
+      "sha256": "a90348e5d120e4a970343ee7a6584075dd97f2f7f7fb0440c27b7357abc5b4a8"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "94b84c0a6452fb775eed6944ab0c6e746fb77414e3d04948bd7b1f00e769a249"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "9bb61740d427287b38bdc1cfe48e125739e3b6dca62e2b38abf85ba295c099e4"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "6272c4406258ac964095c3791b97e9c0e30644ea5b50a8ec757d32ab821e9d43"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "8ed2c2242ef6fe673d37a4610cda02ef8d9777971b2c36f1f7449b653c452a28"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "c282121976dac4312117c21a6d898d723059ae15943abea944659e2f7c3fa6aa"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "72af573ca000fef5367f298614a70c440eed744cd6e3d6d538151e484866dffa"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "cfd723fd2206a0e294871f36a9d3c3880477c00b77586755e9ba4c74c1a0c195"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/resumption-probe.mjs",
+      "sha256": "7786dea2760c76a05d0bebe4b6e85a1b51d917968611025f59e26a5ceb8806bb"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/resumption-probe.test.mjs",
+      "sha256": "21605ba0ce81afba931ce8da63f253d76f5e1a60cb1713724df16442bd03b533"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "9e1bd5e2872defa019bcb9ac779c429e8090282530ea5c6394b002e3061c6f8e"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.mjs",
+      "sha256": "345f6cd7cf9431102ac3d828ed69c1d1f5dc7d56897413a314c623294ba5de5f"
+    }
+  ],
+  "inheritance": "Exact accepted populated04 base image/driver/combined19 installer/recovery; bounded two-stage control with preserved helper cookies/context and extended connected observer validation; known matrix not rerun",
+  "review": {
+    "status": "reviewed-preexecution-no-critical-important",
+    "reviewer": "drift_native_review",
+    "result": "All14 artifact/four source pins match. Baseline two orders verifies unused key002; new order reuses exact observer selection with three orders/rate2fee20000/onehold/replay conservation. Repair/control/recovery unchanged; no findings"
+  },
+  "nativeExecuted": false,
+  "providerWrites": false,
+  "deployed": false,
+  "remaining": [
+    "Native actual repair/restart/signed/quote/order resumption and conservation",
+    "Provider/authority-through-commit/hosted/owner gates"
+  ]
+}

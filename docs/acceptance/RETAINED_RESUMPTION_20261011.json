@@ -1,0 +1,271 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-resumption04",
+  "classification": "Executed local known-three repair/no-op/full conservation, actual healthy service restart and genuine retained category/tariff/order receipts, quote and one new one-hold order resumption",
+  "command": "node .tools/run-retained-resumption04.mjs",
+  "session": 84749,
+  "native": {
+    "pid": 18244,
+    "runnerExit": 0,
+    "vmExit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "processStopped": true,
+    "postgresVersion": "17.6"
+  },
+  "signedPopulation": {
+    "checks": 42,
+    "category": {
+      "result": {
+        "version": "1",
+        "categoryId": "76000000-0000-4000-8000-000000000020",
+        "localMinimum": 150,
+        "effectiveMinimum": 150
+      },
+      "exactSuccessfulReceiptReplay": true,
+      "scope": "Genuine local signed category command before populated native repair; not post-repair resumption"
+    },
+    "tariffAndOrders": {
+      "versions": [
+        1,
+        2
+      ],
+      "feesMinor": [
+        15000,
+        20000
+      ],
+      "acceptedOrders": 2,
+      "acceptedAStateSha256": "383b1d4b302d9c80db868f630ce54287285ca710c3c8d58f6eefc3f471f3f9e4",
+      "finalStateSha256": "76666540032edbeefe835d146e3e0d89f97695c76e5b0292d6ffd5debb942fe0",
+      "exactReceiptReplay": true,
+      "publicationAndReplayConserved": true,
+      "freshStaleAcceptance409": true,
+      "oldChargeRetained": true,
+      "scope": "Sequential genuine local routes and protected complete synthetic business rows; no concurrent, provider, hosted or populated recovery claim",
+      "protectedObserverCalls": 6
+    }
+  },
+  "qualification": {
+    "actualCorrections": 3,
+    "exactNoopRepeat": true,
+    "fullRepairStateAndCatalogConserved": true,
+    "healthyAuthPostgrestRestart": true,
+    "retainedStaffAndGuestCookies": true,
+    "newCustomerActualPeer": "127.0.0.2",
+    "distinctCookieContext": true,
+    "preservedRateBudgets": "order IP900s/5 and contact3600s/3 unchanged",
+    "resumption": {
+      "exactTariffReceipt": true,
+      "oldOrderReceipts": 2,
+      "oldBusinessRowsConserved": true,
+      "newAcceptedOrders": 1,
+      "newOrderHolds": 1,
+      "newReceiptReplayConserved": true,
+      "currentRateVersion": 2,
+      "feeMinor": 20000,
+      "beforeBusinessSha256": "76666540032edbeefe835d146e3e0d89f97695c76e5b0292d6ffd5debb942fe0",
+      "afterBusinessSha256": "4b1d3103021de7aa09267fe80eb2036491963cd67e6009ea497465a5b331ae26",
+      "scope": "Actual local routed requests with retained cookies after native repair/restart; no hosted or production availability claim",
+      "exactCategoryReceipt": true
+    },
+    "globalManagedWitnesses": 4,
+    "snapshots": {
+      "initial": {
+        "sha256": "18c27fe2c094ea30eb65aa3349021e4be9b04b5198d702371ce1fcf2e5169007",
+        "bytes": 25552,
+        "physicalRelations": 168,
+        "sequences": 11,
+        "tableRows": 44525
+      },
+      "final": {
+        "sha256": "18c27fe2c094ea30eb65aa3349021e4be9b04b5198d702371ce1fcf2e5169007",
+        "bytes": 25552,
+        "physicalRelations": 168,
+        "sequences": 11,
+        "tableRows": 44525
+      }
+    },
+    "background": "Actual stopped Auth/PostgREST and zero other clients before full captures; normal request nonce/rate/session changes after restart are separate",
+    "priorMatricesRerun": false
+  },
+  "recovery": {
+    "original88TablesTwoSequencesSha256": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+    "restoredCorrectedInstalledBaselineCatalogSha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+    "scope": "Separate final unconditional guarded disposable reconstruction after genuine post-repair request qualification"
+  },
+  "independentHost": {
+    "fixturePorts": [
+      54392,
+      54393,
+      54394,
+      54395,
+      54396
+    ],
+    "listenerCount": 0,
+    "processPresent": false,
+    "pid": 18244,
+    "method": "Actual escalated Win32_Process and Get-NetTCPConnection after terminal session84749"
+  },
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "6a9c20f85fdda4c990879bc19c1dda304a79aea87ed368cc29f2611f674137ce"
+    },
+    {
+      "file": "staging/k2/retained-matrix.sh",
+      "sha256": "e67d8d8acc763624a71cb01fea1aa1da9236e11f373ca41e6302c0435f38dd32"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "8c821905094875d9f9876a7811012d74af1ca07cbc5d296477b68f2b2ad627c5"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/retained-state-0.sql",
+      "sha256": "a90348e5d120e4a970343ee7a6584075dd97f2f7f7fb0440c27b7357abc5b4a8"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "94b84c0a6452fb775eed6944ab0c6e746fb77414e3d04948bd7b1f00e769a249"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "9bb61740d427287b38bdc1cfe48e125739e3b6dca62e2b38abf85ba295c099e4"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "6272c4406258ac964095c3791b97e9c0e30644ea5b50a8ec757d32ab821e9d43"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "8ed2c2242ef6fe673d37a4610cda02ef8d9777971b2c36f1f7449b653c452a28"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "c282121976dac4312117c21a6d898d723059ae15943abea944659e2f7c3fa6aa"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "72af573ca000fef5367f298614a70c440eed744cd6e3d6d538151e484866dffa"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "cfd723fd2206a0e294871f36a9d3c3880477c00b77586755e9ba4c74c1a0c195"
+    },
+    {
+      "file": "execution01/result.json",
+      "sha256": "21f32ebb22b5fe66694902c2379ea9adb5d55c6dbd125f7a1802ef58793b59ed"
+    },
+    {
+      "file": "execution01/serial.log",
+      "sha256": "7e827351807e6ceb28225334e9a4595c82faaffcbccc2a4a994f28df9046b5ff"
+    },
+    {
+      "file": "host-driver-result.json",
+      "sha256": "3ca1ddfb897688babb6e8279e849a5ed65b9ce38862901b310ca15a46ba08dc1"
+    },
+    {
+      "file": "execution01/independent-host.json",
+      "sha256": "0e0255a7530cdcba278663edef98ec96cbd0df0ea35d73eb9fb21b2038257a55"
+    },
+    {
+      "file": "execution01/retained-resumption-initial.json",
+      "sha256": "18c27fe2c094ea30eb65aa3349021e4be9b04b5198d702371ce1fcf2e5169007"
+    },
+    {
+      "file": "execution01/retained-resumption-final.json",
+      "sha256": "18c27fe2c094ea30eb65aa3349021e4be9b04b5198d702371ce1fcf2e5169007"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/resumption-probe.mjs",
+      "sha256": "7786dea2760c76a05d0bebe4b6e85a1b51d917968611025f59e26a5ceb8806bb"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/resumption-probe.test.mjs",
+      "sha256": "21605ba0ce81afba931ce8da63f253d76f5e1a60cb1713724df16442bd03b533"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "9e1bd5e2872defa019bcb9ac779c429e8090282530ea5c6394b002e3061c6f8e"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.mjs",
+      "sha256": "345f6cd7cf9431102ac3d828ed69c1d1f5dc7d56897413a314c623294ba5de5f"
+    }
+  ],
+  "verification": {
+    "focused": {
+      "command": "node --test docs/evidence/20261010-retained-code-repair/resumption-probe.test.mjs",
+      "initialRed": {
+        "pass": 0,
+        "fail": 2
+      },
+      "emptyEofRegressionRed": {
+        "pass": 4,
+        "fail": 1
+      },
+      "distinctCustomerRed": {
+        "pass": 4,
+        "fail": 1
+      },
+      "observerSelectionRed": {
+        "pass": 5,
+        "fail": 1
+      },
+      "finalGreen": {
+        "pass": 6,
+        "fail": 0
+      },
+      "loopbackScope": "Actual ephemeral TCP checks escalated after sandbox EACCES"
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "session": 97011,
+      "exit": 0
+    }
+  },
+  "review": {
+    "preexecution": "drift_native_review: no Critical/Important issue in resumption04; genuine distinct new-customer peer/context verified",
+    "actualEvidence": "drift_native_review: all20 artifacts/four source pins, independently decoded full snapshots, actual restart/receipt/order/peer/deadline/authority/original-recovery and saved escalated host evidence match; no findings. Earlier failed recovery limitations preserved."
+  },
+  "providerWrites": false,
+  "deployed": false,
+  "remaining": [
+    "Full installer, rendered product/listing, hosted acceptance, authority-through-commit and owner/provider activation gates"
+  ],
+  "nextAction": "MAP-018 remaining full-installer/authority-through-commit/product-listing/hosted and owner/provider gates; reuse accepted local repair/drift/resumption evidence",
+  "retainedFailedRuns": [
+    {
+      "case": "oci-retained-resumption01",
+      "session": 51382,
+      "recovery": "unverified",
+      "receipt": "RETAINED_RESUMPTION01_PREPARATION_20261011.json"
+    },
+    {
+      "case": "oci-retained-resumption02",
+      "session": 84808,
+      "recovery": "verified original reconstruction",
+      "receipt": "RETAINED_RESUMPTION02_PREPARATION_20261011.json"
+    },
+    {
+      "case": "oci-retained-resumption03",
+      "session": 34013,
+      "recovery": "verified original reconstruction",
+      "receipt": "RETAINED_RESUMPTION03_PREPARATION_20261011.json"
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-resumption03",
+  "marker": "8b9bb642-ae60-4f1a-a9cb-00d4b3801c18",
+  "baseCase": "oci-retained-populated04",
+  "classification": "Fresh signed-populated genuine post-repair receipt/quote/order resumption fixture preparation only",
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "7c75f57a72b4233a2e9c26b6cfd6ba8666bd0b528a733ba7812947ad1fd646e2"
+    },
+    {
+      "file": "staging/k2/retained-matrix.sh",
+      "sha256": "e67d8d8acc763624a71cb01fea1aa1da9236e11f373ca41e6302c0435f38dd32"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "35cf9aba2d1f091eff23482ec27fbbb8959b52b3db8f0ceabeda48f660af89f0"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/retained-state-0.sql",
+      "sha256": "63bb72da68c89fc39fb97ba68f73a3c0ebeec4eee2ed1385d3e73e6976339b36"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "94b84c0a6452fb775eed6944ab0c6e746fb77414e3d04948bd7b1f00e769a249"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "419f0c7d7aa46f4283d737ed3d337aababa6a921ce7b1583d2671ff2419b554c"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "db0f73760a0480466129e4958277287d812cc06b48a2c00b566a32edaf8f0003"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "8ed2c2242ef6fe673d37a4610cda02ef8d9777971b2c36f1f7449b653c452a28"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "fb4a92f041a558a89f9c06df2a6235e366bd21c086d5384828f89a61f09a7914"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "fc9730460fb243bf9bf9671dcf36e8c9a8e76b5658ab34a0f105672fd3c4ee14"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "2386e640c852561aa909e1f8b1f7e2f0fb4c6de8c51a9a3a4adfb44c601a2dce"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/resumption-probe.mjs",
+      "sha256": "552a7396cc8c475e79be601d14d147f6de9f5e2acbafa4fb226e936938604948"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/resumption-probe.test.mjs",
+      "sha256": "b28d95f3c32b676a696343ac7e7be5f561c0a6064a2b966fc45d9cc5502e9d04"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "9e1bd5e2872defa019bcb9ac779c429e8090282530ea5c6394b002e3061c6f8e"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.mjs",
+      "sha256": "345f6cd7cf9431102ac3d828ed69c1d1f5dc7d56897413a314c623294ba5de5f"
+    }
+  ],
+  "inheritance": "Exact accepted populated04 base image/driver/combined19 installer/recovery; bounded two-stage control with preserved helper cookies/context and extended connected observer validation; known matrix not rerun",
+  "review": {
+    "status": "reviewed-preexecution-no-critical-important",
+    "reviewer": "drift_native_review",
+    "result": "All14 artifact/four source pins match. Original receipt cookies/payloads retained; new separate jar/actual TCP127.0.0.2 no forwardedheaders/rate changes; repair/restart/control/recovery unchanged; no findings"
+  },
+  "nativeExecuted": false,
+  "providerWrites": false,
+  "deployed": false,
+  "remaining": [
+    "Native actual repair/restart/signed/quote/order resumption and conservation",
+    "Provider/authority-through-commit/hosted/owner gates"
+  ],
+  "execution": {
+    "session": 34013,
+    "pid": 8604,
+    "runnerExit": 1,
+    "vmExit": 0,
+    "hostDriverPassed": false,
+    "diagnostic": "New distinct-customer order returned201; complete observer assertion failed. Source trace identifies exact three-key selection guard rejecting added fourth key.",
+    "recovery": "Verified guarded original reconstruction/corrected catalog/full original rows; no complete resumption claim",
+    "independentHost": {
+      "processPresent": false,
+      "listenerCount": 0,
+      "method": "Actual escalated CIM PID8604/five ports after terminal failure"
+    },
+    "artifactPins": [
+      {
+        "file": "execution01/result.json",
+        "sha256": "19d3c3a2febc71e7f451db6385340aa2e9d11de68a69d33fdfd6f2a0a6b946a2"
+      },
+      {
+        "file": "execution01/serial.log",
+        "sha256": "fa70e7034df8bc66c075e13b2ce131dfda4feaab03c67e89617160c8f72800ba"
+      },
+      {
+        "file": "host-driver-result.json",
+        "sha256": "efe3dc293375060011cf811ea667601bdc80295cbf69de846cfc01922f84ae3f"
+      }
+    ],
+    "historicalSources": "Original source pins describe this failed preparation before later source corrections; current final source differs intentionally. Private generated artifact pins remain unchanged."
+  },
+  "supersededBy": "Fresh04 uses original unused fixture.stale key for the new current-rate order; observer body/catalog unchanged"
+}

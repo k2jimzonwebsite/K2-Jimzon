@@ -1,0 +1,129 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-resumption02",
+  "marker": "7b9bb642-ae60-4f1a-a9cb-00d4b3801c18",
+  "baseCase": "oci-retained-populated04",
+  "classification": "Fresh signed-populated genuine post-repair receipt/quote/order resumption fixture preparation only",
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "a0cdef7cb5249276d7e110df300aa4560528ecb69eee61b5a244ede893dabd11"
+    },
+    {
+      "file": "staging/k2/retained-matrix.sh",
+      "sha256": "e67d8d8acc763624a71cb01fea1aa1da9236e11f373ca41e6302c0435f38dd32"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "e90a7a6dd0a2470521e160e15dddd5bf03611bac7ae59917ed3c007992898b10"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/retained-state-0.sql",
+      "sha256": "0edf9c4c99ed2d1efff5b50a8d944cf2206e7cb717b4f12c9e6b2b4973223d82"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "94b84c0a6452fb775eed6944ab0c6e746fb77414e3d04948bd7b1f00e769a249"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "6fd77ba84d73c512de49ad296a3eedab2640e4427427923e468225e31ff86942"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "902c24f1a0194b6ab5fc49ca960042ce9f6b2ca2dfd71e15d0fc9010ecd26ba5"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "9713e912ecec07ac01041b8741ddb1d97cb7e951346d3f64c4f62928f6c61e3f"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "53a606e7e58db3b23592f736e03c6b7a6cedad44659d75d97646490d2104a9cc"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "d119366af82b107a0cac3a1d2c94b751836890043710b288395d079e199cee28"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "e579efe07bdcee86b1fc28d72ad5899ae5cfc0fac1a6832ee09e89c9843adb08"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/resumption-probe.mjs",
+      "sha256": "64b69f42706d6db80b52ca4feb4608374769de723d4ea217fcd50a1d6baabfc8"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/resumption-probe.test.mjs",
+      "sha256": "096a4af8e92db7624995e11c5df5b61951e3a1f731d78efec377208e8906045e"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "9e1bd5e2872defa019bcb9ac779c429e8090282530ea5c6394b002e3061c6f8e"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.mjs",
+      "sha256": "345f6cd7cf9431102ac3d828ed69c1d1f5dc7d56897413a314c623294ba5de5f"
+    }
+  ],
+  "inheritance": "Exact accepted populated04 base image/driver/combined19 installer/recovery; bounded two-stage control with preserved helper cookies/context and extended connected observer validation; known matrix not rerun",
+  "review": {
+    "status": "reviewed-preexecution-no-critical-important",
+    "reviewer": "drift_native_review",
+    "result": "All14 artifact/four source pins match. Bounded emptyEOF retry, wrongmarker refusal, no premature host-control VM kill, original repair/restart/receipts/hold/recovery assertions reviewed; no findings"
+  },
+  "nativeExecuted": false,
+  "providerWrites": false,
+  "deployed": false,
+  "remaining": [
+    "Native actual repair/restart/signed/quote/order resumption and conservation",
+    "Provider/authority-through-commit/hosted/owner gates"
+  ],
+  "execution": {
+    "session": 84808,
+    "pid": 26064,
+    "runnerExit": 1,
+    "vmExit": 0,
+    "hostDriverPassed": false,
+    "diagnostic": "Storefront order429 RATE_LIMITED at post-repair qualification",
+    "repairConservationPassed": true,
+    "healthyRestartPassed": true,
+    "recovery": "Verified guarded original reconstruction, corrected baseline catalog and original full rows; no guestSuccess or full resumption claim",
+    "independentHost": {
+      "processPresent": false,
+      "listenerCount": 0,
+      "method": "Actual escalated CIM PID26064/five ports after terminal failure"
+    },
+    "artifactPins": [
+      {
+        "file": "execution01/result.json",
+        "sha256": "60a4357f45f3eff4c96b749da651844ce66b8003fc77d88ac50a965d34bd7ab3"
+      },
+      {
+        "file": "execution01/serial.log",
+        "sha256": "679ebb7f8f068bcea909fbddd6f636d1d10c82dff0a066422959ff5121a438f0"
+      },
+      {
+        "file": "host-driver-result.json",
+        "sha256": "4ebc9cde385f8db8a3e918e58332c486f9aa3f49f4b08859cde365b5a6c36e85"
+      }
+    ],
+    "historicalSources": "Original source pins describe this failed preparation before later source corrections; current final source differs intentionally. Private generated artifact pins remain unchanged."
+  },
+  "supersededBy": "Fresh resumption03 uses retained caller for old receipts and a distinct actual loopback peer/cookie context for a new customer, preserving normal order IP900s/5 and contact3600s/3 budgets"
+}

@@ -1,0 +1,141 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-resumption01",
+  "marker": "6b9bb642-ae60-4f1a-a9cb-00d4b3801c18",
+  "baseCase": "oci-retained-populated04",
+  "classification": "Fresh signed-populated genuine post-repair receipt/quote/order resumption fixture preparation only",
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "af27b530f1128fe72aa5146fdac9c815d6dee222566a83064ed4c95b317728e8"
+    },
+    {
+      "file": "staging/k2/retained-matrix.sh",
+      "sha256": "e67d8d8acc763624a71cb01fea1aa1da9236e11f373ca41e6302c0435f38dd32"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "60b8e966637e56cacafe48af53df4ac0f386b75d78b754e4bd23c1d5482f2683"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/retained-state-0.sql",
+      "sha256": "4a75d25ea19e89941e98e41b7a12b6a9de01106fbf35e1b5d52de336ab74ec46"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "94b84c0a6452fb775eed6944ab0c6e746fb77414e3d04948bd7b1f00e769a249"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "2ed983a0aee47dbe800c89df641a724eb2a6aed2589c8869c5ebb2802f4ec223"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "7dfcc2c8b8e59e820d1495b64fd783516ecb6d324e89dd512d917f74e7fc5f9b"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "d7a0ee5442ad2856fb363485d9e6669c408a9bd2a064a0e58d78f7cf39738d9f"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "53a606e7e58db3b23592f736e03c6b7a6cedad44659d75d97646490d2104a9cc"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "fa304880eb39dbd8c2aaac1ba79f059349d92fe83af6e1d4d8be810e7c7a8344"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "e7afabf8094c1978865564971fc81e898f93ca97206e705ef77963a263e0da48"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/resumption-probe.mjs",
+      "sha256": "a93194289f8f73a27b3b22e54c485cc1e9080c430e6ded0a5914076be3dd5eba"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/resumption-probe.test.mjs",
+      "sha256": "7dc711c51de555dcc0fed523c09eee7cf58f54796eccf7718094cb228792c0d8"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "9e1bd5e2872defa019bcb9ac779c429e8090282530ea5c6394b002e3061c6f8e"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.mjs",
+      "sha256": "345f6cd7cf9431102ac3d828ed69c1d1f5dc7d56897413a314c623294ba5de5f"
+    }
+  ],
+  "inheritance": "Exact accepted populated04 base image/driver/combined19 installer/recovery; bounded two-stage control with preserved helper cookies/context and extended connected observer validation; known matrix not rerun",
+  "review": {
+    "status": "reviewed-preexecution-no-critical-important",
+    "reviewer": "drift_native_review",
+    "result": "Actual14 artifact pins and source pins checked; known3/noop/fullstate/catalog, restart/ACK/context/receipts/new hold and unconditional recovery reviewed. Dependency populated-matrix source pin added. Minor historical preparer header says drift; classification/actual payload describe resumption."
+  },
+  "nativeExecuted": false,
+  "providerWrites": false,
+  "deployed": false,
+  "remaining": [
+    "Native actual repair/restart/signed/quote/order resumption and conservation",
+    "Provider/authority-through-commit/hosted/owner gates"
+  ],
+  "verification": {
+    "focused": {
+      "initialExpectedRed": 2,
+      "finalPass": 4,
+      "command": "node --test docs/evidence/20261010-retained-code-repair/resumption-probe.test.mjs",
+      "loopbackExecution": "Escalated actual ephemeral TCP; sandbox EACCES was not treated as protocol failure"
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "session": 42938,
+      "exit": 0
+    }
+  },
+  "execution": {
+    "session": 51382,
+    "pid": 25320,
+    "runnerExit": 1,
+    "vmExit": null,
+    "timedOut": false,
+    "hostDriverPassed": false,
+    "diagnostic": "RESTART_CONTROL_CLOSED",
+    "recovery": "Unverified: inherited host-control catch killed guest before guarded reconstruction completed",
+    "independentHost": {
+      "processPresent": false,
+      "listenerCount": 0,
+      "method": "Escalated CIM PID25320/five ports after terminal failure"
+    },
+    "artifactPins": [
+      {
+        "file": "execution01/result.json",
+        "sha256": "d1255990923eb4d4c1e63c3a293b99a30030ad0cdac15b4092d6e9720686ba63"
+      },
+      {
+        "file": "execution01/serial.log",
+        "sha256": "4beb1ee21723929daa22befc3bd02421b6f8208410ed5a0e47a141ad2d371a9f"
+      },
+      {
+        "file": "host-driver-result.json",
+        "sha256": "f1af38ff171e46c287ea8fef3e6e9b3c490b7611d9c6c9dc8711febb6255e4a1"
+      }
+    ],
+    "historicalSources": "Original preparation source pins describe failed01 before listener-race correction; current successor source differs intentionally. Private generated artifact pins are preserved unchanged."
+  },
+  "supersededBy": "Fresh resumption02 to qualify retiring-listener EOF retry and preserve guest recovery after host-control transport failure"
+}
