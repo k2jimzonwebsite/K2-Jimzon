@@ -22,7 +22,9 @@
     {"file":"scripts/prepare-product-master-recovery-fixture.mjs","sha256":"f5f385844aa4d542e58096ea745744ec1d69e6835710e7539273b41c4774d082"},
     {"file":"docs/acceptance/TARIFF_ORDER_CONNECTED_20261010.json","sha256":"e906deba84ad1eba5f119f7e4d1ed7757d3582bb4d96d448efdf76f220f90dd4"},
     {"file":"docs/acceptance/CATEGORY_POLICY_REVISED_RECOVERY_20261010.json","sha256":"702bac7b3f0be64ac04ae93152c085bce67a9814f3ac7d06e58fe7a7f886d65a"},
-    {"file":"docs/acceptance/CUSTOMER_TARIFF_REVISED_RECOVERY_20261010.json","sha256":"964e0ad0a6cf34d2b9d849cc6bfa0eb484b9ca3dee380ba6beb5c8268bef8098"}
+    {"file":"docs/acceptance/CUSTOMER_TARIFF_REVISED_RECOVERY_20261010.json","sha256":"964e0ad0a6cf34d2b9d849cc6bfa0eb484b9ca3dee380ba6beb5c8268bef8098"},
+    {"file":"docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs","sha256":"27d8fb65076cab763c4f33e2cecafce4e5a67c08663e71bfb6208bb828821654"},
+    {"file":"scripts/prepare-imported-provider-fixture.mjs","sha256":"eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"}
   ],
   "retainedCatalog": {
     "case": "oci-imported23",
@@ -37,6 +39,13 @@
       {"identity":"k2_private.resolve_customer_delivery_quote_v1(p_request jsonb)","sha256":"4feb55f370865b39a81d15d22a8cc4ecfd2387da4937ecd625bd7cc5ed90d582"},
       {"identity":"public.execute_customer_delivery_rates_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)","sha256":"151af34efea459c7b0b20938e50a2b05ae081c603296ca6abc1b0dba93dd521b"}
     ]
+  },
+  "retainedInstaller": {
+    "case":"oci-imported19",
+    "file":"guarded-package.json",
+    "fileSha256":"05dadb37cbe01edc0a70172e12a3d047438559df5c3949edb82ec817f8505b84",
+    "sqlSha256":"ea8e212e648615611f4bc09ed36c7610c875f1779c84510e5556c448ff3a01f4",
+    "scope":"Exact previously qualified combined all-three guarded installation bytes; read only, no new execution or changed package"
   },
   "findings": [
     {
@@ -66,15 +75,22 @@
       "surface": "Accepted recovery evidence",
       "sourceFact": "Revised recovery proves rollback controls and row-cleared cold replay; connected05 proves sequential signed rate/quote/orders and target-bound original archive reconstruction.",
       "consequence": "Neither proves populated category/tariff/receipt/accepted-order retention through repair and repeatable resumption. Keep that exact qualification open."
+    },
+    {
+      "surface":"Complete guarded installer replay versus repair",
+      "sourceFact":"The provider generator and exact retained combined19 SQL take exclusive entry admission, compare complete authority/managed settings and schema; exact after-schema emits K2_PROVIDER_EXACT_REPLAY and returns before the fresh table barrier/payload. Any state other than exact before/after refuses K2_PROVIDER_SCHEMA_DRIFT before fresh payload.",
+      "consequence":"A no-op replay is distinct from repairing damaged installed functions. Do not claim replay alone fixes drift, and do not broaden admission or run fresh-only fragments against populated installed tables.",
+      "limits":"Read-only inspection of exact generator and pinned package branches; not a new native populated replay/repair test, writer-wait qualification or production availability proof. The original entry lock and2s/10s limits are unchanged."
     }
   ],
-  "understandingStatus": "Revised recovery understanding asked asynchronously; pending explicit confirmation before any new recovery design. Existing no-pause owner decision is settled and not being reapproved.",
+  "understandingStatus": "Owner answered the revised recovery understanding with a request for plain-language explanation and recommendations. Explanation given: normal rate edits stay simple; repair preserves saved rates/orders/confirmations and is tested locally first. No explicit confirmation of a new repair design yet. Existing no-pause owner decision is settled and not being reapproved.",
   "review": {
     "status":"reviewed-no-critical-important",
     "reviewer":"auth_migration_review",
-    "verified":"11sourcepins;retainedcatalogandsixdefinitionhashes;direct16configuration/errorfunctions;categorypausevsavailable-shoppingconstraint;catalogACLscope;tariffactiveCHECKandimmutablehistory;priorreceiptlimits",
+    "verified":"13sourcepins;retainedcatalogandsixdefinitionhashes;direct16configuration/errorfunctions;categorypausevsavailable-shoppingconstraint;catalogACLscope;tariffactiveCHECKandimmutablehistory;priorreceiptlimits;exactcombined19package/SQLpinsandreplay-vs-repairbranches",
     "limits":"Read-only source audit; no new design, runtime or provider acceptance."
   },
+  "extensionSourceCommit":"38447c4",
   "nextAction": "MAP-018: confirm remaining recovery scope, then review a method against these constraints before preparing a fresh pinned populated fixture. Retain current limits/ownership and all separate authority-through-commit/provider/real-host gates.",
   "runtimeExecuted": false,
   "productionSourceChanged": false,
