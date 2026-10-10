@@ -2,6 +2,49 @@
 
 ## 10 October — combined imported installation and recovery
 
+### 10 October — remaining writer coverage audit
+
+MAP-018 / IDEA-20261009-11 now has a pinned read-only comparison in
+`DUMMY_PRODUCTION_WRITER_AUDIT_20261010.json`. The accepted local package contains
+261 functions and 161 relations; the retained full05 inventory contains 232
+functions and 153 relations. Exact definition hashes identify 207 unchanged,
+25 changed and 29 added functions. Earlier inventory edges and native receipts
+remain historical evidence; matching a function alone does not prove unchanged
+callers, authority, fixtures or concurrency. This audit rechecks the immutable
+185-pass receipt/package/runner pins and records all nine observed schedules;
+it executes no new native tests and changes no business code or provider state.
+
+Detailed definition/ACL/lock comparisons remain private in
+`.tools/current-writer-audit-20261010.json`, SHA-256
+`32a3f62948c83f2f7ad9d9b3b67c503b5e4170447890e2aaced81c5e7c7e34de`.
+The versioned JSON is a sanitized summary. A fresh Node assertion readback passed
+all seven file pins, private/summary equality, complete definition counts, nine
+schedules, taxonomy scope, unchanged historical inventory and exact MAP next
+action; `git diff --check` exited 0. No application gate was repeated.
+
+Coverage classification: catalog update and initial product brand/category
+assignment versus imported review are observed in both directions. Policy
+**set** versus imported review and first stock is observed in both directions.
+Reviewed association before first stock is observed; the connected sequential
+listing/order/payment/packing/handover path is retained. Policy **clear** and
+inherited fallback, competing review-session versus first stock, broader lot/
+recount and order/maintenance overlaps are not proved by these nine schedules.
+Earlier staff policy/lifecycle receipts are scoped to their own frozen source;
+compare the changed composed roots before reusing their operational claims.
+
+The current contract lists only the postgres table ACL on both `public.brands`
+and `public.categories`, no column ACLs and no triggers. It retains staff-manage
+and public-read RLS policies. The current BFF taxonomy chooser performs direct
+authenticated table reads, and the reference-option source still contains direct
+browser inserts. RLS alone supplies no table privilege. Effective inherited role
+authority and actual BFF/Auth reads were not observed by this offline audit;
+this is a concrete readiness gap, not a claimed live permission failure or
+authorization to add grants. MAP-018 owns the native effective-privilege and
+taxonomy-options check before taxonomy CRUD races, then the missing policy-clear
+and competing-session schedules. No repeated importer/browser/release gate is
+needed for this documentation-only audit. Recovery removes only this audit
+artifact/documentation; the existing private backup and native receipts remain.
+
 ### 10 October — observed current-writer schedules
 
 **Current policy/stock extension, locally verified:** MAP-018 /

@@ -1,0 +1,206 @@
+{
+  "idea": "IDEA-20261009-11",
+  "owningMap": "MAP-018",
+  "scope": "Read-only frozen-contract/source/evidence comparison; no native execution, Auth/provider observation or semantic graph completeness",
+  "pins": [
+    {
+      "path": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/imported-draft-025b3682-3b76-465e-bd2a-5c2c0c597314/result.json",
+      "sha256": "2a3dba7e597c3199e0b6540d9386b17ab15b9b86ab0feebb9a536f4464e2f36a"
+    },
+    {
+      "path": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/imported-draft-025b3682-3b76-465e-bd2a-5c2c0c597314/combined-imported-install.sql",
+      "sha256": "abc2abd5d685913d07508bd704aa1ecc0a29c6b0bae0f870cb47cb5ca82f85d5"
+    },
+    {
+      "path": "docs/evidence/20261004-category-shelf-life/current-full05-writer-resources.json",
+      "sha256": "ecc280d7848ea52fb6f4a5507d445b29c6b5bb2643c3ca0303d6ac0b2b166c82"
+    },
+    {
+      "path": "scripts/rehearse-imported-draft.mjs",
+      "sha256": "00ced3261c399bddf19627a341dbbecb1bfd548f1794648a487eaa5700a95b00"
+    },
+    {
+      "path": "server/admin-bff/product-master.js",
+      "sha256": "a1de8a00f29e683388061cff68d401ecf2273bdd9bd80b0f4b40a784096eb400"
+    },
+    {
+      "path": "src/views/admin/useReferenceOptions.js",
+      "sha256": "dadeb3eec22fbc096357bd81ce93c74ec6ec73ce72642a0a0c5218c0c14a7bfc"
+    },
+    {
+      "path": "supabase/prepared/imported_draft_continuation.sql",
+      "sha256": "26ec4db009173aef02e3954504c05991937fb4d503769fc5133f3ebaa999d52a"
+    }
+  ],
+  "prior": {
+    "functions": 232,
+    "relations": 153
+  },
+  "current": {
+    "functions": 261,
+    "relations": 161
+  },
+  "definitionComparisonCounts": {
+    "identical": 207,
+    "changed": 25,
+    "added": 29
+  },
+  "taxonomy": [
+    {
+      "name": "public.brands",
+      "tableAclGranteeNames": [
+        "postgres"
+      ],
+      "columnAclCount": 0,
+      "triggerCount": 0,
+      "rlsPolicyCount": 2,
+      "effectiveInheritedRoleAuthorityObserved": false
+    },
+    {
+      "name": "public.categories",
+      "tableAclGranteeNames": [
+        "postgres"
+      ],
+      "columnAclCount": 0,
+      "triggerCount": 0,
+      "rlsPolicyCount": 2,
+      "effectiveInheritedRoleAuthorityObserved": false
+    }
+  ],
+  "selectedRoots": [
+    {
+      "identity": "public.cancel_order_request(p_order_request_id uuid, p_reason text)",
+      "definitionSha256": "45a7c4f84ec45635604a0bbd60b24872c2f4abf14fa687dd87208822ab98e4bf",
+      "priorStatus": "changed"
+    },
+    {
+      "identity": "public.confirm_order_request(p_order_request_id uuid, p_reason text)",
+      "definitionSha256": "5d60a5a9c4e730914f7110e749493ae4a900903f2753cbd706f2769478fd6053",
+      "priorStatus": "changed"
+    },
+    {
+      "identity": "public.execute_admin_catalog_import_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "f95e5481c52335015122338673a76b3ed9f5a922548203bed64ffe054d24e72b",
+      "priorStatus": "identical"
+    },
+    {
+      "identity": "public.execute_admin_fulfillment_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "e37b0c268a58921077b22b8f44e5f1c4eaa51da0f337594461451e8cb5809518",
+      "priorStatus": "changed"
+    },
+    {
+      "identity": "public.execute_admin_lot_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "b569fbf60db627347b4d88edd1da532f782e23389a5911cec18f116c8d226756",
+      "priorStatus": "identical"
+    },
+    {
+      "identity": "public.execute_admin_product_intake_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "41564a99d35f5f71d7f8b0630cfeaadeac75934bccbbac5e5241c2282f425d15",
+      "priorStatus": "changed"
+    },
+    {
+      "identity": "public.execute_admin_product_master_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "b9553f8fc638395ce9b5db66197eeaa8b1a9271b218c73dececffae7fefa78d2",
+      "priorStatus": "identical"
+    },
+    {
+      "identity": "public.execute_admin_website_listing_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "d7ed016d63b6f934ae13f8e299e16a38e2a9b81db65235366bc48130764e108a",
+      "priorStatus": "identical"
+    },
+    {
+      "identity": "public.extend_reservation_v1(p_reservation_id uuid, p_minutes integer, p_reason text)",
+      "definitionSha256": "34f26252ae69542a3cacee5d265b146b902cc69d579452039556f4c4169cde82",
+      "priorStatus": "changed"
+    },
+    {
+      "identity": "public.fulfill_order_request(p_order_request_id uuid, p_handover_note text)",
+      "definitionSha256": "b1d12824dd9203697068895259a5c985ee3637e53546e7c8c439038d00039df1",
+      "priorStatus": "changed"
+    },
+    {
+      "identity": "public.record_packing_scan_exact_v1(p_order_request_id uuid, p_scanned_code text, p_reservation_id uuid, p_lot_confirmed boolean)",
+      "definitionSha256": "d52a9139c932e2efd0278d36e902924ea1181c4bcd216bfb49a8aa105d377cdb",
+      "priorStatus": "changed"
+    },
+    {
+      "identity": "public.release_expired_reservations_v1(p_limit integer)",
+      "definitionSha256": "dea625bcd678d5f884df395052a62a306794e9f35e0bf6677a176d886e23bb0e",
+      "priorStatus": "changed"
+    },
+    {
+      "identity": "public.set_order_request_payment_status(p_order_request_id uuid, p_to_status text, p_evidence_note text)",
+      "definitionSha256": "46dee779e9da65f6ca163cf3d1b141437656406195df11be603a627c43c78f70",
+      "priorStatus": "identical"
+    },
+    {
+      "identity": "public.set_order_request_payment_status(p_order_request_id uuid, p_to_status text, p_evidence_note text, p_payment_evidence jsonb)",
+      "definitionSha256": "0bfc50ca79282e4ffef39ea5914a4009f2309747838684a2d93e10d07ba1f3fc",
+      "priorStatus": "changed"
+    },
+    {
+      "identity": "public.submit_guest_order_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "definitionSha256": "4df01143e23717e7e23590188fd26d68c31ca1f6ba3439d905d08d2a782139e5",
+      "priorStatus": "changed"
+    }
+  ],
+  "observedImportedSchedules": [
+    {
+      "kind": "catalog",
+      "direction": "writer before review"
+    },
+    {
+      "kind": "taxonomy",
+      "direction": "writer before review"
+    },
+    {
+      "kind": "catalog",
+      "direction": "review before writer"
+    },
+    {
+      "kind": "taxonomy",
+      "direction": "review before writer"
+    },
+    {
+      "kind": "inventory",
+      "direction": "review before first inventory"
+    },
+    {
+      "kind": "policy/review",
+      "direction": "policy before review"
+    },
+    {
+      "kind": "policy/review",
+      "direction": "review before policy"
+    },
+    {
+      "kind": "policy/inventory",
+      "direction": "policy before first inventory"
+    },
+    {
+      "kind": "policy/inventory",
+      "direction": "first inventory before policy"
+    }
+  ],
+  "findings": [
+    "The full05 inventory is provenance for an earlier image: 25 changed definitions and 29 additions prevent a whole-image coverage claim. Identical definitions alone do not establish unchanged callers or concurrency.",
+    "Current direct taxonomy options reads and browser insertion routes require effective native role/schema/table/column privileges plus actual BFF/Auth evidence; RLS policies alone do not authorize them. Explicit contract ACLs grant only postgres; inherited effective authority was not observed in this audit.",
+    "Nine retained imported schedules cover catalog edits, initial product taxonomy assignment, policy set and first stock. Category policy clear/fallback, distinct review-session versus first stock and broader lot/order/maintenance interactions are not added by this audit.",
+    "Earlier staff/policy/lifecycle receipts remain scoped historical evidence and require exact composed source/authority/fixture comparison before reuse. No proposed Cartesian suite or new business policy is introduced."
+  ],
+  "acceptance": {
+    "frozenReceiptAndSourcePinsVerified": true,
+    "completeSemanticWriterGraph": false,
+    "effectiveTaxonomyRolePrivilegesObserved": false,
+    "bffAuthVerified": false,
+    "allWriter": false,
+    "provider": false,
+    "realHost": false
+  },
+  "providerWrites": false,
+  "privateDetails": {
+    "path": ".tools/current-writer-audit-20261010.json",
+    "sha256": "32a3f62948c83f2f7ad9d9b3b67c503b5e4170447890e2aaced81c5e7c7e34de",
+    "scope": "Complete hash comparison, raw contract ACL/policy fields and observed lock vectors retained privately"
+  }
+}
