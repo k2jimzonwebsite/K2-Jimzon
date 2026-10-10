@@ -2,6 +2,8 @@
 
 ## 10 October — combined imported installation and recovery
 
+**Publishing handoff, 10 October:** Verified captured-authority checkpoint171d832 is committed locally. Automatic approval review rejected `git push origin codex/dummy-production-acceptance`: it could not verify approved repository destination/exact code-disclosure authorization. Verified origin is https://github.com/k2jimzonwebsite/K2-Jimzon.git; remote feature branch remains8829f6e. No workaround or second push attempted. Owner approval for this exact feature-branch push is pending; local evidence and all remaining MAP-018 gates are preserved. Exact publishing action after approval: push the existing feature branch to that origin, then verify local/remote equality. This is separate from production activation/main promotion.
+
 ### 10 October — genuine captured-authority imported composition
 
 MAP-018 / IDEA-20261009-11: **owned native execution passed**, not provider
