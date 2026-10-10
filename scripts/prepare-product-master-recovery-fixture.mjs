@@ -6,19 +6,20 @@ import {createHash} from 'node:crypto'
 import {spawnSync} from 'node:child_process'
 const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const caseName=process.argv[2]||'oci-imported04'
+const customerTariffTransport=process.argv.includes('--customer-tariff-transport')
 assert.match(caseName,/^oci-imported\d{2}$/)
 const dir=path.join(root,caseName),sha=b=>createHash('sha256').update(b).digest('hex')
 assert.ok(!fs.existsSync(dir),'Fresh owned case required')
-const prep=spawnSync(process.execPath,['scripts/prepare-imported-provider-fixture.mjs','--case='+caseName,'--product-master-transport'],{windowsHide:true,encoding:'utf8',maxBuffer:1024*1024})
+const prep=spawnSync(process.execPath,['scripts/prepare-imported-provider-fixture.mjs','--case='+caseName,'--product-master-transport',...(customerTariffTransport?['--customer-tariff-transport']:[])],{windowsHide:true,encoding:'utf8',maxBuffer:1024*1024})
 assert.equal(prep.status,0,prep.stderr)
 assert.ok(!fs.existsSync(path.join(dir,'execution01')),'Cannot modify executed fixture')
 const stage=path.join(dir,'staging/k2'),pkg=JSON.parse(fs.readFileSync(path.join(dir,'guarded-package.json')))
-assert.equal(sha(pkg.sql),'d44df9c5a41ee8d31682038cc48147fa4593914997b98a075e1fccab4e667d45')
+assert.equal(sha(pkg.sql),customerTariffTransport?'98015aa9ae261ba1123c0e47190d19c4dcc6e158bf2df192654c50f6a64e234b':'d44df9c5a41ee8d31682038cc48147fa4593914997b98a075e1fccab4e667d45')
 const initialBytes=fs.readFileSync(root+'/oci-imported03/execution01/before-catalog.json')
 assert.equal(sha(initialBytes),'87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963')
 const initial=JSON.parse(initialBytes)
-const installedBytes=fs.readFileSync(root+'/oci-imported03/execution01/after-catalog.json')
-assert.equal(sha(installedBytes),'2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6')
+const installedBytes=fs.readFileSync(root+(customerTariffTransport?'/oci-imported11':'/oci-imported03')+'/execution01/after-catalog.json')
+assert.equal(sha(installedBytes),customerTariffTransport?'0183c08a7ab7a476959577a5403763ba7f24ff302f50f7df153844436920b72d':'2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6')
 const at=pkg.sql.indexOf('begin;'),body=pkg.sql.slice(at+6).replace(/\ncommit;\s*$/,'')
 assert.ok(at>0&&body.startsWith('set local')&&!body.endsWith('commit;'))
 const owned="do $owned_recovery$ begin if current_database()<>'postgres' or current_user not in ('postgres','supabase_admin') or current_setting('data_directory')<>'/tmp/k2-managed-data' or inet_server_addr() is not null then raise exception 'OWNED_RAM_RECOVERY_REQUIRED';end if;end $owned_recovery$;\n"
@@ -44,7 +45,20 @@ const cases=[
  ['authority-drift','alter function '+fn+' security invoker;','','K2_PROVIDER_SCHEMA_DRIFT'],
  ['acl-drift','grant execute on function '+fn+' to anon;','','K2_PROVIDER_SCHEMA_DRIFT'],
 ]
-for(const [name,mutation,fault] of cases)fs.writeFileSync(path.join(stage,'revised-'+name+'.sql'),'begin;\n'+owned+mutation+'\n'+body+'\n'+fault+'\ncommit;\n',{flag:'wx'})
+if(customerTariffTransport){
+ const tariff='public.execute_customer_delivery_rates_v1(text,bigint,uuid,uuid,text,text)'
+ const tariffBody=`do $drift$ declare d text;begin d:=pg_get_functiondef(${q(tariff)}::regprocedure);if encode(extensions.digest(convert_to(d,'UTF8'),'sha256'),'hex')<>'151af34efea459c7b0b20938e50a2b05ae081c603296ca6abc1b0dba93dd521b' then raise exception 'REVISED_TARIFF_BODY_SOURCE_DRIFT';end if;execute replace(d,'K2_CUSTOMER_TARIFF_VERSION_STALE','K2_CUSTOMER_TARIFF_VERSION_STALE_DRIFT');end $drift$;`
+ cases.push(['tariff-body-drift',tariffBody,'','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['tariff-authority-drift','alter function '+tariff+' security invoker;','','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['tariff-acl-drift','grant execute on function '+tariff+' to anon;','','K2_PROVIDER_SCHEMA_DRIFT'])
+ for(const [label,target] of [['master',fn],['tariff',tariff]]){
+  // Only the owned fixture administrator changes owner. The installer remains postgres.
+  cases.push([label+'-owner-drift','alter function '+target+' owner to authenticated;set local role postgres;','','K2_PROVIDER_SCHEMA_DRIFT'],
+   [label+'-settings-drift','alter function '+target+' set search_path to public;','','K2_PROVIDER_SCHEMA_DRIFT'])
+ }
+}
+if(customerTariffTransport)fs.writeFileSync(path.join(stage,'revised-install-body.sql'),body,{flag:'wx'})
+for(const [name,mutation,fault] of cases)fs.writeFileSync(path.join(stage,'revised-'+name+'.sql'),'begin;\n'+owned+mutation+'\n'+(customerTariffTransport?'\\i /tmp/revised-install-body.sql':body)+'\n'+fault+'\ncommit;\n',{flag:'wx'})
 const tables=initial.relations.filter(r=>['r','p'].includes(r.kind))
 assert.equal(tables.length,88)
 const sequences=initial.relations.filter(r=>r.kind==='S');assert.equal(sequences.length,2)
@@ -54,7 +68,7 @@ fs.writeFileSync(path.join(stage,'revised-cold-install.sql'),pkg.sql,{flag:'wx'}
 const command=(file,user='supabase_admin')=>"su postgres -s /bin/sh -c 'psql -X -q -t -A -P pager=off -h /tmp -U "+user+" -d postgres -v ON_ERROR_STOP=1 -f /tmp/"+file+"'"
 const conserve=(name,mutation,error)=>{
  const tag=name.replaceAll('-','_').toUpperCase()
- return command('race-catalog.sql')+' > /tmp/revised-'+name+'-schema-before.json\n'+command('revised-all-rows.sql')+' > /tmp/revised-'+name+'-rows-before.json\nset +e\n'+command('revised-'+name+'.sql','postgres')+' > /tmp/revised-'+name+'.log 2>&1\nstatus=$?\nset -e\n[ "$status" -eq 3 ]\ngrep -q '+error+' /tmp/revised-'+name+'.log\n'+(name==='interruption'?'grep -q K2_PROVIDER_FRESH_APPLY /tmp/revised-'+name+'.log\n':'! grep -q K2_PROVIDER_EXACT_REPLAY /tmp/revised-'+name+'.log\n')+command('race-catalog.sql')+' > /tmp/revised-'+name+'-schema-after.json\n'+command('revised-all-rows.sql')+' > /tmp/revised-'+name+'-rows-after.json\ncmp -s /tmp/revised-'+name+'-schema-before.json /tmp/revised-'+name+'-schema-after.json\ncmp -s /tmp/revised-'+name+'-rows-before.json /tmp/revised-'+name+'-rows-after.json\nsha256sum /tmp/revised-'+name+'-schema-before.json /tmp/revised-'+name+'-schema-after.json /tmp/revised-'+name+'-rows-before.json /tmp/revised-'+name+'-rows-after.json\necho K2_REVISED_'+tag+'_FULL_RECOVERY_OK\n'
+ return command('race-catalog.sql')+' > /tmp/revised-'+name+'-schema-before.json\n'+command('revised-all-rows.sql')+' > /tmp/revised-'+name+'-rows-before.json\nset +e\n'+command('revised-'+name+'.sql',name.endsWith('owner-drift')?'supabase_admin':'postgres')+' > /tmp/revised-'+name+'.log 2>&1\nstatus=$?\nset -e\n[ "$status" -eq 3 ]\ngrep -q '+error+' /tmp/revised-'+name+'.log\n'+(name==='interruption'?'grep -q K2_PROVIDER_FRESH_APPLY /tmp/revised-'+name+'.log\n':'! grep -q K2_PROVIDER_EXACT_REPLAY /tmp/revised-'+name+'.log\n')+command('race-catalog.sql')+' > /tmp/revised-'+name+'-schema-after.json\n'+command('revised-all-rows.sql')+' > /tmp/revised-'+name+'-rows-after.json\ncmp -s /tmp/revised-'+name+'-schema-before.json /tmp/revised-'+name+'-schema-after.json\ncmp -s /tmp/revised-'+name+'-rows-before.json /tmp/revised-'+name+'-rows-after.json\nsha256sum /tmp/revised-'+name+'-schema-before.json /tmp/revised-'+name+'-schema-after.json /tmp/revised-'+name+'-rows-before.json /tmp/revised-'+name+'-rows-after.json\necho K2_REVISED_'+tag+'_FULL_RECOVERY_OK\n'
 }
 let probe=fs.readFileSync(path.join(stage,'image-probe.sh'),'utf8')
 const full=command('full-contents.sql','postgres')
@@ -69,7 +83,7 @@ const recovery=probe.slice(recoveryAt,exportsAt)
 const cold=recovery+'\n'+command('revised-empty-cold.sql')+'\n'+command('original-row-projection.sql')+' > /tmp/revised-cold-rows-before.json\n'+command('revised-cold-install.sql','postgres')+' > /tmp/revised-cold-install.log 2>&1\ngrep -q K2_PROVIDER_FRESH_APPLY /tmp/revised-cold-install.log\n'+command('revised-cold-install.sql','postgres')+' > /tmp/revised-cold-replay.log 2>&1\ngrep -q K2_PROVIDER_EXACT_REPLAY /tmp/revised-cold-replay.log\n'+command('original-row-projection.sql')+' > /tmp/revised-cold-rows-after.json\ncmp -s /tmp/revised-cold-rows-before.json /tmp/revised-cold-rows-after.json\n'+command('race-catalog.sql')+' > /tmp/revised-cold-schema.json\ncmp -s /tmp/k2-after.json /tmp/revised-cold-schema.json\nsha256sum /tmp/revised-cold-rows-before.json /tmp/revised-cold-rows-after.json /tmp/revised-cold-schema.json\necho K2_REVISED_EMPTY_COLD_COMMIT_REPLAY_OK\n'
 probe=probe.slice(0,recoveryAt)+cold+probe.slice(recoveryAt)
 fs.writeFileSync(path.join(stage,'image-probe.sh'),probe)
-const added=['revised-all-rows.sql',...cases.map(c=>'revised-'+c[0]+'.sql'),'revised-empty-cold.sql','revised-cold-install.sql']
+const added=['revised-all-rows.sql',...(customerTariffTransport?['revised-install-body.sql']:[]),...cases.map(c=>'revised-'+c[0]+'.sql'),'revised-empty-cold.sql','revised-cold-install.sql']
 let init=fs.readFileSync(path.join(stage,'init.sh'),'utf8'),anchor='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image-probe.sh'
 assert.equal(init.split(anchor).length,2)
 init=init.replace(anchor,()=>added.map(n=>'/bin/busybox cp /k2/'+n+' /k2root/tmp/'+n).join('\n')+'\n'+anchor)
