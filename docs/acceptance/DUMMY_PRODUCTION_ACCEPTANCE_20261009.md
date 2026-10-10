@@ -2,6 +2,81 @@
 
 ## 10 October — combined imported installation and recovery
 
+### 10 October — genuine captured-authority imported composition
+
+MAP-018 / IDEA-20261009-11: **owned native execution passed**, not provider
+activation or product readiness. `node scripts/prepare-imported-provider-fixture.mjs
+--case=oci-imported02` prepared the immutable captured-authority extension;
+`node scripts/run-imported-provider-fixture.mjs --case=oci-imported02` finished
+session82754 **exit0**, PostgreSQL17.6, supautils/module probe true, no timeout,
+runtime20164 stopped and independently absent. Native fixture uses retained
+29-layer Linux image, captured baseline/locale, roles/memberships/event bindings,
+managed settings and schema/table/column/default/function ACLs. Only three
+existing function bodies change; one postgres-owned helper has only postgres
+EXECUTE. Independent review compared the actual prepared expected contract:
+all remaining metadata unchanged, seven protected tables and 81 cutover locks.
+No permission grants, alternate operational writer or provider dispatch added.
+
+Fresh installation and exact replay retain the original 2s/10s guards.
+Independent terminal catalog checks match the package's complete before/after
+constants and exact cold rollback. Serial independently contains three original
+88-table foundation-row checks, two captured baseline/locale checks, one cold
+global/managed-authority check, one committed original-projection check, one
+fresh/replay check, one protected concurrent-drift refusal/recovery check and
+one 43,768-reference-row check. Full schema/global/managed checks and timers
+stay in the native SQL, not inferred from a process exit alone. This extends
+the accepted oci-envelope12 package; earlier PG17.11/185-pass and oci-envelope12
+receipts keep their historical source hashes and scopes.
+
+Private immutable outputs live under
+`D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported02`:
+
+- SQL package SHA256 `ba15a5d893b8fb188dc1c9180c4bef85ce3f6a69ca867b065622aedf45f7c4ef`.
+- Fixture SHA256 `87e959e1b66b72d85875b79a786cc35169eb7d287efdadd45b7fe4a5cde50eac`.
+- Composition manifest SHA256 `190164f4368ef46a8d8474fa658fac0c13359926574f4bfffa3065530254ccbc`.
+- Terminal result SHA256 `530fa8ac4d49b72835827c441af8578d5ae24353f74882339656887a66de668f`.
+- Serial SHA256 `eb579724b49a1415f139d42f8631aa4b5d36623ed77756690ff3712398def9ed`.
+- Before/rollback catalog SHA256 `87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963`.
+- After catalog SHA256 `e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460`.
+
+The canonical generator now admits two exact reviewed content hashes: original
+`7c7e96cc81aa6535976ddf447355fd707fbe3392e7e5b2f79866abe814afd1fb`
+and imported `372b188c83b16cc64438a996a99d429c3ebe39a862a09824ce6caa2411951633`.
+Unknown/modified contents and protected metadata drift still refuse. Generator
+source SHA256 is `3e13cae309da45523b3f368321aeda4c3730dd4f128147da4c193b84a03158e5`;
+the maintained local installer source-identity check follows that source revision,
+while generated baseline SQL is proven byte-identical. Generic generator source
+is explicitly versioned; raw captures/packages/logs remain private.
+
+Focused `node --test tests/imported-provider-barrier.test.mjs` passes4/0/no skips;
+reviewer independently reproduced4/0 and found no Critical/Important source
+issue. These tests require retained private fixture inputs and are preparation
+contracts, not native or hosted substitutes. Final source-edit development
+session28059 exits0. `git diff --check` passes. No redundant app/browser/release
+run or production deployment was performed.
+
+Retained preparation diagnostics: the first derivation failed before writing
+because replacement-string SQL interpolation duplicated an anchor; callback
+replacement corrected it. `prepare-oci-imported01.mjs` remains as the next
+refused source: existing barrier correctly rejected the unadmitted payload
+before fixture creation. Four focused tests first demonstrated the missing
+admission, then passed after the second fixed pin. The first run wrapper refused
+an already prepared runner before execution; corrected wrapper requires exact
+retained runner bytes and refuses existing execution directories. No diagnostic
+overwrites prior evidence or modifies a provider. Runtime is RAM-only and stopped;
+preserve all original archives/layers/source/result files. Harness recovery is
+source revert, database recovery is the retained exact captured cold restore,
+not inverse imported SQL.
+
+**Exact next MAP-018 action:** qualify effective taxonomy option reads and
+Staff/Admin writes on this genuine captured-authority composition, then actual
+BFF/Auth concurrency, missing policy-clear/inherited-fallback and competing
+review/first-stock schedules. Installation does not exercise that signed product
+chain. ACL authority through commit remains unresolved; management API
+transaction/unknown-outcome semantics, current owner authorization and real-host
+Auth/media/imported review/listing/order/payment/packing acceptance remain required.
+No provider write, main promotion, verified physical stock or user-ready claim.
+
 ### 10 October — native taxonomy authority boundary
 
 MAP-018 / IDEA-20261009-11: the maintained witness's new scoped mode finished

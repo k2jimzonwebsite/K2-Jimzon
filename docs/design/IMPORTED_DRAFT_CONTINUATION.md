@@ -148,6 +148,8 @@ Integrator/Arbiter disposition: **APPROVED, design only**. All 15 objections
 open. Proceed with implementation and committed behavioral evidence. This is not
 production qualification or provider activation approval.
 
+Captured-authority composition, 10 October: imported review keeps the exact retained provider authority. The composed expected schema changes three body definitions and adds only the private postgres-owned assertion helper; it preserves all existing function headers/ACLs, table/column/schema/default grants, role memberships, event bindings and managed settings. The local package admission is separately pinned, with unchanged timers and protected-table metadata comparisons. Native installation/recovery evidence and remaining taxonomy/Auth/BFF/through-commit/host limits are recorded in DUMMY_PRODUCTION_ACCEPTANCE_20261009.md and MAP-018. This introduces no additional operational writer or permission grant.
+
 Implementation inspection clarification: spreadsheet-created rows have no brand
 or category assignment. Intake must permit their **first** assignment to existing
 brand/category names through its current resolver, while refusing reassignment of

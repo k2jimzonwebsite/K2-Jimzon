@@ -107,6 +107,8 @@ hashes.
 
 ## Recovery
 
+MAP-018 captured-authority imported fixture: preparation and execution use the two `scripts/*-imported-provider-fixture.mjs` commands with a fresh `--case=oci-importedNN` in the explicit private owned D: root. Never overwrite an existing execution or reuse its RAM database as production. Keep its immutable preparer, runner, source pins, SQL package, serial, transferred catalogs and result beside all earlier backups. The original captured archive and exact cold restore remain recovery authority; rollback is not an inverse imported merge. A local native success does not satisfy provider identity/authorization, management transport or actual-host gates. Exact executed case, hashes, terminal result and next action: docs/acceptance/DUMMY_PRODUCTION_ACCEPTANCE_20261009.md; unresolved work stays MAP-018.
+
 Uncommitted transaction: `ROLLBACK` inside the rehearsed transaction. After
 commit, use the data-preserving scoped forward repair chosen in
 `DATABASE_BACKUP_AND_RESTORE_RUNBOOK.md` rather than dropping sessions, lots,

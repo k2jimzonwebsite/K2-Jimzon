@@ -31,7 +31,7 @@ const literal = (sql, anchor, json = true) => {
 export function qualifyImportedInstallation({ db, dir, bin, out, adapted, good, sql, check, report }) {
   const contractSql = fs.readFileSync('supabase/prepared/category_operating_schema_contract.sql', 'utf8')
   const builderSource = fs.readFileSync('docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs', 'utf8')
-  check('logical contract and canonical envelope source pinned', sha(contractSql) === '52184d4b7b6cee2c81d5641608e830675993be482f4f757dec93c7e88be45f47' && sha(builderSource) === 'ecb1ed6d23cb1e85c76494a71406b16fa530d649f44dc2da06d6504a89fe175b')
+  check('logical contract and canonical envelope source pinned', sha(contractSql) === '52184d4b7b6cee2c81d5641608e830675993be482f4f757dec93c7e88be45f47' && sha(builderSource) === '3e13cae309da45523b3f368321aeda4c3730dd4f128147da4c193b84a03158e5')
   const imported = fs.readFileSync('supabase/prepared/imported_draft_continuation.sql', 'utf8')
   check('qualified imported fragment exact source', sha(imported) === '26ec4db009173aef02e3954504c05991937fb4d503769fc5133f3ebaa999d52a')
   const before = literal(adapted, 'v_before constant jsonb:='), foundationAfter = literal(adapted, 'v_after constant jsonb:=')
