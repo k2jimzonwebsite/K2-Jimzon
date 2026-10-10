@@ -1,0 +1,238 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "providerWrites": false,
+  "deployed": false,
+  "case": "oci-imported11",
+  "nativeSession": 84533,
+  "native": {
+    "owningMap": "MAP-023/018",
+    "scope": "Complete guarded10s envelope/fresh/exact replay/cold archive recovery on actual local postgres target; provider physical/locale/project/host qualification separate",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "none",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported11\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 21656,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "catalogs": {
+      "before": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      },
+      "after": {
+        "sha256": "0183c08a7ab7a476959577a5403763ba7f24ff302f50f7df153844436920b72d",
+        "bytes": 2396732
+      },
+      "rollback": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      }
+    },
+    "fullCatalogRollback": true,
+    "processStopped": true,
+    "serialSha256": "5c9a6c09e5d55d77bb1d27b4eac7889da6ae4b4ab0fa266387c27868ef960889"
+  },
+  "scope": "Actual full guarded imported union plus exact Product Master and customer tariff business-conflict corrections on captured PostgreSQL17.6 owned RAM guest; populated current installation/repeat/concurrent schema drift refusal/original archive reconstruction. No new HTTP, empty-database cold install or provider execution.",
+  "hashes": {
+    "execution01/result.json": "72e60d3fcfe319c20cd16eed9efaa0b03613cdbe33794a3fd0c801754fbb3b11",
+    "execution01/serial.log": "5c9a6c09e5d55d77bb1d27b4eac7889da6ae4b4ab0fa266387c27868ef960889",
+    "execution01/before-catalog.json": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+    "execution01/after-catalog.json": "0183c08a7ab7a476959577a5403763ba7f24ff302f50f7df153844436920b72d",
+    "execution01/rollback-catalog.json": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+    "preparer-source.mjs": "2b56235932e8f066b4094fa961a86a70bfb813816c2ff28786ae18d5ebd4f265",
+    "imported-composition.json": "ef5b038669125fa07365d44aa8d78b45848f310627fc36510b38ebace63d6796",
+    "guarded-package.json": "408aa0da32edf59c05f50f1e5c86dc7ee77abe6313661a897f57fd97665ffe3c",
+    "preparation.json": "6d4c0c561e556ffbba74a7afa4138b8320d90e031005d0c42bf0dba035914909",
+    "envelope-overlay.cpio": "a261b8c15ffaa7e0f986d5158edada2f64a3df3ff9b01b4c80cbb5ace0ff8af9",
+    "staging/k2/full-contents.sql": "6b0219b6b7896e33d8ed7102d010f0534eb50bb62c372f48222831e0e195e752",
+    "staging/k2/cold-authority.sql": "da1ab048555c6d3f009b0f6ae811e51528d299ef3d7f4d8daa60632a65948fd1",
+    "staging/k2/captured-baseline-check.sql": "aff237ec2224cbd9849391e25cdd1dc7646b59f7d3c61850fd5a6ca8e89a6e4b",
+    "staging/k2/image-probe.sh": "63b06f69ec4e12178daaa192951a7a8c0fccfe1ab87abb1126a6a896f7482bd6",
+    "staging/k2/preserved-foundation.dump": "f02a7598776b38d35d9d8656178a05ba8e45577668a1be48da2c7553ee696e10",
+    "runner-source.mjs": "2e05ddf53ef2678c38128550337b602635eb963e8d4edc83ab473847b983a39f"
+  },
+  "sourcePins": [
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\preparer-source.mjs",
+      "sha256": "2f6942385816d838cdc61fe628b6d2e96c08b1df9f4dc302027d3cd5d7d1325c"
+    },
+    {
+      "file": "supabase/prepared/imported_draft_continuation.sql",
+      "sha256": "26ec4db009173aef02e3954504c05991937fb4d503769fc5133f3ebaa999d52a"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\execution01\\after-catalog.json",
+      "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\imported-draft-025b3682-3b76-465e-bd2a-5c2c0c597314\\combined-imported-install.sql",
+      "sha256": "abc2abd5d685913d07508bd704aa1ecc0a29c6b0bae0f870cb47cb5ca82f85d5"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\before-catalog.json",
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\after-catalog.json",
+      "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\guarded-package.json",
+      "sha256": "fa0ef714dd5d3582a8b99a57faa1cef1cb4ad0a56fffbfeee0442d3d8692a55b"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\authority-inventory.json",
+      "sha256": "52bcd96910e4b32dd195e375bcbbef468471d1c166095d3d1b11d29e48ecde7a"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\provider-managed-ddl-authority.json",
+      "sha256": "1f6dac40000249a40a7ad45fa5b71f7cbf348f14144f69f1768282e311a3b06a"
+    },
+    {
+      "file": "scripts/prepare-imported-provider-fixture.mjs",
+      "sha256": "cdbd5c783f2ffac3be60a46710bcb992a629bf50d19a607cf6f164e9d6df4cb4"
+    },
+    {
+      "file": "docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs",
+      "sha256": "9fc95665630a929240d78023000c94b15bf93ab7b234974272880d85748cb67d"
+    },
+    {
+      "file": "supabase/prepared/product_master_version_conflict_transport.sql",
+      "sha256": "ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476"
+    },
+    {
+      "file": "supabase/prepared/customer_tariff_version_conflict_transport.sql",
+      "sha256": "efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166"
+    }
+  ],
+  "payloadSha256": "8790fa089868b6fff3bcecbf8b9d5cabe28d997136a3437a0416f9f96845d65a",
+  "sqlSha256": "98015aa9ae261ba1123c0e47190d19c4dcc6e158bf2df192654c50f6a64e234b",
+  "changedFunctions": [
+    "public.execute_admin_product_master_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+    "public.execute_customer_delivery_rates_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)"
+  ],
+  "tariffBeforeSha256": "15f0d4d3373ae753c062d37c70d91def0dc6bb1d292f99f6935e2d2db26fbb81",
+  "tariffAfterSha256": "151af34efea459c7b0b20938e50a2b05ae081c603296ca6abc1b0dba93dd521b",
+  "masterBeforeSha256": "b9553f8fc638395ce9b5db66197eeaa8b1a9271b218c73dececffae7fefa78d2",
+  "masterAfterSha256": "c7e9f53fe80c68ce99401caf10d31f4ee272bd506a0c0f3bc7f6363c97f38b94",
+  "completeAfterEqualsPriorImportedExceptTwoExactDefinitions": true,
+  "metadataUnchangedRelativeToPriorImportedComposition": true,
+  "timingsMs": {
+    "FRESH_APPLY": 2808.355,
+    "EXACT_REPLAY": 314.782
+  },
+  "original88TableTwoSequenceProjectionSha256": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+  "capturedGlobalAuthority": {
+    "roles": 31,
+    "memberships": 22,
+    "eventTriggers": 6,
+    "managedSettings": 8,
+    "postArchiveExactWitness": true
+  },
+  "hostFinalCheck": {
+    "surface": "Independent escalated read-only Get-Process/Get-NetTCPConnection after terminal result",
+    "pid": 21656,
+    "pidAbsent": true,
+    "probeListenerCount": 0
+  },
+  "verification": {
+    "developmentCommand": "npm run verify:development",
+    "developmentSession": 99910,
+    "developmentExit": 0,
+    "sourceAdmissionCommand": "node .tools/verify-tariff-package-source.mjs",
+    "sourceAdmissionExit": 0,
+    "receiptCommand": "node .tools/record-tariff-installation.mjs"
+  },
+  "focusedSourceAdmission": {
+    "red": "Expected exact union admission fails CONTENTS_DRIFT before immutable payload pin",
+    "green": {
+      "contentsSha256": "8790fa089868b6fff3bcecbf8b9d5cabe28d997136a3437a0416f9f96845d65a",
+      "sqlSha256": "98015aa9ae261ba1123c0e47190d19c4dcc6e158bf2df192654c50f6a64e234b",
+      "afterSha256": "adf6ccc32bc102f28f2bc30e18cafea8fff37c08c75a70064e6d03080fd4a33c",
+      "expectedMasterDefinitionSha256": "c7e9f53fe80c68ce99401caf10d31f4ee272bd506a0c0f3bc7f6363c97f38b94",
+      "sourceOnly": true,
+      "providerWrites": false
+    },
+    "appendedPayloadRefused": true,
+    "platformMetadataDriftRefused": true,
+    "compositionRed": "Unimplemented tariff flag produced unchanged Master catalog in prepared-only09; expected exact tariff correction assertion failed",
+    "compositionHarnessCorrection": "Initial11 exact overlay assertion omitted SQL literal quote escaping; fixed assertion without implementation change"
+  },
+  "recovery": "The owned native guest reconstructs the original populated archive; full original schema and captured baseline row/sequence checks pass. Guest terminal0. Source revert only this opt-in integration and exact admission pin; retain receipts. Fresh successors must use a new owned case and retained exact source archive.",
+  "remaining": [
+    "Empty-original-schema cold full installation with the corrected union",
+    "Interrupted full installation rollback and installed Master/tariff body/owner/settings/ACL drift refusal for this exact revised package",
+    "Post-final-check authority-through-commit qualification",
+    "Remaining business-conflict paths; prior isolated tariff HTTP proof does not become new full-package HTTP proof",
+    "Genuine CSV-to-review/stock/eligible publication/Website, creation owner decision, approved facts/media/custody",
+    "K2 identity/readiness/backup/specific owner authorization/provider and real-host/human acceptance",
+    "Populated tariff heads/history/receipt data-retaining deactivation, roll-forward and exact replay for the revised package"
+  ],
+  "limits": "Archive reconstruction is not an empty-database cold installation or data-retaining deactivation/roll-forward of revised installed policy/event rows or tariff heads/history/receipt rows. Earlier scoped recovery evidence cannot silently replace those revised-package tests. Existing actual routed assignment receipt remains separate; native SQL installation is not new Auth/PostgREST/BFF/browser or provider evidence. Privileged after-final-check authority counterexample remains open.",
+  "reviewedFlagUsage": "--product-master-transport --customer-tariff-transport; tariff-only contents have no admitted immutable pin",
+  "preparationDiagnostics": {
+    "imported09": "Prepared-only old composition; no native execution",
+    "generated10": "Immutable allowlist refused exact new contents before fixture creation/native execution",
+    "generated10Sha256": "bd05727c0603b5e63e79a50b0f24d714cb1d42a66736920ee859df603f074381"
+  },
+  "byteIdentityRegression": [
+    {
+      "label": "12 default vs imported02",
+      "preparedOnly": true,
+      "hashes": {
+        "guarded-package.json": "1e1e7a3b3f7275ff25272103bb3057434cc132a5eafd088be0963d0146bb5a38",
+        "staging/k2/full-contents.sql": "87e959e1b66b72d85875b79a786cc35169eb7d287efdadd45b7fe4a5cde50eac"
+      }
+    },
+    {
+      "label": "13 Master-only vs imported03",
+      "preparedOnly": true,
+      "hashes": {
+        "guarded-package.json": "f23a72da7654df22ecc505fd2d96c8abb020282ca84679f704388193265df6e6",
+        "staging/k2/full-contents.sql": "80853e4268e184d0f8c2f9c2c910c1686433813812c5373082880c59c7cc72c7"
+      }
+    }
+  ],
+  "sourceCheckHelpers": {
+    ".tools/check-tariff-composition.mjs": "a6bdd675b75629346423c6429218db1d23ffbd06a7741d92db1c567df79c0c59",
+    ".tools/verify-tariff-package-source.mjs": "4ade0eaa0a6b41c3352b934295165cc0d618ce330ca182f3a108d8d5b965ad6b",
+    ".tools/hash-tariff-payload.mjs": "637b9ef90fc961304d633d1490c403be148c92edb6cf7607a726fe379a1c4e03"
+  },
+  "priorHttpEvidence": "LOCAL_TARIFF_PUBLICATION_20261010.json owns isolated temporary-overlay HTTP200/version1/replay/409 checks. This native package installation adds no Auth/PostgREST/BFF/browser proof.",
+  "independentReview": {
+    "reviewer": "auth_migration_review",
+    "critical": 0,
+    "important": 0,
+    "verified": "16 native artifact pins,13 composition source pins,3 helper hashes, exact two-definition catalog transition, serial-framed catalogs/controls, default and Master-only byte identity, authoritative documentation limits",
+    "hostAndDevelopment": "Parent actual-host and final development observations; reviewer did not rerun"
+  }
+}

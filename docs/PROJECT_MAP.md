@@ -1,5 +1,7 @@
 # K2 Jimzon  -  Project Directory Map
 
+10 October guarded tariff package (MAP-018): existing scripts/prepare-imported-provider-fixture.mjs now prepares the exact combined Master/tariff overlay with both opt-in flags; docs/acceptance/CUSTOMER_TARIFF_TRANSPORT_INSTALLATION_20261010.json owns full current application/replay/original archive evidence. No new canonical logic or route. Immutable content admission remains in docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs; interruption/installed drift/cold/data-retaining/authority/provider/hosted gates remain MAP-018.
+
 10 October prepared Product Master conflict transport (MAP-018): supabase/prepared/product_master_version_conflict_transport.sql owns the sole guarded business SQLSTATE correction; docs/acceptance/LOCAL_PRODUCT_ASSIGNMENT_20261010.json archives actual routed assignment/refusal/retry/audit and recovery diagnostics. Original combined installation source remains unchanged; integrate exact before/after/replay guards under MAP-018 before activation. No duplicate product/reference logic or new route.
 
 10 October initial taxonomy draft correction (MAP-018): existing InventoryGrid editor changes only two select locks; tests/admin-initial-taxonomy-choice.spec.js and docs/acceptance/INITIAL_TAXONOMY_CHOICES_20261010.json own red/green UI evidence. No new route, SQL or duplicate assignment logic. Protected reference creation/command/host acceptance remains MAP-018.

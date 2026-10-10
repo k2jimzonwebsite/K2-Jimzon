@@ -9,6 +9,7 @@ import { pathToFileURL } from 'node:url'
 const root = 'D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const caseName = process.argv.find(a => a.startsWith('--case='))?.slice(7) || 'oci-imported01'
 const productMasterTransport = process.argv.includes('--product-master-transport')
+const customerTariffTransport = process.argv.includes('--customer-tariff-transport')
 if (!/^oci-imported\d{2}$/.test(caseName)) throw Error('OWNED_IMPORTED_FIXTURE_NAME_REQUIRED')
 const sha = bytes => createHash('sha256').update(bytes).digest('hex')
 const sourcePath = path.join(root, 'oci-envelope12/preparer-source.mjs')
@@ -87,6 +88,17 @@ if (productMasterTransport) {
   master.definition = master.definition.replace(anchor, anchor.replace('40001', 'P0001'))
   assert.equal(sha(master.definition), 'c7e9f53fe80c68ce99401caf10d31f4ee272bd506a0c0f3bc7f6363c97f38b94')
 }
+const tariffTransportPath = 'supabase/prepared/customer_tariff_version_conflict_transport.sql'
+let tariffTransport = ''
+if (customerTariffTransport) {
+  tariffTransport = fs.readFileSync(tariffTransportPath, 'utf8')
+  assert.equal(sha(tariffTransport), 'efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166')
+  const tariff = expected.functions.find(f => f.catalog.proname === 'execute_customer_delivery_rates_v1')
+  assert.equal(sha(tariff.definition), '15f0d4d3373ae753c062d37c70d91def0dc6bb1d292f99f6935e2d2db26fbb81')
+  const anchor = "raise exception using errcode='40001',message='K2_CUSTOMER_TARIFF_VERSION_STALE';"
+  assert.equal(tariff.definition.split(anchor).length, 2)
+  tariff.definition = tariff.definition.replace(anchor, anchor.replace('40001', 'P0001'))
+}
 
 let derived = source.replaceAll('oci-envelope12', caseName)
 for (const module of ['operating-replay-package.mjs', 'build-express-delivery.mjs']) {
@@ -100,7 +112,7 @@ assert.equal(derived.split('fragments:fixed.fragments').length, 2)
 const fragmentStart = fragment.indexOf('\nbegin;')
 assert.ok(fragmentStart >= 0 && fragment.split('\nbegin;').length === 2 && /commit;\s*$/.test(fragment))
 const importedBody = fragment.slice(fragmentStart + 1).replace(/^begin;/, '').replace(/commit;\s*$/, '')
-derived = derived.replace('fragments:fixed.fragments', () => 'fragments:[...fixed.fragments,' + JSON.stringify(importedBody) + (productMasterTransport ? ',' + JSON.stringify(transport) : '') + ']')
+derived = derived.replace('fragments:fixed.fragments', () => 'fragments:[...fixed.fragments,' + JSON.stringify(importedBody) + (productMasterTransport ? ',' + JSON.stringify(transport) : '') + (customerTariffTransport ? ',' + JSON.stringify(tariffTransport) : '') + ']')
 const generated = path.join(root, 'prepare-' + caseName + '.mjs')
 assert.ok(!fs.existsSync(path.join(root, caseName)) && !fs.existsSync(generated))
 fs.writeFileSync(generated, derived, { flag: 'wx' })
@@ -109,12 +121,12 @@ if (execution.status !== 0) throw Error(execution.stderr || 'IMPORTED_FIXTURE_PR
 const out = path.join(root, caseName)
 fs.copyFileSync(generated, path.join(out, 'preparer-source.mjs'), fs.constants.COPYFILE_EXCL)
 const record = {
-  owningMap: 'MAP-018', idea: productMasterTransport ? 'IDEA-20261010-08' : 'IDEA-20261009-11', providerWrites: false,
+  owningMap: 'MAP-018', idea: productMasterTransport || customerTariffTransport ? 'IDEA-20261010-08' : 'IDEA-20261009-11', providerWrites: false,
   scope: 'Prepared captured-authority fixture; native execution and provider acceptance unverified',
   sources: [sourcePath, fragmentPath, providerPath, unionPath, calibrationBefore, calibrationAfter,
     originalPackagePath, authorityPath, managedPath, 'scripts/prepare-imported-provider-fixture.mjs',
     'docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs',
-    ...(productMasterTransport ? [transportPath] : [])]
+    ...(productMasterTransport ? [transportPath] : []), ...(customerTariffTransport ? [tariffTransportPath] : [])]
     .map(file => ({ file, sha256: sha(fs.readFileSync(file)) })),
   transitions: transitions.map(([name, beforeMd5]) => ({ name, beforeMd5 })),
   helper: helper.identity, expectedAfterSha256: sha(JSON.stringify(expected)),
