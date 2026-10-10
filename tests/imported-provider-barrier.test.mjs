@@ -45,3 +45,19 @@ test('pinned imported payload cannot conceal protected metadata drift', { skip:!
   after.relations.find(r => r.name === 'auth.schema_migrations').rls = false
   assert.throws(() => providerOperatingReplayPackage({ ...args,after,fragments:[...args.fragments,imported] }), /PROVIDER_PLATFORM_BARRIER_METADATA_DRIFT/)
 })
+
+test('exact Master tariff category union admits guarded preparation', { skip:!available }, () => {
+  const { args,imported } = inputs()
+  const overlays = ['product_master', 'customer_tariff', 'category_policy'].map(name =>
+    fs.readFileSync('supabase/prepared/'+name+'_version_conflict_transport.sql', 'utf8'))
+  const fragments = [...args.fragments,imported,...overlays]
+  const prepared = providerOperatingReplayPackage({ ...args,fragments })
+  assert.equal(prepared.protectedPlatformTables.length, 7)
+  assert.equal(prepared.cutoverTables.length, 81)
+  assert.equal(prepared.requiresConnectorProjectBinding, true)
+  for (let i=0;i<overlays.length;i++) {
+    const changed = [...fragments]
+    changed[args.fragments.length+1+i] += '\n-- changed'
+    assert.throws(() => providerOperatingReplayPackage({ ...args,fragments:changed }), /PROVIDER_PLATFORM_BARRIER_CONTENTS_DRIFT/)
+  }
+})

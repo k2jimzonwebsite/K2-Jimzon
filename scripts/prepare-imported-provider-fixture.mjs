@@ -10,6 +10,8 @@ const root = 'D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const caseName = process.argv.find(a => a.startsWith('--case='))?.slice(7) || 'oci-imported01'
 const productMasterTransport = process.argv.includes('--product-master-transport')
 const customerTariffTransport = process.argv.includes('--customer-tariff-transport')
+const categoryPolicyTransport = process.argv.includes('--category-policy-transport')
+if (categoryPolicyTransport && (!productMasterTransport || !customerTariffTransport)) throw Error('CATEGORY_TRANSPORT_REQUIRES_MASTER_TARIFF_UNION')
 if (!/^oci-imported\d{2}$/.test(caseName)) throw Error('OWNED_IMPORTED_FIXTURE_NAME_REQUIRED')
 const sha = bytes => createHash('sha256').update(bytes).digest('hex')
 const sourcePath = path.join(root, 'oci-envelope12/preparer-source.mjs')
@@ -100,6 +102,21 @@ if (customerTariffTransport) {
   tariff.definition = tariff.definition.replace(anchor, anchor.replace('40001', 'P0001'))
 }
 
+const categoryTransportPath = 'supabase/prepared/category_policy_version_conflict_transport.sql'
+let categoryTransport = ''
+if (categoryPolicyTransport) {
+  categoryTransport = fs.readFileSync(categoryTransportPath, 'utf8')
+  assert.equal(sha(categoryTransport), '974b404f066282f001963d8ba7d548c5e137f95f40c57a73d480abeba7abc6b0')
+  const candidates = expected.functions.filter(f => f.catalog.proname === 'mutate_category_policy_v1')
+  assert.equal(candidates.length, 1)
+  const category = candidates[0]
+  assert.equal(sha(category.definition), '4de418fc3b9204f6dbe72beb708ce3becd1b9ae7d6439997c29452b2e3f9e75c')
+  const anchor = "raise exception using errcode='40001',message='K2_CATEGORY_POLICY_VERSION_CONFLICT';"
+  assert.equal(category.definition.split(anchor).length, 2)
+  category.definition = category.definition.replace(anchor, anchor.replace('40001', 'P0001'))
+  assert.equal(sha(category.definition), 'd3ec75173304d4c8709b81ea0f2e0d101dffa47d7ce85202d29d7efa783f570a')
+}
+
 let derived = source.replaceAll('oci-envelope12', caseName)
 for (const module of ['operating-replay-package.mjs', 'build-express-delivery.mjs']) {
   derived = derived.replace('../20261004-category-shelf-life/' + module,
@@ -112,7 +129,7 @@ assert.equal(derived.split('fragments:fixed.fragments').length, 2)
 const fragmentStart = fragment.indexOf('\nbegin;')
 assert.ok(fragmentStart >= 0 && fragment.split('\nbegin;').length === 2 && /commit;\s*$/.test(fragment))
 const importedBody = fragment.slice(fragmentStart + 1).replace(/^begin;/, '').replace(/commit;\s*$/, '')
-derived = derived.replace('fragments:fixed.fragments', () => 'fragments:[...fixed.fragments,' + JSON.stringify(importedBody) + (productMasterTransport ? ',' + JSON.stringify(transport) : '') + (customerTariffTransport ? ',' + JSON.stringify(tariffTransport) : '') + ']')
+derived = derived.replace('fragments:fixed.fragments', () => 'fragments:[...fixed.fragments,' + JSON.stringify(importedBody) + (productMasterTransport ? ',' + JSON.stringify(transport) : '') + (customerTariffTransport ? ',' + JSON.stringify(tariffTransport) : '') + (categoryPolicyTransport ? ',' + JSON.stringify(categoryTransport) : '') + ']')
 const generated = path.join(root, 'prepare-' + caseName + '.mjs')
 assert.ok(!fs.existsSync(path.join(root, caseName)) && !fs.existsSync(generated))
 fs.writeFileSync(generated, derived, { flag: 'wx' })
@@ -126,7 +143,8 @@ const record = {
   sources: [sourcePath, fragmentPath, providerPath, unionPath, calibrationBefore, calibrationAfter,
     originalPackagePath, authorityPath, managedPath, 'scripts/prepare-imported-provider-fixture.mjs',
     'docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs',
-    ...(productMasterTransport ? [transportPath] : []), ...(customerTariffTransport ? [tariffTransportPath] : [])]
+    ...(productMasterTransport ? [transportPath] : []), ...(customerTariffTransport ? [tariffTransportPath] : []),
+    ...(categoryPolicyTransport ? [categoryTransportPath] : [])]
     .map(file => ({ file, sha256: sha(fs.readFileSync(file)) })),
   transitions: transitions.map(([name, beforeMd5]) => ({ name, beforeMd5 })),
   helper: helper.identity, expectedAfterSha256: sha(JSON.stringify(expected)),

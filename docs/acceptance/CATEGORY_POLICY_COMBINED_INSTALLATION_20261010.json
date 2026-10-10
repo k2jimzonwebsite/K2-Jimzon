@@ -1,0 +1,186 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "providerWrites": false,
+  "providerAcceptance": false,
+  "scope": "Guarded combined Master/tariff/category disposable captured-authority native install/replay/cold original restoration; no production activation",
+  "caseName": "oci-imported19",
+  "preparation": {
+    "payloadSha256": "1827099d14153f9d4cf55e43213341c609692d36aac234033dc96cb71e8717b9",
+    "sqlSha256": "ea8e212e648615611f4bc09ed36c7610c875f1779c84510e5556c448ff3a01f4",
+    "sourcePins": [
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\preparer-source.mjs",
+        "sha256": "2f6942385816d838cdc61fe628b6d2e96c08b1df9f4dc302027d3cd5d7d1325c"
+      },
+      {
+        "file": "supabase/prepared/imported_draft_continuation.sql",
+        "sha256": "26ec4db009173aef02e3954504c05991937fb4d503769fc5133f3ebaa999d52a"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\execution01\\after-catalog.json",
+        "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\imported-draft-025b3682-3b76-465e-bd2a-5c2c0c597314\\combined-imported-install.sql",
+        "sha256": "abc2abd5d685913d07508bd704aa1ecc0a29c6b0bae0f870cb47cb5ca82f85d5"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\before-catalog.json",
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\after-catalog.json",
+        "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\guarded-package.json",
+        "sha256": "fa0ef714dd5d3582a8b99a57faa1cef1cb4ad0a56fffbfeee0442d3d8692a55b"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\authority-inventory.json",
+        "sha256": "52bcd96910e4b32dd195e375bcbbef468471d1c166095d3d1b11d29e48ecde7a"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\provider-managed-ddl-authority.json",
+        "sha256": "1f6dac40000249a40a7ad45fa5b71f7cbf348f14144f69f1768282e311a3b06a"
+      },
+      {
+        "file": "scripts/prepare-imported-provider-fixture.mjs",
+        "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+      },
+      {
+        "file": "docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs",
+        "sha256": "27d8fb65076cab763c4f33e2cecafce4e5a67c08663e71bfb6208bb828821654"
+      },
+      {
+        "file": "supabase/prepared/product_master_version_conflict_transport.sql",
+        "sha256": "ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476"
+      },
+      {
+        "file": "supabase/prepared/customer_tariff_version_conflict_transport.sql",
+        "sha256": "efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166"
+      },
+      {
+        "file": "supabase/prepared/category_policy_version_conflict_transport.sql",
+        "sha256": "974b404f066282f001963d8ba7d548c5e137f95f40c57a73d480abeba7abc6b0"
+      }
+    ],
+    "protectedPlatformTables": 7,
+    "cutoverTables": 81
+  },
+  "category": {
+    "beforeDefinitionSha256": "4de418fc3b9204f6dbe72beb708ce3becd1b9ae7d6439997c29452b2e3f9e75c",
+    "afterDefinitionSha256": "d3ec75173304d4c8709b81ea0f2e0d101dffa47d7ce85202d29d7efa783f570a",
+    "onlyCatalogChangeRelativeToNative11": true
+  },
+  "compatibility": [
+    {
+      "current": "oci-imported20",
+      "prior": "oci-imported11",
+      "sqlSha256": "98015aa9ae261ba1123c0e47190d19c4dcc6e158bf2df192654c50f6a64e234b",
+      "scope": "prepared only, byte-identical SQL; no execution"
+    },
+    {
+      "current": "oci-imported21",
+      "prior": "oci-imported02",
+      "sqlSha256": "ba15a5d893b8fb188dc1c9180c4bef85ce3f6a69ca867b065622aedf45f7c4ef",
+      "scope": "prepared only, byte-identical SQL; no execution"
+    }
+  ],
+  "native": {
+    "owningMap": "MAP-023/018",
+    "scope": "Complete guarded10s envelope/fresh/exact replay/cold archive recovery on actual local postgres target; provider physical/locale/project/host qualification separate",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "none",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported19\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 24516,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "catalogs": {
+      "before": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      },
+      "after": {
+        "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+        "bytes": 2396732
+      },
+      "rollback": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      }
+    },
+    "fullCatalogRollback": true,
+    "processStopped": true,
+    "serialSha256": "72d68d158ea70b46351edee8de4ca40e1f35b658293d616f499fbf732a31e9d5"
+  },
+  "hostFinal": {
+    "pid": 24516,
+    "pidAbsent": true,
+    "probeListenerCount": 0,
+    "checkedAt": "2026-10-10T10:55:35.0106385Z"
+  },
+  "verification": {
+    "command": "node .tools/record-category-package.mjs",
+    "witnessSha256": "c26d624b5e0173ab7f6e53dbea0665e7654eeb4693092a16efc0a546782ad173",
+    "focused": {
+      "command": "node --test tests/imported-provider-barrier.test.mjs",
+      "redSession": 13783,
+      "redExit": 1,
+      "redFailure": "PROVIDER_PLATFORM_BARRIER_CONTENTS_DRIFT for exact three-overlay union",
+      "greenSession": 59353,
+      "greenExit": 0,
+      "passed": 5,
+      "skipped": 0
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "session": 61152,
+      "exit": 0
+    },
+    "reviewPending": false,
+    "independentReview": {
+      "reviewer": "auth_migration_review",
+      "critical": 0,
+      "important": 0,
+      "sourcePinsVerified": 14,
+      "catalogFramesVerified": 3,
+      "compatibilityCasesVerified": 2,
+      "scope": "Exact source/serial/native catalog transition and compatibility/docs reviewed; primary actual PID/listener and focused/development results retained without duplicate execution"
+    },
+    "finalizeCommand": "node .tools/finalize-category-package-review.mjs"
+  },
+  "limits": "Existing runner proves fresh/exact replay and captured original archive/catalog restoration with original88 projection/foundation and protected concurrent drift checks. This does not qualify all149 row conservation, category body/security/ACL/owner/search_path drift, installation interruption, populated data-retaining recovery, authority through commit, production timeout context or new signed HTTP/browser/provider/hosted behavior. Default20/21 are prepared only.",
+  "recovery": "Disposable19 restores original captured archive and catalog before guest stops. Preserve immutable19/20/21; revert exact preparer/admission/test slice if required; create fresh pinned successors, never reuse disposed fixtures.",
+  "remaining": "MAP-018: category helper drift/interruption/full149 conservation and populated data-retaining recovery; connected tariff quote/order behavior; unresolved authority/provider/real-host and product listing gates."
+}
