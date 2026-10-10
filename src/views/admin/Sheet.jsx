@@ -14,7 +14,7 @@ import DeleteProductsModal from './DeleteProductsModal'
 import ProductIntakeSessionModal from './ProductIntakeSessionModal'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import Barcode from 'react-barcode'
-import { EyeIcon, BarcodeIcon, XIcon } from '../../components/ui/icons'
+import { EyeIcon, BarcodeIcon, SparkleIcon, XIcon } from '../../components/ui/icons'
 import {
   adminBffEnabled, downloadCatalogCsvBff, getAdminLots, getAdminProducts,
 } from '../../services/adminBffService'

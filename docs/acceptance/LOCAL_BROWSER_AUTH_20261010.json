@@ -1,0 +1,750 @@
+{
+  "owningMap": "MAP-018",
+  "ideas": [
+    "IDEA-20261009-11",
+    "IDEA-20261010-03"
+  ],
+  "providerWrites": false,
+  "scope": "Fresh Chromium actual full Admin password/MFA/Sheet and anonymous reference-create reproduction; real public Cloudflare test widget, explicit unconfigured positive local server fixture. Native Node HTTP through production api/admin/index.js, actual local Auth v2.196.0/PostgREST v14.17/captured PostgreSQL17.6. Temporary exact prepared public session routine and complete security-event/preauth migrations; captured original fully restored. No hosted/real staff/full migration/provider acceptance. Browser evidence is local desktop reduced-motion only.",
+  "cases": [
+    {
+      "case": "oci-browser-auth01",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "pid": 23224,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "7315a463961dff5ed31412e7f2596c0f812f4a496be01e73641c7ac0a38a020b"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused",
+          "routed_logout_registry_inactive_server_refresh_refused",
+          "routed_saved_old_cookie_refused_after_logout",
+          "routed_logout_cleared_cookie_refused"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "routedStage": "GET_session",
+        "lastRoutedResponse": {
+          "status": 401,
+          "code": "SESSION_EXPIRED"
+        },
+        "botScope": "Missing-secret refusal real; positive local flow explicitly allows unconfigured provider. No Cloudflare/provider acceptance.",
+        "routedLogoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "browser": {
+          "scope": "Fresh Chromium actual Admin app, genuine local API/Auth/PostgREST, public Cloudflare test widget and explicit unconfigured positive local server fixture. No real Cloudflare verification, staff, Vercel or hosted acceptance.",
+          "checks": [],
+          "requests": [],
+          "stage": "launch"
+        },
+        "passed": false,
+        "error": {
+          "name": "TypeError",
+          "stage": "assertion_or_transport_failure"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "ff007be1060aa4125e591c542d41e96d0ad71f8671e7a07b3484853d28574ee9",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "10f7d6d041db95a735b727d1cf83945e3a0ecd1b91c55fb8cef0a615e46e58f3",
+        "host-driver.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+        "bff-helper.mjs": "aa3c67e60a63e78139111326b4ff0e2a2d88e5450af84040a7558721d0406103",
+        "preparation.json": "90b6d5d16f093deea450f284749c8b43fde99cbd8e3b8b92c67ba81ecf94ab92",
+        "execution01/result.json": "12f6fe5b32a1cc7a4b655fe59eb7130f34fd4d01298b2bf222e30dbbcf9a0b97",
+        "execution01/serial.log": "7315a463961dff5ed31412e7f2596c0f812f4a496be01e73641c7ac0a38a020b",
+        "host-driver-result.json": "f6cff319be2cc515f61c47665f36bc7b38d90ea11623621141a729ff242fcb0c"
+      },
+      "recovery": {
+        "exactPrerequisitesInstalled": true,
+        "private": true,
+        "original": true,
+        "authorityWitnessCount": 2,
+        "hashPairs": {
+          "bff-before-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-sequence-recovery.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "auth-rows-before.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-schema-before.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+          "auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+        }
+      }
+    },
+    {
+      "case": "oci-browser-auth02",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "pid": 22992,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "9c77cf11d7497b017622fb3053fe9eda91ac744c2c35569d42aecb50ad5c1f01"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused",
+          "routed_logout_registry_inactive_server_refresh_refused",
+          "routed_saved_old_cookie_refused_after_logout",
+          "routed_logout_cleared_cookie_refused"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "routedStage": "GET_session",
+        "lastRoutedResponse": {
+          "status": 401,
+          "code": "SESSION_EXPIRED"
+        },
+        "botScope": "Missing-secret refusal real; positive local flow explicitly allows unconfigured provider. No Cloudflare/provider acceptance.",
+        "routedLogoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "browser": {
+          "scope": "Fresh Chromium actual Admin app, genuine local API/Auth/PostgREST, public Cloudflare test widget and explicit unconfigured positive local server fixture. No real Cloudflare verification, staff, Vercel or hosted acceptance.",
+          "checks": [
+            "real_public_test_widget_token",
+            "actual_password_ui_mfa_required",
+            "actual_mfa_ui_admin_inventory",
+            "bff_cookie_identity_without_browser_auth_token"
+          ],
+          "requests": [
+            {
+              "path": "/api/admin/session",
+              "method": "GET",
+              "status": 401,
+              "jwtRole": null,
+              "code": "SESSION_EXPIRED"
+            },
+            {
+              "path": "/api/admin/session",
+              "method": "GET",
+              "status": 401,
+              "jwtRole": null,
+              "code": "SESSION_EXPIRED"
+            },
+            {
+              "path": "/api/admin/auth/login",
+              "method": "POST",
+              "status": 202,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/auth/mfa",
+              "method": "POST",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/products",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/overview",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/inbox",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/products",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/products",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/overview",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/security-events",
+              "method": "POST",
+              "status": 202,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/inbox",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/inbox",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/inbox",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/products",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/overview",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            }
+          ],
+          "stage": "sheet_reference",
+          "cookies": [
+            {
+              "name": "k2_admin_session",
+              "httpOnly": true,
+              "secure": false,
+              "sameSite": "Strict"
+            },
+            {
+              "name": "k2_admin_csrf",
+              "httpOnly": false,
+              "secure": false,
+              "sameSite": "Strict"
+            }
+          ]
+        },
+        "passed": false,
+        "error": {
+          "name": "TimeoutError",
+          "stage": "assertion_or_transport_failure"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "3eafab43e37b308ed762182be6fd3cdee3e75a404f2d2e60b635ca8e03baaa58",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "48a48b605df77c39b5f82a3ca67f523cc322e19f225722c3272f672ad8ffd52a",
+        "host-driver.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+        "bff-helper.mjs": "d201e084b375a8056175693645b40514467a132928dcb8def7bbf2d24880db03",
+        "preparation.json": "90b6d5d16f093deea450f284749c8b43fde99cbd8e3b8b92c67ba81ecf94ab92",
+        "execution01/result.json": "74c875ab04053569b6562de91882be6380bfeebafc1ff39aaa810cbc47b980d4",
+        "execution01/serial.log": "9c77cf11d7497b017622fb3053fe9eda91ac744c2c35569d42aecb50ad5c1f01",
+        "host-driver-result.json": "b91e9efedbb6e663974f8cc7ca574eb3d5f727210ae9a55bce349150355c81cf"
+      },
+      "recovery": {
+        "exactPrerequisitesInstalled": true,
+        "private": true,
+        "original": true,
+        "authorityWitnessCount": 2,
+        "hashPairs": {
+          "bff-before-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-sequence-recovery.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "auth-rows-before.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-schema-before.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+          "auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+        }
+      }
+    },
+    {
+      "case": "oci-browser-auth03",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "pid": 19332,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": true,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": true,
+        "processStopped": true,
+        "serialSha256": "e362dafe9ab70e2d656518f7a2c25f41ac362e177c7eb43edd03714826f57686"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused",
+          "routed_logout_registry_inactive_server_refresh_refused",
+          "routed_saved_old_cookie_refused_after_logout",
+          "routed_logout_cleared_cookie_refused",
+          "global_logout",
+          "logout_refresh_refused",
+          "admin_hard_delete_user"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "routedStage": "GET_session",
+        "lastRoutedResponse": {
+          "status": 401,
+          "code": "SESSION_EXPIRED"
+        },
+        "botScope": "Missing-secret refusal real; positive local flow explicitly allows unconfigured provider. No Cloudflare/provider acceptance.",
+        "routedLogoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "browser": {
+          "scope": "Fresh Chromium actual Admin app, genuine local API/Auth/PostgREST, public Cloudflare test widget and explicit unconfigured positive local server fixture. No real Cloudflare verification, staff, Vercel or hosted acceptance.",
+          "checks": [
+            "real_public_test_widget_token",
+            "actual_password_ui_mfa_required",
+            "actual_mfa_ui_admin_inventory",
+            "bff_cookie_identity_without_browser_auth_token",
+            "brand_actual_reference_create_refused_as_anon",
+            "category_actual_reference_create_refused_as_anon"
+          ],
+          "requests": [
+            {
+              "path": "/api/admin/session",
+              "method": "GET",
+              "status": 401,
+              "jwtRole": null,
+              "code": "SESSION_EXPIRED"
+            },
+            {
+              "path": "/api/admin/session",
+              "method": "GET",
+              "status": 401,
+              "jwtRole": null,
+              "code": "SESSION_EXPIRED"
+            },
+            {
+              "path": "/api/admin/auth/login",
+              "method": "POST",
+              "status": 202,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/auth/mfa",
+              "method": "POST",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/overview",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/inbox",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/rest/v1/brands",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": "anon"
+            },
+            {
+              "path": "/rest/v1/categories",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": "anon"
+            },
+            {
+              "path": "/rest/v1/brands",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": "anon"
+            },
+            {
+              "path": "/rest/v1/categories",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": "anon"
+            },
+            {
+              "path": "/api/admin/products",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/products",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/products",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/api/admin/overview",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": null
+            },
+            {
+              "path": "/rest/v1/brands",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": "anon"
+            },
+            {
+              "path": "/rest/v1/brands",
+              "method": "POST",
+              "status": 401,
+              "jwtRole": "anon",
+              "code": "42501"
+            },
+            {
+              "path": "/rest/v1/categories",
+              "method": "GET",
+              "status": 200,
+              "jwtRole": "anon"
+            },
+            {
+              "path": "/rest/v1/categories",
+              "method": "POST",
+              "status": 401,
+              "jwtRole": "anon",
+              "code": "42501"
+            }
+          ],
+          "stage": "complete",
+          "cookies": [
+            {
+              "name": "k2_admin_session",
+              "httpOnly": true,
+              "secure": false,
+              "sameSite": "Strict"
+            },
+            {
+              "name": "k2_admin_csrf",
+              "httpOnly": false,
+              "secure": false,
+              "sameSite": "Strict"
+            }
+          ],
+          "referenceDefectReproduced": true
+        },
+        "routedTransport": {
+          "calls": {
+            "auth": 29,
+            "rest": 89,
+            "routed": 24
+          },
+          "scope": "Native Node request/response streams through production api/admin/index.js and real Auth/PostgREST; no hosted Vercel or browser-cookie-jar proof"
+        },
+        "logoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "passed": true
+      },
+      "hashes": {
+        "executed-source.mjs": "efc33eccf40487217b5047582bb46b635936135c7e465a802ffe2e110475a1ac",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "cfb2b97fc6c4ad15aa22dac9890f0ca3d6118dd3333b545b518a2d02cada7ec2",
+        "host-driver.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+        "bff-helper.mjs": "f16be4879694db519653660f691022040fa7accef852b82b584db0df27b9dd50",
+        "preparation.json": "90b6d5d16f093deea450f284749c8b43fde99cbd8e3b8b92c67ba81ecf94ab92",
+        "execution01/result.json": "cb542e8f5fb9291ac6dc5a1d1b7a9cdcf8b6e2833c55d427d06cb31900728bc9",
+        "execution01/serial.log": "e362dafe9ab70e2d656518f7a2c25f41ac362e177c7eb43edd03714826f57686",
+        "host-driver-result.json": "e416a2634efdf348682f496cce5a7b0e29fb7ee3a4c9339ca8a8fc6f0fef1e91"
+      },
+      "recovery": {
+        "exactPrerequisitesInstalled": true,
+        "private": true,
+        "original": true,
+        "authorityWitnessCount": 2,
+        "hashPairs": {
+          "bff-before-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-sequence-recovery.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "auth-rows-before.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-schema-before.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+          "auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+        }
+      }
+    }
+  ],
+  "sourceHashes": {
+    "src/views/admin/Sheet.jsx": "733d4815d08e66333632ec448f6747ae897946e11a5b2e3565defb8747fb8ac0",
+    "src/views/admin/useReferenceOptions.js": "dadeb3eec22fbc096357bd81ce93c74ec6ec73ce72642a0a0c5218c0c14a7bfc",
+    "src/views/admin/ReferenceSelectCell.jsx": "4ea38a41901574d03482e7bcec2839f19a252874d44d0ddaa159c238284d45ce",
+    "src/context/useAdminAuthRuntime.js": "92bb94a43ce688c78781c95894b8e08babe96aa135c6edc1415ea7516fb1d246",
+    "src/services/adminBffService.js": "44e78103f856869a821b572eb032dfd12797253c485ecca5d7f0fe48444e2384",
+    ".tools/prepare-browser-auth-probe.mjs": "c16c099ee85e52a1591cdbae434e15d14e5d1ba2316d2ba0faed42788dea1bdd",
+    ".tools/browser-reference-probe.inc.mjs": "0e2eedab9b04404f7023edfd66f9395ef2bfd657dcab9cb2b8b5a5274c16ad7e",
+    ".tools/probe-local-browser-boundary.mjs": "f16be4879694db519653660f691022040fa7accef852b82b584db0df27b9dd50",
+    ".tools/record-local-browser.mjs": "c6c408ee09dc6434a3a0c1d70d9790fb66c8648557a60f6a506ef75d0f28bba9",
+    "api/admin/index.js": "d832229d172ddb3adae66862647a4fa75ebaac1178f980c242a59ee94d2b722f",
+    "supabase/migrations/20260822_admin_session_registry.sql": "4b3d99f393ca7df1efe18a18ea8c7b22928ad527918d7c3135a3eca95469502f",
+    "supabase/migrations/20260822_security_event_boundary.sql": "0b57de0ba371d55527c6e076be8988ba081e88fc1421ca18c6e0811076bc2fa7",
+    "supabase/migrations/20260825_admin_preauth_rate_boundary.sql": "f82320cd5731d65944663516ca7433eeaab9be94c4be9281ce241ba5187e1cfc",
+    ".tools/prepare-auth-bff-probe.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+    ".tools/prepare-routed-auth-probe.mjs": "8ae330b6515ef28ce463587d548390bc378719d20b231b852f36f0c866db28ae",
+    ".tools/probe-local-routed-boundary.mjs": "e55753a0502c7f76de1613393f24ef76eb2e3c417c79c22428a4f78a69acd0ae",
+    ".tools/drive-local-routed-auth.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+    ".tools/record-local-routed.mjs": "955034ffd3a65f8ffdb91ffe63a44102720e2252a8d59a41143325dce80e98f5",
+    "server/admin-bff/ai-spend-controls.js": "55cd7e8f5052dd2ff4f42bc333ddebe0dac26283b2df53d9ece33c50bf0f0258",
+    "server/admin-bff/authorize.js": "21113ca8d3a7f3526e140ddcd1193ef854db5698674f8f0b317306060976461c",
+    "server/admin-bff/barcode-catalog.js": "0dfc508e82a4ad55b7b577f06a9271e3f5a371ceb33f9b0c2c7851c3521aed45",
+    "server/admin-bff/catalog-spreadsheet.js": "48463a6d90b7af0d535034ff82182c08d728911a23bf6cae423ffa490c827d62",
+    "server/admin-bff/channels.js": "36418ddff9378ebf2c40f4568a53b1f9c9136100640524cf0ba8ab5e32f72186",
+    "server/admin-bff/consignments.js": "fa40f7147c926bc13d61a586ba3c006efcd5ce4b7a57fa9788e87782f7c7107c",
+    "server/admin-bff/coupons.js": "55265e335db699a3cb9b59c81415178d7a44ce421e6623cf5ac078975d342ea3",
+    "server/admin-bff/customer-delivery-rates.js": "8156da8d18ebc53260dd8bc62381e3cf7d401c34124e0f338e6c2b564f35d5c8",
+    "server/admin-bff/customers.js": "f26cdf3a1e114bfd307ed9f526bddb82a30c20cdd068fd8aead1de3c707a6b89",
+    "server/admin-bff/delivery.js": "1da63726ef7ee2c0ea5dcde6959a8fc7f9ae53b7b58b74bc840e9137d2aa8f6a",
+    "server/admin-bff/evidence-cleanup-policy.js": "865f8a78ca41a7e5b5355f728e6ac4ba9f608c0b6a5d0426daaffb731d45fa64",
+    "server/admin-bff/express-delivery.js": "3f847e7e38da20c8767f4f2b673eb372eade4ccbae6b1891661f44c91d70a47e",
+    "server/admin-bff/fulfillment.js": "cdd6b21eaf295865e7ff4801f216f8c21bdce6ce878ed848a3269a5a576c4faa",
+    "server/admin-bff/gemini-public-draft.js": "9742fd91dce08eb69ce79c6b4ed70ef76793fc99ecfce5cce28a7a5154914437",
+    "server/admin-bff/globe-cms.js": "ee18ea00a2b5bee8629fd1a3a29792e7f6a7c220d6b3f2c1887b1f730102e429",
+    "server/admin-bff/inbox.js": "78739172b871116dc9f5fd5a5375f2e21f5264b9fd746d3f6d20b11d9002d741",
+    "server/admin-bff/intake-ai-jobs.js": "fce0fab7f53d3b2813c1b4c280877e3c9612383dec9726eecdfbdfa8e9027efc",
+    "server/admin-bff/intake-ai-provider.js": "1bda07ff9ce987b4212a9675d299ccfc605c86e4283a688ab902c46e7342ba66",
+    "server/admin-bff/lots.js": "24c2067ceac6a59fbdf73fe0afc9170da077e5b26412bd1fc9ea8292c125c5b7",
+    "server/admin-bff/marketplace-snapshots.js": "da205addeb245a8df8f3fd8603d5e372856390b913f09437485b24dad0004300",
+    "server/admin-bff/mfa-enrollment.js": "7ee01f8a258e1635bf858f8a12cb92844b74220f19c23094a1b69726bef5f5dd",
+    "server/admin-bff/mfa-replacement-handler.js": "cd27089b44d664236e70f34572c402974f6440dddda7122c380ad6732f885466",
+    "server/admin-bff/mfa-replacement.js": "5c74cbdedc51e3c54b7ddd11a9a2db1ff09badf2962372770a8dcd65dd7bc9e0",
+    "server/admin-bff/pasabuy.js": "9978cff90584fff9662184a49eeb5b652898f38c0117c490a4234b7eee8c62c4",
+    "server/admin-bff/password-recovery.js": "7bfbccacf9ce97fce1ac99a84928a9928f1d3c5a8a81ad66622b64ffbe1212c9",
+    "server/admin-bff/preauth-rate.js": "f7dd96186cdda89f0556db18ef65985bc77197980a80bcc89aaf3b80c0f2e209",
+    "server/admin-bff/procurement.js": "9c3b9e6a0363e92e8cd06ca616b0367ac6522b7eb4bc70515fa5b34c868ade48",
+    "server/admin-bff/product-intake.js": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37",
+    "server/admin-bff/product-knowledge.js": "5f9ae3aecd84de214616e391a5cd4fa240ba552b2e2b0062a5b9ad5f96c5e630",
+    "server/admin-bff/product-master.js": "a1de8a00f29e683388061cff68d401ecf2273bdd9bd80b0f4b40a784096eb400",
+    "server/admin-bff/product-media.js": "9eda473df524a8a06cc003873e88d4b0e4607f0c4d651844791fd4dbbbac7d72",
+    "server/admin-bff/request-deadline.js": "1f2b9f1b7d1446cb5f570be21c08ad6256d02367443a54a0e7a0ff3a3444850b",
+    "server/admin-bff/reservations.js": "f1e01100b640a88a335e8f0a75a5147fc1f90b6d694887e7ee56f178e5d12f09",
+    "server/admin-bff/router.js": "ebb0921f3435663540da4d5f828055660ee0102ef3fde36a9c7f822a0de3cadb",
+    "server/admin-bff/security-events.js": "902cc96a392557cdf0f1b719787239520e81604c87443d546af814307b411fe0",
+    "server/admin-bff/security.js": "2c296644a5bfbba1747739bbe7ea3bd761e49afdf22272689b6f94bdb6141b77",
+    "server/admin-bff/sessions.js": "4498ef853c55cb40b4f7705936d2085d4c82fe77d4134df6ef40d39d53cb2510",
+    "server/admin-bff/staff-access.js": "57330678adc8f480e223ec2639ede7dac9d198d656288d1cca73cb00d4801678",
+    "server/admin-bff/staff-invitations.js": "d0bdb0f5ccc6c183d6affccccc42a9dc3936b35036a03849b83a7d5a68d363d4",
+    "server/admin-bff/supabase.js": "3281a0952f350b1c53806168eb8d7c467f8f0c197cbf192ecc04ba21530ef746",
+    "server/admin-bff/system-readiness.js": "25a51f78fac0e3f1343ee4c67c407bf53502b5ba2ed742c3b50d3322d204a55a",
+    "server/admin-bff/wholesale-inquiries.js": "56c87847c239c86135fc99b4c291a469f6e8d3fd3c0841b7cf8b4849caf0bde5"
+  },
+  "composition": {
+    "tablesInitiallyAbsent": [
+      "security_event_nonces",
+      "security_events",
+      "security_event_noise_buckets",
+      "admin_preauth_rate_nonces",
+      "admin_preauth_rate_buckets"
+    ],
+    "newFunctionCount": 4,
+    "absenceGuards": true,
+    "exactDropWithoutCascade": true,
+    "originalRoutineRestored": true
+  },
+  "shutdown": {
+    "independentlyAbsentPids": [
+      23224,
+      22992,
+      19332
+    ],
+    "ports": [
+      54392,
+      54393,
+      54394,
+      54395,
+      54396
+    ],
+    "portsIndependentlyAbsentAfterEachCase": true
+  },
+  "verification": {
+    "nativeSession": 8843,
+    "terminalExit": 0,
+    "development": "Final one-line Sheet icon correction verify:development session3619 exit0.",
+    "review": "Independent final source/native review: qualified acceptance; no Critical or Important findings. Sheet render correction and anonymous taxonomy reproduction reviewed; limitations retained."
+  },
+  "limitations": [
+    "Case01 terminal1/guest0: Playwright CommonJS named chromium import undefined; no browser page reached, full recovery passed.",
+    "Case02 terminal1/guest0: actual public test widget/password/MFA/cookies/no browser token pass, then Sheet missing SparkleIcon throws and reference wait times out. Full recovery passed.",
+    "Case03 terminal0/guest0: one existing shared SparkleIcon import repair renders Sheet; actual brand/category creates use anonymous JWT and each return401/42501. This is a reproduced local identity defect, not successful reference operations.",
+    "Local HttpOnly active cookie and readable CSRF cookie are SameSite Strict and Secure false on HTTP; no HTTPS/Secure or hosted cookie behavior claim.",
+    "Public test widget is real external test mode, positive local server explicitly allows unconfigured bot verification; no Cloudflare security verification.",
+    "External images and unapproved requests aborted, synthetic account, desktop1440x1000/reduced motion only. No mobile/staff/full design or product acceptance.",
+    "Captured eight-hour session routine restored after exact prepared seven-day/public preauth/security telemetry prerequisites; complete production installation remains unverified."
+  ],
+  "recovery": "Dispose completed guest. Recreate fresh owned guest from pinned private source for successor. Original row/schema/sequence/private/authority hashes match; do not resume disposed state.",
+  "nextAction": "MAP-018: audit canonical protected reference/read/create/assignment command path and duplicate/race/recovery rules, then repair reproduced BFF identity defect without anonymous write grants or browser tokens; remaining installation/provider/project/owner/real-host gates persist."
+}

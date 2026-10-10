@@ -1,5 +1,7 @@
 ---
 
+10 October actual local browser witness (MAP-018 / IDEA-20261010-03): one missing existing shared SparkleIcon import was repaired after actual Sheet render failure. No typography, spacing, color, motion, content or interaction redesign. Incumbent Admin Operate/product rules remain authoritative. docs/acceptance/LOCAL_BROWSER_AUTH_20261010.json verifies desktop reduced-motion Sheet render and local anonymous reference failure after genuine BFF MFA; it is not full desktop/mobile/accessibility or human design acceptance. Broader UI/real-host acceptance remains MAP-018/025/028.
+
 Workflow-map phone correction,9October (IDEA-20261009-11): preserve the current
 Admin type, colors and44px controls. Native Staff Role select may shrink within
 its bounded flex container; wider control text no longer grows the document.
