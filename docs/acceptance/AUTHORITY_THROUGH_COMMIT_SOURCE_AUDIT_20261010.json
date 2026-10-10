@@ -1,0 +1,98 @@
+{
+  "owningMap": "MAP-018 / MAP-023 installation dependency",
+  "idea": "IDEA-20261009-07",
+  "scope": "Read-only revalidation of retained native ACL counterexample and primary PostgreSQL17.6 source investigation; no new installer, provider execution or accepted design",
+  "providerWrites": false,
+  "codeChanged": false,
+  "activationReady": false,
+  "currentK2CapacityRead": {
+    "receipt": "docs/acceptance/K2_SYSTEM_CATALOG_LOCK_CAPACITY_20261010.json",
+    "receiptSha256": "6be8b42529b98011199d633c7811d215eae45e7c06ea07932e497dea423a1ff8",
+    "querySha256": "52eb3d447f693ccb8bf8abf4afffc468d9e623460ddd89487f74d94086590ce4",
+    "identityPreflight": "npm run preflight:k2-project exits0: pixplcjqivlfflickobf; verifier enforces exact K2 URL",
+    "surface": "Owner-controlled Management API read_only SELECT; not installed Supabase connector",
+    "observedQueryRole": "supabase_read_only_user",
+    "observedServerVersionNum": "170006",
+    "observedTransactionReadOnly": "on",
+    "roleWhoseEffectivePrivilegesWereChecked": "postgres",
+    "installerSuperuser": false,
+    "installerCreateRole": true,
+    "catalogsChecked": 8,
+    "allOwnedBy": "supabase_admin",
+    "allHaveInstallerSelect": true,
+    "allLackInstallerInsertUpdateDeleteTruncateMaintain": true,
+    "explicitLockCommandsExecuted": false,
+    "interpretation": "Under the inspected LockTableAclCheck rule, observed postgres privileges do not admit stronger catalog table modes than AccessShareLock. No actual LOCK, role switch, grant, administrative exclusion or provider write was performed."
+  },
+  "revisedPackage": {
+    "payloadSha256": "d4600da2a995b983454f720fc3ad1622cc97aeef9b611f00c4accf5d618a0010",
+    "sqlSha256": "d44df9c5a41ee8d31682038cc48147fa4593914997b98a075e1fccab4e667d45",
+    "newAuthorityRaceExecution": false
+  },
+  "retainedCounterexample": {
+    "case": "oci-postcheck05",
+    "originalSqlSha256": "db0cb4d188a743bbadd29cc337e329573ab5405f83e30dc9ae6de554a92036ff",
+    "diagnosticSqlSha256": "f341069d4a54e93e9f283554018db74e5f98fa183f65b0c7b808236963b4a647",
+    "diagnosticScopeSha256": "e09f0742b25bd619fa6870579bce20d15ee2c2c1e16c02e5ac4c4a826ced26d3",
+    "nativeResultSha256": "f73fa018ce12509ee7645d60e9d08b2748c3b2fa32fd6cfe8fd1682c6784a975",
+    "serialSha256": "a02911b461cbb5ab034cc84131a595ef1ebda17ac6cf7b7e226c902f0e7983a3",
+    "serialRehashedAgainstResult": true,
+    "postgresVersion": "17.6",
+    "installerAndIndependentOwnerBothCommitted": true,
+    "authSchemaMigrationsSelectGrantOptionReadback": false,
+    "original88TableTwoSequenceBeforeAfterSha256": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+    "catalogRecoveryMarker": "/tmp/k2-rollback.json: OK",
+    "authorityRecoveryMarker": "K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK",
+    "terminalExit": 0,
+    "guestSuccess": true,
+    "meaning": "Successful counterexample and recovery, not successful authority protection. Earlier diagnostic package differs from revised package; do not claim a new revised-package race run."
+  },
+  "primarySources": [
+    {
+      "url": "https://github.com/postgres/postgres/blob/REL_17_6/src/backend/catalog/aclchk.c#L1724",
+      "releaseTag": "REL_17_6",
+      "function": "ExecGrant_Relation",
+      "lines": "1724-1751",
+      "finding": "The relation grant path opens pg_class and pg_attribute with RowExclusiveLock and obtains the target pg_class tuple through SearchSysCacheLocked1. These are catalog locks, not the retained AccessShareLock on the protected user relation.",
+      "evidenceType": "Pinned release source inspection; explains retained native counterexample, not new provider observation"
+    },
+    {
+      "url": "https://github.com/postgres/postgres/blob/REL_17_6/src/backend/commands/lockcmds.c#L259",
+      "releaseTag": "REL_17_6",
+      "function": "LockTableAclCheck",
+      "lines": "259-276",
+      "finding": "SELECT admits AccessShareLock; INSERT additionally admits RowExclusiveLock and weaker modes; MAINTAIN, UPDATE, DELETE or TRUNCATE admit stronger table modes. Changing a protected-relation lock alone does not address the distinct grant catalog path.",
+      "evidenceType": "Source inference; no new privilege or LOCK command was executed"
+    },
+    {
+      "url": "https://github.com/postgres/postgres/blob/REL_17_6/src/backend/commands/user.c#L708",
+      "releaseTag": "REL_17_6",
+      "functions": "AlterRole and GrantRole",
+      "lines": "708-716 and 1444-1452",
+      "finding": "Role alteration uses the shared pg_authid catalog; role grant processing reads pg_authid and modifies pg_auth_members. Protected application/platform table locks do not establish protection for these separate shared authority catalogs.",
+      "evidenceType": "Source inference; no new global-role race execution"
+    },
+    {
+      "url": "https://www.postgresql.org/docs/17/event-trigger-definition.html",
+      "finding": "Database DDL event triggers exclude shared objects such as roles, databases and tablespaces, and changes to event triggers themselves.",
+      "evidenceType": "Official version17 documentation consulted10October; not an immutable17.6 source hash or deployed-provider behavior proof"
+    }
+  ],
+  "conclusions": {
+    "currentAccessShareProtectionInsufficientForACL": "Retained native observation and matching source path",
+    "databaseEventTriggerAloneInsufficientForGlobalAuthority": "Documented coverage gap; no new design accepted",
+    "arbitrarySQLSolutionImpossible": "Not established",
+    "capturedInstallerSystemCatalogLockCapacity": "Current K2 read_only effective privilege checks observe SELECT-only on eight relevant system catalogs; stronger table-lock admission unavailable under inspected LockTableAclCheck without changing permissions. This is not an executed LOCK or all-SQL-solutions impossibility proof.",
+    "providerControlPlaneExclusionCapability": "Not observed",
+    "maintenanceAssumptionAccepted": false,
+    "relaxedAuthorityContractAccepted": false
+  },
+  "verification": {
+    "method": "Read-only Get-FileHash and sanitized serial marker reconciliation; primary-source line inspection; exact-identity-gated Management API SELECT with read_only true and observed transaction_read_only on",
+    "applicationBuildNeeded": false,
+    "newNativeRunNeededForThisSourceAudit": false,
+    "review": "Independent retained source/counterexample and current K2 capacity review passed with no remaining Critical/Important findings; explicit-lock wording corrected because SELECT takes implicit locks"
+  },
+  "remaining": "MAP-018 retains the exact authority-through-commit requirement and captured permissions. Clarify owner understanding before a replacement design, then qualify any accepted boundary with exact native/provider evidence. No maintenance window, catalog privilege grant, service outage, wider role, runtime replacement or live write is authorized by this audit.",
+  "recovery": "Documentation-only source audit; revert this receipt and its authoritative references if needed. Retain previous native counterexample and all successful installer/recovery receipts. No database or provider rollback applies."
+}
