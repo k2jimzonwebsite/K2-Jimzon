@@ -1,0 +1,84 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "sourceCommit": "600341b",
+  "classification": "Read-only current source and retained catalog scope audit; no new recovery design or runtime",
+  "ownerRequirements": {
+    "simpleRateEditing": true,
+    "shoppingAvailable": true,
+    "acceptedOldChargeRetained": true,
+    "smallPreEditOrderDifferenceAccepted": true,
+    "noAutomaticOrManualTariffPauseDrain": true,
+    "separateAuthorityThroughCommitUnderstandingUnanswered": true
+  },
+  "sourcePins": [
+    {"file":"supabase/prepared/category_shelf_life_policy_command_deactivate.sql","sha256":"c917a8063a8d10048e5b9355488e531609dde4e68e80d8250a29d16e746adc75"},
+    {"file":"supabase/prepared/category_shelf_life_policy_command_rollforward.sql","sha256":"a8b44ec7dde1bb3fd0584015fa53485a7031e9db9d3533633828aee7ecc75de3"},
+    {"file":"supabase/prepared/category_shelf_life_catalog_deactivate.sql","sha256":"cc550ef466249840212ae84ef9903c4280da76dc9ed9bc466350b72c8537e8e4"},
+    {"file":"supabase/prepared/category_shelf_life_catalog_rollforward.sql","sha256":"77f14769e8785ac089cad1857842e23970d5add5bd6f85902622a26e32428389"},
+    {"file":"supabase/prepared/customer_delivery_rates.sql","sha256":"f9492e20fcb330d3108c18479d7a07ac9c8e850b2adcef67f96e937700e5df4c"},
+    {"file":"supabase/prepared/customer_tariff_version_conflict_transport.sql","sha256":"efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166"},
+    {"file":"supabase/prepared/category_policy_version_conflict_transport.sql","sha256":"974b404f066282f001963d8ba7d548c5e137f95f40c57a73d480abeba7abc6b0"},
+    {"file":"scripts/prepare-product-master-recovery-fixture.mjs","sha256":"f5f385844aa4d542e58096ea745744ec1d69e6835710e7539273b41c4774d082"},
+    {"file":"docs/acceptance/TARIFF_ORDER_CONNECTED_20261010.json","sha256":"e906deba84ad1eba5f119f7e4d1ed7757d3582bb4d96d448efdf76f220f90dd4"},
+    {"file":"docs/acceptance/CATEGORY_POLICY_REVISED_RECOVERY_20261010.json","sha256":"702bac7b3f0be64ac04ae93152c085bce67a9814f3ac7d06e58fe7a7f886d65a"},
+    {"file":"docs/acceptance/CUSTOMER_TARIFF_REVISED_RECOVERY_20261010.json","sha256":"964e0ad0a6cf34d2b9d849cc6bfa0eb484b9ca3dee380ba6beb5c8268bef8098"}
+  ],
+  "retainedCatalog": {
+    "case": "oci-imported23",
+    "file": "execution01/after-catalog.json",
+    "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+    "scope": "Accepted local combined all-three metadata, distinct from connected05 imported02 plus tariff overlay runtime",
+    "selectedDefinitions": [
+      {"identity":"k2_private.execute_category_policy_payload_v1(p_action text, p_payload jsonb)","sha256":"d857b5b364b03c59e8b96c36b097377d2fb2e4da857af6770eb2bedf72afbf99"},
+      {"identity":"k2_private.mutate_category_policy_v1(p_category_id uuid, p_action text, p_minimum_days integer, p_expected_version bigint, p_reason text, p_max_depth integer)","sha256":"d3ec75173304d4c8709b81ea0f2e0d101dffa47d7ce85202d29d7efa783f570a"},
+      {"identity":"k2_private.public_category_minimum_v1(p_category uuid)","sha256":"60097994636929c614c612083e9cdc38569c52df7481103990db0e47fc2c6a70"},
+      {"identity":"public.submit_guest_order_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)","sha256":"4df01143e23717e7e23590188fd26d68c31ca1f6ba3439d905d08d2a782139e5"},
+      {"identity":"k2_private.resolve_customer_delivery_quote_v1(p_request jsonb)","sha256":"4feb55f370865b39a81d15d22a8cc4ecfd2387da4937ecd625bd7cc5ed90d582"},
+      {"identity":"public.execute_customer_delivery_rates_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)","sha256":"151af34efea459c7b0b20938e50a2b05ae081c603296ca6abc1b0dba93dd521b"}
+    ]
+  },
+  "findings": [
+    {
+      "surface": "Existing category-policy command deactivation/rollforward",
+      "sourceFact": "Deactivation deletes only guarded category_policy_command_config; rollforward restores the captured maximum_depth. Both take exclusive shared-admission advisory key1261585232/1347374169 under2s/10s limits.",
+      "availabilityFact": "Sixteen retained function definitions directly include both this configuration relation and K2_CATEGORY_POLICY_NOT_CONFIGURED, including public_category_minimum_v1 and submit_guest_order_v1. Operations rulebook explicitly classifies config deletion as an intake/public-availability pause.",
+      "consequence": "Do not reuse this global category deactivation as delivery-rate recovery while claiming shopping stays available.",
+      "limits": "Definition matching is direct source evidence, not a complete call graph, new runtime reproduction or proof of every affected public route. Historical category safety recovery remains separate and unchanged."
+    },
+    {
+      "surface": "Existing catalog-import deactivation/rollforward",
+      "sourceFact": "Prepared scripts revoke/restore authenticated EXECUTE only on the exact catalog-import wrapper while retaining rows and complete non-ACL metadata.",
+      "consequence": "These are catalog-specific scripts; they do not establish tariff recovery or authorize a new tariff edit pause."
+    },
+    {
+      "surface": "Tariff heads/history",
+      "sourceFact": "jt_current head CHECK requires active=true; future_standard requires inactive and null version. Version history refuses UPDATE/DELETE/TRUNCATE through retained triggers.",
+      "consequence": "Changing the current head to inactive is incompatible with the present schema. Removing history or bypassing its retention triggers cannot satisfy retained-rate recovery.",
+      "limits": "No mutation attempted; CHECK/trigger source inspection only. No new tariff deactivation function or switch exists in the inspected tariff fragment."
+    },
+    {
+      "surface": "Guarded conflict transport overlays",
+      "sourceFact": "Category/tariff fragments only replace one exact named business-conflict SQLSTATE40001 withP0001, pin complete function definition and preserve every pg_proc field except prosrc.",
+      "consequence": "Existing code-correction scope is distinct from a pause feature, config deletion or data removal. Prepared fragments are not themselves a repeatable populated recovery/resumption receipt."
+    },
+    {
+      "surface": "Accepted recovery evidence",
+      "sourceFact": "Revised recovery proves rollback controls and row-cleared cold replay; connected05 proves sequential signed rate/quote/orders and target-bound original archive reconstruction.",
+      "consequence": "Neither proves populated category/tariff/receipt/accepted-order retention through repair and repeatable resumption. Keep that exact qualification open."
+    }
+  ],
+  "understandingStatus": "Revised recovery understanding asked asynchronously; pending explicit confirmation before any new recovery design. Existing no-pause owner decision is settled and not being reapproved.",
+  "review": {
+    "status":"reviewed-no-critical-important",
+    "reviewer":"auth_migration_review",
+    "verified":"11sourcepins;retainedcatalogandsixdefinitionhashes;direct16configuration/errorfunctions;categorypausevsavailable-shoppingconstraint;catalogACLscope;tariffactiveCHECKandimmutablehistory;priorreceiptlimits",
+    "limits":"Read-only source audit; no new design, runtime or provider acceptance."
+  },
+  "nextAction": "MAP-018: confirm remaining recovery scope, then review a method against these constraints before preparing a fresh pinned populated fixture. Retain current limits/ownership and all separate authority-through-commit/provider/real-host gates.",
+  "runtimeExecuted": false,
+  "productionSourceChanged": false,
+  "providerWrites": false,
+  "deployed": false,
+  "recovery": "Audit-only source/receipt/documentation revert retaining accepted evidence; no database rollback or runtime cleanup required."
+}
