@@ -1,0 +1,158 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "classification": "Current-source/captured-catalog command-boundary audit; no design acceptance or behavior change",
+  "checkedAt": "2026-10-10T17:13:44.773Z",
+  "catalog": {
+    "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported19/execution01/after-catalog.json",
+    "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+    "scope": "Accepted local combined19 installed catalog, not new production readback",
+    "relations": [
+      {
+        "name": "public.brands",
+        "columns": [
+          {
+            "name": "id",
+            "type": "uuid"
+          },
+          {
+            "name": "name",
+            "type": "character varying"
+          },
+          {
+            "name": "origin_country",
+            "type": "character varying"
+          },
+          {
+            "name": "created_at",
+            "type": "timestamp with time zone"
+          }
+        ],
+        "indexes": [
+          "CREATE UNIQUE INDEX brands_pkey ON public.brands USING btree (id)"
+        ],
+        "constraints": [
+          "PRIMARY KEY (id)"
+        ],
+        "policies": [
+          {
+            "name": "brands_public_read",
+            "check": null,
+            "roles": [
+              "anon",
+              "authenticated"
+            ],
+            "using": "true",
+            "command": "r",
+            "permissive": true
+          },
+          {
+            "name": "brands_staff_manage",
+            "check": "public.is_staff()",
+            "roles": [
+              "authenticated"
+            ],
+            "using": "public.is_staff()",
+            "command": "*",
+            "permissive": true
+          }
+        ]
+      },
+      {
+        "name": "public.categories",
+        "columns": [
+          {
+            "name": "id",
+            "type": "uuid"
+          },
+          {
+            "name": "name",
+            "type": "character varying"
+          },
+          {
+            "name": "parent_id",
+            "type": "uuid"
+          },
+          {
+            "name": "created_at",
+            "type": "timestamp with time zone"
+          }
+        ],
+        "indexes": [
+          "CREATE UNIQUE INDEX categories_pkey ON public.categories USING btree (id)"
+        ],
+        "constraints": [
+          "FOREIGN KEY (parent_id) REFERENCES public.categories(id)",
+          "PRIMARY KEY (id)"
+        ],
+        "policies": [
+          {
+            "name": "categories_public_read",
+            "check": null,
+            "roles": [
+              "anon",
+              "authenticated"
+            ],
+            "using": "true",
+            "command": "r",
+            "permissive": true
+          },
+          {
+            "name": "categories_staff_manage",
+            "check": "public.is_staff()",
+            "roles": [
+              "authenticated"
+            ],
+            "using": "public.is_staff()",
+            "command": "*",
+            "permissive": true
+          }
+        ]
+      }
+    ]
+  },
+  "sourcePins": [
+    {
+      "file": "src/views/admin/useReferenceOptions.js",
+      "sha256": "dadeb3eec22fbc096357bd81ce93c74ec6ec73ce72642a0a0c5218c0c14a7bfc"
+    },
+    {
+      "file": "src/views/admin/ReferenceSelectCell.jsx",
+      "sha256": "4ea38a41901574d03482e7bcec2839f19a252874d44d0ddaa159c238284d45ce"
+    },
+    {
+      "file": "src/views/admin/Sheet.jsx",
+      "sha256": "733d4815d08e66333632ec448f6747ae897946e11a5b2e3565defb8747fb8ac0"
+    },
+    {
+      "file": "server/admin-bff/product-master.js",
+      "sha256": "a1de8a00f29e683388061cff68d401ecf2273bdd9bd80b0f4b40a784096eb400"
+    },
+    {
+      "file": "server/admin-bff/procurement.js",
+      "sha256": "9c3b9e6a0363e92e8cd06ca616b0367ac6522b7eb4bc70515fa5b34c868ade48"
+    },
+    {
+      "file": "src/services/adminBffService.js",
+      "sha256": "44e78103f856869a821b572eb032dfd12797253c485ecca5d7f0fe48444e2384"
+    },
+    {
+      "file": "src/views/admin/InventoryGrid.jsx",
+      "sha256": "3d1c138df6ac1842d57f4887cd8e62c0a4187d4816ca2d987e47db91f58f431f"
+    }
+  ],
+  "findings": [
+    "Captured brands/categories have only ID uniqueness; categories has parent FK. Neither has normalized-name uniqueness. Browser list-before-insert is not concurrent duplicate protection.",
+    "Captured staff-manage RLS uses is_staff() for all authenticated operations. Admin-only BFF creation alone is not proof that all database writers enforce that boundary. Do not silently replace captured grants/policies to obtain a passing fixture.",
+    "Hook creation supplies only name; category parent is omitted. Current duplicate match ignores parent and normalizes browser locale/collapsed whitespace, so a new SQL equivalence rule must be explicitly matched and hierarchy ambiguity preserved rather than assumed.",
+    "Secure Sheet updateField returns false for edits; ReferenceSelectCell closes creation mode and ignores assignment result. A created reference must not be reported as an assigned product.",
+    "Existing Product Master assignment uses paired IDs, reason, expectedUpdatedAt and held operation key; suppliers already have their own reviewed procurement command. Preserve those owners rather than generic direct-write adapters."
+  ],
+  "ownerDecision": "Admin and SuperAdmin only for protected brand/category creation, confirmed directly11October",
+  "designStatus": "Understanding scope presented for explicit confirmation; no technical design or implementation accepted yet",
+  "verification": "Fresh exact catalog hash f1554696... and selected constraints/indexes/RLS inspected; current literal source paths traced. Source inference only, no new concurrent/native/browser proof.",
+  "providerWrites": false,
+  "codeChanged": false,
+  "nextAction": "MAP-018: obtain presented understanding confirmation, design smallest canonical authorized command with matched database/browser equivalence, all-writer duplicate/role boundary and visible creation-versus-assignment recovery; sequential skill-required reviewers before implementation",
+  "recovery": "Documentation-only audit; revert receipt and its MAP/current references if incorrect. Preserve captured files and existing product/permission behavior."
+}

@@ -1,0 +1,325 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08 / IDEA-20261010-06",
+  "observedAt": "2026-10-10T17:10:57.407Z",
+  "classification": "Fresh read-only K2 readiness and Vercel production route/host observations; owner reference-creation role decision",
+  "readiness": {
+    "command": "npm run readiness:k2-live",
+    "exit": 0,
+    "verified": 8,
+    "owner": 2,
+    "connector": 3,
+    "blocked": 0,
+    "scope": "Script preconditions only; connector state reflects script capability rather than installed Vercel connector",
+    "sourceReceipt": ".tools/current-production-backups/live-readiness.json",
+    "sourceReceiptSha256": "5526796258cc29c3b432bf201e00cc420e6d4f4ed221b244413a6f96b8a23894",
+    "savedReceipt": {
+      "projectRef": "pixplcjqivlfflickobf",
+      "ledger": {
+        "entries": 10,
+        "latest": "20260928092634"
+      },
+      "absent": {
+        "intake_sessions": 0,
+        "sku_seq": 0,
+        "channels": 0,
+        "channel_shops": 0
+      },
+      "grants": {
+        "anon_execute": 10
+      },
+      "facts": {
+        "products": 30,
+        "live_products": 22,
+        "lots": 21
+      },
+      "backup": {
+        "file": "current-20260930-pre-guest-install.k2backup",
+        "mtime": "2026-09-30T11:25:39.377Z"
+      },
+      "gates": [
+        {
+          "id": "project-identity",
+          "owner": "none",
+          "state": "verified",
+          "detail": "K2 pixplcjqivlfflickobf"
+        },
+        {
+          "id": "migration-ledger",
+          "owner": "none",
+          "state": "verified",
+          "detail": "10 entries, latest 20260928092634"
+        },
+        {
+          "id": "intake-chain-unapplied",
+          "owner": "none",
+          "state": "verified",
+          "detail": "intake tables absent, prepared apply is a first apply"
+        },
+        {
+          "id": "channel-chain-unapplied",
+          "owner": "none",
+          "state": "verified",
+          "detail": "channel tables absent"
+        },
+        {
+          "id": "public-has-no-execute",
+          "owner": "none",
+          "state": "verified",
+          "detail": "no implicit PUBLIC execute in the public schema"
+        },
+        {
+          "id": "anon-execute-classified",
+          "owner": "owner",
+          "state": "owner",
+          "detail": "5 expected and live, 5 legacy transitional, 13 expected but not yet applied"
+        },
+        {
+          "id": "stock-facts",
+          "owner": "owner",
+          "state": "owner",
+          "detail": "30 products (22 live), 21 lots; physical count unproven"
+        },
+        {
+          "id": "backup-freshness",
+          "owner": "none",
+          "state": "verified",
+          "detail": "current-20260930-pre-guest-install.k2backup (20260930) vs ledger 20260928"
+        },
+        {
+          "id": "backup-restore-proof",
+          "owner": "owner",
+          "state": "verified",
+          "detail": "isolated restore receipt present locally"
+        },
+        {
+          "id": "vercel-preview",
+          "owner": "connector",
+          "state": "connector",
+          "detail": "no Vercel API token or CLI in this harness"
+        },
+        {
+          "id": "vercel-edge-gate",
+          "owner": "connector",
+          "state": "connector",
+          "detail": "Admin Vercel edge routing rule state not readable from this script"
+        },
+        {
+          "id": "provider-advisor",
+          "owner": "connector",
+          "state": "connector",
+          "detail": "Supabase advisor findings need a signed-in session"
+        },
+        {
+          "id": "release-branch",
+          "owner": "none",
+          "state": "verified",
+          "detail": "## codex/dummy-production-acceptance...origin/codex/dummy-production-acceptance [ahead 57]"
+        }
+      ]
+    }
+  },
+  "projects": [
+    {
+      "surface": "storefront",
+      "id": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "name": "k2-jimzon",
+      "framework": "vite",
+      "accountId": "team_C3Wf3dVUBjUqGQ4rndMTCchz",
+      "createdAt": 1784115242078,
+      "updatedAt": 1791555032129,
+      "nodeVersion": "24.x",
+      "live": false,
+      "latestDeployment": {
+        "id": "dpl_AG6hvCSz3rJhWgvdwbXfb6k3uR1z",
+        "url": "k2-jimzon-8mldkt5fo-k2-jimzon.vercel.app",
+        "createdAt": 1791597222996,
+        "readyState": "READY",
+        "target": null
+      },
+      "domains": [
+        "www.k2jimzon.com",
+        "k2-jimzon-vert.vercel.app",
+        "k2jimzon.com",
+        "k2-jimzon-k2-jimzon.vercel.app",
+        "k2-jimzon-git-main-k2-jimzon.vercel.app"
+      ],
+      "passwordProtection": {
+        "enabled": false,
+        "deploymentType": null
+      },
+      "ssoProtection": {
+        "enabled": true,
+        "deploymentType": "all_except_custom_domains"
+      },
+      "trustedIps": {
+        "enabled": false,
+        "deploymentType": null,
+        "addresses": [],
+        "protectionMode": null
+      }
+    },
+    {
+      "surface": "admin",
+      "id": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "name": "k2-jimzon-admin",
+      "framework": "vite",
+      "accountId": "team_C3Wf3dVUBjUqGQ4rndMTCchz",
+      "createdAt": 1784780842789,
+      "updatedAt": 1791555066977,
+      "nodeVersion": "24.x",
+      "live": false,
+      "latestDeployment": {
+        "id": "dpl_6RVg9GwQzRpr9tb8PzNxU9NqNuBq",
+        "url": "k2-jimzon-admin-c5uwkx7q7-k2-jimzon.vercel.app",
+        "createdAt": 1791597222842,
+        "readyState": "READY",
+        "target": null
+      },
+      "domains": [
+        "admin.k2jimzon.com",
+        "k2-jimzon-admin-seven.vercel.app",
+        "k2-jimzon-admin-k2-jimzon.vercel.app",
+        "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+      ],
+      "passwordProtection": {
+        "enabled": false,
+        "deploymentType": null
+      },
+      "ssoProtection": {
+        "enabled": true,
+        "deploymentType": "all_except_custom_domains"
+      },
+      "trustedIps": {
+        "enabled": false,
+        "deploymentType": null,
+        "addresses": [],
+        "protectionMode": null
+      }
+    }
+  ],
+  "deployments": [
+    {
+      "surface": "storefront",
+      "id": "dpl_HCUnL6rSxj9ayVZCzMv3SUtYPzr1",
+      "name": "k2-jimzon",
+      "url": "k2-jimzon-odj31co7u-k2-jimzon.vercel.app",
+      "created": 1791555004764,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+        "username": "k2jimzonwebsite"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "b6ef5863308e60caa4d9b16da3978c5a8f50f37a",
+        "githubCommitMessage": "Record live K2 release and retain remaining activation acceptance [skip ci]",
+        "githubRepo": "K2-Jimzon",
+        "githubOrg": "k2jimzonwebsite"
+      },
+      "inspectorUrl": "https://vercel.com/k2-jimzon/k2-jimzon/HCUnL6rSxj9ayVZCzMv3SUtYPzr1",
+      "isRollbackCandidate": true
+    },
+    {
+      "surface": "admin",
+      "id": "dpl_AKmVJ82fMzrhwp2fi3aQZSexm5ao",
+      "name": "k2-jimzon-admin",
+      "url": "k2-jimzon-admin-ksiof01js-k2-jimzon.vercel.app",
+      "created": 1791555004787,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+        "username": "k2jimzonwebsite"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "b6ef5863308e60caa4d9b16da3978c5a8f50f37a",
+        "githubCommitMessage": "Record live K2 release and retain remaining activation acceptance [skip ci]",
+        "githubRepo": "K2-Jimzon",
+        "githubOrg": "k2jimzonwebsite"
+      },
+      "inspectorUrl": "https://vercel.com/k2-jimzon/k2-jimzon-admin/AKmVJ82fMzrhwp2fi3aQZSexm5ao",
+      "isRollbackCandidate": true
+    }
+  ],
+  "adminProductionRoutes": {
+    "routes": [
+      {
+        "id": "9dee93b6-31c2-4b4b-a496-28df15a0bc76",
+        "name": "K2 Admin BFF disabled gate",
+        "enabled": true,
+        "staged": false,
+        "route": {
+          "src": "/api/admin/:path*",
+          "status": 404
+        },
+        "srcSyntax": "path-to-regexp",
+        "routeType": "set_status"
+      },
+      {
+        "id": "7aff4291-0dc0-4f1d-b455-2a1ef1192725",
+        "name": "K2 Admin security headers",
+        "enabled": true,
+        "staged": false,
+        "route": {
+          "src": "/:path*",
+          "headers": {
+            "X-Frame-Options": "DENY",
+            "X-Content-Type-Options": "nosniff",
+            "X-Robots-Tag": "noindex, nofollow",
+            "Referrer-Policy": "strict-origin-when-cross-origin",
+            "Permissions-Policy": "camera=(self), microphone=(), geolocation=()",
+            "Content-Security-Policy-Report-Only": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests",
+            "Cache-Control": "private, no-store"
+          }
+        },
+        "srcSyntax": "path-to-regexp",
+        "routeType": "transform"
+      }
+    ],
+    "version": {
+      "id": "fd4bbb6a-0db4-49d1-b5e8-a5060f7a3b41",
+      "s3Key": "0f043bad3c43e2dd",
+      "createdBy": "",
+      "lastModified": 1787835345201,
+      "ruleCount": 2,
+      "alias": "k2-jimzon-admin-423d89-routes-k2-jimzon.vercel.app"
+    },
+    "limit": {
+      "maxRoutes": 100,
+      "currentRoutes": 2
+    }
+  },
+  "hostGetObservations": [
+    {
+      "url": "https://admin.k2jimzon.com/api/admin/session",
+      "status": 404
+    },
+    {
+      "url": "https://admin.k2jimzon.com/",
+      "status": 200
+    },
+    {
+      "url": "https://www.k2jimzon.com/",
+      "status": 200
+    }
+  ],
+  "ownerDecision": {
+    "source": "Direct human reply to brand/category creation role clarification in current chat",
+    "decision": "Admin and SuperAdmin only",
+    "scope": "Protected brand/category creation role; no provider, live release or administrative authority contract authorization"
+  },
+  "limits": [
+    "READY deployment and root HTTP200 do not prove staff sign-in, product/listing workflow or customer checkout",
+    "Production Admin session route actually returns404; published enabled non-staged rule blocks /api/admin/:path*",
+    "Fresh script gate has no failed preconditions but owner and connector gates remain; physical inventory unverified",
+    "Latest preview metadata is separate from listed production deployment; local branch changes are not production",
+    "Concurrent administrative permission boundary still unanswered; protected command design/concurrency/recovery qualification remains MAP-018"
+  ],
+  "providerWrites": false,
+  "deployed": false,
+  "nextAction": "MAP-018: design and qualify protected Admin/SuperAdmin brand/category creation and explicit assignment recovery; preserve disabled production Admin route until separately authorized activation gates pass",
+  "recovery": "Read-only observations and owner decision record only. Preserve existing production route. Revert receipt/reference updates for documentation recovery."
+}
