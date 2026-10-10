@@ -1,0 +1,651 @@
+{
+  "owningMap": "MAP-018",
+  "ideas": [
+    "IDEA-20261010-07",
+    "IDEA-20261010-08"
+  ],
+  "providerWrites": false,
+  "deployed": false,
+  "scope": "Actual local Auth v2.196.0/PostgREST v14.17/captured PostgreSQL17.6 through production router. Marked synthetic SQL-created Draft/reference fixtures, unchanged imported operating composition with exact temporary guarded Product Master business-conflict overlay; no CSV, creation-command, approved facts, browser, provider or full installer acceptance.",
+  "cases": [
+    {
+      "case": "oci-product-assignment01",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "pid": 23472,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "745e809f5a3ffef60d362bc7b6507a97fd79396cda35b0027b12903a444cef98"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused",
+          "routed_master_canonical_initial_options_and_eligibility",
+          "routed_master_missing_csrf_refused",
+          "routed_master_partial_pair_refused"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "routedStage": "POST_product-master",
+        "lastRoutedResponse": {
+          "status": 503,
+          "code": "PRODUCT_COMMAND_UNAVAILABLE"
+        },
+        "botScope": "Missing-secret refusal real; positive local flow explicitly allows unconfigured provider. No Cloudflare/provider acceptance.",
+        "passed": false,
+        "error": {
+          "name": "AssertionError",
+          "stage": "assertion_or_transport_failure",
+          "code": "ERR_ASSERTION"
+        },
+        "failedPathUserCleanup": false
+      },
+      "hashes": {
+        "executed-source.mjs": "ea71811ea0b3adfee032c2fb01e8877391f843cda716cffbea625b1176e5f21e",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "f62061fa05904fa5b2ab7dc6f4cc8cef5e9ad7648c4eeffebaf9287debad84e6",
+        "host-driver.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+        "bff-helper.mjs": "56163a7b2230c700639e6ce4659bab248a8d08ec53bcd4a4eb735d5ac7af0d0d",
+        "preparation.json": "9067579dbb2a236fbe6b0baca5e10da83d6fa2b577f38cb41576280ad797e69b",
+        "execution01/result.json": "9cb3e02aec8e3000f0a5ac92c5fce9b5d1b1f1c563363c64a7dd2605f3dfbe84",
+        "execution01/serial.log": "745e809f5a3ffef60d362bc7b6507a97fd79396cda35b0027b12903a444cef98",
+        "host-driver-result.json": "44732a9a3ed673e1c01b63211e85d3e055c7f937df1acf25172695e7cc0c4353"
+      },
+      "recovery": {
+        "exactPrerequisitesInstalled": true,
+        "private": false,
+        "original": false,
+        "masterEvents": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      },
+      "backendWaitSamples": [],
+      "audit": null
+    },
+    {
+      "case": "oci-product-assignment02",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "pid": 24488,
+        "exit": null,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "eebf5704f9fc5ce69b4fd4fa0d1f9d322191e5fbd8abecbcd573924784949dd3"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused",
+          "routed_master_canonical_initial_options_and_eligibility",
+          "routed_master_missing_csrf_refused",
+          "routed_master_partial_pair_refused"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "routedStage": "POST_product-master",
+        "lastRoutedResponse": {
+          "status": 400,
+          "code": "PRODUCT_COMMAND_INVALID"
+        },
+        "botScope": "Missing-secret refusal real; positive local flow explicitly allows unconfigured provider. No Cloudflare/provider acceptance.",
+        "passed": false,
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "12531c2a5834834be7e658d1bc4bbdacef02aca48bbcaebf7a3bfc1eb776d071",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "e48871d62aa8251a7474fbfa2ab07461147af0519d8f5365179d34a4b0b9c05c",
+        "host-driver.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+        "bff-helper.mjs": "1448a2465894cf7a3d886f2b48aee1d71581e7e154a8756e55b22237c9eefb47",
+        "preparation.json": "9067579dbb2a236fbe6b0baca5e10da83d6fa2b577f38cb41576280ad797e69b",
+        "execution01/result.json": "e74fc1717d30233f29824b9f3a2e9c1fd59be0066a376447407e02d8f74177c5",
+        "execution01/serial.log": "eebf5704f9fc5ce69b4fd4fa0d1f9d322191e5fbd8abecbcd573924784949dd3",
+        "host-driver-result.json": "6a1d7397008c8a4fdbf7789d26b7e5ee7d430520f706c5645cabcd2e101520b9"
+      },
+      "recovery": {
+        "exactPrerequisitesInstalled": true,
+        "private": false,
+        "original": false,
+        "masterEvents": false,
+        "authorityWitnessCount": 1,
+        "hashPairs": {}
+      },
+      "backendWaitSamples": [],
+      "audit": null
+    },
+    {
+      "case": "oci-product-assignment03",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "pid": 19888,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "63f6e8bd737ad0759b45c00a06a761f7295c0c186ca76c0618ae3d70979e6e48"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused",
+          "routed_master_canonical_initial_options_and_eligibility",
+          "routed_master_missing_csrf_refused",
+          "routed_master_partial_pair_refused"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "routedStage": "POST_product-master",
+        "lastRoutedResponse": {
+          "status": 400,
+          "code": "PRODUCT_COMMAND_INVALID"
+        },
+        "botScope": "Missing-secret refusal real; positive local flow explicitly allows unconfigured provider. No Cloudflare/provider acceptance.",
+        "passed": false,
+        "error": {
+          "name": "TimeoutError",
+          "stage": "assertion_or_transport_failure"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "e24772a899bdf170a9fa433e42791f3afceab48d2a3d864512c2f468f4ce5bdc",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "5c07bb833c4911d02dcafe455ba9b077abfb188a37083116f4b134b9e9cdfd4e",
+        "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+        "bff-helper.mjs": "1448a2465894cf7a3d886f2b48aee1d71581e7e154a8756e55b22237c9eefb47",
+        "preparation.json": "a0de4cbcc8ecc0f40053a532200c6d99e1fd5a172902cce3f117963c46a0a95f",
+        "execution01/result.json": "d5024f5dd0b70f02e2404bf8c2c53f2b213572b7d9f93b736ef47d701dadc60f",
+        "execution01/serial.log": "63f6e8bd737ad0759b45c00a06a761f7295c0c186ca76c0618ae3d70979e6e48",
+        "host-driver-result.json": "11f3d6b20833eb9fa9854bf92a681563a0b4b8fbf1890fa921cee4fe9a076eda"
+      },
+      "recovery": {
+        "exactPrerequisitesInstalled": true,
+        "private": true,
+        "original": true,
+        "masterEvents": true,
+        "authorityWitnessCount": 2,
+        "hashPairs": {
+          "bff-before-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-sequence-recovery.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "assignment-master-before.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "assignment-master-after.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "auth-rows-before.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-schema-before.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+          "auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+        }
+      },
+      "backendWaitSamples": [
+        [
+          {
+            "pid": 858,
+            "locks": [
+              {
+                "mode": "AccessShareLock",
+                "type": "relation",
+                "granted": true,
+                "relation": "user_profiles_pkey"
+              },
+              {
+                "mode": "AccessShareLock",
+                "type": "relation",
+                "granted": true,
+                "relation": "user_profiles"
+              },
+              {
+                "mode": "ExclusiveLock",
+                "type": "virtualxid",
+                "granted": true,
+                "relation": null
+              }
+            ],
+            "state": "active",
+            "waitType": null,
+            "waitEvent": null
+          }
+        ],
+        [
+          {
+            "pid": 858,
+            "locks": [
+              {
+                "mode": "ExclusiveLock",
+                "type": "virtualxid",
+                "granted": true,
+                "relation": null
+              },
+              {
+                "mode": "ExclusiveLock",
+                "type": "transactionid",
+                "granted": true,
+                "relation": null
+              }
+            ],
+            "state": "active",
+            "waitType": null,
+            "waitEvent": null
+          }
+        ],
+        [
+          {
+            "pid": 858,
+            "locks": [
+              {
+                "mode": "RowExclusiveLock",
+                "type": "relation",
+                "granted": true,
+                "relation": "k2_private.admin_request_nonces"
+              },
+              {
+                "mode": "RowExclusiveLock",
+                "type": "relation",
+                "granted": true,
+                "relation": "k2_private.admin_request_rate_buckets"
+              },
+              {
+                "mode": "AccessShareLock",
+                "type": "relation",
+                "granted": true,
+                "relation": "k2_private.admin_bff_secrets"
+              },
+              {
+                "mode": "AccessShareLock",
+                "type": "relation",
+                "granted": true,
+                "relation": "user_profiles_pkey"
+              },
+              {
+                "mode": "AccessShareLock",
+                "type": "relation",
+                "granted": true,
+                "relation": "user_profiles"
+              },
+              {
+                "mode": "ExclusiveLock",
+                "type": "virtualxid",
+                "granted": true,
+                "relation": null
+              },
+              {
+                "mode": "ExclusiveLock",
+                "type": "transactionid",
+                "granted": true,
+                "relation": null
+              },
+              {
+                "mode": "ExclusiveLock",
+                "type": "transactionid",
+                "granted": true,
+                "relation": null
+              }
+            ],
+            "state": "active",
+            "waitType": null,
+            "waitEvent": null
+          }
+        ]
+      ],
+      "audit": null
+    },
+    {
+      "case": "oci-product-assignment04",
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "pid": 18464,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": true,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": true,
+        "processStopped": true,
+        "serialSha256": "a2ad7c49426164f285e8c8ae407b48315ccaf80587f220eaf6a8222cb9d51434"
+      },
+      "host": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused",
+          "routed_master_canonical_initial_options_and_eligibility",
+          "routed_master_missing_csrf_refused",
+          "routed_master_partial_pair_refused",
+          "routed_master_stale_version_refused",
+          "routed_master_signed_paired_initial_assignment",
+          "routed_master_actual_postgrest_canonical_readback",
+          "routed_master_same_key_fresh_signed_retry",
+          "routed_master_saved_taxonomy_reassignment_refused",
+          "routed_logout_registry_inactive_server_refresh_refused",
+          "routed_saved_old_cookie_refused_after_logout",
+          "routed_logout_cleared_cookie_refused",
+          "global_logout",
+          "logout_refresh_refused",
+          "admin_hard_delete_user"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "routedStage": "GET_session",
+        "lastRoutedResponse": {
+          "status": 401,
+          "code": "SESSION_EXPIRED"
+        },
+        "botScope": "Missing-secret refusal real; positive local flow explicitly allows unconfigured provider. No Cloudflare/provider acceptance.",
+        "assignmentRpcDiagnostic": {
+          "status": 400,
+          "code": "23514",
+          "message": "K2_PRODUCT_TAXONOMY_INITIAL_ONLY"
+        },
+        "productAssignment": {
+          "sku": "MAP018-HTTP-ASSIGN-01",
+          "actorId": "2d90f03a-1d35-4673-862c-3ebc92e33a37",
+          "brandId": "71000000-0000-4000-8000-000000000001",
+          "categoryId": "72000000-0000-4000-8000-000000000001",
+          "requestId": "74000000-0000-4000-8000-000000000001",
+          "reason": "Synthetic local HTTP assignment witness",
+          "updatedAt": "2026-10-10T05:41:30.543075+00:00",
+          "scope": "Marked synthetic SQL-created Draft and canonical reference fixtures in disposable captured-authority RAM; actual local signed Auth/BFF/PostgREST assignment with exact temporary business-conflict SQLSTATE overlay. No CSV, approved facts, creation-command, browser or hosted acceptance."
+        },
+        "routedLogoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "routedTransport": {
+          "calls": {
+            "auth": 25,
+            "rest": 54,
+            "routed": 22
+          },
+          "scope": "Native Node request/response streams through production api/admin/index.js and real Auth/PostgREST; no hosted Vercel or browser-cookie-jar proof"
+        },
+        "logoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "passed": true
+      },
+      "hashes": {
+        "executed-source.mjs": "708350f396267ba6696ca7f43f835adf9cea476d0312d0e00228bfed5a257782",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "a9cfbc2c29e7023b754e333841221e27471b972d7757aad366f4c36199220dd7",
+        "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+        "bff-helper.mjs": "7ab89af6a941076e5dafd88ccd9a0148f18c25ec724596b43149ccbdd91b7118",
+        "preparation.json": "135f76cd5d197002593e79f9c4a3194012eb25761c9bd3b84d581074190a9a6c",
+        "execution01/result.json": "f3c6bd81c51bd9cb100bde1af92da9b4d4bcfa8dc784ba0d8a673e142a380c98",
+        "execution01/serial.log": "a2ad7c49426164f285e8c8ae407b48315ccaf80587f220eaf6a8222cb9d51434",
+        "host-driver-result.json": "fe9ea2001789d78f6fca3a28b277da3fc220250a72fab71e18cf3a1ae9fd91a3"
+      },
+      "recovery": {
+        "exactPrerequisitesInstalled": true,
+        "private": true,
+        "original": true,
+        "masterEvents": true,
+        "authorityWitnessCount": 2,
+        "hashPairs": {
+          "bff-before-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bff-before-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+          "bff-sequence-recovery.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+          "assignment-master-before.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "assignment-master-after.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "auth-rows-before.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+          "auth-schema-before.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+          "auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+        }
+      },
+      "backendWaitSamples": [],
+      "audit": {
+        "rows": 1,
+        "exact": true,
+        "actorId": "2d90f03a-1d35-4673-862c-3ebc92e33a37"
+      }
+    }
+  ],
+  "sourceHashes": {
+    "api/admin/index.js": "d832229d172ddb3adae66862647a4fa75ebaac1178f980c242a59ee94d2b722f",
+    "server/admin-bff/product-master.js": "a1de8a00f29e683388061cff68d401ecf2273bdd9bd80b0f4b40a784096eb400",
+    "server/admin-bff/security.js": "2c296644a5bfbba1747739bbe7ea3bd761e49afdf22272689b6f94bdb6141b77",
+    "server/admin-bff/authorize.js": "21113ca8d3a7f3526e140ddcd1193ef854db5698674f8f0b317306060976461c",
+    "supabase/prepared/product_master_version_conflict_transport.sql": "ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476",
+    ".tools/prepare-product-assignment-probe.mjs": "35942b33910629af43e7036de62c664a983d6c111135821e6e08f1b80265da2d",
+    ".tools/product-assignment-probe.inc.mjs": "af7bb9835b597ce1a4d2cfd9c78f7eb3660917abaf0bc1bdf1ed9d3211e3b52e",
+    ".tools/record-product-assignment.mjs": "0f3b3ec0d2186037f54ad742373f929d22c7db1921664081e6f360e6cd123a9e",
+    ".tools/inspect-assignment-composition.mjs": "11cb0fc927f1ae573e8e18b023f65b29c0584c1884220eb5f148e0327612a64e",
+    ".tools/assignment-composition-audit.json": "b80812e8a67ced980b201fe07983e08faac45b5c4f2027a64c88bc3a5edabd07"
+  },
+  "rootCause": {
+    "branch": "40001 K2_ADMIN_PRODUCT_VERSION_CONFLICT",
+    "evidence": "Known stale POST times out with active/no-wait backend in03; only guarded named business SQLSTATE change makes same stale request return409 and allows complete assignment/retry chain in04.",
+    "source": "https://supabase.com/docs/guides/troubleshooting/high-cpu-and-infinite-transaction-retries-when-using-custom-error-codes-in-rpc-functions-77326b",
+    "sourceDate": "2026-10-09",
+    "qualification": "Local PostgREST14 behavior; no deployed-version or live-host defect claim."
+  },
+  "verification": {
+    "nativeSessions": [
+      13185,
+      13366,
+      25766,
+      95809
+    ],
+    "finalTerminalExit": 0,
+    "development": {
+      "session": 34413,
+      "command": "npm run verify:development",
+      "exit": 0
+    },
+    "review": "Exact guarded overlay/source recovery review: no Critical/Important; native evidence and receipt independently asserted."
+  },
+  "shutdown": {
+    "independentlyAbsentPids": [
+      23472,
+      24488,
+      19888,
+      18464
+    ],
+    "ports": [
+      54392,
+      54393,
+      54394,
+      54395,
+      54396
+    ],
+    "portsIndependentlyAbsentAfterEachCase": true
+  },
+  "limitations": [
+    "01 control window expires before recovery; failed host cleanup.02 TimeoutError numeric-code helper crash interrupts recovery; hard user cleanup passes. Both immutable failures remain recovery-unverified and disposed.",
+    "03 fails business stale POST with bounded TimeoutError; three active/no-wait samples and full recovery. Late authorization refusal after cleanup does not establish the original denial cause.",
+    "04 genuine GET/POST assignment uses synthetic SQL-created Draft and canonical references; not genuine CSV or owner-approved reference facts or production creation-command evidence.",
+    "Framework raw-body/query/header adapters are local Node equivalents, not hosted Vercel or browser acceptance.",
+    "Positive bot flow explicitly unconfigured; no real bot-provider, HTTPS/Secure or real staff acceptance.",
+    "Overlay is fresh-only preparation outside migrations; complete installer before/after/replay/drift/recovery contract and other40001 business sites remain open.",
+    "Temporary exact prepared7d session/security-event/preauth prerequisites, original function8h and Product Master restored; no provider application."
+  ],
+  "recovery": "All guests disposed. Recreate fresh owned guest from pinned private sources.03/04 full before/after checks pass; never infer01/02 recovery from later runs. Revert only new prepared overlay/evidence slice for source recovery; no provider rollback applies.",
+  "nextAction": "MAP-018 integrate exact business-conflict overlay into the full guarded installer, audit other40001 business conflicts over actual transport, finish creation ownership/canonical creation and genuine CSV-to-review/inventory/listing/Website chain, then retained owner/provider/real-host gates."
+}
