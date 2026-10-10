@@ -1,0 +1,138 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "classification": "Prepared connected native quote/order probe and verified input lineage; not runtime evidence",
+  "preparedProbe": {
+    "file": "docs/evidence/20261010-tariff-runtime/connected-order-probe.mjs",
+    "sha256": "d206e61499c17f9ae94f3240b3c95ca5167f7ed6b7440a4722ca58b326bac19b",
+    "syntaxChecked": true,
+    "moduleLoaded": true
+  },
+  "observerAdmission": {
+    "observerAdmissionControls": [
+      "missing_contract",
+      "truncated_batches",
+      "unlinked_reservation",
+      "wrong_key_selection"
+    ],
+    "refused": 4,
+    "shapeAdmittedToRouteBoundary": true,
+    "actualHttpCalls": 0,
+    "nativeExecuted": false,
+    "scope": "Artificial observer-shape admission only; no connected quote/order acceptance",
+    "command": "node .tools/qualify-connected-observer-admission.mjs",
+    "sourceSha256": "be838c5ed678a95a665a8d9c5bc428aa40d9b53d04740520913662b442101944",
+    "limitation": "Admission checks do not establish complete SQL selection; protected observer source and independent counts must be pinned/reviewed before runtime."
+  },
+  "sourceAudit": {
+    "file": "docs/acceptance/TARIFF_QUOTE_ORDER_SOURCE_AUDIT_20261010.json",
+    "sha256": "ec91e6a1e3049d68eb160644a248ed3d76e0251dbaf70bb5e96c384b347e605e",
+    "verifiedSourcePins": 11
+  },
+  "parent": {
+    "case": "oci-tariff08",
+    "verifiedPins": [
+      {
+        "file": "executed-source.mjs",
+        "sha256": "a65f1324c805fd254aa16e0b712344fbd76784cda079a711aacd3aa7cbf71bb9"
+      },
+      {
+        "file": "executed-derivation.mjs",
+        "sha256": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496"
+      },
+      {
+        "file": "runner-source.mjs",
+        "sha256": "3566f0b066939689429de25b33608b837bdbb7c0f5ac6023b71c28d2965546d8"
+      },
+      {
+        "file": "host-driver.mjs",
+        "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+      },
+      {
+        "file": "bff-helper.mjs",
+        "sha256": "964b8483dfbaac2464ed59abf992d8e6dcd4af3cf27d04842e4a9b0869a2f0d5"
+      },
+      {
+        "file": "preparation.json",
+        "sha256": "1e0b31e1ee8989f35b2199d23e7dd86574cf4b18f88852317d284a415fb30465"
+      },
+      {
+        "file": "staging/k2/image-probe.sh",
+        "sha256": "b48c9e73818fa7d789eaaa3e4399e10f7f9657657a92305ce1180fb28c0540c0"
+      },
+      {
+        "file": "execution01/result.json",
+        "sha256": "4e406a60a6db621d6809848ec8b6c7929487d1d919697d1ab655eb700b393ede"
+      },
+      {
+        "file": "execution01/serial.log",
+        "sha256": "8b2c612d9591d0fd28e78d2e57305b3d21019494d23132db52c39ac300ec524c"
+      },
+      {
+        "file": "host-driver-result.json",
+        "sha256": "59a300f80c8383cc7c5da6c8ca01c53befcc9788e883cb9be98ef3213fc39768"
+      }
+    ],
+    "priorConnectedEvidenceAbsent": true,
+    "scope": "Original imported02 plus temporary tariff conflict overlay; combined all-three native23 is a distinct composition"
+  },
+  "installedPrerequisiteFunctions": [
+    {
+      "name": "sync_product_batch_compat_columns",
+      "identity": "public.sync_product_batch_compat_columns()",
+      "sha256": "9043d59ea5d3e6f83b84c4a21317a74771f5499a6e70bbba976998a47d197977"
+    },
+    {
+      "name": "current_category_lot_context_v1",
+      "identity": "k2_private.current_category_lot_context_v1()",
+      "sha256": "7d19a09bbe6829ada6fd57f068cdd76d77299f64eb210382f9e4148e12192797"
+    },
+    {
+      "name": "start_category_lot_context_v1",
+      "identity": "k2_private.start_category_lot_context_v1(p_maximum_depth integer)",
+      "sha256": "b1dd5405848f942687a81d35c5b7989a92a24945003e42c9e0f22b8bed6161e8"
+    },
+    {
+      "name": "lot_is_eligible_for_category_v1",
+      "identity": "k2_private.lot_is_eligible_for_category_v1(p_lot public.product_batches, p_max_depth integer, p_evaluation_instant timestamp with time zone)",
+      "sha256": "f4e789e0a687a059b600e22bc0b69a4a4a36f1fe6d46d5db9e24d9f595bb6e4f"
+    },
+    {
+      "name": "reserve_order_request_lots_v1",
+      "identity": "public.reserve_order_request_lots_v1(p_order_request_id uuid, p_reason text)",
+      "sha256": "0e6578d9facb1dbab2f11873767d1c18c2ec017fdf47a85c4587bba71dd9702e"
+    }
+  ],
+  "nativeExecuted": false,
+  "connectedRuntimeVerified": false,
+  "preExecutionReview": "pending",
+  "preparationReview": {
+    "reviewer": "auth_migration_review",
+    "result": "No remaining Critical/Important findings for prepared-only merge",
+    "resolved": [
+      "Explicit observer contract, exact selection, independently supplied relation counts and zero orphan counts",
+      "Unique rows and canonical order/snapshot/item/reservation/lot/conversation/message linkage",
+      "Canonical stock/lot/active-reservation reconciliation",
+      "Finite non-null money and nonempty receipt identity/status/valid timestamp checks"
+    ],
+    "limit": "Actual SQL completeness, genuine route adapters, native execution and recovery still need separate preexecution review and runtime evidence"
+  },
+  "providerWrites": false,
+  "productionSourceChanged": false,
+  "deployed": false,
+  "setupFindings": [
+    "Batch INSERT invokes unchanged category-lot context guard; seed within a genuine synthetic Staff/Admin AAL2 context and entry advisory lock, without trigger or grant relaxation.",
+    "Eligible lot requires assigned category with effective minimum, finite future expiry, PH HUB-MNL-CENTRAL and a custodian belonging to that hub.",
+    "Website quote requires human review, image, canonical price/weight and an eligible Website channel listing plus valid installed PSGC chain.",
+    "Protected deterministic observer must cover all synthetic orders, immutable snapshots, items, reservations, events, conversations/messages and canonical stock; reject absent/truncated observations.",
+    "Signing nonce/rate-limit effects are distinct from business conservation; four order calls use bounded IP/contact allowances."
+  ],
+  "nextAction": "Wire fresh owned pinned native successor with synthetic setup, distinct Admin/Storefront route environments, protected complete SQL observer, exact two-version/history recovery guards and preexecution review; run actual connected probe and original captured-state restoration, inspect terminal/PID/listener evidence, then archive runtime receipt.",
+  "limits": [
+    "No order/quote runtime result yet",
+    "No concurrent publication or populated history data-retaining recovery proof",
+    "No owner authority-through-commit decision inferred",
+    "No provider or real-host acceptance"
+  ],
+  "recovery": "Prepared-only probe can be removed without database changes. Preserve immutable parent08 and native23; never execute their disposed guests or overwrite their artifacts."
+}
