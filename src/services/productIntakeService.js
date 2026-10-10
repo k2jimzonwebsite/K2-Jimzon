@@ -70,7 +70,12 @@ function commandError(code, userMessage, cause) {
 }
 
 function intakeCommandError(result, fallbackCode, fallbackMessage) {
-  const failure = commandError(result?.code || fallbackCode, result?.error || fallbackMessage)
+  const messages = {
+    IMPORTED_DRAFT_VERSION_CONFLICT: 'This product changed after review started. Reload its current details and start a fresh review. Your earlier review remains saved.',
+    IMPORTED_DRAFT_NOT_ELIGIBLE: 'This product already has stock, publication or a completed review, or was not imported. Open its existing inventory workflow.',
+    IMPORTED_DRAFT_REVIEW_REQUIRED: 'Check the reviewed details. Existing identity and assigned brand/category cannot be replaced through intake.',
+  }
+  const failure = commandError(result?.code || fallbackCode, messages[result?.code] || result?.error || fallbackMessage)
   failure.uncertain = commandOutcomeIsUncertain(result)
     || result?.ok === true
     || ['COMMAND_IN_PROGRESS', 'INTAKE_COMMAND_UNAVAILABLE'].includes(result?.code)
@@ -193,22 +198,38 @@ export async function createOrResumeIntakeSession(barcode = null, scannedIdentit
   if (adminBffEnabled()) {
     // After an uncertain create, replay that command instead of adopting an
     // unrelated most-recent session returned by the general resume lookup.
-    if (!options.recovering) {
+    if (!options.recovering && !options.freshSelection) {
       const active = await getProductIntakeSessionBff(null)
       if (!active.ok || !active.data || !Object.hasOwn(active.data, 'session')
           || (active.data.session !== null && !active.data.session?.id)) {
         throw commandError('INTAKE_RESUME_FAILED', active.error || 'The saved intake session could not be checked. Retry session setup.')
       }
-      if (active.data?.session) return active.data.session
+      if (active.data?.session) {
+        const bound = active.data.session.field_provenance?.imported_draft_target
+        const target = options.existingProduct
+        if (!target || (bound?.productId === target.productId
+            && (bound.recordVersion === target.recordVersion || active.data.session.product_id === target.productId))) {
+          return active.data.session
+        }
+        if (bound?.productId !== target.productId) {
+          throw commandError('INTAKE_TARGET_CONFLICT', 'Another product review is open. Finish that review before selecting this imported product.')
+        }
+        // Same product, changed version: preserve the old session and start a
+        // fresh review without carrying old evidence or acceptance decisions.
+      }
     }
     const requestId = options.requestId || crypto.randomUUID()
     const created = await createProductIntakeSessionBff({
       requestId, barcode: barcode || null, scannedIdentity: scannedIdentity || barcode || '',
+      ...(options.existingProduct ? { existingProduct: options.existingProduct } : {}),
     }, options.idempotencyKey)
     if (!created.ok || !created.result?.sessionId) {
       throw intakeCommandError(created, 'INTAKE_CREATE_FAILED', 'The intake session could not be confirmed.')
     }
     return refreshAfterIntakeCommand(created.result.sessionId)
+  }
+  if (options.existingProduct) {
+    throw commandError('INTAKE_SECURE_SERVER_REQUIRED', 'Reviewing an imported Draft requires the secure Admin server.')
   }
   const client = requireClient()
   const cachedId = readCachedSessionId()

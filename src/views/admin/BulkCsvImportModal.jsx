@@ -4,17 +4,19 @@ import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
 import {
   adminBffEnabled, commandOutcomeIsUncertain, commitCatalogCsvBff, getCatalogImportStatusBff, previewCatalogCsvBff,
+  searchProductIntakeDuplicatesBff,
 } from '../../services/adminBffService'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { useReferenceOptions } from './useReferenceOptions'
 import ReferenceSelectCell from './ReferenceSelectCell'
 
-export default function BulkCsvImportModal({ onClose, onImportComplete }) {
+export default function BulkCsvImportModal({ onClose, onImportComplete, onReviewImported }) {
   const secureCatalog = adminBffEnabled()
   const [file, setFile] = useState(null)
   const [parsedData, setParsedData] = useState([])
   const [importing, setImporting] = useState(false)
   const [error, setError] = useState(null)
+  const [reviewingSku, setReviewingSku] = useState('')
   const [csvText, setCsvText] = useState('')
   const [preview, setPreview] = useState(null)
   const [selectedRows, setSelectedRows] = useState([])
@@ -37,6 +39,25 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
 
   const handleClose = () => {
     if (!commitUnresolved) onClose()
+  }
+
+  const reviewImported = async sku => {
+    if (reviewingSku) return
+    setReviewingSku(sku)
+    try {
+      const result = await searchProductIntakeDuplicatesBff(sku)
+      if (!activeRef.current) return
+      const product = result.data?.product
+      if (!result.ok || product?.sku !== sku || product.status !== 'Draft' || product.published !== false || !product.recordVersion) {
+        setError('The current imported Draft could not be checked. Refresh the catalog before starting its review.')
+        return
+      }
+      onReviewImported?.(product)
+    } catch {
+      if (activeRef.current) setError('The imported product could not be loaded. Refresh the catalog and try again.')
+    } finally {
+      if (activeRef.current) setReviewingSku('')
+    }
   }
 
   const handleFileChange = async (e) => {
@@ -308,7 +329,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
           </div>
 
           {error && (
-            <div className="bg-crimson/10 border border-crimson/30 rounded-adm-sm p-3 text-base text-crimson">
+            <div role="alert" className="bg-crimson/10 border border-crimson/30 rounded-adm-sm p-3 text-base text-crimson">
               {error}
             </div>
           )}
@@ -469,6 +490,9 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
                 {commitState.status === 'completed' && (
                   <div role="status" className="space-y-3 rounded-adm-sm border border-forest/35 bg-forest/10 p-3 text-sm text-white">
                     <p>{commitState.completed} selected row{commitState.completed === 1 ? '' : 's'} {commitState.completed === 1 ? 'was' : 'were'} recorded successfully. Refresh Sheet Mode before making another edit.</p>
+                    {onReviewImported && commitState.rows.filter(row => row.outcome === 'created').map(row => <button key={row.sku} type="button" disabled={Boolean(reviewingSku)} onClick={() => reviewImported(row.sku)} className="min-h-11 w-full rounded-adm-sm border border-adm-line px-3 py-2 text-left text-sm text-white disabled:opacity-60">
+                      {reviewingSku === row.sku ? 'Checking current product…' : `Review imported Draft ${row.sku}`}
+                    </button>)}
                     <button type="button" onClick={downloadResult} className="min-h-11 rounded-adm-sm border border-forest/50 px-3 py-2 font-bold text-forest transition-colors hover:bg-forest/10">
                       Download redacted result CSV
                     </button>

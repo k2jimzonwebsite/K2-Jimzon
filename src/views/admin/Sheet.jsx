@@ -79,7 +79,8 @@ export default function Sheet({ canManageProducts = false }) {
   const [showSmartPaste, setShowSmartPaste] = useState(false)
   const [showCsvImport, setShowCsvImport] = useState(false)
   const [showPhoneIntake, setShowPhoneIntake] = useState(false)
-  const openIntake = () => secureCatalog ? setShowPhoneIntake(true) : setShowAiScanner(true)
+  const [intakeSelection, setIntakeSelection] = useState(null)
+  const openIntake = () => { setIntakeSelection(null); secureCatalog ? setShowPhoneIntake(true) : setShowAiScanner(true) }
   const [showBarcode, setShowBarcode] = useState(null)
   const [batchProduct, setBatchProduct] = useState(null)
   const [enrichProduct, setEnrichProduct] = useState(null)
@@ -764,6 +765,7 @@ export default function Sheet({ canManageProducts = false }) {
 
       <ProductIntakeSessionModal
         isOpen={showPhoneIntake}
+        existingProduct={intakeSelection}
         onClose={() => setShowPhoneIntake(false)}
         onProductCreated={() => fetchProducts({ background: true })}
         onExistingProduct={(product) => {
@@ -784,7 +786,8 @@ export default function Sheet({ canManageProducts = false }) {
         onOpenSmartPaste={() => { setShowAiScanner(false); setShowSmartPaste(true) }}
         onExistingProduct={(product) => { setShowAiScanner(false); setBatchProduct(product) }} />}
       {showSmartPaste && <SmartPasteModal onClose={() => setShowSmartPaste(false)} onProductAdded={() => { fetchProducts({ background: true }); setShowSmartPaste(false) }} />}
-      {showCsvImport && <BulkCsvImportModal onClose={() => setShowCsvImport(false)} />}
+      {showCsvImport && <BulkCsvImportModal onClose={() => setShowCsvImport(false)} onImportComplete={() => fetchProducts({ background:true })}
+        onReviewImported={product => { setIntakeSelection(product); setShowCsvImport(false); setShowPhoneIntake(true) }} />}
       
       {showBarcode && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy/20 backdrop-blur-md">

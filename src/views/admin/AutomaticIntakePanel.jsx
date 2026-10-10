@@ -29,6 +29,7 @@ export default function AutomaticIntakePanel({ session, isOnline, onContent, onB
   }
   const jobs = state?.jobs || []
   const content = jobs.find(job => job.kind === 'content')
+  const imported = Boolean(session.field_provenance?.imported_draft_target)
   const reviewed = session.field_decisions?.name === 'accepted' && session.draft_payload?.product?.name
   async function loadContent() {
     if (lock.current || !isOnline) return
@@ -38,8 +39,8 @@ export default function AutomaticIntakePanel({ session, isOnline, onContent, onB
     finally { lock.current = false; setBusy(false); onBusy(false) }
   }
   return <section aria-label="Automatic API intake" className="space-y-3 border-t border-white/15 pt-4 text-sm">
-    <h4 className="font-semibold text-white">Automatic API (paid)</h4>
-    <p className="text-white/80">Prepare content from registered package evidence. Review fields first, then request each image separately. No stock, pricing or publication is created.</p>
+    <h4 className="font-semibold text-white">{imported ? 'AI suggestions (optional, paid)' : 'Automatic API (paid)'}</h4>
+    <p className="text-white/80">{imported ? 'Check imported details against your uploaded package photos. AI suggests; staff approves each correction. Your supplied display photo stays.' : 'Prepare content from registered package evidence. Review fields first, then request each image separately. No stock, pricing or publication is created.'}</p>
     <button type="button" className={button} disabled={busy || !isOnline} onClick={() => act('read')}>Check readiness / Recover saved results</button>
     {busy && <p role="status" className="text-white/80">Checking the saved job. Keep this intake open.</p>}
     {error && <p role="alert" className="text-crimson">{error}</p>}
@@ -53,7 +54,7 @@ export default function AutomaticIntakePanel({ session, isOnline, onContent, onB
         <p>Content: {content.status === 'dispatched' ? 'Started; outcome not yet confirmed. Recover results; do not start again.' : content.status === 'failed' ? `Unavailable (${content.failure}). Use the manual path.` : 'Draft ready for field review.'}</p>
         {content.result?.content && <button type="button" className={button} disabled={busy || !isOnline || Boolean(session.product_id)} onClick={loadContent}>Load content into field review</button>}
       </div>}
-      {['PRIMARY', 'AFTER'].map(kind => {
+      {(session.field_provenance?.imported_draft_target ? [] : ['PRIMARY', 'AFTER']).map(kind => {
         const job = jobs.find(item => item.kind === kind)
         return <div key={kind} className="space-y-2 border-t border-white/10 pt-3">
           <h5 className="font-semibold">{kind} image candidate</h5>
@@ -80,6 +81,6 @@ export default function AutomaticIntakePanel({ session, isOnline, onContent, onB
         </div>
       })}
     </>}
-    <p className="text-white/80">Manual ChatGPT Projects remains available through the intake steps. AI candidates require review and canonical attachment after Draft creation.</p>
+    <p className="text-white/80">{imported ? 'Continue manually at any time. An imported photo link is not fetched or checked by AI; only your uploaded package photos are inspected.' : 'Manual ChatGPT Projects remains available through the intake steps. AI candidates require review and canonical attachment after Draft creation.'}</p>
   </section>
 }

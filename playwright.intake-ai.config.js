@@ -5,6 +5,6 @@ export default defineConfig({
   webServer: {
     command: 'npx vite --mode combined --host 127.0.0.1 --port 5198 --strictPort --configLoader runner',
     url: 'http://127.0.0.1:5198', reuseExistingServer: false,
-    env: { VITE_SUPABASE_URL: 'https://fixture.supabase.co', VITE_ADMIN_BFF_ENABLED: 'true' },
+    env: { K2_ACCEPTANCE_NO_WATCH: 'true', VITE_SUPABASE_URL: 'https://fixture.supabase.co', VITE_ADMIN_BFF_ENABLED: 'true' },
   },
 })

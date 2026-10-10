@@ -1,5 +1,7 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+**Imported review and supplied-photo authority (IDEA-20261007-01/-12):** Use the same package evidence/checklist/detail approval before stock. Imported identity/version and original facts are server-owned; selection is not approval. Merge only present, explicitly accepted facts, keep absent/rejected details and original SKU/photo/import history. Accepted origin must stay coherent in both intake and spreadsheet origin fields. First null brand/category assignment resolves existing taxonomy; non-null reassignment is refused. Optional content advice must visibly show possible mismatches/unknowns while staff decides each field. Imported AI image claims and attachments must refuse at the locked authoritative command and before paid/storage effects; supplied photo URLs are never fetched by this advice path. On version conflict, reload the same current UUID/SKU and start a fresh review with no prior photos/decisions. Pending or uncertain commands retain their exact reviewed payload and receipt key. These are required rules; local evidence never substitutes for provider/hosted acceptance.
+
 **Protected metadata lock scope:** Explicit Access Share through commit can block the observed RLS alteration within captured SELECT authority, as locally demonstrated by diagnostic04. This does not establish ACL, role or managed-setting stability. Require separate independent mutation qualification and complete recovery before accepting broader concurrency guarantees.
 
 **Postcondition/commit concurrency:** A passing final metadata check does not prevent a privileged mutation before commit when the relation is unprotected. Instrumented postcheck03 reproduces owner RLS drift commit followed by installer success/commit. Require protection through commit and genuine concurrent qualification within captured authority; do not relabel this as immunity or silently substitute a maintenance-only target. Preserve exact fixture recovery and original production package separately.
@@ -3117,6 +3119,15 @@ The canonical product/SKU and physical lots own stock. Website, Shopee, Lazada, 
 
 **9 October source state (IDEA-20261009-10):** Prepared single-inventory/listing/delivery/recovery and seven-day browser staff-session software is now source-deployed on both canonical artifacts9a9b9e6. No prepared database payload or commerce activation switch was applied. Existing published catalog remains visible under the staged compatibility rule; target canonical Website membership and protected writers still require qualified activation and real operational acceptance. Do not describe this source release as full inventory/order/payment production acceptance. Exact evidence and recovery are in the System Brain and Deployment Runbook.
 # Imported-product review decision — 9 October 2026
+
+Spreadsheet photo links are mapped by their declared row/cell, not by AI. Owner
+approves optional AI checking for possible photo/detail mismatches, with staff
+deciding final output. AI suggestions do not silently change saved products,
+approve publication or invent inventory, expiry, price or custody. Preserve
+supplied photos; generated replacements are not the default. Manual review remains
+available if AI is unavailable or declined. The CSV-to-AI connection is pending
+implementation/qualification in MAP-018/020, IDEA-20261009-12; existing API code is
+not evidence of a live enabled service.
 
 Owner confirms spreadsheet-imported Drafts must complete the same packaging,
 photo and product-detail review steps as manually added products before stock
