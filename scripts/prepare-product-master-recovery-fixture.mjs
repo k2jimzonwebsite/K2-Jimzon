@@ -7,25 +7,28 @@ import {spawnSync} from 'node:child_process'
 const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const caseName=process.argv[2]||'oci-imported04'
 const customerTariffTransport=process.argv.includes('--customer-tariff-transport')
+const categoryPolicyTransport=process.argv.includes('--category-policy-transport')
+if(categoryPolicyTransport&&!customerTariffTransport)throw Error('CATEGORY_TRANSPORT_REQUIRES_MASTER_TARIFF_UNION')
 assert.match(caseName,/^oci-imported\d{2}$/)
 const dir=path.join(root,caseName),sha=b=>createHash('sha256').update(b).digest('hex')
 assert.ok(!fs.existsSync(dir),'Fresh owned case required')
-const prep=spawnSync(process.execPath,['scripts/prepare-imported-provider-fixture.mjs','--case='+caseName,'--product-master-transport',...(customerTariffTransport?['--customer-tariff-transport']:[])],{windowsHide:true,encoding:'utf8',maxBuffer:1024*1024})
+const prep=spawnSync(process.execPath,['scripts/prepare-imported-provider-fixture.mjs','--case='+caseName,'--product-master-transport',...(customerTariffTransport?['--customer-tariff-transport']:[]),...(categoryPolicyTransport?['--category-policy-transport']:[])],{windowsHide:true,encoding:'utf8',maxBuffer:1024*1024})
 assert.equal(prep.status,0,prep.stderr)
 assert.ok(!fs.existsSync(path.join(dir,'execution01')),'Cannot modify executed fixture')
 const stage=path.join(dir,'staging/k2'),pkg=JSON.parse(fs.readFileSync(path.join(dir,'guarded-package.json')))
-assert.equal(sha(pkg.sql),customerTariffTransport?'98015aa9ae261ba1123c0e47190d19c4dcc6e158bf2df192654c50f6a64e234b':'d44df9c5a41ee8d31682038cc48147fa4593914997b98a075e1fccab4e667d45')
+assert.equal(sha(pkg.sql),categoryPolicyTransport?'ea8e212e648615611f4bc09ed36c7610c875f1779c84510e5556c448ff3a01f4':customerTariffTransport?'98015aa9ae261ba1123c0e47190d19c4dcc6e158bf2df192654c50f6a64e234b':'d44df9c5a41ee8d31682038cc48147fa4593914997b98a075e1fccab4e667d45')
 const initialBytes=fs.readFileSync(root+'/oci-imported03/execution01/before-catalog.json')
 assert.equal(sha(initialBytes),'87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963')
 const initial=JSON.parse(initialBytes)
-const installedBytes=fs.readFileSync(root+(customerTariffTransport?'/oci-imported11':'/oci-imported03')+'/execution01/after-catalog.json')
-assert.equal(sha(installedBytes),customerTariffTransport?'0183c08a7ab7a476959577a5403763ba7f24ff302f50f7df153844436920b72d':'2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6')
+const installedBytes=fs.readFileSync(root+(categoryPolicyTransport?'/oci-imported19':customerTariffTransport?'/oci-imported11':'/oci-imported03')+'/execution01/after-catalog.json')
+assert.equal(sha(installedBytes),categoryPolicyTransport?'f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a':customerTariffTransport?'0183c08a7ab7a476959577a5403763ba7f24ff302f50f7df153844436920b72d':'2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6')
 const at=pkg.sql.indexOf('begin;'),body=pkg.sql.slice(at+6).replace(/\ncommit;\s*$/,'')
 assert.ok(at>0&&body.startsWith('set local')&&!body.endsWith('commit;'))
 const owned="do $owned_recovery$ begin if current_database()<>'postgres' or current_user not in ('postgres','supabase_admin') or current_setting('data_directory')<>'/tmp/k2-managed-data' or inet_server_addr() is not null then raise exception 'OWNED_RAM_RECOVERY_REQUIRED';end if;end $owned_recovery$;\n"
 const fn='public.execute_admin_product_master_command_v1(text,bigint,uuid,uuid,text,text)'
 const q=s=>"'"+s.replaceAll("'","''")+"'"
 const physical=[...new Set([...initial.relations, ...JSON.parse(installedBytes).relations].filter(r=>['r','p','S'].includes(r.kind)).map(r=>r.name))].sort()
+if(categoryPolicyTransport)assert.equal(physical.length,149)
 const snapshot=`set timezone='Asia/Kuala_Lumpur';set search_path='';
 ${owned}
 create temp table k2_recovery_rows(name text,value jsonb);
@@ -56,6 +59,15 @@ if(customerTariffTransport){
   cases.push([label+'-owner-drift','alter function '+target+' owner to authenticated;set local role postgres;','','K2_PROVIDER_SCHEMA_DRIFT'],
    [label+'-settings-drift','alter function '+target+' set search_path to public;','','K2_PROVIDER_SCHEMA_DRIFT'])
  }
+}
+if(categoryPolicyTransport){
+ const category='k2_private.mutate_category_policy_v1(uuid,text,integer,bigint,text,integer)'
+ const categoryBody=`do $drift$ declare d text;begin d:=pg_get_functiondef(${q(category)}::regprocedure);if encode(extensions.digest(convert_to(d,'UTF8'),'sha256'),'hex')<>'d3ec75173304d4c8709b81ea0f2e0d101dffa47d7ce85202d29d7efa783f570a' then raise exception 'REVISED_CATEGORY_BODY_SOURCE_DRIFT';end if;execute replace(d,'K2_CATEGORY_POLICY_VERSION_CONFLICT','K2_CATEGORY_POLICY_VERSION_CONFLICT_DRIFT');end $drift$;`
+ cases.push(['category-body-drift',categoryBody,'','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['category-authority-drift','alter function '+category+' security invoker;','','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['category-acl-drift','grant execute on function '+category+' to anon;','','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['category-owner-drift','alter function '+category+' owner to authenticated;set local role postgres;','','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['category-settings-drift','alter function '+category+' set search_path to public;','','K2_PROVIDER_SCHEMA_DRIFT'])
 }
 if(customerTariffTransport)fs.writeFileSync(path.join(stage,'revised-install-body.sql'),body,{flag:'wx'})
 for(const [name,mutation,fault] of cases)fs.writeFileSync(path.join(stage,'revised-'+name+'.sql'),'begin;\n'+owned+mutation+'\n'+(customerTariffTransport?'\\i /tmp/revised-install-body.sql':body)+'\n'+fault+'\ncommit;\n',{flag:'wx'})
