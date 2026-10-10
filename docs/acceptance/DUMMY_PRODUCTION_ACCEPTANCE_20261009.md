@@ -4,14 +4,37 @@
 
 ### 10 October — observed current-writer schedules
 
+**Final CI observation, 10 October:** [Run38009805472](https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/38009805472)
+is completed/SUCCESS, attempt2, head d9cd9245fe6a2435eca2c7bbbb1a4bb78aec6c3e.
+Actions tested PR merge1a4336192a1dbfae9730bcdd1f283603fceacd76 against base
+b6ef5863308e60caa4d9b16da3978c5a8f50f37a, not documentation-only HEAD1a54099.
+Original build job114086932528 retained all1396 passing Playwright cases across18
+suites, separate builds, security/import checks and MAP-017/catalog rehearsals;
+it was not rerun. Original SQL job114086932689 failed before final-Admin SQL:
+PostgreSQL could not bind127.0.0.1:54332 (Address already in use). Purchase-hold
+48/48 and payment recovery had passed; the occupying process was not identified.
+These runners were unchanged between02247ff andd9cd924. Connector retry refused
+403; authenticated CLI accepted `gh run rerun 38009805472 --failed`.
+Retry job114093633868 succeeds: purchase-hold48/48, payment recovery/composed
+packing, final-Admin one demotion commit/one K2_ADMIN_FINAL_ADMIN refusal and
+retained Staff,Admin. This confirms unchanged checks on a fresh runner, not the
+original port owner's identity. Run metadata was independently read with
+`gh run view 38009805472 --json status,conclusion,headSha,attempt,url` and connector
+job metadata/logs. Private receipt: .tools/ci-run-38009805472-receipt.json.
+Documentation-only continuation; no source fix, unaffected local suite, release
+gate, provider write or deployment. Private evidence/backups remain intact.
+The completed CI observation leaves MAP-018's active queue; broader writer,
+provider, recovery and actual-host/human gates remain open there.
+
 **Remote source checkpoint:** d9cd9245fe6a2435eca2c7bbbb1a4bb78aec6c3e
 publishes this reviewed harness/evidence batch to draft PR16. Earlier application
 checkpoint02247ff completes Linux run38008808492 with both jobs SUCCESS:
 1396 Playwright cases across18 suites (1103/4/12/32/29/41/8/42/1/41/17/1/8/14/2/4/11/26),
 separate isolated builds, security checks, MAP-017/catalog rollback and critical
 stock/payment/final-Admin SQL rehearsals. This closes the earlier Linux phone-map
-failure for that application checkpoint. Later38009805472 is running against
-d9cd924; no final result is inferred yet. Both new separate Vercel deployments
+failure for that application checkpoint. Later38009805472 completes SUCCESS at
+d9cd924 on attempt2; the focused SQL retry and first failure are recorded above.
+Both new separate Vercel deployments
 dpl_EhgLqDpKxUQ7WWLzgRGcj9tN56BT and dpl_Aq7YSrfby1MzxWLxD3gRiT4GQuCA
 are directly observed READY/target:null/exactd9cd924 in the same two K2 projects.
 Exact Admin https://k2-jimzon-admin-f67ft1639-k2-jimzon.vercel.app and Storefront
