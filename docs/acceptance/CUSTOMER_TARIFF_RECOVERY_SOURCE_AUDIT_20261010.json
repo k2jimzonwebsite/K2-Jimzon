@@ -1,0 +1,473 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "classification": "Read-only exact installed-source/dependency audit; recovery understanding pending",
+  "providerWrites": false,
+  "deployed": false,
+  "newNativeExecution": false,
+  "sourceCommit": "f912ded",
+  "installedCatalogSha256": "0183c08a7ab7a476959577a5403763ba7f24ff302f50f7df153844436920b72d",
+  "sourcePins": [
+    {
+      "file": "supabase/prepared/customer_delivery_rates.sql",
+      "sha256": "f9492e20fcb330d3108c18479d7a07ac9c8e850b2adcef67f96e937700e5df4c"
+    },
+    {
+      "file": "supabase/prepared/customer_tariff_version_conflict_transport.sql",
+      "sha256": "efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166"
+    },
+    {
+      "file": "supabase/prepared/customer_delivery_quote_core.sql",
+      "sha256": "e133a41b94258f534695096c8fa5ea84012c17fd8ccf26b763a9c763faae66dc"
+    },
+    {
+      "file": "supabase/prepared/customer_delivery_quote.sql",
+      "sha256": "bc88391ca901960f370f2fb0ddd8379d72027bed12c2d8a315b0c7108ab36c0f"
+    },
+    {
+      "file": "supabase/prepared/category_shelf_life_catalog_deactivate.sql",
+      "sha256": "cc550ef466249840212ae84ef9903c4280da76dc9ed9bc466350b72c8537e8e4"
+    },
+    {
+      "file": "supabase/prepared/category_shelf_life_catalog_rollforward.sql",
+      "sha256": "77f14769e8785ac089cad1857842e23970d5add5bd6f85902622a26e32428389"
+    },
+    {
+      "file": "scripts/prepare-product-policy-recovery-fixture.mjs",
+      "sha256": "de222b18e484509f1eb86186bca8f9a3eab381e4cca32f61accd23910e8e933e"
+    },
+    {
+      "file": "server/admin-bff/customer-delivery-rates.js",
+      "sha256": "b96c5eddc7befaaaa468d467881b2a09bfedd5f90e287993510f50420cd1438f"
+    }
+  ],
+  "priorEvidencePins": [
+    {
+      "file": "docs/acceptance/CUSTOMER_TARIFF_REVISED_RECOVERY_20261010.json",
+      "sha256": "964e0ad0a6cf34d2b9d849cc6bfa0eb484b9ca3dee380ba6beb5c8268bef8098"
+    },
+    {
+      "file": "docs/acceptance/LOCAL_TARIFF_PUBLICATION_20261010.json",
+      "sha256": "ac6dd5661a226b6940a66936c122efdbea1bef62193b0aa7ec23b56902e7f62a"
+    },
+    {
+      "file": "docs/acceptance/PRODUCT_POLICY_DATA_RETAINING_RECOVERY_20261010.json",
+      "sha256": "359f6b16e76ee0f1177201f613496dd21592a7b5f7866bba02a99078acc2cc3e"
+    }
+  ],
+  "targets": [
+    {
+      "identity": "public.execute_customer_delivery_rates_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "owner": "postgres",
+      "definitionSha256": "151af34efea459c7b0b20938e50a2b05ae081c603296ca6abc1b0dba93dd521b",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "execute_customer_delivery_rates_v1",
+        "prorows": 0,
+        "pronargs": 6,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": [
+          "p_action",
+          "p_timestamp",
+          "p_nonce",
+          "p_idempotency_key",
+          "p_payload_text",
+          "p_signature"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      },
+      "language": "plpgsql",
+      "result": "jsonb"
+    },
+    {
+      "identity": "public.read_customer_delivery_rates_v1()",
+      "owner": "postgres",
+      "definitionSha256": "f35a2e5ce76da2791bf0d14863297b113236b788580c8383e00ea962a7d73992",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "read_customer_delivery_rates_v1",
+        "prorows": 0,
+        "pronargs": 0,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": null,
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "s",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      },
+      "language": "plpgsql",
+      "result": "jsonb"
+    },
+    {
+      "identity": "k2_private.customer_delivery_fee_minor_v1(p_version integer, p_area text, p_weight_g integer)",
+      "owner": "postgres",
+      "definitionSha256": "3240474615e57adab19b9b53795d2312c0354b8edbb2478fe2aa6470657a89e4",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "customer_delivery_fee_minor_v1",
+        "prorows": 0,
+        "pronargs": 3,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": [
+          "p_version",
+          "p_area",
+          "p_weight_g"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "s",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      },
+      "language": "plpgsql",
+      "result": "integer"
+    },
+    {
+      "identity": "k2_private.resolve_customer_delivery_quote_v1(p_request jsonb)",
+      "owner": "postgres",
+      "definitionSha256": "4feb55f370865b39a81d15d22a8cc4ecfd2387da4937ecd625bd7cc5ed90d582",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "resolve_customer_delivery_quote_v1",
+        "prorows": 0,
+        "pronargs": 1,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": [
+          "p_request"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "s",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      },
+      "language": "plpgsql",
+      "result": "jsonb"
+    },
+    {
+      "identity": "k2_private.verify_admin_bff_request(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "owner": "postgres",
+      "definitionSha256": "e058cdc4689b4805b6429b38fef271a08d1530c696e1e1b0fb2e3a6b56f95157",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "verify_admin_bff_request",
+        "prorows": 0,
+        "pronargs": 6,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": [
+          "p_action",
+          "p_timestamp",
+          "p_nonce",
+          "p_idempotency_key",
+          "p_payload_text",
+          "p_signature"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      },
+      "language": "plpgsql",
+      "result": "boolean"
+    }
+  ],
+  "directRateDependencyFunctions": [
+    {
+      "identity": "k2_private.customer_delivery_fee_minor_v1(p_version integer, p_area text, p_weight_g integer)",
+      "definitionSha256": "3240474615e57adab19b9b53795d2312c0354b8edbb2478fe2aa6470657a89e4",
+      "references": [
+        "customer_delivery_rate_versions",
+        "customer_delivery_fee_minor_v1"
+      ]
+    },
+    {
+      "identity": "k2_private.resolve_customer_delivery_quote_v1(p_request jsonb)",
+      "definitionSha256": "4feb55f370865b39a81d15d22a8cc4ecfd2387da4937ecd625bd7cc5ed90d582",
+      "references": [
+        "customer_delivery_rate_heads",
+        "customer_delivery_fee_minor_v1"
+      ]
+    },
+    {
+      "identity": "public.execute_customer_delivery_rates_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "151af34efea459c7b0b20938e50a2b05ae081c603296ca6abc1b0dba93dd521b",
+      "references": [
+        "customer_delivery_rate_heads",
+        "customer_delivery_rate_versions"
+      ]
+    },
+    {
+      "identity": "public.read_customer_delivery_rates_v1()",
+      "definitionSha256": "f35a2e5ce76da2791bf0d14863297b113236b788580c8383e00ea962a7d73992",
+      "references": [
+        "customer_delivery_rate_heads",
+        "customer_delivery_rate_versions"
+      ]
+    }
+  ],
+  "resolverConsumers": [
+    {
+      "identity": "public.quote_customer_delivery_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text)",
+      "definitionSha256": "9f616e18d518edb598cc0fdbf75b07b6a1bfbaafb1328179f98ff57eec9b0208"
+    },
+    {
+      "identity": "public.submit_guest_order_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "definitionSha256": "4df01143e23717e7e23590188fd26d68c31ca1f6ba3439d905d08d2a782139e5"
+    }
+  ],
+  "retainedRelations": [
+    {
+      "name": "k2_private.customer_delivery_rate_heads",
+      "owner": "postgres",
+      "acl": [
+        "postgres=arwdDxtm/postgres"
+      ],
+      "rls": true,
+      "forceRls": true,
+      "constraints": [
+        {
+          "name": "customer_delivery_rate_heads_check",
+          "local": true,
+          "inherit": 0,
+          "noInherit": false,
+          "validated": true,
+          "definition": "CHECK ((((policy = 'jt_current'::text) AND active) OR ((policy = 'future_standard'::text) AND (NOT active) AND (current_version IS NULL))))"
+        },
+        {
+          "name": "customer_delivery_rate_heads_pkey",
+          "local": true,
+          "inherit": 0,
+          "noInherit": true,
+          "validated": true,
+          "definition": "PRIMARY KEY (policy)"
+        },
+        {
+          "name": "customer_delivery_rate_heads_policy_check",
+          "local": true,
+          "inherit": 0,
+          "noInherit": false,
+          "validated": true,
+          "definition": "CHECK ((policy = ANY (ARRAY['jt_current'::text, 'future_standard'::text])))"
+        },
+        {
+          "name": "customer_delivery_rate_heads_policy_current_version_fkey",
+          "local": true,
+          "inherit": 0,
+          "noInherit": true,
+          "validated": true,
+          "definition": "FOREIGN KEY (policy, current_version) REFERENCES k2_private.customer_delivery_rate_versions(policy, version)"
+        }
+      ],
+      "triggers": []
+    },
+    {
+      "name": "k2_private.customer_delivery_rate_versions",
+      "owner": "postgres",
+      "acl": [
+        "postgres=arwdDxtm/postgres"
+      ],
+      "rls": true,
+      "forceRls": true,
+      "constraints": [
+        {
+          "name": "customer_delivery_rate_versions_actor_id_fkey",
+          "local": true,
+          "inherit": 0,
+          "noInherit": true,
+          "validated": true,
+          "definition": "FOREIGN KEY (actor_id) REFERENCES public.user_profiles(id)"
+        },
+        {
+          "name": "customer_delivery_rate_versions_evidence_ref_check",
+          "local": true,
+          "inherit": 0,
+          "noInherit": false,
+          "validated": true,
+          "definition": "CHECK (((length(btrim(evidence_ref)) >= 1) AND (length(btrim(evidence_ref)) <= 500)))"
+        },
+        {
+          "name": "customer_delivery_rate_versions_payload_hash_check",
+          "local": true,
+          "inherit": 0,
+          "noInherit": false,
+          "validated": true,
+          "definition": "CHECK ((payload_hash ~ '^[0-9a-f]{64}$'::text))"
+        },
+        {
+          "name": "customer_delivery_rate_versions_pkey",
+          "local": true,
+          "inherit": 0,
+          "noInherit": true,
+          "validated": true,
+          "definition": "PRIMARY KEY (policy, version)"
+        },
+        {
+          "name": "customer_delivery_rate_versions_policy_check",
+          "local": true,
+          "inherit": 0,
+          "noInherit": false,
+          "validated": true,
+          "definition": "CHECK ((policy = 'jt_current'::text))"
+        },
+        {
+          "name": "customer_delivery_rate_versions_rates_check",
+          "local": true,
+          "inherit": 0,
+          "noInherit": false,
+          "validated": true,
+          "definition": "CHECK ((jsonb_typeof(rates) = 'object'::text))"
+        },
+        {
+          "name": "customer_delivery_rate_versions_reason_check",
+          "local": true,
+          "inherit": 0,
+          "noInherit": false,
+          "validated": true,
+          "definition": "CHECK (((length(btrim(reason)) >= 1) AND (length(btrim(reason)) <= 500)))"
+        },
+        {
+          "name": "customer_delivery_rate_versions_version_check",
+          "local": true,
+          "inherit": 0,
+          "noInherit": false,
+          "validated": true,
+          "definition": "CHECK ((version > 0))"
+        }
+      ],
+      "triggers": [
+        {
+          "name": "customer_delivery_rate_history_immutable",
+          "enabled": "O",
+          "definition": "CREATE TRIGGER customer_delivery_rate_history_immutable BEFORE DELETE OR UPDATE ON k2_private.customer_delivery_rate_versions FOR EACH ROW EXECUTE FUNCTION k2_private.reject_customer_delivery_rate_mutation_v1()"
+        },
+        {
+          "name": "customer_delivery_rate_history_no_truncate",
+          "enabled": "O",
+          "definition": "CREATE TRIGGER customer_delivery_rate_history_no_truncate BEFORE TRUNCATE ON k2_private.customer_delivery_rate_versions FOR EACH STATEMENT EXECUTE FUNCTION k2_private.reject_customer_delivery_rate_mutation_v1()"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "fact": "Current tariff head constraint requires jt_current active=true; future_standard inactive with null version.",
+      "implication": "Changing current active tofalse is not an admitted data-retaining operation under the existing schema."
+    },
+    {
+      "fact": "Version history rejects UPDATE/DELETE and TRUNCATE via enabled immutable-history triggers; current head references a version, and each version references its actor profile.",
+      "implication": "History/actor/head retention must be preserved; prior disposable archive reconstruction is not populated-history retention."
+    },
+    {
+      "fact": "Protected read and fee helper use retained versions; resolver reads active head and fee helper; quote_customer_delivery_v1 and submit_guest_order_v1 call resolver in this exact installed catalog.",
+      "implication": "Rate-edit recovery availability must explicitly account for quote/order consumers. Static call evidence is not end-to-end runtime acceptance."
+    },
+    {
+      "fact": "Signed verifier runs before receipt lookup and writes nonce/rate-limit state on successful fresh-signature receipt replay.",
+      "implication": "Exact business receipt replay preserves the successful receipt but need not preserve every private row. Full149 row conservation must be compared around recovery transitions; signed-operation side effects need separate evidence."
+    },
+    {
+      "fact": "Writer locks current head FOR UPDATE, but writer and signed verifier have no category maintenance/advisory lock call in this exact composition.",
+      "implication": "An ACL-only pause cannot by itself prove quiescence of a previously admitted in-flight publication. No concurrent deactivation acceptance claimed."
+    },
+    {
+      "fact": "No prepared tariff-specific deactivate/rollforward files exist; existing policy recovery helper pins Master-only package and exercises catalog ACL/category config.",
+      "implication": "The prior policy recovery receipt does not cover tariff editing or populated tariff history. Missing recovery behavior needs confirmed understanding and reviewed design before implementation."
+    }
+  ],
+  "understanding": {
+    "status": "Pending explicit owner confirmation",
+    "skill": "C:/Users/jerze/.agents/skills/brainstorming/SKILL.md",
+    "gate": "Do NOT proceed until explicit confirmation is given.",
+    "summary": [
+      "Retain tariff heads, immutable versions and command receipts",
+      "Keep accepted charges and checkout quotes consistent with retained rates",
+      "Repeatable recovery/resumption with exact-state and signed-command evidence",
+      "Assumption: pause editing while retained reads/quotes stay available",
+      "Assumption: existing2s lock/10s statement limits, ownership, local disposable qualification first",
+      "Separate provider backup/readiness/exact authorization gates remain"
+    ],
+    "unresolved": [
+      "Editing-pause availability understanding",
+      "In-flight publication semantics and accepted synchronization boundary",
+      "Existing separate authority-through-commit understanding confirmation"
+    ]
+  },
+  "limits": "Source/captured catalog evidence only. No proposed or accepted recovery implementation; no additional SQL execution, role/permission/flag/data/provider change or HTTP proof. No guarantee of in-flight quiescence. Existing native17 and isolated HTTP08 scopes remain unchanged.",
+  "recovery": "Revert only this audit/documentation slice; runtime and provider unchanged. Next required action is owned by MAP-018, not this receipt.",
+  "verification": {
+    "command": "node .tools/audit-tariff-recovery-source.mjs",
+    "exit": 0,
+    "sourceWitnessSha256": "eee4be53057159e830890b3b07bc3bd2ecc91642ca3b73bd694400183d7f1378",
+    "review": {
+      "agent": "auth_migration_review",
+      "critical": 0,
+      "important": 0,
+      "sourcePinsVerified": 8,
+      "priorEvidencePinsVerified": 3,
+      "functionMetadataRecordsVerified": 5,
+      "relationMetadataRecordsVerified": 2,
+      "directDependenciesVerified": 4,
+      "resolverConsumersVerified": 2,
+      "witnessHashVerified": true,
+      "sourceOnlyClaimBoundaryVerified": true
+    }
+  }
+}
