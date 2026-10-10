@@ -1,0 +1,469 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "classification": "Read-only installed-source audit for connected tariff publication/quote/order qualification",
+  "sourceCommit": "bbd59f7",
+  "providerWrites": false,
+  "deployed": false,
+  "newNativeExecution": false,
+  "installedCatalogSha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+  "sourcePins": [
+    {
+      "file": "api/storefront/index.js",
+      "sha256": "4ee180cab32cebf5d38f1c38d642266112613b5e0cea626446e9eeb43e889b15"
+    },
+    {
+      "file": "server/storefront-bff/router.js",
+      "sha256": "4009362f65f5b0c086ac7467fa2441df1ce6e9e410136378f8aa6c77e847758d"
+    },
+    {
+      "file": "prepared-api/storefront/delivery/quote.js",
+      "sha256": "62c6832f10166e29d655010109ea40b077d752fdd45b613e5124976614ea20ee"
+    },
+    {
+      "file": "prepared-api/storefront/order.js",
+      "sha256": "eefdb744330a837ee19333979fecfe9a61aab2c78dd9e8bdb08adafeb173d9bf"
+    },
+    {
+      "file": "server/storefront-bff/security.js",
+      "sha256": "0ab0526f2cac681bdc425fc8249b6d82161cb3dcd4734d9b745cfb64fa8ad663"
+    },
+    {
+      "file": "server/storefront-bff/supabase.js",
+      "sha256": "739fd2853bf30b0bbe780099063450a5c1527202a5dca5aca189a4b3a276e94e"
+    },
+    {
+      "file": "server/admin-bff/customer-delivery-rates.js",
+      "sha256": "b96c5eddc7befaaaa468d467881b2a09bfedd5f90e287993510f50420cd1438f"
+    },
+    {
+      "file": "supabase/prepared/customer_delivery_rates.sql",
+      "sha256": "f9492e20fcb330d3108c18479d7a07ac9c8e850b2adcef67f96e937700e5df4c"
+    },
+    {
+      "file": "supabase/prepared/customer_tariff_version_conflict_transport.sql",
+      "sha256": "efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166"
+    },
+    {
+      "file": "supabase/prepared/customer_delivery_quote_core.sql",
+      "sha256": "e133a41b94258f534695096c8fa5ea84012c17fd8ccf26b763a9c763faae66dc"
+    },
+    {
+      "file": "tests/guest-commerce-bff-contract.spec.js",
+      "sha256": "1baa240ac5c9386de3f05414beaee5c4a8b0ac6bdc4e722ef740b12c5d52da2e"
+    }
+  ],
+  "targets": [
+    {
+      "identity": "public.execute_customer_delivery_rates_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "owner": "postgres",
+      "definitionSha256": "151af34efea459c7b0b20938e50a2b05ae081c603296ca6abc1b0dba93dd521b",
+      "language": "plpgsql",
+      "result": "jsonb",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "execute_customer_delivery_rates_v1",
+        "prorows": 0,
+        "pronargs": 6,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": [
+          "p_action",
+          "p_timestamp",
+          "p_nonce",
+          "p_idempotency_key",
+          "p_payload_text",
+          "p_signature"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "identity": "public.quote_customer_delivery_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text)",
+      "owner": "postgres",
+      "definitionSha256": "9f616e18d518edb598cc0fdbf75b07b6a1bfbaafb1328179f98ff57eec9b0208",
+      "language": "plpgsql",
+      "result": "jsonb",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres",
+          "anon=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "quote_customer_delivery_v1",
+        "prorows": 0,
+        "pronargs": 5,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": [
+          "p_timestamp",
+          "p_nonce",
+          "p_payload_text",
+          "p_ip_hash",
+          "p_signature"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "identity": "public.submit_guest_order_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "owner": "postgres",
+      "definitionSha256": "4df01143e23717e7e23590188fd26d68c31ca1f6ba3439d905d08d2a782139e5",
+      "language": "plpgsql",
+      "result": "TABLE(ok boolean, error_code text, retry_after_seconds integer, public_reference text, status text, subtotal numeric, discount_amount numeric, total_amount numeric, shipping_quote_status text, delivery_status text, created_at timestamp with time zone, guest_grant_token text)",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres",
+          "anon=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "submit_guest_order_v1",
+        "prorows": 1000,
+        "pronargs": 6,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": true,
+        "prosecdef": true,
+        "proargmodes": [
+          "i",
+          "i",
+          "i",
+          "i",
+          "i",
+          "i",
+          "t",
+          "t",
+          "t",
+          "t",
+          "t",
+          "t",
+          "t",
+          "t",
+          "t",
+          "t",
+          "t",
+          "t"
+        ],
+        "proargnames": [
+          "p_timestamp",
+          "p_nonce",
+          "p_payload_text",
+          "p_ip_hash",
+          "p_signature",
+          "p_guest_grant_hash",
+          "ok",
+          "error_code",
+          "retry_after_seconds",
+          "public_reference",
+          "status",
+          "subtotal",
+          "discount_amount",
+          "total_amount",
+          "shipping_quote_status",
+          "delivery_status",
+          "created_at",
+          "guest_grant_token"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronargdefaults": 1
+      }
+    },
+    {
+      "identity": "k2_private.resolve_customer_delivery_quote_v1(p_request jsonb)",
+      "owner": "postgres",
+      "definitionSha256": "4feb55f370865b39a81d15d22a8cc4ecfd2387da4937ecd625bd7cc5ed90d582",
+      "language": "plpgsql",
+      "result": "jsonb",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "resolve_customer_delivery_quote_v1",
+        "prorows": 0,
+        "pronargs": 1,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": [
+          "p_request"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "s",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "identity": "k2_private.customer_delivery_fee_minor_v1(p_version integer, p_area text, p_weight_g integer)",
+      "owner": "postgres",
+      "definitionSha256": "3240474615e57adab19b9b53795d2312c0354b8edbb2478fe2aa6470657a89e4",
+      "language": "plpgsql",
+      "result": "integer",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "customer_delivery_fee_minor_v1",
+        "prorows": 0,
+        "pronargs": 3,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": [
+          "p_version",
+          "p_area",
+          "p_weight_g"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "s",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "identity": "k2_private.guard_order_delivery_charge_v1()",
+      "owner": "postgres",
+      "definitionSha256": "5624506b0a9cf386e4b2ee363f9a15b751a21c72e3b16dd7e129a028407cf290",
+      "language": "plpgsql",
+      "result": "trigger",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "guard_order_delivery_charge_v1",
+        "prorows": 0,
+        "pronargs": 0,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": null,
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "identity": "k2_private.guard_order_delivery_history_v1()",
+      "owner": "postgres",
+      "definitionSha256": "199742c07756d441a20bb42262ce5823024d2baea1bbb74cd96f03338f4fbd39",
+      "language": "plpgsql",
+      "result": "trigger",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "guard_order_delivery_history_v1",
+        "prorows": 0,
+        "pronargs": 0,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": null,
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "identity": "k2_private.start_guest_category_lot_context_v1(p_maximum_depth integer, p_nonce uuid)",
+      "owner": "postgres",
+      "definitionSha256": "3383d0fc4b74f6891503f6060e694e25f092f500d2e9e38da3f583d9afc3bdcc",
+      "language": "plpgsql",
+      "result": "timestamp with time zone",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "start_guest_category_lot_context_v1",
+        "prorows": 0,
+        "pronargs": 2,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": [
+          "p_maximum_depth",
+          "p_nonce"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "identity": "k2_private.require_website_order_items(p_items jsonb)",
+      "owner": "postgres",
+      "definitionSha256": "af285525546b75fee7fa9c48ef9c8df029787a7da05df91d5755821b96b81318",
+      "language": "plpgsql",
+      "result": "void",
+      "catalog": {
+        "proacl": [
+          "postgres=X/postgres"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "proname": "require_website_order_items",
+        "prorows": 0,
+        "pronargs": 1,
+        "proconfig": [
+          "search_path=\"\""
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "proargmodes": null,
+        "proargnames": [
+          "p_items"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronargdefaults": 0
+      }
+    }
+  ],
+  "retainedSnapshotGuards": {
+    "relation": "k2_private.order_delivery_snapshots",
+    "triggers": [
+      {
+        "name": "order_delivery_history_guard",
+        "enabled": "O",
+        "definition": "CREATE TRIGGER order_delivery_history_guard BEFORE INSERT OR DELETE OR UPDATE ON k2_private.order_delivery_snapshots FOR EACH ROW EXECUTE FUNCTION k2_private.guard_order_delivery_history_v1()"
+      },
+      {
+        "name": "order_delivery_history_truncate",
+        "enabled": "O",
+        "definition": "CREATE TRIGGER order_delivery_history_truncate BEFORE TRUNCATE ON k2_private.order_delivery_snapshots FOR EACH STATEMENT EXECUTE FUNCTION k2_private.guard_order_delivery_history_v1()"
+      }
+    ],
+    "orderGuards": [
+      {
+        "name": "order_delivery_charge_guard",
+        "enabled": "O",
+        "definition": "CREATE TRIGGER order_delivery_charge_guard BEFORE UPDATE ON public.order_requests FOR EACH ROW EXECUTE FUNCTION k2_private.guard_order_delivery_charge_v1()"
+      },
+      {
+        "name": "order_delivery_snapshot_required",
+        "enabled": "O",
+        "definition": "CREATE CONSTRAINT TRIGGER order_delivery_snapshot_required AFTER INSERT ON public.order_requests DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION k2_private.guard_order_delivery_charge_v1()"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "fact": "Standard quotes resolve the active tariff head and calculate a fee from the corresponding immutable version. They return both inputFingerprint and rateVersion.",
+      "implication": "The connected fixture must witness the exact version and fee on both sides of publication; a quote response alone is not an accepted order."
+    },
+    {
+      "fact": "Signed order verification and existing rate limits run before saved-order lookup; exact idempotent receipt/conflict handling precedes fresh quote/configuration/stock/identity/order construction.",
+      "implication": "A fresh-signature retry can retain an old saved charge after publication while legitimately adding signature/rate-limit state. Compare business snapshots separately; do not assert all private rows unchanged."
+    },
+    {
+      "fact": "For a new order, resolved current quote must match the submitted input fingerprint and rate version. A mismatch raises22023/K2_DELIVERY_QUOTE_CHANGED before identity/order creation; routed handler maps it to409.",
+      "implication": "An unsubmitted old quote is reviewed again after a rate change; no silent replacement charge or automatic old-preview acceptance is implied. Exact runtime refusal and absence of newly accepted order still need evidence."
+    },
+    {
+      "fact": "Accepted order stores resolved shipping amount, total, acceptance time and immutable private delivery snapshot. Guard compares standard shipping amount and total to retained snapshot; history guard refuses non-INSERT operations.",
+      "implication": "Acceptance before an edit should retain its agreed charge; actual persisted rows/snapshot/retry must prove this rather than relying on the owner tolerance decision."
+    },
+    {
+      "fact": "Fresh standard ordering also requires valid Website publication, canonical items/stock/lots, signed transaction-bound nonce context and configured category depth.",
+      "implication": "Use an eligible synthetic listing and stock/lot fixture plus valid captured PSGC path, existing deadlines and genuine routed signed BFF calls. A direct resolver call or stubbed RPC does not qualify the connected flow."
+    }
+  ],
+  "runtimeQualificationRequirements": [
+    "Get standard quote at retained versionA and accept orderA through production routed signed guest boundary; witness persisted charge, snapshot and reservation.",
+    "Publish versionB through production routed signed Admin boundary; prove orderA business rows/snapshot/charge stay unchanged.",
+    "Replay exact orderA with fresh signature after publication; same saved receipt and unchanged order/snapshot/reservation/message business state, separate legitimate nonce/rate state.",
+    "Submit a fresh key using old versionA acceptance after versionB publication; exact409 DELIVERY_QUOTE_CHANGED and no newly accepted order or unintended business rows.",
+    "Get new versionB quote and accept a new order with that acceptance; witness versionB fee and snapshot, keeping earlier orderA charge.",
+    "Exercise retained-charge/history guards in the owned fixture, explicitly distinguish SQL guard evidence from routed HTTP evidence.",
+    "Recover disposable synthetic effects and reconstruct exact original captured archive/catalog with scoped/full relation evidence; this is not production data-retaining recovery."
+  ],
+  "ownerBoundary": "No rate-edit pause or editing-drain feature; shopping remains available, accepted orders keep agreed charges. Owner accepts a small loss on an order accepted before publication. Authority-through-commit understanding remains separate and unanswered.",
+  "verification": {
+    "command": "node .tools/audit-tariff-quote-order-source.mjs",
+    "exit": 0,
+    "witnessSha256": "e68f26266a6b6a5c273aec0e360e1a2141340fd8be355ddf3b0cfed19ca8fa87",
+    "reviewPending": false,
+    "independentReview": {
+      "reviewer": "auth_migration_review",
+      "critical": 0,
+      "important": 0,
+      "sourcePinsVerified": 11,
+      "installedFunctionContractsVerified": 9,
+      "scope": "Actual installed source/metadata, production router/handlers, snapshot triggers and exact semantic ordering reviewed; no runtime execution or synthetic RPC acceptance claim"
+    },
+    "finalizeCommand": "node .tools/document-tariff-quote-order-audit.mjs"
+  },
+  "limits": "Source/captured installed catalog only; no new SQL/runtime/HTTP/provider/browser proof, no concurrent version boundary acceptance and no new recovery design. Current quote-change refusal is identified, not changed. Existing local publication and recovery receipts remain separate scopes.",
+  "recovery": "Revert only this audit/documentation slice; preserve all prior runtime/provider state and receipts. MAP-018 owns connected local qualification and remaining real-host/provider gates."
+}
