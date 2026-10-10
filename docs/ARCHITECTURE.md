@@ -1,5 +1,7 @@
 # K2 Jimzon  -  System Architecture
 
+10 October retained native calibration: exact all-three installed catalog plus existing maintained request prerequisites produces five added tables/one sequence/ten types/seven functions, one previously qualified session definition change and four Auth users FK triggers. No object exclusions or catalog guard weakening; unchanged original repair envelope correctly refuses this metadata and conserves full fixture state. Exact profile composition/known-three pin review and populated repair remain MAP-018. RETAINED_FIXTURE_CALIBRATION_20261010.json owns actual evidence.
+
 10 October retained repair preparation: the isolated evidence constructor reuses exact existing corrective SQL and serializers/authority checks from pinned combined19 package bytes; normalized full metadata admits only known three prior/corrected definitions. No product writer, route, migration or provider change. Exact genuine-request prerequisite catalog composition and populated native acceptance remain MAP-018.
 
 10 October retained-code repair design (MAP-018 / IDEA-20261010-08): RETAINED_OPERATIONAL_CODE_REPAIR_SPEC.md is approved for scoped local preparation after sequential Skeptic/Guardian/User Advocate/Arbiter review. Reuse three exact existing correction fragments; no new canonical writer, data deletion, emergency pause or provider dispatch. Full populated state/atomicity/resumption qualification remains pending solely in the Master Action Plan.

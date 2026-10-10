@@ -97,3 +97,15 @@ for (const faultAfter of [1, 2, 3]) test('fault follows an actual correction bou
   assert.match(sql, /K2_RETAINED_REPAIR_INJECTED_FAULT/)
   assert.match(sql, /K2_RETAINED_REPAIR_FAULT_BOUNDARY_UNAVAILABLE/)
 })
+
+test('full snapshot discovers permanent physical data and all sequences without a selection allowlist', () => {
+  assert.equal(typeof module?.retainedSnapshotSql, 'string', 'complete populated-state capture is missing')
+  const sql = module.retainedSnapshotSql
+  assert.match(sql, /relkind in \('r','p','m','S'\)/)
+  assert.match(sql, /relpersistence<>'t'/)
+  assert.match(sql, /to_jsonb\(t\)::text collate "C"/)
+  assert.match(sql, /extensions\.digest/)
+  assert.match(sql, /last_value::text.*is_called/)
+  assert.equal(sql.includes("nspname in ('public'"), false)
+  assert.match(sql, /SET TIME ZONE 'UTC'/)
+})

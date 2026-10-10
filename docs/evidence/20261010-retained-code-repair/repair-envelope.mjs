@@ -16,6 +16,32 @@ const fragmentPins = [
 ]
 const names = ['execute_admin_product_master_command_v1', 'execute_customer_delivery_rates_v1', 'mutate_category_policy_v1']
 
+// Run only inside the separately reviewed owned fixture. Output stays private.
+// Transaction gives one settled capture; fixture coordinator controls writers.
+export const retainedSnapshotSql = `BEGIN ISOLATION LEVEL REPEATABLE READ;
+SET LOCAL search_path='';SET TIME ZONE 'UTC';SET LOCAL DateStyle='ISO, YMD';
+SET LOCAL bytea_output='hex';SET LOCAL extra_float_digits=3;
+CREATE TEMP TABLE k2_retained_snapshot(name text PRIMARY KEY,kind text,value jsonb) ON COMMIT DROP;
+DO $snapshot$ DECLARE r record;v jsonb;BEGIN
+ FOR r IN SELECT c.oid,c.relkind,pg_catalog.format('%I.%I',n.nspname,c.relname) AS name
+ FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+ WHERE c.relkind in ('r','p','m','S') AND c.relpersistence<>'t'
+ AND n.nspname<>'pg_catalog' AND n.nspname<>'information_schema'
+ AND n.nspname NOT LIKE 'pg_toast%' AND n.nspname NOT LIKE 'pg_temp_%'
+ ORDER BY n.nspname COLLATE "C",c.relname COLLATE "C" LOOP
+  IF r.relkind='S' THEN
+   EXECUTE pg_catalog.format('SELECT pg_catalog.jsonb_build_object(''lastValue'',last_value::text,''isCalled'',is_called) FROM %s',r.oid::regclass) INTO v;
+  ELSE
+   EXECUTE pg_catalog.format('SELECT pg_catalog.jsonb_build_object(''count'',count(*),''sha256'',pg_catalog.encode(extensions.digest(pg_catalog.convert_to(coalesce(pg_catalog.string_agg(to_jsonb(t)::text,chr(10) ORDER BY to_jsonb(t)::text collate "C"),''''),''UTF8''),''sha256''),''hex'')) FROM %s t',r.oid::regclass) INTO v;
+  END IF;
+  INSERT INTO k2_retained_snapshot VALUES(r.name,r.relkind,v);
+ END LOOP;
+END $snapshot$;
+SELECT pg_catalog.jsonb_build_object('contract','K2_RETAINED_FULL_PHYSICAL_STATE_V1',
+ 'relationCount',count(*),'relations',coalesce(pg_catalog.jsonb_agg(pg_catalog.jsonb_build_object('name',name,'kind',kind,'state',value) ORDER BY name COLLATE "C"),'[]'::jsonb)) FROM k2_retained_snapshot;
+COMMIT;
+`
+
 export function prepareRepairEnvelope(input) {
   for (const [key, pin] of Object.entries(pins))
     if (sha(input[key]) !== pin) throw Error('RETAINED_REPAIR_SOURCE_PIN:' + key)

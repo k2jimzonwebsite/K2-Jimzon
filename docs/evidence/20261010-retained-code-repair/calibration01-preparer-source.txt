@@ -1,0 +1,88 @@
+// MAP-018 / IDEA-20261010-08. Fresh owned RAM diagnostic, no provider dispatch.
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
+import { spawnSync } from 'node:child_process'
+import { prepareRepairEnvelope, retainedSnapshotSql } from '../docs/evidence/20261010-retained-code-repair/repair-envelope.mjs'
+const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
+const caseName='oci-retained-calibration01',out=path.join(root,caseName),base=path.join(root,'oci-tariff-order05')
+assert.ok(!fs.existsSync(out),'Fresh diagnostic only')
+const sha=b=>createHash('sha256').update(b).digest('hex')
+const receipt=JSON.parse(fs.readFileSync('docs/acceptance/TARIFF_ORDER_CONNECTED_20261010.json'))
+const read=file=>{const b=fs.readFileSync(path.join(base,file));assert.equal(sha(b),receipt.artifactPins.find(p=>p.file===file)?.sha256,'accepted base pin:'+file);return b}
+const originalProbe=read('staging/k2/image-probe.sh').toString()
+const originalInit=read('staging/k2/init.sh').toString()
+const marker='8e2c20f7-fc64-4b8f-8814-d177de6e6f04'
+const pkgBytes=fs.readFileSync(root+'/oci-imported19/guarded-package.json')
+const pkg=JSON.parse(pkgBytes)
+const fragments=['product_master','customer_tariff','category_policy'].map(n=>fs.readFileSync('supabase/prepared/'+n+'_version_conflict_transport.sql','utf8'))
+const repair=prepareRepairEnvelope({priorBytes:fs.readFileSync(root+'/oci-imported02/execution01/after-catalog.json'),correctedBytes:fs.readFileSync(root+'/oci-imported23/execution01/after-catalog.json'),packageBytes:pkgBytes,fragments,marker})
+const psql=(user,file)=>`su postgres -s /bin/sh -c 'psql -X -q -t -A -P pager=off -h /tmp -U ${user} -d postgres -v ON_ERROR_STOP=1 -f /tmp/${file}'`
+const httpAt=originalProbe.indexOf('export GOTRUE_API_HOST=')
+const cleanupAt=originalProbe.indexOf("su postgres -s /bin/sh -c 'psql -X -q -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1' <<'TARGET'")
+const cleanupEnd=originalProbe.indexOf('echo K2_AUTH_STARTUP_CONSERVATION_OK',cleanupAt)
+assert.ok(httpAt>0&&cleanupAt>httpAt&&cleanupEnd>cleanupAt)
+let prefix=originalProbe.slice(0,httpAt)
+assert.equal(prefix.split(fragments[1]).length,2)
+prefix=prefix.replace(fragments[1],'-- Tariff correction already installed by exact combined19 package.\n')
+const record=`${psql('postgres','race-catalog.sql')} > /tmp/retained-catalog-before.json
+${psql('supabase_admin','retained-snapshot.sql')} > /tmp/retained-state-before.json
+set +e
+${psql('postgres','retained-repair.sql')} > /tmp/retained-refusal.log 2>&1
+repair_exit=$?
+set -e
+[ "$repair_exit" = 3 ]
+grep -q 'K2_RETAINED_REPAIR_SCHEMA_DRIFT' /tmp/retained-refusal.log
+${psql('postgres','race-catalog.sql')} > /tmp/retained-catalog-after.json
+${psql('supabase_admin','retained-snapshot.sql')} > /tmp/retained-state-after.json
+cmp -s /tmp/retained-catalog-before.json /tmp/retained-catalog-after.json
+cmp -s /tmp/retained-state-before.json /tmp/retained-state-after.json
+${psql('postgres','cold-authority.sql')}
+echo K2_RETAINED_FIXTURE_DRIFT_REFUSAL_CONSERVED
+for name in catalog-before state-before;do
+ echo K2_RETAINED_EXPORT_$name"_BEGIN"
+ base64 /tmp/retained-$name.json
+ echo K2_RETAINED_EXPORT_$name"_END"
+done
+sha256sum /tmp/retained-catalog-before.json /tmp/retained-state-before.json
+`
+prefix+=`su postgres -s /bin/sh -c 'psql -X -q -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1' <<'MARKER'
+COMMENT ON DATABASE postgres IS 'K2 retained repair:${marker}';
+MARKER
+`+record
+const probe=prefix+originalProbe.slice(cleanupAt,cleanupEnd)+'echo K2_GENUINE_POSTGRES_MODULE_PROBE_OK\n'
+assert.ok(!probe.includes('K2_AUTH_HOST_READY')&&!probe.includes('auth serve')&&!probe.includes('postgrest >'))
+const stage=path.join(out,'staging/k2')
+fs.mkdirSync(stage,{recursive:true})
+const files={'image-probe.sh':probe,'race-install.sql':pkg.sql,'retained-repair.sql':repair.sql,'retained-snapshot.sql':retainedSnapshotSql}
+// Override only the selected SQL/probe after the unchanged layers are unpacked.
+const copyAnchor='/bin/busybox cp /k2/connected-fixture.sql /k2root/tmp/connected-fixture.sql\n'
+assert.equal(originalInit.split(copyAnchor).length,2)
+files['init.sh']=originalInit.replace(copyAnchor,copyAnchor+['retained-repair.sql','retained-snapshot.sql'].map(n=>`/bin/busybox cp /k2/${n} /k2root/tmp/${n}\n`).join(''))
+for(const [name,value] of Object.entries(files))fs.writeFileSync(path.join(stage,name),value,{flag:'wx'})
+const overlay=path.join(out,'overlay.cpio')
+const tar=spawnSync('tar.exe',['-cf',overlay,'--format=newc','-C',path.join(out,'staging'),'k2'],{encoding:'utf8',windowsHide:true})
+assert.equal(tar.status,0,tar.stderr)
+const baseImage=path.join(base,'initramfs.cpio')
+assert.equal(sha(fs.readFileSync(baseImage)),receipt.artifactPins.find(p=>p.file==='initramfs.cpio').sha256)
+const fd=fs.openSync(path.join(out,'initramfs.cpio'),'wx')
+try{for(const file of [baseImage,overlay])for await(const b of fs.createReadStream(file)){let n=0;while(n<b.length)n+=fs.writeSync(fd,b,n,b.length-n)}const pad=(4-fs.fstatSync(fd).size%4)%4;if(pad)fs.writeSync(fd,Buffer.alloc(pad))}finally{fs.closeSync(fd)}
+let runner=read('runner-source.mjs').toString().replaceAll('oci-tariff-order05',caseName)
+const driverImport="const {runAuthDriver}=await import('./host-driver.mjs');"
+assert.equal(runner.split(driverImport).length,2)
+runner=runner.replace(driverImport,'')
+const driverBranch="if(!driverStarted&&stdout.includes('K2_AUTH_HOST_READY')){driverStarted=true;driverPromise=runAuthDriver(guest).catch(error=>{stderr+='HOST_DRIVER_CONTROL_FAILURE';child.kill()});}"
+assert.equal(runner.split(driverBranch).length,2)
+runner=runner.replace(driverBranch,'')
+const gucAt=runner.indexOf('report.moduleGucs='),gucEnd=runner.indexOf(';report.processStopped=',gucAt)
+assert.ok(gucAt>0&&gucEnd>gucAt)
+runner=runner.slice(0,gucAt)+"report.moduleGucs=stdout.includes('K2_RETAINED_FIXTURE_DRIFT_REFUSAL_CONSERVED')&&stdout.includes('K2_TARIFF_ARCHIVE_PROJECTION_CATALOG_RECOVERY_OK')&&(stdout.match(/K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK/g)||[]).length===3"+runner.slice(gucEnd)
+runner=runner.replace("user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997","user,model=virtio-net-pci,restrict=on,ipv6=off")
+runner=runner.replace(/scope:"Native routed local BFF[^\n]*?",providerWrites:false/,"scope:'Native fixture metadata calibration and full-state drift refusal only; no signed operational repair',providerWrites:false")
+fs.writeFileSync(path.join(out,'runner-source.mjs'),runner,{flag:'wx'})
+fs.writeFileSync(path.join(out,'preparation.json'),fs.readFileSync(path.join(base,'preparation.json')),{flag:'wx'})
+fs.copyFileSync('.tools/prepare-retained-calibration01.mjs',path.join(out,'executed-source.mjs'),fs.constants.COPYFILE_EXCL)
+const pins=[...Object.keys(files).map(n=>'staging/k2/'+n),'runner-source.mjs','executed-source.mjs','overlay.cpio','initramfs.cpio','preparation.json'].map(file=>({file,sha256:sha(fs.readFileSync(path.join(out,file)))}))
+fs.writeFileSync('docs/acceptance/RETAINED_CALIBRATION01_PREPARATION_20261010.json',JSON.stringify({owningMap:'MAP-018',idea:'IDEA-20261010-08',case:caseName,marker,classification:'Prepared native fixture metadata calibration, expected drift refusal/full state conservation and original reconstruction only',artifactPins:pins,review:{status:'pending-preexecution'},nativeExecuted:false,providerWrites:false,deployed:false},null,2)+'\n',{flag:'wx'})
+console.log(JSON.stringify({case:caseName,prepared:true,artifacts:pins.length,nativeExecuted:false,providerWrites:false}))

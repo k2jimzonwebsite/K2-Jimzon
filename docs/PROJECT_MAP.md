@@ -1,5 +1,7 @@
 # K2 Jimzon  -  Project Directory Map
 
+10 October retained native calibration: docs/acceptance/RETAINED_FIXTURE_CALIBRATION_20261010.json owns actual calibration01 terminal/whole-state refusal/cleanup/source pins; docs/evidence/20261010-retained-code-repair/calibration01-preparer-source.txt preserves exact executed producer text (original .tools relative import). retainedSnapshotSql in repair-envelope.mjs discovers all permanent user physical relations/sequences outside system catalogs. Full populated operational repair remains MAP-018.
+
 10 October retained repair preparation: docs/evidence/20261010-retained-code-repair/repair-envelope.mjs is a pure disposable SQL constructor/classifier with no dispatcher; adjacent repair-envelope.test.mjs uses real private pinned catalog/package inputs. RETAINED_CODE_REPAIR_PREPARATION_20261010.json owns source evidence; exact genuine-request fixture composition/native qualification remains MAP-018.
 
 10 October retained-code repair design (MAP-018 / IDEA-20261010-08): RETAINED_OPERATIONAL_CODE_REPAIR_SPEC.md is approved for scoped local preparation after sequential Skeptic/Guardian/User Advocate/Arbiter review. Reuse three exact existing correction fragments; no new canonical writer, data deletion, emergency pause or provider dispatch. Full populated state/atomicity/resumption qualification remains pending solely in the Master Action Plan.

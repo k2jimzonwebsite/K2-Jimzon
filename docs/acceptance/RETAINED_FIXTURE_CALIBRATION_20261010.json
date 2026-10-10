@@ -1,0 +1,251 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-calibration01",
+  "classification": "Actual disposable native metadata calibration and whole-state drift-refusal conservation; no signed populated repair",
+  "command": "node .tools/run-retained-calibration01.mjs",
+  "session": 49340,
+  "native": {
+    "pid": 13300,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "processStopped": true,
+    "serialSha256": "9d5ae43a1646a04ce2348c63f793999a8300ca8e8bf9701568e2b6efaea51a8a"
+  },
+  "independentHost": {
+    "pid": 13300,
+    "present": false,
+    "method": "Actual read-only Win32_Process ProcessId=13300 returned no process"
+  },
+  "exports": {
+    "catalog-before": {
+      "sha256": "f02519a354fca1002298bb2b97e5cdc8eea4e2f20ebb496a3cb5deb7dcf3876d",
+      "bytes": 2469277
+    },
+    "state-before": {
+      "sha256": "ac8d76d3045dc5016e134a407709bd0cdf8ffd7074c1beeface504c2379644df",
+      "bytes": 25548
+    }
+  },
+  "snapshot": {
+    "physicalRelations": 168,
+    "sequences": 11,
+    "tableRows": 44393
+  },
+  "expectedRefusalAndFullStateConservation": true,
+  "originalCapturedReconstructionAndCombinedReinstall": true,
+  "globalManagedWitnesses": 3,
+  "catalogDelta": {
+    "types": {
+      "added": [
+        "k2_private._admin_preauth_rate_buckets",
+        "k2_private._admin_preauth_rate_nonces",
+        "k2_private._security_event_noise_buckets",
+        "k2_private._security_event_nonces",
+        "k2_private._security_events",
+        "k2_private.admin_preauth_rate_buckets",
+        "k2_private.admin_preauth_rate_nonces",
+        "k2_private.security_event_noise_buckets",
+        "k2_private.security_event_nonces",
+        "k2_private.security_events"
+      ],
+      "removed": [],
+      "changed": []
+    },
+    "schemas": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "defaults": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "functions": {
+      "added": [
+        "public.consume_admin_preauth_rate_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_ip_hash text, p_contact_hash text, p_signature text)",
+        "public.k2_fixture_tariff_business_v1(p_keys text[], p_sku text)",
+        "public.k2_fixture_tariff_context_v1()",
+        "public.k2_fixture_tariff_setup_v1()",
+        "public.prune_security_events_v1(p_before timestamp with time zone)",
+        "public.read_admin_security_review_v1(p_hours integer)",
+        "public.record_security_event_v1(p_timestamp bigint, p_nonce uuid, p_correlation_id uuid, p_event_type text, p_source text, p_severity text, p_outcome text, p_session_id uuid, p_route_key text, p_reason_code text, p_subject_kind text, p_subject_id text, p_signature text)"
+      ],
+      "removed": [],
+      "changed": [
+        "public.execute_admin_session_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)"
+      ]
+    },
+    "relations": {
+      "added": [
+        "k2_private.admin_preauth_rate_buckets",
+        "k2_private.admin_preauth_rate_nonces",
+        "k2_private.security_event_noise_buckets",
+        "k2_private.security_event_nonces",
+        "k2_private.security_events",
+        "k2_private.security_events_event_id_seq"
+      ],
+      "removed": [],
+      "changed": [
+        "auth.users"
+      ]
+    },
+    "extensions": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "unsupportedAggregates": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    }
+  },
+  "changedExistingMetadata": {
+    "authUsers": {
+      "onlyChangedField": "internalTriggers",
+      "removed": 0,
+      "added": 4,
+      "source": "Foreign-key delete/update triggers of security_events_actor_id_fkey and security_event_noise_buckets_actor_id_fkey; no index change"
+    },
+    "sessionFunction": {
+      "beforeDefinitionSha256": "d26c26c31a85b7f9f5bd7a7a40a9734cb35de0227ba6d3e91a31e898f98a3b4e",
+      "afterDefinitionSha256": "ab61286080f116b00e3ccbf65e17198224411732cf124010cd579b140d510c89",
+      "changes": [
+        "Already qualified exact prepared seven-day session lifetime instead of captured eight-hour lifetime",
+        "Already qualified greatest(clock_timestamp(),created_at) last-seen creation floor"
+      ],
+      "repairTarget": false
+    }
+  },
+  "bootChecksumCoverage": {
+    "baseImageSha256": "67853d5f5e69542fbfb3e5dd02ab155180ff336ee3cf105f47a0cd36f8b92102",
+    "actualManifestOffset": 378971900,
+    "manifestSha256": "19b1981dd86b3fb81d28a4db47d100879c862067538eb38943cf0c50ed693c47",
+    "entries": 29,
+    "coversOnlyOciLayers": true,
+    "overriddenSqlCovered": false,
+    "method": "Read-only actual assembled accepted base byte scan validating complete newc header/name/size and all29 layer-only entries"
+  },
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "d1f19f2194d5292a5050614048cb7d6e7ce952b177958c7b199e054f39b3bcbe"
+    },
+    {
+      "file": "staging/k2/race-install.sql",
+      "sha256": "ea8e212e648615611f4bc09ed36c7610c875f1779c84510e5556c448ff3a01f4"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "adffabacbd974c9fe40dea6be0d44d7aa814cfe3bdd9e1a03a0933484754daf8"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "e624d0565398b506047debd508217edf4f51b352e60cb15bb84ce3e58b91b0d2"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "c86561e2717b4da17218d836caf1dfc407216e468bac5ecd3927ae4bd31b40b8"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "44442d51427b1ab1b03faa7c0b17856ad82d89a5381b2efe8a0db3f025b940cc"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "b1c52bbafde11f1c1a3b593b886d9fd399369cd66a59b906ab1808fcb70e1eda"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "3c97b95260f3e8e7fc33e43487b4103db3be446cbf42e8f487123bd845320792"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "execution01/result.json",
+      "sha256": "856e8112c005954c585c032ac23a63f825e700e9b0de1825f5c0f32d14fef255"
+    },
+    {
+      "file": "execution01/serial.log",
+      "sha256": "9d5ae43a1646a04ce2348c63f793999a8300ca8e8bf9701568e2b6efaea51a8a"
+    },
+    {
+      "file": "execution01/launch.json",
+      "sha256": "386ac11e608856afb858702e2700e07bdd57e1a0cbee8bad6c11564cb3e1dded"
+    },
+    {
+      "file": "execution01/retained-catalog-before.json",
+      "sha256": "f02519a354fca1002298bb2b97e5cdc8eea4e2f20ebb496a3cb5deb7dcf3876d"
+    },
+    {
+      "file": "execution01/retained-state-before.json",
+      "sha256": "ac8d76d3045dc5016e134a407709bd0cdf8ffd7074c1beeface504c2379644df"
+    },
+    {
+      "file": "execution01/independent-extraction.json",
+      "sha256": "5f96f3017689e61b9ec4205adcd0812c9ad7e0ea0e450148b1140eee5eee8802"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "6c4c5323a5021120eaaf891c268ac466b8113cfe504384b82e73a18d3ecfa7cf"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.test.mjs",
+      "sha256": "e46d34fa091069dc5704f165d29f2aa5ae064da37d9b50bc96639b464f1534ff"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/calibration01-preparer-source.txt",
+      "sha256": "44442d51427b1ab1b03faa7c0b17856ad82d89a5381b2efe8a0db3f025b940cc"
+    }
+  ],
+  "review": {
+    "preexecution": "reviewed-preexecution-no-critical-important",
+    "reviewer": "auth_migration_review",
+    "postexecution": "reviewed-no-critical-important",
+    "independentlyVerified": "16artifact/3source pins;serial exports decoded and native-byte hashes;168relations/11sequences/44393rows;exact catalog delta seven added functions;session definition hashes and four Auth FK triggers;refusal/conservation/original reconstruction/global witnesses/terminal scope"
+  },
+  "verification": {
+    "focused": {
+      "command": "node --test docs/evidence/20261010-retained-code-repair/repair-envelope.test.mjs",
+      "pass": 22,
+      "fail": 0,
+      "exit": 0
+    },
+    "captureRed": {
+      "command": "node --test --test-name-pattern full snapshot docs/evidence/20261010-retained-code-repair/repair-envelope.test.mjs",
+      "pass": 0,
+      "fail": 1,
+      "exit": 1,
+      "reason": "Expected missing complete populated-state capture assertion"
+    },
+    "development": {
+      "session": 53304,
+      "exit": 0
+    }
+  },
+  "limits": [
+    "No Auth/PostgREST or host driver started; no signed publication/order/repair acceptance",
+    "Fixture snapshot contains staged prerequisite rows only, not genuine accepted orders",
+    "Refused known-three guard conserves complete fixture data; this is not successful repair",
+    "Original reconstruction is disposable cleanup only, not retained-data repair",
+    "Authority through commit and provider/real-host/human gates remain open"
+  ],
+  "nextAction": "MAP-018: review exact fixed supplemental fixture catalog and known-three-only prior/corrected pin pair; qualify settled real-request populated repair in a fresh pinned successor without metadata/control exclusions",
+  "providerWrites": false,
+  "deployed": false,
+  "recovery": "Completed exact original archive/locale reconstruction and same combined installation comparison; VM terminal0 and actual PID absent. Preserve immutable private inputs, staged/executed sources, serial, results and exports; never reuse calibration01 execution.",
+  "sourceBaseCommit": "cb10188"
+}

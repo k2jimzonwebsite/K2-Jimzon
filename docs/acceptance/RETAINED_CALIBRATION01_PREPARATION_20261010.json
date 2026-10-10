@@ -1,0 +1,89 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-calibration01",
+  "marker": "8e2c20f7-fc64-4b8f-8814-d177de6e6f04",
+  "classification": "Prepared native fixture metadata calibration, expected drift refusal/full state conservation and original reconstruction only",
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "d1f19f2194d5292a5050614048cb7d6e7ce952b177958c7b199e054f39b3bcbe"
+    },
+    {
+      "file": "staging/k2/race-install.sql",
+      "sha256": "ea8e212e648615611f4bc09ed36c7610c875f1779c84510e5556c448ff3a01f4"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "adffabacbd974c9fe40dea6be0d44d7aa814cfe3bdd9e1a03a0933484754daf8"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "e624d0565398b506047debd508217edf4f51b352e60cb15bb84ce3e58b91b0d2"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "c86561e2717b4da17218d836caf1dfc407216e468bac5ecd3927ae4bd31b40b8"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "44442d51427b1ab1b03faa7c0b17856ad82d89a5381b2efe8a0db3f025b940cc"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "b1c52bbafde11f1c1a3b593b886d9fd399369cd66a59b906ab1808fcb70e1eda"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "3c97b95260f3e8e7fc33e43487b4103db3be446cbf42e8f487123bd845320792"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    }
+  ],
+  "review": {
+    "status": "reviewed-preexecution-no-critical-important",
+    "reviewer": "auth_migration_review",
+    "scope": "Metadata calibration/refusal only; native populated signed repair unproved"
+  },
+  "nativeExecuted": false,
+  "providerWrites": false,
+  "deployed": false,
+  "bootChecksumCoverage": {
+    "baseImageSha256": "67853d5f5e69542fbfb3e5dd02ab155180ff336ee3cf105f47a0cd36f8b92102",
+    "actualManifestOffset": 378971900,
+    "manifestSha256": "19b1981dd86b3fb81d28a4db47d100879c862067538eb38943cf0c50ed693c47",
+    "entries": 29,
+    "coversOnlyOciLayers": true,
+    "overriddenSqlCovered": false,
+    "method": "Read-only actual assembled accepted base byte scan validating complete newc header/name/size and all29 layer-only entries"
+  },
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "6c4c5323a5021120eaaf891c268ac466b8113cfe504384b82e73a18d3ecfa7cf"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.test.mjs",
+      "sha256": "e46d34fa091069dc5704f165d29f2aa5ae064da37d9b50bc96639b464f1534ff"
+    },
+    {
+      "file": ".tools/prepare-retained-calibration01.mjs",
+      "sha256": "44442d51427b1ab1b03faa7c0b17856ad82d89a5381b2efe8a0db3f025b940cc"
+    }
+  ],
+  "development": {
+    "session": 53304,
+    "command": "npm run verify:development",
+    "exit": 0
+  },
+  "preWriteDiagnostic": {
+    "error": "Template ReferenceError: name is not defined",
+    "fixedBeforeAnyPrivateDirectoryWrite": true
+  }
+}

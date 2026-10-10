@@ -94,6 +94,8 @@ cleanup is not the repair method. Terminal results, independently absent PID and
 listeners, immutable executed-source hashes and every failed diagnostic remain
 part of the receipt. No original private archive or prior fixture is reused/deleted.
 
+Native fixture calibration (not populated repair): calibration01 qualifies complete supplemental catalog capture and refusal conservation for168 permanent user physical relations,11 sequences and44393 staged rows. The exact delta adds existing maintained telemetry/Admin-preauth schema and disposable observers, preserves the prior qualified session correction, and adds only their four Auth foreign-key triggers. Current envelope intentionally refuses these additions. Any later fixture profile must pin this complete catalog and admit only the same three reviewed definition corrections; it must preserve every control fact, and requires independent composition review before execution. Evidence: RETAINED_FIXTURE_CALIBRATION_20261010.json. No arbitrary installed metadata admission is authorized.
+
 Decision log:
 
 - Accepted scope: code repair retains saved rates/orders and available shopping;

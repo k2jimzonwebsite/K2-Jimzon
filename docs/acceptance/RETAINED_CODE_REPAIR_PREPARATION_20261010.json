@@ -61,7 +61,8 @@
       "k2_private.security_event_nonces",
       "k2_private.storefront_preauth_rate_buckets"
     ],
-    "consequence": "Genuine BFF fixture adds maintained telemetry/preauth prerequisites and disposable observer functions. Current exact catalog guard intentionally refuses those additional objects. Qualify and review their complete exact fixture catalog before composing populated repair; never silently ignore them, delete retained control facts, or broaden installed admission."
+    "consequence": "Genuine BFF fixture adds maintained telemetry/preauth prerequisites and disposable observer functions. Current exact catalog guard intentionally refuses those additional objects. Qualify and review their complete exact fixture catalog before composing populated repair; never silently ignore them, delete retained control facts, or broaden installed admission.",
+    "clarification": "Actual calibration identifies the five telemetry/Admin-preauth tables and their sequence/foreign-key triggers, eight added functions and existing session correction exactly. The originally noted absent storefront_preauth_rate_buckets table was not added by this fixture. See laterQualificationReceipt; no silent admission or data deletion."
   },
   "remaining": [
     "Exact populated fixture metadata composition and review",
@@ -74,5 +75,7 @@
   "runtimeExecuted": false,
   "providerWrites": false,
   "deployed": false,
-  "recovery": "Prepared-only source revert needs no database rollback; retained private input catalogs/package and all prior fixtures stay immutable."
+  "recovery": "Prepared-only source revert needs no database rollback; retained private input catalogs/package and all prior fixtures stay immutable.",
+  "preparedSourceCommit": "cb10188",
+  "laterQualificationReceipt": "docs/acceptance/RETAINED_FIXTURE_CALIBRATION_20261010.json"
 }
