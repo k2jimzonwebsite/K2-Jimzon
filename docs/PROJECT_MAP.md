@@ -1,5 +1,7 @@
 # K2 Jimzon  -  Project Directory Map
 
+10 October protected product taxonomy read (MAP-018 / IDEA-20261010-04): docs/acceptance/LOCAL_PRODUCT_READ_20261010.json archives the existing-route projection repair, focused regression, genuine native/full browser and complete recovery evidence. No new route/SQL/provider or duplicate catalog logic. MAP-018 retains protected reference creation/read/initial-assignment and later installation/host acceptance.
+
 10 October actual local browser witness (MAP-018): Sheet shared-icon import repair is locally verified; docs/acceptance/LOCAL_BROWSER_AUTH_20261010.json owns genuine full Admin login/MFA/Sheet/reference identity evidence and complete recovery. Protected taxonomy identity repair is the next unfinished MAP-018 slice; avoid duplicate stock/reference logic, anonymous write grants or browser staff-token exposure.
 
 10 October routed local Auth qualified (MAP-018 / IDEA-20261009-11): docs/acceptance/LOCAL_ROUTED_AUTH_20261010.json owns the source-pinned native entrypoint, real local password/MFA/session/CSRF/logout and exact recovery evidence. No new product route, migration or provider state was changed. MAP-018 alone owns the next fresh-browser brand/category identity reproduction and later activation/real-host acceptance.

@@ -4,7 +4,7 @@ import { strictInteger } from '../../server/shared-numeric.js'
 
 const PRODUCT_FIELDS = [
   'sku', 'name', 'barcode', 'status', 'srp', 'wholesale_price', 'subcategory',
-  'primary_image_url', 'created_at',
+  'primary_image_url', 'created_at', 'brand_id', 'category_id',
 ].join(',')
 
 export async function readAdminProducts(client) {
@@ -35,6 +35,8 @@ export async function readAdminProducts(client) {
       srp: Number(product.srp || 0),
       wholesale_price: Number(product.wholesale_price || 0),
       subcategory: product.subcategory || null,
+      brand_id: product.brand_id ?? null,
+      category_id: product.category_id ?? null,
       primary_image_url: product.primary_image_url || null,
       created_at: product.created_at,
       stock_available: stockResult.error ? null : (stockBySku.get(product.sku) ?? null),
