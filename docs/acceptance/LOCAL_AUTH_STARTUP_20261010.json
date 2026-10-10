@@ -1,0 +1,52 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "scope": "Local genuine Auth serve startup and health with captured-authority conservation; not migrations, JWT, MFA, BFF, provider or deployed acceptance",
+  "case": "oci-auth-startup01",
+  "command": "node .tools/probe-captured-auth-startup.mjs",
+  "officialSource": {
+    "root": "https://raw.githubusercontent.com/supabase/auth/v2.196.0/cmd/root_cmd.go",
+    "serve": "https://raw.githubusercontent.com/supabase/auth/v2.196.0/cmd/serve_cmd.go",
+    "migrate": "https://raw.githubusercontent.com/supabase/auth/v2.196.0/cmd/migrate_cmd.go"
+  },
+  "acquisitionSha256": "5ba4e2f208340723c748e0647818e18069707e5eecc3f8be7fe1d49c6e2a971b",
+  "hashes": {
+    "result": "d1e2ead10596fa515cd9fce5beb655fe9d31409fd0e0c876078092133ceccf91",
+    "serial": "942162b5a25936101471b7756b318b7ca0135a4610cf93aea82615cd78f8b0a7",
+    "source": "19cccb1caaf9b04ec2f8d8328e2ded5ef0b3125337f48c63d59ac5fbfb4e38af",
+    "probe": "47dfa5a59f1ab510ee6836661f93d21f05267a314a8a1bc976a32289a70fce35",
+    "init": "47b68bcfccdf6805cd2d87b9de9542f60134326e55e2be8e94f2e99c070a4c64"
+  },
+  "postgresVersion": "17.6",
+  "authVersion": "v2.196.0",
+  "exit": 0,
+  "timedOut": false,
+  "processStopped": true,
+  "independentlyAbsentPid": 13632,
+  "authStopExit": 0,
+  "health": {
+    "version": "v2.196.0",
+    "name": "GoTrue"
+  },
+  "original88RowsAndTwoSequences": {
+    "before": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+    "after": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c"
+  },
+  "completeCatalog": {
+    "before": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+    "after": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+  },
+  "globalAndManagedAuthorityChecks": 2,
+  "externalNic": "none",
+  "httpListener": "guest loopback 127.0.0.1:9999 only",
+  "dbListener": "guest loopback 127.0.0.1:5432 only plus /tmp Unix socket",
+  "providerWrites": false,
+  "defaultCommandUsed": false,
+  "migrationsExecuted": false,
+  "development": {
+    "session": 2647,
+    "exit": 0
+  },
+  "remaining": "Audit bundled migration/schema compatibility; qualify real HTTP/JWT/MFA/server-cookie/signed-registry/CSRF and fresh BFF browser. Preserve owner/provider/real-host gates.",
+  "recovery": "Already stopped RAM guest; preserve immutable source/layers/fixture/serial/result. Revert scoped preparation source only; no provider rollback."
+}

@@ -1,5 +1,7 @@
 # K2 Production Readiness Runbook
 
+**10 October local Auth probe:** LOCAL_AUTH_STARTUP_20261010.json records stopped networknone RAM Auth serve/health and captured-authority conservation. It is not a production readiness gate receipt, migration approval or provider/deployed identity evidence. Preserve immutable oci-auth-startup01; do not run the default Auth command against K2 on the strength of local health. MAP-018 owns migration/identity/host qualification.
+
 **Scope:** the read-only gate every owner-authorized K2 production step must
 pass first. **Current state (30 September 2026):** the gate exists and runs. It
 authorizes nothing.

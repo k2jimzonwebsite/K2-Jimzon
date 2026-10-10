@@ -1,5 +1,58 @@
 # Dummy production acceptance receipt — 9 October 2026
 
+### 10 October — genuine isolated Auth serve startup
+
+10 October local Auth startup (MAP-018 / IDEA-20261009-11): Fresh captured-authority17.6 RAM composition installs the accepted imported package once; pinned Authv2.196.0 uses its documented separate serve command, without migrations. Genuine guest-loopback /health reports exact version; Auth exits0, guest/session96040 terminal0/no timeout/PID13632 independently absent. Original88 rows/two sequencesbc485716... and complete schema/defaultACLe9ff1868... remain identical; full global/managed checks pass twice. Resultd1e2ead1.../serial942162b5...; development2647 exits0. Health does not qualify migration/schema application compatibility, JWT/MFA/BFF or deployed/provider behavior. Next: audit bundled migration inventory against captured schema/history, then qualify genuine identity endpoints/loopback gateway/server-cookie/registry/CSRF and fresh-browser reference reproduction. No grants, provider writes, main/release or publishing authorization change. Receipt/source/hashes/recovery: docs/acceptance/LOCAL_AUTH_STARTUP_20261010.json and DUMMY_PRODUCTION_ACCEPTANCE_20261009.md.
+
+Official tagged source root_cmd.go invokes migrate before serve for the default
+command; serve_cmd.go invokes serve directly. This probe explicitly uses the
+separate serve command and preserves the captured auth schema. It does not test
+whether later identity endpoints are compatible with every current model column.
+Synthetic local JWT configuration is server-held and never used to mint or return
+a token in this probe. No real provider credentials, external NIC or host forwarding.
+An initial refused connection during bounded startup polling is retained; the
+subsequent genuine health body contains GoTrue/v2.196.0. No mocked route response.
+
+| Evidence | SHA256 |
+| --- | --- |
+| result | d1e2ead10596fa515cd9fce5beb655fe9d31409fd0e0c876078092133ceccf91 |
+| serial | 942162b5a25936101471b7756b318b7ca0135a4610cf93aea82615cd78f8b0a7 |
+| source | 19cccb1caaf9b04ec2f8d8328e2ded5ef0b3125337f48c63d59ac5fbfb4e38af |
+| probe | 47dfa5a59f1ab510ee6836661f93d21f05267a314a8a1bc976a32289a70fce35 |
+| init | 47b68bcfccdf6805cd2d87b9de9542f60134326e55e2be8e94f2e99c070a4c64 |
+
+The executed preparation source pins accepted oci-imported02 result/package
+lineage, reuses its unchanged foundation and authority witness, and retains all
+six exact acquired Auth layers. Guest probe changes only local DB listen address
+to loopback, accepted single install, startup/health/stop and before/after witnesses.
+Both full schema captures compare byte-identically, including existing function,
+relation and default ACL metadata. Original rows/sequences compare separately;
+global roles/memberships/events/eight managed settings use the existing complete
+actual postgres non-superuser witness before and after. This does not establish
+any wider all-writer, installer through-commit or transport guarantee.
+
+Reproduction: recover the retained executed-source and pinned inputs into a new
+explicit owned case (the utility refuses overwrite), then run its same preparation
+and native runner. Keep original case immutable. Recovery is already complete:
+Auth exits0, PostgreSQL stops, QEMU powers off; independent host check finds13632
+absent. No persistent database or provider rollback applies. Final development
+session2647 exits0; no application/browser/release suite repeated.
+
+Exact next: compare captured Auth migration history/schema with pinned runtime
+inventory; qualify genuine JWT/MFA/BFF flows without silently migrating or relaxing
+authority. Current public version is not an observed K2 deployment version.
+Publishing remains blocked by the previously recorded approval rejection.
+
+Independent review finds no Critical/Important issue in this checkpoint. It
+verified all six acquired/staged Auth layer hashes/sizes, immutable source lineage,
+the exact combined image bytes, single installation, health/stop/terminal markers,
+both conservation hash pairs and twice-passing authority, and independently found
+PID13632 absent. Minor inherited runner limitation: aggregate moduleGucs checks
+markers rather than parsing the exact health body and row/schema hashes. Primary
+and reviewer validated those exact values from retained serial; a summary flag
+alone must never substitute for that scoped readback.
+
+
 ## 10 October — combined imported installation and recovery
 
 ### 10 October — official local HTTP runtime candidates
