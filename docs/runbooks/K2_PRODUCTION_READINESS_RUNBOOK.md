@@ -1,5 +1,9 @@
 # K2 Production Readiness Runbook
 
+**10 October local migration continuation resolved:** Same automatic review path passed after usageAllowed readback; all4owned migration PIDs independently absent. Local04 connection-only auth routing qualifies embedded zero-migration/startup conservation, with no captured role/grant/default change. Historical01/02/03 failures remain. LOCAL_AUTH_MIGRATION_20261010.json records exact pins; no production authorization or real-host/JWT/MFA/BFF acceptance follows. Publishing remains separately approval-blocked.
+
+**10 October local Auth migration refusal:** LOCAL_AUTH_MIGRATION_20261010.json records an unqualified-public-table CREATE refusal42501, preserved rows/schema/authority and stopped execution handles. Independent host PID absence remains unverified after account usage prevented approval review. No migration compatibility, provider authorization or new grant follows from offline version coverage. Resume exact MAP-018 session-resolution test only after review availability and stopped-guest checks.
+
 **10 October local Auth probe:** LOCAL_AUTH_STARTUP_20261010.json records stopped networknone RAM Auth serve/health and captured-authority conservation. It is not a production readiness gate receipt, migration approval or provider/deployed identity evidence. Preserve immutable oci-auth-startup01; do not run the default Auth command against K2 on the strength of local health. MAP-018 owns migration/identity/host qualification.
 
 **Scope:** the read-only gate every owner-authorized K2 production step must

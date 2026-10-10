@@ -1,5 +1,110 @@
 # Dummy production acceptance receipt — 9 October 2026
 
+### 10 October — embedded Auth zero-migration continuation qualified locally
+
+10 October local Auth embedded migration no-op qualified (MAP-018 / IDEA-20261009-11): Offline70 image versions all in82 captured (7legacy/5newer). Fresh04 actual default Auth-role session resolves public/ABSENT; connection-only options=-csearch_path%3Dauth resolves auth/schema_migrations. Embedded migrator exit0/exact completed eventcount0, healthv2.196.0/stop0, native/session39252 terminal0/no timeout/PID20236 absent. Original88/two-sequencebc485716... and full schema/defaultACLe9ff1868... unchanged, global/managed authority twice. No role/grant/default change. Result4ba953dc.../serialb3c56430...; final development74822 exit0. Refusal01/02 and libpq-parameter diagnostic03 retained; account review failure resolved through same approved process check, all4PIDs absent. This closes local zero-migration/startup conservation only, not operational Auth/JWT/MFA/BFF or observed deployed versions. Exact next: genuine identity endpoints, local PostgREST/JWT/MFA/BFF fresh-browser session-registry/CSRF with synthetic cleanup, then all remaining MAP provider/owner/host/inventory/listing gates. Publishing approval remains blocked. Evidence/commands/recovery: LOCAL_AUTH_MIGRATION_20261010.json and DUMMY_PRODUCTION_ACCEPTANCE_20261009.md.
+
+This current continuation supersedes the earlier temporary unverified PID/review
+state and next-searchpath action below. Both historical01/02 remain failed;03
+stops at libpq URI parsing before migration;04 changes only the two connection
+URI parameters from direct search_path=auth to options=-csearch_path%3Dauth and
+its new immutable case path. PostgreSQL17 libpq documentation supports options
+for session search_path. Actual Auth-role readback confirms default public/ABSENT
+versus selectedauth/schema_migrations. Actual embedded migrator runs once and
+returns0 with count0. Its exact JSON completed event is printed twice by cat
+and the exact-event grep; these identical copies must not be counted as two runs.
+
+| Artifact | SHA256 |
+| --- | --- |
+| resultSha256 | 4ba953dc7ec72cdfe0daaef53a86567b3eacd2ae00f81519cf8743060bd3d52f |
+| serialSha256 | b3c56430b5804841da896b461aaebe6f9e144a0aa4611c1c22333ee15142f079 |
+| sourceSha256 | 32b3e83aedb2c0b9e7a5445ae45812d326fe91d93d308b9b664108152ab215da |
+| probeSha256 | f295307bee4cc0f39e274845d0c3f380b378a07a3bfecaca108c5c7e19d069a2 |
+| initSha256 | 47b68bcfccdf6805cd2d87b9de9542f60134326e55e2be8e94f2e99c070a4c64 |
+
+All01/02/03/04 owned PIDs8040/17212/20344/20236 were authoritatively absent after
+review resumed. No bypass: account usage tool reported ordinaryUsageAllowed true,
+then the same denied read-only host operation passed through automatic review;
+only then did new native work resume. Final development74822 passes. Scoped
+source/diagnostics and all pinned layer/fixture/serial/results remain private.
+Recovery is already complete stopped RAM/conserved rows/schema/authority; no
+provider rollback. Future reproduction uses a new explicit owned case and same
+pins, never overwrites04 or modifies captured authority to force compatibility.
+
+Next is genuine operational Auth/JWT/MFA/PostgREST/BFF and exact synthetic data
+cleanup. No actual identity endpoint, staff browser cookie/registry/CSRF, imported
+listing host, provider authorization or full inventory/selling claim is made.
+
+Final independent review finds no Critical/Important issue. It checks exact03→04
+URI/case-only changes, every source/init/probe/result/serial pin, both session
+resolutions, the exact zero-migration event/duplicate printing, health/stop and
+all conservation evidence. Public receipt SHA256
+1ffb9d4445207aa9e73630517b21f7bfcb9618edbd3960488bbc9d3904d1378c
+matches independently. Host absence/development terminal state rely on primary
+authoritative approved checks/handles; reviewer performs no new runtime suite.
+
+
+### 10 October — Auth migration inventory and refusal diagnostic
+
+10 October Auth migration diagnostic (MAP-018 / IDEA-20261009-11): Offline pinned image has70 up-SQL versions, all in82 captured entries; seven legacy/five newer captured entries. audit02 SHA3e7ec5a8...; audit01 retains legitimate .postgres suffix refusal. Actual embedded migration01/02 both terminal1, guest exit0/no timeout/stopped reported.02 captures migrator exit1: unqualified schema_migrations creation in public denied42501; separate serve health/stop0, original88/two-sequencebc485716... and schema/defaultACLe9ff1868... unchanged, authority twice. Migration compatibility remains false. Leading unverified connection-searchpath hypothesis; no grant/role relaxation. Auto-review account usage failure blocked separate PID8040 inspection, so independent absence8040/17212 remains unverified; no bypass/retry/new escalation. Final development98390 exits0. Next: resolve review availability, independently verify stopped guests, inspect actual session/schema resolution and test session-only auth selection/zero migration/full conservation, then genuine JWT/MFA/BFF. Uncommitted local receipt/docs; no provider/main/release/push. Exact evidence/recovery: LOCAL_AUTH_MIGRATION_20261010.json and DUMMY_PRODUCTION_ACCEPTANCE_20261009.md.
+
+Offline command: node .tools/audit-auth-migrations.mjs. It pins acquisition
+5ba4e2f2... and preserved restore57c1cf8a..., validates every Auth layer size/hash,
+lists exact paths and hashes each of70 migration SQL bodies directly from pinned
+archives. Version coverage is separate from matching historical SQL bodies or
+binary-embedded equivalence. Five newer captured versions are:
+20260821000000, 20260821010000, 20260824000000, 20260824000001, 20260831180000. No runtime downgrade or captured-history rewrite.
+
+Native command: node .tools/probe-captured-auth-migration.mjs. Case01 exited
+before printing the failed migrator log; immutable case02 changes only diagnostic
+status/log capture and new case path, then runs the existing health/stop/full
+conservation witnesses regardless of migration refusal. Both aggregate executions
+remain terminal1; guest poweroff exit0 must not be presented as a passing gate.
+02 migrator exit1 attempts unqualified schema_migrations in public and refuses42501.
+It does not reach zero-migration confirmation. Healthv2.196.0/stop0 and byte-exact
+original-row/schema conservation remain separately observed; authority twice.
+
+| Case | Result SHA256 | Serial SHA256 |
+| --- | --- | --- |
+| oci-auth-migration01 | 5c7bb52b36d7f4242b96d2ffc0a2287bad5b0c723e445c220bdb3cc59f351605 | 2eba73b280aa9bd8ac9a4b6e5fc76b50dc36410bdc88de7f97b4ad1fa05bccdb |
+| oci-auth-migration02 | f4dd46684b38b58ee81ef0d950f0f1ec58fea6b7b4db83e2ab3dd7c5f8b1b969 | 9f3daa873a10c1d4ce0241a7a464c06ccf5074e9f962addbe524e2c4c65d9aba |
+
+Leading hypothesis is connection search_path/schema resolution, not a verified
+root cause. Tagged Auth source cmd/migrate_cmd.go uses migration_table_name and
+Namespace options; its pinned pop/v6 v6.1.1 migrator checks/creates the unqualified
+migration table. The retained URI has no session schema options. Next inspect
+actual session resolution and test connection-only auth selection with exact
+conservation; do not create public migration tables, alter captured defaults or
+expand CREATE privileges. Current older local runtime/newer captured schema still
+needs actual operational Auth/JWT/MFA/BFF qualification.
+
+Automatic approval review could not execute the independent host PID8040 check
+because of account usage limit. This is review failure, not an unsafe-action
+determination. No bypass/retry/escalation followed; independent host absence for
+8040/17212 is unverified despite terminal child handles/stopped reports and02
+shutdown serial. Resolve review availability before future native/private D write
+or commit actions. Preserve all four cases and source/log/result/layer inputs.
+Final development98390 passes; no application/browser/release suite repeated.
+
+Independent read-only review finds no Critical/Important issue in this diagnostic.
+It matched all01/02 source/init/probe/result/serial pins, six layer digests/sizes,
+offline70/82/zero-missing/seven-legacy/five-newer counts, actual42501 refusal and
+all retained health/stop/conservation evidence. It performed no runtime or host
+process inspection. Minor future gate: require the exact completed-migration
+event with count0 rather than accepting any log containing a count0 field.
+Current02 correctly fails and does not certify migration compatibility.
+
+Tagged dependency source connection_details.go (pop/v6 v6.1.1) returns the
+unqualified migration_table_name option and retains raw URI query options;
+the migrator checks/creates that name. This supports the session-resolution
+hypothesis without proving it. Once review is available and both guests are
+independently absent, inspect the actual Auth-role search_path/current_schema;
+test only a URI session search_path=auth addition in a new owned case. Preserve
+role defaults/grants and require an exact successful zero-migration event plus
+complete row/schema/global/managed conservation before identity endpoint work.
+Official source: https://raw.githubusercontent.com/gobuffalo/pop/v6.1.1/connection_details.go.
+
+
 ### 10 October — genuine isolated Auth serve startup
 
 10 October local Auth startup (MAP-018 / IDEA-20261009-11): Fresh captured-authority17.6 RAM composition installs the accepted imported package once; pinned Authv2.196.0 uses its documented separate serve command, without migrations. Genuine guest-loopback /health reports exact version; Auth exits0, guest/session96040 terminal0/no timeout/PID13632 independently absent. Original88 rows/two sequencesbc485716... and complete schema/defaultACLe9ff1868... remain identical; full global/managed checks pass twice. Resultd1e2ead1.../serial942162b5...; development2647 exits0. Health does not qualify migration/schema application compatibility, JWT/MFA/BFF or deployed/provider behavior. Next: audit bundled migration inventory against captured schema/history, then qualify genuine identity endpoints/loopback gateway/server-cookie/registry/CSRF and fresh-browser reference reproduction. No grants, provider writes, main/release or publishing authorization change. Receipt/source/hashes/recovery: docs/acceptance/LOCAL_AUTH_STARTUP_20261010.json and DUMMY_PRODUCTION_ACCEPTANCE_20261009.md.

@@ -1,0 +1,153 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "scope": "Offline Auth migration inventory plus actual embedded zero-migration/health and full captured conservation on session-only auth schema routing; not operational Auth/JWT/MFA/BFF/provider/deployed compatibility",
+  "providerWrites": false,
+  "offline": {
+    "case": "auth-migration-audit02",
+    "auditSha256": "3e7ec5a8a9bc48aab89958642d7e861a7cb4707ccfb0a186708489066ee4ac50",
+    "executedSourceSha256": "447632281bd17100584ff421c888d7b322c3a877c98dbf52ce952bc349255eb7",
+    "imageTag": "v2.196.0",
+    "imageManifest": "sha256:7e813221b93fbf54b515036438550e483bfaf057b9db52fe9bc1ce91c47e817e",
+    "upSqlCount": 70,
+    "capturedVersionCount": 82,
+    "missingCaptured": [],
+    "oldHistory": [
+      "20171026211738",
+      "20171026211808",
+      "20171026211834",
+      "20180103212743",
+      "20180108183307",
+      "20180119214651",
+      "20180125194653"
+    ],
+    "newerHistory": [
+      "20260821000000",
+      "20260821010000",
+      "20260824000000",
+      "20260824000001",
+      "20260831180000"
+    ],
+    "latestImageVersion": "20260625000000",
+    "latestCapturedVersion": "20260831180000",
+    "embeddedEquivalence": false
+  },
+  "retainedOfflineFailure": {
+    "case": "auth-migration-audit01",
+    "reason": "Strict filename regex refused legitimate .postgres.up.sql suffix before audit; preserved source and diagnostic",
+    "sourceSha256": "1e2b8a281b9180be49431fe97f9b9780881f65cb58b97d28f641d4544bd67e6b"
+  },
+  "cases": {
+    "oci-auth-migration01": {
+      "resultSha256": "5c7bb52b36d7f4242b96d2ffc0a2287bad5b0c723e445c220bdb3cc59f351605",
+      "serialSha256": "2eba73b280aa9bd8ac9a4b6e5fc76b50dc36410bdc88de7f97b4ad1fa05bccdb",
+      "sourceSha256": "b6042857a2667dad90e4d9a4d0dd4a383b40de7d6b70b25984f34a5f1a1296b3",
+      "probeSha256": "62540bf305f3f52efec5c4f3851e4f23b552b92c5e2ab04f526c77ebb5b32011",
+      "initSha256": "47b68bcfccdf6805cd2d87b9de9542f60134326e55e2be8e94f2e99c070a4c64",
+      "executionTerminal": 1,
+      "guestExit": 0,
+      "timedOut": false,
+      "processStoppedReported": true,
+      "pid": 8040,
+      "independentHostAbsence": "verified after approved read-only host check",
+      "migrationGatePassed": false
+    },
+    "oci-auth-migration02": {
+      "resultSha256": "f4dd46684b38b58ee81ef0d950f0f1ec58fea6b7b4db83e2ab3dd7c5f8b1b969",
+      "serialSha256": "9f3daa873a10c1d4ce0241a7a464c06ccf5074e9f962addbe524e2c4c65d9aba",
+      "sourceSha256": "08eba30a9ecd2b71bfb47c7d33d4bcfeaed309780a4bf79682d597eef04afc34",
+      "probeSha256": "e1295a559d8c628c41caa2edae9ebc5578385af2a1045a586d4a392d3ec73752",
+      "initSha256": "47b68bcfccdf6805cd2d87b9de9542f60134326e55e2be8e94f2e99c070a4c64",
+      "executionTerminal": 1,
+      "guestExit": 0,
+      "timedOut": false,
+      "processStoppedReported": true,
+      "pid": 17212,
+      "independentHostAbsence": "verified after approved read-only host check",
+      "migrationGatePassed": false
+    },
+    "oci-auth-migration03": {
+      "resultSha256": "bf6ab100f3f959901e97afa22f17cf6de8b5c86d1488c889ffb1200f5d244214",
+      "serialSha256": "5752d2148e8485439d77d0294b23bdf1774b4f2a3001a66ddabd8a16c6e91b28",
+      "sourceSha256": "b9e22eb1c4cde782e03bfddccc3a3cb19d6b35d8c2c1528a8a0a9e77ab092601",
+      "probeSha256": "165adcea5a233158f8865255e5e79e77d8b68e4c75d91faf4f53a147e6407af4",
+      "initSha256": "47b68bcfccdf6805cd2d87b9de9542f60134326e55e2be8e94f2e99c070a4c64",
+      "executionTerminal": 1,
+      "guestExit": 0,
+      "timedOut": false,
+      "processStoppedReported": true,
+      "pid": 20344,
+      "independentHostAbsence": "verified after approved read-only host check",
+      "migrationGatePassed": false
+    },
+    "oci-auth-migration04": {
+      "resultSha256": "4ba953dc7ec72cdfe0daaef53a86567b3eacd2ae00f81519cf8743060bd3d52f",
+      "serialSha256": "b3c56430b5804841da896b461aaebe6f9e144a0aa4611c1c22333ee15142f079",
+      "sourceSha256": "32b3e83aedb2c0b9e7a5445ae45812d326fe91d93d308b9b664108152ab215da",
+      "probeSha256": "f295307bee4cc0f39e274845d0c3f380b378a07a3bfecaca108c5c7e19d069a2",
+      "initSha256": "47b68bcfccdf6805cd2d87b9de9542f60134326e55e2be8e94f2e99c070a4c64",
+      "executionTerminal": 0,
+      "guestExit": 0,
+      "timedOut": false,
+      "processStoppedReported": true,
+      "pid": 20236,
+      "independentHostAbsence": "verified after approved read-only host check",
+      "migrationGatePassed": true
+    }
+  },
+  "diagnostic02": {
+    "migrationExit": 1,
+    "error": "Unqualified CREATE TABLE schema_migrations attempted in public; schema CREATE refused SQLSTATE42501",
+    "authServeHealth": "v2.196.0",
+    "authStopExit": 0,
+    "original88AndTwoSequenceHashes": {
+      "before": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+      "after": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c"
+    },
+    "completeSchemaDefaultAclHashes": {
+      "before": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+      "after": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460"
+    },
+    "globalManagedAuthorityChecks": 2,
+    "rootCause": "Session schema routing mismatch supported by actual04 paired resolution and unchanged-authority zero-migration result; isolated fixture scope only."
+  },
+  "development": {
+    "finalSession": 74822,
+    "exit": 0,
+    "previousSessions": [
+      21710,
+      98390,
+      70691
+    ],
+    "scope": "Final development gate after last probe source edit; unaffected app/browser/release suites not repeated"
+  },
+  "approvalReviewFailure": {
+    "action": "Independent host process inspection for owned PID8040",
+    "reason": "Account usage limit prevented automatic approval review; action not executed; not an unsafe-action determination",
+    "consequence": "Historical temporary interruption resolved; no bypass. Native resumed only after same review path succeeded and prior guests independently absent.",
+    "resolved": "Read-only account usage tool reported ordinaryUsageAllowed true; same independent host check through automatic approval review passed. Subsequent all4PID check passed. Historical review failure retained; publishing approval remains separately blocked."
+  },
+  "next": "Qualify genuine local Auth operational endpoints/JWT/MFA, PostgREST and BFF server-cookie/signed registry/CSRF fresh-browser reference flow with full synthetic cleanup. Retain current older-runtime/newer-captured-schema compatibility limits and all provider/owner/host/publishing gates.",
+  "recovery": "All4executionhandles terminal; all4ownedPIDs independently absent after approved checks.04 exact conservation and Auth/PostgreSQL stop/poweroff retained. Preserve all audit/native sources/layers/cases; no provider rollback.",
+  "qualified04": {
+    "sessionOption": "options=-csearch_path%3Dauth",
+    "defaultSession": "\"$user\", public|public|ABSENT",
+    "selectedSession": "auth|auth|schema_migrations",
+    "migrationExit": 0,
+    "appliedCount": 0,
+    "completedMigrationEvent": "GoTrue migrations applied successfully",
+    "eventPrintedTwice": "Same log event printed by cat and exact-event grep, not two executions",
+    "authHealth": "v2.196.0",
+    "authStopExit": 0,
+    "original88AndTwoSequences": "unchanged bc485716...",
+    "completeSchemaDefaultAcl": "unchanged e9ff1868...",
+    "globalManagedAuthorityChecks": 2,
+    "roleOrGrantChanges": false,
+    "operationalAuthEndpointsQualified": false
+  },
+  "diagnostic03": {
+    "reason": "Native psql/libpq rejects direct search_path URI parameter before migration/conservation; retained stopped failed case",
+    "defaultSessionObserved": "\"$user\", public|public|ABSENT",
+    "migrationAttempted": false
+  }
+}
