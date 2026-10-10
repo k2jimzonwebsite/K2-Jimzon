@@ -27,6 +27,7 @@ const q = v => "'" + String(v).replaceAll("'", "''") + "'"
 const sha = v => createHash('sha256').update(v).digest('hex')
 const report = { scope: 'Synthetic owned PG17.11 clone, no provider/Auth/media acceptance', out, db, marker, checks: [] }
 let n = 0, started = false, created = false
+const pendingSql = new Set(), asyncErrors = []
 const ctl = args => spawnSync(path.join(bin, 'pg_ctl.exe'), args, { windowsHide: true, stdio: 'ignore' }).status
 function sql(database, text) {
   const file = path.join(out, 'command-' + (++n) + '.sql')
@@ -53,11 +54,16 @@ const command=(action,payload,key,user,aal)=>sql(db,commandSql(action,payload,ke
 function asyncSql(text) {
   const number=++n,file=path.join(out,'command-'+number+'.sql')
   fs.writeFileSync(file,text,{flag:'wx'})
-  return new Promise((resolve,reject)=>{
+  const pending = new Promise((resolve,reject)=>{
     const child=spawn(path.join(bin,'psql.exe'),['-h','127.0.0.1','-p','54391','-U','postgres','-d',db,'-X','-q','-t','-A','-v','ON_ERROR_STOP=1','-v','VERBOSITY=terse','-f',file],{windowsHide:true})
     let stdout='',stderr='';child.stdout.on('data',b=>stdout+=b);child.stderr.on('data',b=>stderr+=b);child.on('error',reject)
-    child.on('close',exit=>{fs.writeFileSync(path.join(out,'stderr-'+number+'.txt'),stderr,{flag:'wx'});resolve({exit,stdout:stdout.trim(),stderr:stderr.trim()})})
+    child.on('close',exit=>{try { fs.writeFileSync(path.join(out,'stderr-'+number+'.txt'),stderr,{flag:'wx'});resolve({exit,stdout:stdout.trim(),stderr:stderr.trim()}) } catch(error) { reject(error) }})
   })
+  pendingSql.add(pending)
+  // Attach rejection handling immediately, even if an observation fails before
+  // the caller reaches its await. All children settle before clone disposal.
+  pending.then(() => pendingSql.delete(pending), error => { pendingSql.delete(pending); asyncErrors.push(error.message) })
+  return pending
 }
 const saved = (action, payload, key, user = actor) => { const r = command(action, payload, key, user); if (r.exit !== 0) throw Error(r.stderr); return parsed(r.stdout) }
 const productRead = id => parsed(good(db, 'select to_jsonb(p) from public.products p where id=' + q(id) + ';'))
@@ -129,7 +135,7 @@ try {
   const secondRequest = randomUUID()
   const second = saved('intake_session_create', { ...createPayload, requestId:secondRequest }).sessionId
   const step = (sid, next, patch = {}) => saved('intake_session_step', { sessionId:sid, step:next, patch })
-  const review = sid => {
+  const review = (sid, candidate = draft) => {
     step(sid,'packaging_evidence')
     for (const [i, slot] of ['PRIMARY','BACK','BARCODE'].entries()) {
       const key = randomUUID(), hash = String(i+1).repeat(64)
@@ -137,7 +143,7 @@ try {
     }
     step(sid,'research_handoff',{ evidenceChecklist:{ ingredients:true,allergens:true,storage:true,expiry:true }, categoryType:'food' })
     step(sid,'field_review')
-    step(sid,'draft_saved',{ draftPayload:draft.reviewedPayload, fieldDecisions:draft.fieldDecisions, fieldProvenance:{ sources:[] } })
+    step(sid,'draft_saved',{ draftPayload:candidate.reviewedPayload, fieldDecisions:candidate.fieldDecisions, fieldProvenance:{ sources:[] } })
   }
   review(sessionId); review(second)
   refuse('signed imported PRIMARY claim refuses without budget or job mutation','intake_ai_claim',{sessionId,kind:'PRIMARY',confirmation:'CONFIRM_PAID_INTAKE',version:'k2.intake-ai.2026-09-06',brief:'Synthetic image claim must be refused'},'AI_REVIEW_REQUIRED')
@@ -148,6 +154,7 @@ try {
   let sleeping=false
   for(let attempt=0;attempt<30 && !sleeping;attempt++)sleeping=good(db,"select exists(select 1 from pg_stat_activity where datname="+q(db)+" and wait_event='PgSleep');")==='t'
   check('first reviewed save holds its transaction while second session races',sleeping)
+  if (process.argv.includes('--writer-observation-failure')) throw Error('EXPLICIT_WRITER_OBSERVATION_FAILURE')
   const loser=command('intake_draft',{...draft,sessionId:second,requestId:secondRequest})
   const winning=await winner
   check('concurrent reviewed saves have exactly one winner',winning.exit===0 && loser.exit===3 && loser.stderr.includes('K2_IMPORTED_DRAFT_VERSION_CONFLICT'))
@@ -210,13 +217,71 @@ try {
   const final=parsed(good(db,`select jsonb_build_object('physical',(select sum(quantity) from public.product_batches where sku=${q(baseline.sku)}),'reserved',(select sum(reserved_quantity) from public.product_batches where sku=${q(baseline.sku)}),'ownershipEvents',(select count(*) from public.inventory_events where reference_id=${q(orderId)} and event_type='stock_committed'));`))
   check('complete imported chain consumes exactly one unit and one ownership event',final.physical===5 && final.reserved===0 && final.ownershipEvents===1)
   report.connectedOrder={...report.connectedOrder,finalStock:final,scope:'Actual signed native commands and maintained validators; synthetic actor, media registration, payment and physical inventory'}
+  if (process.argv.includes('--qualify-writers')) {
+    const pair = async (firstSql, secondSql) => {
+      const firstName = 'k2import_first_' + randomUUID(), secondName = 'k2import_second_' + randomUUID()
+      const first = asyncSql('set application_name=' + q(firstName) + ';' + firstSql)
+      let held = false
+      for (let i = 0; i < 30 && !held; i++) held = good(db, 'select exists(select 1 from pg_stat_activity where datname=' + q(db) + ' and application_name=' + q(firstName) + " and wait_event='PgSleep');") === 't'
+      check('actual signed writer has completed its body while retaining transaction locks', held)
+      const second = asyncSql('set application_name=' + q(secondName) + ';' + secondSql)
+      let observation = null
+      for (let i = 0; i < 30 && !observation; i++) {
+        const seen = good(db, 'select jsonb_build_object(\'heldPid\',a.pid,\'waitingPid\',b.pid,\'waitType\',b.wait_event_type,\'waitEvent\',b.wait_event,\'blockingPids\',pg_blocking_pids(b.pid)) from pg_stat_activity a cross join pg_stat_activity b where a.datname=' + q(db) + ' and b.datname=' + q(db) + ' and a.application_name=' + q(firstName) + ' and b.application_name=' + q(secondName) + " and a.wait_event='PgSleep' and b.wait_event_type='Lock' and a.pid=any(pg_blocking_pids(b.pid));")
+        if (seen) observation = JSON.parse(seen)
+      }
+      check('independent contender is observed waiting on the exact held writer PID', observation?.heldPid > 0 && observation?.waitingPid > 0 && observation.waitType === 'Lock' && observation.blockingPids.includes(observation.heldPid))
+      const [firstResult, secondResult] = await Promise.all([first, second])
+      return { firstResult, secondResult, observation }
+    }
+    const fixture = name => {
+      const requestId = randomUUID()
+      const created = saved('catalog_import_chunk', { ...payload, operationId:randomUUID(), rows:[{ ...payload.rows[0], values:{ ...payload.rows[0].values, name } }] })
+      const product = productRead(good(db, 'select id from public.products where sku=' + q(created.rows[0].sku) + ';'))
+      const sid = saved('intake_session_create', { requestId, barcode:null, scannedIdentity:'', existingProduct:{ productId:product.id, recordVersion:String(product.catalog_record_version) } }).sessionId
+      const candidate = { ...draft, sessionId:sid, requestId, reviewedPayload:{ ...draft.reviewedPayload, product:{ ...draft.reviewedPayload.product, name } } }
+      review(sid, candidate)
+      const catalog = { ...payload, operationId:randomUUID(), rows:[{ ...payload.rows[0], kind:'update', catalogId:product.catalog_id, sku:product.sku, expectedVersion:product.catalog_record_version, expectedUpdatedAt:product.updated_at, values:{ ...payload.rows[0].values, name, description:'Concurrent catalog correction' } }] }
+      const taxonomy = { sku:product.sku, patch:{ brand_id:brand, category_id:category }, expectedUpdatedAt:product.updated_at, reason:'Explicit synthetic concurrent taxonomy assignment' }
+      return { product, sid, candidate, catalog, taxonomy }
+    }
+    report.writerRaces = []
+    for (const [kind, name] of [['catalog','Amber lentil'],['taxonomy','Blue cocoa']]) {
+      const f = fixture(name), action = kind === 'catalog' ? 'catalog_import_chunk' : 'product_master_update'
+      const race = await pair(commandSql(action, f[kind], randomUUID(), admin, 'aal2', 'select pg_sleep(1);'), commandSql('intake_draft', f.candidate))
+      const writerResult = race.firstResult, reviewResult = race.secondResult
+      check(kind + ' writer commits before queued stale review refuses', writerResult.exit === 0 && reviewResult.exit === 3 && reviewResult.stderr.includes('K2_IMPORTED_DRAFT_VERSION_CONFLICT'))
+      check(kind + ' writer winner leaves review unassociated and version advances once', sessionRead(f.sid).product_id === null && Number(productRead(f.product.id).catalog_record_version) === Number(f.product.catalog_record_version) + 1)
+      check(kind + ' stale review records no review audit', good(db, "select count(*) from public.audit_logs where record_id=" + q(f.product.id) + " and new_data->>'operation'='REVIEW_IMPORTED_DRAFT';") === '0')
+      report.writerRaces.push({ kind, direction:'writer before review', writerExit:writerResult.exit, reviewExit:reviewResult.exit, observation:race.observation })
+    }
+    for (const [kind, name] of [['catalog','Cedar rice'],['taxonomy','Dahlia pepper']]) {
+      const f = fixture(name), race = await pair(commandSql('intake_draft', f.candidate, randomUUID(), actor, 'aal2', 'select pg_sleep(1);'), commandSql(kind === 'catalog' ? 'catalog_import_chunk' : 'product_master_update', f[kind], randomUUID(), admin))
+      const result = race.secondResult, reviewedResult = race.firstResult
+      check('review commits before queued stale ' + kind + ' writer refuses', reviewedResult.exit === 0 && result.exit === 3 && result.stderr.includes(kind === 'catalog' ? 'K2_CATALOG_STALE_CONFLICT' : 'K2_ADMIN_PRODUCT_VERSION_CONFLICT'))
+      check('winning review retains original SKU and one catalog-version change ' + kind, sessionRead(f.sid).product_id === f.product.id && productRead(f.product.id).sku === f.product.sku && Number(productRead(f.product.id).catalog_record_version) === Number(f.product.catalog_record_version) + 1)
+      report.writerRaces.push({ kind, direction:'review before writer', reviewExit:reviewedResult.exit, writerExit:result.exit, observation:race.observation })
+    }
+    const f = fixture('Emerald coffee')
+    const stock = { ...inventory, sessionId:f.sid, inventoryRequestId:randomUUID(), inventory:{ ...inventory.inventory, boxCode:'SYN-RACE-BOX', batchCode:'SYN-RACE-LOT' } }
+    const race = await pair(commandSql('intake_draft', f.candidate, randomUUID(), actor, 'aal2', 'select pg_sleep(1);'), commandSql('intake_inventory', stock, randomUUID(), admin))
+    const stockResult = race.secondResult, reviewResult = race.firstResult
+    check('queued first inventory proceeds only after reviewed association commits', reviewResult.exit === 0 && stockResult.exit === 0 && sessionRead(f.sid).product_id === f.product.id)
+    const duplicateBefore = fingerprint(), duplicateResult = command('intake_inventory', { ...stock, inventoryRequestId:randomUUID() }, randomUUID(), admin)
+    check('second first-inventory request refuses without any committed application mutation', duplicateResult.exit === 3 && duplicateResult.stderr.includes('K2_FIRST_INVENTORY_ALREADY_RECORDED') && isDeepStrictEqual(duplicateBefore, fingerprint()))
+    check('queued inventory records exactly six units once', Number(good(db, 'select sum(quantity) from public.product_batches where sku=' + q(f.product.sku) + ';')) === 6)
+    report.writerRaces.push({ kind:'inventory', direction:'review before first inventory', reviewExit:reviewResult.exit, inventoryExit:stockResult.exit, duplicateExit:duplicateResult.exit, observation:race.observation })
+  }
 } catch (error) { report.error = error.message; process.exitCode = 1 }
 finally {
-  if (created) {
+  const settled = await Promise.allSettled([...pendingSql])
+  report.asyncChildrenSettled = pendingSql.size === 0 && settled.every(r => r.status === 'fulfilled') && asyncErrors.length === 0
+  if (!report.asyncChildrenSettled) { report.asyncErrors = asyncErrors; process.exitCode = 1 }
+  try { if (created) {
     const actual = good('postgres', 'select shobj_description(oid,\'pg_database\') from pg_database where datname=' + q(db) + ';')
     if (actual !== marker) throw Error('CLEANUP_MARKER_MISMATCH')
     good('postgres', 'drop database ' + db + ';'); report.cloneRemoved = true
-  }
+  } } catch (error) { report.cleanupError = error.message; process.exitCode = 1 }
   if (started) ctl(['stop','-m','fast','-w','-t','20','-D',dir])
   report.mirrorStopped = ctl(['status','-D',dir]) === 3
   const pins = JSON.parse(fs.readFileSync(path.join(root,'native-rehearsal-copy-manifest.json')))

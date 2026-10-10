@@ -2,6 +2,58 @@
 
 ## 10 October — combined imported installation and recovery
 
+### 10 October — observed current-writer schedules
+
+The same maintained rehearsal with `--qualify-installation --qualify-writers`
+exits0 with125 checks/zero failures. Private root
+`D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/imported-draft-d9231f93-dcb5-4288-8c36-62c741fec276`,
+resultSHA25676222e348611f25ae710aa9c67d6f6a6905975f305eef03ba331f0abc612eaa7;
+combined package remains exactabc2abd5.... Five uniquely named native connection
+pairs explicitly observe firstPgSleep after its signed body and secondLock wait
+with the first PID in pg_blocking_pids. Actual observed blocking pairs:
+catalog→review18568→668; first brand/category assignment→review4056→4676;
+review→catalog15640→5420; review→taxonomy2512→12016;
+review→first inventory19840→11640. All waits are transactionid, not an assumed
+advisory-lock observation. The holder commits; stale review/catalog/taxonomy
+contenders exit3 with the exact version error. First inventory succeeds only
+after reviewed association commits; a new second first-stock request refuses
+and preserves all application rows/metadata. Exactly six dummy units are recorded.
+
+Immediate child rejection handling and settlement precede clone disposal.
+`--writer-observation-failure` deliberately throws only after a real signed
+review is observed holding its transaction: diagnostic root1b05fa18-404f-4d33-8158-1813840f2428,
+resultSHA25665a464d3a6e113bbd783474a2c834f85a3f35df54fe16b61b0ed946fe374dcc8.
+Expected terminal1/EXPLICIT_WRITER_OBSERVATION_FAILURE,25 preceding checks pass;
+independent readback confirms every child settled, clone removed, mirror/original
+stopped and all3602 original files retained. Parent disposal refusal preserves
+shutdown/result handling. Earlier120-check rootb06cdbef... remains private and is
+superseded for concurrency claims because it did not observe the contender wait.
+Independent review's two Important findings were corrected and re-reviewed.
+
+Final `npm run verify:development` after the final diagnostic edit exits0;
+source/environment/import/secret/dependency and security inventories pass.
+No application code changed in this witness batch, so passing42-contract/26-UI
+and prior source proofs were retained without rerunning unaffected suites.
+
+Scope is these five native signed schedules and duplicate first-stock refusal,
+not every taxonomy/policy/inventory operation, real BFF/Auth concurrency, genuine
+provider authority or global through-commit immunity. Other required acceptance
+remains solely MAP-018. No application/business writer changed in this witness.
+
+**GitHub/preview checkpoint:**02247ff648500462b79f71a68a577e7a8ab7e431
+is pushed to codex/dummy-production-acceptance; [draft PR16](https://github.com/k2jimzonwebsite/K2-Jimzon/pull/16)
+is attached to this chat. K2 Vercel connector directly returns READY/target:null
+for Admin dpl_Fi1voUqwKpy5Cf4XAbZdyvpqCemv/projectprj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x
+and Storefront dpl_JBCN1wa11s6VUY8F1HdZ9xtGKvB6/projectprj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL,
+both with exact commit02247ff. Root fetches at
+https://k2-jimzon-admin-e9592s77g-k2-jimzon.vercel.app and
+https://k2-jimzon-getb09lbc-k2-jimzon.vercel.app return200 and separate correct
+titles. This observes preview metadata/HTTP only, not rendered/Auth/activated
+workflow or a main promotion. Linux run38008808492 critical-sql-behavior succeeds;
+complete build-and-smoke/browser status remains in MAP-018 until terminal.
+The script-unreached Vercel gate remains accurate for that script, but no longer
+supports a blanket claim that K2 Vercel previews cannot be reached.
+
 MAP-018 / IDEA-20261007-01/-12. The existing owned rehearsal now uses
 `scripts/qualify-imported-installation.mjs` and the canonical
 `operatingReplayPackage` generator. Source-pinned accepted contents and the
