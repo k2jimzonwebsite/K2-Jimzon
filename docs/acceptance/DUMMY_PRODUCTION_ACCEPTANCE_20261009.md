@@ -1,5 +1,60 @@
 # Dummy production acceptance receipt — 9 October 2026
 
+## 10 October — combined imported installation and recovery
+
+MAP-018 / IDEA-20261007-01/-12. The existing owned rehearsal now uses
+`scripts/qualify-imported-installation.mjs` and the canonical
+`operatingReplayPackage` generator. Source-pinned accepted contents and the
+imported fragment share one full current/cold contract; repeated nested
+admission wrappers alone are removed. Original2s lock/10s statement limits
+remain. Calibration permits exactly three function-body changes and one private
+helper, preserving all other contract/function-authority metadata. This is an
+owned PG17.11 package, not a provider installation candidate.
+
+```powershell
+node scripts/rehearse-imported-draft.mjs --recovery-root=D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc --qualify-installation
+```
+
+Final run exits0: **102 checks, zero failures**. Populated and schema-only copies
+pass fresh commit, exact replay, original RLS drift refusal, helper ACL drift
+refusal and explicit failure after successful apply with complete rollback.
+Rollback/recovery/replay compare every original row. Successful-install
+conservation alone permits the absent-before evidence bucket, whose exact
+private configuration is separately checked. Original columns of all88 tables
+and both sequence states remain. A custom-format populated backup restores into
+a third marked database with full original logical contract, rows, sequences
+and event bindings matching. The signed imported review-to-handover chain passes
+on this combined installation: SKU K2-SKU-001001, dummy order WEB-CD8EF48276,
+physical5/reserved0/one ownership event from six dummy units. No real Auth/media,
+paid AI, money or physical stock is asserted.
+
+Private immutable root:
+`D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/imported-draft-1b575df3-478e-4b1d-a2ba-b8d361746037`.
+ResultSHA25649223d1bb569c8d109ad844ba6e1f2d593f237d894854b2200c8250f3d9ce2a1;
+package11532586bytes/SHA256abc2abd5d685913d07508bd704aa1ecc0a29c6b0bae0f870cb47cb5ca82f85d5;
+backupSHA25689d3d36740f25f3bcf19ab771604a195980b428c729a69596e2a047855e7c8e4.
+Logical query/builder hashes are pinned and recorded. Independent readback
+checks receipt/package hashes, all102 passes, all three clone removals, stopped
+mirror/original and all3602 original files retained. Independent source review's
+bucket-comparison weakness was corrected and re-reviewed with no remaining
+Critical/Important finding. Final `npm run verify:development` exits0; no
+unaffected browser suite or release gate was repeated for this harness batch.
+
+Regression d3866aa6... proves old-foundation replay refuses after the separate
+fragment.93eac602.../7d862bb0... are constant-reader/sequence-composite harness
+failures.32357ced... retains the unchanged10s nested-wrapper timeout; its cold
+clone was removed after exact mirror/marker/owner/no-session verification,
+receipt `.tools/cleanup-installation-cold-receipt.json`. Final flattening retains
+all pinned function guards and complete outer admission/postconditions. Client
+terse errors avoid duplicating large SQL in stderr without changing SQL limits
+or error/notice status. All failures remain private; no production write occurred.
+
+This supersedes prior current/cold/populated recovery gaps only for the owned
+PG17.11 package. Current catalog/taxonomy/inventory writers, genuine provider
+composition/transport, the authority-through-commit counterexample, explicit
+live authorization and actual-host/human acceptance remain MAP-018/023/025.
+Recovery restores the verified whole backup, not an inverse merge over staff edits.
+
 Owning work: MAP-018/023/025. This records tested scope and gaps; it is not another
 backlog. No real stock, funds, Auth identity or human participation is asserted.
 

@@ -31,7 +31,7 @@ const ctl = args => spawnSync(path.join(bin, 'pg_ctl.exe'), args, { windowsHide:
 function sql(database, text) {
   const file = path.join(out, 'command-' + (++n) + '.sql')
   fs.writeFileSync(file, text, { flag: 'wx' })
-  const r = spawnSync(path.join(bin, 'psql.exe'), ['-h','127.0.0.1','-p','54391','-U','postgres','-d',database,'-X','-q','-t','-A','-v','ON_ERROR_STOP=1','-f',file], { windowsHide: true, encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 })
+  const r = spawnSync(path.join(bin, 'psql.exe'), ['-h','127.0.0.1','-p','54391','-U','postgres','-d',database,'-X','-q','-t','-A','-v','ON_ERROR_STOP=1','-v','VERBOSITY=terse','-f',file], { windowsHide: true, encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 })
   fs.writeFileSync(path.join(out, 'stderr-' + n + '.txt'), r.stderr || '', { flag: 'wx' })
   return { exit: r.status, stdout: (r.stdout || '').trim(), stderr: (r.stderr || '').trim() }
 }
@@ -54,7 +54,7 @@ function asyncSql(text) {
   const number=++n,file=path.join(out,'command-'+number+'.sql')
   fs.writeFileSync(file,text,{flag:'wx'})
   return new Promise((resolve,reject)=>{
-    const child=spawn(path.join(bin,'psql.exe'),['-h','127.0.0.1','-p','54391','-U','postgres','-d',db,'-X','-q','-t','-A','-v','ON_ERROR_STOP=1','-f',file],{windowsHide:true})
+    const child=spawn(path.join(bin,'psql.exe'),['-h','127.0.0.1','-p','54391','-U','postgres','-d',db,'-X','-q','-t','-A','-v','ON_ERROR_STOP=1','-v','VERBOSITY=terse','-f',file],{windowsHide:true})
     let stdout='',stderr='';child.stdout.on('data',b=>stdout+=b);child.stderr.on('data',b=>stderr+=b);child.on('error',reject)
     child.on('close',exit=>{fs.writeFileSync(path.join(out,'stderr-'+number+'.txt'),stderr,{flag:'wx'});resolve({exit,stdout:stdout.trim(),stderr:stderr.trim()})})
   })
@@ -75,9 +75,15 @@ try {
   const target = "current_setting('data_directory') is distinct from 'C:/Users/jerze/K2 JImzon/.tools/current-restore-20260929-pg-data'", port = 'inet_server_port() is distinct from 54388'
   check('four owned-local target literals only', original.split(target).length === 2 && original.split(target.replaceAll("'","''")).length === 2 && original.split(port).length === 3)
   const adapted = original.replace(target, () => "current_setting('data_directory') is distinct from " + q(dir)).replace(target.replaceAll("'","''"), () => "current_setting(''data_directory'') is distinct from ''" + dir + "''").replaceAll(port, 'inet_server_port() is distinct from 54391')
-  good(db, adapted)
   report.foundation = { source, sourceSha256: sha(original), adaptedSha256: sha(adapted) }
-  if (!baselineOnly) good(db, fs.readFileSync('supabase/prepared/imported_draft_continuation.sql', 'utf8'))
+  if (process.argv.includes('--qualify-installation')) {
+    if (baselineOnly) throw Error('INSTALL_QUALIFICATION_REQUIRES_IMPORTED_FRAGMENT')
+    const { qualifyImportedInstallation } = await import('./qualify-imported-installation.mjs')
+    qualifyImportedInstallation({ db, dir, bin, out, adapted, good, sql, check, report })
+  } else {
+    good(db, adapted)
+    if (!baselineOnly) good(db, fs.readFileSync('supabase/prepared/imported_draft_continuation.sql', 'utf8'))
+  }
   good(db, `insert into auth.users(id) values(${q(actor)});insert into public.user_profiles(id,role) values(${q(actor)},'Staff') on conflict(id) do update set role=excluded.role;insert into k2_private.admin_bff_secrets(singleton,request_secret) values(true,decode(repeat('01',32),'hex')) on conflict(singleton) do update set request_secret=excluded.request_secret;`)
   process.env.K2_ADMIN_BFF_REQUEST_SECRET = Buffer.alloc(32,1).toString('base64')
   good(db, `insert into auth.users(id) values(${q(admin)});update public.user_profiles set role='Admin' where id=${q(admin)};
