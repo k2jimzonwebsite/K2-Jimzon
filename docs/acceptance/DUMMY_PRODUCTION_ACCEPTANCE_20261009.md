@@ -4,6 +4,20 @@
 
 ### 10 October — observed current-writer schedules
 
+**Remote source checkpoint:** d9cd9245fe6a2435eca2c7bbbb1a4bb78aec6c3e
+publishes this reviewed harness/evidence batch to draft PR16. Earlier application
+checkpoint02247ff completes Linux run38008808492 with both jobs SUCCESS:
+1396 Playwright cases across18 suites (1103/4/12/32/29/41/8/42/1/41/17/1/8/14/2/4/11/26),
+separate isolated builds, security checks, MAP-017/catalog rollback and critical
+stock/payment/final-Admin SQL rehearsals. This closes the earlier Linux phone-map
+failure for that application checkpoint. Later38009805472 is running against
+d9cd924; no final result is inferred yet. Both new separate Vercel deployments
+dpl_EhgLqDpKxUQ7WWLzgRGcj9tN56BT and dpl_Aq7YSrfby1MzxWLxD3gRiT4GQuCA
+are directly observed READY/target:null/exactd9cd924 in the same two K2 projects.
+Exact Admin https://k2-jimzon-admin-f67ft1639-k2-jimzon.vercel.app and Storefront
+https://k2-jimzon-g9ly7iyui-k2-jimzon.vercel.app roots return200/correct separate
+titles. These remain previews/HTTP proof, not activated workflow/production.
+
 The same maintained rehearsal with `--qualify-installation --qualify-writers`
 exits0 with125 checks/zero failures. Private root
 `D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/imported-draft-d9231f93-dcb5-4288-8c36-62c741fec276`,
