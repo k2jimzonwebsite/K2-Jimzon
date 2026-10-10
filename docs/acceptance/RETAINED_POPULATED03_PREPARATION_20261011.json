@@ -1,0 +1,138 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-populated03",
+  "marker": "2b9bb642-ae60-4f1a-a9cb-00d4b3801c18",
+  "classification": "Fresh signed-population native all-eight repair/repeat/three-interruption fixture preparation; no execution",
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "69315aaf560f64fb80c2bdf4db7b88887c01f5beb7b2b6a70031e2af290aad4c"
+    },
+    {
+      "file": "staging/k2/race-install.sql",
+      "sha256": "ea8e212e648615611f4bc09ed36c7610c875f1779c84510e5556c448ff3a01f4"
+    },
+    {
+      "file": "staging/k2/retained-matrix.sh",
+      "sha256": "7281a4fd4de778cf1a75b6df42dbebe592e5125ec413d68c53a4c88fe990c45c"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "229d5bfba6c107b6dc00ce8454d7149aa1384dbcff4a489721342fbdaea5bf6b"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/retained-state-0.sql",
+      "sha256": "f30b7de87091c42fc3fb5a74e4ccdb1502bd78ff2eb017af402eb3f2ed4d9cdc"
+    },
+    {
+      "file": "staging/k2/retained-state-1.sql",
+      "sha256": "71aa1c7e813b146ad7bf18a95154a7328b5bdeb43bcb2329ba5fa3c299e7641a"
+    },
+    {
+      "file": "staging/k2/retained-state-2.sql",
+      "sha256": "c3c3203b4bd43ba6c891d36c629dc6431d8cac7ca6e683ef584a7c7d8c55578d"
+    },
+    {
+      "file": "staging/k2/retained-state-3.sql",
+      "sha256": "2fb1d3047d7974e8d431166807811bccf54ebce156039b409a279321cbcbc811"
+    },
+    {
+      "file": "staging/k2/retained-state-4.sql",
+      "sha256": "f14e7ad0312acf0feee31ee0f5c93920fec49af96976e0d5b9025751d6c10b4c"
+    },
+    {
+      "file": "staging/k2/retained-state-5.sql",
+      "sha256": "21186d272dd847c25381c677e6b023fc29ac6de17aabc9b4ddc5dd112df4ed23"
+    },
+    {
+      "file": "staging/k2/retained-state-6.sql",
+      "sha256": "9fa3052d1ba8559014d9eea8c5953d254fc74ff381d86594d84eac1d5f93d958"
+    },
+    {
+      "file": "staging/k2/retained-state-7.sql",
+      "sha256": "9c5d231959e9f22c5201e4f3b3fd5129a5f20b15d87cd1fb22b711ecd0dee67c"
+    },
+    {
+      "file": "staging/k2/retained-fault-1.sql",
+      "sha256": "6e4ee1cc122642ca5d821d581ca41448b79f90b5c98c8979c68861efe9855016"
+    },
+    {
+      "file": "staging/k2/retained-fault-2.sql",
+      "sha256": "713f381aca5dc73e8362c4bcfdb6116fe8d7bef1d3a8b8da947509bfeeca2678"
+    },
+    {
+      "file": "staging/k2/retained-fault-3.sql",
+      "sha256": "7e21371707f4556706916e78e221057b450e5948ea05961ed32ce43137e4c47a"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "ee3c52eab3e73cfd586994f59bfb9bc7478d672cb405681e0357a69e970fb17c"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "eb318346eca9dd6f515890e7c0caa2cd704ebc288b5d384fdb0e1621e3193e0d"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "c123c225fb2cb09a50fbf807550af2ab02f611d4c2becde0247ebc8eb22c1e36"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "3994f5ad1865085b48eec050c91a5fad1b11228a14cde2a3ba861cc13db8d70e"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "d206e61499c17f9ae94f3240b3c95ca5167f7ed6b7440a4722ca58b326bac19b"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "dc0f32d8eef4952e5abfd69dd50be08d2ee65f3b5494eebf1040b8726cba9b32"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "0723111ed4cc45f24d574a868ad401977d2cf10967faa31026b253db99dbfd92"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.mjs",
+      "sha256": "345f6cd7cf9431102ac3d828ed69c1d1f5dc7d56897413a314c623294ba5de5f"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.test.mjs",
+      "sha256": "4f625ce5fc91704e478763e9cd5c79f1b195a412899e1a77b3896e823aa0d316"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "9e1bd5e2872defa019bcb9ac779c429e8090282530ea5c6394b002e3061c6f8e"
+    }
+  ],
+  "review": {
+    "status": "rejected-unexecuted-preparation",
+    "reviewer": "populated_native_review",
+    "reason": "Outer healthy variable became subshell-local"
+  },
+  "nativeExecuted": false,
+  "providerWrites": false,
+  "deployed": false,
+  "remaining": [
+    "Preexecution review",
+    "Native execution and full conservation/recovery evidence",
+    "Unknown drift refusal cases",
+    "Actual post-repair signed/quote/order resumption",
+    "Provider/authority-through-commit/hosted/owner gates"
+  ]
+}

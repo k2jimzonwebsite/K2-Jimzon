@@ -1,0 +1,145 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-populated04",
+  "marker": "3b9bb642-ae60-4f1a-a9cb-00d4b3801c18",
+  "classification": "Fresh signed-population native all-eight repair/repeat/three-interruption fixture preparation; no execution",
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "1334b0d30194058607766b6128d7ae01003eb973e6e91e0f38f5c3fd4ef04446"
+    },
+    {
+      "file": "staging/k2/race-install.sql",
+      "sha256": "ea8e212e648615611f4bc09ed36c7610c875f1779c84510e5556c448ff3a01f4"
+    },
+    {
+      "file": "staging/k2/retained-matrix.sh",
+      "sha256": "7281a4fd4de778cf1a75b6df42dbebe592e5125ec413d68c53a4c88fe990c45c"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "82ccb7cbd2c64d3d1d98d8ffaf10a6041feb5963706bba06d77dc0cf6af62d47"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/retained-state-0.sql",
+      "sha256": "c8c1b1590d57144bfc32b84a5f09b249f93c05c4c1d62d37e00a71db1d1c817c"
+    },
+    {
+      "file": "staging/k2/retained-state-1.sql",
+      "sha256": "645871c27a8b2b501e1cd6e329c6d948c9b2cbf427231e808e2719797e4220d7"
+    },
+    {
+      "file": "staging/k2/retained-state-2.sql",
+      "sha256": "f386b49c84c04cc29a159dd3369cc936e8a25040594f159aafad9b52a0f39830"
+    },
+    {
+      "file": "staging/k2/retained-state-3.sql",
+      "sha256": "2a1315cad7c799f4542b9c0a8ff5e3d0202acbba2e12ff819c50fc405f4c58b7"
+    },
+    {
+      "file": "staging/k2/retained-state-4.sql",
+      "sha256": "a5e0d9e4acf999769376c34b170d8daa868deec98d16e3a7b4922fef6b540e98"
+    },
+    {
+      "file": "staging/k2/retained-state-5.sql",
+      "sha256": "43060b6e15619e08224681e3834c5f6b750afe434d56ef2bf8618b3ddaf829b4"
+    },
+    {
+      "file": "staging/k2/retained-state-6.sql",
+      "sha256": "41f00986649d13c5cca6035153ee35a98998301c28dfcd49414b8038646da580"
+    },
+    {
+      "file": "staging/k2/retained-state-7.sql",
+      "sha256": "6868353ad6b48aafcae818a61d2133ba677642cc61d70f85bbddeffb3160f81e"
+    },
+    {
+      "file": "staging/k2/retained-fault-1.sql",
+      "sha256": "8086ac3bf5995294530af6b22d02f965f9cc80c3b59d5f24ddfe669e9371950f"
+    },
+    {
+      "file": "staging/k2/retained-fault-2.sql",
+      "sha256": "02499916b05a1d013ed66a0df63f9f628a5953f32ca6fca1c553b3e1fcab3a30"
+    },
+    {
+      "file": "staging/k2/retained-fault-3.sql",
+      "sha256": "37af7141ead08f07d0f83db0af502d8a663216de7a5e329bf2e633637c53f4ca"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "ee3c52eab3e73cfd586994f59bfb9bc7478d672cb405681e0357a69e970fb17c"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "912a95ee58cb3bf2ec3f0a08d505efe00a6d197587a04f8c0df072a588b7759d"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "31aa1cb7f2fb8a63b93b16f09fb4d83c18809bd65831a12d18e3199574379574"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "3994f5ad1865085b48eec050c91a5fad1b11228a14cde2a3ba861cc13db8d70e"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "d206e61499c17f9ae94f3240b3c95ca5167f7ed6b7440a4722ca58b326bac19b"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "dab251673e5ea6820b5fc448c41684dcd19cae62d0bb00f36df79748a314eaa4"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "ed8d91e10f3af980ceb3fc614f058d33f90971d607b9b2c444f94d25b4cd310f"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.mjs",
+      "sha256": "345f6cd7cf9431102ac3d828ed69c1d1f5dc7d56897413a314c623294ba5de5f"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.test.mjs",
+      "sha256": "4f625ce5fc91704e478763e9cd5c79f1b195a412899e1a77b3896e823aa0d316"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "9e1bd5e2872defa019bcb9ac779c429e8090282530ea5c6394b002e3061c6f8e"
+    }
+  ],
+  "review": {
+    "status": "reviewed-preexecution-no-critical-important",
+    "reviewer": "populated_native_review",
+    "artifactPinsVerified": 25,
+    "sourcePinsVerified": 3,
+    "scope": "Scoped local all-eight/repeat/interruption qualification only; drift/resumption/provider remain open"
+  },
+  "nativeExecuted": false,
+  "providerWrites": false,
+  "deployed": false,
+  "remaining": [
+    "Preexecution review",
+    "Native execution and full conservation/recovery evidence",
+    "Unknown drift refusal cases",
+    "Actual post-repair signed/quote/order resumption",
+    "Provider/authority-through-commit/hosted/owner gates"
+  ],
+  "prelaunch": {
+    "emulatorProcesses": 0,
+    "listeners54392through54396": 0,
+    "method": "Actual escalated Win32_Process and Get-NetTCPConnection read-only checks"
+  }
+}

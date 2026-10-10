@@ -1,0 +1,138 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-populated02",
+  "marker": "1b9bb642-ae60-4f1a-a9cb-00d4b3801c18",
+  "classification": "Fresh signed-population native all-eight repair/repeat/three-interruption fixture preparation; no execution",
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "6a25d968f5be228b78f837a7b2c0de551487de50b945a3f7621eba554e453ebc"
+    },
+    {
+      "file": "staging/k2/race-install.sql",
+      "sha256": "ea8e212e648615611f4bc09ed36c7610c875f1779c84510e5556c448ff3a01f4"
+    },
+    {
+      "file": "staging/k2/retained-matrix.sh",
+      "sha256": "7281a4fd4de778cf1a75b6df42dbebe592e5125ec413d68c53a4c88fe990c45c"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "1b7279b6f6417f9b3e49e0bdf8d73ebbabdbaaf08772ce47e9ccb52d2a11e5ae"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/retained-state-0.sql",
+      "sha256": "8e7e535babc03b3f61c2652b610919269ac85a38506958443ae1fb5195f4b893"
+    },
+    {
+      "file": "staging/k2/retained-state-1.sql",
+      "sha256": "9a23cd12ef7dc30b60e5433334441c53c4ba57037a759b6c0b8138aa30f67373"
+    },
+    {
+      "file": "staging/k2/retained-state-2.sql",
+      "sha256": "c2b4339ee475eb9f0756a2e51681d4b79fbbb1e6c7b245d8b7216030e6261cc4"
+    },
+    {
+      "file": "staging/k2/retained-state-3.sql",
+      "sha256": "3ebe07853d2a5803b64956d11d5b8618fd4b6a6d380809a94251f1d3593e09c8"
+    },
+    {
+      "file": "staging/k2/retained-state-4.sql",
+      "sha256": "5f6eade5343922512a158628d621383bdd285f720eb41484ab7d074d0f0386b4"
+    },
+    {
+      "file": "staging/k2/retained-state-5.sql",
+      "sha256": "c31024911669da622d63e1b6b99617e5f99b75f290e2aa0c79bd09d2fc390f95"
+    },
+    {
+      "file": "staging/k2/retained-state-6.sql",
+      "sha256": "c6b5efd5e2b3ea31be0f625ef9748258e7c214ea02d323d51b0c87e561cc4772"
+    },
+    {
+      "file": "staging/k2/retained-state-7.sql",
+      "sha256": "dc151156adcc5d507b30b791b7d3e219263e9390ae101e7c11c276957d96ef32"
+    },
+    {
+      "file": "staging/k2/retained-fault-1.sql",
+      "sha256": "a7de83bae8b801a509880625011554731786668b79417320cc810832a65cdfc7"
+    },
+    {
+      "file": "staging/k2/retained-fault-2.sql",
+      "sha256": "774fbc6d3dbccb5857314cd6a8d448572179b2ea91cd8b533335bff0e562b326"
+    },
+    {
+      "file": "staging/k2/retained-fault-3.sql",
+      "sha256": "83f4eb5861c00dd0268917a7127240718e0d61d6a5f61a951533612022c836b5"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "ee3c52eab3e73cfd586994f59bfb9bc7478d672cb405681e0357a69e970fb17c"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "b406d3b557d5bbda56da44e08fdc2bc7c55d6c8f19522602c2c85ea320c32c71"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "616bff426c43c3c3accbe3a3f607605bf59b1f9061c5b3bb5ff43e7b48d01311"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "3994f5ad1865085b48eec050c91a5fad1b11228a14cde2a3ba861cc13db8d70e"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "d206e61499c17f9ae94f3240b3c95ca5167f7ed6b7440a4722ca58b326bac19b"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "8fa33a36c7f5da8f8983d2b6297ea6442a36c6208b061d74a7f6503d7a6bb293"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "6d8ea2924854eea033e1d5cc5bc120fa9d8a9f6f6e45a43781d0ae14cced8f20"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.mjs",
+      "sha256": "345f6cd7cf9431102ac3d828ed69c1d1f5dc7d56897413a314c623294ba5de5f"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.test.mjs",
+      "sha256": "4f625ce5fc91704e478763e9cd5c79f1b195a412899e1a77b3896e823aa0d316"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "9e1bd5e2872defa019bcb9ac779c429e8090282530ea5c6394b002e3061c6f8e"
+    }
+  ],
+  "review": {
+    "status": "rejected-unexecuted-preparation",
+    "reviewer": "populated_native_review",
+    "reason": "Population-stage failures could bypass recovery"
+  },
+  "nativeExecuted": false,
+  "providerWrites": false,
+  "deployed": false,
+  "remaining": [
+    "Preexecution review",
+    "Native execution and full conservation/recovery evidence",
+    "Unknown drift refusal cases",
+    "Actual post-repair signed/quote/order resumption",
+    "Provider/authority-through-commit/hosted/owner gates"
+  ]
+}

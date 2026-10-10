@@ -1,4 +1,6 @@
 
+IDEA-20261010-08 outcome,11October: existing approved known-three recovery now has actual signed-populated all8/repeat/3-interruption/full-state conservation evidence in docs/acceptance/RETAINED_POPULATED_REPAIR_20261011.json. No new scope or production pause. Source preparation red2/green2, development3493 exit0; independent actual-evidence review found no Critical/Important issues. Unknown drift and genuine post-repair resumption remain solely MAP-018.
+
 IDEA-20261010-08 continuation outcome,11October: existing approved settled witness boundary now has source preparation and10 passing coordinator checks; no new idea, repair scope or production pause. docs/acceptance/RETAINED_SETTLED_COORDINATOR_20261011.json records review/limitations/recovery. Native signed populated qualification remains MAP-018.
 
 IDEA-20261010-08 profile outcome: exact calibration01 / derived known-three prior composition and source review approved; fixed matched-pair preparation passes36 source tests/development18973 and preserves original SQL bytes. No new idea or broadened arbitrary repair scope. RETAINED_REPAIR_PROFILE_PREPARATION_20261010.json owns derivation/pins/limits; settled signed populated qualification remains solely MAP-018.
