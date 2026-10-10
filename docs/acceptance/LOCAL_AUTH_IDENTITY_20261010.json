@@ -1,0 +1,322 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "scope": "Genuine isolated local Auth creation/password/signed JWT/server user/TOTP MFA/logout refresh refusal/deletion and captured conservation only",
+  "providerWrites": false,
+  "dependencies": {
+    "auth": "v2.196.0",
+    "postgres": "17.6",
+    "authSdk": "2.117.2",
+    "lockfileSha256": "e248630a980ba18780cf9bd738f1c0b8f89324f1a534425c7797628c891e0225",
+    "baseMigrationSourceSha256": "32b3e83aedb2c0b9e7a5445ae45812d326fe91d93d308b9b664108152ab215da"
+  },
+  "cases": {
+    "oci-auth-identity01": {
+      "native": {
+        "exit": 0,
+        "timedOut": false,
+        "pid": 7516,
+        "guestSuccess": false,
+        "conservationReached": false,
+        "processStoppedReported": true,
+        "independentHostAbsence": "Verified through approved owned-PID/loopback-port check"
+      },
+      "driver": {
+        "owningMap": "MAP-018",
+        "scope": "Real local Auth SDK admin creation/password/JWT/user/TOTP MFA/deletion only; no BFF/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login"
+        ],
+        "passed": false,
+        "error": {
+          "name": "AssertionError",
+          "stage": "assertion_or_transport_failure"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "1314bb182052c92a653da83cea656d2f856660ebc4ebb188f88a98eb767f7ff0",
+        "executed-derivation.mjs": "c71bbcba9447bb677403999430b03417f5c0555c00ad5927b9097f7b49f032d7",
+        "host-driver.mjs": "f5cbadf26610a3be25a6652dc412d8a690529a53c3f9962b39384c0f55049c89",
+        "runner-source.mjs": "6bf0c19a4051c3e31f1ffc49f3a4b6f640b82f4da145f6a3bdc5c76aafbdc751",
+        "staging/k2/image-probe.sh": "cea4d5cc389f55daf2a3364a3c07ec659fe17785472d1ccfc32d0e907a1b56fa",
+        "staging/k2/init.sh": "08870076860c3712102b720f5c8ea1790fa7c777748467dffca92d796e511c1d",
+        "execution01/result.json": "a12e16ce96d9a0281487bf37781699c6c379d2293c7dde5c99df749168c459b6",
+        "execution01/serial.log": "3c55de6c4e68929b23cad0ba82914b3e0072fb5a65c07a621f5f82942753956c",
+        "host-driver-result.json": "3b5ef588f4df33c0827e5eb07a2fb77f7e54fceef7a72618611b2e13c356fb9d"
+      }
+    },
+    "oci-auth-identity02": {
+      "native": {
+        "exit": 0,
+        "timedOut": false,
+        "pid": 10048,
+        "guestSuccess": false,
+        "conservationReached": false,
+        "processStoppedReported": true,
+        "independentHostAbsence": "Verified through approved owned-PID/loopback-port check"
+      },
+      "driver": {
+        "owningMap": "MAP-018",
+        "scope": "Real local Auth SDK admin creation/password/JWT/user/TOTP MFA/deletion only; no BFF/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login"
+        ],
+        "passed": false,
+        "error": {
+          "name": "AssertionError",
+          "stage": "assertion_or_transport_failure"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "853ad3a6ce73bc1fc63ab59ac325afa9e21659cc2e3f6c84239c3a0f9467f7ea",
+        "executed-derivation.mjs": "88565676d714bba516d68f9dce0be6f0ac9051e7a7e3632ffc25b583ebd08d6b",
+        "host-driver.mjs": "9493fc91c04319a55139c691c188195b7de142eda9d8fa091d5470871d78469d",
+        "runner-source.mjs": "9bd562a0bc84b2d41613fd41f0c68178c0051a1ddc7526f7c96e685797519f9b",
+        "staging/k2/image-probe.sh": "cea4d5cc389f55daf2a3364a3c07ec659fe17785472d1ccfc32d0e907a1b56fa",
+        "staging/k2/init.sh": "08870076860c3712102b720f5c8ea1790fa7c777748467dffca92d796e511c1d",
+        "execution01/result.json": "875beedc53b6e1e9842c70555bb4235e052f44319035a4ab02086c2e76d8767a",
+        "execution01/serial.log": "a20f8e168a883a24f35fa062b99e7256d3d0c0613acfbd563eb84a111b22a24c",
+        "host-driver-result.json": "3b5ef588f4df33c0827e5eb07a2fb77f7e54fceef7a72618611b2e13c356fb9d"
+      }
+    },
+    "oci-auth-identity03": {
+      "native": {
+        "exit": 0,
+        "timedOut": false,
+        "pid": 2132,
+        "guestSuccess": false,
+        "conservationReached": false,
+        "processStoppedReported": true,
+        "independentHostAbsence": "Verified through approved owned-PID/loopback-port check"
+      },
+      "driver": {
+        "owningMap": "MAP-018",
+        "scope": "Real local Auth SDK admin creation/password/JWT/user/TOTP MFA/deletion only; no BFF/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login"
+        ],
+        "passed": false,
+        "error": {
+          "name": "AssertionError",
+          "stage": "jwt_role"
+        },
+        "failedPathUserCleanup": true
+      },
+      "hashes": {
+        "executed-source.mjs": "6299a8d2efad80e1a2c9c3103c838f2250d6a8b716432d54392c2387cd7e74e1",
+        "executed-derivation.mjs": "95e6524b5966e5c08a1345a2ff60b9b5eab627b2c1c0c767a115c23968f94626",
+        "host-driver.mjs": "97f69a688e7f8305c858a02e5aa81f0dc4159314f9e8361f2c0312d5bac24827",
+        "runner-source.mjs": "102454e77f226922478926848897a3b3a7340d77e46a76d5d593a010dc6ff072",
+        "staging/k2/image-probe.sh": "cea4d5cc389f55daf2a3364a3c07ec659fe17785472d1ccfc32d0e907a1b56fa",
+        "staging/k2/init.sh": "08870076860c3712102b720f5c8ea1790fa7c777748467dffca92d796e511c1d",
+        "execution01/result.json": "856b991d6c567035c62fd1ea527ed79913ca3d5812472a7691d7d8234d20df1e",
+        "execution01/serial.log": "23875efd80a40aea777711728bbde1e1130c4c4da0fe1ede1272caad0f6d8d48",
+        "host-driver-result.json": "4311f31b9bc477c22154d27c8a8c2ff4570afc5449a46d1a9a28d6160bbdaa4d"
+      }
+    },
+    "oci-auth-identity04": {
+      "native": {
+        "exit": 0,
+        "timedOut": false,
+        "pid": 23364,
+        "guestSuccess": true,
+        "conservationReached": true,
+        "processStoppedReported": true,
+        "independentHostAbsence": "Verified through approved owned-PID/loopback-port check"
+      },
+      "driver": {
+        "owningMap": "MAP-018",
+        "scope": "Real local Auth SDK admin creation/password/JWT/user/TOTP MFA/deletion only; no BFF/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "global_logout",
+          "admin_hard_delete_user"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "passed": true
+      },
+      "hashes": {
+        "executed-source.mjs": "52fdbda5144db4e45fb6d864cb530c0c183d4dde6e74a3d95cc3411cd2ad437e",
+        "executed-derivation.mjs": "e2dfcfdc220538c0053b73106c63effcbe7fef849b0c48c2d471c4431084c2a6",
+        "host-driver.mjs": "97f69a688e7f8305c858a02e5aa81f0dc4159314f9e8361f2c0312d5bac24827",
+        "runner-source.mjs": "577cf9691c48d713caaca1e5a4f032fd7ab77a8682c5f0ee70301b75ca2be91c",
+        "staging/k2/image-probe.sh": "b77e197aeb2673a253f6cf0b68cd3b8d6255ff5faf92f163cad8e9b13243f48a",
+        "staging/k2/init.sh": "08870076860c3712102b720f5c8ea1790fa7c777748467dffca92d796e511c1d",
+        "execution01/result.json": "79bf286da962751b06da6e7b42a77381ce35cf1cfbc7adaa757ea6bca8593ce9",
+        "execution01/serial.log": "7fc428e8af66f7d28b3e5d625d3823f0f53804c6c7fbfeefb101bfbaa00e1cf3",
+        "host-driver-result.json": "da6c19f1d23f46f9ce93acc6ce8096217a9ec697c1123ebad9ff27db2c931468"
+      }
+    },
+    "oci-auth-identity05": {
+      "native": {
+        "exit": 0,
+        "timedOut": false,
+        "pid": 18208,
+        "guestSuccess": true,
+        "conservationReached": true,
+        "processStoppedReported": true,
+        "independentHostAbsence": "Verified through approved owned-PID/loopback-port check"
+      },
+      "driver": {
+        "owningMap": "MAP-018",
+        "scope": "Real local Auth SDK admin creation/password/JWT/user/TOTP MFA/deletion only; no BFF/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "global_logout",
+          "logout_refresh_refused",
+          "admin_hard_delete_user"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "passed": true
+      },
+      "hashes": {
+        "executed-source.mjs": "fc70f2ed7cea94ac06331b24dbc1b0f85cc53e6f2035f3864bc942483b5c4b7b",
+        "executed-derivation.mjs": "517108a44932518150af67dbef3b14e793d081a99968f8620817dc3bc7ef46ee",
+        "host-driver.mjs": "f5974ae4128006f5c57ed4e5d34698f08d3ec99fb7672b9edf734fbbb9862025",
+        "runner-source.mjs": "86816fdc1d4edf1d21d813ba1b2fcb79d4cabc44cca963210a4d5d0f4b47982a",
+        "staging/k2/image-probe.sh": "b77e197aeb2673a253f6cf0b68cd3b8d6255ff5faf92f163cad8e9b13243f48a",
+        "staging/k2/init.sh": "08870076860c3712102b720f5c8ea1790fa7c777748467dffca92d796e511c1d",
+        "execution01/result.json": "82a9967a9f511ccd15d42c332c70f036bc41d0551e3f6831ad5076650010b04a",
+        "execution01/serial.log": "f2596e65fbc026b99e1872560033a7e5d7c6de76f13043b7d69585d9ae16683f",
+        "host-driver-result.json": "81c90a267eadd1d0838d1d294cfcc042aa0da27bb5dbb6e3d786bff45de0bd47"
+      }
+    },
+    "oci-auth-identity06": {
+      "native": {
+        "exit": 0,
+        "timedOut": false,
+        "pid": 24136,
+        "guestSuccess": true,
+        "conservationReached": true,
+        "processStoppedReported": true,
+        "independentHostAbsence": "Verified through approved owned-PID/loopback-port check"
+      },
+      "driver": {
+        "owningMap": "MAP-018",
+        "scope": "Real local Auth SDK admin creation/password/JWT/user/TOTP MFA/deletion only; no BFF/provider/hosted staff acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "global_logout",
+          "logout_refresh_refused",
+          "admin_hard_delete_user"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "logoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "passed": true
+      },
+      "hashes": {
+        "executed-source.mjs": "30c7ab853aa759f5761a5645fecc2832c7c337e826977daf7d0c27a7699ed925",
+        "executed-derivation.mjs": "d5a2f22d689097f735a1d1aa4780a4bb510e0bb22407f31eac9f29b3eedcb480",
+        "host-driver.mjs": "301356b714224446aa30ca40211f0ab2beb022d8fdefb3c4734508b5426d8981",
+        "runner-source.mjs": "62fb6e3a8854a5a06958f758f6dc2a3b2fe3b4e7a2fdf49ecfc2d881df38c765",
+        "staging/k2/image-probe.sh": "b77e197aeb2673a253f6cf0b68cd3b8d6255ff5faf92f163cad8e9b13243f48a",
+        "staging/k2/init.sh": "08870076860c3712102b720f5c8ea1790fa7c777748467dffca92d796e511c1d",
+        "execution01/result.json": "88029d1ad437275f8abfd351b58f13b947713b0852476bce7344cd4be83ab3d4",
+        "execution01/serial.log": "3c3ce8a77db152cff455067840a71da58a9fcebcab48e0479c94fbfd87146144",
+        "host-driver-result.json": "bce34a0796aa66be3f60226211b718e29a23ae237ade6b75756ea927bd154d8e"
+      }
+    }
+  },
+  "preparationFailures": [
+    {
+      "file": ".tools/auth-identity-preparation-diagnostic01.mjs",
+      "sha256": "da00daac20b14b948d879c51b6e055c4f173de082a95fa3351d97e90abad8318",
+      "scope": "Prelaunch anchor/replacement refusal; no guest or private case launched"
+    },
+    {
+      "file": ".tools/auth-identity-preparation-diagnostic02.mjs",
+      "sha256": "839392390ccc7bb06e4d68df4a7bdbd77004a73a29b780b5a97ecf7914270219",
+      "scope": "Prelaunch anchor/replacement refusal; no guest or private case launched"
+    }
+  ],
+  "correction": "03 identified jwt_role failure after signature/subject checks;04 changes only immutable case and local GOTRUE_JWT_DEFAULT_GROUP_NAME=authenticated",
+  "reviewCorrection": "05 status400 refresh witness insufficient: SDK missing-token error also400.06 requires nonempty token and real AuthApiError/code refresh_token_not_found.",
+  "recovery": {
+    "failed01through03": "API synthetic-user deletion acknowledged; SQL conservation not reached. RAM guest powered off, native terminal and independent PID/ports absent. No persistent database or provider write.",
+    "successful04through06": "Auth stopped before guest-only audit delta deletion and exact sequence restoration; original88-table/two-sequence SHA bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c, full schema/defaultACL SHA e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460 both unchanged; global/managed authority twice. PostgreSQL stop/poweroff; preserve immutable private cases."
+  },
+  "network": "QEMU restricted user networking, ipv6 off, only127.0.0.1 host54392→guest9999 Auth and54393→9998 control; no PostgreSQL forwarding or external provider credentials",
+  "limits": [
+    "No email delivery/signup/callback/forgot-password qualification",
+    "Global logout refresh refusal does not revoke already-issued JWTs",
+    "No BFF cookies, signed staff registry, CSRF, PostgREST, fresh browser or hosted staff acceptance",
+    "Older Auth runtime against newer captured migration history: only exercised endpoints qualified; no observed production version equivalence"
+  ],
+  "development": {
+    "session": 86305,
+    "exit": 0
+  },
+  "review": {
+    "status": "No remaining Critical/Important findings after final evidence review"
+  },
+  "next": "Add actual local PostgREST and BFF cookie/registry/CSRF fresh-browser reference flow, reproduce browser anon gap, then qualify smallest correction. Remaining signed writer, ACL through-commit, transport, owner/provider/host/listing/inventory gates remain MAP-018."
+}
