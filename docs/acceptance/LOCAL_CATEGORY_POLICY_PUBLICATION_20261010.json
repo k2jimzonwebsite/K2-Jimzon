@@ -1,0 +1,480 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "providerWrites": false,
+  "deployed": false,
+  "case": "oci-policy-http07",
+  "nativeSession": 72933,
+  "native": {
+    "owningMap": "MAP-023/018",
+    "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-policy-http07\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 17100,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "processStopped": true,
+    "serialSha256": "6ca2d1b22954714b3bb64753468cec61f963d84e56f491cf1d09f1f83e80ed4c"
+  },
+  "manifest": {
+    "owningMap": "MAP-018",
+    "idea": "IDEA-20261010-08",
+    "prepared": true,
+    "nativeVerified": false,
+    "providerWrites": false,
+    "caseName": "oci-policy-http07",
+    "sourceLineage": {
+      "baseCase": "oci-tariff03",
+      "baseNativeResultSha256": "a2a67ef353f84e8339803b514cdbd1511b056263ddf67405965dc2f6d3c664b8",
+      "baseReceiptSha256": "d117feaeaaac9fc27e5357af8481a8e8d2ab8fbda0fc940098e6cd5d2abe4e49",
+      "baseSourceSha256": "299fe473578a26d1a8b746c26228ef313eb5ddf240655bac52caa6a40c9d73a2",
+      "baseDriverSha256": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+      "baseHelperSha256": "f87bc4540c53fc8016e725d5ac3f10515775f74f71104e8bd65a69bc52a863b8",
+      "derivationSha256": "4f7ca6fd8a9b0137cb6a15ad2e9445849bebedb7da2dd2b3f4babb597600a7a3",
+      "derivedSourceSha256": "2a71f102cae70e2ed3beec8120b44b1e41142d18fc89cd12e547ee75d0dd60cb"
+    },
+    "artifacts": {
+      "executed-source.mjs": "2a71f102cae70e2ed3beec8120b44b1e41142d18fc89cd12e547ee75d0dd60cb",
+      "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+      "bff-helper.mjs": "933fb59774dcdec5b5e5733b4709a742fef76b902ef59ab51672f6ecdd62696e",
+      "runner-source.mjs": "828e303727714ccb7639d10f78381f0ee2816b2b7a0aacfd952cf633f177c519",
+      "staging/k2/image-probe.sh": "ee2b951830551f5fae626b1d8cd39264a9eb6a02874563e9246386e9959a670d",
+      "staging/k2/init.sh": "38eb81d0baa39caf89e022f54a398a710c66c45f85697063617757c8fdf5739a"
+    },
+    "overlaySha256": "974b404f066282f001963d8ba7d548c5e137f95f40c57a73d480abeba7abc6b0",
+    "limits": "Original imported02 composition plus pinned guarded category business-conflict overlay; genuine local signed set/clear publication and fresh-signature receipt retries, changed-payload/stale refusals with committed state snapshots. Temporary secured read-only observer is removed before original catalog recovery. Fixture cleanup temporarily disables only two named retention triggers inside one owned transaction after proving normal deletes refused, removes only synthetic history/category, restores exact triggers/body/config/private/original88/two sequences/full catalog/global authority. Fixture cleanup is not production populated-history recovery. No combined package/provider/browser/hosted/all149 conservation proof."
+  },
+  "artifactHashes": {
+    "executed-source.mjs": "2a71f102cae70e2ed3beec8120b44b1e41142d18fc89cd12e547ee75d0dd60cb",
+    "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+    "category-conflict-preparer-source.mjs": "4f7ca6fd8a9b0137cb6a15ad2e9445849bebedb7da2dd2b3f4babb597600a7a3",
+    "category-conflict-preparation.json": "1a0b74b53a5476fec319da750393485fa4e337bfbd280838a27eddfd961196b5",
+    "runner-source.mjs": "828e303727714ccb7639d10f78381f0ee2816b2b7a0aacfd952cf633f177c519",
+    "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+    "bff-helper.mjs": "933fb59774dcdec5b5e5733b4709a742fef76b902ef59ab51672f6ecdd62696e",
+    "preparation.json": "91e3eed51cbd1647249fa6efdf2f43c27299e327663a8cc19b4ef9a818759d1a",
+    "staging/k2/image-probe.sh": "ee2b951830551f5fae626b1d8cd39264a9eb6a02874563e9246386e9959a670d",
+    "staging/k2/init.sh": "38eb81d0baa39caf89e022f54a398a710c66c45f85697063617757c8fdf5739a",
+    "execution01/result.json": "88f529679ef69eeb9fb1fa1e345511ba1b8d2e0a631d3208c45c172b7a70dea6",
+    "execution01/serial.log": "6ca2d1b22954714b3bb64753468cec61f963d84e56f491cf1d09f1f83e80ed4c",
+    "host-driver-result.json": "a0936f00fbdb8444840646ca98543c01151ffea5525b6aed93a8ea938de57ade"
+  },
+  "operational": {
+    "set": {
+      "status": 200,
+      "result": {
+        "version": "1",
+        "categoryId": "76000000-0000-4000-8000-000000000001",
+        "localMinimum": 150,
+        "effectiveMinimum": 150
+      }
+    },
+    "setRetry": {
+      "status": 200,
+      "result": {
+        "version": "1",
+        "categoryId": "76000000-0000-4000-8000-000000000001",
+        "localMinimum": 150,
+        "effectiveMinimum": 150
+      }
+    },
+    "clear": {
+      "status": 200,
+      "result": {
+        "version": "2",
+        "categoryId": "76000000-0000-4000-8000-000000000001",
+        "localMinimum": null,
+        "effectiveMinimum": 90
+      }
+    },
+    "clearRetry": {
+      "status": 200,
+      "result": {
+        "version": "2",
+        "categoryId": "76000000-0000-4000-8000-000000000001",
+        "localMinimum": null,
+        "effectiveMinimum": 90
+      }
+    },
+    "changedPayload": {
+      "status": 409,
+      "code": "IDEMPOTENCY_CONFLICT"
+    },
+    "postSetStale": {
+      "status": 409,
+      "code": "CATEGORY_POLICY_VERSION_CONFLICT"
+    },
+    "states": {
+      "before": {
+        "events": [],
+        "policy": null,
+        "receipts": [],
+        "nonceCount": 0
+      },
+      "afterSet": {
+        "events": [
+          {
+            "id": "5a8c0c33-f963-43c7-871d-debc25dd2692",
+            "reason": "Synthetic local category positive transport witness",
+            "version": 1,
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.158211+00:00",
+            "category_id": "76000000-0000-4000-8000-000000000001",
+            "after_minimum_days": 150,
+            "before_minimum_days": null
+          }
+        ],
+        "policy": {
+          "reason": "Synthetic local category positive transport witness",
+          "version": 1,
+          "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+          "changed_at": "2026-10-10T10:41:27.158211+00:00",
+          "category_id": "76000000-0000-4000-8000-000000000001",
+          "minimum_days": 150
+        },
+        "receipts": [
+          {
+            "action": "category_policy_set",
+            "result": {
+              "version": "1",
+              "categoryId": "76000000-0000-4000-8000-000000000001",
+              "localMinimum": 150,
+              "effectiveMinimum": 150
+            },
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.155752+00:00",
+            "completed_at": "2026-10-10T10:41:27.159114+00:00",
+            "payload_hash": "a8f3d94db63f6ba8a3f53bd086bede70978f5fd5ee47f12eff6aee41f24c1f0f",
+            "idempotency_key": "76000000-0000-4000-8000-000000000004"
+          }
+        ],
+        "nonceCount": 1
+      },
+      "afterSetRetry": {
+        "events": [
+          {
+            "id": "5a8c0c33-f963-43c7-871d-debc25dd2692",
+            "reason": "Synthetic local category positive transport witness",
+            "version": 1,
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.158211+00:00",
+            "category_id": "76000000-0000-4000-8000-000000000001",
+            "after_minimum_days": 150,
+            "before_minimum_days": null
+          }
+        ],
+        "policy": {
+          "reason": "Synthetic local category positive transport witness",
+          "version": 1,
+          "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+          "changed_at": "2026-10-10T10:41:27.158211+00:00",
+          "category_id": "76000000-0000-4000-8000-000000000001",
+          "minimum_days": 150
+        },
+        "receipts": [
+          {
+            "action": "category_policy_set",
+            "result": {
+              "version": "1",
+              "categoryId": "76000000-0000-4000-8000-000000000001",
+              "localMinimum": 150,
+              "effectiveMinimum": 150
+            },
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.155752+00:00",
+            "completed_at": "2026-10-10T10:41:27.159114+00:00",
+            "payload_hash": "a8f3d94db63f6ba8a3f53bd086bede70978f5fd5ee47f12eff6aee41f24c1f0f",
+            "idempotency_key": "76000000-0000-4000-8000-000000000004"
+          }
+        ],
+        "nonceCount": 2
+      },
+      "afterClear": {
+        "events": [
+          {
+            "id": "5a8c0c33-f963-43c7-871d-debc25dd2692",
+            "reason": "Synthetic local category positive transport witness",
+            "version": 1,
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.158211+00:00",
+            "category_id": "76000000-0000-4000-8000-000000000001",
+            "after_minimum_days": 150,
+            "before_minimum_days": null
+          },
+          {
+            "id": "0e15d838-797b-4dc9-b27d-3e0a428f7467",
+            "reason": "Synthetic local category clear transport witness",
+            "version": 2,
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.34417+00:00",
+            "category_id": "76000000-0000-4000-8000-000000000001",
+            "after_minimum_days": null,
+            "before_minimum_days": 150
+          }
+        ],
+        "policy": {
+          "reason": "Synthetic local category clear transport witness",
+          "version": 2,
+          "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+          "changed_at": "2026-10-10T10:41:27.34417+00:00",
+          "category_id": "76000000-0000-4000-8000-000000000001",
+          "minimum_days": null
+        },
+        "receipts": [
+          {
+            "action": "category_policy_clear",
+            "result": {
+              "version": "2",
+              "categoryId": "76000000-0000-4000-8000-000000000001",
+              "localMinimum": null,
+              "effectiveMinimum": 90
+            },
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.342006+00:00",
+            "completed_at": "2026-10-10T10:41:27.344641+00:00",
+            "payload_hash": "f1b25fd0574ba0d7dc2792968b14d7db11090f89ee9aa9ee36296fc8743c4bf6",
+            "idempotency_key": "76000000-0000-4000-8000-000000000006"
+          },
+          {
+            "action": "category_policy_set",
+            "result": {
+              "version": "1",
+              "categoryId": "76000000-0000-4000-8000-000000000001",
+              "localMinimum": 150,
+              "effectiveMinimum": 150
+            },
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.155752+00:00",
+            "completed_at": "2026-10-10T10:41:27.159114+00:00",
+            "payload_hash": "a8f3d94db63f6ba8a3f53bd086bede70978f5fd5ee47f12eff6aee41f24c1f0f",
+            "idempotency_key": "76000000-0000-4000-8000-000000000004"
+          }
+        ],
+        "nonceCount": 3
+      },
+      "afterClearRetry": {
+        "events": [
+          {
+            "id": "5a8c0c33-f963-43c7-871d-debc25dd2692",
+            "reason": "Synthetic local category positive transport witness",
+            "version": 1,
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.158211+00:00",
+            "category_id": "76000000-0000-4000-8000-000000000001",
+            "after_minimum_days": 150,
+            "before_minimum_days": null
+          },
+          {
+            "id": "0e15d838-797b-4dc9-b27d-3e0a428f7467",
+            "reason": "Synthetic local category clear transport witness",
+            "version": 2,
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.34417+00:00",
+            "category_id": "76000000-0000-4000-8000-000000000001",
+            "after_minimum_days": null,
+            "before_minimum_days": 150
+          }
+        ],
+        "policy": {
+          "reason": "Synthetic local category clear transport witness",
+          "version": 2,
+          "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+          "changed_at": "2026-10-10T10:41:27.34417+00:00",
+          "category_id": "76000000-0000-4000-8000-000000000001",
+          "minimum_days": null
+        },
+        "receipts": [
+          {
+            "action": "category_policy_clear",
+            "result": {
+              "version": "2",
+              "categoryId": "76000000-0000-4000-8000-000000000001",
+              "localMinimum": null,
+              "effectiveMinimum": 90
+            },
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.342006+00:00",
+            "completed_at": "2026-10-10T10:41:27.344641+00:00",
+            "payload_hash": "f1b25fd0574ba0d7dc2792968b14d7db11090f89ee9aa9ee36296fc8743c4bf6",
+            "idempotency_key": "76000000-0000-4000-8000-000000000006"
+          },
+          {
+            "action": "category_policy_set",
+            "result": {
+              "version": "1",
+              "categoryId": "76000000-0000-4000-8000-000000000001",
+              "localMinimum": 150,
+              "effectiveMinimum": 150
+            },
+            "actor_id": "84c92967-85f5-4811-9055-a917af81af25",
+            "created_at": "2026-10-10T10:41:27.155752+00:00",
+            "completed_at": "2026-10-10T10:41:27.159114+00:00",
+            "payload_hash": "a8f3d94db63f6ba8a3f53bd086bede70978f5fd5ee47f12eff6aee41f24c1f0f",
+            "idempotency_key": "76000000-0000-4000-8000-000000000004"
+          }
+        ],
+        "nonceCount": 4
+      }
+    }
+  },
+  "rpcDiagnostics": [
+    {
+      "status": 400,
+      "context": {
+        "lockMs": null,
+        "statementMs": null,
+        "role": null,
+        "sessionRole": null
+      },
+      "code": "P0001",
+      "message": "K2_CATEGORY_POLICY_VERSION_CONFLICT"
+    },
+    {
+      "status": 400,
+      "context": {
+        "lockMs": null,
+        "statementMs": null,
+        "role": null,
+        "sessionRole": null
+      },
+      "code": "P0001",
+      "message": "K2_CATEGORY_POLICY_VERSION_CONFLICT"
+    },
+    {
+      "status": 200,
+      "context": {
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "authenticated",
+        "sessionRole": "authenticator"
+      },
+      "code": null,
+      "message": "unclassified_message"
+    },
+    {
+      "status": 200,
+      "context": {
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "authenticated",
+        "sessionRole": "authenticator"
+      },
+      "code": null,
+      "message": "unclassified_message"
+    },
+    {
+      "status": 400,
+      "context": {
+        "lockMs": null,
+        "statementMs": null,
+        "role": null,
+        "sessionRole": null
+      },
+      "code": "22023",
+      "message": "K2_ADMIN_IDEMPOTENCY_CONFLICT"
+    },
+    {
+      "status": 400,
+      "context": {
+        "lockMs": null,
+        "statementMs": null,
+        "role": null,
+        "sessionRole": null
+      },
+      "code": "P0001",
+      "message": "K2_CATEGORY_POLICY_VERSION_CONFLICT"
+    },
+    {
+      "status": 200,
+      "context": {
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "authenticated",
+        "sessionRole": "authenticator"
+      },
+      "code": null,
+      "message": "unclassified_message"
+    },
+    {
+      "status": 200,
+      "context": {
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "authenticated",
+        "sessionRole": "authenticator"
+      },
+      "code": null,
+      "message": "unclassified_message"
+    }
+  ],
+  "conservationPairs": {
+    "auth-rows-before.json = auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+    "auth-schema-before.json = auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+    "category-policy-before.rows = category-policy-after.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "category-events-before.rows = category-events-after.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "category-config-before.rows = category-config-after.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-sequence-recovery.sql = bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+    "bff-before-admin_sessions.rows = bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-before-admin_session_events.rows = bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-before-admin_request_rate_buckets.rows = bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-before-admin_request_nonces.rows = bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-before-admin_command_receipts.rows = bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-before-admin_bff_secrets.rows = bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e"
+  },
+  "globalManagedWitnesses": 2,
+  "hostFinal": {
+    "pid": 17100,
+    "pidAbsent": true,
+    "probeListenerCount": 0,
+    "checkedAt": "2026-10-10T10:42:05.6828979Z"
+  },
+  "verification": {
+    "command": "node .tools/record-category-publication.mjs",
+    "witnessSha256": "e15f1fde280c4ff5bdf14fcc03166afc0859c39d56ec392d3f75acc3a90222c5",
+    "development": "Prior66895exit0 retained; current slice private fixture/documentation only",
+    "reviewPending": false,
+    "independentReview": {
+      "reviewer": "auth_migration_review",
+      "critical": 0,
+      "important": 0,
+      "artifactPinsVerified": 13,
+      "conservationPairsVerified": 12,
+      "rpcObservationsVerified": 8,
+      "scope": "Source/artifact/native/operational snapshots/RPC/limits reviewed; primary observed actual PID/listeners, not re-executed by reviewer"
+    },
+    "finalizeCommand": "node .tools/document-category-publication.mjs"
+  },
+  "limits": "Genuine local routed signed set/clear and successful receipt replay, immutable history and exact disposable fixture restoration. Fresh signatures add nonce evidence on each replay; all private rows are not unchanged during retries. Temporary observer is synthetic/admin-only and absent from production package. After services stop, scoped synthetic history removal temporarily disables only two named retention triggers transactionally then restores them; this is not production populated-history recovery. No combined guarded installer/replay/drift/provider/browser/hosted/realtaxonomy or all149 row conservation acceptance.",
+  "recovery": "Exact guarded inverse restores helper4de418fc, observers/config/synthetic history/category removed, named triggers restored and12scoped pairs/originalcatalog/global authority verified before guest stops. Preserve immutable07 and prior failed04; recreate fresh pinned successor only.",
+  "remaining": "MAP-018: integrate exact category correction into guarded combined package and qualify opt-in/replay/drift/interruption/populated data-retaining recovery, production context/authority-through-commit/provider/hosted and remaining business transports."
+}
