@@ -1,5 +1,7 @@
 ---
 
+10 October initial taxonomy draft correction (MAP-018 / IDEA-20261010-05): preserve Admin Operate/product design, existing labels, geometry and motion. Only immutable-versus-unsaved select behavior changes; unsaved choices stay correctable, saved originals stay disabled. Four mandatory design skills applied; intercepted rendered controls and375/1440 overflow checks pass. Existing mobile edit capture inspected; no new taxonomy screenshot or full visual/human acceptance claim. docs/acceptance/INITIAL_TAXONOMY_CHOICES_20261010.json; protected creation and real-host acceptance remain MAP-018.
+
 10 October actual local browser witness (MAP-018 / IDEA-20261010-03): one missing existing shared SparkleIcon import was repaired after actual Sheet render failure. No typography, spacing, color, motion, content or interaction redesign. Incumbent Admin Operate/product rules remain authoritative. docs/acceptance/LOCAL_BROWSER_AUTH_20261010.json verifies desktop reduced-motion Sheet render and local anonymous reference failure after genuine BFF MFA; it is not full desktop/mobile/accessibility or human design acceptance. Broader UI/real-host acceptance remains MAP-018/025/028.
 
 Workflow-map phone correction,9October (IDEA-20261009-11): preserve the current

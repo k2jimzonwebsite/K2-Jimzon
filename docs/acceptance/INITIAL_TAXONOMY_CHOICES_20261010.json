@@ -1,0 +1,34 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-05",
+  "date": "2026-10-10",
+  "scope": "Local actual-component UI regression with intercepted API responses; no database, genuine command, provider or hosted acceptance.",
+  "change": "Only two disabled predicates in InventoryGrid use server-loaded originalBrandId/originalCategoryId instead of current draft IDs. Existing saved IDs remain locked; saving, eligibility, paired command, reason and version rules are preserved.",
+  "sourceSha256": {
+    "src/views/admin/InventoryGrid.jsx": "3d1c138df6ac1842d57f4887cd8e62c0a4187d4816ca2d987e47db91f58f431f",
+    "tests/admin-initial-taxonomy-choice.spec.js": "0ae5f38065271b80e81c97b9ceafefe20dd2b26e46d070e1d60bdc263f5e8ad7",
+    "tests/admin-product-master-ui.spec.js": "d4475066f65bcf8c2281e8ba129f767f13d89a1f831efef9bcd45bc1f493dfdd"
+  },
+  "red": {
+    "session": 86668,
+    "exit": 1,
+    "passed": 0,
+    "failed": 2,
+    "finding": "Brand/category selects became disabled after the first unsaved choice. Expected enabled, received disabled."
+  },
+  "focusedFinal": {
+    "command": "npx playwright test tests/admin-initial-taxonomy-choice.spec.js tests/admin-product-master-ui.spec.js --config playwright.product-master.config.js --grep \"initial taxonomy draft|keeps secure Product Master\"",
+    "session": 6299,
+    "exit": 0,
+    "passed": 4,
+    "failed": 0,
+    "checks": ["Neither original ID set: each unsaved choice can be changed", "Saved brand stays locked while unsaved category remains correctable", "Saved category stays locked while unsaved brand remains correctable", "Editor overflow <=1px at 375px and 1440px", "Existing paired Save/reason/version and lifecycle/delete UI regression"]
+  },
+  "development": { "command": "npm run verify:development", "session": 22453, "exit": 0 },
+  "review": { "agent": "auth_migration_review", "critical": 0, "important": 0, "qualification": "UI evidence only; actual SQL authority and protected creation/assignment acceptance remain open." },
+  "design": "All four required design skills applied. Existing Admin design retained; no style, layout, copy or motion change. Existing mobile edit capture inspected; the new taxonomy tests assert behavior and geometry without a taxonomy screenshot claim.",
+  "providerWrites": false,
+  "deployed": false,
+  "recovery": "Revert only the two InventoryGrid predicates and new regression/evidence slice on the feature branch; no provider rollback applies.",
+  "nextAction": "MAP-018 protected canonical reference read/create and paired initial assignment, including duplicate/all-writer concurrency and retained recovery; full installation/provider/owner/real-host gates remain."
+}

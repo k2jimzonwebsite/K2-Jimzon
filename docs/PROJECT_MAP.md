@@ -1,5 +1,7 @@
 # K2 Jimzon  -  Project Directory Map
 
+10 October initial taxonomy draft correction (MAP-018): existing InventoryGrid editor changes only two select locks; tests/admin-initial-taxonomy-choice.spec.js and docs/acceptance/INITIAL_TAXONOMY_CHOICES_20261010.json own red/green UI evidence. No new route, SQL or duplicate assignment logic. Protected reference creation/command/host acceptance remains MAP-018.
+
 10 October protected product taxonomy read (MAP-018 / IDEA-20261010-04): docs/acceptance/LOCAL_PRODUCT_READ_20261010.json archives the existing-route projection repair, focused regression, genuine native/full browser and complete recovery evidence. No new route/SQL/provider or duplicate catalog logic. MAP-018 retains protected reference creation/read/initial-assignment and later installation/host acceptance.
 
 10 October actual local browser witness (MAP-018): Sheet shared-icon import repair is locally verified; docs/acceptance/LOCAL_BROWSER_AUTH_20261010.json owns genuine full Admin login/MFA/Sheet/reference identity evidence and complete recovery. Protected taxonomy identity repair is the next unfinished MAP-018 slice; avoid duplicate stock/reference logic, anonymous write grants or browser staff-token exposure.

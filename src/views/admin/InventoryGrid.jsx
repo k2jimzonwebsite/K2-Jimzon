@@ -929,7 +929,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                               <Label htmlFor="product-initial-brand">Brand</Label>
                               <select id="product-initial-brand" value={editingProduct.brand_id || ''}
                                 onChange={event => set('brand_id', event.target.value)}
-                                disabled={saving || Boolean(editingProduct.brand_id)}
+                                disabled={saving || Boolean(productTaxonomyReview.originalBrandId)}
                                 className={`${inp} min-h-11 disabled:cursor-not-allowed disabled:opacity-60`}>
                                 <option value="">Choose an existing brand</option>
                                 {productTaxonomyReview.brandOptions.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
@@ -939,7 +939,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                               <Label htmlFor="product-initial-category">Canonical category</Label>
                               <select id="product-initial-category" value={editingProduct.category_id || ''}
                                 onChange={event => set('category_id', event.target.value)}
-                                disabled={saving || Boolean(editingProduct.category_id)}
+                                disabled={saving || Boolean(productTaxonomyReview.originalCategoryId)}
                                 className={`${inp} min-h-11 disabled:cursor-not-allowed disabled:opacity-60`}>
                                 <option value="">Choose an existing category</option>
                                 {productTaxonomyReview.categoryOptions.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
