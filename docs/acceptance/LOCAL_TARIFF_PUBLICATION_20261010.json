@@ -1,0 +1,211 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "scope": "Actual local signed customer tariff publication/version1, exact successful receipt replay, actor=actual Auth UID, reason/evidence/rates readback and populated conflict refusals through production router with genuine Auth2.196.0/PostgREST14.17/captured PostgreSQL17.6. Synthetic rates only. Disposable archive reset; no provider/hosted/browser acceptance.",
+  "providerWrites": false,
+  "deployed": false,
+  "source": {
+    "path": "supabase/prepared/customer_tariff_version_conflict_transport.sql",
+    "sha256": "efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166"
+  },
+  "case": "oci-tariff08",
+  "nativeSession": 58004,
+  "native": {
+    "pid": 8400,
+    "exit": 0,
+    "guestSuccess": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true
+  },
+  "transport": {
+    "refusals": [
+      {
+        "status": 409,
+        "code": "CUSTOMER_TARIFF_VERSION_STALE",
+        "elapsedMs": 42
+      },
+      {
+        "status": 409,
+        "code": "CUSTOMER_TARIFF_VERSION_STALE",
+        "elapsedMs": 41
+      }
+    ],
+    "expectedVersion": 1,
+    "currentVersion": 0,
+    "scope": "Actual routed signed stale and same-key fresh-signature retry with exact temporary guarded tariff SQLSTATE overlay; synthetic publication, exact receipt replay, and populated-head refusals",
+    "publication": {
+      "version": 1,
+      "actorId": "af9cc27f-ba3c-4770-a912-d7620171bee8",
+      "policy": "jt_current",
+      "sameKeyReceiptReplay": true,
+      "changedPayload409": true,
+      "populatedStale409": true,
+      "readbackPreserved": true,
+      "syntheticRatesOnly": true
+    },
+    "rpcDiagnostics": [
+      {
+        "status": 400,
+        "code": "P0001",
+        "message": "K2_CUSTOMER_TARIFF_VERSION_STALE"
+      },
+      {
+        "status": 400,
+        "code": "P0001",
+        "message": "K2_CUSTOMER_TARIFF_VERSION_STALE"
+      },
+      {
+        "status": 200,
+        "code": null,
+        "message": null
+      },
+      {
+        "status": 200,
+        "code": null,
+        "message": null
+      },
+      {
+        "status": 400,
+        "code": "22023",
+        "message": "K2_ADMIN_IDEMPOTENCY_CONFLICT"
+      },
+      {
+        "status": 400,
+        "code": "P0001",
+        "message": "K2_CUSTOMER_TARIFF_VERSION_STALE"
+      }
+    ],
+    "checks": [
+      "routed_tariff_missing_csrf_refused",
+      "routed_tariff_stale409_and_same_key_signed_retry",
+      "routed_tariff_publication_receipt_replay_populated_refusals",
+      "routed_tariff_current_readback_unchanged"
+    ],
+    "actorAssertion": "saved.actorId compared directly with actual Auth uid in executed helper; native safe row witness does not independently assert actor"
+  },
+  "hashes": {
+    "executed-source.mjs": "a65f1324c805fd254aa16e0b712344fbd76784cda079a711aacd3aa7cbf71bb9",
+    "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+    "runner-source.mjs": "3566f0b066939689429de25b33608b837bdbb7c0f5ac6023b71c28d2965546d8",
+    "host-driver.mjs": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d",
+    "bff-helper.mjs": "964b8483dfbaac2464ed59abf992d8e6dcd4af3cf27d04842e4a9b0869a2f0d5",
+    "preparation.json": "1e0b31e1ee8989f35b2199d23e7dd86574cf4b18f88852317d284a415fb30465",
+    "staging/k2/image-probe.sh": "b48c9e73818fa7d789eaaa3e4399e10f7f9657657a92305ce1180fb28c0540c0",
+    "execution01/result.json": "4e406a60a6db621d6809848ec8b6c7929487d1d919697d1ab655eb700b393ede",
+    "execution01/serial.log": "8b2c612d9591d0fd28e78d2e57305b3d21019494d23132db52c39ac300ec524c",
+    "host-driver-result.json": "59a300f80c8383cc7c5da6c8ca01c53befcc9788e883cb9be98ef3213fc39768"
+  },
+  "recovery": {
+    "method": "Explicit RAM database/socket/owner/ICU/encoding target guard, drop/recreate disposable database with reviewed preload-off restore and normal-managed restart; pinned captured original archive/foundation reconstruction and exact installer. Synthetic history discarded, not data retaining; new custom dump is diagnostic only.",
+    "evidence": [
+      "35e782fc8e4d139fa203eab9a4d42564284c11558731145ee6a7a752506f389f  /tmp/tariff-fixture-baseline.dump",
+      "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-before.json",
+      "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-after.json",
+      "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-before.json",
+      "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-after.json"
+    ],
+    "originalProjection": "88 captured original tables/two sequences; full catalog equality",
+    "globalManagedAuthorityMarkers": 2,
+    "exactPrivateAll149RowsSequencesVerified": false,
+    "shutdown": {
+      "pid": 8400,
+      "processPresent": false,
+      "listeners": 0,
+      "readOnlyActualHostCheck": true
+    }
+  },
+  "failedPredecessor": {
+    "case": "oci-tariff05",
+    "session": 90328,
+    "nativeExit": 0,
+    "guestSuccess": false,
+    "hostPassed": true,
+    "error": "K2_CUSTOMER_TARIFF_HISTORY_IMMUTABLE on fixture TRUNCATE; no passing recovery claim",
+    "hashes": {
+      "executed-source.mjs": "4e9bf19be77f2c9bc2f6df83ef6a0b2515b08d533402f30d60adda58254759ff",
+      "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+      "runner-source.mjs": "a9c8b1eb9556c9b0ee3b8a91b92cec24d4bb111113a1f3c99c418f2ce564161a",
+      "host-driver.mjs": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d",
+      "bff-helper.mjs": "964b8483dfbaac2464ed59abf992d8e6dcd4af3cf27d04842e4a9b0869a2f0d5",
+      "preparation.json": "7106aa57b4de81fdf01001b253d095d7333be79142fa2ef226118ad52618cfef",
+      "staging/k2/image-probe.sh": "bc8e329a918c56ffb341a87b0e80699092d6a1b0eef6a65877858c3d25b3eb62",
+      "execution01/result.json": "7ea8ca1bd06c7ae50f17036d3c05dbe9d97adf6bc8e371f3924d20f414bc4dcd",
+      "execution01/serial.log": "85bb25916daa80527c2a4cba193b76066800d3fa4056c5d4a997999569dba32a",
+      "host-driver-result.json": "1f33a994a7afad5d7687573bd9ece457e193a65bcf3f4f63e8d36143f077c37e"
+    },
+    "shutdown": {
+      "pid": 20320,
+      "processPresent": false,
+      "listeners": 0,
+      "readOnlyActualHostCheck": true
+    }
+  },
+  "reviewCorrections": "Before05: actor directly compared with Auth uid. Before06: explicit RAM target identity guard and bounded marker.05 immutable-history refusal retained;06/07 custom-dump catalog mismatches retained. Before08: reviewed preload-off captured reconstruction and normal-managed restart.",
+  "verification": "Ignored local fixture sources only; no tracked application/SQL change. Syntax checks pass. Previous tracked-code development18397 exit0 retained; no application gate repeated for documentation-only evidence.",
+  "limits": "No successful second distinct tariff version, Staff publication, complete149/private row equality, preservation of new history during recovery, overlay replay/drift/cold or guarded whole-package integration. Local unconfigured bot opt-in is not Cloudflare acceptance. No production activation permission.",
+  "remaining": "MAP-018: integrate exact tariff overlay into guarded full package; qualify replay/drift/cold and data-retaining populated tariff recovery plus remaining business conflicts, authority confirmation and provider/real-host gates.",
+  "recoveryPath": "Retain private05 failure and06 evidence. Never resume disposed guests. Recreate fresh pinned successor. Documentation revert only; no provider rollback.",
+  "failedArchiveSuccessors": [
+    {
+      "case": "oci-tariff06",
+      "session": 72924,
+      "nativeExit": 0,
+      "guestSuccess": false,
+      "hostPassed": true,
+      "error": "Custom archive reset completed; original row projection matched; full catalog comparison failed before final authority verification. No passing recovery claim.",
+      "diagnostic": null,
+      "hashes": {
+        "executed-source.mjs": "5f825b203e599f19f27077853a589fc0a0d7e9e7bfab131c88e6325d15cff1f4",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "2e218d1e846c207ba7586607cf6431ba197a6ba6599cd295e35de29ce7d7f462",
+        "host-driver.mjs": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d",
+        "bff-helper.mjs": "964b8483dfbaac2464ed59abf992d8e6dcd4af3cf27d04842e4a9b0869a2f0d5",
+        "preparation.json": "b44b195ccec02699025fc843732b64e3cb5adf0a761ecd9c1ade15f431760f2a",
+        "staging/k2/image-probe.sh": "c942f97dfc0a3da8a7eac9a49c43cb6574ba5934e96e24ba1ca59221b9132ea5",
+        "execution01/result.json": "b41d26ebb2ebfaca87c3b1ed33ecb2c30c3f629f60d28d04b08d44843931aa2f",
+        "execution01/serial.log": "7db4e292e7144d703db80a2c26f9779068d43f970b4b496b8983b748ac83f5c1",
+        "host-driver-result.json": "ca6981f9ab24e881187a0f15a70ef7fb27792b3845c5b942fbb678c3de27cf63"
+      },
+      "shutdown": {
+        "pid": 19188,
+        "processPresent": false,
+        "listeners": 0,
+        "readOnlyActualHostCheck": true
+      }
+    },
+    {
+      "case": "oci-tariff07",
+      "session": 62599,
+      "nativeExit": 0,
+      "guestSuccess": false,
+      "hostPassed": true,
+      "error": "Custom archive reset completed; original row projection matched; full catalog comparison failed before final authority verification. No passing recovery claim.",
+      "diagnostic": "Changed catalog keys types/functions/relations/extensions; object identities only. No specific cause established.",
+      "hashes": {
+        "executed-source.mjs": "8df486603f0679b9bc1eacfabefbff135e7c3a5bc8e86bad8c90b33f2e218ac0",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "ebc9b74c0489c7aab2faba6f265997ea09c3564453c0d6f0a542b3cd8444e5f8",
+        "host-driver.mjs": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d",
+        "bff-helper.mjs": "964b8483dfbaac2464ed59abf992d8e6dcd4af3cf27d04842e4a9b0869a2f0d5",
+        "preparation.json": "f4aa892f9622e893955047086558aefb4ab870b19b2646d94c02d3a6e3275a74",
+        "staging/k2/image-probe.sh": "c78e152576e4ffc704b9e421249b59d98f488a794fb3052f8626cc7ea203e62f",
+        "execution01/result.json": "cb4ef01b2fccf703225e5d9a32869cb4119e5107aaa70ebe3c1b4d7e3cffa55a",
+        "execution01/serial.log": "3e4950a3f54baa4d2ecc35ec753278d392a20789a1289043f343ebccf021d5c5",
+        "host-driver-result.json": "b902bf5ed63523a4a38c841b96df30aa30a4410885b39914bfbc47be2f4cb7e1"
+      },
+      "shutdown": {
+        "pid": 10000,
+        "processPresent": false,
+        "listeners": 0,
+        "readOnlyActualHostCheck": true
+      }
+    }
+  ],
+  "independentReview": {
+    "reviewer": "auth_migration_review",
+    "critical": 0,
+    "important": 0,
+    "verified": "All40 artifact pins, exact staged overlay, actual Auth actor assertion, six RPC outcomes, serial recovery scopes and authoritative documentation/MAP limits",
+    "hostShutdownChecks": "Parent actual-host observations; reviewer did not rerun"
+  }
+}
