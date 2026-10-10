@@ -1,0 +1,98 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-tariff-order01",
+  "classification": "Fresh owned staged connected fixture inspected; no native execution",
+  "sourceCommit": "a08e829",
+  "artifactPins": [
+    {
+      "file": "executed-source.mjs",
+      "sha256": "1b60b846af2e173a4e0f5afe20b79ce35f6cbf12d6ba355a763f4ad97283137b"
+    },
+    {
+      "file": "executed-derivation.mjs",
+      "sha256": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "c897f81cb44dbe12eeeb97b763dfb0869ba73139504bba4fd0d240fa66322906"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "9e77c687bfc1f6dd77887b8121a5e41a5627b6d0770fe6127be06d4151542248"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "d206e61499c17f9ae94f3240b3c95ca5167f7ed6b7440a4722ca58b326bac19b"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "6d40ca2cf80065b8bd0d747f5d9b11ea68c8ca9cfa35e02b97205e800adbe00f"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "760dbb770a2544dca8d0bc2656dea2b34193dbdf77d259e65a2bd83c5ceb1905"
+    },
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "08995633f1178ef613214f0568e00a5b944d13715ed491522ec4ec79b4460c9e"
+    },
+    {
+      "file": "staging/k2/connected-fixture.sql",
+      "sha256": "d6ed535f1a2005dc074643ebedd8ab0225c004949414fa9153065ab1d27bbd1e"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "58e0becaba48aa009693f789eed7381ce880237d16a9c7673d63cbbbbbbc781b"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "ccf8e7748c7c0ca97899551ef24ac0e8e3939ba9c63e7b18273dc7bbfae63ebf"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-tariff-runtime/fixture-setup.sql",
+      "sha256": "e14e4a0f240bb6ee328d8942d8ce418ac69a7b470c9064762b53437e5a1bcd53"
+    },
+    {
+      "file": "docs/evidence/20261010-tariff-runtime/fixture-observer.sql",
+      "sha256": "900b383bcbd59ffc2f9e7cca69039a581204a8bd3c7fb74e3c6d96e50430ef77"
+    },
+    {
+      "file": ".tools/derive-connected-tariff-fixture.mjs",
+      "sha256": "e88984fac11ed215940504f1065ee6dc1d1dc8d39ec0ad41b92aa9b8bfc0f986"
+    }
+  ],
+  "checks": {
+    "exactCombinedSql": true,
+    "explicitStagingCopyBeforeChroot": true,
+    "exactRetainedParentDriver": true,
+    "helperAndProbePins": true,
+    "syntaxFourModules": true,
+    "independentTwoVersionOrderChargeStockGuard": true,
+    "existingOriginalArchiveRecoveryRetained": true,
+    "loopbackRestrictedNetwork": true
+  },
+  "review": {
+    "status": "reviewed-preexecution-no-critical-important",
+    "resolved": [
+      "canonical lowercase website listing",
+      "explicit connected SQL staging copy"
+    ],
+    "reviewer": "auth_migration_review",
+    "verified": "All12 artifacts/3 sources/exactSQL/stagingcopy/publicAdmin+AAL2/fixedselection and byte-identical TARGET-to-final recovery suffix independently checked"
+  },
+  "nativeExecuted": false,
+  "connectedRuntimeVerified": false,
+  "providerWrites": false,
+  "deployed": false,
+  "observerScope": "Complete defined synthetic orders/snapshots/items/reservations/events/conversations/messages/batches/inventory-events plus stock balance/product; no all-database or customer/grant-state conservation claim",
+  "scope": "Imported02 plus temporary tariff overlay and existing exact Auth/BFF prerequisites; not combined all-three23, deployed artifacts, concurrent publication or populated history data-retaining recovery",
+  "recovery": "Do not reuse disposed parents08/23. Run only fresh pinned successor after complete review; existing guest original-captured archive/schema/row/authority reconstruction retained. If native run fails, retain artifacts/results and inspect exact recovery and terminal/PID/listeners before any successor.",
+  "nextAction": "Complete staged review, independently confirm five ports free, then execute this exact pinned runner once; inspect actual connected/protected observer/native charge/stock evidence plus full original recovery and terminal/PID/listeners before runtime acceptance."
+}
