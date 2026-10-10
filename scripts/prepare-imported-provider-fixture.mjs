@@ -8,6 +8,7 @@ import { pathToFileURL } from 'node:url'
 
 const root = 'D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const caseName = process.argv.find(a => a.startsWith('--case='))?.slice(7) || 'oci-imported01'
+const productMasterTransport = process.argv.includes('--product-master-transport')
 if (!/^oci-imported\d{2}$/.test(caseName)) throw Error('OWNED_IMPORTED_FIXTURE_NAME_REQUIRED')
 const sha = bytes => createHash('sha256').update(bytes).digest('hex')
 const sourcePath = path.join(root, 'oci-envelope12/preparer-source.mjs')
@@ -74,6 +75,18 @@ const position = expected.functions.findIndex(f => f.catalog.proname === 'assert
 assert.ok(position >= 0 && expected.functions[position + 1].catalog.proname === 'clear_category_lot_context_v1')
 expected.functions.splice(position + 1, 0, helper)
 assert.equal(expected.functions.length, providerAfter.functions.length + 1)
+const transportPath = 'supabase/prepared/product_master_version_conflict_transport.sql'
+let transport = ''
+if (productMasterTransport) {
+  transport = fs.readFileSync(transportPath, 'utf8')
+  assert.equal(sha(transport), 'ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476')
+  const master = expected.functions.find(f => f.catalog.proname === 'execute_admin_product_master_command_v1')
+  assert.equal(sha(master.definition), 'b9553f8fc638395ce9b5db66197eeaa8b1a9271b218c73dececffae7fefa78d2')
+  const anchor = "raise exception using errcode='40001',message='K2_ADMIN_PRODUCT_VERSION_CONFLICT';"
+  assert.equal(master.definition.split(anchor).length, 2)
+  master.definition = master.definition.replace(anchor, anchor.replace('40001', 'P0001'))
+  assert.equal(sha(master.definition), 'c7e9f53fe80c68ce99401caf10d31f4ee272bd506a0c0f3bc7f6363c97f38b94')
+}
 
 let derived = source.replaceAll('oci-envelope12', caseName)
 for (const module of ['operating-replay-package.mjs', 'build-express-delivery.mjs']) {
@@ -87,7 +100,7 @@ assert.equal(derived.split('fragments:fixed.fragments').length, 2)
 const fragmentStart = fragment.indexOf('\nbegin;')
 assert.ok(fragmentStart >= 0 && fragment.split('\nbegin;').length === 2 && /commit;\s*$/.test(fragment))
 const importedBody = fragment.slice(fragmentStart + 1).replace(/^begin;/, '').replace(/commit;\s*$/, '')
-derived = derived.replace('fragments:fixed.fragments', () => 'fragments:[...fixed.fragments,' + JSON.stringify(importedBody) + ']')
+derived = derived.replace('fragments:fixed.fragments', () => 'fragments:[...fixed.fragments,' + JSON.stringify(importedBody) + (productMasterTransport ? ',' + JSON.stringify(transport) : '') + ']')
 const generated = path.join(root, 'prepare-' + caseName + '.mjs')
 assert.ok(!fs.existsSync(path.join(root, caseName)) && !fs.existsSync(generated))
 fs.writeFileSync(generated, derived, { flag: 'wx' })
@@ -96,10 +109,12 @@ if (execution.status !== 0) throw Error(execution.stderr || 'IMPORTED_FIXTURE_PR
 const out = path.join(root, caseName)
 fs.copyFileSync(generated, path.join(out, 'preparer-source.mjs'), fs.constants.COPYFILE_EXCL)
 const record = {
-  owningMap: 'MAP-018', idea: 'IDEA-20261009-11', providerWrites: false,
+  owningMap: 'MAP-018', idea: productMasterTransport ? 'IDEA-20261010-08' : 'IDEA-20261009-11', providerWrites: false,
   scope: 'Prepared captured-authority fixture; native execution and provider acceptance unverified',
   sources: [sourcePath, fragmentPath, providerPath, unionPath, calibrationBefore, calibrationAfter,
-    originalPackagePath, authorityPath, managedPath, 'scripts/prepare-imported-provider-fixture.mjs']
+    originalPackagePath, authorityPath, managedPath, 'scripts/prepare-imported-provider-fixture.mjs',
+    'docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs',
+    ...(productMasterTransport ? [transportPath] : [])]
     .map(file => ({ file, sha256: sha(fs.readFileSync(file)) })),
   transitions: transitions.map(([name, beforeMd5]) => ({ name, beforeMd5 })),
   helper: helper.identity, expectedAfterSha256: sha(JSON.stringify(expected)),

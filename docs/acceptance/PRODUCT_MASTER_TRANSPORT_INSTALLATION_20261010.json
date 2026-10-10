@@ -1,0 +1,188 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "providerWrites": false,
+  "deployed": false,
+  "case": "oci-imported03",
+  "nativeSession": 68347,
+  "native": {
+    "owningMap": "MAP-023/018",
+    "scope": "Complete guarded10s envelope/fresh/exact replay/cold archive recovery on actual local postgres target; provider physical/locale/project/host qualification separate",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "none",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported03\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 18468,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "catalogs": {
+      "before": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      },
+      "after": {
+        "sha256": "2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6",
+        "bytes": 2396732
+      },
+      "rollback": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      }
+    },
+    "fullCatalogRollback": true,
+    "processStopped": true,
+    "serialSha256": "1befb53d4924f9b13bf40a7ff1a22af33640adc9685b5a63d6ccb9ec525b9397"
+  },
+  "scope": "Actual full guarded imported union plus exact Product Master business-conflict correction on captured PostgreSQL17.6 owned RAM guest; populated current installation/repeat/concurrent schema drift refusal/original archive reconstruction. No new HTTP, empty-database cold install or provider execution.",
+  "hashes": {
+    "execution01/result.json": "446fba158bb4380b368744561d159798f660de7495771dc2c8486a13221759c8",
+    "execution01/serial.log": "1befb53d4924f9b13bf40a7ff1a22af33640adc9685b5a63d6ccb9ec525b9397",
+    "execution01/before-catalog.json": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+    "execution01/after-catalog.json": "2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6",
+    "execution01/rollback-catalog.json": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+    "preparer-source.mjs": "5f3011852666a491383f7c084175b7684d6dc5736ccc442406ae205ca4b3bb21",
+    "imported-composition.json": "a931dbf47272efbbe26a13247fe3f2bdd66a292555018f75a2e35f33c0ec117c",
+    "guarded-package.json": "f23a72da7654df22ecc505fd2d96c8abb020282ca84679f704388193265df6e6",
+    "preparation.json": "cc648e3ab61a4d145dd41f172c786d3064b0fb214effcc3c90d9eda7adebbb85",
+    "envelope-overlay.cpio": "34967acfe6f9cc5079ce1608615bc14814bb382e7641b7e3293e13143d61a8ba",
+    "staging/k2/full-contents.sql": "80853e4268e184d0f8c2f9c2c910c1686433813812c5373082880c59c7cc72c7",
+    "staging/k2/cold-authority.sql": "da1ab048555c6d3f009b0f6ae811e51528d299ef3d7f4d8daa60632a65948fd1",
+    "staging/k2/captured-baseline-check.sql": "aff237ec2224cbd9849391e25cdd1dc7646b59f7d3c61850fd5a6ca8e89a6e4b",
+    "staging/k2/image-probe.sh": "63b06f69ec4e12178daaa192951a7a8c0fccfe1ab87abb1126a6a896f7482bd6",
+    "staging/k2/preserved-foundation.dump": "f02a7598776b38d35d9d8656178a05ba8e45577668a1be48da2c7553ee696e10"
+  },
+  "sourcePins": [
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\preparer-source.mjs",
+      "sha256": "2f6942385816d838cdc61fe628b6d2e96c08b1df9f4dc302027d3cd5d7d1325c"
+    },
+    {
+      "file": "supabase/prepared/imported_draft_continuation.sql",
+      "sha256": "26ec4db009173aef02e3954504c05991937fb4d503769fc5133f3ebaa999d52a"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\execution01\\after-catalog.json",
+      "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\imported-draft-025b3682-3b76-465e-bd2a-5c2c0c597314\\combined-imported-install.sql",
+      "sha256": "abc2abd5d685913d07508bd704aa1ecc0a29c6b0bae0f870cb47cb5ca82f85d5"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\before-catalog.json",
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\after-catalog.json",
+      "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\guarded-package.json",
+      "sha256": "fa0ef714dd5d3582a8b99a57faa1cef1cb4ad0a56fffbfeee0442d3d8692a55b"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\authority-inventory.json",
+      "sha256": "52bcd96910e4b32dd195e375bcbbef468471d1c166095d3d1b11d29e48ecde7a"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\provider-managed-ddl-authority.json",
+      "sha256": "1f6dac40000249a40a7ad45fa5b71f7cbf348f14144f69f1768282e311a3b06a"
+    },
+    {
+      "file": "scripts/prepare-imported-provider-fixture.mjs",
+      "sha256": "04944bbcfd861599ed71be93e0f965cac0e1d8e1798aae63b03cfcc870db9e28"
+    },
+    {
+      "file": "docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs",
+      "sha256": "16f5f8a87a3d094237d543fda293d6b90cdeddc904d32a9c37aceba989412cfb"
+    },
+    {
+      "file": "supabase/prepared/product_master_version_conflict_transport.sql",
+      "sha256": "ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476"
+    }
+  ],
+  "payloadSha256": "d4600da2a995b983454f720fc3ad1622cc97aeef9b611f00c4accf5d618a0010",
+  "sqlSha256": "d44df9c5a41ee8d31682038cc48147fa4593914997b98a075e1fccab4e667d45",
+  "changedFunction": "public.execute_admin_product_master_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+  "masterBeforeSha256": "b9553f8fc638395ce9b5db66197eeaa8b1a9271b218c73dececffae7fefa78d2",
+  "masterAfterSha256": "c7e9f53fe80c68ce99401caf10d31f4ee272bd506a0c0f3bc7f6363c97f38b94",
+  "completeAfterEqualsPriorImportedExceptOneExactDefinition": true,
+  "metadataUnchangedRelativeToPriorImportedComposition": true,
+  "timingsMs": {
+    "FRESH_APPLY": 2965.766,
+    "EXACT_REPLAY": 292.734
+  },
+  "original88TableTwoSequenceProjectionSha256": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+  "capturedGlobalAuthority": {
+    "roles": 31,
+    "memberships": 22,
+    "eventTriggers": 6,
+    "managedSettings": 8,
+    "postArchiveExactWitness": true
+  },
+  "hostFinalCheck": {
+    "surface": "Independent escalated read-only Get-Process/Get-NetTCPConnection after terminal result",
+    "pid": 18468,
+    "pidAbsent": true,
+    "probeListenerCount": 0
+  },
+  "verification": {
+    "developmentCommand": "npm run verify:development",
+    "developmentSession": 74964,
+    "developmentExit": 0,
+    "sourceAdmissionCommand": "node .tools/verify-transport-package-source.mjs",
+    "sourceAdmissionExit": 0,
+    "receiptCommand": "node .tools/record-transport-installation.mjs"
+  },
+  "focusedSourceAdmission": {
+    "red": "Expected exact union admission fails CONTENTS_DRIFT before immutable payload pin",
+    "green": {
+      "contentsSha256": "d4600da2a995b983454f720fc3ad1622cc97aeef9b611f00c4accf5d618a0010",
+      "sqlSha256": "d44df9c5a41ee8d31682038cc48147fa4593914997b98a075e1fccab4e667d45",
+      "afterSha256": "a9aed5cdcc6c1eabf1a014cd2d28612c1ba74c1b23811a80ed9fafdcf8bd3186",
+      "expectedMasterDefinitionSha256": "c7e9f53fe80c68ce99401caf10d31f4ee272bd506a0c0f3bc7f6363c97f38b94",
+      "sourceOnly": true,
+      "providerWrites": false
+    },
+    "appendedPayloadRefused": true,
+    "platformMetadataDriftRefused": true
+  },
+  "recovery": "The owned native guest reconstructs the original populated archive; full original schema and captured baseline row/sequence checks pass. Guest terminal0. Source revert only this opt-in integration and exact admission pin; retain receipts. Fresh successors must use a new owned case and retained exact source archive.",
+  "remaining": [
+    "Empty-original-schema cold full installation with the corrected union",
+    "Interrupted full installation rollback and installed-function/ACL drift refusal for this exact revised package",
+    "Post-final-check authority-through-commit qualification",
+    "Other16 business-conflict raises and tariff BFF mapping, with actual HTTP proof",
+    "Genuine CSV-to-review/stock/eligible publication/Website, creation owner decision, approved facts/media/custody",
+    "K2 identity/readiness/backup/specific owner authorization/provider and real-host/human acceptance"
+  ],
+  "limits": "Archive reconstruction is not an empty-database cold installation or data-retaining deactivation/roll-forward of revised installed policy/event rows. Earlier scoped recovery evidence cannot silently replace those revised-package tests. Existing actual routed assignment receipt remains separate; native SQL installation is not new Auth/PostgREST/BFF/browser or provider evidence. Privileged after-final-check authority counterexample remains open."
+}
