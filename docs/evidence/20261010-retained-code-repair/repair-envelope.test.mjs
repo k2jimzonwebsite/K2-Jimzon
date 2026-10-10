@@ -1,0 +1,99 @@
+// MAP-018 / IDEA-20261010-08. Preparation tests; native SQL proof is separate.
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import fs from 'node:fs'
+
+const root = 'D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
+const input = {
+  priorBytes: fs.readFileSync(root + '/oci-imported02/execution01/after-catalog.json'),
+  correctedBytes: fs.readFileSync(root + '/oci-imported23/execution01/after-catalog.json'),
+  packageBytes: fs.readFileSync(root + '/oci-imported19/guarded-package.json'),
+  fragments: ['product_master', 'customer_tariff', 'category_policy'].map(name =>
+    fs.readFileSync('supabase/prepared/' + name + '_version_conflict_transport.sql', 'utf8')),
+  marker: '32c52df3-2642-4b5a-8b84-5c327824f4bc',
+}
+const prior = JSON.parse(input.priorBytes)
+const corrected = JSON.parse(input.correctedBytes)
+const pkg = JSON.parse(input.packageBytes)
+const indices = prior.functions.flatMap((f, i) => f.definition !== corrected.functions[i].definition ? [i] : [])
+let module
+try { module = await import('./repair-envelope.mjs') } catch (error) {
+  if (error.code !== 'ERR_MODULE_NOT_FOUND') throw error
+}
+
+test('reviewed repair preparation is available', () => {
+  assert.equal(typeof module?.prepareRepairEnvelope, 'function', 'known-correction envelope is missing')
+})
+
+for (let mask = 0; mask < 8; mask++) {
+  test('admits complete known catalog combination ' + mask, () => {
+    assert.ok(module, 'known-correction envelope is missing')
+    const prepared = module.prepareRepairEnvelope(input)
+    const state = structuredClone(prior)
+    indices.forEach((index, bit) => { if (mask & (1 << bit)) state.functions[index] = corrected.functions[index] })
+    const result = prepared.classify(state, pkg.authority, pkg.managedAuthority)
+    assert.equal(result.corrections.length, 3 - mask.toString(2).replaceAll('0', '').length)
+    assert.equal(result.noOp, mask === 7)
+  })
+}
+
+for (const [name, mutate] of [
+  ['unknown target body', c => { c.functions[indices[0]].definition += '\n-- unknown' }],
+  ['target owner', c => { c.functions[indices[0]].owner = 'authenticated' }],
+  ['target ACL', c => { c.functions[indices[1]].catalog.proacl = null }],
+  ['target settings', c => { c.functions[indices[2]].catalog.proconfig = ['search_path=public'] }],
+  ['non-target definition', c => { c.functions.find((_, i) => !indices.includes(i)).definition += '\n-- drift' }],
+  ['relation drift', c => { c.relations.pop() }],
+]) test('refuses ' + name, () => {
+  assert.ok(module, 'known-correction envelope is missing')
+  const state = structuredClone(prior)
+  mutate(state)
+  assert.throws(() => module.prepareRepairEnvelope(input).classify(state, pkg.authority, pkg.managedAuthority), /SCHEMA_DRIFT/)
+})
+
+test('refuses global and managed authority drift', () => {
+  assert.ok(module, 'known-correction envelope is missing')
+  const prepared = module.prepareRepairEnvelope(input)
+  const authority = structuredClone(pkg.authority)
+  authority.roles.pop()
+  assert.throws(() => prepared.classify(prior, authority, pkg.managedAuthority), /AUTHORITY_DRIFT/)
+  const managed = { ...pkg.managedAuthority, sessionPreloadLibraries: '' }
+  assert.throws(() => prepared.classify(prior, pkg.authority, managed), /MANAGED_AUTHORITY_DRIFT/)
+})
+
+test('refuses altered reviewed bytes and invalid owned marker', () => {
+  assert.ok(module, 'known-correction envelope is missing')
+  for (const key of ['priorBytes', 'correctedBytes', 'packageBytes'])
+    assert.throws(() => module.prepareRepairEnvelope({ ...input, [key]: Buffer.concat([input[key], Buffer.from(' ')]) }), /SOURCE_PIN/)
+  const fragments = [...input.fragments]
+  fragments[0] += '\n-- changed'
+  assert.throws(() => module.prepareRepairEnvelope({ ...input, fragments }), /SOURCE_PIN/)
+  assert.throws(() => module.prepareRepairEnvelope({ ...input, marker: "x';commit;" }), /OWNED_MARKER/)
+})
+
+test('generates one atomic local-only transaction reusing exact correction bytes', () => {
+  assert.ok(module, 'known-correction envelope is missing')
+  const { sql } = module.prepareRepairEnvelope(input)
+  assert.match(sql, /^-- Disposable owned RAM qualification only\nBEGIN;/)
+  assert.match(sql, /lock_timeout='2s';set local statement_timeout='10s'/)
+  assert.match(sql, /data_directory.*\/tmp\/k2-managed-data/)
+  assert.match(sql, /inet_server_addr\(\) is not null/)
+  assert.match(sql, /shobj_description/)
+  assert.match(sql, /pg_advisory_xact_lock\(1261585232,1347374169\)/)
+  for (const fragment of input.fragments) assert.ok(sql.includes("EXECUTE '" + fragment.replaceAll("'", "''") + "';"))
+  assert.match(sql, /K2_RETAINED_REPAIR_POSTCONDITION/)
+  assert.ok(sql.endsWith('COMMIT;\n'))
+  // The full catalog embeds retained function bodies as quoted data. Inspect
+  // executable text, plus the exact correction fragments, rather than that data.
+  const executable = [sql, ...input.fragments].map(s => s.replace(/'(?:''|[^'])*'/g, "''")).join('\n')
+  assert.equal(/truncate table|disable trigger|delete\s+from/i.test(executable), false)
+})
+
+for (const faultAfter of [1, 2, 3]) test('fault follows an actual correction boundary ' + faultAfter, () => {
+  assert.ok(module, 'known-correction envelope is missing')
+  const { sql } = module.prepareRepairEnvelope({ ...input, faultAfter })
+  assert.ok(sql.includes('v_executed=' + faultAfter))
+  assert.ok(sql.indexOf('v_executed:=v_executed+1') > sql.indexOf("EXECUTE '-- IDEA"))
+  assert.match(sql, /K2_RETAINED_REPAIR_INJECTED_FAULT/)
+  assert.match(sql, /K2_RETAINED_REPAIR_FAULT_BOUNDARY_UNAVAILABLE/)
+})

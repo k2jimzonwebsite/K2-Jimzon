@@ -1,6 +1,6 @@
 # Retained operational code repair qualification
 
-MAP-018 / IDEA-20261010-08. Reviewed design approved for local preparation; no repair SQL, native execution,
+MAP-018 / IDEA-20261010-08. Reviewed design approved for local preparation; repair-envelope source now prepared; no native execution,
 provider apply or deployment. The sole active work queue remains MASTER_ACTION_PLAN.md.
 
 The owner confirmed: “Yes, use that recovery approach” for preserving saved rates

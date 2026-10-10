@@ -1,0 +1,78 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "baseCommit": "4c2e081",
+  "classification": "Reviewed source preparation only; generated repair SQL has not executed",
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "14ab20573fb9f619c9a4af26882d36d062968dce78971d87d1803c5d23a2f0ec"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.test.mjs",
+      "sha256": "15247a46bce9d26a7460313f4e6405c1b30c5889af8f18b12fa0ce4cc4fb9bb3"
+    }
+  ],
+  "verification": {
+    "focusedCommand": "node --test docs/evidence/20261010-retained-code-repair/repair-envelope.test.mjs",
+    "red": {
+      "exit": 1,
+      "pass": 0,
+      "fail": 21,
+      "reason": "Expected assertions: known-correction envelope missing"
+    },
+    "intermediate": {
+      "exit": 1,
+      "pass": 20,
+      "fail": 1,
+      "reason": "Test inspected quoted retained function bodies as executable text; corrected test to inspect executable text and exact fragments"
+    },
+    "green": {
+      "exit": 0,
+      "pass": 21,
+      "fail": 0
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "session": 29018,
+      "exit": 0
+    }
+  },
+  "review": {
+    "reviewer": "auth_migration_review",
+    "status": "no-critical-important",
+    "scope": "Exact six input pins, fragment reuse, complete metadata normalization, owned target guards, fault after actual correction; source preparation only"
+  },
+  "scope": {
+    "admittedStates": 8,
+    "repairTargets": 3,
+    "fragmentsReused": true,
+    "completeMetadataAndAuthorityChecks": true,
+    "originalLockMilliseconds": 2000,
+    "originalStatementMilliseconds": 10000,
+    "noEmergencyPause": true,
+    "noDataMutation": true,
+    "noProviderDispatcher": true
+  },
+  "fixturePrerequisite": {
+    "observed": "Read-only retained combined23 catalog and connected05 preparer",
+    "absentFromRetainedCatalog": [
+      "k2_private.security_events",
+      "k2_private.security_event_nonces",
+      "k2_private.storefront_preauth_rate_buckets"
+    ],
+    "consequence": "Genuine BFF fixture adds maintained telemetry/preauth prerequisites and disposable observer functions. Current exact catalog guard intentionally refuses those additional objects. Qualify and review their complete exact fixture catalog before composing populated repair; never silently ignore them, delete retained control facts, or broaden installed admission."
+  },
+  "remaining": [
+    "Exact populated fixture metadata composition and review",
+    "Settled fixture-only full table/sequence capture",
+    "Native all-eight-state repair/repeat and post-correction interruption rollback",
+    "Full state/authority conservation and genuine retained-order/quote/signed-receipt resumption",
+    "Separate authority-through-commit/provider/real-host/human gates"
+  ],
+  "nextAction": "MAP-018 ordered step3: resolve exact genuine-request fixture metadata prerequisite, preserve every control fact and complete guard, then prepare a fresh owned pinned successor for review before native launch",
+  "runtimeExecuted": false,
+  "providerWrites": false,
+  "deployed": false,
+  "recovery": "Prepared-only source revert needs no database rollback; retained private input catalogs/package and all prior fixtures stay immutable."
+}

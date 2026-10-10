@@ -1,5 +1,7 @@
 # K2 Jimzon  -  Project Directory Map
 
+10 October retained repair preparation: docs/evidence/20261010-retained-code-repair/repair-envelope.mjs is a pure disposable SQL constructor/classifier with no dispatcher; adjacent repair-envelope.test.mjs uses real private pinned catalog/package inputs. RETAINED_CODE_REPAIR_PREPARATION_20261010.json owns source evidence; exact genuine-request fixture composition/native qualification remains MAP-018.
+
 10 October retained-code repair design (MAP-018 / IDEA-20261010-08): RETAINED_OPERATIONAL_CODE_REPAIR_SPEC.md is approved for scoped local preparation after sequential Skeptic/Guardian/User Advocate/Arbiter review. Reuse three exact existing correction fragments; no new canonical writer, data deletion, emergency pause or provider dispatch. Full populated state/atomicity/resumption qualification remains pending solely in the Master Action Plan.
 
 10 October connected tariff runtime evidence (MAP-018): TARIFF_ORDER_CONNECTED_20261010.json owns actual sequential native/Auth/PostgREST/Admin/Storefront qualification and disposable captured-state recovery. Adjacent fixture-context.sql is a disposable SECURITY INVOKER request-header observer, outside migrations; canonical source/guard/roles unchanged. Preparation05 pins12 artifacts/4 sources; rejected unexecuted04 and failed01/02/03 remain retained. Populated category/tariff/accepted-order recovery and provider/hosted gates remain solely MAP-018.
