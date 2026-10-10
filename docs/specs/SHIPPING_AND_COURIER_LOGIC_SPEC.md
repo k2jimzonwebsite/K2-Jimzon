@@ -1838,3 +1838,16 @@ selectors; narrowed assertions rerun only affected cases. Application source
 review approved without Critical/Important; four sources parse. Existing native
 54+12/API3 and E53/0 evidence reused.375/1440 screens inspected without overflow;
 no native HTTP/authenticated host/real staff/provider or deployment claim.
+
+
+## 10 October tariff recovery approach review — IDEA-20261010-08 / MAP-018
+
+Owner decision: "Yes, keep shopping available." During emergency rate-edit recovery, customers retain the last valid rates and existing orders retain agreed charges. Understanding confirmed; approach selection and detailed design remain pending. No implementation or provider authorization.
+
+Recommended approach: a database-enforced editing pause separate from the active tariff head. Each publication cooperates with the pause boundary; recovery waits for already-admitted edits to finish before confirming paused state, within existing2s lock/10s statement limits. If it cannot establish the pause within the bound, it reports failure and does not claim completion. Retained rate reads/quotes continue. Resumption restores editing without replacing heads/history/receipts. Existing accepted charges are preserved. This introduces a small protected control and synchronization contract, requiring installation/replay/drift/concurrency/data-retaining recovery evidence. It avoids relying on an operator guessing that an edit finished. No final choice of SQL mechanism is accepted yet.
+
+Alternative: pause the application editing endpoint and have an operator verify that admitted publications have drained before database recovery. This needs less database change but relies on every caller respecting the application pause, accurate operational drain evidence and a maintained manual runbook; direct RPC callers and already-running requests need separate handling. It cannot inherit a database-enforced quiescence claim.
+
+Both approaches retain one canonical rate source, immutable history, existing owner/security/signature/version/receipt behavior and available retained reads/quotes. Neither automatically rolls back to a previous price, changes accepted charges, enables the future tariff, pauses the whole shop, or authorizes production actions. Scale assumption: existing single canonical current-rate head; no new channel-specific rate store. Reliability/security/maintenance assumption: owner-controlled repeatable recovery, bounded refusal, retained evidence and least privilege. Open question: approach acceptance; detailed synchronization/command replay/error behavior and qualified races follow that choice.
+
+Decision log: availability confirmed by owner; source audit0183 remains authoritative; no approach accepted, no implementation. Exact next action belongs to MAP-018. The brainstorming skill requires explicit approach acceptance and reviewed final design before implementation.
