@@ -1,4 +1,6 @@
 
+IDEA-20261010-08 continuation outcome,11October: existing approved settled witness boundary now has source preparation and10 passing coordinator checks; no new idea, repair scope or production pause. docs/acceptance/RETAINED_SETTLED_COORDINATOR_20261011.json records review/limitations/recovery. Native signed populated qualification remains MAP-018.
+
 IDEA-20261010-08 profile outcome: exact calibration01 / derived known-three prior composition and source review approved; fixed matched-pair preparation passes36 source tests/development18973 and preserves original SQL bytes. No new idea or broadened arbitrary repair scope. RETAINED_REPAIR_PROFILE_PREPARATION_20261010.json owns derivation/pins/limits; settled signed populated qualification remains solely MAP-018.
 
 IDEA-20261010-08 qualification outcome: native calibration01 terminal0, expected complete metadata refusal and168physicalrelations/11sequences/44393row conservation, exact disposable original reconstruction and absentPID verified. Exact telemetry/Admin-preauth/observer/session/FK delta is recorded rather than silently excluded. Completed calibration stays in RETAINED_FIXTURE_CALIBRATION_20261010.json; signed populated repair remains solely MAP-018.

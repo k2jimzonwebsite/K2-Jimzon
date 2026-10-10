@@ -1,0 +1,52 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "baseCommit": "099e46c",
+  "classification": "Disposable coordinator source preparation only; no native populated repair",
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/settled-fixture.mjs",
+      "sha256": "2a84224ccbc93727606032ac521fd5fec1489b1181ea876a7aa3804fa1cf756d"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/settled-fixture.test.mjs",
+      "sha256": "3894df9691f958fca7c896bcd627e2ce20d7c52e3e38bc0a212c661448a94593"
+    }
+  ],
+  "verification": {
+    "command": "node --test docs/evidence/20261010-retained-code-repair/settled-fixture.test.mjs",
+    "red": {
+      "pass": 0,
+      "fail": 9,
+      "reason": "missing coordinator"
+    },
+    "green": {
+      "pass": 10,
+      "fail": 0
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "session": 71418,
+      "exit": 0
+    }
+  },
+  "review": {
+    "reviewer": "repair_boundary_review",
+    "status": "No Critical/Important source findings",
+    "minor": "Rejected-resumption test added after review; focused 10/10 pass"
+  },
+  "scope": {
+    "completePendingPromiseDrain": true,
+    "sealedDuringCapture": true,
+    "privateBytesReturned": false,
+    "failedCaptureRemainsSealed": true,
+    "suppliedAdapterTestsOnly": true,
+    "nativeStopWitnessVerified": false,
+    "signedPopulationVerified": false,
+    "nativeRepairExecuted": false,
+    "providerWrites": false,
+    "deployed": false
+  },
+  "nextAction": "MAP-018 step3: wire all actual request/refresh/session/observer operations and native stop/writer/capture/resume adapters into a fresh pinned successor; then signed category/tariff/order population, all-eight repair/repeat/fault/refusal/full conservation and genuine resumption.",
+  "recovery": "Revert only these two new preparation files and associated records for source recovery. No database rollback applies. Failed future native boundary stays sealed for explicit successor recovery/shutdown. Preserve all accepted private artifacts and pinned originals."
+}

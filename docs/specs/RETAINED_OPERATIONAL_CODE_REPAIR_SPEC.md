@@ -132,3 +132,6 @@ Decision log:
 - Final Integrator/Arbiter APPROVED for scoped local implementation preparation:
   both Skeptic and Guardian revisions are resolved. Runtime qualification,
   authority through commit and provider/live acceptance remain open.
+
+11 October coordinator implementation preparation: 11 October settled retained fixture coordinator prepared (MAP-018 / IDEA-20261010-08): new disposable settled-fixture.mjs drains admitted request promises, seals new requests, requires explicit stopped Auth/PostgREST and zero-writer adapter witness, compares stable before/exact after private bytes and keeps failure sealed. Focused expected9-red then10-green; source review no Critical/Important findings. docs/acceptance/RETAINED_SETTLED_COORDINATOR_20261011.json owns source evidence. Controlled-adapter tests do not prove native process stop, signed population, populated repair, service resumption or deployed behavior. Exact remaining integration/native qualification stays in MAP-018 step3.
+Native adapters must use actual stopped-process/writer observations, existing complete retainedSnapshotSql and explicit healthy restart; supplied booleans or arbitrary bytes in coordinator unit tests cannot substitute for that execution evidence. Every failed native boundary requires explicit fixture recovery/shutdown.
