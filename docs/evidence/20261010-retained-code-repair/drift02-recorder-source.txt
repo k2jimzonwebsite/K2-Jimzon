@@ -1,0 +1,56 @@
+import fs from 'node:fs'
+import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
+const preparation = JSON.parse(fs.readFileSync('docs/acceptance/RETAINED_DRIFT02_PREPARATION_20261011.json'))
+const dir = 'D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/' + preparation.case
+const sha = b => createHash('sha256').update(b).digest('hex')
+for (const p of preparation.artifactPins) assert.equal(sha(fs.readFileSync(dir + '/' + p.file)), p.sha256, p.file)
+for (const p of preparation.sourcePins) assert.equal(sha(fs.readFileSync(p.file)), p.sha256, p.file)
+const native = JSON.parse(fs.readFileSync(dir + '/execution01/result.json'))
+const driver = JSON.parse(fs.readFileSync(dir + '/host-driver-result.json'))
+const host = JSON.parse(fs.readFileSync(dir + '/execution01/independent-host.json'))
+assert.equal(native.exit, 0); assert.equal(native.timedOut, false)
+for (const k of ['guestSuccess', 'serverModuleProbe', 'moduleGucs', 'processStopped']) assert.equal(native[k], true, k)
+assert.equal(native.postgresVersion, '17.6'); assert.equal(driver.passed, true)
+assert.equal(driver.checks.length, 41); assert.equal(driver.connectedTariff.acceptedOrders, 2)
+assert.equal(host.pid, native.pid); assert.equal(host.processPresent, false); assert.equal(host.listenerCount, 0)
+const log = fs.readFileSync(dir + '/execution01/serial.log', 'utf8')
+const lines = log.split(/\r?\n/).map(x => x.trim())
+const names = ['BODY', 'OWNER', 'ACL', 'SEARCH_PATH', 'SCHEMA']
+for (const marker of ['K2_RETAINED_AUTH_REST_STOPPED_NO_CLIENTS', 'K2_RETAINED_DRIFT_ALL5_OK', 'K2_RETAINED_MATRIX_EXIT_0', 'K2_RETAINED_SCOPE_EXIT_0', 'K2_TARIFF_DISPOSABLE_CAPTURED_RECONSTRUCTION_OK', 'K2_TARIFF_ARCHIVE_PROJECTION_CATALOG_RECOVERY_OK', 'K2_AUTH_STARTUP_CONSERVATION_OK', 'K2_OCI_GUEST_SUCCESS', ...names.map(n => 'K2_RETAINED_DRIFT_' + n + '_REFUSED_CONSERVED')]) assert.equal(lines.filter(x => x === marker).length, 1, marker)
+assert.equal(lines.filter(x => x === 'K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK').length, 9)
+const snapshots = {}
+for (const phase of ['initial', 'final']) {
+  const start = lines.indexOf('K2_RETAINED_DRIFT_EXPORT_' + phase + '_BEGIN'), end = lines.indexOf('K2_RETAINED_DRIFT_EXPORT_' + phase + '_END')
+  assert.ok(start >= 0 && end > start)
+  const bytes = Buffer.from(lines.slice(start + 1, end).join(''), 'base64'), parsed = JSON.parse(bytes)
+  assert.equal(parsed.contract, 'K2_RETAINED_FULL_PHYSICAL_STATE_V1')
+  assert.equal(parsed.relationCount, parsed.relations.length)
+  assert.equal(new Set(parsed.relations.map(r => r.name)).size, parsed.relationCount)
+  fs.writeFileSync(dir + '/execution01/retained-drift-' + phase + '.json', bytes, { flag: 'wx' })
+  snapshots[phase] = { sha256: sha(bytes), bytes: bytes.length, physicalRelations: parsed.relationCount, sequences: parsed.relations.filter(r => r.kind === 'S').length, tableRows: parsed.relations.filter(r => r.kind !== 'S').reduce((n, r) => n + r.state.count, 0) }
+}
+assert.deepEqual(snapshots.initial, snapshots.final)
+const schema = lines.filter(x => /^[a-f0-9]{64}  \/tmp\/auth-schema-(before|after)\.json$/.test(x))
+assert.equal(schema.length, 2); assert.equal(schema[0].slice(0, 64), schema[1].slice(0, 64))
+const rows = 'bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c'
+for (const p of ['before', 'after']) assert.ok(log.includes(rows + '  /tmp/auth-rows-' + p + '.json'))
+const record = {
+  owningMap: 'MAP-018', idea: 'IDEA-20261010-08', case: preparation.case,
+  classification: 'Executed local signed-populated five unknown-drift refusals with full conservation and exact restored catalog; genuine post-repair resumption remains unverified',
+  command: 'node .tools/run-retained-drift02.mjs', session: 95945,
+  native: { pid: native.pid, runnerExit: 0, vmExit: native.exit, timedOut: false, guestSuccess: true, processStopped: true, postgresVersion: native.postgresVersion },
+  signedPopulation: { checks: driver.checks.length, category: driver.signedCategory, tariffAndOrders: driver.connectedTariff },
+  qualification: { driftCases: names, refusalExit: 3, refusalDiagnostic: 'K2_RETAINED_REPAIR_SCHEMA_DRIFT', actualCatalogDifferenceStatus: 1, fullStateAndCatalogConservedAfterEachRefusal: true, exactBaselineRestoredAfterEachFault: true, background: 'Actual Auth/PostgREST kill/wait and zero other client sessions before stable full capture; no control exclusions', globalManagedWitnesses: 9, snapshots, knownMatrixRerun: false },
+  recovery: { original88TablesTwoSequencesSha256: rows, restoredCorrectedInstalledBaselineCatalogSha256: schema[0].slice(0, 64), scope: 'Separate final unconditional guarded disposable reconstruction after refusal conservation; not post-repair request resumption' },
+  independentHost: host,
+  artifactPins: [...preparation.artifactPins, ...['execution01/result.json', 'execution01/serial.log', 'host-driver-result.json', 'execution01/independent-host.json', 'execution01/retained-drift-initial.json', 'execution01/retained-drift-final.json'].map(file => ({ file, sha256: sha(fs.readFileSync(dir + '/' + file)) }))],
+  sourcePins: preparation.sourcePins,
+  verification: { focused: { command: 'node --test docs/evidence/20261010-retained-code-repair/drift-probe.test.mjs', initialRed: { pass: 0, fail: 2 }, cmpRegressionRed: { pass: 1, fail: 1 }, finalGreen: { pass: 2, fail: 0 } }, development: { command: 'npm run verify:development', session: 16598, exit: 0 } },
+  review: { preexecution: 'drift_native_review: no findings in drift02', actualEvidence: 'pending' },
+  providerWrites: false, deployed: false,
+  remaining: ['Genuine post-repair quote, saved receipt/charge replay and one-hold new order resumption', 'Full installer, rendered product/listing, hosted acceptance, authority-through-commit and owner/provider activation gates'],
+  nextAction: 'MAP-018 genuine post-repair request resumption; reuse known-matrix and drift evidence without rerunning unaffected gates',
+}
+fs.writeFileSync('docs/acceptance/RETAINED_DRIFT_REFUSAL_20261011.json', JSON.stringify(record, null, 2) + '\n', { flag: 'wx' })
+console.log(JSON.stringify({ recorded: true, snapshots: snapshots.initial, nativePid: native.pid, refusedCases: 5 }))

@@ -1,0 +1,265 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-drift02",
+  "classification": "Executed local signed-populated five unknown-drift refusals with full conservation and exact restored catalog; genuine post-repair resumption remains unverified",
+  "command": "node .tools/run-retained-drift02.mjs",
+  "session": 95945,
+  "native": {
+    "pid": 19372,
+    "runnerExit": 0,
+    "vmExit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "processStopped": true,
+    "postgresVersion": "17.6"
+  },
+  "signedPopulation": {
+    "checks": 41,
+    "category": {
+      "result": {
+        "version": "1",
+        "categoryId": "76000000-0000-4000-8000-000000000020",
+        "localMinimum": 150,
+        "effectiveMinimum": 150
+      },
+      "exactSuccessfulReceiptReplay": true,
+      "scope": "Genuine local signed category command before populated native repair; not post-repair resumption"
+    },
+    "tariffAndOrders": {
+      "versions": [
+        1,
+        2
+      ],
+      "feesMinor": [
+        15000,
+        20000
+      ],
+      "acceptedOrders": 2,
+      "acceptedAStateSha256": "71449100293e0a7bfc89af806c7a2a9396518e44d16be1231428de007b69ae31",
+      "finalStateSha256": "214caff72c4cb8d703008164b11d4a026d005c69548fbedc1dcc9ccbcad12f97",
+      "exactReceiptReplay": true,
+      "publicationAndReplayConserved": true,
+      "freshStaleAcceptance409": true,
+      "oldChargeRetained": true,
+      "scope": "Sequential genuine local routes and protected complete synthetic business rows; no concurrent, provider, hosted or populated recovery claim",
+      "protectedObserverCalls": 6
+    }
+  },
+  "qualification": {
+    "driftCases": [
+      "BODY",
+      "OWNER",
+      "ACL",
+      "SEARCH_PATH",
+      "SCHEMA"
+    ],
+    "refusalExit": 3,
+    "refusalDiagnostic": "K2_RETAINED_REPAIR_SCHEMA_DRIFT",
+    "actualCatalogDifferenceStatus": 1,
+    "fullStateAndCatalogConservedAfterEachRefusal": true,
+    "exactBaselineRestoredAfterEachFault": true,
+    "background": "Actual Auth/PostgREST kill/wait and zero other client sessions before stable full capture; no control exclusions",
+    "globalManagedWitnesses": 9,
+    "snapshots": {
+      "initial": {
+        "sha256": "5de9b3e3898bf4f9ad9e0316cb9eadb321d0dfe11dce7c4ee2b012cfb0dc4a53",
+        "bytes": 25551,
+        "physicalRelations": 168,
+        "sequences": 11,
+        "tableRows": 44521
+      },
+      "final": {
+        "sha256": "5de9b3e3898bf4f9ad9e0316cb9eadb321d0dfe11dce7c4ee2b012cfb0dc4a53",
+        "bytes": 25551,
+        "physicalRelations": 168,
+        "sequences": 11,
+        "tableRows": 44521
+      }
+    },
+    "knownMatrixRerun": false
+  },
+  "recovery": {
+    "original88TablesTwoSequencesSha256": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+    "restoredCorrectedInstalledBaselineCatalogSha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+    "scope": "Separate final unconditional guarded disposable reconstruction after refusal conservation; not post-repair request resumption"
+  },
+  "independentHost": {
+    "listenerCount": 0,
+    "method": "Independent Win32_Process and Get-NetTCPConnection checks after terminal session95945",
+    "processPresent": false,
+    "pid": 19372,
+    "fixturePorts": [
+      54392,
+      54393,
+      54394,
+      54395,
+      54396
+    ]
+  },
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "0fac844b40182408ad52218767b820b834e85cf15496f6447f203624b223159f"
+    },
+    {
+      "file": "staging/k2/retained-matrix.sh",
+      "sha256": "dfd419233d238ef80ecd03f3fa49e987be1a7178687cc88881b63c2778f393f2"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "ce3ebac4050410225f8540a7c0b48a1fc7915c565951828ede497fdfa5608098"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/retained-drift-body-setup.sql",
+      "sha256": "ac0117084d6a7330107aad7f12add31e8edaf1eece719cec8de8b4f08cb4a6f0"
+    },
+    {
+      "file": "staging/k2/retained-drift-body-restore.sql",
+      "sha256": "a979922a2d00f7e56333ab4a7134f87417757bdf2a1a0acfddfd041f81b8759c"
+    },
+    {
+      "file": "staging/k2/retained-drift-owner-setup.sql",
+      "sha256": "75011701e374ce10545f311109ebb784a5294b26d51c44310e918bfcd1786039"
+    },
+    {
+      "file": "staging/k2/retained-drift-owner-restore.sql",
+      "sha256": "5bb68281c2abaa06ab7feadf8e05ca23581cf8a115a733119b671feb6bf6780f"
+    },
+    {
+      "file": "staging/k2/retained-drift-acl-setup.sql",
+      "sha256": "b35616596bcfaaef48f776e563bbad66962d234b098d18e980257329ad455d89"
+    },
+    {
+      "file": "staging/k2/retained-drift-acl-restore.sql",
+      "sha256": "a754f9ddb0fa9d21366f395ec28d05186e6333b35bbf085d134e1d9cb3c5921b"
+    },
+    {
+      "file": "staging/k2/retained-drift-search-path-setup.sql",
+      "sha256": "a6373de8c56b962a70d5940da1ccbdf1282e8fdfc9000cccd992a25b538e8515"
+    },
+    {
+      "file": "staging/k2/retained-drift-search-path-restore.sql",
+      "sha256": "0fb15df24d194c4935019e62898a8a184474dab95064654570821ae3ddd84a49"
+    },
+    {
+      "file": "staging/k2/retained-drift-schema-setup.sql",
+      "sha256": "a08902d03a8c397acbfe417aeda133d273a0a797a971469844f546f5c932ac3b"
+    },
+    {
+      "file": "staging/k2/retained-drift-schema-restore.sql",
+      "sha256": "c68a963ba03ad1b2afdb07248c1afa123ab15ddedcdac7d6309cb69202e05d3f"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "33331593e3a92fe4804960587e94bbf1c82fb87282081ebd31fd4ae4144d6216"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "700cb3b35b811dacb7fd999aee68b0bae576df952a5d7365268e0fa092061b9d"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "67e6ce7581b0674c867b88c6c771a5c3c68462cc9178dc64b8be7f3240f596ab"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "3994f5ad1865085b48eec050c91a5fad1b11228a14cde2a3ba861cc13db8d70e"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "d206e61499c17f9ae94f3240b3c95ca5167f7ed6b7440a4722ca58b326bac19b"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "f7f4d030fef47bffdf9d854a53fd945badbf92b31e31e38d9d5046e09eb530ad"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "97041acc853bfdbb0105513d5c2ad8b4432b3303e621b5c489e72303a3138d46"
+    },
+    {
+      "file": "execution01/result.json",
+      "sha256": "9000c7dbc3dd282cfbf05b1874bc0b1506033185e5b25467533a864c954403b8"
+    },
+    {
+      "file": "execution01/serial.log",
+      "sha256": "a902fb611d0452a05f2495d7eecbcb67a02daebd2fc2cd4f29378c5f2e560cb6"
+    },
+    {
+      "file": "host-driver-result.json",
+      "sha256": "7d239310258db2db42ae51045c5cc98309a4cf86efcb087e38cf9cc4e8ecaa0c"
+    },
+    {
+      "file": "execution01/independent-host.json",
+      "sha256": "266ab41d7212f831f90b94426baa3f42a7eb02687833bfe049b5d3a0d0671c0a"
+    },
+    {
+      "file": "execution01/retained-drift-initial.json",
+      "sha256": "5de9b3e3898bf4f9ad9e0316cb9eadb321d0dfe11dce7c4ee2b012cfb0dc4a53"
+    },
+    {
+      "file": "execution01/retained-drift-final.json",
+      "sha256": "5de9b3e3898bf4f9ad9e0316cb9eadb321d0dfe11dce7c4ee2b012cfb0dc4a53"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/drift-probe.mjs",
+      "sha256": "d3827a1047d1039b5a48c00d4d4eae84ccc344505989357067970ffa8ea88b6e"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/drift-probe.test.mjs",
+      "sha256": "4c77adb685a2882c0807b8a0a78c8b3311cb9d1d318b978ea4dd9d5514c12dc4"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "9e1bd5e2872defa019bcb9ac779c429e8090282530ea5c6394b002e3061c6f8e"
+    }
+  ],
+  "verification": {
+    "focused": {
+      "command": "node --test docs/evidence/20261010-retained-code-repair/drift-probe.test.mjs",
+      "initialRed": {
+        "pass": 0,
+        "fail": 2
+      },
+      "cmpRegressionRed": {
+        "pass": 1,
+        "fail": 1
+      },
+      "finalGreen": {
+        "pass": 2,
+        "fail": 0
+      }
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "session": 16598,
+      "exit": 0
+    }
+  },
+  "review": {
+    "preexecution": "drift_native_review: no findings in drift02",
+    "actualEvidence": "drift_native_review: all29 artifact and3 source pins, exact serial markers, decoded private snapshots and separate recovery match; no findings. Reviewer CIM recheck sandbox-denied and contributes no absence evidence; primary actual escalated host check is recorded."
+  },
+  "providerWrites": false,
+  "deployed": false,
+  "remaining": [
+    "Genuine post-repair quote, saved receipt/charge replay and one-hold new order resumption",
+    "Full installer, rendered product/listing, hosted acceptance, authority-through-commit and owner/provider activation gates"
+  ],
+  "nextAction": "MAP-018 genuine post-repair request resumption; reuse known-matrix and drift evidence without rerunning unaffected gates"
+}

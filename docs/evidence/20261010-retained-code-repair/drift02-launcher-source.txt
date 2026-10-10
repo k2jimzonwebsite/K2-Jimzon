@@ -1,0 +1,14 @@
+import fs from 'node:fs'
+import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
+import { pathToFileURL } from 'node:url'
+const receipt = JSON.parse(fs.readFileSync('docs/acceptance/RETAINED_DRIFT02_PREPARATION_20261011.json'))
+assert.equal(receipt.case, 'oci-retained-drift02')
+assert.equal(receipt.review.status, 'reviewed-preexecution-no-critical-important')
+const root = 'D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/' + receipt.case
+assert.ok(!fs.existsSync(root + '/execution01'), 'Never reuse native execution')
+const sha = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex')
+for (const pin of receipt.artifactPins) assert.equal(sha(root + '/' + pin.file), pin.sha256, pin.file)
+for (const pin of receipt.sourcePins) assert.equal(sha(pin.file), pin.sha256, pin.file)
+console.log(JSON.stringify({ case: receipt.case, pinsVerified: true, launchingOnce: true }))
+await import(pathToFileURL(root + '/runner-source.mjs').href)

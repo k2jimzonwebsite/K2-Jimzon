@@ -1,0 +1,129 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-retained-drift01",
+  "marker": "4b9bb642-ae60-4f1a-a9cb-00d4b3801c18",
+  "baseCase": "oci-retained-populated04",
+  "classification": "Fresh signed-populated unknown body/owner/ACL/search-path/schema native refusal/conservation fixture preparation only",
+  "artifactPins": [
+    {
+      "file": "staging/k2/image-probe.sh",
+      "sha256": "2a1f4f9f4c7522283c3db5f9324b061d673e5b8fb3e76a89c0fa1509492d98c2"
+    },
+    {
+      "file": "staging/k2/retained-matrix.sh",
+      "sha256": "f35147d722449e4f7b99a58d5207cb8b182e5c02b18a877ba845122fdc35de75"
+    },
+    {
+      "file": "staging/k2/retained-repair.sql",
+      "sha256": "3077ff7bdc09f9f67eb61d3c8bed489d4f229e1a59c7d94e59771ff59afc4fa6"
+    },
+    {
+      "file": "staging/k2/retained-snapshot.sql",
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": "staging/k2/retained-drift-body-setup.sql",
+      "sha256": "1ab01603136672a01db0e34dc4c1eae9416a401bbb51e45f7d53a318b258f91f"
+    },
+    {
+      "file": "staging/k2/retained-drift-body-restore.sql",
+      "sha256": "98e4ff82c8e63822b8f22026e0fc40c005a2d742c3acf7dcb8461cbf44585a40"
+    },
+    {
+      "file": "staging/k2/retained-drift-owner-setup.sql",
+      "sha256": "9ce5994acbe4b155643b5ccd9f9b0ebf17b6761cbebde9e2a7b5cb86d1350f80"
+    },
+    {
+      "file": "staging/k2/retained-drift-owner-restore.sql",
+      "sha256": "bb4cd69d7b52c9d8304cb45ff92d6f582bb9053689436821d7e739b7bdec2411"
+    },
+    {
+      "file": "staging/k2/retained-drift-acl-setup.sql",
+      "sha256": "42e69d4300b6a97323bc9a29d3437c295de8087e992de05317f4dd588a0b1801"
+    },
+    {
+      "file": "staging/k2/retained-drift-acl-restore.sql",
+      "sha256": "81cbf3f30981fa7b8c84aca5100efae5979b72b76102c496bbb8071c4397ec82"
+    },
+    {
+      "file": "staging/k2/retained-drift-search-path-setup.sql",
+      "sha256": "e95c00251589b372918ed7e849ad7cdd367f01f0a6c8f49516dd11cc21cfb8f2"
+    },
+    {
+      "file": "staging/k2/retained-drift-search-path-restore.sql",
+      "sha256": "dd57d951917c12b5d6446e0a31239c1ec66feda6813be235a3f8f264b2c05578"
+    },
+    {
+      "file": "staging/k2/retained-drift-schema-setup.sql",
+      "sha256": "879e7562c33b25b66fbf97de0ff4e2f43d39df05456c9ad4f51867f10d517413"
+    },
+    {
+      "file": "staging/k2/retained-drift-schema-restore.sql",
+      "sha256": "1a79dc4cae4776609f5185f7fe3a34e5e24311a52b6caed87bb83fb07f91aaf7"
+    },
+    {
+      "file": "staging/k2/init.sh",
+      "sha256": "33331593e3a92fe4804960587e94bbf1c82fb87282081ebd31fd4ae4144d6216"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "8d8c43152a2099a8f59bd7baf5633ad6a71f6d82bc35bc7a02cc3075846ecdc1"
+    },
+    {
+      "file": "executed-source.mjs",
+      "sha256": "449486c81e2af48d675a6dc3718ed55be1b0ab3c0dcfe92abf9a1cd6147aefb8"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "3994f5ad1865085b48eec050c91a5fad1b11228a14cde2a3ba861cc13db8d70e"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "d206e61499c17f9ae94f3240b3c95ca5167f7ed6b7440a4722ca58b326bac19b"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "2775c5f9a50ba53241f2d27c2e3827f4f006c18cecbbcab5165fe4f2b434a339"
+    },
+    {
+      "file": "overlay.cpio",
+      "sha256": "4303e03fb678a5a049ecfc08a9d1318c1ceaf830ae964cdbd6f0228c187b4b35"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "660225b77a02f5d1d4bb5cceec17093f10f34d2f7e3703d2877ad4ddbaf21fe7"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/drift-probe.mjs",
+      "sha256": "31e46760d2f65dea7271226ac3e2c586c95765d62954dd9e6cec9fa5174401c3"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/drift-probe.test.mjs",
+      "sha256": "aba91fa44952f98056936d60509df5f80a64f357ad385706925b63be086e469e"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "sha256": "9e1bd5e2872defa019bcb9ac779c429e8090282530ea5c6394b002e3061c6f8e"
+    }
+  ],
+  "inheritance": "Exact accepted populated04 base image and unchanged driver/helper/combined19 installer/recovery; inherited known-state files are present but not executed",
+  "review": {
+    "status": "superseded-unexecuted",
+    "reason": "Fresh drift02 enforces catalog comparison status exactly 1; original private artifacts retained unchanged"
+  },
+  "nativeExecuted": false,
+  "providerWrites": false,
+  "deployed": false,
+  "remaining": [
+    "Actual drift refusal/full conservation",
+    "Genuine post-repair signed/quote/order resumption",
+    "Provider/authority-through-commit/hosted/owner gates"
+  ]
+}

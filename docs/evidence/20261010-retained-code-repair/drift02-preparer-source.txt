@@ -1,0 +1,63 @@
+// MAP-018 / IDEA-20261010-08. Fresh signed-populated drift-refusal successor.
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
+import { spawnSync } from 'node:child_process'
+import { prepareDriftProbe } from '../docs/evidence/20261010-retained-code-repair/drift-probe.mjs'
+const root = 'D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
+const caseName = 'oci-retained-drift02', out = path.join(root, caseName), base = path.join(root, 'oci-retained-populated04')
+assert.ok(!fs.existsSync(out), 'Fresh case only')
+const sha = b => createHash('sha256').update(b).digest('hex')
+const accepted = JSON.parse(fs.readFileSync('docs/acceptance/RETAINED_POPULATED_REPAIR_20261011.json'))
+const read = file => { const bytes = fs.readFileSync(path.join(base, file)); assert.equal(sha(bytes), accepted.artifactPins.find(p => p.file === file)?.sha256, file); return bytes }
+const replace = (s, a, b) => { assert.equal(s.split(a).length, 2, 'single anchor:' + a.slice(0, 70)); return s.replace(a, () => b) }
+const marker = '5b9bb642-ae60-4f1a-a9cb-00d4b3801c18'
+const drift = prepareDriftProbe({
+  priorBytes: fs.readFileSync(root + '/retained-code-pair01/prior-catalog.json'),
+  correctedBytes: fs.readFileSync(root + '/oci-retained-calibration01/execution01/retained-catalog-before.json'),
+  packageBytes: fs.readFileSync(root + '/oci-imported19/guarded-package.json'),
+  fragments: ['product_master', 'customer_tariff', 'category_policy'].map(n => fs.readFileSync('supabase/prepared/' + n + '_version_conflict_transport.sql', 'utf8')),
+  marker,
+})
+const files = {
+  'image-probe.sh': replace(read('staging/k2/image-probe.sh').toString(), '3b9bb642-ae60-4f1a-a9cb-00d4b3801c18', marker),
+  'retained-matrix.sh': drift.shell + `for name in initial final;do
+ echo K2_RETAINED_DRIFT_EXPORT_$name"_BEGIN"
+ base64 /tmp/retained-drift-$name.json
+ echo K2_RETAINED_DRIFT_EXPORT_$name"_END"
+done
+`,
+  'retained-repair.sql': drift.repairSql, 'retained-snapshot.sql': drift.snapshotSql,
+  ...Object.fromEntries(drift.cases.flatMap(c => [['retained-drift-' + c.name + '-setup.sql', c.setup], ['retained-drift-' + c.name + '-restore.sql', c.restore]])),
+}
+const originalInit = read('staging/k2/init.sh').toString()
+const anchor = '/bin/busybox cp /k2/retained-snapshot.sql /k2root/tmp/retained-snapshot.sql\n'
+files['init.sh'] = replace(originalInit, anchor, anchor + Object.keys(files).filter(n => n.startsWith('retained-drift-')).map(n => `/bin/busybox cp /k2/${n} /k2root/tmp/${n}\n`).join(''))
+const stage = path.join(out, 'staging/k2')
+fs.mkdirSync(stage, { recursive: true })
+for (const [name, value] of Object.entries(files)) fs.writeFileSync(path.join(stage, name), value, { flag: 'wx' })
+const overlay = path.join(out, 'overlay.cpio')
+const tar = spawnSync('tar.exe', ['-cf', overlay, '--format=newc', '-C', path.join(out, 'staging'), 'k2'], { encoding: 'utf8', windowsHide: true })
+assert.equal(tar.status, 0, tar.stderr)
+const baseImage = path.join(base, 'initramfs.cpio')
+assert.equal(sha(fs.readFileSync(baseImage)), accepted.artifactPins.find(p => p.file === 'initramfs.cpio').sha256)
+const fd = fs.openSync(path.join(out, 'initramfs.cpio'), 'wx')
+try { for (const file of [baseImage, overlay]) for await (const b of fs.createReadStream(file)) { let n = 0; while (n < b.length) n += fs.writeSync(fd, b, n, b.length - n) } const pad = (4 - fs.fstatSync(fd).size % 4) % 4; if (pad) fs.writeSync(fd, Buffer.alloc(pad)) } finally { fs.closeSync(fd) }
+let runner = read('runner-source.mjs').toString().replaceAll('oci-retained-populated04', caseName)
+runner = replace(runner, 'K2_RETAINED_MATRIX_ALL8_OK', 'K2_RETAINED_DRIFT_ALL5_OK')
+runner = replace(runner, '(stdout.match(/K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK/g)||[]).length===15', '(stdout.match(/K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK/g)||[]).length===9')
+fs.writeFileSync(path.join(out, 'runner-source.mjs'), runner, { flag: 'wx' })
+for (const file of ['bff-helper.mjs', 'host-driver.mjs', 'connected-order-probe.mjs', 'preparation.json']) fs.writeFileSync(path.join(out, file), read(file), { flag: 'wx' })
+fs.copyFileSync('.tools/prepare-retained-drift02.mjs', path.join(out, 'executed-source.mjs'), fs.constants.COPYFILE_EXCL)
+const pins = [...Object.keys(files).map(n => 'staging/k2/' + n), 'runner-source.mjs', 'executed-source.mjs', 'bff-helper.mjs', 'host-driver.mjs', 'connected-order-probe.mjs', 'preparation.json', 'overlay.cpio', 'initramfs.cpio'].map(file => ({ file, sha256: sha(fs.readFileSync(path.join(out, file))) }))
+const sources = ['docs/evidence/20261010-retained-code-repair/drift-probe.mjs', 'docs/evidence/20261010-retained-code-repair/drift-probe.test.mjs', 'docs/evidence/20261010-retained-code-repair/repair-envelope.mjs']
+fs.writeFileSync('docs/acceptance/RETAINED_DRIFT02_PREPARATION_20261011.json', JSON.stringify({
+  owningMap: 'MAP-018', idea: 'IDEA-20261010-08', case: caseName, marker, baseCase: accepted.case,
+  classification: 'Fresh signed-populated unknown body/owner/ACL/search-path/schema native refusal/conservation fixture preparation only',
+  artifactPins: pins, sourcePins: sources.map(file => ({ file, sha256: sha(fs.readFileSync(file)) })),
+  inheritance: 'Exact accepted populated04 base image and unchanged driver/helper/combined19 installer/recovery; inherited known-state files are present but not executed',
+  review: { status: 'pending-preexecution' }, nativeExecuted: false, providerWrites: false, deployed: false,
+  remaining: ['Actual drift refusal/full conservation', 'Genuine post-repair signed/quote/order resumption', 'Provider/authority-through-commit/hosted/owner gates'],
+}, null, 2) + '\n', { flag: 'wx' })
+console.log(JSON.stringify({ case: caseName, prepared: true, artifacts: pins.length, nativeExecuted: false, providerWrites: false }))
