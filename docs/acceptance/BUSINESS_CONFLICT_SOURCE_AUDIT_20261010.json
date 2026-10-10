@@ -1,0 +1,305 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "providerWrites": false,
+  "scope": "Read-only exact retained native imported02 composed function source inventory; no new database execution, HTTP behavior or provider observation",
+  "auditCommand": "node scripts/audit-business-conflict-source.mjs",
+  "auditorSha256": "fcb9b8bfa82db4e166d72b44ad21f1e30bbd9c9b17be7670d948f81d8c634ea0",
+  "nativeResultSha256": "530fa8ac4d49b72835827c441af8578d5ae24353f74882339656887a66de668f",
+  "catalogSha256": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+  "nativeSerialSha256": "eb579724b49a1415f139d42f8631aa4b5d36623ed77756690ff3712398def9ed",
+  "functionsScanned": 261,
+  "sites": [
+    {
+      "identity": "k2_private.accept_express_delivery_v1(p_account boolean, p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "definitionSha256": "61c79969dbf3bd288cfce6f1e2d009d1f9cde95a99a2ca749831ffbfa93e8966",
+      "line": 57,
+      "message": "K2_EXPRESS_QUOTE_STALE",
+      "context": " end if;\n perform k2_private.assert_express_order_v1(o.id);\n select * into q from k2_private.express_delivery_quotes where order_id=o.id order by version desc limit 1;\n if not found or q.version<>v_version then raise exception using errcode='40001',message='K2_EXPRESS_QUOTE_STALE';end if;\n v_time:=clock_timestamp();"
+    },
+    {
+      "identity": "k2_private.assert_imported_draft_target_v1(p_product_id uuid, p_expected_version bigint)",
+      "definitionSha256": "e4851f0a51ed27baa8bb5e15381d85b8d93e60140067717328c3184387f162ee",
+      "line": 18,
+      "message": "K2_IMPORTED_DRAFT_VERSION_CONFLICT",
+      "context": " end if;\n select * into p from public.products where id=p_product_id for update;\n if not found or p.catalog_record_version is distinct from p_expected_version then\n  raise exception using errcode='40001',message='K2_IMPORTED_DRAFT_VERSION_CONFLICT';\n end if;"
+    },
+    {
+      "identity": "k2_private.mutate_category_policy_v1(p_category_id uuid, p_action text, p_minimum_days integer, p_expected_version bigint, p_reason text, p_max_depth integer)",
+      "definitionSha256": "4de418fc3b9204f6dbe72beb708ce3becd1b9ae7d6439997c29452b2e3f9e75c",
+      "line": 41,
+      "message": "K2_CATEGORY_POLICY_VERSION_CONFLICT",
+      "context": "  from k2_private.category_shelf_life_policy where category_id=p_category_id for update;\n if not found then v_version:=0;v_before:=null;end if;\n if v_version<>p_expected_version then\n  raise exception using errcode='40001',message='K2_CATEGORY_POLICY_VERSION_CONFLICT';\n end if;"
+    },
+    {
+      "identity": "public.execute_admin_ai_spend_controls_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "3f6aa7e2bcf89b8296559bd70b3840cc91119b60addddf22d495c2c098128ae0",
+      "line": 89,
+      "message": "K2_AI_SPEND_VERSION_CONFLICT",
+      "context": "  ),version into v_before,v_version\n  from k2_private.ai_spend_control_config where config_key='default' for update;\n  if v_expected_version<>v_version then\n    raise exception using errcode='40001',message='K2_AI_SPEND_VERSION_CONFLICT';\n  end if;"
+    },
+    {
+      "identity": "public.execute_admin_catalog_import_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "f95e5481c52335015122338673a76b3ed9f5a922548203bed64ffe054d24e72b",
+      "line": 239,
+      "message": "K2_CATALOG_STALE_CONFLICT",
+      "context": "      where catalog_id=v_catalog_id and sku=v_sku for update;\n      if not found or v_existing.catalog_record_version<>v_expected_version\n         or v_existing.updated_at<>v_expected_updated_at then\n        raise exception using errcode='40001',message='K2_CATALOG_STALE_CONFLICT';\n      end if;"
+    },
+    {
+      "identity": "public.execute_admin_fulfillment_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "1fd793c60a16aeb173b9dbc516120d92dff2f898f50111cf39bee67450aafed6",
+      "line": 101,
+      "message": "K2_PAYMENT_VERSION_CONFLICT",
+      "context": "       or nullif(v_payload->>'expectedPaymentStatus','') is null\n       or v_order.payment_status is distinct from v_payload->>'expectedPaymentStatus'\n       or v_order.updated_at is distinct from (v_payload->>'expectedUpdatedAt')::timestamptz then\n      raise exception using errcode='40001', message='K2_PAYMENT_VERSION_CONFLICT';\n    end if;"
+    },
+    {
+      "identity": "public.execute_admin_globe_review_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "e06ce1297a0acb925d4472341a282d8d92b24ad8ea2b2ea0b0a3d557e10240cd",
+      "line": 59,
+      "message": "K2_ADMIN_GLOBE_STALE",
+      "context": "    v_product_id:=v_payload->>'productId'; v_version:=(v_payload->>'version')::integer;\n    select * into v_globe from public.globe_products where product_id=v_product_id for update;\n    if not found then raise exception using errcode='P0002',message='K2_ADMIN_GLOBE_NOT_FOUND'; end if;\n    if v_globe.version<>v_version then raise exception using errcode='40001',message='K2_ADMIN_GLOBE_STALE'; end if;\n    v_hero:=v_payload->'hero';"
+    },
+    {
+      "identity": "public.execute_admin_globe_review_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "e06ce1297a0acb925d4472341a282d8d92b24ad8ea2b2ea0b0a3d557e10240cd",
+      "line": 119,
+      "message": "K2_ADMIN_REVIEW_STALE",
+      "context": "      v_id:=(v_payload->>'id')::uuid; v_version:=(v_payload->>'version')::integer;\n      select * into v_review from public.reviews where id=v_id for update;\n      if not found then raise exception using errcode='P0002',message='K2_ADMIN_REVIEW_NOT_FOUND'; end if;\n      if v_review.version<>v_version then raise exception using errcode='40001',message='K2_ADMIN_REVIEW_STALE'; end if;\n      v_before:=to_jsonb(v_review);"
+    },
+    {
+      "identity": "public.execute_admin_globe_review_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "e06ce1297a0acb925d4472341a282d8d92b24ad8ea2b2ea0b0a3d557e10240cd",
+      "line": 144,
+      "message": "K2_ADMIN_REVIEW_STALE",
+      "context": "    v_id:=(v_payload->>'id')::uuid; v_version:=(v_payload->>'version')::integer;\n    select * into v_review from public.reviews where id=v_id for update;\n    if not found then raise exception using errcode='P0002',message='K2_ADMIN_REVIEW_NOT_FOUND'; end if;\n    if v_review.version<>v_version then raise exception using errcode='40001',message='K2_ADMIN_REVIEW_STALE'; end if;\n    v_before:=to_jsonb(v_review);"
+    },
+    {
+      "identity": "public.execute_admin_globe_review_direct_v1(p_action text, p_idempotency_key uuid, p_payload_text text)",
+      "definitionSha256": "f386a7aa30a7337694c2c001c9c2da87055eae73fc819881797299ac641801b5",
+      "line": 60,
+      "message": "K2_ADMIN_GLOBE_STALE",
+      "context": "    v_product_id:=v_payload->>'productId'; v_version:=(v_payload->>'version')::integer;\n    select * into v_globe from public.globe_products where product_id=v_product_id for update;\n    if not found then raise exception using errcode='P0002',message='K2_ADMIN_GLOBE_NOT_FOUND'; end if;\n    if v_globe.version<>v_version then raise exception using errcode='40001',message='K2_ADMIN_GLOBE_STALE'; end if;\n    v_hero:=v_payload->'hero';"
+    },
+    {
+      "identity": "public.execute_admin_globe_review_direct_v1(p_action text, p_idempotency_key uuid, p_payload_text text)",
+      "definitionSha256": "f386a7aa30a7337694c2c001c9c2da87055eae73fc819881797299ac641801b5",
+      "line": 120,
+      "message": "K2_ADMIN_REVIEW_STALE",
+      "context": "      v_id:=(v_payload->>'id')::uuid; v_version:=(v_payload->>'version')::integer;\n      select * into v_review from public.reviews where id=v_id for update;\n      if not found then raise exception using errcode='P0002',message='K2_ADMIN_REVIEW_NOT_FOUND'; end if;\n      if v_review.version<>v_version then raise exception using errcode='40001',message='K2_ADMIN_REVIEW_STALE'; end if;\n      v_before:=to_jsonb(v_review);"
+    },
+    {
+      "identity": "public.execute_admin_globe_review_direct_v1(p_action text, p_idempotency_key uuid, p_payload_text text)",
+      "definitionSha256": "f386a7aa30a7337694c2c001c9c2da87055eae73fc819881797299ac641801b5",
+      "line": 145,
+      "message": "K2_ADMIN_REVIEW_STALE",
+      "context": "    v_id:=(v_payload->>'id')::uuid; v_version:=(v_payload->>'version')::integer;\n    select * into v_review from public.reviews where id=v_id for update;\n    if not found then raise exception using errcode='P0002',message='K2_ADMIN_REVIEW_NOT_FOUND'; end if;\n    if v_review.version<>v_version then raise exception using errcode='40001',message='K2_ADMIN_REVIEW_STALE'; end if;\n    v_before:=to_jsonb(v_review);"
+    },
+    {
+      "identity": "public.execute_admin_order_cancellation_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "7dc9d8b981ffdfe894ffec661b57d008b46165e642181c258a88d7c1a699d3de",
+      "line": 46,
+      "message": "K2_CANCELLATION_VERSION_CONFLICT",
+      "context": "  raise exception using errcode='22023',message='K2_CANCELLATION_ORDER_INELIGIBLE';end if;\n if v_order.status is distinct from v_payload->>'expectedStatus'\n  or v_order.updated_at is distinct from (v_payload->>'expectedUpdatedAt')::timestamptz then\n  raise exception using errcode='40001',message='K2_CANCELLATION_VERSION_CONFLICT';end if;\n if (select count(*) from k2_private.admin_command_receipts where actor_id=v_actor and action=p_action and created_at>now()-interval '1 minute')>=30 then"
+    },
+    {
+      "identity": "public.execute_admin_product_master_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "b9553f8fc638395ce9b5db66197eeaa8b1a9271b218c73dececffae7fefa78d2",
+      "line": 68,
+      "message": "K2_ADMIN_PRODUCT_VERSION_CONFLICT",
+      "context": "    select * into v_product from public.products where sku=v_sku for update;\n    if not found then raise exception using errcode='P0002',message='K2_PRODUCT_NOT_FOUND'; end if;\n    if v_product.updated_at is distinct from (v_payload->>'expectedUpdatedAt')::timestamptz then\n      raise exception using errcode='40001',message='K2_ADMIN_PRODUCT_VERSION_CONFLICT';\n    end if;"
+    },
+    {
+      "identity": "public.execute_admin_website_listing_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "d7ed016d63b6f934ae13f8e299e16a38e2a9b81db65235366bc48130764e108a",
+      "line": 78,
+      "message": "K2_WEBSITE_LISTING_STALE",
+      "context": "  v_has_listing:=found;\n  if (v_has_listing and v_expected is distinct from v_before.updated_at)\n     or (not v_has_listing and v_expected is not null) then\n    raise exception using errcode='40001',message='K2_WEBSITE_LISTING_STALE';\n  end if;"
+    },
+    {
+      "identity": "public.execute_customer_delivery_rates_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "15f0d4d3373ae753c062d37c70d91def0dc6bb1d292f99f6935e2d2db26fbb81",
+      "line": 71,
+      "message": "K2_CUSTOMER_TARIFF_VERSION_STALE",
+      "context": "  raise exception using errcode='22023',message='K2_CUSTOMER_TARIFF_INPUT_INVALID';\n end if;\n if v_expected is distinct from coalesce(v_current,0)::numeric then\n  raise exception using errcode='40001',message='K2_CUSTOMER_TARIFF_VERSION_STALE';\n end if;"
+    },
+    {
+      "identity": "public.execute_express_delivery_quote_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "definitionSha256": "4b05da6211e7fdf57dfb175487e1b58954939ed3f6b66624abc5ca50e018db7c",
+      "line": 44,
+      "message": "K2_EXPRESS_QUOTE_STALE",
+      "context": " end if;\n perform k2_private.assert_express_order_v1(o);\n select coalesce(max(version),0) into v from k2_private.express_delivery_quotes where order_id=o;\n if v is distinct from (p->>'expectedVersion')::integer then raise exception using errcode='40001',message='K2_EXPRESS_QUOTE_STALE';end if;\n begin t:=(p->>'quotedAt')::timestamptz;expiry:=(p->>'expiresAt')::timestamptz;"
+    }
+  ],
+  "mappings": [
+    {
+      "message": "K2_EXPRESS_QUOTE_STALE",
+      "consumers": []
+    },
+    {
+      "message": "K2_IMPORTED_DRAFT_VERSION_CONFLICT",
+      "consumers": [
+        {
+          "path": "server/admin-bff/product-intake.js",
+          "sha256": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37"
+        }
+      ]
+    },
+    {
+      "message": "K2_CATEGORY_POLICY_VERSION_CONFLICT",
+      "consumers": [
+        {
+          "path": "server/admin-bff/product-master.js",
+          "sha256": "a1de8a00f29e683388061cff68d401ecf2273bdd9bd80b0f4b40a784096eb400"
+        }
+      ]
+    },
+    {
+      "message": "K2_AI_SPEND_VERSION_CONFLICT",
+      "consumers": [
+        {
+          "path": "server/admin-bff/ai-spend-controls.js",
+          "sha256": "55cd7e8f5052dd2ff4f42bc333ddebe0dac26283b2df53d9ece33c50bf0f0258"
+        },
+        {
+          "path": "server/admin-bff/staff-access.js",
+          "sha256": "57330678adc8f480e223ec2639ede7dac9d198d656288d1cca73cb00d4801678"
+        }
+      ]
+    },
+    {
+      "message": "K2_CATALOG_STALE_CONFLICT",
+      "consumers": [
+        {
+          "path": "server/admin-bff/catalog-spreadsheet.js",
+          "sha256": "48463a6d90b7af0d535034ff82182c08d728911a23bf6cae423ffa490c827d62"
+        }
+      ]
+    },
+    {
+      "message": "K2_PAYMENT_VERSION_CONFLICT",
+      "consumers": []
+    },
+    {
+      "message": "K2_ADMIN_GLOBE_STALE",
+      "consumers": [
+        {
+          "path": "server/admin-bff/globe-cms.js",
+          "sha256": "ee18ea00a2b5bee8629fd1a3a29792e7f6a7c220d6b3f2c1887b1f730102e429"
+        }
+      ]
+    },
+    {
+      "message": "K2_ADMIN_REVIEW_STALE",
+      "consumers": [
+        {
+          "path": "server/admin-bff/globe-cms.js",
+          "sha256": "ee18ea00a2b5bee8629fd1a3a29792e7f6a7c220d6b3f2c1887b1f730102e429"
+        }
+      ]
+    },
+    {
+      "message": "K2_ADMIN_REVIEW_STALE",
+      "consumers": [
+        {
+          "path": "server/admin-bff/globe-cms.js",
+          "sha256": "ee18ea00a2b5bee8629fd1a3a29792e7f6a7c220d6b3f2c1887b1f730102e429"
+        }
+      ]
+    },
+    {
+      "message": "K2_ADMIN_GLOBE_STALE",
+      "consumers": [
+        {
+          "path": "server/admin-bff/globe-cms.js",
+          "sha256": "ee18ea00a2b5bee8629fd1a3a29792e7f6a7c220d6b3f2c1887b1f730102e429"
+        }
+      ]
+    },
+    {
+      "message": "K2_ADMIN_REVIEW_STALE",
+      "consumers": [
+        {
+          "path": "server/admin-bff/globe-cms.js",
+          "sha256": "ee18ea00a2b5bee8629fd1a3a29792e7f6a7c220d6b3f2c1887b1f730102e429"
+        }
+      ]
+    },
+    {
+      "message": "K2_ADMIN_REVIEW_STALE",
+      "consumers": [
+        {
+          "path": "server/admin-bff/globe-cms.js",
+          "sha256": "ee18ea00a2b5bee8629fd1a3a29792e7f6a7c220d6b3f2c1887b1f730102e429"
+        }
+      ]
+    },
+    {
+      "message": "K2_CANCELLATION_VERSION_CONFLICT",
+      "consumers": [
+        {
+          "path": "server/admin-bff/fulfillment.js",
+          "sha256": "cdd6b21eaf295865e7ff4801f216f8c21bdce6ce878ed848a3269a5a576c4faa"
+        }
+      ]
+    },
+    {
+      "message": "K2_ADMIN_PRODUCT_VERSION_CONFLICT",
+      "consumers": [
+        {
+          "path": "server/admin-bff/product-master.js",
+          "sha256": "a1de8a00f29e683388061cff68d401ecf2273bdd9bd80b0f4b40a784096eb400"
+        }
+      ]
+    },
+    {
+      "message": "K2_WEBSITE_LISTING_STALE",
+      "consumers": [
+        {
+          "path": "server/admin-bff/channels.js",
+          "sha256": "36418ddff9378ebf2c40f4568a53b1f9c9136100640524cf0ba8ab5e32f72186"
+        }
+      ]
+    },
+    {
+      "message": "K2_CUSTOMER_TARIFF_VERSION_STALE",
+      "consumers": []
+    },
+    {
+      "message": "K2_EXPRESS_QUOTE_STALE",
+      "consumers": []
+    }
+  ],
+  "mappingMethod": "Literal-only candidate matches within server/admin-bff/*.js. Empty consumers means no literal match; it does not establish absence of a handler. Templates, shared handlers, imports and other scopes require semantic review.",
+  "manualMappings": [
+    {
+      "message": "K2_PAYMENT_VERSION_CONFLICT",
+      "path": "server/admin-bff/fulfillment.js",
+      "description": "paymentErrors contains VERSION_CONFLICT; equality uses K2_PAYMENT_${code}; response409/paymentError. Literal-only matching misses this template.",
+      "anchors": [
+        "'VERSION_CONFLICT', 'ORDER_INELIGIBLE'",
+        "providerCode === `K2_PAYMENT_${code}`",
+        "if (paymentError) return safeJson(res, 409"
+      ],
+      "sha256": "cdd6b21eaf295865e7ff4801f216f8c21bdce6ce878ed848a3269a5a576c4faa"
+    },
+    {
+      "message": "K2_EXPRESS_QUOTE_STALE",
+      "path": "server/express-delivery-contract.js",
+      "description": "Shared expressDeliveryFailure maps named message to409/EXPRESS_QUOTE_STALE outside Admin BFF.",
+      "anchors": [
+        "message.includes('K2_EXPRESS_QUOTE_STALE')",
+        "return [409, 'EXPRESS_QUOTE_STALE']"
+      ],
+      "sha256": "5df399b4393f4ac43bbc0781fd6d4bc867c2f8c17ef5150499e6ae45f0d993b9"
+    }
+  ],
+  "codeOnly": [
+    {
+      "path": "server/admin-bff/customer-delivery-rates.js",
+      "line": 61,
+      "text": "if (error.code === '40001') return safeJson(res, 409, { error: { code: 'CUSTOMER_TARIFF_VERSION_STALE' } })",
+      "sha256": "8156da8d18ebc53260dd8bc62381e3cf7d401c34124e0f338e6c2b564f35d5c8"
+    }
+  ],
+  "limits": "Contexts classify explicit application raises only. Original actual PostgREST timeout proof is Product Master; each remaining command still needs its own actual transport qualification and full-package/recovery proof. Candidate mappings are not a complete call graph or runtime response proof."
+}
