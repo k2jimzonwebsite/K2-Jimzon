@@ -2,6 +2,66 @@
 
 ## 10 October — combined imported installation and recovery
 
+### 10 October — native taxonomy authority boundary
+
+MAP-018 / IDEA-20261009-11: the maintained witness's new scoped mode finished
+with **17 diagnostic checks, zero failures**, while `nativeOptionsUsable=false`
+and `productReady=false`. Actual `authenticated` Staff and Admin connections
+each resolve their synthetic profile correctly. Both `brands` and `categories`
+ordered `id,name` reads refuse with table permission errors; effective table and
+column SELECT predicates are false. Both direct insert attempts refuse and
+effective INSERT is false. Public schema USAGE is true; direct auth-schema USAGE
+is false. Synthetic claim settings are not verified JWTs. No PostgREST/HTTP BFF,
+provider, hosted Auth or product readiness claim follows from this diagnostic.
+
+The private captured K2 catalog independently identifies project
+`pixplcjqivlfflickobf`, version `170006`, and retains `anon=r/postgres` plus
+`authenticated=arwd/postgres` on both tables. Catalog source SHA-256:
+`43d329972489e2ff4f56800887f3eeb200ab913dc437e88e761d175cf24316eb`.
+Historical source `20260812_map017_public_write_boundary_hardening.sql` also
+declares these taxonomy read/staff mutation grants. The owner-only local contract
+therefore differs from captured provider authority. This is a fixture fidelity
+finding, not proof of a currently broken live taxonomy endpoint or a reason to
+add new product grants. The stored capture is historical; no provider was queried.
+
+Executed command:
+
+```powershell
+node scripts/rehearse-imported-draft.mjs --recovery-root=D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc --qualify-taxonomy-access
+```
+
+This mode reuses the exact accepted `abc2abd5...` package in one new owned clone,
+without repeating installation/recovery/importer/browser coverage. Final session
+53575 exits 0; private receipt root is
+`D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/imported-draft-ba9f7deb-2146-4caa-803e-2a3f97f86db6`.
+Result SHA-256 `9a2bc92ae9b9fc4a28a9a887704472d817aef19f1a05b456bf4da6c024781972`;
+current/executed runner `07c2ab8ba923a1c3092c381ceb4e3e008db79ec3edd4e200d2e6044e356f4ac7`.
+All 105 ordinary public/k2_private row count/hash maps and captured metadata
+(`c9f6b799...`) match before/after. These maps do not include auth/storage rows or
+sequence values. Independent readback checks exact current/archived source,
+both profile/role bindings, all four pairs of query refusals and predicates,
+complete scoped maps, child settlement, clone removal, stopped mirror/original,
+all 3,602 original files and both absent PID files. No grants or business SQL changed.
+Independent final review reports no Critical/Important issues and separately
+rehashes all 3,602 original manifest entries, both source copies and the receipt.
+
+Preserved diagnostics: session28754/root `0a4f1404...` exits 1 after six preceding
+checks because the observer directly called `auth.uid()` without auth-schema
+USAGE; the observer now reads its claim setting and independently checks the
+native profile helpers. Session96804/root `dd624b57...` exits 0/17 checks before
+the report-only addition retaining both conservation maps. All three runs remove
+their clone, stop owned runtimes and retain all original files. Final development
+gate session38684 exits 0 after the last source edit. Existing 185/0 native and
+1396-case CI receipts retain their own source pins; they were not rerun.
+
+Exact next remains MAP-018: compose imported continuation into the genuine
+captured-authority fixture and observe effective role/options behavior there,
+then actual BFF/Auth and the uncovered policy-clear/fallback and competing-session
+schedules. Preserve the historical inventory and private captured baseline;
+do not patch the owner-only local package to resemble provider authority by
+loosening guards. Recovery reverts only this harness mode; whole-backup recovery
+and prior immutable receipts remain the database authority.
+
 ### 10 October — remaining writer coverage audit
 
 MAP-018 / IDEA-20261009-11 now has a pinned read-only comparison in

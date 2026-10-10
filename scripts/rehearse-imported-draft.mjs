@@ -12,6 +12,8 @@ import { validateFulfillmentCommand } from '../server/admin-bff/fulfillment.js'
 const root = process.argv.find(a => a.startsWith('--recovery-root='))?.slice(16)
 if (!root || !fs.existsSync(path.join(root, 'native-rehearsal-copy-manifest.json'))) throw Error('OWNED_RECOVERY_ROOT_REQUIRED')
 const baselineOnly = process.argv.includes('--baseline-only')
+const taxonomyAccessOnly = process.argv.includes('--qualify-taxonomy-access')
+if (taxonomyAccessOnly && (baselineOnly || process.argv.includes('--qualify-installation') || process.argv.includes('--qualify-writers'))) throw Error('TAXONOMY_ACCESS_MODE_MUST_BE_SCOPED')
 const out = path.join(root, 'imported-draft-' + randomUUID())
 fs.mkdirSync(out)
 const dir = path.join(root, 'native-rehearsal/current-restore-20260929-pg-data').replaceAll('\\', '/')
@@ -90,7 +92,13 @@ try {
   check('four owned-local target literals only', original.split(target).length === 2 && original.split(target.replaceAll("'","''")).length === 2 && original.split(port).length === 3)
   const adapted = original.replace(target, () => "current_setting('data_directory') is distinct from " + q(dir)).replace(target.replaceAll("'","''"), () => "current_setting(''data_directory'') is distinct from ''" + dir + "''").replaceAll(port, 'inet_server_port() is distinct from 54391')
   report.foundation = { source, sourceSha256: sha(original), adaptedSha256: sha(adapted) }
-  if (process.argv.includes('--qualify-installation')) {
+  if (taxonomyAccessOnly) {
+    const acceptedPath = path.join(root,'imported-draft-025b3682-3b76-465e-bd2a-5c2c0c597314/combined-imported-install.sql')
+    const accepted = fs.readFileSync(acceptedPath,'utf8')
+    check('taxonomy access uses exact accepted combined package', sha(accepted) === 'abc2abd5d685913d07508bd704aa1ecc0a29c6b0bae0f870cb47cb5ca82f85d5')
+    good(db,accepted)
+    report.installation = { scope:'Single installation of retained local package for new permission evidence; prior cold/replay/recovery proof reused', path:acceptedPath, sha256:sha(accepted) }
+  } else if (process.argv.includes('--qualify-installation')) {
     if (baselineOnly) throw Error('INSTALL_QUALIFICATION_REQUIRES_IMPORTED_FRAGMENT')
     const { qualifyImportedInstallation } = await import('./qualify-imported-installation.mjs')
     qualifyImportedInstallation({ db, dir, bin, out, adapted, good, sql, check, report })
@@ -107,6 +115,34 @@ try {
     insert into k2_private.category_shelf_life_policy(category_id,minimum_days,version,actor_id,reason) values(${q(category)},150,1,${q(admin)},'Explicit synthetic shelf-life policy');
     insert into public.hubs(id,name,code,country,role) values('HUB-MNL-CENTRAL','Synthetic imported workflow hub','SYN-IMPORT','PH','Synthetic test');
     insert into public.custodians(id,name,role,hub_id) values('CUST-STAFF-ELENA','Synthetic imported custodian','Synthetic test','HUB-MNL-CENTRAL');`)
+  const tableNames = parsed(good(db, "select jsonb_agg(jsonb_build_object('schema',n.nspname,'table',c.relname) order by n.nspname,c.relname) from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid=c.relnamespace where c.relkind='r' and n.nspname in ('public','k2_private');"))
+  const qi = s => '"' + s.replaceAll('"','""') + '"'
+  const rowsQuery = 'select jsonb_agg(x order by x->>\'table\') from (' + tableNames.map(t => `select jsonb_build_object('table',${q(t.schema+'.'+t.table)},'count',count(*),'hash',md5(coalesce(string_agg(to_jsonb(t)::text,E'\\n' order by to_jsonb(t)::text collate "C"),''))) x from ${qi(t.schema)}.${qi(t.table)} t`).join(' union all ') + ') snapshots;'
+  const fingerprint = () => ({ rows: parsed(good(db, rowsQuery)), metadata: sha(good(db, fs.readFileSync('supabase/current_install_state_capture.sql','utf8'))) })
+  if (taxonomyAccessOnly) {
+    const before = fingerprint()
+    report.taxonomyAccess = { scope:'Actual native authenticated role with synthetic Staff/Admin claims; not JWT, PostgREST or HTTP BFF acceptance', attempts:[], nativeOptionsUsable:true, directMutationDenied:true }
+    for (const [user, profile] of [[actor,'Staff'],[admin,'Admin']]) {
+      const privileges = parsed(good(db,context(user) + "select jsonb_build_object('role',current_user,'actor',current_setting('request.jwt.claim.sub'),'staff',public.is_staff(),'admin',public.is_admin(),'schemaUsage',has_schema_privilege(current_user,'public','USAGE'),'authSchemaUsage',has_schema_privilege(current_user,'auth','USAGE'),'tables',(select jsonb_agg(jsonb_build_object('table',t,'select',has_table_privilege(current_user,t,'SELECT'),'insert',has_table_privilege(current_user,t,'INSERT'),'idSelect',has_column_privilege(current_user,t,'id','SELECT'),'nameSelect',has_column_privilege(current_user,t,'name','SELECT')) order by t) from unnest(array['public.brands','public.categories']) t));commit;"))
+      check(profile + ' native permission observation binds exact authenticated actor and profile',privileges.role === 'authenticated' && privileges.actor === user && privileges.staff === true && privileges.admin === (profile === 'Admin'))
+      for (const table of ['brands','categories']) {
+        const options = sql(db,context(user) + 'select id,name from public.' + table + ' order by name asc limit 501;select count(*) from public.' + table + ';commit;')
+        const insert = sql(db,context(user) + 'insert into public.' + table + "(name) values('Synthetic permission probe') returning id,name;rollback;")
+        const granted = privileges.tables.find(t => t.table === 'public.' + table)
+        const optionsUsable = options.exit === 0
+        const mutationDenied = insert.exit === 3 && insert.stderr.includes('permission denied for table ' + table)
+        report.taxonomyAccess.nativeOptionsUsable &&= optionsUsable
+        report.taxonomyAccess.directMutationDenied &&= mutationDenied
+        check(profile + ' ' + table + ' options refusal agrees with actual effective SELECT predicates',!optionsUsable && options.exit === 3 && options.stderr.includes('permission denied for table ' + table) && granted.select === false && granted.idSelect === false && granted.nameSelect === false)
+        check(profile + ' ' + table + ' direct browser insertion is denied without INSERT privilege',mutationDenied && granted.insert === false)
+        report.taxonomyAccess.attempts.push({ profile,table,privileges,options:{exit:options.exit,stderr:options.stderr},insert:{exit:insert.exit,stderr:insert.stderr} })
+      }
+    }
+    const after = fingerprint()
+    report.taxonomyAccess.conservation = { scope:'Every ordinary public/k2_private table row and captured metadata; not auth/storage row or sequence-value conservation',before,after }
+    check('all taxonomy observations preserve scoped application rows and captured metadata',isDeepStrictEqual(before,after))
+    report.taxonomyAccess.productReady = false
+  } else {
   const values = Object.fromEntries(CATALOG_COLUMNS.map(k => [k, '']))
   Object.assign(values, { template_version: 'k2-catalog-v1', name: 'Synthetic imported pantry review', description: 'Imported description to preserve', ingredients: 'Synthetic label ingredients',country_of_origin:'Spain', primary_image_url: 'https://example.invalid/imported-supplied.jpg', internal_notes: 'Synthetic CSV provenance' })
   const csv = Object.keys(values).join(',') + '\n' + Object.values(values).join(',')
@@ -125,10 +161,6 @@ try {
   const sessionId = parsed(r.stdout).sessionId
   check('selection does not mark product reviewed or linked', sessionRead(sessionId).product_id === null && isDeepStrictEqual(productRead(id), baseline))
   check('same-key create receipt retains exact target session', saved('intake_session_create', createPayload, createKey).sessionId === sessionId)
-  const tableNames = parsed(good(db, "select jsonb_agg(jsonb_build_object('schema',n.nspname,'table',c.relname) order by n.nspname,c.relname) from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid=c.relnamespace where c.relkind='r' and n.nspname in ('public','k2_private');"))
-  const qi = s => '"' + s.replaceAll('"','""') + '"'
-  const rowsQuery = 'select jsonb_agg(x order by x->>\'table\') from (' + tableNames.map(t => `select jsonb_build_object('table',${q(t.schema+'.'+t.table)},'count',count(*),'hash',md5(coalesce(string_agg(to_jsonb(t)::text,E'\\n' order by to_jsonb(t)::text collate "C"),''))) x from ${qi(t.schema)}.${qi(t.table)} t`).join(' union all ') + ') snapshots;'
-  const fingerprint = () => ({ rows: parsed(good(db, rowsQuery)), metadata: sha(good(db, fs.readFileSync('supabase/current_install_state_capture.sql','utf8'))) })
   const refuse = (label, action, body, code, user = actor, aal = 'aal2') => {
     const before = fingerprint(), failure = command(action, body, randomUUID(), user, aal)
     check(label, failure.exit === 3 && failure.stderr.includes(code))
@@ -375,6 +407,7 @@ try {
       refuse('second policy-qualified first-stock request refuses', 'intake_inventory', { ...stock, inventoryRequestId:randomUUID() }, 'K2_FIRST_INVENTORY_ALREADY_RECORDED', admin)
       report.writerRaces.push({ kind:'policy/inventory', direction:policyFirst ? 'policy before first inventory' : 'first inventory before policy', firstExit:race.firstResult.exit, secondExit:race.secondResult.exit, boundary:race.boundary, observation:race.observation, changedTables, conservation:{ filters,before:unrelatedBefore,after:unrelatedAfter }, stock:state, policyBefore, policyAfter:afterPolicy })
     }
+  }
   }
 } catch (error) { report.error = error.message; process.exitCode = 1 }
 finally {
