@@ -1,0 +1,133 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+  "providerWrites": false,
+  "case": "oci-auth-rest01",
+  "native": {
+    "owningMap": "MAP-023/018",
+    "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy reads/writes/refusal/recovery; no BFF/browser/provider/hosted staff acceptance",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-auth-rest01\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 13136,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "processStopped": true,
+    "serialSha256": "985047a745729c6c54f8ee47102f5d154b0edd22b67b774d15ee76ce4fd4bc66"
+  },
+  "driver": {
+    "owningMap": "MAP-018",
+    "scope": "Genuine local Auth/JWT/MFA plus captured PostgREST taxonomy Staff/Admin writes and anon/Customer refusals; no BFF/browser/provider/hosted staff acceptance",
+    "providerWrites": false,
+    "checks": [
+      "admin_create_confirmed_user",
+      "wrong_password_refused",
+      "password_login",
+      "server_validated_user",
+      "totp_enroll",
+      "totp_challenge",
+      "totp_verify",
+      "assurance_level",
+      "aal2_server_validated_user",
+      "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+      "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+      "staff_brands_jwt_options_create_read_delete_absence",
+      "staff_categories_jwt_options_create_read_delete_absence",
+      "admin_brands_jwt_options_create_read_delete_absence",
+      "admin_categories_jwt_options_create_read_delete_absence",
+      "global_logout",
+      "logout_refresh_refused",
+      "admin_hard_delete_user"
+    ],
+    "aal1": {
+      "role": "authenticated",
+      "aal": "aal1",
+      "signatureVerified": true
+    },
+    "aal2": {
+      "role": "authenticated",
+      "aal": "aal2",
+      "signatureVerified": true
+    },
+    "logoutRefusal": {
+      "name": "AuthApiError",
+      "status": 400,
+      "code": "refresh_token_not_found"
+    },
+    "passed": true
+  },
+  "hashes": {
+    "executed-source.mjs": "43797494dc9ce6f111d63bc7a1e1eee113cce325617e89667bfc4abc683ba947",
+    "executed-derivation.mjs": "76868d8accfbb2d0ab6925c3e58dfa07b990d5fb1680f06c24bacdd2c73722af",
+    "host-driver.mjs": "d81a193ad67d2fb4b299f9394a61ca5d4902ad631fbbec31ec3c7848d9bf7de9",
+    "runner-source.mjs": "b24d16e9b316a0c8a7e112bad5e4cbb188f9aa2e9a35ea484d43494d343da507",
+    "staging/k2/image-probe.sh": "f75a2bdd09aa4b55959832372ed120029b6c3c9dacf8d808ad4418817c6e9efd",
+    "staging/k2/init.sh": "38eb81d0baa39caf89e022f54a398a710c66c45f85697063617757c8fdf5739a",
+    "execution01/result.json": "2e2b25b6d73e4629be2ea4447e92067f054e4d94772f06d9823f0140c1c4276f",
+    "execution01/serial.log": "985047a745729c6c54f8ee47102f5d154b0edd22b67b774d15ee76ce4fd4bc66",
+    "host-driver-result.json": "7077a5fac56f4fb4e6ef570e541886f01c580951d95bb415a017351419be54b0"
+  },
+  "dependencies": {
+    "auth": "v2.196.0",
+    "postgrest": "v14.17",
+    "postgrestManifest": "sha256:aa7e96af2d01219a09bc00c75de28171b1f9fda17ea455a931e4fb6d317089e0",
+    "postgrestLayer": "sha256:cd68e1dc2f6c6a6c06430dc8e4bfa5a0bb62e2208774395dd9e026b60c8f492b",
+    "postgres": "17.6",
+    "authSdk": "2.117.2",
+    "lockfileSha256": "e248630a980ba18780cf9bd738f1c0b8f89324f1a534425c7797628c891e0225",
+    "base": "Immutable oci-auth-identity06/executed-source.mjs pinned against LOCAL_AUTH_IDENTITY_20261010.json"
+  },
+  "localConfiguration": "PostgREST connects authenticator with existing captured role memberships/grants; DB_CONFIG=false uses explicit candidate env settings without changing captured settings. JWT synthetic key matches actual Auth issuer. No database forwarding; restricted QEMU loopback54392→9999 Auth,54393→9998 control,54394→9997 PostgREST.",
+  "assertions": "Both taxonomy tables: anon ordered options200, changed signature401/PGRST301, anon POST401/42501, authenticated Customer POST403/42501. Same actual AAL2JWT: synthetic profile Staff then Admin, matching baseline options, UUID insert201, exact readback, service deletion200, confirmed absence; profile resetCustomer. Real Auth global logout, server refresh_token_not_found refusal, hard user deletion.",
+  "recovery": "Auth and PostgREST stopped; guest-only audit delta removed preserving all original audit IDs; exact refresh sequence restored. Original88-table/two-sequence SHA bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c and full schema/defaultACL SHA e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460 unchanged, global/managed authority twice, PostgreSQL stopped and RAM powered off. OwnedPID13136 and threeports independently absent through approved check. Preserve immutable sources/layers/serial; no provider rollback.",
+  "daemonStops": {
+    "authExit": 0,
+    "postgrestExit": 130,
+    "meaning": "PostgREST controlled signal stop; native guest exit0 and all recovery witnesses passed"
+  },
+  "development": {
+    "session": 64625,
+    "exit": 0
+  },
+  "review": {
+    "status": "No remaining Critical/Important findings in independent source/native review"
+  },
+  "limits": [
+    "Captured brand/category option baselines empty; requests/shape/permission and created-row readback qualified, populated ordering/pagination not proved",
+    "Same synthetic user promoted to Staff/Admin in isolated fixture using synthetic service_role; no actual staff promotion",
+    "AAL2 token used; taxonomy AAL2 enforcement not established",
+    "Auth/PostgREST pinned public candidates are not observed production versions",
+    "No BFF cookie/registry/CSRF, fresh-browser or hosted staff acceptance"
+  ],
+  "next": "Reuse accepted local Auth/PostgREST transport in a new immutable case; add real local /auth/v1 and /rest/v1 proxy, actual BFF cookie/session registry/CSRF and fresh browser reference reproduction. No intercepted success, exposed browser refresh token, anon grant expansion or weakened session controls. All remaining MAP-018 signed writer, ACL-through-commit, transport, owner/provider/inventory/listing/host gates persist."
+}

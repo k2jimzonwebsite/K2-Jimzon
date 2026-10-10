@@ -1,5 +1,7 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+PostgREST permission acceptance requires real signed Auth tokens, exact positive role statements and negative anonymous/customer/tampered-token refusals, followed by complete captured conservation. Fixture profile promotion, token AAL2 use and source-configured public versions are separate from actual staff/BFF/browser/deployed acceptance. Local receipt: LOCAL_AUTH_POSTGREST_20261010.json; remaining MAP-018.
+
 Local identity acceptance requires actual signed JWT, server user and real TOTP verification, plus server refresh refusal after logout. Preserve failure cases and API deletion versus complete native conservation distinctions; never infer BFF/staff/hosted acceptance. Local evidence: LOCAL_AUTH_IDENTITY_20261010.json; remaining work MAP-018.
 
 **Local Auth connection routing:** Qualify session schema routing separately from captured database authority. The owned04 connection options=-csearch_path%3Dauth reaches existing auth migration history with zero embedded migrations and full conservation, without role/default/grant changes. Require the exact completed-migration event/count and complete witnesses; local startup/no-op does not establish operational identity or production versions. Receipt LOCAL_AUTH_MIGRATION_20261010.json; remaining MAP-018.
