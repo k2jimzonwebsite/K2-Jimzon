@@ -2,6 +2,77 @@
 
 ## 10 October — combined imported installation and recovery
 
+### 10 October — official local HTTP runtime candidates
+
+MAP-018 / IDEA-20261009-11: current official Supabase self-hosting compose
+names `supabase/gotrue:v2.196.0` and `postgrest/postgrest:v14.17`. Captured public
+source SHA256 `46b00ea67dfa4bb0360ab0cd0eb8fdae914a6e77c2e75e1ab49f55ff6ae35c09`;
+source URL https://raw.githubusercontent.com/supabase/supabase/master/docker/docker-compose.yml.
+These are **local candidates**, not observed K2 deployed versions.
+Public Docker Hub index/platform manifests were resolved and pinned:
+
+| Image | Index SHA256 | Linux AMD64 manifest SHA256 |
+| --- | --- | --- |
+| Auth v2.196.0 | c0c25187a6b835e65a6f6e6c6b39d090e832d40e6de5186f2c038e0411944232 | 7e813221b93fbf54b515036438550e483bfaf057b9db52fe9bc1ce91c47e817e |
+| PostgREST v14.17 | c9dc201e555f5d8e37e7f39cdd4df0229774996e213bfd7de8d10ac609030f2c | aa7e96af2d01219a09bc00c75de28171b1f9fda17ea455a931e4fb6d317089e0 |
+
+Private `http-runtime01` under the explicit owned D: recovery root retains exact
+source/index/manifest/config files and seven layers totaling35,783,044 bytes.
+Every manifest/config/layer digest and every declared layer size was checked
+on acquisition and independently read back. Acquisition receipt SHA256
+`5ba4e2f208340723c748e0647818e18069707e5eecc3f8be7fe1d49c6e2a971b`.
+Sanitized public inventory/limits: `docs/acceptance/LOCAL_HTTP_RUNTIME_20261010.json`.
+Temporary anonymous registry pull tokens were neither printed nor persisted.
+No K2/provider credentials or external application writes were used.
+
+Owned `http-version-probe03` runs only binary version commands in a fresh
+Linux RAM guest (`-nic none`, no database or HTTP service). Auth reports
+`v2.196.0`; PostgREST reports `14.17`. Unified execution terminal0/no timeout,
+success marker once/no failure marker; runtime6936 stopped and independently
+absent. All layer listing paths reject absolute/traversal/whiteout entries.
+Retained guest script, extracted-layer lists, launch arguments, serial, stderr,
+executed orchestration source and result preserve reproducibility. Command:
+`node .tools/probe-public-http-runtime.mjs`; this explicit private preparation
+utility and its immutable executed-source copy introduce no product writer.
+
+- Terminal result SHA256 `235e55feedcc4d057928e45754b9f2171a73419d5d4b35d50f20444ad4282090`.
+- Serial SHA256 `adf01d32945b436348b707f24504fd751a512f32a4c0a39ba90884e884611ec5`.
+- Executed source SHA256 `3af3b1fd84e395726f2e68f162e06c20a44b1d70a50c944159b6443cd1b333bd`.
+- Guest script SHA256 `2c513566bca7802f87fb851f7819d03f7fa62b0bc7c3eca2347308080ba521ea`.
+- Base initramfs SHA256 `1f878a079d9c2260765e89b227b16f06747965deb612f2cc265b28941561a992`.
+
+Retained diagnostics: sandbox public registry DNS failed before acquisition;
+read-only escalation reached the public manifests. Version01 timed out at120s:
+serial command characters were dropped (`/bin/sh ih`); it stopped owned4132.
+Version02 used established15ms character pacing, reached binary execution but
+Auth refused unsupported `--version`; it stopped22236. Version03 changes only
+the documented-by-binary `version` subcommand and case path. Both diagnostics
+remain immutable; neither guest ran a database, HTTP listener or external NIC.
+Primary independently checked version lines/marker/terminal hashes/networknone
+and all three absent PIDs. Final development53049 exits0; no app/browser/release
+suite or deployment repeated. Preserve all source/layers/three cases. Recovery
+is stopped RAM guest and source revert, never database rollback or image deletion.
+
+**Exact next MAP-018 action:** connect these pinned candidates to a fresh
+owned captured-authority17.6 composition, first qualifying Auth startup/migration
+compatibility and complete metadata/role/default ACL conservation. Do not silently
+admit Auth auto-migrations, normalize grants/roles, change the accepted provider
+package or claim latest local versions equal production. Then prepare loopback-only
+genuine HTTP gateway and real JWT/MFA/session-registry/CSRF BFF fresh-browser
+reproduction, with exact synthetic data cleanup and recovery. Native versions are
+not HTTP/Auth/BFF acceptance. Existing signed concurrency/missing policy/review/stock,
+ACL through-commit/transport/owner/real-host and publishing gates remain open.
+
+Independent review finds no Critical/Important issue within acquisition/version
+scope. It reproduced the full digest chain, sizes, exact serial versions, hashes,
+networknone and three absent PIDs. For these pinned archives it also inspected574
+ordinary symlinks and found no later tar member traversing an earlier symlink
+parent. The name guard is not general arbitrary-image symlink containment.
+The runner's marker-only success flag does not itself assert exact versions;
+primary and reviewer independently checked both exact version lines in retained
+serial. Public sanitized receipt SHA256
+`a041208e72cf50d85e6ccd7ef85d13215bae9aff45ec78eba54a507db826af95`.
+
 ### 10 October — BFF/reference identity boundary audit
 
 MAP-018 / IDEA-20261009-11: source audit pins12 current files in

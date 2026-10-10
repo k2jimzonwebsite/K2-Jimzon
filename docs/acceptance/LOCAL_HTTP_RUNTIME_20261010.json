@@ -1,0 +1,107 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "scope": "Native genuine public Auth/PostgREST version probe only; not HTTP/Auth/BFF or provider version qualification",
+  "providerWrites": false,
+  "providerVersionsObserved": false,
+  "httpAuthAccepted": false,
+  "source": {
+    "url": "https://raw.githubusercontent.com/supabase/supabase/master/docker/docker-compose.yml",
+    "sha256": "46b00ea67dfa4bb0360ab0cd0eb8fdae914a6e77c2e75e1ab49f55ff6ae35c09"
+  },
+  "images": [
+    {
+      "repo": "supabase/gotrue",
+      "tag": "v2.196.0",
+      "indexDigest": "sha256:c0c25187a6b835e65a6f6e6c6b39d090e832d40e6de5186f2c038e0411944232",
+      "manifestDigest": "sha256:7e813221b93fbf54b515036438550e483bfaf057b9db52fe9bc1ce91c47e817e",
+      "layers": [
+        {
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "digest": "sha256:55afa1ecc21d2bb5e5045f32dafee56272ffd89860bac26f6c32123439af26a4",
+          "size": 3846391,
+          "name": "00.tar.gz"
+        },
+        {
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "digest": "sha256:565df2d910df4b3bdf460c1b649831707ec8e10c5f5ca4a56a8d68a34f917480",
+          "size": 941,
+          "name": "01.tar.gz"
+        },
+        {
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "digest": "sha256:dc286a8aa1971aba0a28c1142eb1d51bb040d438bed4e2b199b2554f85a7f969",
+          "size": 245057,
+          "name": "02.tar.gz"
+        },
+        {
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "digest": "sha256:518a41cba818d83726d2b15fc754ea8705c5e40d148a6adb4badf8e82310a837",
+          "size": 25312636,
+          "name": "03.tar.gz"
+        },
+        {
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "digest": "sha256:1278e66a267cf21e6d9d455c7c4e751d71f08be033878bd2a2082513c5110943",
+          "size": 13577,
+          "name": "04.tar.gz"
+        },
+        {
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "digest": "sha256:44c4479b4ddcbcb1d87c020ece0e8c8769bfd2c757eb503e9003ad807bffbefc",
+          "size": 169,
+          "name": "05.tar.gz"
+        }
+      ],
+      "config": {
+        "mediaType": "application/vnd.oci.image.config.v1+json",
+        "digest": "sha256:688edbb786f6d736edaa478438f23c7044a22a6a5f19502a7138d38caca6c2f6",
+        "size": 2336
+      }
+    },
+    {
+      "repo": "postgrest/postgrest",
+      "tag": "v14.17",
+      "indexDigest": "sha256:c9dc201e555f5d8e37e7f39cdd4df0229774996e213bfd7de8d10ac609030f2c",
+      "manifestDigest": "sha256:aa7e96af2d01219a09bc00c75de28171b1f9fda17ea455a931e4fb6d317089e0",
+      "layers": [
+        {
+          "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+          "size": 6364273,
+          "digest": "sha256:cd68e1dc2f6c6a6c06430dc8e4bfa5a0bb62e2208774395dd9e026b60c8f492b",
+          "name": "00.tar.gz"
+        }
+      ],
+      "config": {
+        "mediaType": "application/vnd.docker.container.image.v1+json",
+        "size": 485,
+        "digest": "sha256:fc3d286fec899d5a5bebbb98eac771ced1ccaa44deac8ce2fc23fe5d262eb3d9"
+      }
+    }
+  ],
+  "acquisitionSha256": "5ba4e2f208340723c748e0647818e18069707e5eecc3f8be7fe1d49c6e2a971b",
+  "native": {
+    "case": "http-version-probe03",
+    "auth": "v2.196.0",
+    "postgrest": "14.17",
+    "exit": 0,
+    "processStopped": true,
+    "network": "none",
+    "resultSha256": "235e55feedcc4d057928e45754b9f2171a73419d5d4b35d50f20444ad4282090",
+    "serialSha256": "adf01d32945b436348b707f24504fd751a512f32a4c0a39ba90884e884611ec5",
+    "executedSourceSha256": "3af3b1fd84e395726f2e68f162e06c20a44b1d70a50c944159b6443cd1b333bd",
+    "guestInitSha256": "2c513566bca7802f87fb851f7819d03f7fa62b0bc7c3eca2347308080ba521ea",
+    "baseInitramfsSha256": "1f878a079d9c2260765e89b227b16f06747965deb612f2cc265b28941561a992"
+  },
+  "diagnostics": [
+    {
+      "case": "http-version-probe01",
+      "reason": "Unpaced serial command characters dropped; execution ceiling reached, owned process stopped"
+    },
+    {
+      "case": "http-version-probe02",
+      "reason": "Auth --version unsupported; actual version subcommand then used; owned process stopped"
+    }
+  ],
+  "remaining": "Connect official candidates to a fresh owned captured-authority database, observe/refuse unqualified Auth migrations and qualify loopback-only actual HTTP/JWT/MFA/BFF fresh-browser behavior with full recovery. Preserve exact authority; version execution is not HTTP/Auth or deployed-version acceptance."
+}
