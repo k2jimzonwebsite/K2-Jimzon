@@ -198,7 +198,7 @@ export default function MasterWorkflowGraph({
 
           <div className="flex flex-wrap items-center gap-3">
             {/* Role Filter Selector */}
-            <div className="flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5">
+            <div className="flex min-h-11 min-w-0 max-w-full items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5">
               <label htmlFor="staff-role-filter" className="text-xs font-semibold text-white/60 whitespace-nowrap">
                 Staff Role:
               </label>
@@ -206,7 +206,7 @@ export default function MasterWorkflowGraph({
                 id="staff-role-filter"
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
-                className="bg-transparent text-xs font-semibold text-sky-300 focus:outline-none cursor-pointer"
+                className="min-w-0 flex-1 bg-transparent text-xs font-semibold text-sky-300 focus:outline-none cursor-pointer"
               >
                 {availableRoles.map((role) => (
                   <option key={role} value={role} className="bg-slate-900 text-white">

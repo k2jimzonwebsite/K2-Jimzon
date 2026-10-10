@@ -92,11 +92,20 @@ function inventoryPayload(source, value) {
 
 export function validateProductIntakeCommand(action, body) {
   if (action === 'intake_session_create') {
-    exactObject(body, ['requestId', 'barcode', 'scannedIdentity'])
+    exactObject(body, ['requestId', 'barcode', 'scannedIdentity', 'existingProduct'])
+    let existingProduct
+    if (Object.hasOwn(body, 'existingProduct')) {
+      exactObject(body.existingProduct, ['productId', 'recordVersion'])
+      const version = body.existingProduct.recordVersion
+      if (typeof version !== 'string' || !/^[1-9][0-9]{0,18}$/.test(version)
+          || BigInt(version) > 9223372036854775807n) throw new Error('REQUEST_INVALID')
+      existingProduct = { productId: uuid(body.existingProduct.productId), recordVersion: version }
+    }
     return {
       requestId: uuid(body.requestId),
       barcode: text(body.barcode, { max: 32, nullable: true }),
       scannedIdentity: text(body.scannedIdentity, { max: 240 }),
+      ...(existingProduct ? { existingProduct } : {}),
     }
   }
   if (action === 'intake_session_step') {
@@ -118,7 +127,10 @@ export function validateProductIntakeCommand(action, body) {
     if (has('evidenceChecklist')) patch.evidenceChecklist = jsonObject(body.patch.evidenceChecklist, 8_192)
     if (has('draftPayload')) patch.draftPayload = jsonObject(body.patch.draftPayload, 131_072)
     if (has('fieldDecisions')) patch.fieldDecisions = jsonObject(body.patch.fieldDecisions, 32_768)
-    if (has('fieldProvenance')) patch.fieldProvenance = jsonObject(body.patch.fieldProvenance, 32_768)
+    if (has('fieldProvenance')) {
+      patch.fieldProvenance = jsonObject(body.patch.fieldProvenance, 32_768)
+      if (Object.hasOwn(patch.fieldProvenance, 'imported_draft_target')) throw new Error('REQUEST_INVALID')
+    }
     if (has('unknownFields')) patch.unknownFields = stringArray(body.patch.unknownFields)
     return {
       sessionId: uuid(body.sessionId), step,
@@ -172,9 +184,11 @@ export async function readProductIntakeSession(client, sessionId) {
 
 export async function searchProductIntakeDuplicates(client, rawQuery) {
   const query = text(rawQuery, { required: true, max: 140 })
-  const projection = 'id,sku,barcode,name,status,brand_id,category_id,brand:brands(name),category:categories(name)'
+  const projection = 'id,sku,barcode,name,status,published,catalog_record_version,primary_image_url,brand_id,category_id,brand:brands(name),category:categories(name)'
   const normalize = (product) => ({
     ...product,
+    recordVersion: Number.isSafeInteger(product.catalog_record_version) && product.catalog_record_version > 0
+      ? String(product.catalog_record_version) : null,
     brand: product.brand?.name || 'Unassigned brand',
     category: product.category?.name || 'Unassigned category',
   })
@@ -216,6 +230,9 @@ export async function handleProductIntakeCommand(req, res, action) {
       if (providerCode.includes('K2_ADMIN_RATE_LIMITED')) return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': '60' })
       if (providerCode.includes('K2_ADMIN_IDEMPOTENCY_CONFLICT')) return safeJson(res, 409, { error: { code: 'IDEMPOTENCY_CONFLICT' } })
       if (providerCode.includes('K2_ADMIN_COMMAND_IN_PROGRESS')) return safeJson(res, 409, { error: { code: 'COMMAND_IN_PROGRESS' } }, { 'Retry-After': '1' })
+      if (providerCode.includes('K2_IMPORTED_DRAFT_VERSION_CONFLICT')) return safeJson(res, 409, { error: { code: 'IMPORTED_DRAFT_VERSION_CONFLICT' } })
+      if (providerCode.includes('K2_IMPORTED_DRAFT_NOT_ELIGIBLE')) return safeJson(res, 409, { error: { code: 'IMPORTED_DRAFT_NOT_ELIGIBLE' } })
+      if (providerCode.includes('K2_IMPORTED_DRAFT_')) return safeJson(res, 422, { error: { code: 'IMPORTED_DRAFT_REVIEW_REQUIRED' } })
       return safeJson(res, 503, { error: { code: 'INTAKE_COMMAND_UNAVAILABLE' } })
     }
     return safeJson(res, 200, { ok: true, result: data })

@@ -9,6 +9,17 @@ const STEP_BY_CHECKLIST = Object.freeze({
   completed: 7,
 })
 
+export function importedReviewCandidate(payload) {
+  const product = payload?.product || {}
+  const fields = ['name','short_name','description','card_description','why_buy',
+    'usage_instructions','ingredients','allergens','storage_instructions',
+    'package_type','subcategory','origin','size','finished_product_details',
+    'seo_keywords','pairings','brand','category','barcode']
+  const aliases = { short_name: 'short', description: 'inside', why_buy: 'whyBuy' }
+  return { ...payload, product: Object.fromEntries(fields
+    .map(field => [field, product[field] ?? product[aliases[field]] ?? (['seo_keywords','pairings'].includes(field) ? [] : '')])) }
+}
+
 export function buildReviewedDraftState(parsedPayload, acceptedFields) {
   const product = parsedPayload?.product || {}
   const fieldDecisions = Object.fromEntries(
@@ -39,6 +50,7 @@ export function buildResumedIntakeState(session) {
   )
   return {
     step,
+    importedTarget: session?.field_provenance?.imported_draft_target || null,
     query: String(session?.scanned_identity || session?.barcode || ''),
     packagingImages: Object.fromEntries(
       (Array.isArray(session?.packaging_images) ? session.packaging_images : [])

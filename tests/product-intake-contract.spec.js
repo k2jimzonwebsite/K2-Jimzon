@@ -7,6 +7,46 @@ import {
 } from '../src/views/admin/productResearchContract.js'
 import { searchProductIntakeDuplicates, validateProductIntakeCommand } from '../server/admin-bff/product-intake.js'
 
+test('imported Draft selection carries exact identity and version without accepting browser review authority', () => {
+  const id = '10000000-0000-4000-8000-000000000001'
+  const body = { requestId: id, barcode: null, scannedIdentity: '',
+    existingProduct: { productId: id, recordVersion: '7' } }
+  expect(validateProductIntakeCommand('intake_session_create', body)).toEqual(body)
+  for (const value of [0, true, null, '0', '01', '1.5', '9223372036854775808']) {
+    expect(() => validateProductIntakeCommand('intake_session_create', {
+      ...body, existingProduct: { productId: id, recordVersion: value },
+    })).toThrow('REQUEST_INVALID')
+  }
+  expect(() => validateProductIntakeCommand('intake_session_create', {
+    ...body, existingProduct: { ...body.existingProduct, reviewed: true },
+  })).toThrow('REQUEST_INVALID')
+})
+
+test('review patches cannot replace or erase the server-owned imported Draft binding', () => {
+  const id = '10000000-0000-4000-8000-000000000001'
+  expect(() => validateProductIntakeCommand('intake_session_step', {
+    sessionId: id, step: 'field_review',
+    patch: { fieldProvenance: { imported_draft_target: null } },
+  })).toThrow('REQUEST_INVALID')
+  expect(validateProductIntakeCommand('intake_session_step', {
+    sessionId: id, step: 'field_review', patch: { fieldProvenance: { sources: [] } },
+  }).patch).toEqual({ fieldProvenance: { sources: [] } })
+})
+
+test('imported review resumes its baseline with no selection mistaken for completion', async () => {
+  const { buildResumedIntakeState } = await import('../src/views/admin/productIntakeResume.js')
+  const target = { productId: '10000000-0000-4000-8000-000000000001', recordVersion: '7',
+    sku: 'K2-ORIGINAL', name: 'Imported product', primaryImageUrl: 'https://example.invalid/original.jpg',
+    product: { name: 'Imported product', description: 'Original facts' } }
+  const state = buildResumedIntakeState({ checklist_step: 'identify',
+    draft_payload: { meta: { schemaVersion: PRODUCT_RESEARCH_SCHEMA_VERSION }, product: target.product },
+    field_decisions: {}, field_provenance: { imported_draft_target: target }, product_id: null })
+  expect(state.importedTarget).toEqual(target)
+  expect(state.acceptedFields).toEqual({})
+  expect(state.createdProduct).toBeNull()
+  expect(state.step).toBe(1)
+})
+
 test('intake rejects coerced quantities and costs before they become inventory facts', () => {
   const id = '10000000-0000-4000-8000-000000000001'
   const inventory = { quantity: 1, unitCost: 0, boxCode: 'BOX-A', batchCode: 'LOT-A',

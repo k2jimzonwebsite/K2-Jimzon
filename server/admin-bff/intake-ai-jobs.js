@@ -15,8 +15,14 @@ async function command(client, actor, requestId, action, payload, sign = signedA
   if (response.error || !response.data) throw new Error(safeCode(response.error))
   return response.data
 }
+async function assertImageIntake(client, sessionId) {
+  const {data,error}=await client.from('product_intake_sessions').select('id,field_provenance').eq('id',sessionId).single()
+  if(error || data?.id!==sessionId)throw new Error('AI_JOB_UNAVAILABLE')
+  if(data.field_provenance?.imported_draft_target)throw new Error('AI_REVIEW_REQUIRED')
+}
 
 export async function attachIntakeAiCandidate({ client, identity, requestId, input }) {
+  await assertImageIntake(client,input.sessionId)
   const state = await command(client, identity.userId, requestId, 'read', { sessionId: input.sessionId })
   const job = (await command(client, identity.userId, requestId, 'candidate', { sessionId: input.sessionId, jobId: input.jobId })).job
   if (!job || job.decision !== 'accepted' || !job.result?.image || !state.productId) throw new Error('AI_REVIEW_REQUIRED')
@@ -48,6 +54,7 @@ export async function attachIntakeAiCandidate({ client, identity, requestId, inp
 }
 
 export async function runIntakeAiJob({ client, identity, requestId, input }, dependencies = {}) {
+  if(input.kind!=='content')await assertImageIntake(client,input.sessionId)
   const sign = dependencies.sign || signedAdminCommandArguments
   const claim = await command(client, identity.userId, requestId, 'claim', { ...input, version: INTAKE_AI_VERSION }, sign)
   if (!claim.dispatch) return claim.job
@@ -69,7 +76,11 @@ export async function runIntakeAiJob({ client, identity, requestId, input }, dep
       images.push({ data, slot: evidence.slot, mime: evidence.type })
     }
     if (input.kind === 'content') {
-      result = await (dependencies.generateContent || generateIntakeContent)({ images })
+      const { data: session, error } = await client.from('product_intake_sessions')
+        .select('id,field_provenance').eq('id',input.sessionId).single()
+      if (error || session?.id !== input.sessionId) throw new Error('AI_EVIDENCE_REQUIRED')
+      const importedFacts = session.field_provenance?.imported_draft_target?.product
+      result = await (dependencies.generateContent || generateIntakeContent)({ images, importedFacts })
     } else {
       const image = await (dependencies.generateImage || generateIntakeImage)({ image: images.find(item => item.slot === 'PRIMARY'), slot: input.kind, brief: claim.job.brief })
       result = { image: image.data.toString('base64'), usage: image.usage }

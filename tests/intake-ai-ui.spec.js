@@ -1,6 +1,101 @@
 import { test, expect } from '@playwright/test'
 import sharp from 'sharp'
 import { PRODUCT_RESEARCH_TEMPLATE } from '../src/views/admin/productResearchContract.js'
+import { serializeCatalogCsv } from '../server/admin-bff/catalog-spreadsheet.js'
+import { createHash } from 'node:crypto'
+
+for (const stale of [false,true]) test(`completed CSV import ${stale ? 'refuses stale selection' : 'opens the same Draft for package review'}`,async ({page}) => {
+  const sku='K2-IMPORTED-001',id='10000000-0000-4000-8000-000000000001'
+  const csv=serializeCatalogCsv([{name:'Imported pantry product',primary_image_url:'https://example.invalid/original.jpg'}])
+  let created
+  const session={id:'e74a4161-72ca-4d72-8f59-37aa690e1869',request_id:'c32fcf68-b8fd-45cf-bc56-ac461349ba23',checklist_step:'identify',product_id:null,packaging_images:[],field_decisions:{},draft_payload:{},field_provenance:{imported_draft_target:{productId:id,recordVersion:'7',sku,name:'Imported pantry product',product:{name:'Imported pantry product'}}}}
+  await page.route('https://**/*',route=>route.abort())
+  await page.route('**/api/admin/catalog-import/preview',route=>route.fulfill({json:{ok:true,preview:{fileSha256:createHash('sha256').update(csv).digest('hex'),counts:{New:1},outcomes:[{rowNumber:2,sku:'',category:'New',changes:[]}]}}}))
+  await page.route('**/api/admin/catalog-import/commit',route=>route.fulfill({json:{ok:true,result:{status:'completed',rows:[{rowNumber:2,sku,outcome:'created',recordVersion:7,updatedAt:'2026-10-10T00:00:00Z'}]}}}))
+  await page.route('**/api/admin/product-intake/**',route=>{
+    const action=new URL(route.request().url()).pathname.split('/').at(-1)
+    if(action==='duplicates')return route.fulfill({json:{ok:true,data:{matchType:'exact',product:{id,sku,name:'Imported pantry product',status:stale?'Live':'Draft',published:stale,recordVersion:'7'}}}})
+    if(action==='session'){
+      if(route.request().method()==='POST'){created=route.request().postDataJSON();session.request_id=created.requestId;return route.fulfill({json:{ok:true,result:{sessionId:session.id}}})}
+      return route.fulfill({json:{ok:true,data:{session:created?session:null}}})
+    }
+    throw Error('Unexpected CSV review request '+action)
+  })
+  await page.goto('/tests/fixtures/intake-ai-harness.html?csv',{waitUntil:'domcontentloaded'})
+  await page.locator('input[type="file"]').setInputFiles({name:'import.csv',mimeType:'text/csv',buffer:Buffer.from(csv)})
+  await page.getByRole('button',{name:'Review changes'}).click()
+  await page.getByLabel('Select row 2, new product').check()
+  await page.getByLabel('Reason for this catalog change').fill('Explicit dummy import review')
+  await page.getByText('I reviewed the selected before/after values.',{exact:false}).click()
+  await page.getByRole('button',{name:'Commit 1 selected row'}).click()
+  await page.getByRole('button',{name:'Review imported Draft '+sku}).click()
+  if(stale){await expect(page.getByRole('alert')).toContainText('Refresh the catalog');expect(created).toBeUndefined()}
+  else{await expect(page.getByText('Existing SKU: '+sku)).toBeVisible();expect(created.existingProduct).toEqual({productId:id,recordVersion:'7'});await expect(page.getByLabel('Product barcode, SKU, or name')).toBeDisabled()}
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true)
+})
+
+test('imported Draft manual review keeps its baseline and saves only explicit staff corrections', async ({ page }) => {
+  const target = { productId:'10000000-0000-4000-8000-000000000001', recordVersion:'7',
+    sku:'K2-IMPORTED-001', name:'Imported pantry product', primaryImageUrl:'https://example.invalid/supplied.jpg',
+    product:{ name:'Imported pantry product', description:'Original spreadsheet description', ingredients:'Original ingredients' } }
+  const session = { id:'e74a4161-72ca-4d72-8f59-37aa690e1869', request_id:'c32fcf68-b8fd-45cf-bc56-ac461349ba23',
+    checklist_step:'field_review', product_id:null, packaging_images:[], field_decisions:{},
+    field_provenance:{ imported_draft_target:target },
+    draft_payload:{ meta:{ schemaVersion:'k2.product-content.v3', evidenceCount:3,reviewNotes:['Possible ingredient mismatch: check the back package.'],unknownFields:['allergens'] }, product:target.product } }
+  let reviewed, restarted
+  await page.route('https://**/*', route => route.abort())
+  await page.route('**/api/admin/product-intake/**', route => {
+    const action = new URL(route.request().url()).pathname.split('/').at(-1)
+    if (action === 'session') return route.fulfill({ json:{ ok:true, data:{ session } } })
+    if (action === 'ai') return route.fulfill({ status:503, json:{ error:{ code:'AI_NOT_CONFIGURED' } } })
+    if (action === 'step') {
+      reviewed = route.request().postDataJSON()
+      session.checklist_step='draft_saved';session.draft_payload=reviewed.patch.draftPayload;session.field_decisions=reviewed.patch.fieldDecisions
+      return route.fulfill({ json:{ ok:true,result:{ sessionId:session.id,step:'draft_saved',updatedAt:'2026-10-10T00:00:00Z' } } })
+    }
+    throw Error('Unexpected imported fixture request: '+action)
+  })
+  await page.route('**/api/admin/product-intake/draft',route=>route.fulfill({status:409,json:{error:{code:'IMPORTED_DRAFT_VERSION_CONFLICT'}}}))
+  await page.route('**/api/admin/product-intake/duplicates*',route=>route.fulfill({json:{ok:true,data:{matchType:'exact',product:{id:target.productId,sku:target.sku,status:'Draft',published:false,recordVersion:'8'}}}}))
+  await page.route('**/api/admin/product-intake/session',route=>{
+    if(route.request().method()!=='POST')return route.fallback()
+    restarted=route.request().postDataJSON()
+    Object.assign(session,{id:'e74a4161-72ca-4d72-8f59-37aa690e1868',request_id:restarted.requestId,checklist_step:'identify',field_decisions:{},packaging_images:[],draft_payload:{meta:{schemaVersion:'k2.product-content.v3',evidenceCount:0},product:target.product},field_provenance:{imported_draft_target:{...target,recordVersion:'8'}}})
+    return route.fulfill({json:{ok:true,result:{sessionId:session.id}}})
+  })
+  await page.goto('/tests/fixtures/intake-ai-harness.html?modal', { waitUntil:'domcontentloaded' })
+  await expect(page.getByRole('heading',{ name:'Step 4: Review imported details' })).toBeVisible()
+  await expect(page.getByText('Existing SKU: K2-IMPORTED-001')).toBeVisible()
+  await expect(page.getByRole('checkbox',{ name:'Accept name' })).not.toBeChecked()
+  await expect(page.getByRole('region',{name:'Review advice'}).getByText('Possible ingredient mismatch: check the back package.')).toBeVisible()
+  await expect(page.getByText('Still unknown: allergens')).toBeVisible()
+  await page.getByLabel('Proposed description').fill('Staff checked correction')
+  await page.getByRole('checkbox',{ name:'Accept name' }).check()
+  await page.getByRole('checkbox',{ name:'Accept description' }).check()
+  await page.screenshot({path:test.info().outputPath('imported-review-phone.png'),fullPage:true})
+  await page.setViewportSize({width:1440,height:900})
+  await page.screenshot({path:test.info().outputPath('imported-review-desktop.png'),fullPage:true})
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true)
+  await page.setViewportSize({width:375,height:812})
+  await page.getByRole('button',{ name:'Next',exact:true }).click()
+  await expect(page.getByRole('button',{ name:'Save reviewed details',exact:true })).toBeVisible()
+  expect(reviewed.patch.draftPayload.product).toEqual({ name:target.name, description:'Staff checked correction' })
+  expect(reviewed.patch.fieldDecisions.ingredients).toBe('rejected')
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  await page.getByRole('button',{name:'Save reviewed details',exact:true}).click()
+  await expect(page.getByRole('alert')).toContainText('This product changed')
+  await page.getByRole('button',{name:'Reload current product',exact:true}).click()
+  await expect.poll(()=>restarted?.existingProduct?.recordVersion).toBe('8')
+  await expect(page.getByLabel('Product barcode, SKU, or name')).toBeDisabled()
+  expect(restarted.existingProduct).toEqual({productId:target.productId,recordVersion:'8'})
+  expect(session.field_decisions).toEqual({});expect(session.packaging_images).toEqual([])
+  await expect(page.getByRole('button',{name:'Save reviewed details',exact:true})).toHaveCount(0)
+  await page.evaluate(()=>window.toggleImportedFixture())
+  await expect(page.getByRole('dialog')).toHaveCount(0)
+  await page.evaluate(()=>window.toggleImportedFixture())
+  await expect(page.getByRole('alert')).toContainText('Another product review is open')
+  await expect(page.getByRole('button',{name:'Save reviewed details',exact:true})).toHaveCount(0)
+})
 
 test('barcode scan shows a public catalog suggestion and saves only staff-confirmed provenance', async ({ page }) => {
   const barcode = '3017620422003'
@@ -365,9 +460,9 @@ test(`uncertain Draft creation after ${failure} retries the frozen reviewed Draf
   if (failure === 'response loss') {
     await expect(page.getByRole('alert')).toBeFocused()
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
-    await page.screenshot({ path: 'docs/evidence/20260909-intake-command-retry/phone.png', fullPage: true })
+    await page.screenshot({ path: test.info().outputPath('intake-command-phone.png'), fullPage: true })
     await page.setViewportSize({ width: 1440, height: 1000 })
-    await page.screenshot({ path: 'docs/evidence/20260909-intake-command-retry/desktop.png', fullPage: true })
+    await page.screenshot({ path: test.info().outputPath('intake-command-desktop.png'), fullPage: true })
   }
   await page.getByRole('button', { name: 'Retry exact Draft command' }).click()
 
@@ -560,7 +655,7 @@ test('phone recovery, missing configuration, reviewed image and canonical attach
   expect(actions).not.toContain('start')
   expect(actions.filter(action => action === 'attach')).toHaveLength(1)
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
-  await page.screenshot({ path: 'docs/evidence/20260906-intake-ai/phone.png', fullPage: true })
+  await page.screenshot({ path: test.info().outputPath('intake-ai-phone.png'), fullPage: true })
 })
 
 test('confirmed barcode catalog allows Gemini SEO draft request and shows staff review text', async ({ page }) => {

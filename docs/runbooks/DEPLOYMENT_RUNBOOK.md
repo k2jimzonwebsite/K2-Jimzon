@@ -631,3 +631,14 @@ Evidence retained privately: `.tools/release-final-07.log` SHA2562bb18e69e1f4a9c
 **Remaining acceptance, MAP-018/020/023/025:** No database payload, provider grant or activation flag changed. Existing disabled commerce compatibility preserves the current catalog; canonical Website membership/writers must activate together only after guarded installer/replay/recovery/authority/transport and full rendered Draft-to-listing/order/staff/payment proof pass. Real identities, payment recipient/independent verdict, staff operational acceptance and owner sign-off remain unverified. CI run37941316559 is still in progress at this receipt: critical-sql-behavior passed; build-and-smoke dependency/history/isolated-build stages passed and complete acceptance is running. Record its final result without rerunning or redeploying this passing source. Completed integration/push/host-verification actions are removed from MAP; its owning items retain required activation/human work.
 
 **Recovery:** Reviewed source revert to prior main `f95e384eefaebf372f5e8037bd8fd1819118dc17` and previous separate Storefront/Admin deployment receipts6706792344/6706803173 if needed; no database rollback applies. Source publication is complete; full production/inventory activation is not claimed.
+# Release follow-up — 9 October 2026
+
+CI37941316559 for source9a9b9e6 completed failure at the phone workflow-map width
+assertion; SQL job passed. Local source branch codex/dummy-production-acceptance
+contains a reproduced strict regression and two-class sizing correction. All11
+focused map cases and verify:development pass; this has not been pushed/promoted.
+Remote CI must be green for the intended release candidate. Preserve existing
+separate Storefront/Admin source receipts; do not infer database activation from
+deployment. MAP-025 owns the next release/human gate, MAP-018/023 the full workflow
+and remaining provider admission. Recovery for this local correction is a scoped
+revert of MasterWorkflowGraph.jsx and the new regression; no database rollback.

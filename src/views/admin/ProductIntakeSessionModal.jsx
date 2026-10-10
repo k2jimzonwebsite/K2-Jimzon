@@ -26,7 +26,7 @@ import {
 import { PRODUCT_EVIDENCE_MAX_BYTES, PRODUCT_EVIDENCE_MIMES } from '../../lib/uploadValidation'
 import { PRODUCT_RESEARCH_SCHEMA_VERSION, parseProductResearchPaste } from './productResearchContract'
 import { buildProductJsonPrompt } from './productResearchPrompt'
-import { buildResumedIntakeState, buildReviewedDraftState } from './productIntakeResume'
+import { buildResumedIntakeState, buildReviewedDraftState, importedReviewCandidate } from './productIntakeResume'
 import { safeUiError } from '../../lib/safeUiError'
 import { applyImageFallback } from '../../lib/imageFallback'
 import { AdminDialog } from '../../components/ui/AdminDialog'
@@ -36,7 +36,7 @@ import IntakeStepGuide from './IntakeStepGuide'
 import { useRetainedIntakeCommand } from './useRetainedIntakeCommand'
 import { adminBffEnabled, lookupProductBarcodeBff, publicSeoDraftBff } from '../../services/adminBffService'
 
-export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCreated, onExistingProduct, guided = false }) {
+export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCreated, onExistingProduct, existingProduct = null, guided = false }) {
   const closeButtonRef = useRef(null)
   const errorRef = useRef(null)
   const copiedPromptTimerRef = useRef(null)
@@ -45,6 +45,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   const [showStepGuide, setShowStepGuide] = useState(guided)
   useEffect(() => { if (guided && isOpen) setShowStepGuide(true) }, [guided, isOpen])
   const [session, setSession] = useState(null)
+  const [importedTarget, setImportedTarget] = useState(null)
   const [sessionLoading, setSessionLoading] = useState(false)
   const [aiBusy, setAiBusy] = useState(false)
   const [resumeNotice, setResumeNotice] = useState('')
@@ -179,18 +180,33 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
     return () => { active = false }
   }, [isOpen, isOnline, step])
 
-  const initSession = async () => {
+  const initSession = async (selection = existingProduct, freshSelection = false) => {
+    if (freshSelection && (session?.checklist_step !== 'identify' || importedTarget || session?.packaging_images?.length)) {
+      setOperationError('Finish the current product review before selecting another product.')
+      return
+    }
     setSessionLoading(true)
     setOperationError('')
+    if (!freshSelection) {
+      setSession(null)
+      setImportedTarget(null)
+      setParsedPayload(null)
+      setAcceptedFields({})
+      setCreatedProduct(null)
+      setResumeNotice('')
+      setStep(1)
+    }
     const restoreSession = (active) => {
       const resumed = buildResumedIntakeState(active)
       setSession(active)
+      setImportedTarget(resumed.importedTarget)
       setStep(resumed.step)
       setQuery(resumed.query)
       setPackagingImages({ PRIMARY: null, BACK: null, BARCODE: null, ...resumed.packagingImages })
       setEvidenceChecked({ ingredients: false, allergens: false, storage: false, expiry: false, ...resumed.evidenceChecked })
       setCategoryType(resumed.categoryType)
-      setParsedPayload(resumed.parsedPayload)
+      setParsedPayload(resumed.importedTarget && resumed.parsedPayload
+        ? importedReviewCandidate(resumed.parsedPayload) : resumed.parsedPayload)
       setJsonInput(resumed.jsonInput)
       setAcceptedFields(resumed.acceptedFields)
       setCreatedProduct(resumed.createdProduct)
@@ -214,24 +230,43 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
           kind: 'session-setup',
           label: 'intake session',
           retryLabel: 'Retry exact session setup',
-          payload: { requestId: crypto.randomUUID() },
+          payload: { requestId: crypto.randomUUID(),
+            existingProduct: selection ? { productId:selection.id, recordVersion:selection.recordVersion } : null,
+            freshSelection },
           send: (frozen, key) => {
             const recovering = attempted
             attempted = true
             return createOrResumeIntakeSession(null, null, {
               requestId: frozen.requestId, idempotencyKey: key, recovering,
+              existingProduct: frozen.existingProduct, freshSelection:frozen.freshSelection,
             })
           },
           onSuccess: restoreSession,
         })
       } else {
-        restoreSession(await createOrResumeIntakeSession())
+        restoreSession(await createOrResumeIntakeSession(null,null,{ existingProduct: selection }))
       }
     } catch (error) {
       setOperationError(error.userMessage || 'Product intake could not be started. Nothing was changed.')
     } finally {
       setSessionLoading(false)
     }
+  }
+
+  const reloadImported = async () => {
+    if (!importedTarget || intakeCommand.locked || sessionLoading || createdProduct) return
+    setSessionLoading(true)
+    setOperationError('')
+    try {
+      const current = (await searchIdentityDuplicates(importedTarget.sku))?.product
+      if (current?.id !== importedTarget.productId || current.status !== 'Draft' || current.published !== false || !current.recordVersion) {
+        setOperationError('This product is no longer an eligible imported Draft. Refresh the catalog and open its existing inventory workflow.')
+        return
+      }
+      await initSession(current)
+    } catch (error) {
+      setOperationError(error.userMessage || 'The current product could not be loaded. Try again after reconnecting.')
+    } finally { setSessionLoading(false) }
   }
 
   if (!isOpen) return null
@@ -398,6 +433,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
     if (aiBusy) return false
     if (sessionLoading || !session?.id || evidenceCleanup) return false
     if (step === 1) {
+      if (importedTarget) return true
       return (duplicateResult?.matchType === 'none'
           && (catalogResult?.status !== 'found' || Boolean(catalogDecision)))
         || (duplicateResult?.matchType === 'ambiguous'
@@ -409,7 +445,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
         && Object.values(evidenceChecked).every(Boolean)
     }
     if (step === 3) return true
-    if (step === 4) return Boolean(parsedPayload) && Object.values(acceptedFields).some(Boolean)
+    if (step === 4) return Boolean(parsedPayload) && (importedTarget ? acceptedFields.name === true : Object.values(acceptedFields).some(Boolean))
     return false
   })()
 
@@ -426,8 +462,8 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       if (step === 1) {
         requestedStep = 'packaging_evidence'
         partialData = {
-          barcode: query || null,
-          scanned_identity: query,
+          barcode: importedTarget ? session.barcode : query || null,
+          scanned_identity: importedTarget ? session.scanned_identity : query,
           field_provenance: duplicateResult?.matchType === 'ambiguous'
             ? {
                 duplicate_resolution: {
@@ -496,11 +532,11 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       if (res.meta.schemaVersion !== PRODUCT_RESEARCH_SCHEMA_VERSION) {
         throw new Error(`This intake requires ${PRODUCT_RESEARCH_SCHEMA_VERSION}. Regenerate the product JSON with the current K2 Product Content instructions.`)
       }
-      setParsedPayload(res)
-      // Initialize accepted fields to all true
+      setParsedPayload(importedTarget ? importedReviewCandidate(res) : res)
+      // Imported facts and pasted AI suggestions require explicit staff choices.
       const initialAccepted = {}
       if (res.product) {
-        Object.keys(res.product).forEach(k => { initialAccepted[k] = true })
+        Object.keys(res.product).forEach(k => { initialAccepted[k] = !importedTarget })
       }
       setAcceptedFields(initialAccepted)
     } catch {
@@ -654,7 +690,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
             <BoxIcon className="w-5 h-5 text-amber-400" />
             <div>
               <h3 id="product-intake-title" className="text-sm font-semibold tracking-wide">Phone-First Product Intake</h3>
-              <p id="product-intake-summary" className="text-xs text-white/50">Resumable session · server-controlled SKU</p>
+              <p id="product-intake-summary" className="text-xs text-white/50">{importedTarget ? 'Review existing imported Draft' : 'Resumable session · server-controlled SKU'}</p>
             </div>
           </div>
           <button
@@ -674,9 +710,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
           {[
             { num: 1, label: 'Identify' },
             { num: 2, label: 'Packaging' },
-            { num: 3, label: 'ChatGPT' },
-            { num: 4, label: 'Smart Paste' },
-            { num: 5, label: 'Draft SKU' },
+            { num: 3, label: importedTarget ? 'Advice' : 'ChatGPT' },
+            { num: 4, label: importedTarget ? 'Review' : 'Smart Paste' },
+            { num: 5, label: importedTarget ? 'Save review' : 'Draft SKU' },
             { num: 6, label: 'Inventory' },
             { num: 7, label: 'Publish' }
           ].map(s => (
@@ -711,6 +747,14 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
         {/* Body Content */}
         <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
+          {importedTarget && <section aria-label="Selected imported product" className="space-y-2 border-b border-white/15 pb-4 text-sm">
+            <p className="font-semibold break-words">{importedTarget.name}</p>
+            <p className="font-mono break-all">Existing SKU: {importedTarget.sku}</p>
+            <p className="text-white/80">Your spreadsheet photo stays with this product. Upload the front, back and barcode package photos below for the same review used for new products.</p>
+            {createdProduct && <p role="status" className="text-emerald-300">Existing Draft reviewed. Continue with controlled inventory intake.</p>}
+            {!createdProduct && <button type="button" onClick={reloadImported} disabled={sessionLoading || intakeCommand.locked || !isOnline || aiBusy} className="min-h-11 rounded-adm-sm border border-white/20 px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue disabled:opacity-50">Reload current product</button>}
+            {!createdProduct && <p className="text-white/60">If it changed, reloading starts a fresh review without carrying earlier photos or approvals.</p>}
+          </section>}
           <button type="button" aria-expanded={showStepGuide} onClick={() => setShowStepGuide(value => !value)} className="min-h-11 rounded-adm-sm border border-adm-line px-3 text-sm text-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue">
             {showStepGuide ? 'Hide step guidance' : 'Show step guidance'}
           </button>
@@ -741,7 +785,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 </button>
               )}
               {!session && !sessionLoading && !intakeCommand.locked && (
-                <button type="button" onClick={initSession} disabled={!isOnline}
+                <button type="button" onClick={() => initSession()} disabled={!isOnline}
                   className="mt-3 flex min-h-11 items-center justify-center rounded-lg border border-white/30 px-4 py-2 font-semibold disabled:opacity-50">
                   Retry session setup
                 </button>
@@ -777,7 +821,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
             </div>
           )}
 
-          <fieldset disabled={intakeCommand.locked} className="min-w-0 space-y-4">
+          <fieldset disabled={intakeCommand.locked || sessionLoading || !session} className="min-w-0 space-y-4">
           {/* STEP 1: IDENTIFY & DUPLICATE CHECK */}
           {step === 1 && (
             <div className="space-y-4">
@@ -795,7 +839,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                     aria-label="Product barcode, SKU, or name"
                     type="text"
                     value={query}
-                    disabled={intakeCommand.locked}
+                    disabled={intakeCommand.locked || Boolean(importedTarget)}
                     onChange={(e) => {
                       setQuery(e.target.value)
                       setDuplicateResult(null)
@@ -815,7 +859,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <button
                   type="button"
                   onClick={handleSearchDuplicate}
-                  disabled={searching || sessionLoading || intakeCommand.locked || !session?.id || !query.trim()}
+                  disabled={searching || sessionLoading || intakeCommand.locked || Boolean(importedTarget) || !session?.id || !query.trim()}
                   className="min-h-11 px-4 py-2.5 bg-amber-500 text-black font-medium text-sm rounded-lg hover:bg-amber-400 disabled:opacity-50 transition-colors flex items-center gap-1.5"
                 >
                   {searching ? <SyncIcon className="w-4 h-4 animate-spin" /> : 'Check Duplicate'}
@@ -833,10 +877,13 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                       </div>
                       <p>An exact match already exists in the Product Master. Do not create a duplicate SKU.</p>
                       <button
-                        onClick={() => onExistingProduct?.(duplicateResult.product)}
+                        type="button"
+                        onClick={() => duplicateResult.product.status === 'Draft' && duplicateResult.product.published === false && duplicateResult.product.recordVersion
+                          ? initSession(duplicateResult.product, true) : onExistingProduct?.(duplicateResult.product)}
                         className="min-h-11 px-3 py-2 bg-amber-400 text-black font-medium rounded-lg text-sm hover:bg-amber-300"
                       >
-                        Open Existing Product & Add Inventory / Flight Box
+                        {duplicateResult.product.status === 'Draft' && duplicateResult.product.published === false
+                          ? 'Review existing Draft before inventory' : 'Open Existing Product & Add Inventory / Flight Box'}
                       </button>
                     </div>
                   )}
@@ -1033,7 +1080,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               const parsed = parseProductResearchPaste(JSON.stringify(content))
               const openReview = (updated) => {
                 setSession(updated)
-                setParsedPayload(parsed)
+                setParsedPayload(importedTarget ? importedReviewCandidate(parsed) : parsed)
                 setJsonInput(JSON.stringify(content, null, 2))
                 setAcceptedFields({})
                 setParseError(null)
@@ -1054,7 +1101,8 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
           {step === 3 && (
             <div className="space-y-4 text-xs">
               <div>
-                <h4 className="text-base font-medium text-white">Step 3: Manual ChatGPT Projects</h4>
+                <h4 className="text-base font-medium text-white">{importedTarget ? 'Step 3: Optional advice' : 'Step 3: Manual ChatGPT Projects'}</h4>
+                {importedTarget && <p className="text-sm text-white/80">AI is optional. Continue to review the imported details manually, or request package-based suggestions above. Staff decides each correction.</p>}
                 <p className="text-white/60">
                   Copy the versioned adaptive prompt for the private ChatGPT Project <strong className="text-amber-300">K2 Product Content</strong>.
                 </p>
@@ -1085,13 +1133,15 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
           {step === 4 && (
             <div className="space-y-4 text-xs">
               <div>
-                <h4 className="text-base font-medium text-white">Step 4: Smart Paste & Field Review</h4>
+                <h4 className="text-base font-medium text-white">{importedTarget ? 'Step 4: Review imported details' : 'Step 4: Smart Paste & Field Review'}</h4>
                 <p className="text-white/60">
-                  Paste the JSON output returned by ChatGPT. The system validates schema, highlights evidence, and displays a field diff.
+                  {importedTarget ? 'Check the package against the imported details. Tick only the fields you approve. Unticked fields keep their imported values. Accept the product name to continue.' : 'Paste the JSON output returned by ChatGPT. The system validates schema, highlights evidence, and displays a field diff.'}
                 </p>
               </div>
 
-              <div className="space-y-2">
+              <details open={!importedTarget} className="space-y-2">
+                {importedTarget && <summary className="min-h-11 cursor-pointer py-3 text-sm text-white/80">Paste optional research JSON</summary>}
+                <div className="space-y-2">
                 <label htmlFor="product-research-json" className="block text-white/70">Product research JSON</label>
                 <textarea
                   id="product-research-json"
@@ -1108,7 +1158,8 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 >
                   Validate & Review Fields
                 </button>
-              </div>
+                </div>
+              </details>
 
               {parseError && (
                 <div role="alert" className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-300 rounded-lg">
@@ -1122,8 +1173,28 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                     <span className="flex items-center gap-1.5"><CheckIcon className="h-4 w-4" /> Schema validated: {parsedPayload.meta.schemaVersion}</span>
                     <span className="text-xs text-white/50">Evidence Items: {parsedPayload.meta.evidenceCount}</span>
                   </div>
-                  <div className="space-y-1 bg-black/40 p-2 rounded max-h-40 overflow-y-auto">
-                    {Object.entries(parsedPayload.product).map(([key, val]) => (
+                  {importedTarget && (parsedPayload.meta.reviewNotes?.length > 0 || parsedPayload.meta.unknownFields?.length > 0) && <section aria-label="Review advice" className="space-y-2 rounded-adm-sm border border-amber-300/30 p-3 text-sm text-white/90">
+                    <p className="font-semibold">Suggestions to check before approval</p>
+                    {parsedPayload.meta.reviewNotes?.map((note,index)=><p key={index} className="break-words">{note}</p>)}
+                    {parsedPayload.meta.unknownFields?.length > 0 && <p className="break-words">Still unknown: {parsedPayload.meta.unknownFields.join(', ')}</p>}
+                    <p className="text-white/70">These notes do not approve or change any field. Staff checks the package and makes the final decision.</p>
+                  </section>}
+                  <div className={`space-y-1 bg-black/40 p-2 rounded ${importedTarget ? '' : 'max-h-40 overflow-y-auto'}`}>
+                    {Object.entries(parsedPayload.product).map(([key, val]) => importedTarget ? (
+                      <div key={key} className="space-y-2 border-b border-white/10 py-3 text-sm">
+                        <label className="flex min-h-11 items-center gap-3"><input type="checkbox" aria-label={`Accept ${key}`} checked={Boolean(acceptedFields[key])}
+                          onChange={event => setAcceptedFields(current => ({ ...current,[key]:event.target.checked }))} className="accent-amber-400" />{key.replaceAll('_',' ')}</label>
+                        <p className="break-words text-white/70">Imported: {String(importedTarget.product?.[key] ?? 'Blank')}</p>
+                        <label htmlFor={`imported-field-${key}`} className="sr-only">Proposed {key}</label>
+                        <input id={`imported-field-${key}`} value={Array.isArray(val) ? val.join(' | ') : val ?? ''}
+                          readOnly={key === 'barcode'}
+                          onChange={event => {
+                            const value = Array.isArray(val) ? event.target.value.split('|').map(part => part.trim()).filter(Boolean) : event.target.value
+                            setParsedPayload(current => ({ ...current,product:{ ...current.product,[key]:value } }))
+                            setAcceptedFields(current => ({ ...current,[key]:false }))
+                          }} className="min-h-11 w-full rounded-adm-sm border border-white/20 bg-black/20 px-3 text-base text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue" />
+                      </div>
+                    ) : (
                       <label key={key} className="flex items-center justify-between gap-3 text-xs min-h-8 cursor-pointer">
                         <span className="flex items-center gap-2 text-white/60 font-mono">
                           <input
@@ -1149,16 +1220,16 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
           {step === 5 && (
             <div className="space-y-4 text-xs">
               <div>
-                <h4 className="text-base font-medium text-white">Step 5: Server-Assigned SKU Draft</h4>
+                <h4 className="text-base font-medium text-white">{importedTarget ? 'Step 5: Save reviewed details' : 'Step 5: Server-Assigned SKU Draft'}</h4>
                 <p className="text-white/60">
-                  The system will assign a stable internal SKU (e.g. <strong className="text-amber-300">K2-SKU-XXXXXX</strong>) and save the product as Draft.
+                  {importedTarget ? `The existing SKU ${importedTarget.sku} and supplied photo are retained. Only accepted details are saved; stock and publication stay in their later steps.` : <>The system will assign a stable internal SKU (e.g. <strong className="text-amber-300">K2-SKU-XXXXXX</strong>) and save the product as Draft.</>}
                 </p>
               </div>
 
               <div className="p-4 bg-white/5 border border-white/10 rounded-lg space-y-3">
                 <div className="flex items-center gap-2 text-amber-400 font-semibold">
                   <SparkleIcon className="w-5 h-5" />
-                  Ready to Create Server Product Draft
+                  {importedTarget ? 'Ready to save existing Draft review' : 'Ready to Create Server Product Draft'}
                 </div>
                 <p className="text-white/70">
                   Product Name: <strong className="text-white">{parsedPayload?.product?.name || query || 'New Product'}</strong>
@@ -1172,7 +1243,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 >
                   {creatingDraft || (intakeCommand.busy && intakeCommand.kind === 'draft')
                     ? <SyncIcon className="w-4 h-4 animate-spin" />
-                    : 'Assign SKU & Save Product Draft'}
+                    : importedTarget ? 'Save reviewed details' : 'Assign SKU & Save Product Draft'}
                 </button>
               </div>
             </div>

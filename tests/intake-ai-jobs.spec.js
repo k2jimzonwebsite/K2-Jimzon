@@ -2,6 +2,32 @@ import { test, expect } from '@playwright/test'
 import { createHash } from 'node:crypto'
 import sharp from 'sharp'
 
+for(const operation of ['image claim','attachment']) test(`imported target refuses ${operation} before provider or storage side effects`,async()=>{
+  const {runIntakeAiJob,attachIntakeAiCandidate}=await import('../server/admin-bff/intake-ai-jobs.js')
+  let commands=0,paid=0,uploads=0
+  const client={from:()=>({select:()=>({eq:()=>({single:async()=>({data:{id:'session',field_provenance:{imported_draft_target:{productId:'imported'}}}})})})}),rpc:async()=>{commands++;return {error:{message:'Unexpected command'}}},storage:{from:()=>({upload:async()=>{uploads++;return {}}})}}
+  const args={client,identity:{userId:'actor'},requestId:'request',input:{sessionId:'session',kind:'PRIMARY',jobId:'job'}}
+  const prior=process.env.K2_ADMIN_BFF_REQUEST_SECRET
+  process.env.K2_ADMIN_BFF_REQUEST_SECRET=Buffer.alloc(32,5).toString('base64')
+  try {
+    await expect(operation==='image claim'?runIntakeAiJob(args,{generateImage:async()=>paid++}):attachIntakeAiCandidate(args)).rejects.toThrow('AI_REVIEW_REQUIRED')
+    expect(commands).toBe(0);expect(paid).toBe(0);expect(uploads).toBe(0)
+  } finally { if(prior===undefined)delete process.env.K2_ADMIN_BFF_REQUEST_SECRET;else process.env.K2_ADMIN_BFF_REQUEST_SECRET=prior }
+})
+
+for(const failedRead of [false,true]) test(`imported AI comparison ${failedRead?'refuses an unreadable session before paid dispatch':'uses only the immutable selected baseline'}`,async()=>{
+  const {runIntakeAiJob}=await import('../server/admin-bff/intake-ai-jobs.js')
+  const bytes=Buffer.from('registered synthetic package'),facts={name:'Original imported name',description:'Original copy'}
+  let providerInput,calls=0
+  const client={rpc:async(name,args)=>({data:args.action==='intake_ai_claim'?{dispatch:true,job:{id:'job'},evidence:[{slot:'PRIMARY',type:'image/png',path:'actor/session/front.png',sha256:createHash('sha256').update(bytes).digest('hex')}]}:{job:args.payload}}),storage:{from:()=>({download:async()=>({data:new Blob([bytes])})})},from:table=>{
+    expect(table).toBe('product_intake_sessions')
+    return {select:()=>({eq:()=>({single:async()=>failedRead?{error:{message:'Read refused'}}:{data:{id:'session',field_provenance:{imported_draft_target:{product:facts}}}}})})}
+  }}
+  const result=await runIntakeAiJob({client,identity:{userId:'actor'},requestId:'request',input:{sessionId:'session',kind:'content'}},{sign:(action,actor,id,payload)=>({action,payload}),generateContent:async input=>{calls++;providerInput=input;return {content:{product:{name:'Unaccepted suggestion'}}}}})
+  if(failedRead){expect(calls).toBe(0);expect(result.failure).toBe('AI_EVIDENCE_REQUIRED')}
+  else{expect(calls).toBe(1);expect(providerInput.importedFacts).toEqual(facts);expect(providerInput.images[0].data).toEqual(bytes);expect(facts.name).toBe('Original imported name')}
+})
+
 test('accepted candidate uses existing signed media registration and attachment without provider calls', async () => {
   const { attachIntakeAiCandidate } = await import('../server/admin-bff/intake-ai-jobs.js')
   const previous = process.env.K2_ADMIN_BFF_REQUEST_SECRET
@@ -19,7 +45,7 @@ test('accepted candidate uses existing signed media registration and attachment 
         throw new Error('unexpected command')
       },
       storage: { from: () => ({ upload: async () => { uploads++; return {} }, getPublicUrl: path => ({ data: { publicUrl: `https://fixture.supabase.co/storage/v1/object/public/product-images/${path}` } }) }) },
-      from: () => ({ select: () => ({ eq: () => ({ single: async () => ({ data: { sku: 'K2-FIXTURE', primary_image_url: null, lifestyle_images: ['https://fixture.invalid/existing.png'], secondary_images: [] } }) }) }) }),
+      from: table => ({ select: () => ({ eq: () => ({ single: async () => ({ data: table==='product_intake_sessions'?{id:'session',field_provenance:{}}:{ sku: 'K2-FIXTURE', primary_image_url: null, lifestyle_images: ['https://fixture.invalid/existing.png'], secondary_images: [] } }) }) }) }),
     }
     const args = { client, identity: { userId: 'actor' }, requestId: 'request', input: { sessionId: 'session', jobId: job.id } }
     await attachIntakeAiCandidate(args)
@@ -46,6 +72,7 @@ test('uncertain completion retries persistence only and paid work runs once', as
       return completions === 1 ? { error: { message: 'lost write receipt' } } : { data: { job: { id: 'job', result: args.payload.result } } }
     },
     storage: { from: () => ({ download: async () => ({ data: new Blob([data]) }) }) },
+    from: () => ({ select: () => ({ eq: () => ({ single: async () => ({ data:{ id:'session',field_provenance:{} } }) }) }) }),
   }
   const result = await runIntakeAiJob({ client, identity: { userId: 'actor' }, requestId: 'request', input: { sessionId: 'session', kind: 'content' } }, {
     sign: (action, actor, id, payload) => ({ action, payload }), generateContent: async () => { paid++; return { content: { draft: 'fixture' } } },
