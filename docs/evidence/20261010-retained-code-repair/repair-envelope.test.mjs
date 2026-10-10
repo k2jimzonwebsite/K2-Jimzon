@@ -109,3 +109,40 @@ test('full snapshot discovers permanent physical data and all sequences without 
   assert.equal(sql.includes("nspname in ('public'"), false)
   assert.match(sql, /SET TIME ZONE 'UTC'/)
 })
+
+const fixtureInput = {
+  ...input,
+  priorBytes: fs.readFileSync(root + '/retained-code-pair01/prior-catalog.json'),
+  correctedBytes: fs.readFileSync(root + '/oci-retained-calibration01/execution01/retained-catalog-before.json'),
+}
+const fixturePrior = JSON.parse(fixtureInput.priorBytes)
+const fixtureCorrected = JSON.parse(fixtureInput.correctedBytes)
+const fixtureIndices = fixturePrior.functions.flatMap((f, i) => f.definition !== fixtureCorrected.functions[i].definition ? [i] : [])
+
+for (let mask = 0; mask < 8; mask++) test('exact calibrated request fixture admits known combination ' + mask, () => {
+  const state = structuredClone(fixturePrior)
+  fixtureIndices.forEach((index, bit) => { if (mask & (1 << bit)) state.functions[index] = fixtureCorrected.functions[index] })
+  const result = module.prepareRepairEnvelope(fixtureInput).classify(state, pkg.authority, pkg.managedAuthority)
+  assert.equal(result.corrections.length, 3 - mask.toString(2).replaceAll('0', '').length)
+  assert.equal(result.noOp, mask === 7)
+})
+
+test('fixed catalog profiles cannot be mixed or altered', () => {
+  for (const changed of [
+    { ...input, correctedBytes: fixtureInput.correctedBytes },
+    { ...fixtureInput, correctedBytes: input.correctedBytes },
+    { ...fixtureInput, correctedBytes: Buffer.concat([fixtureInput.correctedBytes, Buffer.from(' ')]) },
+  ]) assert.throws(() => module.prepareRepairEnvelope(changed), /SOURCE_PIN/)
+})
+
+for (const [name, mutate] of [
+  ['telemetry table removed', c => { c.relations = c.relations.filter(r => r.name !== 'k2_private.security_events') }],
+  ['telemetry function owner', c => { c.functions.find(f => f.catalog.proname === 'record_security_event_v1').owner = 'authenticated' }],
+  ['preauth ACL', c => { c.functions.find(f => f.catalog.proname === 'consume_admin_preauth_rate_v1').catalog.proacl = null }],
+  ['existing session definition', c => { c.functions.find(f => f.catalog.proname === 'execute_admin_session_command_v1').definition += '\n-- drift' }],
+  ['Auth foreign-key trigger', c => { c.relations.find(r => r.name === 'auth.users').internalTriggers.pop() }],
+]) test('calibrated fixture refuses ' + name, () => {
+  const state = structuredClone(fixtureCorrected)
+  mutate(state)
+  assert.throws(() => module.prepareRepairEnvelope(fixtureInput).classify(state, pkg.authority, pkg.managedAuthority), /SCHEMA_DRIFT/)
+})

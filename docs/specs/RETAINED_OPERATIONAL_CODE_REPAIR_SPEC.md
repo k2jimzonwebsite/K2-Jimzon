@@ -1,6 +1,6 @@
 # Retained operational code repair qualification
 
-MAP-018 / IDEA-20261010-08. Reviewed design approved for local preparation; repair-envelope source now prepared; no native execution,
+MAP-018 / IDEA-20261010-08. Reviewed design approved for local preparation; repair-envelope source now prepared; no native repair execution,
 provider apply or deployment. The sole active work queue remains MASTER_ACTION_PLAN.md.
 
 The owner confirmed: “Yes, use that recovery approach” for preserving saved rates
@@ -25,7 +25,13 @@ each target at its exact prior or corrected definition. It checks the complete
 catalog, owners, ACLs, settings, roles/memberships/events and managed authority;
 unknown differences refuse. It atomically executes each existing pinned fragment
 only for a prior-state target; corrected targets are checked and skipped. Final
-catalog must equal the complete accepted combined23 catalog. An all-corrected
+catalog must equal the complete corrected catalog of the selected fixed matched
+profile. The original profile is imported02/combined23; the second is the exact
+native calibration01 complete prerequisite catalog paired with a derived prior
+containing only the three known definition substitutions. The derived prior is
+not an observed native starting state. Cross-profile pairs and unknown metadata
+refuse. RETAINED_REPAIR_PROFILE_PREPARATION_20261010.json records composition
+review, source tests and original-profile SQL byte compatibility. An all-corrected
 repeat is an exact no-op. No fresh table installer or historical inverse is used.
 
 The original caller/target ownership and positive2s lock/10s statement limits stay
@@ -37,7 +43,7 @@ immunity to lock failures. A refused/unknown repair must never be reported as
 successful. Readers/quotes keep valid retained rates outside ordinary existing
 transaction contention; no new global availability guarantee is asserted.
 
-Both captured schemas are source inputs, never live observed state. The first
+All catalog profiles are local source inputs, never live provider observed state. The first
 envelope is disposable-fixture-only with exact owned RAM target/marker checks;
 it cannot execute on a provider. A later provider envelope needs its own reviewed
 project binding, backup/readiness/authorization and transaction/receipt semantics.
@@ -94,7 +100,7 @@ cleanup is not the repair method. Terminal results, independently absent PID and
 listeners, immutable executed-source hashes and every failed diagnostic remain
 part of the receipt. No original private archive or prior fixture is reused/deleted.
 
-Native fixture calibration (not populated repair): calibration01 qualifies complete supplemental catalog capture and refusal conservation for168 permanent user physical relations,11 sequences and44393 staged rows. The exact delta adds existing maintained telemetry/Admin-preauth schema and disposable observers, preserves the prior qualified session correction, and adds only their four Auth foreign-key triggers. Current envelope intentionally refuses these additions. Any later fixture profile must pin this complete catalog and admit only the same three reviewed definition corrections; it must preserve every control fact, and requires independent composition review before execution. Evidence: RETAINED_FIXTURE_CALIBRATION_20261010.json. No arbitrary installed metadata admission is authorized.
+Native fixture calibration (not populated repair): calibration01 qualifies complete supplemental catalog capture and refusal conservation for168 permanent user physical relations,11 sequences and44393 staged rows. The exact delta adds existing maintained telemetry/Admin-preauth schema and disposable observers, preserves the prior qualified session correction, and adds only their four Auth foreign-key triggers. The original profile intentionally refused these additions. The independently reviewed second fixed profile now pins the complete catalog and only the same three reviewed definition corrections; every control fact remains included. Its source preparation passes36 tests and development18973, but native populated repair remains unverified. Evidence: RETAINED_FIXTURE_CALIBRATION_20261010.json and RETAINED_REPAIR_PROFILE_PREPARATION_20261010.json. No arbitrary installed metadata admission is authorized.
 
 Decision log:
 

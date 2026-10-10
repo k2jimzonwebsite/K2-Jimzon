@@ -1,5 +1,7 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+10 October fixed fixture repair profile (MAP-018): admission uses an exact matched complete prior/corrected catalog pair. The reviewed calibration01 profile preserves all maintained request prerequisites and control metadata; its prior is derived fault setup, not native observed state. Cross-pair or unknown metadata must refuse. Source tests and byte-identical original SQL are preparation evidence only; populated signed repair/resumption remains required. Receipt: RETAINED_REPAIR_PROFILE_PREPARATION_20261010.json.
+
 10 October fixture metadata requirement (MAP-018): retained repair proof must include the exact telemetry/Admin-preauth relations, their Auth foreign-key triggers, disposable observers and already qualified session correction required by genuine BFF operations. Never substitute arbitrary supplemental metadata, ignore those objects, or remove control history to admit a repair. Native calibration/refusal evidence is separate from successful populated repair/resumption: RETAINED_FIXTURE_CALIBRATION_20261010.json.
 
 10 October populated repair witness requirement (MAP-018): account for every maintained telemetry/preauth prerequisite and disposable observer in a reviewed exact fixture catalog before repair admission. Preserve their control facts and compare full table/sequence state; never delete history or exclude metadata to make a repair guard pass. RETAINED_CODE_REPAIR_PREPARATION_20261010.json is source preparation evidence only.
