@@ -1,0 +1,209 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "preparedOnly": true,
+  "locallyVerified": true,
+  "providerWrites": false,
+  "deployed": false,
+  "case": "oci-policy-http06",
+  "nativeSession": 60309,
+  "native": {
+    "owningMap": "MAP-023/018",
+    "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-policy-http06\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 8612,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "processStopped": true,
+    "serialSha256": "7e5fafdde72c1a7177b9fa4aaf6f87180334b8971e88cb5301457e5b3f60d4a4"
+  },
+  "scope": {
+    "owningMap": "MAP-018",
+    "idea": "IDEA-20261010-08",
+    "prepared": true,
+    "executed": false,
+    "providerWrites": false,
+    "overlaySha256": "974b404f066282f001963d8ba7d548c5e137f95f40c57a73d480abeba7abc6b0",
+    "sourceBeforeSha256": "4de418fc3b9204f6dbe72beb708ce3becd1b9ae7d6439997c29452b2e3f9e75c",
+    "scope": "Original imported02 composition plus one guarded category mutation business SQLSTATE40001-to-P0001 change. All nonbody metadata and every other body byte retained; exact guarded inverse during recovery. Two genuinely signed same-key stale409 refusals required. No positive publication, retry or combined-package integration acceptance.",
+    "supersedes": "Inherited preparation manifest phrase no correction is superseded by this companion correction scope; no original uncorrected command acceptance claimed.",
+    "inputContainedExactlyOnce": true
+  },
+  "manifest": {
+    "owningMap": "MAP-018",
+    "idea": "IDEA-20261010-08",
+    "prepared": true,
+    "nativeVerified": false,
+    "providerWrites": false,
+    "caseName": "oci-policy-http06",
+    "sourceLineage": {
+      "baseCase": "oci-tariff03",
+      "baseNativeResultSha256": "a2a67ef353f84e8339803b514cdbd1511b056263ddf67405965dc2f6d3c664b8",
+      "baseReceiptSha256": "d117feaeaaac9fc27e5357af8481a8e8d2ab8fbda0fc940098e6cd5d2abe4e49",
+      "baseSourceSha256": "299fe473578a26d1a8b746c26228ef313eb5ddf240655bac52caa6a40c9d73a2",
+      "baseDriverSha256": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+      "baseHelperSha256": "f87bc4540c53fc8016e725d5ac3f10515775f74f71104e8bd65a69bc52a863b8",
+      "derivationSha256": "f3d5c993b75fba433c6ea9fc7bd77156beff17c25f8686e248203037a2a8dd06",
+      "derivedSourceSha256": "51ec343d6a7fada120d46961021f5ffe511e2f000b6f9475201e4fd2fe6e4eb2"
+    },
+    "artifacts": {
+      "executed-source.mjs": "51ec343d6a7fada120d46961021f5ffe511e2f000b6f9475201e4fd2fe6e4eb2",
+      "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+      "bff-helper.mjs": "3437733979a5792c4ae3fcd7554e0dfe2aae8bba38ae150d0ab5a436e37df589",
+      "runner-source.mjs": "91b2a264e181a040672ee10fc5f6d1eeb840d94be7487f37143fdf2da5a5fdd4",
+      "staging/k2/image-probe.sh": "ac5b58851d211a7986d81d2f5b4c1526d0a62b133a4347ec050c5fdeb7c68215",
+      "staging/k2/init.sh": "38eb81d0baa39caf89e022f54a398a710c66c45f85697063617757c8fdf5739a"
+    },
+    "limits": "Original imported02 package/source, no correction or combined package proof. Stale-only synthetic category/config fixture, actual local Auth/BFF/PostgREST. Recovery compares policy/events/config, retained BFF scopes, original88/two sequences/full schema/global authority. No populated policy success/history or all149 private conservation/provider/hosted proof."
+  },
+  "artifactHashes": {
+    "executed-source.mjs": "51ec343d6a7fada120d46961021f5ffe511e2f000b6f9475201e4fd2fe6e4eb2",
+    "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+    "category-conflict-preparer-source.mjs": "f3d5c993b75fba433c6ea9fc7bd77156beff17c25f8686e248203037a2a8dd06",
+    "category-conflict-preparation.json": "9236831e7f976f744828142ef7a5579df093c2f4f561ed485e2f7e65b601b9ba",
+    "runner-source.mjs": "91b2a264e181a040672ee10fc5f6d1eeb840d94be7487f37143fdf2da5a5fdd4",
+    "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+    "bff-helper.mjs": "3437733979a5792c4ae3fcd7554e0dfe2aae8bba38ae150d0ab5a436e37df589",
+    "preparation.json": "a063a0749121357209c92d3687c830cd9c906f85cd2bb3cacb078b19163fce4f",
+    "staging/k2/image-probe.sh": "ac5b58851d211a7986d81d2f5b4c1526d0a62b133a4347ec050c5fdeb7c68215",
+    "staging/k2/init.sh": "38eb81d0baa39caf89e022f54a398a710c66c45f85697063617757c8fdf5739a",
+    "execution01/result.json": "8964f3efb66f53d6c6d59b3bb6d86666d29f39752c6df7b5f2b3c04ba3b6dac1",
+    "execution01/serial.log": "7e5fafdde72c1a7177b9fa4aaf6f87180334b8971e88cb5301457e5b3f60d4a4",
+    "host-driver-result.json": "ed7992a94a7fb7c89a0bf13c0e700a5b989dda9ec0ce10a852df1c4051e84e40",
+    "category-policy-conflict-overlay.sql": "974b404f066282f001963d8ba7d548c5e137f95f40c57a73d480abeba7abc6b0",
+    "category-correction-scope.json": "3206f84718e0c1e90415879510e08d9e8585fec7243987f345cdce313be9fd9c"
+  },
+  "transport": [
+    {
+      "elapsedMs": 46,
+      "status": 409,
+      "code": "CATEGORY_POLICY_VERSION_CONFLICT",
+      "expectedVersion": "1",
+      "currentVersion": "0"
+    },
+    {
+      "elapsedMs": 43,
+      "status": 409,
+      "code": "CATEGORY_POLICY_VERSION_CONFLICT",
+      "expectedVersion": "1",
+      "currentVersion": "0"
+    }
+  ],
+  "rpcDiagnostics": [
+    {
+      "status": 400,
+      "context": {
+        "lockMs": null,
+        "statementMs": null,
+        "role": null,
+        "sessionRole": null
+      },
+      "code": "P0001",
+      "message": "K2_CATEGORY_POLICY_VERSION_CONFLICT"
+    },
+    {
+      "status": 400,
+      "context": {
+        "lockMs": null,
+        "statementMs": null,
+        "role": null,
+        "sessionRole": null
+      },
+      "code": "P0001",
+      "message": "K2_CATEGORY_POLICY_VERSION_CONFLICT"
+    }
+  ],
+  "authenticatedReadContext": {
+    "lockMs": "2000",
+    "statementMs": "10000",
+    "role": "authenticated",
+    "sessionRole": "authenticator"
+  },
+  "conservationPairs": {
+    "auth-rows-before.json = auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+    "auth-schema-before.json = auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+    "category-policy-before.rows = category-policy-after.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "category-events-before.rows = category-events-after.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "category-config-before.rows = category-config-after.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-sequence-recovery.sql = bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+    "bff-before-admin_sessions.rows = bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-before-admin_session_events.rows = bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-before-admin_request_rate_buckets.rows = bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-before-admin_request_nonces.rows = bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-before-admin_command_receipts.rows = bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bff-before-admin_bff_secrets.rows = bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e"
+  },
+  "globalManagedWitnesses": 2,
+  "hostFinal": {
+    "pid": 8612,
+    "pidAbsent": true,
+    "probeListenerCount": 0,
+    "checkedAt": "2026-10-10T10:30:33.2725680Z"
+  },
+  "red": {
+    "command": "node .tools/verify-category-conflict-response.mjs oci-policy-http05",
+    "exit": 1,
+    "expected": "HTTP409",
+    "actual": "No HTTP response before20000ms client deadline"
+  },
+  "green": {
+    "command": "node .tools/verify-category-conflict-response.mjs oci-policy-http06",
+    "exit": 0
+  },
+  "verification": {
+    "command": "node .tools/record-category-conflict-transport.mjs",
+    "witnessSha256": "23a190e2cca3e40fbc5688a5b598d300fc79a49b82d6d4c9d9b8f0719b67c410",
+    "developmentSession": 66895,
+    "developmentPending": false,
+    "reviewPending": false,
+    "independentReview": {
+      "reviewer": "auth_migration_review",
+      "critical": 0,
+      "important": 0,
+      "artifactPinsVerified": 15,
+      "conservationPairsVerified": 12,
+      "scope": "Actual source/artifact/result/pair/limits review; primary-observed host-stop evidence not re-executed"
+    },
+    "finalizeCommand": "node .tools/finalize-category06-receipts.mjs",
+    "development": {
+      "command": "npm run verify:development",
+      "session": 66895,
+      "exit": 0,
+      "scope": "Full development gate once after final prepared SQL edit; no release or provider gate"
+    }
+  },
+  "limits": "Two stale refusals with fresh signatures on same key are not successful receipt replay. No positive category mutation/retained populated policy history/whole combined installer proof.05 original request timeout and late42501 are not original40001 or retry mechanism proof; changing only guarded named SQLSTATE produces qualified P0001/409 behavior in06. Context read is observed separately; error headers are null. Scoped original88/sequences/fullcatalog/private recovery is not all149 row conservation. No provider/browser/hosted/bot-provider or release acceptance.",
+  "recovery": "Guarded inverse restores exact original helper hash4de418fc and all nonbody metadata; temporary observer/config/category removed, exact12pairs/global witness verified and guest stopped. Retain immutable failed04 and successful05/06; only fresh pinned successor may execute.",
+  "remaining": "MAP-018: qualify positive signed category publication and successful receipt replay; integrate correction into exact guarded combined package with opt-in/replay/drift/interruption/populated data-retaining recovery. Establish production request timeout context and authority-through-commit/provider/hosted gates separately."
+}

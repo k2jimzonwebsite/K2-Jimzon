@@ -1,0 +1,286 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "providerWrites": false,
+  "deployed": false,
+  "cases": [
+    {
+      "case": "oci-policy-http04",
+      "nativeSession": 55899,
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-policy-http04\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 20396,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "e4b94d8bdd6bd3316853482f5c19d6f071348f3ef337dd56832b58a5365ccb7a"
+      },
+      "hostFinalCheck": {
+        "pid": 20396,
+        "pidAbsent": true,
+        "probeListenerCount": 0,
+        "checkedAt": "2026-10-10T10:22:13.9738191Z"
+      },
+      "transport": {
+        "elapsedMs": 20005,
+        "clientDeadlineMs": 20000,
+        "outcome": "client_timeout_without_http_response",
+        "expectedVersion": "1",
+        "currentVersion": "0",
+        "scope": "Actual signed local stale request; no successful409 or retry-mechanism claim"
+      },
+      "rpcDiagnostics": [
+        {
+          "status": 403,
+          "context": {
+            "lockMs": null,
+            "statementMs": null,
+            "role": null,
+            "sessionRole": null
+          },
+          "code": "42501",
+          "message": "K2_ADMIN_REQUIRED"
+        }
+      ],
+      "authenticatedReadContext": null,
+      "conservationPairs": {
+        "bff-sequence-recovery.sql = bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+        "bff-before-admin_sessions.rows = bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bff-before-admin_session_events.rows = bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bff-before-admin_request_rate_buckets.rows = bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bff-before-admin_request_nonces.rows = bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bff-before-admin_command_receipts.rows = bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bff-before-admin_bff_secrets.rows = bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e"
+      },
+      "completeOriginalRecovery": false,
+      "artifactHashes": {
+        "executed-source.mjs": "94d25cd3f59f6ebc854f3d360e82f9c98a0dd46b4613cd6a136719b0ea0f18ef",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "category-conflict-preparer-source.mjs": "28ec94434df9642a8891438684b2b1da874e8ebbedbddb8f5ed1ba9772810751",
+        "category-conflict-preparation.json": "acb221370b72ab0afd606c128330dafe50102611fe6f8d62099b7631c416931f",
+        "runner-source.mjs": "b91401f6866ce53ade6d32aaa720bdde7c8c5ef728728d316e0e76de2934a0d4",
+        "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+        "bff-helper.mjs": "ba307c79e531a005baf7c3ca199934fdd8224336681bba9840c08073707cd9cd",
+        "preparation.json": "cf18d4ed973ae1bd450ce9668de192e87f26ac7fba2b12fbea1f99e29ebad34d",
+        "staging/k2/image-probe.sh": "2ca84fa4718444568eee280185d609fbc97e482d922592ccf8834bd21f9bc18d",
+        "staging/k2/init.sh": "38eb81d0baa39caf89e022f54a398a710c66c45f85697063617757c8fdf5739a",
+        "execution01/result.json": "4f0b7fb11ccb11f2462f1c79735579e5d12543cfa12f43961b982b007d65126f",
+        "execution01/serial.log": "e4b94d8bdd6bd3316853482f5c19d6f071348f3ef337dd56832b58a5365ccb7a",
+        "host-driver-result.json": "97ff06e0e5f6ce7a134d30a83e028ada59568c48232778fafdfa1fa8ed05d1c3"
+      },
+      "manifest": {
+        "owningMap": "MAP-018",
+        "idea": "IDEA-20261010-08",
+        "prepared": true,
+        "nativeVerified": false,
+        "providerWrites": false,
+        "caseName": "oci-policy-http04",
+        "sourceLineage": {
+          "baseCase": "oci-tariff03",
+          "baseNativeResultSha256": "a2a67ef353f84e8339803b514cdbd1511b056263ddf67405965dc2f6d3c664b8",
+          "baseReceiptSha256": "d117feaeaaac9fc27e5357af8481a8e8d2ab8fbda0fc940098e6cd5d2abe4e49",
+          "baseSourceSha256": "299fe473578a26d1a8b746c26228ef313eb5ddf240655bac52caa6a40c9d73a2",
+          "baseDriverSha256": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+          "baseHelperSha256": "f87bc4540c53fc8016e725d5ac3f10515775f74f71104e8bd65a69bc52a863b8",
+          "derivationSha256": "28ec94434df9642a8891438684b2b1da874e8ebbedbddb8f5ed1ba9772810751",
+          "derivedSourceSha256": "94d25cd3f59f6ebc854f3d360e82f9c98a0dd46b4613cd6a136719b0ea0f18ef"
+        },
+        "artifacts": {
+          "executed-source.mjs": "94d25cd3f59f6ebc854f3d360e82f9c98a0dd46b4613cd6a136719b0ea0f18ef",
+          "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+          "bff-helper.mjs": "ba307c79e531a005baf7c3ca199934fdd8224336681bba9840c08073707cd9cd",
+          "runner-source.mjs": "b91401f6866ce53ade6d32aaa720bdde7c8c5ef728728d316e0e76de2934a0d4",
+          "staging/k2/image-probe.sh": "2ca84fa4718444568eee280185d609fbc97e482d922592ccf8834bd21f9bc18d",
+          "staging/k2/init.sh": "38eb81d0baa39caf89e022f54a398a710c66c45f85697063617757c8fdf5739a"
+        },
+        "limits": "Original imported02 package/source, no correction or combined package proof. Stale-only synthetic category/config fixture, actual local Auth/BFF/PostgREST. Recovery compares policy/events/config, retained BFF scopes, original88/two sequences/full schema/global authority. No populated policy success/history or all149 private conservation/provider/hosted proof."
+      }
+    },
+    {
+      "case": "oci-policy-http05",
+      "nativeSession": 97875,
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Native routed local BFF credentials/TOTP/cookies/registry/CSRF/logout with genuine Auth/PostgREST and temporarily exact prepared telemetry/preauth migrations; local bot-provider opt-in; full recovery; no browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "4096",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-policy-http05\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 20712,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": true,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": true,
+        "processStopped": true,
+        "serialSha256": "ce4fc977015365932469432e229ae135ea059ca0d1b59b64a96ce4499fa9e7ce"
+      },
+      "hostFinalCheck": {
+        "pid": 20712,
+        "pidAbsent": true,
+        "probeListenerCount": 0,
+        "checkedAt": "2026-10-10T10:25:49.7611414Z"
+      },
+      "transport": {
+        "elapsedMs": 20012,
+        "clientDeadlineMs": 20000,
+        "outcome": "client_timeout_without_http_response",
+        "expectedVersion": "1",
+        "currentVersion": "0",
+        "scope": "Actual signed local stale request; no successful409 or retry-mechanism claim"
+      },
+      "rpcDiagnostics": [
+        {
+          "status": 403,
+          "context": {
+            "lockMs": null,
+            "statementMs": null,
+            "role": null,
+            "sessionRole": null
+          },
+          "code": "42501",
+          "message": "K2_CATEGORY_POLICY_ADMIN_REQUIRED"
+        }
+      ],
+      "authenticatedReadContext": {
+        "lockMs": "2000",
+        "statementMs": "10000",
+        "role": "authenticated",
+        "sessionRole": "authenticator"
+      },
+      "conservationPairs": {
+        "bff-sequence-recovery.sql = bff-sequence-after.sql": "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f",
+        "bff-before-admin_sessions.rows = bff-after-admin_sessions.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bff-before-admin_session_events.rows = bff-after-admin_session_events.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bff-before-admin_request_rate_buckets.rows = bff-after-admin_request_rate_buckets.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bff-before-admin_request_nonces.rows = bff-after-admin_request_nonces.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bff-before-admin_command_receipts.rows = bff-after-admin_command_receipts.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bff-before-admin_bff_secrets.rows = bff-after-admin_bff_secrets.rows": "0035b37d232f61c98cdbd683125b87301215fe067584c728213b0c3050329b1e",
+        "auth-rows-before.json = auth-rows-after.json": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+        "auth-schema-before.json = auth-schema-after.json": "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460",
+        "category-policy-before.rows = category-policy-after.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "category-events-before.rows = category-events-after.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "category-config-before.rows = category-config-after.rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "completeOriginalRecovery": true,
+      "artifactHashes": {
+        "executed-source.mjs": "466892b9d4290d26b658b993209e28fae303132da71c9ecc10abda75f1f8f028",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "category-conflict-preparer-source.mjs": "a7f817114145bb1b6107232fdf86ce054aa4a7b7775b8183d097acde4e26b2ae",
+        "category-conflict-preparation.json": "95c51725a904806c3e07b49fa74f7f41a4ade6f69a0a77ef10cb8909fe297ec8",
+        "runner-source.mjs": "df23cf2aa5a4d471042f3dcbe2f2a3c637e9211968d208efc2fefa50fd48c329",
+        "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+        "bff-helper.mjs": "84b85a02860a352cbc621fbc21dfacf91f43cfe47a9e69d0d8201a4b176d2e20",
+        "preparation.json": "67f0335e0d9f51b344e95da1f8ffb5f9986fbb976d9e3ee0bd2d44588884b357",
+        "staging/k2/image-probe.sh": "c96918b3649e7795d3aa2caba654c9184f07438f23f17bc2dfb03b84d30317f0",
+        "staging/k2/init.sh": "38eb81d0baa39caf89e022f54a398a710c66c45f85697063617757c8fdf5739a",
+        "execution01/result.json": "2bd20e256934fd60fbe6dd1285fec5cf741e78598819e4fb5964d7b0ef1adec4",
+        "execution01/serial.log": "ce4fc977015365932469432e229ae135ea059ca0d1b59b64a96ce4499fa9e7ce",
+        "host-driver-result.json": "f5b523ff9e3bb7ff9d75fe3a2d535577b3055dc16278e06ee33acd54e06295bb"
+      },
+      "manifest": {
+        "owningMap": "MAP-018",
+        "idea": "IDEA-20261010-08",
+        "prepared": true,
+        "nativeVerified": false,
+        "providerWrites": false,
+        "caseName": "oci-policy-http05",
+        "sourceLineage": {
+          "baseCase": "oci-tariff03",
+          "baseNativeResultSha256": "a2a67ef353f84e8339803b514cdbd1511b056263ddf67405965dc2f6d3c664b8",
+          "baseReceiptSha256": "d117feaeaaac9fc27e5357af8481a8e8d2ab8fbda0fc940098e6cd5d2abe4e49",
+          "baseSourceSha256": "299fe473578a26d1a8b746c26228ef313eb5ddf240655bac52caa6a40c9d73a2",
+          "baseDriverSha256": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+          "baseHelperSha256": "f87bc4540c53fc8016e725d5ac3f10515775f74f71104e8bd65a69bc52a863b8",
+          "derivationSha256": "a7f817114145bb1b6107232fdf86ce054aa4a7b7775b8183d097acde4e26b2ae",
+          "derivedSourceSha256": "466892b9d4290d26b658b993209e28fae303132da71c9ecc10abda75f1f8f028"
+        },
+        "artifacts": {
+          "executed-source.mjs": "466892b9d4290d26b658b993209e28fae303132da71c9ecc10abda75f1f8f028",
+          "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+          "bff-helper.mjs": "84b85a02860a352cbc621fbc21dfacf91f43cfe47a9e69d0d8201a4b176d2e20",
+          "runner-source.mjs": "df23cf2aa5a4d471042f3dcbe2f2a3c637e9211968d208efc2fefa50fd48c329",
+          "staging/k2/image-probe.sh": "c96918b3649e7795d3aa2caba654c9184f07438f23f17bc2dfb03b84d30317f0",
+          "staging/k2/init.sh": "38eb81d0baa39caf89e022f54a398a710c66c45f85697063617757c8fdf5739a"
+        },
+        "limits": "Original imported02 package/source, no correction or combined package proof. Stale-only synthetic category/config fixture, actual local Auth/BFF/PostgREST. Recovery compares policy/events/config, retained BFF scopes, original88/two sequences/full schema/global authority. No populated policy success/history or all149 private conservation/provider/hosted proof."
+      }
+    }
+  ],
+  "limits": "05 context proves an authenticated brands read over the same configured local connection, not failed RPC header values or provider configuration. Both stale requests have no HTTP response before client deadline; later42501 occurs during profile teardown and is not stale branch or retry evidence.04 original recovery failed despite scoped BFF conservation; RAM discard/process stop does not substitute for recovery.05 complete original scoped recovery is not populated category history or all149 rows.",
+  "recovery": "Never reuse disposed04/05. Recreate fresh pinned successor; preserve failed evidence. Temporary observer removed in successful05 before exact catalog comparison.",
+  "verification": {
+    "command": "node .tools/record-category-context-diagnostic.mjs",
+    "witnessSha256": "546c8580ae0d064293e7310775ee3795566f05517c21b7e60c074a694e3d7d1b",
+    "reviewPending": false,
+    "independentReview": {
+      "reviewer": "auth_migration_review",
+      "critical": 0,
+      "important": 0,
+      "artifactPinsVerified": 26,
+      "conservationPairsVerified": 19,
+      "scope": "Actual source/artifact/result/pair/limits review; primary-observed host-stop evidence not re-executed"
+    },
+    "finalizeCommand": "node .tools/finalize-category06-receipts.mjs"
+  },
+  "remaining": "MAP-018: paired guarded category business error correction/repeated409/native positive publication/idempotency and fullpackage context/recovery; authority/provider/realhost gates retained."
+}
