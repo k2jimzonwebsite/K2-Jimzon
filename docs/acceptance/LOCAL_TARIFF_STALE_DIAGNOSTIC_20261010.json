@@ -1,0 +1,245 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "scope": "Actual isolated local Auth2.196.0/PostgREST14.17/captured PostgreSQL17.6 stale-only tariff diagnostic through production router, temporary exact telemetry/preauth and seven-day session prerequisites; local unconfigured bot opt-in; no browser/hosted/provider qualification",
+  "cases": [
+    {
+      "case": "oci-tariff01",
+      "native": {
+        "pid": 6932,
+        "exit": 0,
+        "guestSuccess": false,
+        "moduleGucs": false,
+        "postgresVersion": "17.6"
+      },
+      "host": {
+        "passed": false,
+        "lastStage": "GET_delivery_customer-rates",
+        "tariff": null,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused"
+        ]
+      },
+      "hashes": {
+        "executed-source.mjs": "c927b40fc3415c4f0c90b42d8ddaff82c36b86a13d99dbb7c9b9c3b08903cb6c",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "eadc6d9e2969acea2f832774a862006fd93105dffe78d6f1d290cee6bf03ac00",
+        "host-driver.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+        "bff-helper.mjs": "aa7bd86309f02766b8a70af4260e218c99f5313c6a46598e33db6e4fbe987703",
+        "preparation.json": "90b6d5d16f093deea450f284749c8b43fde99cbd8e3b8b92c67ba81ecf94ab92",
+        "execution01/result.json": "d4c402688646234f138e42c88a673ba93a2ee8193302660643806aba95dca831",
+        "execution01/serial.log": "5ba38a629b1d93fdd32be32900945d704a0ce7f1ef6d853f824108c457ad555a",
+        "host-driver-result.json": "b98fedfc2b8edb1cb04e888ba873dbc4c719e4ad6e37d8d3f6ca16593f6b8265"
+      },
+      "shutdown": {
+        "processPresent": false,
+        "listeners": 0,
+        "readOnlyActualHostCheck": true
+      },
+      "recovery": {
+        "privateMarker": true,
+        "originalRows": [
+          "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-before.json",
+          "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-after.json"
+        ],
+        "catalogs": [
+          "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-before.json",
+          "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-after.json"
+        ],
+        "authorityMarkers": 2
+      },
+      "interpretation": "Failed witness null-current assumption before POST; private/original/catalog/authority recovery completed."
+    },
+    {
+      "case": "oci-tariff02",
+      "native": {
+        "pid": 20284,
+        "exit": null,
+        "guestSuccess": false,
+        "moduleGucs": false,
+        "postgresVersion": "17.6"
+      },
+      "host": {
+        "passed": false,
+        "lastStage": "POST_delivery_customer-rates",
+        "tariff": null,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused"
+        ]
+      },
+      "hashes": {
+        "executed-source.mjs": "f690fb4d7a9923ebeef7ff8389672ac94c400385ef2a74bf0a516fc2ce58018f",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "8219ca6ec1875e90abb788694c2c476ce064d75b32aa2d3b6434c32c3455461b",
+        "host-driver.mjs": "ebc1cc907e4c20dca516fc1d9c28b30edbba8acb44f9c550aa4d7b24520cfa27",
+        "bff-helper.mjs": "9a0721ab7d435bc2d1ee1d304f9eba34856c12eda2bade613b31b5605eca4351",
+        "preparation.json": "90b6d5d16f093deea450f284749c8b43fde99cbd8e3b8b92c67ba81ecf94ab92",
+        "execution01/result.json": "65efbc25a49130479214785cb6037daed7c8172c195b334bc57ebcda57011863",
+        "execution01/serial.log": "a99acd351ee8c1a6d209a82b6a6c5bb2747b3a145686176ea80e572ccc4696cb",
+        "host-driver-result.json": "ca9173056eed62d3a8437ed83e781431251964b09863ce96e586a0e53691e60a"
+      },
+      "shutdown": {
+        "processPresent": false,
+        "listeners": 0,
+        "readOnlyActualHostCheck": true
+      },
+      "recovery": {
+        "privateMarker": false,
+        "originalRows": [],
+        "catalogs": [],
+        "authorityMarkers": 1
+      },
+      "interpretation": "POST client deadline then inherited numeric diagnostic error caused HOST_DRIVER_CONTROL_FAILURE and abort; no complete recovery proof. Fresh RAM guest disposed, no persisted target reused."
+    },
+    {
+      "case": "oci-tariff03",
+      "native": {
+        "pid": 17168,
+        "exit": 0,
+        "guestSuccess": true,
+        "moduleGucs": true,
+        "postgresVersion": "17.6"
+      },
+      "host": {
+        "passed": true,
+        "lastStage": "GET_session",
+        "tariff": {
+          "elapsedMs": 20001,
+          "clientDeadlineMs": 20000,
+          "outcome": "client_timeout_without_http_response",
+          "expectedVersion": 1,
+          "currentVersion": 0,
+          "scope": "Genuine local signed stale request; no completed HTTP error or retry mechanism claim"
+        },
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "brands_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "categories_anon_read_bad_jwt_anon_and_customer_write_refused",
+          "staff_brands_jwt_options_create_read_delete_absence",
+          "staff_categories_jwt_options_create_read_delete_absence",
+          "admin_brands_jwt_options_create_read_delete_absence",
+          "admin_categories_jwt_options_create_read_delete_absence",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused",
+          "routed_tariff_original_sql_stale_client_timeout_reproduced",
+          "routed_tariff_current_readback_unchanged",
+          "routed_logout_registry_inactive_server_refresh_refused",
+          "routed_saved_old_cookie_refused_after_logout",
+          "routed_logout_cleared_cookie_refused",
+          "global_logout",
+          "logout_refresh_refused",
+          "admin_hard_delete_user"
+        ]
+      },
+      "hashes": {
+        "executed-source.mjs": "299fe473578a26d1a8b746c26228ef313eb5ddf240655bac52caa6a40c9d73a2",
+        "executed-derivation.mjs": "cda718fd5f09991ca9fdd7b4eac234c6fa28b457f76cec53f792dff42b43f496",
+        "runner-source.mjs": "48dc7cad7f2922827c0c3f2efdf5be80d65e8ccb56340901998c8e78a73327ae",
+        "host-driver.mjs": "6953bbe321883b6de06aadf91b48ce1ddd18ee9603a1e80049c9251d91735bd8",
+        "bff-helper.mjs": "f87bc4540c53fc8016e725d5ac3f10515775f74f71104e8bd65a69bc52a863b8",
+        "preparation.json": "90b6d5d16f093deea450f284749c8b43fde99cbd8e3b8b92c67ba81ecf94ab92",
+        "execution01/result.json": "a2a67ef353f84e8339803b514cdbd1511b056263ddf67405965dc2f6d3c664b8",
+        "execution01/serial.log": "6c1fc0e290483bf688bc505d55c13017bcd70831fa4604bbe003fa1be97c8ce5",
+        "host-driver-result.json": "418d279c13b91df7179d18cb30beacfef0fb0706bd9e0270e8d8c1bda86225f5"
+      },
+      "shutdown": {
+        "processPresent": false,
+        "listeners": 0,
+        "readOnlyActualHostCheck": true
+      },
+      "recovery": {
+        "privateMarker": true,
+        "originalRows": [
+          "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-before.json",
+          "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-after.json"
+        ],
+        "catalogs": [
+          "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-before.json",
+          "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-after.json"
+        ],
+        "authorityMarkers": 2
+      },
+      "interpretation": "Successful diagnostic harness proves20s client timeout without HTTP response, unchanged current tariff readback and complete retained recovery scope; it does not prove corrected409 or underlying retry mechanism."
+    }
+  ],
+  "providerWrites": false,
+  "sqlOverlayApplied": false,
+  "tariffPublicationAttempted": false,
+  "limits": "Current tariff head is unconfigured/current null (comparison version0). Synthetic request expected1 with bounded example rates is deliberately stale before publication.03 proves client timeout and conserved current readback; no completed HTTP503/409, backend error readback or measured retry mechanism. Original88-table/two-sequence projection, full installed catalog and original/private Auth/BFF recovery witnesses are scoped evidence; not whole149-relation tariff history snapshot or revised full package qualification.",
+  "remaining": "Prepare reviewed exact tariff business-conflict SQLSTATE overlay; qualify actual HTTP409/refusal/replay/positive guarded tariff mutation and data-retaining full installation recovery in fresh owned successor. Retain16-business-error/authority/provider/real-host gates in MAP-018.",
+  "recovery": "Preserve private01/02/03 evidence; never restart disposed state. Recreate only fresh marked successor from pinned runtime. Revert this documentation slice if needed; no provider rollback.",
+  "independentReview": {
+    "reviewer": "auth_migration_review",
+    "critical": 0,
+    "important": 0,
+    "artifactsVerified": 27,
+    "scope": "Retained artifacts, serial/hash lines, source timeout/numeric guard, outcomes and bounded recovery claims; shutdown checks parent-observed"
+  }
+}
