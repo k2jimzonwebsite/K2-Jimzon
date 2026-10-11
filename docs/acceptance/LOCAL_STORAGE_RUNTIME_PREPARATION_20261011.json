@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "date": "2026-10-11",
+  "scope": "Public official Linux amd64 Storage image acquisition and archive inspection only",
+  "privateCase": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/storage-runtime01",
+  "source": "https://raw.githubusercontent.com/supabase/supabase/master/docker/docker-compose.yml",
+  "image": "supabase/storage-api:v1.74.0",
+  "indexDigest": "sha256:f1546fac6d1c7e345428ac904bfaa7be7cecd50a1f549fe1cf38c628a7b15c85",
+  "manifestDigest": "sha256:63da55733ce9d7592d860739acb94f0b6189d880b7565d247ee5b195be854db1",
+  "configDigest": "sha256:cbd50858d9a1d085d301f10a5f4ab5c3214e44674cfa111f2a1226cc391c1ad9",
+  "pins": {
+    "metadata-admission.json": "2e1dfcfeb9bbdb477a22fdf43983a3abf3f4911d9ad84a770440de1bb1e5ec21",
+    "layer-acquisition.json": "c2ca0774c55bbf58e01e90daad1652c40433eb0fa845db1744a965829c069f06",
+    "official-compose.yml": "46b00ea67dfa4bb0360ab0cd0eb8fdae914a6e77c2e75e1ab49f55ff6ae35c09",
+    "index.json": "f1546fac6d1c7e345428ac904bfaa7be7cecd50a1f549fe1cf38c628a7b15c85",
+    "manifest.json": "63da55733ce9d7592d860739acb94f0b6189d880b7565d247ee5b195be854db1",
+    "config.json": "cbd50858d9a1d085d301f10a5f4ab5c3214e44674cfa111f2a1226cc391c1ad9"
+  },
+  "layers": [
+    {
+      "name": "00.tar.gz",
+      "digest": "sha256:e6f31ffc071e5560b82a8685fba8214954e5721e3e49269d00958316edbe89fe",
+      "size": 3844421
+    },
+    {
+      "name": "01.tar.gz",
+      "digest": "sha256:d7e873383d31196aa47949d3be0e9f826a16493f04a3a78a45c4e816b29cbaa0",
+      "size": 53377241
+    },
+    {
+      "name": "02.tar.gz",
+      "digest": "sha256:00981fef6de82bf9ed0283a250ecb528b4264630c31b816af437f37be88d5761",
+      "size": 1262090
+    },
+    {
+      "name": "03.tar.gz",
+      "digest": "sha256:264aff2833b7db440aa59ee560485bbc7f01e29e59917fefb5b1f07fd7303ecf",
+      "size": 443
+    },
+    {
+      "name": "04.tar.gz",
+      "digest": "sha256:0a85b149f5b77a71dd640ccdc6d601032433462e2c1932053709be5ea5413819",
+      "size": 111211057
+    },
+    {
+      "name": "05.tar.gz",
+      "digest": "sha256:36a3533204882e8935ab257f527316a20300c4871d85937a3615d1524a3991df",
+      "size": 93
+    },
+    {
+      "name": "06.tar.gz",
+      "digest": "sha256:a6f36c1182d9c9b3676112dbd5bbcf26d65a323bf6793183058d11a3e3472e46",
+      "size": 181518
+    },
+    {
+      "name": "07.tar.gz",
+      "digest": "sha256:4135400def2aac7f091089af35525f78e7013bceff9646306ff1cd1cccb8c814",
+      "size": 660
+    },
+    {
+      "name": "08.tar.gz",
+      "digest": "sha256:01d24c3560cf276235bbab47e90dd32ccf24cba154ed1dc9616809315a28dcaa",
+      "size": 13006308
+    },
+    {
+      "name": "09.tar.gz",
+      "digest": "sha256:3c88e9a69541e3a7250261cd85fbb3919704cd8faa3005eab435223e9104312f",
+      "size": 32469
+    },
+    {
+      "name": "10.tar.gz",
+      "digest": "sha256:d2780d7704a5c7cc8da65a9ec35703a9df55f9ada81ee32db96988f8476136e3",
+      "size": 55618399
+    },
+    {
+      "name": "11.tar.gz",
+      "digest": "sha256:35ed90d85712696a28d677d1ce779d39e43f834831cec4fcc85a0875e94461e2",
+      "size": 1795623
+    },
+    {
+      "name": "12.tar.gz",
+      "digest": "sha256:56e1017e84a3769ef3fc48d9513c632d9d86ba273446fba98260658b5e657b04",
+      "size": 587
+    },
+    {
+      "name": "13.tar.gz",
+      "digest": "sha256:fb95fef3d6a081dd8166c17a093fc6cc081ac3683aa9649a6cf88b226ec777ef",
+      "size": 271
+    }
+  ],
+  "archiveInspection": [
+    {
+      "layer": "00.tar.gz",
+      "entries": 515,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 96,
+        "2": 335,
+        "0": 84
+      }
+    },
+    {
+      "layer": "01.tar.gz",
+      "entries": 2983,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 519,
+        "0": 2459,
+        "2": 5
+      }
+    },
+    {
+      "layer": "02.tar.gz",
+      "entries": 36,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 16,
+        "2": 4,
+        "0": 16
+      }
+    },
+    {
+      "layer": "03.tar.gz",
+      "entries": 4,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 3,
+        "0": 1
+      }
+    },
+    {
+      "layer": "04.tar.gz",
+      "entries": 3689,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 202,
+        "0": 3413,
+        "2": 55,
+        "1": 19
+      }
+    },
+    {
+      "layer": "05.tar.gz",
+      "entries": 1,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 1
+      }
+    },
+    {
+      "layer": "06.tar.gz",
+      "entries": 3,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 1,
+        "0": 2
+      }
+    },
+    {
+      "layer": "07.tar.gz",
+      "entries": 3,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 2,
+        "0": 1
+      }
+    },
+    {
+      "layer": "08.tar.gz",
+      "entries": 2937,
+      "emptyNames": 0,
+      "whiteouts": 45,
+      "unsafeNames": 0,
+      "types": {
+        "5": 471,
+        "0": 2366,
+        "2": 100
+      }
+    },
+    {
+      "layer": "09.tar.gz",
+      "entries": 104,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 5,
+        "0": 99
+      }
+    },
+    {
+      "layer": "10.tar.gz",
+      "entries": 71482,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 7289,
+        "2": 37,
+        "0": 64155,
+        "1": 1
+      }
+    },
+    {
+      "layer": "11.tar.gz",
+      "entries": 1204,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 76,
+        "0": 1128
+      }
+    },
+    {
+      "layer": "12.tar.gz",
+      "entries": 2,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 1,
+        "0": 1
+      }
+    },
+    {
+      "layer": "13.tar.gz",
+      "entries": 2,
+      "emptyNames": 0,
+      "whiteouts": 0,
+      "unsafeNames": 0,
+      "types": {
+        "5": 1,
+        "0": 1
+      }
+    }
+  ],
+  "verified": [
+    "Official compose names v1.74.0",
+    "One Linux amd64 manifest",
+    "Manifest/config SHA256 match descriptors",
+    "All14 layer SHA256 and sizes freshly match descriptors",
+    "Python tarfile reads all14 without empty names, absolute names or parent traversal"
+  ],
+  "diagnostics": [
+    "Windows tar lists00-09 but exits1 on10 with empty or unreadable filename warnings",
+    "Layer08 contains45 OCI whiteouts; .tools/probe-public-http-runtime.mjs admission rejects their filenames; the full fixture simple tar extractor does not implement OCI deletion semantics",
+    "Current accepted browser helper proxies Auth/PostgREST only; routed requests are capped16KiB and decoded UTF8"
+  ],
+  "unverified": [
+    "OCI filesystem merge, whiteout processing and link target admission",
+    "Native Node24.20.0 and Storage1.74.0 process execution/health",
+    "Storage schema/migrator compatibility and original authority conservation",
+    "Actual private package uploads/registration/readback/cleanup",
+    "Connected genuine imported CSV/review/canonical stock/publication/listing and original database/private/Storage recovery",
+    "Hosted provider and human acceptance"
+  ],
+  "recovery": "Preserve this immutable acquisition and previous fixtures; no runtime launched, extraction, database/provider mutation, application edit or deployment occurred. Continue in a fresh owned case after filesystem/migration admission.",
+  "execution": false,
+  "extraction": false,
+  "databaseChanges": false,
+  "providerWrites": false,
+  "deployed": false
+}
