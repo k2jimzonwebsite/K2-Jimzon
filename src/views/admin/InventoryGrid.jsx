@@ -217,6 +217,8 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   const [referenceNotice, setReferenceNotice] = useState('')
   const [editError, setEditError] = useState('')
   const editOperationKey = useRef(null)
+  const editRequest = useRef(null)
+  const [editPending, setEditPending] = useState(false)
   const [notice, setNotice] = useState(null)
   const [search, setSearch] = useState('')
   const [stockFilter, setStockFilter] = useState('all')
@@ -390,6 +392,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
     slug:                     p.slug || null,
     seo_keywords:             Array.isArray(p.seo_keywords) ? p.seo_keywords : (p.seo_keywords ? String(p.seo_keywords).split(',').map(s => s.trim()) : []),
     is_featured:              Boolean(p.is_featured),
+    ...(secure ? { is_human_reviewed: p.is_human_reviewed === true } : {}),
     product_video_url:        p.product_video_url || null,
     internal_notes:           p.internal_notes || null,
   })
@@ -401,6 +404,8 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
     setEditError('')
     setProductTaxonomyReview(null)
     editOperationKey.current = null
+    editRequest.current = null
+    setEditPending(false)
     if (!secure) { setEditingProduct(product); return }
     if (!canManageProducts) { flash('Only an administrator can change product-master records.', true); return }
     const result = await getAdminProductMasterBff(product.sku)
@@ -431,13 +436,27 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
         patch.brand_id = editingProduct.brand_id
         patch.category_id = editingProduct.category_id
       }
-      const result = await commandAdminProductMasterBff('update', {
+      const payload = editRequest.current || {
         sku: editingProduct.sku, patch,
         expectedUpdatedAt: editingProduct.updated_at, reason: editReason.trim(),
-      }, operationKey)
+      }
+      editRequest.current = payload
+      const result = await commandAdminProductMasterBff('update', payload, operationKey)
       setSaving(false)
-      if (!result.ok) { setEditError(result.error); return }
+      if (!result.ok) {
+        // Only an initial explicit rejection can release the request. After a
+        // lost reply, even a later auth refusal does not resolve the first save.
+        const rejected = ['PRODUCT_COMMAND_INVALID', 'PRODUCT_VERSION_CONFLICT', 'PRODUCT_TAXONOMY_INITIAL_ONLY',
+          'PRODUCT_NOT_FOUND', 'PRODUCT_ADMIN_REQUIRED', 'ORIGIN_DENIED', 'SESSION_EXPIRED',
+          'SESSION_REVOKED', 'MFA_REQUIRED', 'STAFF_ACCESS_REQUIRED', 'RATE_LIMITED'].includes(result.code)
+        if (!editPending && rejected) { editOperationKey.current = null; editRequest.current = null }
+        else setEditPending(true)
+        setEditError(result.error)
+        return
+      }
       editOperationKey.current = null
+      editRequest.current = null
+      setEditPending(false)
       const savedSku = editingProduct.sku
       setEditingProduct(null)
       setEditReason('')
@@ -458,6 +477,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   }
 
   const set = (field, val) => {
+    if (saving || editPending) return
     setEditError('')
     setEditingProduct(prev => ({ ...prev, [field]: val }))
   }
@@ -878,7 +898,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-2 md:p-4 animate-in fade-in">
           <AdminDialog
             onClose={() => { setEditingProduct(null); setEditError('') }}
-            closeDisabled={saving}
+            closeDisabled={saving || editPending}
             labelledBy="product-editor-title"
           >
           <div className="w-full max-w-3xl rounded-adm border border-adm-line bg-adm-surface shadow-2xl flex flex-col max-h-[96vh]">
@@ -889,7 +909,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                 <h3 id="product-editor-title" className="font-sans text-xl font-semibold text-white">Edit Product</h3>
                 <p className="text-sm text-white/60 font-mono mt-0.5">{editingProduct.sku}</p>
               </div>
-              <button onClick={() => { setEditingProduct(null); setEditError('') }} disabled={saving} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10 disabled:opacity-50" aria-label="Close product editor">
+              <button onClick={() => { setEditingProduct(null); setEditError('') }} disabled={saving || editPending} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10 disabled:opacity-50" aria-label="Close product editor">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -906,7 +926,8 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                 ))}
               </div>
 
-              <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+              <div className="min-h-0 p-4 sm:p-6 overflow-y-auto flex-1">
+              <fieldset disabled={saving || editPending} className="m-0 min-w-0 border-0 p-0">
 
                 {/* ── Details tab: Identity + Content ──────────────────── */}
                 <div className={editTab === 'details' ? 'space-y-6' : 'hidden'}>
@@ -1106,6 +1127,21 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                       </div>
                    </DetailBlock>
 
+                   {secure && <DetailBlock title="Human review" defaultOpen>
+                    <label className="flex min-h-11 cursor-pointer items-center gap-3 py-3 text-base text-white/90">
+                      <input type="checkbox" checked={editingProduct.is_human_reviewed === true}
+                        disabled={saving || !canManageProducts}
+                        onChange={event => set('is_human_reviewed', event.target.checked)}
+                        aria-describedby="product-human-review-help"
+                        className="h-5 w-5 shrink-0 rounded border border-adm-line accent-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue disabled:cursor-not-allowed" />
+                      <span>I reviewed this product’s details and pricing</span>
+                    </label>
+                    <p id="product-human-review-help" className="text-sm leading-relaxed text-white/70">
+                      Save Changes records this decision with your reason. Clear it if the product needs another review.
+                      Publication and Website assignment remain separate decisions.
+                    </p>
+                   </DetailBlock>}
+
                    <DetailBlock title="Status & staff notes">
                     <div>
                       <Label>Status</Label>
@@ -1127,25 +1163,28 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                    </DetailBlock>
 
                  </div>
+              </fieldset>
               </div>
 
               {/* Footer */}
               <div className="shrink-0 space-y-3 border-t border-adm-line bg-black/20 px-4 py-4 sm:px-6">
                 <p className="text-sm text-white/55 italic">Product details save separately from photos, publication, and batch reconciliation.</p>
                 {editError && <StateBanner tone="danger">{editError}</StateBanner>}
+                {editPending && <StateBanner tone="warning">This save may already be recorded. Retry the same saved decision before changing or closing it. Keep this page open; reloading loses this pending request.</StateBanner>}
                 {secure && <label className="block text-sm font-semibold text-white/70">Reason for this change
-                  <textarea value={editReason} onChange={(event) => { setEditReason(event.target.value.slice(0, 500)); editOperationKey.current = null }} minLength={8} maxLength={500} required className="mt-1 min-h-[88px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" />
+                  <textarea disabled={saving || editPending} value={editReason} onChange={(event) => { setEditReason(event.target.value.slice(0, 500)); editOperationKey.current = null }} minLength={8} maxLength={500} required className="mt-1 min-h-[88px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" />
                       <span className="mt-1 block text-xs font-normal text-white/45">Saved permanently in this product's change history.</span>
                 </label>}
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                   <button type="button" onClick={() => { setEditingProduct(null); setEditError('') }}
+                    disabled={saving || editPending}
                     className="min-h-11 rounded-adm-sm px-4 py-2 text-base font-semibold text-white/60 transition-colors hover:text-white">
                     Cancel
                   </button>
                   <button type="submit" disabled={saving || (secure && editReason.trim().length < 8)}
                     className="flex min-h-11 items-center justify-center gap-2 rounded-adm-sm bg-blue px-6 py-2 text-base font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-blue/90 active:scale-[0.98] disabled:opacity-50">
                     {saving && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
-                    {saving ? 'Saving…' : 'Save Changes'}
+                    {saving ? 'Saving…' : editPending ? 'Retry saved decision' : 'Save Changes'}
                   </button>
                 </div>
               </div>

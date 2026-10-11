@@ -1,0 +1,105 @@
+{
+  "owningMap": "MAP-018",
+  "ideas": [
+    "IDEA-20261009-11",
+    "IDEA-20261001-03"
+  ],
+  "date": "2026-10-12",
+  "request": "Connect existing protected human-review field to explicit reasoned Admin editor decision; preserve independent publication and Website assignment.",
+  "changed": [
+    "Explicit strict-boolean control and signed patch",
+    "Current reviewed value preserved on other detail saves",
+    "Immutable in-memory payload/version/reason/key on uncertain save",
+    "Editing, close, Cancel and Escape frozen until exact retry confirms",
+    "Only initial explicit rejection releases request",
+    "Constrained scrolling body preserves fixed footer"
+  ],
+  "providerWrites": false,
+  "deployment": false,
+  "productionPromotion": false,
+  "sourcePins": {
+    "src/views/admin/InventoryGrid.jsx": "5e714411d3ea3f5537d258b9c82fa15a25461415dc207b83a5089ec984e1b7c8",
+    "tests/admin-human-review-editor.spec.js": "e0fdd9679eb63c2a30f356859a01391c9d75e50fdf987ffa0a78f4bb972ed4d1",
+    "tests/fixtures/admin-product-master-harness.jsx": "e05ec7f675e30b46f4c3c22cd863a1c8f80cec5d0e9282ed79f42dc1db5b753a",
+    "playwright.product-master.config.js": "d23e9ed8c6f9dbca106371eb9a118918f8ad180941aa88b20f68789bbce3c579",
+    "server/admin-bff/product-master.js": "be5e920c73cc2046798d66903759e7e75b61c7ebd6f6289807d85f943fb86bf7",
+    "src/services/adminBffService.js": "ba620399f94e078d60d2c1d4b6ed3d89d53d500b3e765d8c692a6e7e0ec3ab51"
+  },
+  "verification": [
+    {
+      "command": "npx playwright test tests/admin-human-review-editor.spec.js --config playwright.product-master.config.js",
+      "session": 43460,
+      "exit": 1,
+      "purpose": "Pre-implementation red: missing review control"
+    },
+    {
+      "command": "same focused browser command",
+      "session": 79662,
+      "exit": 1,
+      "purpose": "Collapsed review section hid the control; corrected default-open discoverability"
+    },
+    {
+      "command": "same focused browser command",
+      "session": 78379,
+      "exit": 1,
+      "passed": 2,
+      "failed": 1,
+      "purpose": "Scrolling fieldset overlapped fixed footer and blocked reversal; corrected enclosing min-h-0 scroll div"
+    },
+    {
+      "command": "same focused browser command",
+      "session": 79972,
+      "exit": 0,
+      "passed": 4,
+      "assertions": [
+        "Keyboard explicit true/reopen/false and reason/version",
+        "No published or status field in review patch",
+        "375/1440 horizontal fit, label >=44px and vertical footer separation",
+        "503 then403 then success retain exact request body/key; fields/close/Cancel/Escape frozen",
+        "Initial409version refusal permits Cancel and fresh canonical read",
+        "Previously true review preserved on unrelated Save"
+      ]
+    },
+    {
+      "command": "npx playwright test tests/admin-product-master-ui.spec.js --grep 'keeps secure Product Master' --config playwright.product-master.config.js",
+      "session": 11809,
+      "exit": 0,
+      "passed": 1
+    },
+    {
+      "command": "npm run verify:development",
+      "session": 16163,
+      "exit": 0,
+      "adminChecks": 30,
+      "routeControlGaps": 0
+    }
+  ],
+  "visualReview": {
+    "skills": [
+      "ui-ux-pro-max",
+      "impeccable",
+      "design-taste-frontend",
+      "emil-design-eng"
+    ],
+    "preserved": "Existing K2 Admin Operate/product register, Source Sans, token colors, AdminDialog and separate operational decisions",
+    "widths": [
+      375,
+      1440
+    ],
+    "rounds": "Initial overlap found; one corrected confirmation batch independently inspected",
+    "result": "Review label/help and footer readable and separated, wrapping phone label, no horizontal overflow",
+    "captures": "79972 temporary test-results captures inspected by primary and reviewer, subsequently cleared by the existing regression run. They are not retained or hash-pinned artifacts."
+  },
+  "independentReview": {
+    "agent": "/root/stock_recovery_review",
+    "result": "No remaining Critical/Important findings in bounded in-memory slice; source and corrected375/1440 captures reviewed; runtime79972 supplied by parent, not independently rerun"
+  },
+  "limits": [
+    "Synthetic intercepted browser responses only; not genuine Auth/PostgREST/BFF/database proof",
+    "Pending request is in memory only; reload/navigation/unmount loses it. Durable actor-isolated recovery/reconciliation remains a release gate",
+    "No current-role-switch/late-response or multi-tab browser qualification for this new request retention",
+    "No actual human-review, publication, Website assignment, provider, hosted or live readiness claim"
+  ],
+  "recovery": "Revert only this InventoryGrid/test slice; preserve prior stock/reference receipts. During uncertain Save keep page open and retry exact saved decision; if page was lost reconcile canonical record and durable command evidence before issuing a new decision.",
+  "next": "MAP-018: durable actor-scoped Product Master pending command and safe reconciliation across reload/navigation/session switch, then protected independent Website assignment/recovery UI and genuine rendered media/Live/customer/host/provider/owner gates."
+}
