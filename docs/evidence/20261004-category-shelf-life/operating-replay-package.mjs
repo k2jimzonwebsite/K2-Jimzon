@@ -24,7 +24,9 @@ export function providerOperatingReplayPackage({contractSql,before,after,fragmen
    // IDEA-20261010-08: exact imported union plus Master and tariff transport overlays.
    '8790fa089868b6fff3bcecbf8b9d5cabe28d997136a3437a0416f9f96845d65a',
    // IDEA-20261010-08: same union plus the exact guarded category conflict overlay.
-   '1827099d14153f9d4cf55e43213341c609692d36aac234033dc96cb71e8717b9']
+   '1827099d14153f9d4cf55e43213341c609692d36aac234033dc96cb71e8717b9',
+   // IDEA-20261010-06: reviewed exact reference additions; native integration still required.
+   '0a945f7183c1ba483894fa83a09c2a38bf4bff1bd50a2cfcd6e5144454cfec8d']
   if(!reviewedContents.includes(createHash('sha256').update(contents).digest('hex')))throw Error('PROVIDER_PLATFORM_BARRIER_CONTENTS_DRIFT')
   for(const name of protectedPlatformTables){
    const prior=before.relations.find(r=>r.name===name),next=after.relations.find(r=>r.name===name)

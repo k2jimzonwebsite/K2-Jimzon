@@ -1,0 +1,372 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "classification": "Actual owned PostgreSQL17.6 guarded full reference installation, exact replay, original concurrent drift refusal and cold archive reconstruction; not complete affected recovery or staff workflow qualification",
+  "providerWrites": false,
+  "privateEvidenceRoot": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc",
+  "case": "oci-imported41",
+  "controllerSession": 50203,
+  "controllerExit": 0,
+  "result": {
+    "owningMap": "MAP-023/018",
+    "scope": "Complete guarded10s envelope/fresh/exact replay/cold archive recovery on actual local postgres target; provider physical/locale/project/host qualification separate",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "none",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 2328,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "catalogs": {
+      "before": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      },
+      "after": {
+        "sha256": "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667",
+        "bytes": 2428955
+      },
+      "rollback": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      }
+    },
+    "fullCatalogRollback": true,
+    "processStopped": true,
+    "serialSha256": "c5b082e5fcefebd6c04312aecc8ebd422a577b1e216a9cd61b6a8f769aa4824b"
+  },
+  "independentProcessAbsent": true,
+  "resultSha256": "f54eff9f2c390f2f9e0c2813fd0980b6fa3d3027801e42fd61a9d00cfde32105",
+  "sourcePins": [
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\preparer-source.mjs",
+      "sha256": "2f6942385816d838cdc61fe628b6d2e96c08b1df9f4dc302027d3cd5d7d1325c",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "supabase/prepared/imported_draft_continuation.sql",
+      "sha256": "26ec4db009173aef02e3954504c05991937fb4d503769fc5133f3ebaa999d52a",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\execution01\\after-catalog.json",
+      "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\imported-draft-025b3682-3b76-465e-bd2a-5c2c0c597314\\combined-imported-install.sql",
+      "sha256": "abc2abd5d685913d07508bd704aa1ecc0a29c6b0bae0f870cb47cb5ca82f85d5",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\before-catalog.json",
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\after-catalog.json",
+      "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\guarded-package.json",
+      "sha256": "fa0ef714dd5d3582a8b99a57faa1cef1cb4ad0a56fffbfeee0442d3d8692a55b",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\authority-inventory.json",
+      "sha256": "52bcd96910e4b32dd195e375bcbbef468471d1c166095d3d1b11d29e48ecde7a",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\provider-managed-ddl-authority.json",
+      "sha256": "1f6dac40000249a40a7ad45fa5b71f7cbf348f14144f69f1768282e311a3b06a",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "scripts/prepare-imported-provider-fixture.mjs",
+      "sha256": "5fbf18263a0b0523a50fe26b0c0b655cd56bbc3fea41ceb460ccddc8794f60b8",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs",
+      "sha256": "4b528247a9905f8fb622bf703eb44344efa7f8490652ddbac0c4ef5c2ceb4ed4",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "supabase/prepared/product_master_version_conflict_transport.sql",
+      "sha256": "ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "supabase/prepared/customer_tariff_version_conflict_transport.sql",
+      "sha256": "efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "supabase/prepared/category_policy_version_conflict_transport.sql",
+      "sha256": "974b404f066282f001963d8ba7d548c5e137f95f40c57a73d480abeba7abc6b0",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "supabase/prepared/protected_reference_catalog_delta.json",
+      "sha256": "d482c3e3fd6ca89a95097d24801b9d2dd98a0631449e44739b1758341985d42b",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported39\\execution01\\reference-installed-catalog.json",
+      "sha256": "be85021470fc2976e36fbdeff750641d45810c8c30818f06155336a600866df7",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "supabase/prepared/protected_reference_normalization.sql",
+      "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "supabase/prepared/protected_reference_creation.sql",
+      "sha256": "adc0eac81830a83244cc6848e8d0d89b1480c7fd32e88b1b01223e60a4ac2c02",
+      "currentSourceMatches": true
+    },
+    {
+      "file": "scripts/reference-catalog-contract.mjs",
+      "sha256": "8acf5671543000e966d0228e595ee5d22c898e2d92fda8d06e810d6e0e52631b",
+      "currentSourceMatches": true
+    }
+  ],
+  "files": [
+    {
+      "file": "guarded-package.json",
+      "sha256": "12ec45b2b68e00d25800317bc68d68efff508c86b2067dad057792cf8a9bc6c2"
+    },
+    {
+      "file": "preparation.json",
+      "sha256": "ad8ef06d4a87bcbbfe098ffe6eb21d9403e3d94d6e173a2fe8627e1d8e2bf8d9"
+    },
+    {
+      "file": "imported-composition.json",
+      "sha256": "ceb1393e73ea7e0b50348401ee4bcf0372b0eee605d1e3ce70e9edb05dc84386"
+    },
+    {
+      "file": "preparer-source.mjs",
+      "sha256": "f36642e36bb8f1ae281af092435af22b3b35f9417768f8682d4b328115c32e99"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "83313b768f9b4f97d36f0fd3b9b72e058bc5ccdc6b058b56ce260605387069be"
+    },
+    {
+      "file": "initramfs.cpio",
+      "sha256": "97cd3270609e73f3160c5be34573aecf0a7ddfb805c8c0020fefcb28d2826440"
+    }
+  ],
+  "stagedPins": [
+    {
+      "file": "captured-baseline-check.sql",
+      "sha256": "aff237ec2224cbd9849391e25cdd1dc7646b59f7d3c61850fd5a6ca8e89a6e4b"
+    },
+    {
+      "file": "captured-foundation.sql",
+      "sha256": "cb7cebec0fcf40d9d6fbeed80b18654901b73bb6f5bcae0782c68f592ad6c60c"
+    },
+    {
+      "file": "captured-restore.sql",
+      "sha256": "57c1cf8abe1b36ba078d125751cf91b01c0a46faf9ca0a5be9cd561e60bd9637"
+    },
+    {
+      "file": "cold-authority.sql",
+      "sha256": "da1ab048555c6d3f009b0f6ae811e51528d299ef3d7f4d8daa60632a65948fd1"
+    },
+    {
+      "file": "cold-catalog.sql",
+      "sha256": "6ba79c208b3bc30e79b1b520d1876e589ac734f9799a147bd07d2e7e6aa76a54"
+    },
+    {
+      "file": "foundation-metadata.sql",
+      "sha256": "ba80db4dcc15ed07c1fcf4b6b3a3f62c651f8e1f17155a1bb3cc32297baedbeb"
+    },
+    {
+      "file": "foundation-rows.sql",
+      "sha256": "c3ab70a6b9692ca9df71392f75df92593652b4ef92fff2b8907ade2eada31822"
+    },
+    {
+      "file": "full-contents.sql",
+      "sha256": "076149272dff7b500cb1fc7e09e8f956745491d38863ea234a5221c433d057f8"
+    },
+    {
+      "file": "image-probe.sh",
+      "sha256": "63b06f69ec4e12178daaa192951a7a8c0fccfe1ab87abb1126a6a896f7482bd6"
+    },
+    {
+      "file": "init.sh",
+      "sha256": "40380821b7a2a066d164c1f391c92269516ca38c142e8fc55e29cfbeb6e144c2"
+    },
+    {
+      "file": "managed-check.sql",
+      "sha256": "6d672122ff9422a7a762d459c3ac68c09e7796f98c076dd7510fe16efc7cf5b0"
+    },
+    {
+      "file": "managed-fixtures.sql",
+      "sha256": "dc39aabdfcc689bf6948b7e8052c84eb97fad1afbb200164a74c58430456a974"
+    },
+    {
+      "file": "managed-settings.conf",
+      "sha256": "7997d9ec01a9b9a3306bb5ead38e6f6c006b7354912daac9c7130283669ccdf8"
+    },
+    {
+      "file": "original-row-projection.sql",
+      "sha256": "98b83bb916c9178406ded4c4d6c030ff9c1ed0f3b39bda92e7be1e6826251010"
+    },
+    {
+      "file": "preserved-foundation.dump",
+      "sha256": "f02a7598776b38d35d9d8656178a05ba8e45577668a1be48da2c7553ee696e10"
+    },
+    {
+      "file": "race-blocker.sql",
+      "sha256": "8c132ca0ec2b7b2e517eefd78c0b4fa679bbbe49cbc81c529d841420c9a098bd"
+    },
+    {
+      "file": "race-catalog.sql",
+      "sha256": "10b5ebadfbb099ad8d3cbc624220b731ec49ddbd9f2c855412f922631d277ceb"
+    },
+    {
+      "file": "race-drift.sql",
+      "sha256": "1da0f0f60730e26e5fe867e205ec2b73eb2925346d5b43eb61f4abba627f0f46"
+    },
+    {
+      "file": "race-install.sql",
+      "sha256": "6030155ff4e7957793e92dec513622535fd5ad229f5c1edffec01cda0997ec49"
+    },
+    {
+      "file": "race-locks.sql",
+      "sha256": "22a5193af083cd96b8305ece001c330abadad71062df463d6831ede53d17984f"
+    },
+    {
+      "file": "race-observer.sql",
+      "sha256": "e5eb75ea07860b29b8559fe47872d2e15eee56bf241d8835b2fa329e640a930b"
+    },
+    {
+      "file": "race-recover.sql",
+      "sha256": "b1ca683e1308b0fc0a79e14e3f9a9cdd7187983196fdf30ec55b027d495cc7d5"
+    },
+    {
+      "file": "role-bootstrap.sql",
+      "sha256": "619a43276c9c7ae166cc7f81bb018b2433e577952ab78969efa845fabd504d01"
+    },
+    {
+      "file": "vault-probe.sql",
+      "sha256": "cd15118a69ac9ea0fcd2081e2755c46d4b7391f50d456480755dd9911f7b974d"
+    }
+  ],
+  "target": {
+    "canonicalSha256": "8a71131773cc4886b678e414b9dd040e76ad0539fc1bfdfdbfadd52266ad9bed",
+    "functions": 268,
+    "relations": 163,
+    "types": 344,
+    "exactConstrainedDeltaPassed": true
+  },
+  "package": {
+    "sqlSha256": "e051cd65f6b9b070c70754b61ef521a772bc2bad46c211e918081e23b945457f",
+    "prefixPayloadSha256": "1827099d14153f9d4cf55e43213341c609692d36aac234033dc96cb71e8717b9",
+    "payloadSha256": "0a945f7183c1ba483894fa83a09c2a38bf4bff1bd50a2cfcd6e5144454cfec8d",
+    "fragmentCount": 12,
+    "protectedPlatformTables": [
+      "auth.schema_migrations",
+      "storage.migrations",
+      "storage.buckets_analytics",
+      "storage.buckets_vectors",
+      "storage.s3_multipart_uploads",
+      "storage.s3_multipart_uploads_parts",
+      "storage.vector_indexes"
+    ],
+    "cutoverTableCount": 81,
+    "expectedConnectorProject": "pixplcjqivlfflickobf"
+  },
+  "admission": {
+    "failedPreparedCase": "oci-imported40",
+    "failure": "PROVIDER_PLATFORM_BARRIER_CONTENTS_DRIFT",
+    "fixtureCreated": false,
+    "nativeExecuted": false,
+    "generatedSourceSha256": "e69704d2869dd1c16e40a6c5aa50609380af05c285c7de24f851bce56fde6832",
+    "review": "Independent reference_endpoint_review found no Critical/Important issue in the exact metadata delta and payload admission before native execution",
+    "beforeSource": {
+      "file": "docs/acceptance/sources/reference-installer/operating-replay-package-before.mjs",
+      "sha256": "27d8fb65076cab763c4f33e2cecafce4e5a67c08663e71bfb6208bb828821654"
+    },
+    "afterSource": {
+      "file": "docs/acceptance/sources/reference-installer/operating-replay-package-after.mjs",
+      "sha256": "4b528247a9905f8fb622bf703eb44344efa7f8490652ddbac0c4ef5c2ceb4ed4"
+    },
+    "change": "Only exact whole-payload hash admission; seven platform metadata comparisons/content exclusions, all original identity/deadline/authority/cutover/replay/schema checks unchanged"
+  },
+  "focused": {
+    "command": "node scripts/test-reference-catalog-contract.mjs <actual39 base> <actual39 reference-installed>",
+    "checks": 27,
+    "passed": 27,
+    "refusedUnsafeMutations": 26
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "session": 28498,
+    "exit": 0,
+    "sessionReferenceChecks": 19,
+    "routeControlGaps": 0
+  },
+  "observedMarkers": [
+    "K2_PROTECTED_RACE_RELATION_WAIT_OBSERVED",
+    "K2_PROTECTED_CONCURRENT_DRIFT_REFUSED_AND_RECOVERED",
+    "K2_ALL43768_REFERENCE_ROWS_OK",
+    "K2_GUARDED_FRESH_REPLAY_OK",
+    "K2_ALL88_COMMITTED_ORIGINAL_PROJECTIONS_OK",
+    "K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK",
+    "K2_OCI_GUEST_SUCCESS"
+  ],
+  "limitations": [
+    "Installed reference-specific body/ACL/owner/path/index/trigger drift and post-fragment interruption/full physical row-sequence conservation still require affected qualification",
+    "Original88 projection and captured two sequences are narrower than full installed relations/data conservation",
+    "Cold archive reconstruction is disposable recovery, not populated data-retaining production recovery",
+    "Genuine Auth/PostgREST/BFF and rendered creation-to-paired-Save remain unverified",
+    "Provider physical/locale/project/host, privileged post-final-check authority, production activation and human/physical acceptance are separate gates"
+  ],
+  "nextAction": "MAP-018: extend the existing affected recovery fixture to the pinned reference target, qualify changed-object drift/interruption/full row-sequence conservation; then connect approved existing editor and genuine signed rendered creation-to-paired-Save.",
+  "recovery": "Revert the references opt-in, catalog validator/contract and sole admission entry together; use archived before module if needed. Preserve40 diagnostic and41 immutable execution. No provider rollback required; use fresh successors only.",
+  "finalIndependentReview": {
+    "reviewer": "reference_endpoint_review",
+    "result": "No Critical or Important findings",
+    "verified": [
+      "Actual41 source/stage/runner/initramfs/result/serial/catalog pins",
+      "Each claimed marker appears once; installed target equals constrained39; original cold rollback exact",
+      "Independent PID2328 absence",
+      "Sole exact payload admission/comment; remaining canonical guards byte-identical",
+      "Remaining qualification limits explicit in receipt and MAP-018"
+    ]
+  }
+}

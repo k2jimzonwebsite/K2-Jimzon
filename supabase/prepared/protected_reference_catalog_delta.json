@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "classification": "Exact compiled reference metadata delta; native guarded integration remains unqualified",
+  "providerWrites": false,
+  "beforeCanonicalSha256": "4a1d137ff2d17a7e60ca00718eb417d1e974c4a954fdc9db1ef51b848d9d73fc",
+  "afterCanonicalSha256": "8a71131773cc4886b678e414b9dd040e76ad0539fc1bfdfdbfadd52266ad9bed",
+  "sourceEvidence": "docs/acceptance/PROTECTED_REFERENCE_METADATA_20261011.json",
+  "sources": [
+    {
+      "file": "supabase/prepared/protected_reference_normalization.sql",
+      "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896"
+    },
+    {
+      "file": "supabase/prepared/protected_reference_creation.sql",
+      "sha256": "adc0eac81830a83244cc6848e8d0d89b1480c7fd32e88b1b01223e60a4ac2c02"
+    }
+  ],
+  "functions": {
+    "k2_private.clean_reference_name_v1(p_value text)": "dec20be6a1e33b01d53992989199308bf64abc14ac880da1ccd15ed634884c47",
+    "k2_private.guard_category_reference_entry_v1()": "a373293a1aed6c4d56ca5f09484533c93d17bde80351b930f151f2c3335db314",
+    "k2_private.guard_reference_context_clear_v1()": "78e0d3382a5d5f8fae5560f693735a5db03a24c7244d6b61554d9a30f9216d24",
+    "k2_private.guard_reference_event_immutable_v1()": "0409d5d0b62ccb7f7a7e55680285338195aec75ae23b6786d1e7579c6fb29fbd",
+    "k2_private.guard_reference_insert_v1()": "c938e61b4f37c4606cf7a8033e7548e1fabbe13dc8615111b79e9c1a89f7bbdf",
+    "k2_private.reference_name_key_v1(p_value text)": "439b7e11b78f9a8f7cac0358f58b45867940ba597d847e5a0716e34a5d32eb5c",
+    "public.execute_admin_reference_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)": "12485c529e243a0bde0348ddb80b322d4e5e0f2f7f28be467df0c05430dbab2e"
+  },
+  "relations": {
+    "k2_private.reference_command_context": "3aeda84e38c89a76ad94c25f2138d022949a79213df88c8d0ea2c26e1272ffb9",
+    "k2_private.reference_events": "65c53af3664e1e1b98039d2194046df56f02f9552b5e44eb89cff30d1ed387a6"
+  },
+  "types": {
+    "k2_private._reference_command_context": "1b571ab3cf3f0f73f572bf857cf9c0f72a17ea8e4d706b3bab37fc6b84f8504b",
+    "k2_private._reference_events": "5337c2884bce9ca296e086573292a1a82bcb5dcd68cbdf3d8937b42bf5d44157",
+    "k2_private.reference_command_context": "a1aeef3ecce7a05fa4585fbbcc4633d19cc89e2d70c956ada4e6a7d295cbe8f9",
+    "k2_private.reference_events": "35f041b86a6546c42c329d4e10d6529ac4e2a41a27b5b526a689f19a176b5517"
+  },
+  "relationChanges": {
+    "public.brands": {
+      "indexes": [
+        "edefdc9800fc5670483daa6b9109e1b44f715f0241f36aa4bbbb36f576737d67"
+      ],
+      "triggers": [
+        "cad64aecd6be1c426a3695fcd5e2d6e679b2da1e1d830dbd3c76c57c095011ba"
+      ]
+    },
+    "public.categories": {
+      "indexes": [
+        "0ef84401fdee4c52976603f990909d7b1d88b1141ffc11000810c6edcfa91ba7"
+      ],
+      "triggers": [
+        "52f736ffbee11f16ae9962ba124c0a48955c75659927bc43ef5aa85db282e029",
+        "09aa69d15566f7d2929e804572d7c0c3674bba094a765f82d40bb2018de99486"
+      ]
+    }
+  }
+}
