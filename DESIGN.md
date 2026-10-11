@@ -1386,3 +1386,14 @@ no document overflow. Physical devices/authenticated whole-page acceptance remai
 
 Optional Impeccable register/sidecar metadata refresh remains deferred in the MAP;
 owner-required K2 records remain authoritative. No cosmetic follow-up expands H.
+
+
+11 October MAP-018 / IDEA-20261011-01 stock data-state refinement: all four required design skills applied to the incumbent Admin Operate/product register. No layout/font/color/motion source is changed. One1440/375 stock overview batch inspected; overflow and actual filtered stock6 DOM checks pass. Complete accessibility/device/performance and header usability remain unverified. Source-confirmed secure batchMap clearing/loading gap remains MAP-018.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Unpublished internal Draft omitted by public offer projection; Unknown after stocking. | Protected current canonical staff read displays6 locally, while public offer stays absent. | Staff stock must be independent of channel publication. |
+| Cached quantity could outlive a stricter shelf-life policy. | Current canonical minimum/predicate returns0 while verified physical remains6. | Sellable eligibility and physical custody are separate facts. |
+| Missing or failed stock read. | Existing explicit Unknown state retained. | Absence cannot prove zero. |
+
+The existing batch/custody/expiry map remains cleared/unloaded; this table does not claim that part of Inventory is corrected. Evidence: docs/acceptance/LOCAL_ADMIN_PRODUCT_STOCK_READ_20261011.json.

@@ -6,8 +6,9 @@ import {intakeEvidenceProbe} from './imported-intake-evidence-probe.inc.mjs'
 import sharp from 'sharp'
 import {decodeEvidenceImage} from '../server/admin-bff/product-intake.js'
 import {importedIntakeBrowserProbe} from './imported-intake-browser-probe.inc.mjs'
+import {adminStockReadProbe} from './admin-stock-read-probe.inc.mjs'
 
-export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false,browserWorkflow=false,browserInventory=false,browserOut}={}){
+export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false,browserWorkflow=false,browserInventory=false,staffStock=false,browserOut}={}){
  let mediaCleanup,mediaPath
  const command=async(expect,route,body,key=randomUUID())=>expect(route,await request(route,'POST',body,{headers:{'x-k2-idempotency-key':key}})).result
  const prepareStock=async({expect,cleanup,good},categoryId)=>{
@@ -18,7 +19,7 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
  try{
  await intakeEvidenceProbe(uid,report,credentials,request,jar,{
   publicMedia,
-  ...(browserWorkflow ? {browser: context => importedIntakeBrowserProbe({...context,credentials,uid,report,out:browserOut,browserInventory})} : {}),
+  ...(browserWorkflow ? {browser: context => importedIntakeBrowserProbe({...context,credentials,uid,report,out:browserOut,browserInventory,staffStock})} : {}),
   before:async({client,cleanup,request,good,expect})=>{
    const values=Object.fromEntries(CATALOG_COLUMNS.map(k=>[k,'']))
    Object.assign(values,{template_version:'k2-catalog-v1',name:'Synthetic pantry '+randomUUID(),description:'Imported description to preserve',ingredients:'Synthetic label ingredients',country_of_origin:'Spain',primary_image_url:'https://example.invalid/imported-supplied.jpg',internal_notes:'Explicit synthetic CSV provenance'})
@@ -49,6 +50,7 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
    const brand=brands[0],category=categories[0]
    if(browserInventory)await prepareStock({expect,cleanup,good},category.id)
    report.importedProduct={id:baseline.id,sku,catalogId:baseline.catalog_id,baselineVersion:String(baseline.catalog_record_version),importedDraft:true,zeroBatches:true,syntheticMediaUrl:values.primary_image_url}
+   if(staffStock)await adminStockReadProbe({client,request,good,expect,credentials,target:{baseline,category},report,phase:'before'})
    const readReviewedVersion=async()=>{
     const reviewed=good('review_before_inventory_readback',await client.from('products').select('id,sku,catalog_record_version').eq('id',baseline.id).single())
     assert.equal(reviewed.id,baseline.id);assert.equal(reviewed.sku,baseline.sku)
@@ -114,6 +116,7 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
    assert.equal(batches.reduce((n,b)=>n+Number(b.quantity),0),6)
    assert.equal(batches.reduce((n,b)=>n+Number(b.reserved_quantity),0),0)
    report.importedProduct.canonicalStock=6;report.importedProduct.stockReplay=!browserInventory
+   if(staffStock)await adminStockReadProbe({client,request,good,expect,credentials,target,report,phase:'after'})
    if(!browserInventory)await command(expect,'product-intake/publication',{sessionId,requestedStatus:'under_review',reason:'Explicit synthetic staff package review'})
    const current=good('publication_master',await client.from('products').select('*').eq('id',baseline.id).single())
    await command(expect,'product-master',{action:'update',payload:{sku,patch:{srp:100,is_human_reviewed:true},expectedUpdatedAt:current.updated_at,reason:'Explicit synthetic Admin pricing and human review'}})

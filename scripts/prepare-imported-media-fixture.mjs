@@ -6,9 +6,11 @@ import {createHash} from 'node:crypto'
 import {pathToFileURL} from 'node:url'
 import {execFileSync} from 'node:child_process'
 import {catalogValueHash} from './reference-catalog-contract.mjs'
+import {extendAdminStockReadFixture} from './admin-stock-read-fixture.inc.mjs'
 const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const name=process.argv.find(a=>a.startsWith('--case='))?.slice(7)
-const browserInventory=process.argv.includes('--browser-inventory')
+const staffStock=process.argv.includes('--staff-stock')
+const browserInventory=staffStock||process.argv.includes('--browser-inventory')
 const browserWorkflow=browserInventory||process.argv.includes('--browser-workflow')
 const currentInstallation=browserWorkflow||process.argv.includes('--current-installation')
 const publicMedia=currentInstallation||process.argv.includes('--public-media')
@@ -66,7 +68,7 @@ helper=once(helper,"const chunks=[];let size=0;for await(const chunk of req){siz
 const probeFile=productWorkflow?'scripts/imported-product-workflow-probe.inc.mjs':intakeEvidence?'scripts/imported-intake-evidence-probe.inc.mjs':'scripts/imported-media-transport-probe.inc.mjs'
 const probeName=productWorkflow?'importedProductProbe':intakeEvidence?'intakeEvidenceProbe':'mediaTransportProbe'
 helper=once(helper,'await browserProbe(credentials,report,uid);',intakeEvidence?`await ${probeName}(uid,report,credentials,request,jar);`:'await mediaTransportProbe(uid,report,credentials);')
-if(publicMedia)helper=once(helper,'await importedProductProbe(uid,report,credentials,request,jar);',`await importedProductProbe(uid,report,credentials,request,jar,{publicMedia:true,currentInstallation:${currentInstallation},browserWorkflow:${browserWorkflow},browserInventory:${browserInventory},browserOut:path.dirname(new URL(import.meta.url).pathname.replace(/^\\/([A-Za-z]:)/,'$1'))});`)
+if(publicMedia)helper=once(helper,'await importedProductProbe(uid,report,credentials,request,jar);',`await importedProductProbe(uid,report,credentials,request,jar,{publicMedia:true,currentInstallation:${currentInstallation},browserWorkflow:${browserWorkflow},browserInventory:${browserInventory},staffStock:${staffStock},browserOut:path.dirname(new URL(import.meta.url).pathname.replace(/^\\/([A-Za-z]:)/,'$1'))});`)
 helper+=`\nconst {${probeName}}=await import(pathToFileURL(path.join(process.cwd(),${JSON.stringify(probeFile)})).href)\n`
 if(browserWorkflow){
  // Those refusal/logout contracts are already qualified. Avoid exhausting the
@@ -188,6 +190,7 @@ source=once(source,"const run='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image
 source=once(source, "\"args[args.indexOf('-m')+1]='4096';args", "\"args[args.indexOf('-m')+1]='7168';args").replace('hostfwd=tcp:127.0.0.1:54394-:9997','hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996')
 source=once(source,"stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&","stdout.includes('K2_STORAGE_INTEGRATED_HTTP_READY')&&stdout.includes('K2_STORAGE_INTEGRATED_STOPPED_EXIT_')&&stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&")
 const sources=['scripts/prepare-imported-media-fixture.mjs',probeFile,'scripts/fixture-admin-http-body.mjs','scripts/storage-runtime-layout.mjs',...(intakeEvidence?['server/admin-bff/product-intake.js']:[]),...(productWorkflow?['scripts/imported-intake-evidence-probe.inc.mjs','server/admin-bff/catalog-spreadsheet.js','server/admin-bff/product-master.js','server/admin-bff/channels.js']:[]),...(publicMedia?['server/admin-bff/product-media.js']:[]),...(currentInstallation?['server/admin-bff/references.js','scripts/reference-catalog-contract.mjs']:[])]
+if(staffStock){source=extendAdminStockReadFixture(source,once);sources.push('scripts/admin-stock-read-fixture.inc.mjs','scripts/admin-stock-read-probe.inc.mjs','supabase/prepared/admin_product_stock_read.sql','server/admin-bff/product-stock.js','prepared-api/admin/products.js')}
 if(browserWorkflow)sources.push('scripts/imported-intake-browser-probe.inc.mjs','src/views/admin/ProductIntakeSessionModal.jsx','src/views/admin/InventoryGrid.jsx','src/services/productIntakeService.js')
 const pins=Object.fromEntries(sources.map(f=>[f,hash(fs.readFileSync(f))]))
 if(productWorkflow)source=once(source,'const prep=JSON.parse',`const sourceInputs=${JSON.stringify(pins)};fs.mkdirSync(path.join(out,'source-inputs'));for(const [file,expected]of Object.entries(sourceInputs)){const bytes=fs.readFileSync(file);assert.equal(sha(bytes),expected,file);fs.writeFileSync(path.join(out,'source-inputs',file.replaceAll('/','--')),bytes,{flag:'wx'});}\nconst prep=JSON.parse`)

@@ -12,7 +12,10 @@ const unassigned = { sku: 'synthetic-unassigned', name: 'Synthetic unassigned pr
 // Model PostgREST's projection: unselected columns cannot accidentally pass by
 // leaking fixture fields. Authorization is tested by the genuine local witness.
 function client(stockError = null) {
-  return { from(table) {
+  return { async rpc(name) {
+    assert.equal(name, 'read_admin_product_stock_v1')
+    return { data: stockError ? null : [{ sku: assigned.sku, stock_from_batches: 4 }, { sku: unassigned.sku, stock_from_batches: 0 }], error: stockError }
+  }, from(table) {
     let fields
     const query = {
       select(value) { fields = value.split(','); return query },

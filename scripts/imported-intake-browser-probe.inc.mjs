@@ -5,7 +5,7 @@ import {chromium} from 'playwright'
 import sharp from 'sharp'
 import {decodeEvidenceImage} from '../server/admin-bff/product-intake.js'
 
-export async function importedIntakeBrowserProbe({credentials,uid,report,target,out,trackRequest,trackPath,browserInventory=false}) {
+export async function importedIntakeBrowserProbe({credentials,uid,report,target,out,trackRequest,trackPath,browserInventory=false,staffStock=false}) {
  const origin='http://127.0.0.1:54396',observed=[]
  report.intakeBrowser={scope:'Actual local password/MFA, imported Draft selection, three packaging uploads, manual field review and Save. Public test widget/unconfigured local bot fixture. No hosted/provider acceptance.',requests:observed,checks:[]}
  const result=report.intakeBrowser
@@ -131,6 +131,15 @@ export async function importedIntakeBrowserProbe({credentials,uid,report,target,
    await dialog.waitFor({state:'hidden'})
    await page.getByPlaceholder('Search SKU, product, barcode, or origin',{exact:true}).fill(target.baseline.sku)
    await page.getByText(/^under review$/i).waitFor()
+   if(staffStock){
+    await page.getByText('Stock',{exact:true}).locator('..').getByText('6',{exact:true}).waitFor()
+    for(const[name,viewport]of [['desktop',{width:1440,height:1000}],['phone',{width:375,height:812}]]){
+     await page.setViewportSize(viewport)
+     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1))
+     await page.screenshot({path:path.join(out,'staff-stock-register-'+name+'.png')})
+    }
+    result.staffStockRendered=true
+   }
    result.phoneFirstInventory=true;result.publicationUnderReview=true
    result.checks.push('actual_phone_first_inventory_and_under_review_publication')
   }

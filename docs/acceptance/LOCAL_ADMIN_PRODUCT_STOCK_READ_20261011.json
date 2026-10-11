@@ -1,0 +1,1428 @@
+{
+  "schemaVersion": 1,
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261011-01",
+  "mergedInto": "IDEA-20261009-11",
+  "date": "2026-10-11",
+  "case": "oci-imported-media29",
+  "privateCase": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media29",
+  "providerWrites": false,
+  "scope": "Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save/first-inventory/Under Review publication, joined to qualified backend public-media/Live/Website commands; offline recovery. No customer browser/hosted/provider acceptance",
+  "controllerSession": 80365,
+  "controllerExit": 0,
+  "result": {
+    "owningMap": "MAP-023/018",
+    "scope": "Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save/first-inventory/Under Review publication, joined to qualified backend public-media/Live/Website commands; offline recovery. No customer browser/hosted/provider acceptance",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "7168",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media29\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 20528,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "processStopped": true,
+    "serialSha256": "0b5bcebfe95262fcac821e34186a519c75eecb4c9aa671654cb9ddadd7083252"
+  },
+  "hostDriver": {
+    "owningMap": "MAP-018",
+    "scope": "Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save/first-inventory/Under Review publication, joined to qualified backend public-media/Live/Website commands; offline recovery. No customer browser/hosted/provider acceptance",
+    "providerWrites": false,
+    "checks": [
+      "admin_create_confirmed_user",
+      "wrong_password_refused",
+      "password_login",
+      "server_validated_user",
+      "totp_enroll",
+      "totp_challenge",
+      "totp_verify",
+      "assurance_level",
+      "aal2_server_validated_user",
+      "prior_taxonomy_diagnostic_not_repeated",
+      "accepted_http_auth_refusal_logout_evidence_reused",
+      "genuine_bff_csv_review_original_identity_canonical_stock_publication_website_listing",
+      "global_logout",
+      "logout_refresh_refused",
+      "auth_user_deletion_deferred_to_offline_fixture_recovery"
+    ],
+    "aal1": {
+      "role": "authenticated",
+      "aal": "aal1",
+      "signatureVerified": true
+    },
+    "aal2": {
+      "role": "authenticated",
+      "aal": "aal2",
+      "signatureVerified": true
+    },
+    "botScope": "Explicit local unconfigured bot fixture; no hosted bot-provider proof",
+    "routedStage": "POST_channels",
+    "lastRoutedResponse": {
+      "status": 200,
+      "code": "success"
+    },
+    "intakeStage": "synthetic_media_cleanup",
+    "intakeReply": {
+      "status": 200,
+      "code": "success"
+    },
+    "importedBaseline": {
+      "status": "Draft",
+      "published": false,
+      "primaryImagePreserved": true
+    },
+    "integratedReferences": {
+      "created": [
+        {
+          "id": "a2b545b4-0392-4eb8-ab1e-2b9a87e54148",
+          "kind": "brand",
+          "name": "MAP018 synthetic brand 0838a8e1-5d8f-467e-9ee6-d40687bc8296",
+          "parentId": null
+        },
+        {
+          "id": "31916cbe-d824-4347-a148-3b50e61ef2e6",
+          "kind": "category",
+          "name": "MAP018 synthetic category b7b53396-cbdf-4b26-935a-6e28e05fd264",
+          "parentId": null
+        }
+      ],
+      "exactReplay": true,
+      "protectedBff": true,
+      "offlineTaxonomySeeds": false
+    },
+    "importedProduct": {
+      "id": "63d68b93-3a5f-4758-a819-153b3e2db603",
+      "sku": "K2-SKU-001001",
+      "catalogId": "7b331603-cabc-4b63-886d-6e1898f9ff2b",
+      "baselineVersion": "1",
+      "importedDraft": true,
+      "zeroBatches": true,
+      "syntheticMediaUrl": "https://example.invalid/imported-supplied.jpg",
+      "reviewRecordVersion": "2",
+      "recordVersionAfterStockAndPublication": "4",
+      "reviewedOriginalIdentity": true,
+      "rejectedIngredientsPreserved": true,
+      "reviewReplay": false,
+      "canonicalStock": 6,
+      "stockReplay": false,
+      "liveOriginalIdentity": true,
+      "websiteListing": {
+        "sku": "K2-SKU-001001",
+        "status": "Active",
+        "channel_source": "website"
+      },
+      "websiteReplay": true
+    },
+    "staffStockRead": {
+      "scope": "Current protected staff stock independent of Website offers; prepared SQL extension, not accepted provider envelope",
+      "providerWrites": false,
+      "noLots": {
+        "rpc": [
+          {
+            "sku": "K2-SKU-001001",
+            "stock_from_batches": 0
+          }
+        ],
+        "catalog": 0,
+        "master": 0
+      },
+      "eligible": {
+        "rpc": [
+          {
+            "sku": "K2-SKU-001001",
+            "stock_from_batches": 6
+          }
+        ],
+        "catalog": 6,
+        "master": 6
+      },
+      "publicDraftOfferAbsent": true,
+      "invalidInputsRefused": 4,
+      "currentPolicy": {
+        "rpc": [
+          {
+            "sku": "K2-SKU-001001",
+            "stock_from_batches": 0
+          }
+        ],
+        "catalog": 0,
+        "master": 0
+      },
+      "restoredPolicy": {
+        "rpc": [
+          {
+            "sku": "K2-SKU-001001",
+            "stock_from_batches": 6
+          }
+        ],
+        "catalog": 6,
+        "master": 6
+      },
+      "anonymousRefused": true,
+      "aal1Refused": true,
+      "passed": true
+    },
+    "intakeBrowser": {
+      "scope": "Actual local password/MFA, imported Draft selection, three packaging uploads, manual field review and Save. Public test widget/unconfigured local bot fixture. No hosted/provider acceptance. Actual phone first-inventory form and Under Review publication; explicit dummy opening balance, not real inventory.",
+      "requests": [
+        {
+          "path": "/api/admin/session",
+          "method": "GET",
+          "status": 401,
+          "code": "SESSION_EXPIRED"
+        },
+        {
+          "path": "/api/admin/session",
+          "method": "GET",
+          "status": 401,
+          "code": "SESSION_EXPIRED"
+        },
+        {
+          "path": "/api/admin/auth/login",
+          "method": "POST",
+          "status": 202
+        },
+        {
+          "path": "/api/admin/auth/mfa",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/inbox",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/overview",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/products",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/products",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/products",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/overview",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/duplicates",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/step",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/evidence",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/evidence",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/evidence",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/step",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/step",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/step",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/draft",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/consignments",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/inventory",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/publication",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/product-intake/session",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/admin/products",
+          "method": "GET",
+          "status": 200
+        }
+      ],
+      "checks": [
+        "real_password_mfa_http_only_session",
+        "actual_phone_first_inventory_and_under_review_publication",
+        "actual_imported_selection_three_uploads_manual_review_phone_save"
+      ],
+      "stage": "complete",
+      "cookies": [
+        {
+          "name": "k2_admin_session",
+          "httpOnly": true,
+          "sameSite": "Strict"
+        },
+        {
+          "name": "k2_admin_csrf",
+          "httpOnly": false,
+          "sameSite": "Strict"
+        }
+      ],
+      "reviewRecordVersion": "2",
+      "stockInputs": {
+        "quantity": 6,
+        "unitCost": 40,
+        "ownerCode": "SYNTHETIC-OWNER",
+        "hubLocation": "HUB-MNL-CENTRAL",
+        "custodian": "CUST-STAFF-ELENA",
+        "source": "reconciliation",
+        "synthetic": true
+      },
+      "desktop": {
+        "width": 672,
+        "viewport": 1440,
+        "documentWidth": 1440
+      },
+      "phone": {
+        "width": 359,
+        "viewport": 375,
+        "documentWidth": 375
+      },
+      "inventoryStatus": 200,
+      "staffStockRendered": true,
+      "phoneFirstInventory": true,
+      "publicationUnderReview": true,
+      "sessionId": "49ab5327-cb3d-4931-948a-325d20742d72",
+      "requestId": "53dda54a-2dc7-403c-8b18-95a976be1821",
+      "manualReview": true,
+      "phoneSave": true,
+      "passed": true
+    },
+    "intakeEvidence": {
+      "sessionId": "49ab5327-cb3d-4931-948a-325d20742d72",
+      "requestId": "53dda54a-2dc7-403c-8b18-95a976be1821",
+      "images": [
+        {
+          "name": "synthetic-0.png",
+          "path": "6f794dda-ae46-4c63-be57-ca7204e64233/49ab5327-cb3d-4931-948a-325d20742d72/primary-c5b65e43-5c97-4bc3-9220-7ac9bf767f83-bd4287f511bb7ecc.png",
+          "size": 284,
+          "slot": "PRIMARY",
+          "type": "image/png",
+          "width": 160,
+          "height": 120,
+          "sha256": "bd4287f511bb7ecc568bba235d312194c4f9e63ba3971d9c142a462816b5306c",
+          "uploaded_at": "2026-10-11T12:52:44.610354+00:00",
+          "upload_status": "uploaded"
+        },
+        {
+          "name": "synthetic-1.png",
+          "path": "6f794dda-ae46-4c63-be57-ca7204e64233/49ab5327-cb3d-4931-948a-325d20742d72/back-cca9e9b6-9657-4a20-8602-20383724f1d5-3e1f5906b3431581.png",
+          "size": 284,
+          "slot": "BACK",
+          "type": "image/png",
+          "width": 160,
+          "height": 120,
+          "sha256": "3e1f5906b343158160521689044fbaddadb25bfc226dbeb6e2b3b1965fd44fbe",
+          "uploaded_at": "2026-10-11T12:52:44.861346+00:00",
+          "upload_status": "uploaded"
+        },
+        {
+          "name": "synthetic-2.png",
+          "path": "6f794dda-ae46-4c63-be57-ca7204e64233/49ab5327-cb3d-4931-948a-325d20742d72/barcode-c7390c2d-d9c5-4a54-be04-1998deda0f1c-22b87617f9ae5e88.png",
+          "size": 284,
+          "slot": "BARCODE",
+          "type": "image/png",
+          "width": 160,
+          "height": 120,
+          "sha256": "22b87617f9ae5e886e6ad3ce7362367a49a7b3672e8ff3557331c15bf9853154",
+          "uploaded_at": "2026-10-11T12:52:45.105045+00:00",
+          "upload_status": "uploaded"
+        }
+      ],
+      "browserRendered": true,
+      "protectedReadback": true,
+      "disposableCleanup": true
+    },
+    "publicMedia": {
+      "url": "https://127.0.0.1:54395/storage/v1/object/public/product-images/6f794dda-ae46-4c63-be57-ca7204e64233/product-media/46e191ea-6410-4a79-ab75-9e61d61df473-e511005c7a59f146.png",
+      "objectPath": "6f794dda-ae46-4c63-be57-ca7204e64233/product-media/46e191ea-6410-4a79-ab75-9e61d61df473-e511005c7a59f146.png",
+      "sha256": "e511005c7a59f146f409b1e35064be9cd8dcd99814f0ea5b2255dff9b458a1e0",
+      "bytes": 341,
+      "width": 180,
+      "height": 140,
+      "uploadReplay": true,
+      "assignmentReplay": true,
+      "canonicalReadback": true,
+      "anonymousDownload": true,
+      "certificateValidation": true,
+      "browserRendered": false,
+      "disposableCleanup": true,
+      "cleanupNotFound": {
+        "httpStatus": 400,
+        "storageStatus": 404
+      }
+    },
+    "routedTransport": {
+      "calls": {
+        "auth": 71,
+        "rest": 259,
+        "storage": 15,
+        "routed": 64
+      },
+      "scope": "Native Node request/response streams through production api/admin/index.js and real Auth/PostgREST; no hosted Vercel or browser-cookie-jar proof"
+    },
+    "logoutRefusal": {
+      "name": "AuthApiError",
+      "status": 400,
+      "code": "refresh_token_not_found"
+    },
+    "passed": true
+  },
+  "sourcePins": {
+    "scripts/prepare-imported-media-fixture.mjs": "080715309751d91b148918f54e1abb98514c09b254998beedfad97d0dfa053c1",
+    "scripts/imported-product-workflow-probe.inc.mjs": "505e869b1915fc9635eb2ed0509d1114dbe1440033796397d8abe3535177e447",
+    "scripts/fixture-admin-http-body.mjs": "e178ac738b6a972ff02c61e2245f598af2bae57c09e2a636bb07e992858cdd0f",
+    "scripts/storage-runtime-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+    "server/admin-bff/product-intake.js": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37",
+    "scripts/imported-intake-evidence-probe.inc.mjs": "4e84f4350f0722831909f4eaba5912c20269d14d39710a501f218f12f612ab9f",
+    "server/admin-bff/catalog-spreadsheet.js": "48463a6d90b7af0d535034ff82182c08d728911a23bf6cae423ffa490c827d62",
+    "server/admin-bff/product-master.js": "be5e920c73cc2046798d66903759e7e75b61c7ebd6f6289807d85f943fb86bf7",
+    "server/admin-bff/channels.js": "36418ddff9378ebf2c40f4568a53b1f9c9136100640524cf0ba8ab5e32f72186",
+    "server/admin-bff/product-media.js": "9eda473df524a8a06cc003873e88d4b0e4607f0c4d651844791fd4dbbbac7d72",
+    "server/admin-bff/references.js": "fc402debb63588e533c08c8da21147e73109d58cc37673e86c6d2760df445684",
+    "scripts/reference-catalog-contract.mjs": "8acf5671543000e966d0228e595ee5d22c898e2d92fda8d06e810d6e0e52631b",
+    "scripts/admin-stock-read-fixture.inc.mjs": "557321aacde4c71c29b3617a885aabb59396d2ea615103207786f30664de2b89",
+    "scripts/admin-stock-read-probe.inc.mjs": "5e10e5fa06ff80fc985f8290db73ea41085ba57cd375fa600f528c8a7f3d7aeb",
+    "supabase/prepared/admin_product_stock_read.sql": "afb90a0184c71dae7e11d697e932c004814f69f1313952aca4bc90d06d66a026",
+    "server/admin-bff/product-stock.js": "b1fc9cc4e8eabcfcb9b6873ffb2f68587cc940eabfd618c0ef562f24d3adfc45",
+    "prepared-api/admin/products.js": "257276537a6975373a00e74659363cd1f240e558de0ceb72697c0abb843977cd",
+    "scripts/imported-intake-browser-probe.inc.mjs": "c063c55b48da754556f0a99cdda23f7db3944d8a530def7dccc159df4149de1d",
+    "src/views/admin/ProductIntakeSessionModal.jsx": "eefb4b5362aa1e9279108fba0077deeb89337c3ca21e4f957fc8f7578568e80a",
+    "src/views/admin/InventoryGrid.jsx": "e4eed8d8d8aa75837e49c6b1bef98353cf90fa8d1226cd6b1785a3734d2e788e",
+    "src/services/productIntakeService.js": "d44cda86d09ccc891c64363cb783131d3b56cf0a7892fb42d0b4c44cf43587b8"
+  },
+  "installation": {
+    "receipt": "docs/acceptance/PROTECTED_REFERENCE_INSTALLATION_20261011.json",
+    "receiptSha256": "de35739ec0e4a95037a1e8c859cf93f469aaa6a98650fad7ccff6781b2351398",
+    "inputs": [
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\preparer-source.mjs",
+        "sha256": "2f6942385816d838cdc61fe628b6d2e96c08b1df9f4dc302027d3cd5d7d1325c",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/imported_draft_continuation.sql",
+        "sha256": "26ec4db009173aef02e3954504c05991937fb4d503769fc5133f3ebaa999d52a",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\execution01\\after-catalog.json",
+        "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\imported-draft-025b3682-3b76-465e-bd2a-5c2c0c597314\\combined-imported-install.sql",
+        "sha256": "abc2abd5d685913d07508bd704aa1ecc0a29c6b0bae0f870cb47cb5ca82f85d5",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\before-catalog.json",
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\after-catalog.json",
+        "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\guarded-package.json",
+        "sha256": "fa0ef714dd5d3582a8b99a57faa1cef1cb4ad0a56fffbfeee0442d3d8692a55b",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\authority-inventory.json",
+        "sha256": "52bcd96910e4b32dd195e375bcbbef468471d1c166095d3d1b11d29e48ecde7a",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\provider-managed-ddl-authority.json",
+        "sha256": "1f6dac40000249a40a7ad45fa5b71f7cbf348f14144f69f1768282e311a3b06a",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "scripts/prepare-imported-provider-fixture.mjs",
+        "sha256": "5fbf18263a0b0523a50fe26b0c0b655cd56bbc3fea41ceb460ccddc8794f60b8",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs",
+        "sha256": "4b528247a9905f8fb622bf703eb44344efa7f8490652ddbac0c4ef5c2ceb4ed4",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/product_master_version_conflict_transport.sql",
+        "sha256": "ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/customer_tariff_version_conflict_transport.sql",
+        "sha256": "efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/category_policy_version_conflict_transport.sql",
+        "sha256": "974b404f066282f001963d8ba7d548c5e137f95f40c57a73d480abeba7abc6b0",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/protected_reference_catalog_delta.json",
+        "sha256": "d482c3e3fd6ca89a95097d24801b9d2dd98a0631449e44739b1758341985d42b",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported39\\execution01\\reference-installed-catalog.json",
+        "sha256": "be85021470fc2976e36fbdeff750641d45810c8c30818f06155336a600866df7",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/protected_reference_normalization.sql",
+        "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/protected_reference_creation.sql",
+        "sha256": "adc0eac81830a83244cc6848e8d0d89b1480c7fd32e88b1b01223e60a4ac2c02",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "scripts/reference-catalog-contract.mjs",
+        "sha256": "8acf5671543000e966d0228e595ee5d22c898e2d92fda8d06e810d6e0e52631b",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\captured-baseline-check.sql",
+        "sha256": "aff237ec2224cbd9849391e25cdd1dc7646b59f7d3c61850fd5a6ca8e89a6e4b"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\captured-foundation.sql",
+        "sha256": "cb7cebec0fcf40d9d6fbeed80b18654901b73bb6f5bcae0782c68f592ad6c60c"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\captured-restore.sql",
+        "sha256": "57c1cf8abe1b36ba078d125751cf91b01c0a46faf9ca0a5be9cd561e60bd9637"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\cold-authority.sql",
+        "sha256": "da1ab048555c6d3f009b0f6ae811e51528d299ef3d7f4d8daa60632a65948fd1"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\cold-catalog.sql",
+        "sha256": "6ba79c208b3bc30e79b1b520d1876e589ac734f9799a147bd07d2e7e6aa76a54"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\foundation-metadata.sql",
+        "sha256": "ba80db4dcc15ed07c1fcf4b6b3a3f62c651f8e1f17155a1bb3cc32297baedbeb"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\foundation-rows.sql",
+        "sha256": "c3ab70a6b9692ca9df71392f75df92593652b4ef92fff2b8907ade2eada31822"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\full-contents.sql",
+        "sha256": "076149272dff7b500cb1fc7e09e8f956745491d38863ea234a5221c433d057f8"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\image-probe.sh",
+        "sha256": "63b06f69ec4e12178daaa192951a7a8c0fccfe1ab87abb1126a6a896f7482bd6"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\init.sh",
+        "sha256": "40380821b7a2a066d164c1f391c92269516ca38c142e8fc55e29cfbeb6e144c2"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\managed-check.sql",
+        "sha256": "6d672122ff9422a7a762d459c3ac68c09e7796f98c076dd7510fe16efc7cf5b0"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\managed-fixtures.sql",
+        "sha256": "dc39aabdfcc689bf6948b7e8052c84eb97fad1afbb200164a74c58430456a974"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\managed-settings.conf",
+        "sha256": "7997d9ec01a9b9a3306bb5ead38e6f6c006b7354912daac9c7130283669ccdf8"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\original-row-projection.sql",
+        "sha256": "98b83bb916c9178406ded4c4d6c030ff9c1ed0f3b39bda92e7be1e6826251010"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\preserved-foundation.dump",
+        "sha256": "f02a7598776b38d35d9d8656178a05ba8e45577668a1be48da2c7553ee696e10"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\race-blocker.sql",
+        "sha256": "8c132ca0ec2b7b2e517eefd78c0b4fa679bbbe49cbc81c529d841420c9a098bd"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\race-catalog.sql",
+        "sha256": "10b5ebadfbb099ad8d3cbc624220b731ec49ddbd9f2c855412f922631d277ceb"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\race-drift.sql",
+        "sha256": "1da0f0f60730e26e5fe867e205ec2b73eb2925346d5b43eb61f4abba627f0f46"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\race-install.sql",
+        "sha256": "6030155ff4e7957793e92dec513622535fd5ad229f5c1edffec01cda0997ec49"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\race-locks.sql",
+        "sha256": "22a5193af083cd96b8305ece001c330abadad71062df463d6831ede53d17984f"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\race-observer.sql",
+        "sha256": "e5eb75ea07860b29b8559fe47872d2e15eee56bf241d8835b2fa329e640a930b"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\race-recover.sql",
+        "sha256": "b1ca683e1308b0fc0a79e14e3f9a9cdd7187983196fdf30ec55b027d495cc7d5"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\role-bootstrap.sql",
+        "sha256": "619a43276c9c7ae166cc7f81bb018b2433e577952ab78969efa845fabd504d01"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\staging\\k2\\vault-probe.sql",
+        "sha256": "cd15118a69ac9ea0fcd2081e2755c46d4b7391f50d456480755dd9911f7b974d"
+      }
+    ],
+    "expectedFile": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported41\\execution01\\after-catalog.json",
+    "expectedSha256": "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667",
+    "expectedCanonicalSha256": "8a71131773cc4886b678e414b9dd040e76ad0539fc1bfdfdbfadd52266ad9bed",
+    "package": {
+      "sqlSha256": "e051cd65f6b9b070c70754b61ef521a772bc2bad46c211e918081e23b945457f",
+      "prefixPayloadSha256": "1827099d14153f9d4cf55e43213341c609692d36aac234033dc96cb71e8717b9",
+      "payloadSha256": "0a945f7183c1ba483894fa83a09c2a38bf4bff1bd50a2cfcd6e5144454cfec8d",
+      "fragmentCount": 12,
+      "protectedPlatformTables": [
+        "auth.schema_migrations",
+        "storage.migrations",
+        "storage.buckets_analytics",
+        "storage.buckets_vectors",
+        "storage.s3_multipart_uploads",
+        "storage.s3_multipart_uploads_parts",
+        "storage.vector_indexes"
+      ],
+      "cutoverTableCount": 81,
+      "expectedConnectorProject": "pixplcjqivlfflickobf"
+    }
+  },
+  "dependencyPins": {
+    "package-lock.json": "e248630a980ba18780cf9bd738f1c0b8f89324f1a534425c7797628c891e0225",
+    "node_modules/@supabase/supabase-js/package.json": "02e42e8011329ed38c1f774fc7b3c0b9329a93a26d39deb79e5ad31ffccb16d8",
+    "node_modules/sharp/package.json": "ad4a2535d72eb638053a38867b1abf43c328cd1c1dbae5cf4172d498365a8b97"
+  },
+  "pins": {
+    "executed-source.mjs": "f248dda3e96e64aace95e1eb61988de26f3155ef8efd07b198e69b19bede226b",
+    "executed-derivation.mjs": "080715309751d91b148918f54e1abb98514c09b254998beedfad97d0dfa053c1",
+    "preparation.json": "918d7318d2c5d4b36487038bc721f4b0a181f5c1a007bcf5050dba3e48351f2e",
+    "media-source-pins.json": "6016287c8e04c8c1e7b377b50190db31935c80cfeaf902bd91191b95fc6f0174",
+    "staging/k2/init.sh": "198df1c9c97e264c3ebb3152c802912286191b18d083e56b1225d49098fd4753",
+    "staging/k2/image-probe.sh": "36834fd4ddb76ca748ffa2ac4c60154644c510c85f8df720b53540df359bb395",
+    "bff-helper.mjs": "eebb75976524a9fb926b27512d08ec77e930af0cbf3470c7b418b69e00b9ef93",
+    "host-driver.mjs": "f24fa6846ba012d61564feb9468e4d752e178f17064b67ad9ea07fbee4dbc736",
+    "runner-source.mjs": "b90b8e52069991b11395d79bb9b9f3504531553a7580e74dd12479cfe9bcc4ef",
+    "host-driver-result.json": "972120cb4bf97bd40bd995a6f3732b67b574fba205894931eb13d9a43cac34f8",
+    "execution01/result.json": "b4afc6c6dda4f3079f141b569f8066a2c5cd533ac6aa2d9a2806de896efbb406",
+    "execution01/serial.log": "0b5bcebfe95262fcac821e34186a519c75eecb4c9aa671654cb9ddadd7083252",
+    "execution01/stderr.log": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc",
+    "execution01/launch.json": "8ad421c1acb40d6cfe969363c3cfe4cf1092612926749f73a823c28e8adc649c",
+    "full-installation-pins.json": "1ff8077e9ff460dd84b26d947715a39dae1eeedcb353e1d61f4df2e9e38b5b06",
+    "staging/k2/race-install.sql": "6030155ff4e7957793e92dec513622535fd5ad229f5c1edffec01cda0997ec49",
+    "staging/k2/race-catalog.sql": "10b5ebadfbb099ad8d3cbc624220b731ec49ddbd9f2c855412f922631d277ceb",
+    "staging/k2/current-installed-expected.json": "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667",
+    "source-inputs/scripts--prepare-imported-media-fixture.mjs": "080715309751d91b148918f54e1abb98514c09b254998beedfad97d0dfa053c1",
+    "source-inputs/scripts--imported-product-workflow-probe.inc.mjs": "505e869b1915fc9635eb2ed0509d1114dbe1440033796397d8abe3535177e447",
+    "source-inputs/scripts--fixture-admin-http-body.mjs": "e178ac738b6a972ff02c61e2245f598af2bae57c09e2a636bb07e992858cdd0f",
+    "source-inputs/scripts--storage-runtime-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+    "source-inputs/server--admin-bff--product-intake.js": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37",
+    "source-inputs/scripts--imported-intake-evidence-probe.inc.mjs": "4e84f4350f0722831909f4eaba5912c20269d14d39710a501f218f12f612ab9f",
+    "source-inputs/server--admin-bff--catalog-spreadsheet.js": "48463a6d90b7af0d535034ff82182c08d728911a23bf6cae423ffa490c827d62",
+    "source-inputs/server--admin-bff--product-master.js": "be5e920c73cc2046798d66903759e7e75b61c7ebd6f6289807d85f943fb86bf7",
+    "source-inputs/server--admin-bff--channels.js": "36418ddff9378ebf2c40f4568a53b1f9c9136100640524cf0ba8ab5e32f72186",
+    "source-inputs/server--admin-bff--product-media.js": "9eda473df524a8a06cc003873e88d4b0e4607f0c4d651844791fd4dbbbac7d72",
+    "source-inputs/server--admin-bff--references.js": "fc402debb63588e533c08c8da21147e73109d58cc37673e86c6d2760df445684",
+    "source-inputs/scripts--reference-catalog-contract.mjs": "8acf5671543000e966d0228e595ee5d22c898e2d92fda8d06e810d6e0e52631b",
+    "source-inputs/scripts--admin-stock-read-fixture.inc.mjs": "557321aacde4c71c29b3617a885aabb59396d2ea615103207786f30664de2b89",
+    "source-inputs/scripts--admin-stock-read-probe.inc.mjs": "5e10e5fa06ff80fc985f8290db73ea41085ba57cd375fa600f528c8a7f3d7aeb",
+    "source-inputs/supabase--prepared--admin_product_stock_read.sql": "afb90a0184c71dae7e11d697e932c004814f69f1313952aca4bc90d06d66a026",
+    "source-inputs/server--admin-bff--product-stock.js": "b1fc9cc4e8eabcfcb9b6873ffb2f68587cc940eabfd618c0ef562f24d3adfc45",
+    "source-inputs/prepared-api--admin--products.js": "257276537a6975373a00e74659363cd1f240e558de0ceb72697c0abb843977cd",
+    "source-inputs/scripts--imported-intake-browser-probe.inc.mjs": "c063c55b48da754556f0a99cdda23f7db3944d8a530def7dccc159df4149de1d",
+    "source-inputs/src--views--admin--ProductIntakeSessionModal.jsx": "eefb4b5362aa1e9279108fba0077deeb89337c3ca21e4f957fc8f7578568e80a",
+    "source-inputs/src--views--admin--InventoryGrid.jsx": "e4eed8d8d8aa75837e49c6b1bef98353cf90fa8d1226cd6b1785a3734d2e788e",
+    "source-inputs/src--services--productIntakeService.js": "d44cda86d09ccc891c64363cb783131d3b56cf0a7892fb42d0b4c44cf43587b8",
+    "intake-inventory-desktop.png": "e70da288d3be19d0f4d593e306e2ea65ace3d053b690a3875efbece66a10331b",
+    "intake-inventory-phone.png": "fcb61262c85bcf4b0369fcbe3c7e05fb766ee200a693d082ee2274933b4f6084",
+    "staff-stock-register-desktop.png": "cd6d4e6988bce2b38835c1e62a37f3a736308eb70934d61e259f348a2f7bd5c2",
+    "staff-stock-register-phone.png": "627dc63f2c0f501211a75b43a581c21aa7b1780b4a53af96a568eacc0d705091",
+    "staging/k2/staff-stock-read.sql": "90680c3649457bbfa91e6539fbc81c118ac4201861f717a476a1efddaf189b9d",
+    "staging/k2/staff-stock-metadata.sql": "39019ebd8f59083d3f56511c29f0a547de2de82b6cac02730d410cede98c5e9b",
+    "staging/k2/staff-stock-recovery.sql": "1de1b4c3e6dbf6f584ca608703484a283884f7af90f674e94ddb5fc695cd1a4a"
+  },
+  "conservation": {
+    "applicationTables": 107,
+    "fullRowsIncludingGenerated": {
+      "k2_private-admin_bff_secrets": "0ba34f528dab5d1bcd27f0a6cec1c04cf4e855a22a9e9b86b677898b077e1a34",
+      "k2_private-admin_command_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-admin_request_nonces": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-admin_request_rate_buckets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-admin_session_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-admin_sessions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-ai_spend_control_config": "2cd7fd7702450fa057a8bda5d3f9324e59b3bbd97d905f341b28a6905e02f571",
+      "k2_private-ai_spend_control_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-catalog_import_operations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-catalog_import_row_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-category_lot_command_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-category_policy_command_config": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-category_shelf_life_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-category_shelf_life_policy": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-channel_verification_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-customer_account_notifications": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-customer_account_settings": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-customer_delivery_rate_heads": "df41604481ed29640b5a9ceee1c9509e54d49f57a620b862acda2b022c2e2a80",
+      "k2_private-customer_delivery_rate_versions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-delivery_psgc_locations": "5e08d97551a2ba9a1249013b71ee1dacbd79b15a3c753768175280d2cd3efe4b",
+      "k2_private-express_delivery_acceptances": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-express_delivery_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-express_delivery_quotes": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-globe_review_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-guest_account_claim_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-guest_bff_secrets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-guest_conversation_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-guest_rate_buckets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-guest_request_nonces": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-intake_ai_jobs": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-order_delivery_construction_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-order_delivery_snapshots": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-order_payment_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-product_delete_operations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-product_intake_evidence_cleanup_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-product_master_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-product_media_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-product_media_orphan_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-reference_command_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-reference_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-staff_delete_credentials": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-staff_invitation_operations": "19f8c77c8dbf2a25e96f833dbf66636a9152295ebc894b5945e548bcd121f8cf",
+      "k2_private-storefront_auth_rate_buckets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-storefront_auth_rate_nonces": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-website_listing_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-wholesale_inquiry_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-wholesale_inquiry_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-audit_logs": "9eaa92a3a7618f16ecbe6ef0019c6d57f5bd7e586a32030aade40dd4a520dfc7",
+      "public-batch_change_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-brands": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-categories": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channel_connections": "825074baa12066c2b04c5e782ce7a21e9a284e8bfe7ac79dabae39358805b5fa",
+      "public-channel_credentials": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channel_event_inbox": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channel_identities": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channel_listings": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channel_shops": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channels": "e3feeb7ec7fbd56f2a03f3ac1cd3e412b37859c7ee8bc8606df3507059bfe6ff",
+      "public-consignment_items": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-consignment_scan_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-consignments": "8a4880119b90cbb1ff3e336840984138a9cf8160184f06b334b942ebb61d73c3",
+      "public-conversation_events": "438a4e1d7077b8d410a2712b6ac22d94b810733dcd8e7125644c0cccdbea2963",
+      "public-conversations": "3ab503ba9b0db398e0e4da4c9afa01484005214cc921b03c7e46bfb216916e46",
+      "public-coupon_redemptions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-coupons": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-custodians": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-customer_accounts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-customer_claim_requests": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-customer_contact_points": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-customers": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-delivery_cost_rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-delivery_courier_options": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-delivery_locality_rules": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-delivery_quote_snapshots": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-delivery_rate_sources": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-error_reports": "4f83f496dbf3ce2f05c108060ce85136b818257943e150d451ba0aaf2d3a9958",
+      "public-globe_products": "5385dcc65ac609026b0ffd6f2cd8fb97c7ccba2eba481f19c084e48bffc1c783",
+      "public-guest_access_grant_scopes": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-guest_access_grants": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-hubs": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-inventory_balances": "aeffe3095235747fb992c39327adcf62a0ed2c117d1f1ddf34e2dfb87d79c87d",
+      "public-inventory_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-inventory_reservations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-messages": "73042f6136a28339e4f3fd20a33c62b6055669478edea35381767d28eb4bbc7f",
+      "public-notifications": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-order_request_events": "6af64929ff9737811d11bc0a46fc03bfbc9131beca5bfbe689f7df259213e0a8",
+      "public-order_request_items": "98ff9cb52c0fb8054b337c684b4f4c09948caa59ddf9c8dbb033cb851a01cfed",
+      "public-order_requests": "4ca443a068e7d5876055bce649c3ee16feab00cccc17475b80a40f2467f15e0c",
+      "public-orders": "79908b3c1bffb93352b9a85608ab677402225794bf588db62985c87a56c27663",
+      "public-packing_scan_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-pasabuy_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-pasabuy_quotes": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-pasabuy_requests": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-po_lines": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-product_batches": "13605899382ef80766744cb05e90a5562fe8b2d7cefa8674ce4ac369945c02f2",
+      "public-product_deletions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-product_drafts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-product_intake_sessions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-products": "6b4fc3ec702add2708abb47dfc114846c26b8bb466ffea3da10d28cae24c82b3",
+      "public-products_old": "756786d903f1b2965c70e914586c9199735ccd6a0cc33857689f44289122a609",
+      "public-purchase_orders": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-reviews": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-staff_allocations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-suppliers": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-user_profiles": "b7378c72ac9ceaad048dcf219fa361ebf96f682bef065eb6b2b61927b74f74cc",
+      "public-warehouses": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-wholesale_inquiries": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "allApplicationSequences": [
+      "56236a44372da27f6914beb5aa2f16b1afcb2447dac333f8fa0281c6f9d643a0  /tmp/product-fixture-sequences.copy",
+      "56236a44372da27f6914beb5aa2f16b1afcb2447dac333f8fa0281c6f9d643a0  /tmp/product-fixture-sequences-after.copy"
+    ],
+    "original88ProjectionAndTwoSequences": [
+      "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-before.json",
+      "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-after.json",
+      "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667  /tmp/auth-schema-before.json",
+      "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667  /tmp/auth-schema-after.json"
+    ],
+    "exactInstalledMetadata": [
+      "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667  /tmp/current-installed-expected.json",
+      "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667  /tmp/full-current-installed.json"
+    ],
+    "authorityWitnesses": 2
+  },
+  "failures": [
+    {
+      "case": "oci-imported-media25",
+      "result": {
+        "owningMap": "MAP-023/018",
+        "scope": "Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save/first-inventory/Under Review publication, joined to qualified backend public-media/Live/Website commands; offline recovery. No customer browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "7168",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media25\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 24876,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "8ed271ca35256f0c484a617085a91697a65e1948c4d5b7f56f66bce7f710e573"
+      },
+      "pins": {
+        "executed-source.mjs": "866e592d1423aa29de1b9e094e5ef626c22e028d29215dfc76d908408639be19",
+        "executed-derivation.mjs": "080715309751d91b148918f54e1abb98514c09b254998beedfad97d0dfa053c1",
+        "bff-helper.mjs": "e22ceb3821cb53804c11b8d6d4ca9c4cf5dff0b6c78669430b57e9634bc58cf6",
+        "host-driver.mjs": "f24fa6846ba012d61564feb9468e4d752e178f17064b67ad9ea07fbee4dbc736",
+        "execution01/result.json": "b4fc4e70b3ab59d62d16f56e2c87c3635332e73b2160bd80b0cf483d2d139f24",
+        "execution01/serial.log": "8ed271ca35256f0c484a617085a91697a65e1948c4d5b7f56f66bce7f710e573",
+        "media-source-pins.json": "260ab547adaa2d11020c13a2bc588a4dc3335077e86687133a2259d292782383",
+        "staging/k2/staff-stock-read.sql": "be9960008d2959bb2c76c279c2ede9b8e29d65c6386b54b7df713cfa144005f8",
+        "staging/k2/staff-stock-metadata.sql": "1bcf808d422b6305e49265c4085274cdaa9879e7692d3a79b6ccb095fc10663d",
+        "staging/k2/staff-stock-recovery.sql": "1de1b4c3e6dbf6f584ca608703484a283884f7af90f674e94ddb5fc695cd1a4a"
+      },
+      "browserAccepted": false,
+      "recoveryVerified": false,
+      "scope": "Stopped before Auth/browser host journey; no complete after-row/catalog recovery artifacts. Original RAM guest retired; do not claim recovery accepted."
+    },
+    {
+      "case": "oci-imported-media26",
+      "result": {
+        "owningMap": "MAP-023/018",
+        "scope": "Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save/first-inventory/Under Review publication, joined to qualified backend public-media/Live/Website commands; offline recovery. No customer browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "7168",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media26\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 25168,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "4366c1cc994cf8a56b9b532c54bb514ee0a6b74d730687baf44cc3603b8e9f65"
+      },
+      "pins": {
+        "executed-source.mjs": "8347fad567d0b99af69f505b20d1f7d4fcd94ab86e0742ad825df5991359b0f2",
+        "executed-derivation.mjs": "080715309751d91b148918f54e1abb98514c09b254998beedfad97d0dfa053c1",
+        "bff-helper.mjs": "7970f558a56714a938b118fc2eb193b4fd9d53e7dfc107ebd676961bae950f31",
+        "host-driver.mjs": "f24fa6846ba012d61564feb9468e4d752e178f17064b67ad9ea07fbee4dbc736",
+        "execution01/result.json": "a6b015572d3790fbe9ae3bc832ef75187393df8870a2b9f96a7684f842d551f2",
+        "execution01/serial.log": "4366c1cc994cf8a56b9b532c54bb514ee0a6b74d730687baf44cc3603b8e9f65",
+        "media-source-pins.json": "58d45e83c335b961fa3a1dfe27de63c923c5ce4727211a34004b5e4971277cf1",
+        "staging/k2/staff-stock-read.sql": "28947627f5b9082a4eb622fca45d392675d17d2ab8630ecdd425fcf30e5bfbd3",
+        "staging/k2/staff-stock-metadata.sql": "1bcf808d422b6305e49265c4085274cdaa9879e7692d3a79b6ccb095fc10663d",
+        "staging/k2/staff-stock-recovery.sql": "1de1b4c3e6dbf6f584ca608703484a283884f7af90f674e94ddb5fc695cd1a4a"
+      },
+      "browserAccepted": false,
+      "recoveryVerified": false,
+      "scope": "Stopped before Auth/browser host journey; no complete after-row/catalog recovery artifacts. Original RAM guest retired; do not claim recovery accepted."
+    },
+    {
+      "case": "oci-imported-media27",
+      "result": {
+        "owningMap": "MAP-023/018",
+        "scope": "Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save/first-inventory/Under Review publication, joined to qualified backend public-media/Live/Website commands; offline recovery. No customer browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "7168",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media27\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 18860,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": false,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "be74811c22e5e7d66e5075dec189da4f7672f70df95a45c08ed62046c0da702d"
+      },
+      "pins": {
+        "executed-source.mjs": "8bb9928f935ef50605f3bd6c6c00f9c8616bf82b94a6aa95c97f814645be806c",
+        "executed-derivation.mjs": "080715309751d91b148918f54e1abb98514c09b254998beedfad97d0dfa053c1",
+        "bff-helper.mjs": "9e05990dbd5cf0c3845476bc41891f580bfae49b5f728fd533b6ef46d86fd1a5",
+        "host-driver.mjs": "f24fa6846ba012d61564feb9468e4d752e178f17064b67ad9ea07fbee4dbc736",
+        "execution01/result.json": "b3f11bdb94858ef5fef933925cf3be39a81f6e83dcd46ff42da54f3528d9d51e",
+        "execution01/serial.log": "be74811c22e5e7d66e5075dec189da4f7672f70df95a45c08ed62046c0da702d",
+        "media-source-pins.json": "f2781e056a4a66268e12277fbd8e3df042b321f49692a192cff09304f9204411",
+        "staging/k2/staff-stock-read.sql": "90680c3649457bbfa91e6539fbc81c118ac4201861f717a476a1efddaf189b9d",
+        "staging/k2/staff-stock-metadata.sql": "1bcf808d422b6305e49265c4085274cdaa9879e7692d3a79b6ccb095fc10663d",
+        "staging/k2/staff-stock-recovery.sql": "1de1b4c3e6dbf6f584ca608703484a283884f7af90f674e94ddb5fc695cd1a4a"
+      },
+      "browserAccepted": false,
+      "recoveryVerified": false,
+      "scope": "Stopped before Auth/browser host journey; no complete after-row/catalog recovery artifacts. Original RAM guest retired; do not claim recovery accepted."
+    },
+    {
+      "case": "oci-imported-media28",
+      "result": {
+        "owningMap": "MAP-023/018",
+        "scope": "Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save/first-inventory/Under Review publication, joined to qualified backend public-media/Live/Website commands; offline recovery. No customer browser/hosted/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "7168",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media28\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 2036,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "52083df86b3cf9cac980273985f06c31b6c006acedd6cf4ab59055f36bfdd4ea"
+      },
+      "pins": {
+        "executed-source.mjs": "e15bb12d87e43c56ed3aeff1410063f3eb88c738cd90cb51dcffea97af6d7776",
+        "executed-derivation.mjs": "080715309751d91b148918f54e1abb98514c09b254998beedfad97d0dfa053c1",
+        "bff-helper.mjs": "224cecb7cfbaf81fc7f2c16debef85336b8a4bb09a6fdf5a124508c374662436",
+        "host-driver.mjs": "f24fa6846ba012d61564feb9468e4d752e178f17064b67ad9ea07fbee4dbc736",
+        "execution01/result.json": "475306a83c535b20ebd81e76628b261a1d7301ea39d0aec481aeba3472191031",
+        "execution01/serial.log": "52083df86b3cf9cac980273985f06c31b6c006acedd6cf4ab59055f36bfdd4ea",
+        "media-source-pins.json": "567de8ce29767b62cb5c9a5c95d4e40a773b824aa92b74bbec90540c870a8d2a",
+        "staging/k2/staff-stock-read.sql": "90680c3649457bbfa91e6539fbc81c118ac4201861f717a476a1efddaf189b9d",
+        "staging/k2/staff-stock-metadata.sql": "39019ebd8f59083d3f56511c29f0a547de2de82b6cac02730d410cede98c5e9b",
+        "staging/k2/staff-stock-recovery.sql": "1de1b4c3e6dbf6f584ca608703484a283884f7af90f674e94ddb5fc695cd1a4a",
+        "host-driver-result.json": "a113a48c3298390b05ce80c875561d589b55df7641a0cf5e167a07f6a44093d2",
+        "staff-stock-register-desktop.png": "8b1732a3551c406bb0765bdc07f6ba07795751d170fe421ba4e0fefe9e03d0e6",
+        "staff-stock-register-phone.png": "782ae374778fb737fbdefa3b146ba35ce3c798e43fe7528cb504200fb26fb54c"
+      },
+      "browserAccepted": false,
+      "recoveryVerified": true,
+      "conservation": {
+        "applicationTables": 107,
+        "fullRowsIncludingGenerated": {
+          "k2_private-admin_bff_secrets": "0ba34f528dab5d1bcd27f0a6cec1c04cf4e855a22a9e9b86b677898b077e1a34",
+          "k2_private-admin_command_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-admin_request_nonces": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-admin_request_rate_buckets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-admin_session_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-admin_sessions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-ai_spend_control_config": "ee19aae998b7f8424f81f1a63569e3b5ca40718cb59363ef396976f904b3842e",
+          "k2_private-ai_spend_control_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-catalog_import_operations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-catalog_import_row_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-category_lot_command_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-category_policy_command_config": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-category_shelf_life_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-category_shelf_life_policy": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-channel_verification_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-customer_account_notifications": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-customer_account_settings": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-customer_delivery_rate_heads": "df41604481ed29640b5a9ceee1c9509e54d49f57a620b862acda2b022c2e2a80",
+          "k2_private-customer_delivery_rate_versions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-delivery_psgc_locations": "5e08d97551a2ba9a1249013b71ee1dacbd79b15a3c753768175280d2cd3efe4b",
+          "k2_private-express_delivery_acceptances": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-express_delivery_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-express_delivery_quotes": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-globe_review_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-guest_account_claim_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-guest_bff_secrets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-guest_conversation_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-guest_rate_buckets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-guest_request_nonces": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-intake_ai_jobs": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-order_delivery_construction_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-order_delivery_snapshots": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-order_payment_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-product_delete_operations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-product_intake_evidence_cleanup_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-product_master_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-product_media_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-product_media_orphan_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-reference_command_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-reference_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-staff_delete_credentials": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-staff_invitation_operations": "19f8c77c8dbf2a25e96f833dbf66636a9152295ebc894b5945e548bcd121f8cf",
+          "k2_private-storefront_auth_rate_buckets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-storefront_auth_rate_nonces": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-website_listing_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-wholesale_inquiry_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "k2_private-wholesale_inquiry_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-audit_logs": "9eaa92a3a7618f16ecbe6ef0019c6d57f5bd7e586a32030aade40dd4a520dfc7",
+          "public-batch_change_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-brands": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-categories": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-channel_connections": "825074baa12066c2b04c5e782ce7a21e9a284e8bfe7ac79dabae39358805b5fa",
+          "public-channel_credentials": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-channel_event_inbox": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-channel_identities": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-channel_listings": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-channel_shops": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-channels": "e796683fb4d9670afe64f4d6dff38d3474f648e5fe365ff01e3a834a7467fead",
+          "public-consignment_items": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-consignment_scan_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-consignments": "8a4880119b90cbb1ff3e336840984138a9cf8160184f06b334b942ebb61d73c3",
+          "public-conversation_events": "438a4e1d7077b8d410a2712b6ac22d94b810733dcd8e7125644c0cccdbea2963",
+          "public-conversations": "3ab503ba9b0db398e0e4da4c9afa01484005214cc921b03c7e46bfb216916e46",
+          "public-coupon_redemptions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-coupons": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-custodians": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-customer_accounts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-customer_claim_requests": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-customer_contact_points": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-customers": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-delivery_cost_rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-delivery_courier_options": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-delivery_locality_rules": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-delivery_quote_snapshots": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-delivery_rate_sources": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-error_reports": "4f83f496dbf3ce2f05c108060ce85136b818257943e150d451ba0aaf2d3a9958",
+          "public-globe_products": "5385dcc65ac609026b0ffd6f2cd8fb97c7ccba2eba481f19c084e48bffc1c783",
+          "public-guest_access_grant_scopes": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-guest_access_grants": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-hubs": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-inventory_balances": "aeffe3095235747fb992c39327adcf62a0ed2c117d1f1ddf34e2dfb87d79c87d",
+          "public-inventory_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-inventory_reservations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-messages": "73042f6136a28339e4f3fd20a33c62b6055669478edea35381767d28eb4bbc7f",
+          "public-notifications": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-order_request_events": "6af64929ff9737811d11bc0a46fc03bfbc9131beca5bfbe689f7df259213e0a8",
+          "public-order_request_items": "98ff9cb52c0fb8054b337c684b4f4c09948caa59ddf9c8dbb033cb851a01cfed",
+          "public-order_requests": "4ca443a068e7d5876055bce649c3ee16feab00cccc17475b80a40f2467f15e0c",
+          "public-orders": "79908b3c1bffb93352b9a85608ab677402225794bf588db62985c87a56c27663",
+          "public-packing_scan_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-pasabuy_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-pasabuy_quotes": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-pasabuy_requests": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-po_lines": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-product_batches": "13605899382ef80766744cb05e90a5562fe8b2d7cefa8674ce4ac369945c02f2",
+          "public-product_deletions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-product_drafts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-product_intake_sessions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-products": "84a81ca288994839528774a5b28bfecfaadd9ff58e9dcf1dd509a83f1d95a28d",
+          "public-products_old": "756786d903f1b2965c70e914586c9199735ccd6a0cc33857689f44289122a609",
+          "public-purchase_orders": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-reviews": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-staff_allocations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-suppliers": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-user_profiles": "b7378c72ac9ceaad048dcf219fa361ebf96f682bef065eb6b2b61927b74f74cc",
+          "public-warehouses": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "public-wholesale_inquiries": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "allApplicationSequences": [
+          "56236a44372da27f6914beb5aa2f16b1afcb2447dac333f8fa0281c6f9d643a0  /tmp/product-fixture-sequences.copy",
+          "56236a44372da27f6914beb5aa2f16b1afcb2447dac333f8fa0281c6f9d643a0  /tmp/product-fixture-sequences-after.copy"
+        ],
+        "original88ProjectionAndTwoSequences": [
+          "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-before.json",
+          "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-after.json",
+          "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667  /tmp/auth-schema-before.json",
+          "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667  /tmp/auth-schema-after.json"
+        ],
+        "exactInstalledMetadata": [
+          "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667  /tmp/current-installed-expected.json",
+          "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667  /tmp/full-current-installed.json"
+        ],
+        "authorityWitnesses": 2
+      },
+      "scope": "Browser/RPC/BFF stock and current-policy checks plus complete recovery passed; final permission probe failed before execution because it used an absent environment key alias. Not full acceptance."
+    }
+  ],
+  "verification": {
+    "native": {
+      "command": "node scripts/prepare-imported-media-fixture.mjs --case=oci-imported-media29 --staff-stock",
+      "session": 80365,
+      "exit": 0
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "session": 97998,
+      "exit": 0,
+      "adminSessionChecks": 27,
+      "routeControlGaps": 0
+    },
+    "review": {
+      "status": "unfinished",
+      "scope": "Primary current-source and complete pin/conservation verification. Latest independent reviewer unavailable due usage limit; final source/raw independent acceptance not claimed."
+    },
+    "visual": {
+      "captures": [
+        "staff-stock-register-desktop.png",
+        "staff-stock-register-phone.png"
+      ],
+      "viewportWidths": [
+        1440,
+        375
+      ],
+      "engine": "Headless Chromium, emulated viewport, reduced motion",
+      "physicalTouch": false,
+      "detector": {
+        "command": "impeccable detect src/views/admin/ProductIntakeSessionModal.jsx",
+        "chunk": "b878c3",
+        "exit": 0,
+        "findings": 0
+      },
+      "inspected": true,
+      "findings": "One bounded1440/375 stock overview capture batch inspected. Available units6 is visible; the filtered product stock6 DOM assertion passed, although its lower card fields are below these initial capture viewports. Existing Admin typography/density and responsive overview retained; no layout/motion/theme source changed. Full keyboard/contrast/device/performance acceptance unverified. Desktop header remains crowded. Source inspection confirms secure fetchProducts clears batchMap and never calls fetchBatches in secure initial/refresh flow; batch/custody/expiry counts therefore remain unqualified and require correction in MAP-018.",
+      "audit": {
+        "scope": "Bounded stock data-state/overview review, not full UI/accessibility acceptance",
+        "dimensions": [
+          {
+            "dimension": "Accessibility",
+            "score": 2,
+            "evidence": "Existing named controls and reduced-motion path; keyboard/contrast/zoom unverified"
+          },
+          {
+            "dimension": "Performance",
+            "score": 2,
+            "evidence": "Bounded500-SKU read reuses one instant/current predicates; full bundle/query-load profile unverified"
+          },
+          {
+            "dimension": "Responsive design",
+            "score": 3,
+            "evidence": "375/1440 overview and overflow gates pass; desktop header crowded, physical devices unverified"
+          },
+          {
+            "dimension": "Theming",
+            "score": 3,
+            "evidence": "Incumbent Admin Source Sans/dark tokens preserved, no style changes"
+          },
+          {
+            "dimension": "Implementation integrity",
+            "score": 2,
+            "evidence": "Genuine canonical read and unknown fallback pass; secure batch-map loading and full installer/role qualification remain"
+          }
+        ],
+        "total": 12,
+        "rating": "Incomplete operational UI acceptance",
+        "blockingFindings": [
+          "Secure batch/custody/expiry readback is cleared/unloaded; stock read fix does not close the complete Inventory surface."
+        ]
+      }
+    }
+  },
+  "limits": [
+    "Admitted12-fragment base installer plus prepared staff-stock read extension; not a newly accepted13-fragment provider envelope. Actual Admin stock6 display after phone inventory/Under Review, RPC and both BFF reads, stricter policy0/restored6, retained physical6, anonymous/AAL1/input refusal checks.",
+    "Canonical quantity6/zero reserved is read back after actual browser stocking; replay is reused from prior backend proof, not newly exercised. Public media/Live/Website remain actual backend commands, not rendered in this batch",
+    "Rejecting a manually entered suggestion preserves original ingredients; no paid AI/provider suggestion was requested",
+    "375/1440 rendered stock register and existing inventory actions exercised; physical devices/full accessibility/performance/hosted acceptance remain unverified. Admin/AAL2 tested; current Staff/SuperAdmin/customer and reserved/clearance/malformed taxonomy case qualification remain required in full installer acceptance.",
+    "Public test widget and explicitly unconfigured local bot mode are synthetic prerequisites, not production bot acceptance",
+    "Disposable107-table offline logical/generated-value/sequence restoration is not production retained-data/media recovery",
+    "No production app/UI/SQL/provider write, activation, main push or release",
+    "Secure batch/custody/expiry statistics remain unloaded/cleared; complete stock screen readiness not claimed. Existing positive lots with invalid/unassigned taxonomy remain conservatively Unknown; no real source-data correction was performed."
+  ],
+  "recovery": "Preserve25–27 failed pre-Auth guards/metadata witnesses, successful successor and prior15–24 source/TLS archives. Failed25–27 complete after-row/catalog recovery remains unverified. Revert qualification browser opt-in/hook/probe together only; keep existing production code and prior receipts. No provider rollback.",
+  "nextAction": "MAP-018 / IDEA-20261011-01: fix secure Grid batch readback and complete/unknown states; integrate and qualify prepared stock read in the full guarded installer/recovery, current Staff/SuperAdmin/customer and held/clearance/taxonomy cases, independent review. Then explicit human-review and protected Website assignment/recovery controls, remaining rendered media/Live/customer/hosted/provider/owner gates. No provider apply or release authorized.",
+  "hostRetirement": {
+    "pids": [
+      24876,
+      25168,
+      18860,
+      2036,
+      20528
+    ],
+    "ports": [
+      54392,
+      54393,
+      54394,
+      54395,
+      54396,
+      54397
+    ],
+    "processCount": 0,
+    "listenerCount": 0,
+    "verification": "Independent read-only chunk220853 exit0 after native29/controller80365 terminal0"
+  },
+  "extension": {
+    "file": "supabase/prepared/admin_product_stock_read.sql",
+    "state": "Prepared/unapplied; local extension on admitted base only",
+    "allowedChange": "Exactly one public.read_admin_product_stock_v1(text[]) function, no other immediate catalog changes",
+    "nativeMarkers": [
+      "K2_ADMIN_STOCK_READ_DEPENDENCIES",
+      "K2_STAFF_STOCK_ONLY_FUNCTION_ADDED",
+      "K2_STAFF_STOCK_EXTENSION_REMOVED"
+    ],
+    "predicateDependencyHashes": {
+      "effectiveCategoryMinimumDefinitionMd5": "26ce6255f014a870f8a358f3de2638a8",
+      "lotEligibilityDefinitionMd5": "a54b62fb4502c063bdcb608b6cde20f9"
+    },
+    "baselineScope": "Compare catalog immediately before/after extension, after previously qualified temporary BFF prerequisites; independently require original full-catalog equality after BFF restoration and extension removal."
+  }
+}

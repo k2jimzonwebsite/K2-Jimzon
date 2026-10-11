@@ -3,6 +3,7 @@ import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
 import { isAdminRole } from './supabase.js'
 import { strictInteger } from '../shared-numeric.js'
 import { isReadableReferenceName } from '../../src/lib/referenceCommandRecovery.js'
+import { readAdminProductStock } from './product-stock.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const SKU = /^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$/
@@ -102,16 +103,6 @@ function validatePatch(raw) {
   return patch
 }
 
-function stockQuantity(result) {
-  if (result.error) return null
-  if (!result.data) return 0
-  try {
-    return strictInteger(result.data.stock_from_batches, 'STOCK_UNAVAILABLE', { max: Number.MAX_SAFE_INTEGER })
-  } catch {
-    return null
-  }
-}
-
 function zeroQuantity(value) {
   try {
     return strictInteger(value, 'STOCK_UNAVAILABLE', { max: Number.MAX_SAFE_INTEGER }) === 0
@@ -203,9 +194,7 @@ export default async function handleProductMaster(req, res) {
     const { data, error } = await authorized.client.from('products').select(MASTER_FIELDS).eq('sku', sku).maybeSingle()
     if (error) return safeJson(res, 503, { error: { code: 'PRODUCTS_UNAVAILABLE' } })
     if (!data) return safeJson(res, 404, { error: { code: 'PRODUCT_NOT_FOUND' } })
-    const stockResult = await authorized.client.from('v_product_stock_from_batches')
-      .select('sku,stock_from_batches').eq('sku', sku).maybeSingle()
-    const stockAvailable = stockQuantity(stockResult)
+    const stockAvailable = (await readAdminProductStock(authorized.client, [sku])).get(sku)
     const product = { ...data, stock_available: stockAvailable }
     let taxonomyReview = null
     if (data.status === 'Draft' && data.published === false && (!data.brand_id || !data.category_id)) {
@@ -223,7 +212,7 @@ export default async function handleProductMaster(req, res) {
         ['on_hand', 'reserved', 'in_transit', 'damaged', 'expired', 'unaccounted']
           .every(field => zeroQuantity(balance[field])))
       const productStocksZero = zeroQuantity(data.stock_available) && zeroQuantity(data.total_stock)
-      const evidenceReadable = !stockResult.error && !batchResult.error && !eventResult.error && balancesReadable
+      const evidenceReadable = stockAvailable !== null && !batchResult.error && !eventResult.error && balancesReadable
       if (!evidenceReadable) {
         taxonomyReview = { status: 'unavailable' }
       } else if (!productStocksZero || stockAvailable !== 0 || (batchResult.data || []).length > 0
