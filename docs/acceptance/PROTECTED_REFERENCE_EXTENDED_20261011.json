@@ -1,0 +1,314 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "classification": "Owned PostgreSQL17.6 extended concurrency and real database-role probes with synthetic signer/actors",
+  "providerWrites": false,
+  "privateEvidenceRoot": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc",
+  "red": {
+    "case": "oci-imported34",
+    "result": {
+      "owningMap": "MAP-023/018",
+      "scope": "Owned reference concurrency probe on captured PostgreSQL17.6; base/cold recovery retained; no whole revised installation or provider qualification",
+      "providerWrites": false,
+      "arguments": [
+        "-L",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+        "-machine",
+        "pc",
+        "-accel",
+        "whpx",
+        "-m",
+        "4096",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-nic",
+        "none",
+        "-no-reboot",
+        "-kernel",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+        "-initrd",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported34\\initramfs.cpio",
+        "-append",
+        "console=ttyS0 rdinit=/bin/sh loglevel=3"
+      ],
+      "pid": 1336,
+      "exit": 0,
+      "timedOut": false,
+      "guestSuccess": false,
+      "serverModuleProbe": false,
+      "postgresVersion": "17.6",
+      "moduleGucs": false,
+      "processStopped": true,
+      "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+      "serialSha256": "5a2fb67b77fa6a260fba175f6321f09976c36dd351a51b1644ba068b3e690aa2"
+    },
+    "preparationSha256": "9896e48272be34ffbe64a184014e85396c91d54e2a85e3b5cccab76ef51036aa",
+    "resultSha256": "6fb9056221f600bc9c44d024ab2c55fc0c4aaeee7fff03bf624cdd48945932a9",
+    "preparation": {
+      "owningMap": "MAP-018",
+      "idea": "IDEA-20261010-06",
+      "case": "oci-imported34",
+      "mode": "green",
+      "phase": "concurrency",
+      "extended": true,
+      "scope": "Owned captured PostgreSQL17.6 concurrency probe, not whole revised installation qualification",
+      "providerWrites": false,
+      "sources": [
+        {
+          "file": "tests/native/protected-reference-concurrency.sh",
+          "sha256": "18f58700c7fcefebd9bc6a04459f9e5e6501afabc063429ace543716cc4f5afc"
+        },
+        {
+          "file": "tests/sql/protected-reference-concurrency-setup.sql",
+          "sha256": "933bb22a297db3418aeb3eb91bb00537e00ddd15dc441aa1a1b9db3b34791e44"
+        },
+        {
+          "file": "tests/sql/protected-reference-authority.sql",
+          "sha256": "694bb94ee48887b493b3a508a65f4c96483026aebe538ec0b18f93b9b25578e0"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_normalization.sql",
+          "sha256": "20a588aa2f4ef349c9ac544747e1dd551a0aace68a761fb518dbe97499cf5126"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_creation.sql",
+          "sha256": "0f1babb607e9d511659910478c923b0c7abc8dc90f0d6c5a17b10921469e4cfe"
+        },
+        {
+          "file": "scripts/prepare-reference-normalization-fixture.mjs",
+          "sha256": "9fb7dfd21839e3591509422097c9e8048ae85c438d55e6cc9e1aa9197da9bd65"
+        },
+        {
+          "file": "scripts/prepare-imported-provider-fixture.mjs",
+          "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+        }
+      ],
+      "runnerSha256": "ef5e1ecfb590fd9fcd53dd2e48f6a463fef6ff1232771864d1daa9518d3c194e",
+      "initramfsSha256": "de7021d91539aadcf4220f19e648ca19eeef2a58215c7f745ff5ee41dc1f505d",
+      "staged": [
+        {
+          "file": "reference-concurrency-test.sh",
+          "sha256": "18f58700c7fcefebd9bc6a04459f9e5e6501afabc063429ace543716cc4f5afc"
+        },
+        {
+          "file": "reference-concurrency-setup.sql",
+          "sha256": "933bb22a297db3418aeb3eb91bb00537e00ddd15dc441aa1a1b9db3b34791e44"
+        },
+        {
+          "file": "reference-authority-test.sql",
+          "sha256": "694bb94ee48887b493b3a508a65f4c96483026aebe538ec0b18f93b9b25578e0"
+        },
+        {
+          "file": "reference-normalization-install.sql",
+          "sha256": "a72e74100c85c77e5e3debb76d8fece8831db2dba2e576e807595511762d47e1"
+        },
+        {
+          "file": "init.sh",
+          "sha256": "d0107a39caed3e94c63516080d331114c66b2fb323fce6154ddbee4fa389a262"
+        },
+        {
+          "file": "image-probe.sh",
+          "sha256": "5b204d7ffc445ee6a48fefdd6bb09a1697d4b8c0fe5d56d41e8ce256a2bea990"
+        }
+      ]
+    },
+    "controllerSession": 35292,
+    "controllerExit": 1,
+    "scope": "Three same-key schedules passed; ordinary Staff category UPDATE then failed stored-index function EXEC permission. No cold recovery proof."
+  },
+  "green": {
+    "case": "oci-imported35",
+    "result": {
+      "owningMap": "MAP-023/018",
+      "scope": "Owned reference concurrency probe on captured PostgreSQL17.6; base/cold recovery retained; no whole revised installation or provider qualification",
+      "providerWrites": false,
+      "arguments": [
+        "-L",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+        "-machine",
+        "pc",
+        "-accel",
+        "whpx",
+        "-m",
+        "4096",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-nic",
+        "none",
+        "-no-reboot",
+        "-kernel",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+        "-initrd",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported35\\initramfs.cpio",
+        "-append",
+        "console=ttyS0 rdinit=/bin/sh loglevel=3"
+      ],
+      "pid": 9728,
+      "exit": 0,
+      "timedOut": false,
+      "guestSuccess": true,
+      "serverModuleProbe": true,
+      "postgresVersion": "17.6",
+      "moduleGucs": true,
+      "catalogs": {
+        "before": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        },
+        "after": {
+          "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+          "bytes": 2396732
+        },
+        "rollback": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        }
+      },
+      "fullCatalogRollback": true,
+      "processStopped": true,
+      "serialSha256": "e1b6f14385d1e45da5dbd806be27e0a9f461960f1fdc2ee0f30f84ffd002b379"
+    },
+    "preparationSha256": "b3fb2432ab890fa5cc2f55aaa57335652c887c6f6fd98d2a88613765b464ab58",
+    "resultSha256": "23832e74767128e6213f6f2bed90563529328e7badf9c03227bdb8b222249e6c",
+    "preparation": {
+      "owningMap": "MAP-018",
+      "idea": "IDEA-20261010-06",
+      "case": "oci-imported35",
+      "mode": "green",
+      "phase": "concurrency",
+      "extended": true,
+      "scope": "Owned captured PostgreSQL17.6 concurrency probe, not whole revised installation qualification",
+      "providerWrites": false,
+      "sources": [
+        {
+          "file": "tests/native/protected-reference-concurrency.sh",
+          "sha256": "18f58700c7fcefebd9bc6a04459f9e5e6501afabc063429ace543716cc4f5afc"
+        },
+        {
+          "file": "tests/sql/protected-reference-concurrency-setup.sql",
+          "sha256": "2f0bfa347cca5f85e9ddf7729e365df1cc76c13a9b9804474cb7f627bef10526"
+        },
+        {
+          "file": "tests/sql/protected-reference-authority.sql",
+          "sha256": "1709012578d14f29a4d7ee81b5044a9ab2dcfa51bc38630bf79364a69e744c79"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_normalization.sql",
+          "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_creation.sql",
+          "sha256": "0f1babb607e9d511659910478c923b0c7abc8dc90f0d6c5a17b10921469e4cfe"
+        },
+        {
+          "file": "scripts/prepare-reference-normalization-fixture.mjs",
+          "sha256": "9fb7dfd21839e3591509422097c9e8048ae85c438d55e6cc9e1aa9197da9bd65"
+        },
+        {
+          "file": "scripts/prepare-imported-provider-fixture.mjs",
+          "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+        }
+      ],
+      "runnerSha256": "03557c099e7ed157decfed2423f76da253b7158a6ba2a00d6ae97eecf1fff11a",
+      "initramfsSha256": "a1de828b3542557247fcfac708428825ab91fe005767b5e3f6959e50b388ce98",
+      "staged": [
+        {
+          "file": "reference-concurrency-test.sh",
+          "sha256": "18f58700c7fcefebd9bc6a04459f9e5e6501afabc063429ace543716cc4f5afc"
+        },
+        {
+          "file": "reference-concurrency-setup.sql",
+          "sha256": "2f0bfa347cca5f85e9ddf7729e365df1cc76c13a9b9804474cb7f627bef10526"
+        },
+        {
+          "file": "reference-authority-test.sql",
+          "sha256": "1709012578d14f29a4d7ee81b5044a9ab2dcfa51bc38630bf79364a69e744c79"
+        },
+        {
+          "file": "reference-normalization-install.sql",
+          "sha256": "db07b8ecf04dd8134153b6f10ac625a3b67b1fcfa20805b706fb50146de0b75c"
+        },
+        {
+          "file": "init.sh",
+          "sha256": "d0107a39caed3e94c63516080d331114c66b2fb323fce6154ddbee4fa389a262"
+        },
+        {
+          "file": "image-probe.sh",
+          "sha256": "5b204d7ffc445ee6a48fefdd6bb09a1697d4b8c0fe5d56d41e8ce256a2bea990"
+        }
+      ]
+    },
+    "controllerSession": 39012,
+    "controllerExit": 0,
+    "independentProcessAbsent": true
+  },
+  "schedules": [
+    {
+      "name": "samekey_commit",
+      "marker": "K2_REFERENCE_SCHEDULE_samekey_commit_OK",
+      "count": 1
+    },
+    {
+      "name": "samekey_rollback",
+      "marker": "K2_REFERENCE_SCHEDULE_samekey_rollback_OK",
+      "count": 1
+    },
+    {
+      "name": "samekey_conflict",
+      "marker": "K2_REFERENCE_SCHEDULE_samekey_conflict_OK",
+      "count": 1
+    },
+    {
+      "name": "reparent_commit",
+      "marker": "K2_REFERENCE_SCHEDULE_reparent_commit_OK",
+      "count": 1
+    },
+    {
+      "name": "reparent_rollback",
+      "marker": "K2_REFERENCE_SCHEDULE_reparent_rollback_OK",
+      "count": 1
+    }
+  ],
+  "correction": "Pure input-only reference_name_key_v1 is postgres-owned SECURITY DEFINER with empty search_path and EXEC for authenticated/service_role existing table writers. No private schema USAGE, inner cleaner EXEC, context/event/helper privileges or creation role widening.",
+  "behavior": [
+    "Fresh-signature same-key follower returns exactly the committed historical JSON receipt",
+    "Rolled-back same-key holder lets follower create",
+    "Changed-body same-key follower refuses22023 without extra business rows",
+    "Ordinary Staff reparent COMMIT to invalid cycle makes child creation refuse after actual advisory wait; ROLLBACK permits creation",
+    "Staff and service_role existing name UPDATE succeeds; normalized duplicate UPDATE refuses23505",
+    "Private helper direct access/context forging and unsigned INSERT remain denied",
+    "Anon execution, AAL1 and tampered signatures refuse; shared-to-exclusive policy upgrade and repeatable-read entry refuse",
+    "SuperAdmin signed creation succeeds inside rollback-only probe",
+    "Exact pure helper body/owner/searchpath/ACL metadata asserted; four events/receipts and five nonces/rate hits; cleared context"
+  ],
+  "development": {
+    "command": "npm run verify:development",
+    "session": 76426,
+    "exit": 0,
+    "sessionReferenceTests": 19,
+    "failures": 0,
+    "routeControlGaps": 0
+  },
+  "remainingDiscovery": "Captured existing signed Admin catalog-import/fulfillment/lot/product-intake/product-master paths verify and take nonce/rate tuple locks before category policy; reference category entry currently takes policy before verification. This source-based potential lock-order inversion is unqualified and stays MAP-018. No actual deadlock claim or fix yet.",
+  "limitations": [
+    "Synthetic claims/signing are not genuine Auth/PostgREST/BFF/browser acceptance",
+    "Inherited after-catalog predates reference fragments; whole new metadata and revised installer conservation/replay/drift remain",
+    "Cold reconstruction is disposable baseline recovery, not populated data-retaining production recovery",
+    "Existing signed-writer lock-order compatibility remains unqualified",
+    "Editor integration, durable pending-body recovery and creation-to-paired-Save remain",
+    "No provider write, production activation, deployment or physical/real-host acceptance"
+  ],
+  "recovery": "Revert only this prepared helper metadata/test/fixture extension; retain34 failure and35 evidence. No provider rollback because none changed; fresh successors only."
+}

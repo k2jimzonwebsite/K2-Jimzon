@@ -12,6 +12,8 @@ const mode = process.argv.includes('--red') ? 'red' : 'green'
 const phase = process.argv.includes('--concurrency') ? 'concurrency'
   : process.argv.includes('--creation') ? 'creation' : 'normalization'
 assert.ok(phase !== 'concurrency' || mode === 'green', 'Concurrency qualifies the existing creation component')
+const extended = process.argv.includes('--extended-concurrency')
+assert.ok(!extended || phase === 'concurrency')
 const target = path.resolve(root, caseName)
 assert.equal(path.dirname(target), path.resolve(root))
 assert.ok(!fs.existsSync(target), 'Fresh owned fixture required; never reuse a prior case')
@@ -20,6 +22,7 @@ const testFile = phase === 'concurrency' ? 'tests/native/protected-reference-con
   : `tests/sql/protected-reference-${phase}.sql`
 const sources = [testFile]
 if (phase === 'concurrency') sources.push('tests/sql/protected-reference-concurrency-setup.sql')
+if (extended) sources.push('tests/sql/protected-reference-authority.sql')
 const installs = []
 if (mode === 'green' || phase === 'creation') installs.push('supabase/prepared/protected_reference_normalization.sql')
 if (mode === 'green' && phase !== 'normalization') installs.push('supabase/prepared/protected_reference_creation.sql')
@@ -38,6 +41,10 @@ const added = [stagedTest]
 if (phase === 'concurrency') {
   fs.copyFileSync('tests/sql/protected-reference-concurrency-setup.sql',path.join(stage,'reference-concurrency-setup.sql'),fs.constants.COPYFILE_EXCL)
   added.push('reference-concurrency-setup.sql')
+}
+if (extended) {
+  fs.copyFileSync('tests/sql/protected-reference-authority.sql',path.join(stage,'reference-authority-test.sql'),fs.constants.COPYFILE_EXCL)
+  added.push('reference-authority-test.sql')
 }
 if (installs.length) {
   fs.writeFileSync(path.join(stage, 'reference-normalization-install.sql'),
@@ -58,7 +65,7 @@ assert.equal(probe.split(anchor).length, 2)
 const marker = `K2_REFERENCE_${phase.toUpperCase()}`
 const tests = (installs.length ? `${command('reference-normalization-install.sql')}\n` : '') + (mode === 'red'
   ? `set +e\n${command('reference-normalization-test.sql')} > /tmp/reference-normalization.log 2>&1\nreference_status=$?\nset -e\ncat /tmp/reference-normalization.log\n[ "$reference_status" -eq 3 ]\ngrep -q ${marker}_MISSING /tmp/reference-normalization.log\necho ${marker}_EXPECTED_RED_OK\n`
-  : phase === 'concurrency' ? '/bin/sh /tmp/reference-concurrency-test.sh\n'
+  : phase === 'concurrency' ? `${extended ? 'K2_REFERENCE_SCHEDULE_SET=extended ' : ''}/bin/sh /tmp/reference-concurrency-test.sh\n`
     : `${command('reference-normalization-test.sql')}\n`)
 probe = probe.replace(anchor, anchor + tests)
 fs.writeFileSync(path.join(stage, 'image-probe.sh'), probe)
@@ -86,7 +93,7 @@ assert.equal(runner.split(oldScope).length, 2)
 runner = runner.replace(oldScope, `Owned reference ${phase} probe on captured PostgreSQL17.6; base/cold recovery retained; no whole revised installation or provider qualification`)
 fs.writeFileSync(path.join(target, 'runner-source.mjs'), runner, { flag: 'wx' })
 sources.push('scripts/prepare-reference-normalization-fixture.mjs', 'scripts/prepare-imported-provider-fixture.mjs')
-const receipt = { owningMap: 'MAP-018', idea: 'IDEA-20261010-06', case: caseName, mode, phase,
+const receipt = { owningMap: 'MAP-018', idea: 'IDEA-20261010-06', case: caseName, mode, phase, extended,
   scope: `Owned captured PostgreSQL17.6 ${phase} probe, not whole revised installation qualification`,
   providerWrites: false, sources: sources.map(file => ({ file, sha256: sha(fs.readFileSync(file)) })),
   runnerSha256: sha(runner),

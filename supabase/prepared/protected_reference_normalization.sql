@@ -41,8 +41,12 @@ revoke all on function k2_private.clean_reference_name_v1(text)
  from public,anon,authenticated,service_role;
 
 create function k2_private.reference_name_key_v1(p_value text)
-returns text language sql immutable set search_path='' as $key$
+returns text language sql immutable security definer set search_path='' as $key$
  select pg_catalog.lower(k2_private.clean_reference_name_v1(p_value) collate "default");
 $key$;
 revoke all on function k2_private.reference_name_key_v1(text)
  from public,anon,authenticated,service_role;
+-- Stored expression-index evaluation needs EXECUTE for existing table writers.
+-- This pure input-only helper runs its owner-only cleanup under fixed identity;
+-- private schema USAGE and every mutation/context helper remain closed.
+grant execute on function k2_private.reference_name_key_v1(text) to authenticated,service_role;

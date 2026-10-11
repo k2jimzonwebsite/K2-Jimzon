@@ -39,5 +39,8 @@ grant execute on function k2_reference_probe.command(uuid,text,text,uuid) to aut
 insert into public.categories(id,name) values
  ('88400000-0000-4000-8000-000000000001','Race parent commit'),
  ('88400000-0000-4000-8000-000000000002','Race parent rollback');
+insert into public.brands(id,name) values
+ ('88600000-0000-4000-8000-000000000001','Index writer one'),
+ ('88600000-0000-4000-8000-000000000002','Index writer two');
 commit;
 select 'K2_REFERENCE_CONCURRENCY_SETUP_OK';
