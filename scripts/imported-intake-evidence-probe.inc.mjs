@@ -10,6 +10,7 @@ import { createServerSupabase, restoreAuthSession } from '../server/admin-bff/su
 export async function intakeEvidenceProbe(uid, report, credentials, request, jar, workflow = {}) {
   assert.equal(process.env.SUPABASE_URL, workflow.publicMedia ? 'https://127.0.0.1:54395' : 'http://127.0.0.1:54395')
   const requestId = randomUUID(), key = randomUUID(), paths = []
+  const ownedRequests = new Set([requestId])
   const good = (stage, reply) => {
     report.intakeStage = stage
     if (reply.error) report.intakeFailure = { code: reply.error.code || null, status: reply.error.status || null }
@@ -44,6 +45,24 @@ export async function intakeEvidenceProbe(uid, report, credentials, request, jar
   let sessionId
   try {
     const target = workflow.before ? await workflow.before({ client, cleanup, request, good, expect, report }) : null
+    if (workflow.browser) {
+      const selected = await workflow.browser({ target, trackRequest: value => {
+        assert.match(value || '', /^[0-9a-f-]{36}$/i); ownedRequests.add(value)
+      }, trackPath: value => {
+        assert.ok(value.startsWith(uid + '/')); if (!paths.includes(value)) paths.push(value)
+      } })
+      sessionId = selected.sessionId
+      const saved = good('browser_session_readback', await cleanup.from('product_intake_sessions').select('*').eq('id', sessionId).eq('created_by', uid).single())
+      assert.equal(saved.request_id, selected.requestId); assert.equal(saved.packaging_images.length, 3)
+      for (const image of saved.packaging_images) {
+        assert.equal(image.upload_status, 'uploaded'); assert.ok(paths.includes(image.path))
+        const blob = good('browser_evidence_retained', await bucket.download(image.path))
+        assert.equal(createHash('sha256').update(Buffer.from(await blob.arrayBuffer())).digest('hex'), image.sha256)
+      }
+      report.intakeEvidence = { sessionId, requestId: selected.requestId, images: saved.packaging_images, browserRendered: true, protectedReadback: true }
+      if (workflow.after) await workflow.after({ client, cleanup, request, good, expect, report, target, sessionId, requestId: selected.requestId })
+      return
+    }
     if (target) body.existingProduct = target.existingProduct
     const before = good('synthetic_session_absent', await cleanup.from('product_intake_sessions').select('id').eq('created_by', uid).eq('request_id', requestId))
     assert.deepEqual(before, [])
@@ -92,9 +111,9 @@ export async function intakeEvidenceProbe(uid, report, credentials, request, jar
     throw error
   } finally {
     // Delete only this fixture actor/request before its Auth FK is hard-deleted.
-    const removed = good('synthetic_session_cleanup', await cleanup.from('product_intake_sessions').delete().eq('created_by', uid).eq('request_id', requestId).select('id'))
-    if (sessionId) assert.deepEqual(removed, [{ id: sessionId }])
-    assert.deepEqual(good('synthetic_session_cleanup_readback', await cleanup.from('product_intake_sessions').select('id').eq('created_by', uid).eq('request_id', requestId)), [])
+    const removed = good('synthetic_session_cleanup', await cleanup.from('product_intake_sessions').delete().eq('created_by', uid).in('request_id', [...ownedRequests]).select('id'))
+    if (sessionId) assert.ok(removed.some(row => row.id === sessionId))
+    assert.deepEqual(good('synthetic_session_cleanup_readback', await cleanup.from('product_intake_sessions').select('id').eq('created_by', uid).in('request_id', [...ownedRequests])), [])
     if (paths.length) {
       good('synthetic_media_cleanup', await bucket.remove(paths))
       for (const objectPath of paths) assert.ok((await bucket.download(objectPath)).error)

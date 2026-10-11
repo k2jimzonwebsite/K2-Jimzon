@@ -5,13 +5,15 @@ import {CATALOG_COLUMNS} from '../server/admin-bff/catalog-spreadsheet.js'
 import {intakeEvidenceProbe} from './imported-intake-evidence-probe.inc.mjs'
 import sharp from 'sharp'
 import {decodeEvidenceImage} from '../server/admin-bff/product-intake.js'
+import {importedIntakeBrowserProbe} from './imported-intake-browser-probe.inc.mjs'
 
-export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false}={}){
+export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false,browserWorkflow=false,browserOut}={}){
  let mediaCleanup,mediaPath
  const command=async(expect,route,body,key=randomUUID())=>expect(route,await request(route,'POST',body,{headers:{'x-k2-idempotency-key':key}})).result
  try{
  await intakeEvidenceProbe(uid,report,credentials,request,jar,{
   publicMedia,
+  ...(browserWorkflow ? {browser: context => importedIntakeBrowserProbe({...context,credentials,uid,report,out:browserOut})} : {}),
   before:async({client,cleanup,request,good,expect})=>{
    const values=Object.fromEntries(CATALOG_COLUMNS.map(k=>[k,'']))
    Object.assign(values,{template_version:'k2-catalog-v1',name:'Synthetic pantry '+randomUUID(),description:'Imported description to preserve',ingredients:'Synthetic label ingredients',country_of_origin:'Spain',primary_image_url:'https://example.invalid/imported-supplied.jpg',internal_notes:'Explicit synthetic CSV provenance'})
@@ -48,6 +50,7 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
    const reviewedPayload={meta:{schemaVersion:'k2.product-content.v3'},product:{name:baseline.name,description:'Staff accepted correction',ingredients:'Rejected AI suggestion',origin:'Italy',brand:brand.name,category:category.name}}
    const fieldDecisions={name:'accepted',description:'accepted',ingredients:'rejected',origin:'accepted',brand:'accepted',category:'accepted'}
    const step=async(next,patch={})=>command(expect,'product-intake/step',{sessionId,step:next,patch})
+   if(!browserWorkflow){
    await step('packaging_evidence')
    await step('research_handoff',{evidenceChecklist:{ingredients:true,allergens:true,storage:true,expiry:true},categoryType:'food'})
    await step('field_review')
@@ -56,11 +59,12 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
    const reviewed=await command(expect,'product-intake/draft',body,key)
    assert.equal(reviewed.product_id,baseline.id);assert.equal(reviewed.sku,sku)
    assert.deepEqual(await command(expect,'product-intake/draft',body,key),reviewed)
+   }
    const product=good('reviewed_product_read',await client.from('products').select('*').eq('id',baseline.id).single())
    for(const field of ['id','sku','catalog_id','primary_image_url','ingredients','internal_notes'])assert.equal(product[field],baseline[field])
    assert.equal(product.description,'Staff accepted correction');assert.equal(product.brand_id,brand.id);assert.equal(product.category_id,category.id)
    assert.equal(Number(product.catalog_record_version),Number(baseline.catalog_record_version)+1)
-   report.importedProduct.reviewedOriginalIdentity=true;report.importedProduct.rejectedIngredientsPreserved=true;report.importedProduct.reviewReplay=true
+   report.importedProduct.reviewedOriginalIdentity=true;report.importedProduct.rejectedIngredientsPreserved=true;report.importedProduct.reviewReplay=!browserWorkflow
    if(publicMedia){
     mediaCleanup=cleanup.storage.from('product-images')
     const bytes=await sharp({create:{width:180,height:140,channels:3,background:{r:184,g:93,b:42}}}).png().toBuffer()
