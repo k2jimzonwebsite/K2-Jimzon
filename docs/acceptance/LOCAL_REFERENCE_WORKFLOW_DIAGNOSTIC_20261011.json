@@ -1,0 +1,431 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "date": "2026-10-11",
+  "scope": "Preserved local workflow diagnostic history01–13; final13 connected local acceptance is recorded separately in LOCAL_REFERENCE_WORKFLOW_20261011.json. No provider or hosted changes.",
+  "fixes": [
+    "Verified empty canonical reference lists admit first-reference creation without weakening stock/history or complete-count guards",
+    "Product Master historical names use shared exact readable semantics, including approved U+FEFF"
+  ],
+  "focused": {
+    "command": "node --test tests/category-policy-handler.checks.mjs",
+    "redEmpty": {
+      "passed": 23,
+      "failed": 1
+    },
+    "greenEmpty": {
+      "passed": 24,
+      "failed": 0
+    },
+    "redUnicode": {
+      "passed": 24,
+      "failed": 1
+    },
+    "greenFinal": {
+      "passed": 25,
+      "failed": 0
+    }
+  },
+  "cases": [
+    {
+      "case": "oci-reference-workflow01",
+      "hashes": {
+        "executed-source.mjs": "1f532c8cd3dc67e3f9388e417a923aa8116537cf4760739095ccf5b72ce00494",
+        "executed-derivation.mjs": "35e919db27f477f164cf2106e3e6f1c673e424f400f3b8d9b7ad3f546ecce688",
+        "bff-helper.mjs": "16858b96c58789da64d134fca71fc48513e9e31daa7d908a8362345e921e71d6",
+        "host-driver.mjs": "1d68f6f73bc328c9fc54f7fd55562e6b4e35a13b3a2633e710a5540f703a60c9",
+        "workflow-source-pins.json": "a303076911cbdeb5ec32396d3048d85645818edd7ee74254fa68a621aece8549",
+        "execution01/launch.json": "f44585a01c903d17d248dea2867060662763bd34e1bfc97d1674504371d0ebea",
+        "execution01/result.json": "d065ce79113ab6ed1494658544722eff4648a9ad79ed0459b3850555c682b363",
+        "execution01/serial.log": "f675d3c79a955ebf60f91d7a1e02b3e3e94a9019e028a9831d4518078969c107"
+      },
+      "browserStage": null,
+      "browserChecks": [],
+      "eligibilityDiagnostics": null,
+      "fullRecovery": false,
+      "authorityWitnesses": 1
+    },
+    {
+      "case": "oci-reference-workflow02",
+      "hashes": {
+        "executed-source.mjs": "09cfee28a9e5e6251ab162172d7c7cc5d4ffc2025f8a377a427cb81025a8cbf6",
+        "executed-derivation.mjs": "4aa9e6232fdd2ebdffe98d39752680383f0d8222b2fb738f688590f01798631a",
+        "bff-helper.mjs": "16858b96c58789da64d134fca71fc48513e9e31daa7d908a8362345e921e71d6",
+        "host-driver.mjs": "1d68f6f73bc328c9fc54f7fd55562e6b4e35a13b3a2633e710a5540f703a60c9",
+        "workflow-source-pins.json": "127f0deacf853432d8ee0555699beb268f260822d76c3e5512df5db142047a87",
+        "execution01/launch.json": "1826dd5ebe69493de7b8c3290947d762b90ff2c288b2e7148b74612d10ab418c",
+        "execution01/result.json": "5deed4c771dfde1735408b56935aadbe5b4c326119561057a74431d4dae17c6f",
+        "execution01/serial.log": "3b8b9cd9f96c03a739bd8bdb428a9fa0699f90601e2e94aa1965da1c9523267d"
+      },
+      "browserStage": null,
+      "browserChecks": [],
+      "eligibilityDiagnostics": null,
+      "fullRecovery": false,
+      "authorityWitnesses": 1
+    },
+    {
+      "case": "oci-reference-workflow03",
+      "hashes": {
+        "executed-source.mjs": "1e9ba3fb1cd5c35e5d7a4d9fadb2146dd452293ce80606f71c9086c925bc644c",
+        "executed-derivation.mjs": "652901b3bbbf2558e9a8572e1b26252e5b14fb8b0954dacbf408dff1bb94441f",
+        "bff-helper.mjs": "16858b96c58789da64d134fca71fc48513e9e31daa7d908a8362345e921e71d6",
+        "host-driver.mjs": "1d68f6f73bc328c9fc54f7fd55562e6b4e35a13b3a2633e710a5540f703a60c9",
+        "host-driver-result.json": "66c769c6edc3c7a13360fd2842e2ff13d7313b5df3d1d07d38851ffd5f4ba1bb",
+        "workflow-source-pins.json": "9b846982e370d3120af90ed902b059cd785ae0caebbd3295eea7cf4f1f4ea912",
+        "execution01/launch.json": "0aa956bb8b84206d582ef6094e181635b382dfb9d8ee95d86ca5b6463bedafd3",
+        "execution01/result.json": "a3e3a1a14fce3e79e197627722139918f067596504b3d1c78473bff7974960e9",
+        "execution01/serial.log": "b260aae595deb85a6183308694235f14184e55de2d0c3b7732a960072835deb1"
+      },
+      "browserStage": "login",
+      "browserChecks": [
+        "real_password_mfa_full_admin"
+      ],
+      "eligibilityDiagnostics": null,
+      "fullRecovery": true,
+      "authorityWitnesses": 2
+    },
+    {
+      "case": "oci-reference-workflow04",
+      "hashes": {
+        "executed-source.mjs": "c8244776967654dca6106f637576d60a0321c69bdc52a1e460c1593d73d1c3be",
+        "executed-derivation.mjs": "c38cc72e8f2bc736af37c96502a44eaad44c57d89d96c378cf01ae11745e29f6",
+        "bff-helper.mjs": "cba4668884f8d4e99154fb3bfeb796aa473107cb3008affed383d25a3fb1ccdc",
+        "host-driver.mjs": "f2e9d9f62b559728e4310eea76f104c3117f3c51689af79cb012743530626e31",
+        "host-driver-result.json": "bfb3129155c1dc17e105affe4e0414a107a7591c548aace2539191fcfca4f437",
+        "workflow-source-pins.json": "3e7fd451f70762af4b8ae6ee7ff2b46c7c8f42e523c4703037ea46d0c1dea13d",
+        "execution01/launch.json": "22898ec99dd319e482a2ebf5a40e61912076fbacaddf7cddff822841da04ea41",
+        "execution01/result.json": "56ebd7ddbccb8ade83204025fd0db244a12a5920ece4552d33ed205dbe6fc016",
+        "execution01/serial.log": "0684961f9e9db9c981c3bc6c3b574d3e204c4d7799ee3d574f66af2243d2e699"
+      },
+      "browserStage": "open_brand_creation",
+      "browserChecks": [
+        "real_password_mfa_full_admin"
+      ],
+      "eligibilityDiagnostics": null,
+      "fullRecovery": true,
+      "authorityWitnesses": 2
+    },
+    {
+      "case": "oci-reference-workflow05",
+      "hashes": {
+        "executed-source.mjs": "218676cf581a9b42400fbe2b10a80248157669a66e5dea4a55b27081466c8281",
+        "executed-derivation.mjs": "c38cc72e8f2bc736af37c96502a44eaad44c57d89d96c378cf01ae11745e29f6",
+        "bff-helper.mjs": "c374682e8a6d78763693b7d1c65f0247f16c3eeb35c76ca3da4df0ac24cc69ad",
+        "host-driver.mjs": "f2e9d9f62b559728e4310eea76f104c3117f3c51689af79cb012743530626e31",
+        "host-driver-result.json": "f6822c8232a661d3346509a562395d37cb6fc3d6ebf6041304964ea3c9b5f003",
+        "workflow-source-pins.json": "d859e6912777b40270cdd61c18cc0c719d7cf849caf9b07da5f896c9ed3f5b39",
+        "execution01/launch.json": "9b6010501489e8665555cc2c7e18d7eb3e25065351f485314422553445a47fd4",
+        "execution01/result.json": "6d11eb63549b27006c01ec227ba056e90203025f4f5eef7dfe1b9d4e765fad7b",
+        "execution01/serial.log": "d5baea7ab796d0ca7323c82fbef769ab7ec45b5360a83fb2a8f86afb22b3d78e"
+      },
+      "browserStage": "open_editor",
+      "browserChecks": [
+        "real_password_mfa_full_admin"
+      ],
+      "eligibilityDiagnostics": [
+        {
+          "table": "v_product_stock_from_batches",
+          "status": 200,
+          "count": 0,
+          "rows": 0
+        },
+        {
+          "table": "product_batches",
+          "status": 200,
+          "count": 0,
+          "rows": 0
+        },
+        {
+          "table": "inventory_balances",
+          "status": 200,
+          "count": 0,
+          "rows": 0
+        },
+        {
+          "table": "inventory_events",
+          "status": 200,
+          "count": 0,
+          "rows": 0
+        },
+        {
+          "table": "brands",
+          "status": 200,
+          "count": 0,
+          "rows": 0,
+          "allNamesReadable": true
+        },
+        {
+          "table": "categories",
+          "status": 200,
+          "count": 0,
+          "rows": 0,
+          "allNamesReadable": true
+        }
+      ],
+      "fullRecovery": true,
+      "authorityWitnesses": 2
+    },
+    {
+      "case": "oci-reference-workflow06",
+      "hashes": {
+        "executed-source.mjs": "0a2b830daf6845c2ce70e3b523339719fa82d65cd993cc46b5dbce69c7b3f387",
+        "executed-derivation.mjs": "c38cc72e8f2bc736af37c96502a44eaad44c57d89d96c378cf01ae11745e29f6",
+        "bff-helper.mjs": "c374682e8a6d78763693b7d1c65f0247f16c3eeb35c76ca3da4df0ac24cc69ad",
+        "host-driver.mjs": "f2e9d9f62b559728e4310eea76f104c3117f3c51689af79cb012743530626e31",
+        "workflow-source-pins.json": "d859e6912777b40270cdd61c18cc0c719d7cf849caf9b07da5f896c9ed3f5b39",
+        "execution01/launch.json": "1713e102bcf84f5fc319ff9cc0d576d66934737da2ab0cd2cf77dd4ff853a8f3",
+        "execution01/serial.log": "e3073c18bc9907402dd6b8cec5557a9e2e71b4d4bd4d17c567a28787bb529dcc"
+      },
+      "browserStage": null,
+      "browserChecks": [],
+      "eligibilityDiagnostics": null,
+      "fullRecovery": false,
+      "authorityWitnesses": 1
+    },
+    {
+      "case": "oci-reference-workflow07",
+      "hashes": {
+        "executed-source.mjs": "4190a2a35a7b58084e50b2461f6f27f32a1e18ecf4b0b251be4a3f0f93f5a761",
+        "executed-derivation.mjs": "953df2035922b2314793e6cb630ee28649eccd4c52acd0c5427aabc71dd98b4b",
+        "bff-helper.mjs": "2aa6f32c9066d89d615af31155103064a698cd1815f10dbfe03d402b7c54e271",
+        "host-driver.mjs": "f2e9d9f62b559728e4310eea76f104c3117f3c51689af79cb012743530626e31",
+        "host-driver-result.json": "57dbfef5994295d818c596de01954183d8fbe86fde16e24e174a131bfe66f4fb",
+        "workflow-source-pins.json": "f13344bcf8918cd9fc980fbf764db8781efd62a2e15abc6a3fe38c1b0ad0a3e1",
+        "execution01/launch.json": "42aad8a238bbd817f40a113b99ecd47a329b67028ad55a06e6475cfd24e209bb",
+        "execution01/result.json": "772f3f4ffc161554d261274794fd7022ba1466727df06e0f7c589f33a34e9f36",
+        "execution01/serial.log": "35297cf58dd89533e9913a3d95eb17bd1178d2978e11c387d026e4e6216abc15"
+      },
+      "browserPassed": false,
+      "browserStage": "brand_lost_reply",
+      "browserChecks": [
+        "real_password_mfa_full_admin"
+      ],
+      "referenceRpcFailure": {
+        "status": 500,
+        "code": "55000",
+        "reason": "K2_REFERENCE_DEADLINES_REQUIRED"
+      },
+      "fullRecovery": true,
+      "authorityWitnesses": 2
+    },
+    {
+      "case": "oci-reference-workflow08",
+      "hashes": {
+        "executed-source.mjs": "418545438a70c86fead75116ee4b4886b964ec3d923695728d2a75c912f402dd",
+        "executed-derivation.mjs": "180e948d540b200f661733eb43426028742966edeed55e10e155ffdbb67325aa",
+        "bff-helper.mjs": "a21a6fb847bce9255c05837e3c086981af27ac00ff0f8fb804a6144d9e8f194a",
+        "host-driver.mjs": "f2e9d9f62b559728e4310eea76f104c3117f3c51689af79cb012743530626e31",
+        "host-driver-result.json": "5ec3c3b04c325b46dc9e8d4fc4377292054deaab8c956c6bd11acd3be0e23d83",
+        "workflow-source-pins.json": "a5c597b67febcce24ff73628bca8c15801d3f5fa6b76b42ceb690ef298325b05",
+        "execution01/launch.json": "fcb0d7ceed35d75e0eaf38c779014e8923dd7acd6cdffa19d82f139c367f114b",
+        "execution01/result.json": "fc83935bcda0f2259edf8ab1805defac9c02845e354faf0b02ae723b560280ac",
+        "execution01/serial.log": "7076cd42d6da48eebe88b74d218040c43fe86535380407530bd672906a648f82"
+      },
+      "browserPassed": false,
+      "browserStage": "brand_lost_reply",
+      "browserChecks": [
+        "real_password_mfa_full_admin"
+      ],
+      "callerDeadlines": {
+        "lock": "0",
+        "role": "authenticated",
+        "statement": "0"
+      },
+      "referenceRpcFailure": {
+        "status": 500,
+        "code": "55000",
+        "reason": "K2_REFERENCE_DEADLINES_REQUIRED"
+      },
+      "fullRecovery": true,
+      "authorityWitnesses": 2
+    },
+    {
+      "case": "oci-reference-workflow09",
+      "hashes": {
+        "executed-source.mjs": "c79a53b5c5e9e923662403bcff403259e1b5eab5f533eed49d3cdcda6efbd865",
+        "executed-derivation.mjs": "8fc55f2282ab9e7e9cd6b23602c0d8a8a9a4c8a962b0f787e02b77d018166888",
+        "bff-helper.mjs": "a21a6fb847bce9255c05837e3c086981af27ac00ff0f8fb804a6144d9e8f194a",
+        "host-driver.mjs": "f2e9d9f62b559728e4310eea76f104c3117f3c51689af79cb012743530626e31",
+        "host-driver-result.json": "93c07c22b2e66eda000ad3ae6c2470445d4007c4cbb23820e5ad4ad10b3bb46f",
+        "workflow-source-pins.json": "63feba196ccd4650539cccedde3e52eadb921c928edeb82f3a437fa039bbe0c5",
+        "execution01/launch.json": "36b79fee29949790e52443132d44719a0da2ec078e8aa218482bb57bfa42fac4",
+        "execution01/result.json": "6603cca04ba25add039c586a48e1b89590dd03b07ac77dcd843b5df4134cca59",
+        "execution01/serial.log": "c5c2aaefb206a96c74d34bf5d963ca4f05477fd9fb79e9de58281942f884331e"
+      },
+      "browserPassed": false,
+      "browserStage": "open_editor",
+      "browserChecks": [
+        "real_password_mfa_full_admin",
+        "committed_lost_reply_reload_exact_request_receipt_recovery"
+      ],
+      "callerDeadlines": {
+        "lock": "2s",
+        "role": "authenticated",
+        "statement": "10s"
+      },
+      "referenceRpcFailure": {
+        "status": 500,
+        "code": "55000",
+        "reason": "K2_CATEGORY_POLICY_NOT_CONFIGURED"
+      },
+      "fullRecovery": true,
+      "authorityWitnesses": 2
+    },
+    {
+      "case": "oci-reference-workflow10",
+      "hashes": {
+        "executed-source.mjs": "a8e966a76df3dd27e7f3ee1dd4d568e16ef517d218957d67d8bed5fcb8a79206",
+        "executed-derivation.mjs": "ad16ffcab60524e2a80cacf502ff71ae08354b01871646f12c26fa7e8d5b9010",
+        "bff-helper.mjs": "a21a6fb847bce9255c05837e3c086981af27ac00ff0f8fb804a6144d9e8f194a",
+        "host-driver.mjs": "f2e9d9f62b559728e4310eea76f104c3117f3c51689af79cb012743530626e31",
+        "host-driver-result.json": "ae31ab1ff7a15ca6d020893b7a089cf62b445d816e07e67a472bc61f0826ca90",
+        "workflow-source-pins.json": "bc331893d8b15be32c12963c6d058f37d898f7d7a622ac753366714c9c7589f3",
+        "execution01/launch.json": "7cea422cf054113db8324e6a6b5f09ae151c3b7f6cf6fd80c5e07b9ab7b6b8df",
+        "execution01/result.json": "6f3106c037c401fef52af7e54cdab5c5e7095711f77ee75f26d9aa79a3cac261",
+        "execution01/serial.log": "3768422f745740fc0e4b35e7cbde13142b24a8f08a95a5bbd6a39ea2c0eddae2"
+      },
+      "browserPassed": false,
+      "browserStage": "open_editor",
+      "browserChecks": [
+        "real_password_mfa_full_admin",
+        "committed_lost_reply_reload_exact_request_receipt_recovery"
+      ],
+      "callerDeadlines": {
+        "lock": "2s",
+        "role": "authenticated",
+        "statement": "10s"
+      },
+      "fullRecovery": true,
+      "authorityWitnesses": 2
+    },
+    {
+      "case": "oci-reference-workflow11",
+      "hashes": {
+        "executed-source.mjs": "d08975ec5ac5ee9484d861b442af5a68242248a497e3bf2215ba9e8b6662e2ca",
+        "executed-derivation.mjs": "ad16ffcab60524e2a80cacf502ff71ae08354b01871646f12c26fa7e8d5b9010",
+        "bff-helper.mjs": "5b08e4f62ac1c0bcb1b1ac5ec74781655efb81a40d5d483eb6a68b1290903e88",
+        "host-driver.mjs": "f2e9d9f62b559728e4310eea76f104c3117f3c51689af79cb012743530626e31",
+        "host-driver-result.json": "b31ade436a84eb1ab35d8105c7d4d90cf41cebc359e3b900540119222f0fe6d4",
+        "workflow-source-pins.json": "38fde0dcbbd2d3ba47d1b857a5e1c240ed449d1efe43408c0058e4247cedcba2",
+        "execution01/launch.json": "b5e3adedb0d477ddfe24f0cd3ce6130c7b0721e00837ae6c5862ef6e85637ded",
+        "execution01/result.json": "4ab5dd8897afded2e71c04ab7cb83a14097f744028b03af8286f5be0d06debdf",
+        "execution01/serial.log": "b67f00ee294e5bd7111a6db009a9abb01332cfc36fd6aec6e1a51ee8f078d0ac"
+      },
+      "browserPassed": false,
+      "browserStage": "unsaved_choices",
+      "browserChecks": [
+        "real_password_mfa_full_admin",
+        "committed_lost_reply_reload_exact_request_receipt_recovery"
+      ],
+      "callerDeadlines": {
+        "lock": "2s",
+        "role": "authenticated",
+        "statement": "10s"
+      },
+      "fullRecovery": true,
+      "authorityWitnesses": 2
+    },
+    {
+      "case": "oci-reference-workflow12",
+      "hashes": {
+        "executed-source.mjs": "8c296f704e1af8b08a00ad4eeab2b468930c16934d855158582daf4f461f7e6c",
+        "executed-derivation.mjs": "ad16ffcab60524e2a80cacf502ff71ae08354b01871646f12c26fa7e8d5b9010",
+        "bff-helper.mjs": "ec13d32fe7bfb89135ea49e4f1563b732b2d449da2ecc6204f282b22e905319e",
+        "host-driver.mjs": "f2e9d9f62b559728e4310eea76f104c3117f3c51689af79cb012743530626e31",
+        "host-driver-result.json": "0b73ae88dfeaa63db6a735d5f3f14d6706bb62a5f910a8447d5f2afdddbda5de",
+        "workflow-source-pins.json": "1c04c8e2be352df8af4308f5ba3eae58999a2ec22002696326ad23f520af99ff",
+        "execution01/launch.json": "6852151604b7f0119370387d2191cc47eaafe20ed36b951ad555fa0b540bfe00",
+        "execution01/result.json": "697828969382d2818dfd99f2947ef12768dbcedf1b62114d4077c6ae46e88fdf",
+        "execution01/serial.log": "57b2e6d0c387970bc0a91d538ca65220543eb30cf1039afce277615342ba6504"
+      },
+      "browserPassed": false,
+      "browserStage": "unsaved_choices",
+      "browserChecks": [
+        "real_password_mfa_full_admin",
+        "committed_lost_reply_reload_exact_request_receipt_recovery"
+      ],
+      "callerDeadlines": {
+        "lock": "2s",
+        "role": "authenticated",
+        "statement": "10s"
+      },
+      "unsavedChoices": {
+        "brand": "f8dd8b8f-a4aa-4edc-9d67-07a4feb52a30",
+        "expectedBrand": "f8dd8b8f-a4aa-4edc-9d67-07a4feb52a30",
+        "category": "9310ff38-658d-44b7-b409-088b13331f47",
+        "expectedCategory": "9310ff38-658d-44b7-b409-088b13331f47"
+      },
+      "fullRecovery": true,
+      "authorityWitnesses": 2
+    },
+    {
+      "case": "oci-reference-workflow13",
+      "hashes": {
+        "executed-source.mjs": "fe6cd88c7b03056a50c725284face30e65e2e6ec029f592b4d370109fbbc51aa",
+        "executed-derivation.mjs": "ad16ffcab60524e2a80cacf502ff71ae08354b01871646f12c26fa7e8d5b9010",
+        "bff-helper.mjs": "babb2761df0ee8356a5b2489bf2e039d5dad0af827de93a211e443c470a94c26",
+        "host-driver.mjs": "f2e9d9f62b559728e4310eea76f104c3117f3c51689af79cb012743530626e31",
+        "host-driver-result.json": "f0f0ffb46b5ab72934bfbf4c7afc25a483680adc0a4fba4bcd3f73d8a5e1667b",
+        "workflow-source-pins.json": "06b144b0f137903f4ec300d666c7184c6d106d1999575c54b536c694a6cb0763",
+        "execution01/launch.json": "497d89b7a6d39a37e68ed21fda85fbb1b2c7c68f9f5ab3b7097554158f9a547c",
+        "execution01/result.json": "3537a11ac6c593480b16685e8a7e4be242ad8b449c8342de88a217def01c5bc5",
+        "execution01/serial.log": "c93fd3595f5d5745819d5ff47cfe1641e988f53456743b887b691cb74d000913"
+      },
+      "browserPassed": true,
+      "browserStage": "complete",
+      "browserChecks": [
+        "real_password_mfa_full_admin",
+        "committed_lost_reply_reload_exact_request_receipt_recovery",
+        "creation_does_not_assign_before_paired_save",
+        "real_current_role_csrf_actor_changed_body_refusals_and_exact_replay",
+        "actual_rendered_paired_save_canonical_ids",
+        "actual_secure_sheet_guidance"
+      ],
+      "callerDeadlines": {
+        "lock": "2s",
+        "role": "authenticated",
+        "statement": "10s"
+      },
+      "referenceRpcFailure": {
+        "status": 400,
+        "code": "22023",
+        "reason": "K2_ADMIN_IDEMPOTENCY_CONFLICT"
+      },
+      "unsavedChoices": {
+        "brand": "7d77afed-4702-4498-9795-b2eb401a99af",
+        "expectedBrand": "7d77afed-4702-4498-9795-b2eb401a99af",
+        "category": "8954b631-5c41-4cfe-a354-9d43b4ab227f",
+        "expectedCategory": "8954b631-5c41-4cfe-a354-9d43b4ab227f"
+      },
+      "fullRecovery": true,
+      "authorityWitnesses": 2
+    }
+  ],
+  "sourceHashes": {
+    "scripts/prepare-reference-workflow-fixture.mjs": "ad16ffcab60524e2a80cacf502ff71ae08354b01871646f12c26fa7e8d5b9010",
+    "scripts/reference-workflow-browser-probe.inc.mjs": "09c0bd4b521b7ed59ed8ddbeed23f1f0272e6dae7662de1c601ba3928d5bfef3",
+    "server/admin-bff/product-master.js": "b269f307354476083b4601e31a6fdc3a4448cbbc7a5138b122ab68449531a1f7",
+    "tests/category-policy-handler.checks.mjs": "a8d870777d83824c7d417512b108f7728366fc53dd034f72529923ecf4042807"
+  },
+  "interruption": {
+    "case": "oci-reference-workflow07",
+    "executed": false,
+    "reason": "Automatic approval review unavailable due to account usage limit; no bypass",
+    "resolved": "Normal approval resumed after usage availability;07executed"
+  },
+  "unfinished": [
+    "Disposed06 has no full recovery proof; do not retrospectively claim restoration",
+    "Provider/real-host/human/release and remaining MAP018 gates remain"
+  ],
+  "recovery": "Preserve all immutable disposed cases; fresh successor only, retain exact full original/private/sequence/authority recovery gates; no production rollback needed",
+  "development": {
+    "command": "npm run verify:development",
+    "controller": 76478,
+    "exit": 0,
+    "sessionTests": 20,
+    "routeClassificationGaps": 0,
+    "secretScanFiles": 2123,
+    "scope": "Final application code checked; later fixture-only actor assertion moved out of route callback and syntax checked"
+  },
+  "review": "Final bounded source recheck: no remaining Critical/Important; route callback actor assertion resolved; no native07 execution inferred"
+}

@@ -2,6 +2,7 @@ import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
 import { isAdminRole } from './supabase.js'
 import { strictInteger } from '../shared-numeric.js'
+import { isReadableReferenceName } from '../../src/lib/referenceCommandRecovery.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const SKU = /^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$/
@@ -121,9 +122,9 @@ function zeroQuantity(value) {
 
 function isCompleteTaxonomyOptions(result) {
   return !result.error && Array.isArray(result.data) && Number.isInteger(result.count)
-    && result.count >= 1 && result.count <= 500 && result.data.length === result.count
+    && result.count >= 0 && result.count <= 500 && result.data.length === result.count
     && result.data.every(option => option && UUID.test(String(option.id || ''))
-      && typeof option.name === 'string' && option.name.trim().length > 0)
+      && isReadableReferenceName(option.name))
 }
 
 export function validateProductMasterCommand(body) {

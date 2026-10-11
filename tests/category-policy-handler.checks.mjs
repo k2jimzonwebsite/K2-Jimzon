@@ -50,6 +50,16 @@ beforeEach(() => {
     if (url.pathname === '/rest/v1/user_profiles') return reply({ role: state.role })
     if (url.pathname === '/rest/v1/rpc/execute_admin_session_command_v1') return reply({ active: state.active })
     if (url.pathname === '/rest/v1/rpc/record_security_event_v1') return reply({ recorded: true })
+    if (state.readFixture && url.pathname.startsWith('/rest/v1/')) {
+      const table = url.pathname.slice('/rest/v1/'.length)
+      if (table === 'products') return reply({ sku: 'synthetic-empty-references', status: 'Draft', published: false, stock_available: 0, total_stock: 0, brand_id: null, category_id: null })
+      if (table === 'v_product_stock_from_batches') return reply(null)
+      if (['brands', 'categories', 'product_batches', 'inventory_balances', 'inventory_events'].includes(table)) {
+        const rows = state.readFixture[table] || []
+        const count = state.readFixture.counts?.[table] ?? rows.length
+        return new Response(JSON.stringify(rows), { status: 200, headers: { 'content-type': 'application/json', 'content-range': `0-${Math.max(0, rows.length-1)}/${count}` } })
+      }
+    }
     if (url.pathname === '/rest/v1/rpc/execute_admin_product_master_command_v1') return state.error ? reply(state.error, 400) : reply(state.result)
     state.unexpected.push(url.pathname)
     throw new Error('UNEXPECTED_FIXTURE_REQUEST')
@@ -64,6 +74,34 @@ afterEach(() => {
   assert.deepEqual(state.unexpected, [])
 })
 const commandCalls = () => state.calls.filter(c => c.path.endsWith('/execute_admin_product_master_command_v1'))
+test('verified empty canonical lists admit first-reference creation on an eligible Draft', async () => {
+  state.readFixture = {}
+  const req = request(), res = response()
+  req.method = 'GET'; req.query.sku = 'synthetic-empty-references'; delete req.body
+  await handler(req, res)
+  assert.equal(res.statusCode, 200)
+  assert.equal(JSON.parse(res.body).taxonomyReview.status, 'eligible')
+  assert.deepEqual(JSON.parse(res.body).taxonomyReview.brandOptions, [])
+  assert.deepEqual(JSON.parse(res.body).taxonomyReview.categoryOptions, [])
+  assert.equal(commandCalls().length, 0)
+})
+test('incomplete canonical list remains unavailable', async () => {
+  state.readFixture = { counts: { brands: 1 } }
+  const req = request(), res = response()
+  req.method = 'GET'; req.query.sku = 'synthetic-empty-references'; delete req.body
+  await handler(req, res)
+  assert.equal(res.statusCode, 200)
+  assert.equal(JSON.parse(res.body).taxonomyReview.status, 'unavailable')
+  assert.equal(commandCalls().length, 0)
+})
+test('approved U+FEFF reference names remain readable in Product Master', async () => {
+  state.readFixture = { brands: [{ id: categoryId, name: '\ufeff' }], categories: [{ id: categoryId, name: '\ufeff' }] }
+  const req = request(), res = response()
+  req.method = 'GET'; req.query.sku = 'synthetic-empty-references'; delete req.body
+  await handler(req, res)
+  assert.equal(res.statusCode, 200)
+  assert.equal(JSON.parse(res.body).taxonomyReview.status, 'eligible')
+})
 for (const action of ['category_policy_set', 'category_policy_clear']) {
   test(`${action} routes normalized signed payload after authorization`, async () => {
     const req = request(action), res = response()

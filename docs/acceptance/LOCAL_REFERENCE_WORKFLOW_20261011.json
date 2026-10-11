@@ -1,0 +1,391 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "date": "2026-10-11",
+  "scope": "Genuine full local Admin browser/Auth/PostgREST/captured PostgreSQL17.6 workflow. Synthetic account/Draft, public test widget, explicit unconfigured bot fixture, HTTP loopback, depth10 and local2s/10sconnection. No provider/hosted/HTTPS/mobile/physical-device/human acceptance.",
+  "command": "node scripts/prepare-reference-workflow-fixture.mjs --case=oci-reference-workflow13",
+  "controller": 79287,
+  "terminal": 0,
+  "native": {
+    "owningMap": "MAP-023/018",
+    "scope": "Genuine local full Admin password/MFA, protected reference recovery and paired Product Master Save with captured PostgreSQL/Auth/PostgREST; public test widget and explicit unconfigured local bot fixture; full restoration required; no provider or hosted acceptance",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-reference-workflow13\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 11812,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "processStopped": true,
+    "serialSha256": "c93fd3595f5d5745819d5ff47cfe1641e988f53456743b887b691cb74d000913"
+  },
+  "browser": {
+    "scope": "Actual full local Admin password/MFA and protected reference creation/reload/exact replay/paired Save. Real local Auth/PostgREST/captured PostgreSQL; public test widget and explicit unconfigured local bot fixture. No provider or hosted acceptance.",
+    "checks": [
+      "real_password_mfa_full_admin",
+      "committed_lost_reply_reload_exact_request_receipt_recovery",
+      "creation_does_not_assign_before_paired_save",
+      "real_current_role_csrf_actor_changed_body_refusals_and_exact_replay",
+      "actual_rendered_paired_save_canonical_ids",
+      "actual_secure_sheet_guidance"
+    ],
+    "requests": [
+      {
+        "path": "/api/admin/session",
+        "method": "GET",
+        "status": 401,
+        "code": "SESSION_EXPIRED"
+      },
+      {
+        "path": "/api/admin/session",
+        "method": "GET",
+        "status": 401,
+        "code": "SESSION_EXPIRED"
+      },
+      {
+        "path": "/api/admin/auth/login",
+        "method": "POST",
+        "status": 202
+      },
+      {
+        "path": "/api/admin/auth/mfa",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/products",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/inbox",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/products",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/products",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/overview",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/product-master",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/session",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/session",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/session",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/inbox",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/products",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/overview",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/products",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/products",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/session",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/session",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/product-master",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/session",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/session",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/references",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/product-master",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/products",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/admin/products",
+        "method": "GET",
+        "status": 200
+      }
+    ],
+    "stage": "complete",
+    "cookies": [
+      {
+        "name": "k2_admin_session",
+        "httpOnly": true,
+        "secure": false,
+        "sameSite": "Strict"
+      },
+      {
+        "name": "k2_admin_csrf",
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "Strict"
+      }
+    ],
+    "callerDeadlines": {
+      "lock": "2s",
+      "role": "authenticated",
+      "statement": "10s"
+    },
+    "taxonomyReview": {
+      "status": "eligible",
+      "brandCount": 1,
+      "categoryCount": 0
+    },
+    "firstCreation": {
+      "status": 200,
+      "code": null
+    },
+    "recovery": {
+      "lostReplyServerStatus": 200,
+      "exactLiteralBody": true,
+      "exactKey": true,
+      "actor": "cd5f7fa6-ac1d-4b99-af78-071445416751",
+      "payloadSha256": "207dc99fb860269f00e260eb71bfef316d2887ebac3b3c32940afaa37a3552e7",
+      "acknowledged": true
+    },
+    "unsavedChoices": {
+      "brand": "7d77afed-4702-4498-9795-b2eb401a99af",
+      "expectedBrand": "7d77afed-4702-4498-9795-b2eb401a99af",
+      "category": "8954b631-5c41-4cfe-a354-9d43b4ab227f",
+      "expectedCategory": "8954b631-5c41-4cfe-a354-9d43b4ab227f"
+    },
+    "canonicalReadStatus": 200,
+    "refusals": {
+      "changedBody": 409,
+      "actor": 403,
+      "csrf": 403,
+      "currentStaff": 403
+    },
+    "canonical": {
+      "sku": "MAP018-REFERENCE-WORKFLOW-01",
+      "brandId": "7d77afed-4702-4498-9795-b2eb401a99af",
+      "categoryId": "8954b631-5c41-4cfe-a354-9d43b4ab227f",
+      "pairedSaveStatus": 200
+    },
+    "passed": true
+  },
+  "sourceHashes": {
+    "api/admin/index.js": "d832229d172ddb3adae66862647a4fa75ebaac1178f980c242a59ee94d2b722f",
+    "server/admin-bff/product-master.js": "b269f307354476083b4601e31a6fdc3a4448cbbc7a5138b122ab68449531a1f7",
+    "server/admin-bff/references.js": "fc402debb63588e533c08c8da21147e73109d58cc37673e86c6d2760df445684",
+    "server/admin-bff/authorize.js": "21113ca8d3a7f3526e140ddcd1193ef854db5698674f8f0b317306060976461c",
+    "src/views/admin/InventoryGrid.jsx": "e4eed8d8d8aa75837e49c6b1bef98353cf90fa8d1226cd6b1785a3734d2e788e",
+    "src/views/admin/ReferenceCreationDialog.jsx": "15b531ceff03a7c76b9a9ce24e851aecfbeb1b2355facc999d2140bca1767e95",
+    "src/views/admin/Sheet.jsx": "626b2a60c375b0794e8045a86915415cf2680e584d62c34fb7f200adc9c60f7b",
+    "src/services/adminBffService.js": "ba620399f94e078d60d2c1d4b6ed3d89d53d500b3e765d8c692a6e7e0ec3ab51",
+    "src/lib/referenceCommandRecovery.js": "b9e05bb94658c44bca607f6b1440e1f0f1ba5f93a7e01976befe8c0212912b55",
+    "scripts/prepare-reference-workflow-fixture.mjs": "ad16ffcab60524e2a80cacf502ff71ae08354b01871646f12c26fa7e8d5b9010",
+    "scripts/reference-workflow-browser-probe.inc.mjs": "09c0bd4b521b7ed59ed8ddbeed23f1f0272e6dae7662de1c601ba3928d5bfef3",
+    "tests/category-policy-handler.checks.mjs": "a8d870777d83824c7d417512b108f7728366fc53dd034f72529923ecf4042807",
+    "supabase/prepared/protected_reference_normalization.sql": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896",
+    "supabase/prepared/protected_reference_creation.sql": "adc0eac81830a83244cc6848e8d0d89b1480c7fd32e88b1b01223e60a4ac2c02",
+    "supabase/prepared/product_master_version_conflict_transport.sql": "ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476"
+  },
+  "caseHashes": {
+    "executed-source.mjs": "fe6cd88c7b03056a50c725284face30e65e2e6ec029f592b4d370109fbbc51aa",
+    "executed-derivation.mjs": "ad16ffcab60524e2a80cacf502ff71ae08354b01871646f12c26fa7e8d5b9010",
+    "bff-helper.mjs": "babb2761df0ee8356a5b2489bf2e039d5dad0af827de93a211e443c470a94c26",
+    "host-driver.mjs": "f2e9d9f62b559728e4310eea76f104c3117f3c51689af79cb012743530626e31",
+    "host-driver-result.json": "f0f0ffb46b5ab72934bfbf4c7afc25a483680adc0a4fba4bcd3f73d8a5e1667b",
+    "workflow-source-pins.json": "06b144b0f137903f4ec300d666c7184c6d106d1999575c54b536c694a6cb0763",
+    "execution01/launch.json": "497d89b7a6d39a37e68ed21fda85fbb1b2c7c68f9f5ab3b7097554158f9a547c",
+    "execution01/result.json": "3537a11ac6c593480b16685e8a7e4be242ad8b449c8342de88a217def01c5bc5",
+    "execution01/serial.log": "c93fd3595f5d5745819d5ff47cfe1641e988f53456743b887b691cb74d000913"
+  },
+  "nativeAudit": {
+    "events": 2,
+    "context": 0,
+    "receipts": 2,
+    "productEvents": 1,
+    "productReceipts": 1,
+    "pairedCanonicalIds": true,
+    "referenceReceiptsMatch": true
+  },
+  "recovery": {
+    "auditMarker": true,
+    "fullRecovery": true,
+    "authorityWitnesses": 2,
+    "pid11812IndependentlyAbsent": true,
+    "fiveLocalListenersAbsent": true,
+    "exactComparedHashLines": [
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /tmp/reference-master-before.rows",
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /tmp/reference-master-after.rows",
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /tmp/reference-policy-config-before.rows",
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /tmp/reference-policy-config-after.rows",
+      "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f  /tmp/bff-sequence-recovery.sql",
+      "f3833f385ac913a0f321210cd33bc62ca32855a6e7175b70764b0927953df98f  /tmp/bff-sequence-after.sql",
+      "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-before.json",
+      "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-after.json",
+      "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-before.json",
+      "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-after.json"
+    ]
+  },
+  "screenshot": {
+    "path": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-reference-workflow13/browser-sheet.png",
+    "sha256": "5a3aa94419203d43a4710dfb60291de6b565c232a720e1c746b36043955e4fac",
+    "inspected": true,
+    "scope": "1440x1000 actual Sheet guidance only; Product Masters loading. No loaded-row/mobile/layout completion proof."
+  },
+  "focusedTests": {
+    "passed": 25,
+    "failed": 0,
+    "command": "node --test tests/category-policy-handler.checks.mjs",
+    "redGreen": "Empty23/24red→24/24green; U+FEFF24/25red→25/25green"
+  },
+  "development": {
+    "controller": 24022,
+    "command": "npm run verify:development",
+    "exit": 0,
+    "sessionTests": 20,
+    "routeClassificationGaps": 0,
+    "secretScanFiles": 2124
+  },
+  "review": "Final bounded source review no Critical/Important",
+  "recoveryPath": "Exact synthetic references/events/product/Auth/depthconfig restored to captured baseline. Preserve all disposed cases; production unchanged. Revert local changes via Git.",
+  "remaining": "MAP018 retains provider transport/authorization/backup/readiness and complete staff/storefront real-host/human/two-artifact release gates."
+}
