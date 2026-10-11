@@ -153,6 +153,19 @@ row/name resources. New guards cannot invent hierarchy depth/policy defaults or
 disable existing category guards. Installer maintenance/setup and caller roles
 must be qualified separately under exact captured permissions.
 
+Captured combined19 categories has no DML triggers. Do not claim an existing
+all-writer category entry guard. Add a BEFORE STATEMENT INSERT/UPDATE/DELETE
+guard which takes the existing exclusive policy lock before category row/index
+resources for every ordinary writer; INSERT additionally requires signed Admin
+context at its row guard. Retain READ COMMITTED/armed deadlines/upgrade refusal.
+The narrowly identified installer-login exception remains separately qualified;
+definer current_user is insufficient. Parent validation uses a fresh statement
+after entry. Audit existing signed/legacy category writers for pre-held shared
+locks or late entry; refuse unsupported ordering rather than silently changing
+accepted behavior. Qualify creation versus reparent/delete holder/waiter schedules,
+timeout/upgrade refusal and unchanged rows on refusal. This enforces ordinary
+hierarchy serialization, not privileged owner override immunity.
+
 ## UI and recovery
 
 Creation belongs beside the existing initial taxonomy choices in the signed
@@ -230,5 +243,15 @@ YAGNI boundary are accepted/resolved; Guardian and Advocate approvals stand.
 No unresolved design objection remains within the confirmed scope. Implementation
 and actual qualification gates remain MAP-018; production authorization and
 privileged administrative permission-change scope are separate.
+
+Source-driven revision during normalization preparation: combined19 categories
+has no DML triggers. Skeptic REVISE accepted: ordinary reparent/delete could
+otherwise bypass creation's policy lock. The statement entry guard above is the
+minimal hierarchy-preservation correction, not a new maintenance feature. Prior
+UI/creation/assignment decisions remain locked. Constraint Guardian APPROVED the
+correction as hierarchy serialization within scope; existing-writer schedules,
+actual timers and unchanged refusal state remain proof gates. Arbiter APPROVED
+the narrow correction; original User Advocate/UI/assignment approvals stand.
+No production authorization or privileged-owner immunity follows.
 All objections must be resolved here before implementation. Remaining execution
 actions live solely in MAP-018, not in this specification.

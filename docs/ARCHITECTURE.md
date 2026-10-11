@@ -1,5 +1,13 @@
 # K2 Jimzon  -  System Architecture
 
+11October MAP-018 / IDEA-20261010-06: private clean_reference_name_v1 and
+reference_name_key_v1 have executed local PostgreSQL17.6 character proof under
+the admitted ICU profile. Equality will use the same key with COLLATE "C";
+unique indexes and signed creation contexts are not installed. Captured categories
+has no DML triggers; the reviewed ordinary-writer statement entry guard is still
+a target. Evidence: PROTECTED_REFERENCE_NORMALIZATION_20261011.json; future
+command/metadata/all-writer/editor/installer qualification stays MAP-018.
+
 11October MAP-018 / IDEA-20261010-06: the prepared GET/POST references boundary
 uses existing server-cookie/current-role/AAL2/registry/CSRF/signature authority;
 GET preserves complete bounded brand/category hierarchy, POST dispatches one

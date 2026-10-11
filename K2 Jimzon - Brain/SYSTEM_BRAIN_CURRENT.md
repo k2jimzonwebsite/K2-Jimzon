@@ -1,5 +1,17 @@
 # K2 Jimzon  -  System Brain (Current State)
 
+11October MAP-018 / IDEA-20261010-06 SQL normalization component: actual owned
+PostgreSQL17.6 red26/session18240 proves missing-helper refusal; green27/session44585
+executes the prepared functions and character tests. Both terminal0, exact cold
+original catalog recovery and independent PID2928/4712 absence. Native proof covers
+19 printable whitespace members,64 non-NUL C0/C1 controls, Unicode character
+bounds, Italian lowercase, U+FEFF preservation and distinct compositions. Source
+and staged pins: PROTECTED_REFERENCE_NORMALIZATION_20261011.json. Its inherited
+after-catalog is the base installation before normalization, not new-function
+metadata qualification. Development88035 exits0. Signed creation/context/unique
+indexes, category all-writer entry, durable editor recovery and affected whole
+installer/native/host gates remain MAP-018. No provider/deployed change.
+
 11October MAP-018 / IDEA-20261010-06 endpoint preparation: sequential design
 review APPROVED; server/admin-bff/references.js and its prepared-api/router entry
 now enforce current Admin/SuperAdmin BFF admission, exact raw-command validation,

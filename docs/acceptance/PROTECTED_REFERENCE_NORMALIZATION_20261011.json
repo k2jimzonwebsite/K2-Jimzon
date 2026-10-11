@@ -1,0 +1,173 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "classification": "Actual owned PostgreSQL17.6 normalization red/green and cold recovery; component only",
+  "providerWrites": false,
+  "cases": [
+    {
+      "case": "oci-imported26",
+      "mode": "red",
+      "session": 18240,
+      "pid": 2928,
+      "exit": 0,
+      "timedOut": false,
+      "postgresVersion": "17.6",
+      "marker": "K2_REFERENCE_NORMALIZATION_EXPECTED_RED_OK",
+      "markerCount": 1,
+      "serialSha256": "1a2f919ab06afc0161c136dbfa1b184b1fb127f1dcffe99d5798034104e18f4f",
+      "fullCatalogRollback": true,
+      "processStopped": true,
+      "catalogs": {
+        "before": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        },
+        "after": {
+          "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+          "bytes": 2396732
+        },
+        "rollback": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        }
+      },
+      "preparationSha256": "2a08d8da8e3bf3cd019e6e5d745699b2d966adcb889480a9b9196e29a08f1099",
+      "sourcePins": [
+        {
+          "file": "tests/sql/protected-reference-normalization.sql",
+          "sha256": "9187a2ea19bb33e669cae553f65554ac4ff6490104e9b20c57d238c0014e868b"
+        },
+        {
+          "file": "scripts/prepare-reference-normalization-fixture.mjs",
+          "sha256": "86da2abefa0afb0dd991ecf526b55bb738a670404f3952a55d9f1973116a6b61"
+        },
+        {
+          "file": "scripts/prepare-imported-provider-fixture.mjs",
+          "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+        }
+      ],
+      "stagedPins": [
+        {
+          "file": "reference-normalization-test.sql",
+          "sha256": "9187a2ea19bb33e669cae553f65554ac4ff6490104e9b20c57d238c0014e868b"
+        },
+        {
+          "file": "init.sh",
+          "sha256": "f9cb20fd453efa25dcd8ec0dad43584837d0295fd315a303d76d7d5a11a4ef5b"
+        },
+        {
+          "file": "image-probe.sh",
+          "sha256": "a2cf6921f4a8eb8a7bba637b776de22a9dc309a6e6d0b3508c65bdad5705d2bd"
+        }
+      ],
+      "runnerSha256": "fe158062db32bdb806801e9db241cc6e24af0af3ab1d4a66092dbe1f178babc8",
+      "preparationCorrection": {
+        "reason": "Reviewed scoped runner marker/scope correction before first execution",
+        "beforeRunnerSha256": "e81d11677be1f70c7e87933e3cd3e3492cea81a3c6c2ac0516284573d89fab39",
+        "beforeReceiptSha256": "a3b0660d8fdf3878e239ef27f20adb09a5def000eb70b629aae73208f6a69984",
+        "script": ".tools/finalize-reference-red-runner.mjs",
+        "scriptSha256": "008859dec9a041c3bd25af44c389d6d78929abd150f8e6443e1e85c8d1563934"
+      }
+    },
+    {
+      "case": "oci-imported27",
+      "mode": "green",
+      "session": 44585,
+      "pid": 4712,
+      "exit": 0,
+      "timedOut": false,
+      "postgresVersion": "17.6",
+      "marker": "K2_REFERENCE_NORMALIZATION_CHECKS_OK",
+      "markerCount": 1,
+      "serialSha256": "5d4c5829acb1ffffd9ebc31a772ec0d3eee903181bc6a8bdca97428426c64f95",
+      "fullCatalogRollback": true,
+      "processStopped": true,
+      "catalogs": {
+        "before": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        },
+        "after": {
+          "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+          "bytes": 2396732
+        },
+        "rollback": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        }
+      },
+      "preparationSha256": "1339ed6ed23009910e35b6f8ecd972822b81dbf6e79bcbae4bbdce5a18881864",
+      "sourcePins": [
+        {
+          "file": "tests/sql/protected-reference-normalization.sql",
+          "sha256": "9187a2ea19bb33e669cae553f65554ac4ff6490104e9b20c57d238c0014e868b"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_normalization.sql",
+          "sha256": "20a588aa2f4ef349c9ac544747e1dd551a0aace68a761fb518dbe97499cf5126"
+        },
+        {
+          "file": "scripts/prepare-reference-normalization-fixture.mjs",
+          "sha256": "86da2abefa0afb0dd991ecf526b55bb738a670404f3952a55d9f1973116a6b61"
+        },
+        {
+          "file": "scripts/prepare-imported-provider-fixture.mjs",
+          "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+        }
+      ],
+      "stagedPins": [
+        {
+          "file": "reference-normalization-test.sql",
+          "sha256": "9187a2ea19bb33e669cae553f65554ac4ff6490104e9b20c57d238c0014e868b"
+        },
+        {
+          "file": "reference-normalization-install.sql",
+          "sha256": "f4f3ccba4ab7a29455d6cef035736efecc529968e83c9e9c053c050f0cad61ef"
+        },
+        {
+          "file": "init.sh",
+          "sha256": "3c6058f223945d23b665953ab236c11bfb2cf929931088f9efec8947aa12ff95"
+        },
+        {
+          "file": "image-probe.sh",
+          "sha256": "31bf5a69b3fcad94d184644dd55ef8370b9bf456d4818944375277de4a0abc17"
+        }
+      ],
+      "runnerSha256": "a72becb6bc62ab0c175769cdd282bcdd0a13aeff0a7e9333cfb16df994149714",
+      "preparationCorrection": null
+    }
+  ],
+  "semantics": [
+    "All19 specified printable whitespace characters trim/collapse",
+    "All64 non-NUL C0/C1 control characters refused before cleanup",
+    "NULL/empty/printable-whitespace-only names refused",
+    "120 supplementary codepoints accepted and121 refused",
+    "Italian lowercase identity, U+FEFF preservation and distinct Unicode compositions"
+  ],
+  "catalogScope": "Inherited after-catalog is accepted base installation before normalization; it is not an exact catalog of the new functions. Cold rollback catalog matches original captured schema.",
+  "review": {
+    "status": "No Critical/Important findings after scoped runner correction; SQL fragment reviewed before green",
+    "agent": "reference_endpoint_review",
+    "archivedCorrectionSource": "docs/acceptance/sources/reference-normalization-red-runner-correction.mjs",
+    "finalEvidenceReview": "No remaining Critical/Important findings; independent source/stage/runner/serial/catalog pins and absent PIDs verified"
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "session": 88035,
+    "exit": 0,
+    "sessionReferenceChecks": 19
+  },
+  "limits": [
+    "No duplicate index/context/signed creation command or editor integration yet",
+    "Locale mismatch refusal source prepared but not independently fault-tested",
+    "No new helper full metadata/all-role/index evaluation proof",
+    "No full revised installer qualification, provider write, deployment or release"
+  ],
+  "remainingOwner": "MAP-018",
+  "recovery": "Preserve26/27 and prior fixtures; never reuse executions. Both RAM guests cold-reconstructed original schema and stopped; no provider recovery required. Revert normalization/helpers/tests/source preparation together if needed.",
+  "independentStopCheck": {
+    "command": "@(Get-Process -Id 2928,4712 -ErrorAction SilentlyContinue).Count",
+    "exit": 0,
+    "matches": 0
+  }
+}

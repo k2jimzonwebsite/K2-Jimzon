@@ -1,3 +1,5 @@
+11October IDEA-20261010-06 decision register: protected taxonomy design and source-driven ordinary category serialization correction APPROVED; native normalization component red/green/cold recovery archived in PROTECTED_REFERENCE_NORMALIZATION_20261011.json. This does not finish the idea. Remaining signed command/all-writer/concurrency/editor/installer/native/host behavior is solely MAP-018; no provider authorization inferred.
+
 11October IDEA-20261010-06 understanding confirmed: owner says proceed after presented protected-reference scope. Role remains Admin/SuperAdmin only. Decision register: docs/specs/PROTECTED_REFERENCE_COMMAND_SPEC.md now has APPROVED sequential review; PROTECTED_REFERENCE_ENDPOINT_20261011.json records prepared BFF source and passing local transport tests. SQL/native/editor work remains MAP-018. Database normalized identity and all-writer guard, category entry deadlines, signed receipt and current-editor assignment/recovery are targets, not prepared/executed/deployed facts. Remaining actions stay solely MAP-018; no provider or release approval follows.
 
 

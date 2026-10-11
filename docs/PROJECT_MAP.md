@@ -1,5 +1,13 @@
 # K2 Jimzon  -  Project Directory Map
 
+11October protected reference normalization component: prepared fragment
+supabase/prepared/protected_reference_normalization.sql; actual native test
+tests/sql/protected-reference-normalization.sql; one-use owned fixture preparation
+and pin-checked execution in scripts/prepare-reference-normalization-fixture.mjs
+and scripts/run-reference-normalization-fixture.mjs. Red/green and recovery pins:
+docs/acceptance/PROTECTED_REFERENCE_NORMALIZATION_20261011.json. No provider apply
+or creation-command/editor completion is implied; remaining work is MAP-018.
+
 11October MAP-018 / IDEA-20261010-06: prepared-api/admin/references.js forwards
 the single router's references route to server/admin-bff/references.js. Focused
 command/read and handler tests live in tests/admin-reference-command.test.mjs

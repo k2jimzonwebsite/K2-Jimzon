@@ -1,5 +1,13 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+11October protected category mutation clarification (MAP-018 / IDEA-20261010-06):
+captured categories has no DML entry triggers. The reviewed creation design
+requires every ordinary INSERT/UPDATE/DELETE to take existing exclusive policy
+entry before row/index resources, with exact deadlines/isolation/upgrade refusal
+and a separately qualified narrow installer-login exception. Parent admission
+must use a fresh post-entry statement. This remains target behavior until actual
+writer/race/refusal qualification; owner override immunity remains separate.
+
 11October MAP-018 / IDEA-20261010-06 protected taxonomy target: owner confirms
 Admin/SuperAdmin creation. The approved PROTECTED_REFERENCE_COMMAND_SPEC.md owns
 exact name/parent equivalence, signed creation, historical receipt/current identity
