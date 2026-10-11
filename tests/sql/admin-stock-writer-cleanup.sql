@@ -1,0 +1,23 @@
+-- Setup and cleanup are owned synthetic mutations; canonical writer ran origin.
+set search_path='';set statement_timeout='10s';set lock_timeout='2s';
+do $owned$ begin if session_user<>'supabase_admin' or inet_server_addr() is not null or current_setting('data_directory')<>'/tmp/k2-managed-data' then raise exception 'OWNED_CLEANUP_REQUIRED';end if;end $owned$;
+begin;set local session_replication_role=replica;
+delete from k2_private.admin_command_receipts where actor_id='89600000-0000-4000-8000-000000000001';
+delete from public.batch_change_events where sku='SYN-STOCK-WRITER';
+delete from public.inventory_reservations where sku='SYN-STOCK-WRITER';
+delete from public.order_request_items where sku='SYN-STOCK-WRITER';
+delete from public.order_requests where id in ('89600000-0000-4000-8000-000000000005','89600000-0000-4000-8000-000000000006');
+delete from public.inventory_balances where sku='SYN-STOCK-WRITER';
+delete from public.product_batches where sku='SYN-STOCK-WRITER';
+delete from public.products where sku='SYN-STOCK-WRITER';
+delete from public.custodians where id='SYN-STOCK-WRITER-CUST';
+delete from public.hubs where id='HUB-MNL-CENTRAL';insert into public.hubs select * from k2_stock_snapshot_probe.hub_before;
+delete from public.categories where id='89600000-0000-4000-8000-000000000002';
+delete from public.user_profiles where id='89600000-0000-4000-8000-000000000001';
+delete from auth.users where id='89600000-0000-4000-8000-000000000001';
+delete from k2_private.admin_bff_secrets;insert into k2_private.admin_bff_secrets select * from k2_stock_snapshot_probe.secret_before;
+delete from k2_private.category_policy_command_config;insert into k2_private.category_policy_command_config select * from k2_stock_snapshot_probe.policy_before;
+delete from k2_private.admin_request_rate_buckets;insert into k2_private.admin_request_rate_buckets select * from k2_stock_snapshot_probe.rate_before;
+delete from k2_private.admin_request_nonces;insert into k2_private.admin_request_nonces select * from k2_stock_snapshot_probe.nonce_before;
+set local session_replication_role=origin;drop schema k2_stock_snapshot_probe cascade;commit;
+select 'K2_STOCK_WRITER_CLEANUP_OK';

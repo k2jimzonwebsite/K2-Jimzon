@@ -1,0 +1,747 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261011-01",
+  "case": "oci-imported71",
+  "privateCase": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71",
+  "providerWrites": false,
+  "controllerSession": 4960,
+  "controllerExit": 0,
+  "result": {
+    "owningMap": "MAP-023/018",
+    "scope": "Complete guarded10s envelope/fresh/exact replay/cold archive recovery on actual local postgres target; provider physical/locale/project/host qualification separate",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "none",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported71\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 6408,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "catalogs": {
+      "before": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      },
+      "after": {
+        "sha256": "f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b",
+        "bytes": 2435014
+      },
+      "rollback": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      }
+    },
+    "fullCatalogRollback": true,
+    "processStopped": true,
+    "serialSha256": "c3a839dc0b971cb53a06785fadb9c587090baf44ab54f584c0a02fcda77dabb7"
+  },
+  "preparation": {
+    "owningMap": "MAP-018",
+    "idea": "IDEA-20261011-01",
+    "case": "oci-imported71",
+    "providerWrites": false,
+    "sqlSha256": "e6eda8085254f27f0dd30c01f77c3a53bfc4a1652c59ad472a68558079bab052",
+    "physicalSelection": [
+      "auth.audit_log_entries",
+      "auth.custom_oauth_providers",
+      "auth.flow_state",
+      "auth.identities",
+      "auth.instances",
+      "auth.mfa_amr_claims",
+      "auth.mfa_challenges",
+      "auth.mfa_factors",
+      "auth.mfa_recovery_code_sets",
+      "auth.mfa_recovery_codes",
+      "auth.oauth_authorizations",
+      "auth.oauth_client_states",
+      "auth.oauth_clients",
+      "auth.oauth_consents",
+      "auth.one_time_tokens",
+      "auth.refresh_tokens",
+      "auth.refresh_tokens_id_seq",
+      "auth.saml_providers",
+      "auth.saml_relay_states",
+      "auth.schema_migrations",
+      "auth.scim_tokens",
+      "auth.scim_users",
+      "auth.sessions",
+      "auth.sso_domains",
+      "auth.sso_providers",
+      "auth.users",
+      "auth.webauthn_challenges",
+      "auth.webauthn_credentials",
+      "k2_private.admin_bff_secrets",
+      "k2_private.admin_command_receipts",
+      "k2_private.admin_request_nonces",
+      "k2_private.admin_request_rate_buckets",
+      "k2_private.admin_session_events",
+      "k2_private.admin_session_events_event_id_seq",
+      "k2_private.admin_sessions",
+      "k2_private.ai_spend_control_config",
+      "k2_private.ai_spend_control_events",
+      "k2_private.ai_spend_control_events_id_seq",
+      "k2_private.catalog_import_operations",
+      "k2_private.catalog_import_row_events",
+      "k2_private.category_lot_command_context",
+      "k2_private.category_policy_command_config",
+      "k2_private.category_shelf_life_events",
+      "k2_private.category_shelf_life_policy",
+      "k2_private.channel_verification_events",
+      "k2_private.channel_verification_events_id_seq",
+      "k2_private.customer_account_notifications",
+      "k2_private.customer_account_settings",
+      "k2_private.customer_delivery_rate_heads",
+      "k2_private.customer_delivery_rate_versions",
+      "k2_private.delivery_psgc_locations",
+      "k2_private.express_delivery_acceptances",
+      "k2_private.express_delivery_context",
+      "k2_private.express_delivery_quotes",
+      "k2_private.globe_review_events",
+      "k2_private.guest_account_claim_events",
+      "k2_private.guest_account_claim_events_id_seq",
+      "k2_private.guest_bff_secrets",
+      "k2_private.guest_conversation_receipts",
+      "k2_private.guest_rate_buckets",
+      "k2_private.guest_request_nonces",
+      "k2_private.intake_ai_jobs",
+      "k2_private.order_delivery_construction_context",
+      "k2_private.order_delivery_snapshots",
+      "k2_private.order_payment_receipts",
+      "k2_private.product_delete_operations",
+      "k2_private.product_intake_evidence_cleanup_events",
+      "k2_private.product_master_events",
+      "k2_private.product_master_events_id_seq",
+      "k2_private.product_media_events",
+      "k2_private.product_media_orphan_events",
+      "k2_private.reference_command_context",
+      "k2_private.reference_events",
+      "k2_private.staff_delete_credentials",
+      "k2_private.staff_invitation_operations",
+      "k2_private.storefront_auth_rate_buckets",
+      "k2_private.storefront_auth_rate_nonces",
+      "k2_private.website_listing_events",
+      "k2_private.website_listing_events_id_seq",
+      "k2_private.wholesale_inquiry_events",
+      "k2_private.wholesale_inquiry_events_id_seq",
+      "k2_private.wholesale_inquiry_receipts",
+      "public.audit_logs",
+      "public.batch_change_events",
+      "public.brands",
+      "public.categories",
+      "public.channel_connections",
+      "public.channel_credentials",
+      "public.channel_event_inbox",
+      "public.channel_identities",
+      "public.channel_listings",
+      "public.channel_shops",
+      "public.channels",
+      "public.consignment_items",
+      "public.consignment_scan_events",
+      "public.consignments",
+      "public.conversation_events",
+      "public.conversations",
+      "public.coupon_redemptions",
+      "public.coupons",
+      "public.custodians",
+      "public.customer_accounts",
+      "public.customer_claim_requests",
+      "public.customer_contact_points",
+      "public.customers",
+      "public.delivery_cost_rows",
+      "public.delivery_courier_options",
+      "public.delivery_locality_rules",
+      "public.delivery_quote_snapshots",
+      "public.delivery_rate_sources",
+      "public.error_reports",
+      "public.globe_products",
+      "public.guest_access_grant_scopes",
+      "public.guest_access_grants",
+      "public.hubs",
+      "public.inventory_balances",
+      "public.inventory_events",
+      "public.inventory_reservations",
+      "public.k2_sku_seq",
+      "public.messages",
+      "public.notifications",
+      "public.order_request_events",
+      "public.order_request_items",
+      "public.order_requests",
+      "public.orders",
+      "public.packing_scan_events",
+      "public.pasabuy_events",
+      "public.pasabuy_quotes",
+      "public.pasabuy_requests",
+      "public.po_lines",
+      "public.product_batches",
+      "public.product_deletions",
+      "public.product_drafts",
+      "public.product_intake_sessions",
+      "public.products",
+      "public.products_old",
+      "public.purchase_orders",
+      "public.reviews",
+      "public.staff_allocations",
+      "public.suppliers",
+      "public.user_profiles",
+      "public.warehouses",
+      "public.wholesale_inquiries",
+      "storage.buckets",
+      "storage.buckets_analytics",
+      "storage.buckets_vectors",
+      "storage.migrations",
+      "storage.objects",
+      "storage.s3_multipart_uploads",
+      "storage.s3_multipart_uploads_parts",
+      "storage.vector_indexes"
+    ],
+    "prefixSha256": "e006b627c37d4705ac5328d39f7a435918393eb0416cea7075f5db7e2ec9dbc8",
+    "overlaySha256": "7fed5b9a25179c78c4802b69e65ba1763616daeb4255a5d25007373e10addfce",
+    "initramfsSha256": "6c47eb352c229fb1a3164ec1b5919bf224286ec70199bf982f8f0dfc7e99cd9c",
+    "runnerSha256": "98875ec2c1499a28b22f30990c5e97933af89fa49581ba5924887b1d168cffbf",
+    "sources": [
+      {
+        "file": "tests/sql/admin-stock-boundaries.sql",
+        "sha256": "f62342ce27ace4d75940df5ba66da96928827d49adf14b172ce196390cbb3e80"
+      },
+      {
+        "file": "scripts/prepare-admin-stock-boundary-fixture.mjs",
+        "sha256": "658584ed9a6b4f49d6af9166151646865b44abe15a160e5beed2cea4f6489852"
+      },
+      {
+        "file": "tests/sql/admin-stock-500lots.sql",
+        "sha256": "de0a4d392303f0219f2061f2830d7007d8c8cddbf5d4037e7f00ec80d6f5b75c"
+      },
+      {
+        "file": "tests/sql/admin-stock-writer-snapshot.sql",
+        "sha256": "3d7fcbf569b40af4f58bd30a15948f6b2c7934b15c67905fd3881b178b374f58"
+      },
+      {
+        "file": "tests/sql/admin-stock-writer-cleanup.sql",
+        "sha256": "de1c94246c934481e4fc33fde4000de6f9ead9b5f7c5c76e1886db1ef61e22a3"
+      },
+      {
+        "file": "tests/native/admin-stock-writer-snapshot.sh",
+        "sha256": "bcdd7d48537f23ed95cd255103b4de8dc8ae4053382fb3a34184a6a42825b034"
+      }
+    ],
+    "files": [
+      {
+        "file": "stock-boundaries.sql",
+        "sha256": "bbd2e4090b844d7d413002cc115b031ce4ed9b0717f2836fd47d70464de3bbb6"
+      },
+      {
+        "file": "stock-boundary-rows.sql",
+        "sha256": "8bdc0e2e75151079afa8a00c5133c8023639992ceacc9026e0679f3dc0919d37"
+      },
+      {
+        "file": "image-probe.sh",
+        "sha256": "8dabd6dd9cab9eab1ce30d9dee8193dc7345fb58dc685f9fd925360a2a481a48"
+      },
+      {
+        "file": "init.sh",
+        "sha256": "294e8a50070df02fbce164db8723b937b0f4100f612a451930c2ae40fc8a3232"
+      },
+      {
+        "file": "stock-writer-setup.sql",
+        "sha256": "3d7fcbf569b40af4f58bd30a15948f6b2c7934b15c67905fd3881b178b374f58"
+      },
+      {
+        "file": "stock-writer-cleanup.sql",
+        "sha256": "de1c94246c934481e4fc33fde4000de6f9ead9b5f7c5c76e1886db1ef61e22a3"
+      },
+      {
+        "file": "stock-writer-snapshot.sh",
+        "sha256": "bcdd7d48537f23ed95cd255103b4de8dc8ae4053382fb3a34184a6a42825b034"
+      }
+    ],
+    "scope": "Exact global500lot admitted IDs plus actual signed canonical lots_reconcile held in independent transaction with three observed row-exclusive resources: old complete lot/hold/order and stock reads while held, old after rollback and new after commit. Synthetic committed setup/cleanup owner replica only; unchanged signed writer and readers origin. Full151 physical/schema and cold recovery retained. No provider or general mid-statement writer schedule claim.",
+    "writerSnapshot": true
+  },
+  "composition": {
+    "owningMap": "MAP-018",
+    "idea": "IDEA-20261010-08",
+    "providerWrites": false,
+    "scope": "Prepared captured-authority fixture; native execution and provider acceptance unverified",
+    "sources": [
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\preparer-source.mjs",
+        "sha256": "2f6942385816d838cdc61fe628b6d2e96c08b1df9f4dc302027d3cd5d7d1325c"
+      },
+      {
+        "file": "supabase/prepared/imported_draft_continuation.sql",
+        "sha256": "26ec4db009173aef02e3954504c05991937fb4d503769fc5133f3ebaa999d52a"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\execution01\\after-catalog.json",
+        "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\imported-draft-025b3682-3b76-465e-bd2a-5c2c0c597314\\combined-imported-install.sql",
+        "sha256": "abc2abd5d685913d07508bd704aa1ecc0a29c6b0bae0f870cb47cb5ca82f85d5"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\before-catalog.json",
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\after-catalog.json",
+        "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\guarded-package.json",
+        "sha256": "fa0ef714dd5d3582a8b99a57faa1cef1cb4ad0a56fffbfeee0442d3d8692a55b"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\authority-inventory.json",
+        "sha256": "52bcd96910e4b32dd195e375bcbbef468471d1c166095d3d1b11d29e48ecde7a"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\provider-managed-ddl-authority.json",
+        "sha256": "1f6dac40000249a40a7ad45fa5b71f7cbf348f14144f69f1768282e311a3b06a"
+      },
+      {
+        "file": "scripts/prepare-imported-provider-fixture.mjs",
+        "sha256": "092032a0b067061effe21762800234fd0d267fa6d9d85c2e70474da3aeef3490"
+      },
+      {
+        "file": "docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs",
+        "sha256": "0745352c4309f9cc885fee69d94f55bd191133d822aa82dddb839b8a6cb7f3c7"
+      },
+      {
+        "file": "supabase/prepared/product_master_version_conflict_transport.sql",
+        "sha256": "ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476"
+      },
+      {
+        "file": "supabase/prepared/customer_tariff_version_conflict_transport.sql",
+        "sha256": "efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166"
+      },
+      {
+        "file": "supabase/prepared/category_policy_version_conflict_transport.sql",
+        "sha256": "974b404f066282f001963d8ba7d548c5e137f95f40c57a73d480abeba7abc6b0"
+      },
+      {
+        "file": "supabase/prepared/protected_reference_catalog_delta.json",
+        "sha256": "d482c3e3fd6ca89a95097d24801b9d2dd98a0631449e44739b1758341985d42b"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported39\\execution01\\reference-installed-catalog.json",
+        "sha256": "be85021470fc2976e36fbdeff750641d45810c8c30818f06155336a600866df7"
+      },
+      {
+        "file": "supabase/prepared/protected_reference_normalization.sql",
+        "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896"
+      },
+      {
+        "file": "supabase/prepared/protected_reference_creation.sql",
+        "sha256": "adc0eac81830a83244cc6848e8d0d89b1480c7fd32e88b1b01223e60a4ac2c02"
+      },
+      {
+        "file": "scripts/reference-catalog-contract.mjs",
+        "sha256": "8acf5671543000e966d0228e595ee5d22c898e2d92fda8d06e810d6e0e52631b"
+      },
+      {
+        "file": "supabase/prepared/admin_stock_catalog_delta.json",
+        "sha256": "587428f90372bd4cdfb5060ae73bb8cfc18f643684705ec23958c28b5b80cf04"
+      },
+      {
+        "file": "supabase/prepared/admin_product_stock_read.sql",
+        "sha256": "ccd55d177244c82a693cbeedf779611050e48aa3ba4f7fc12909450341a75db3"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\execution01\\calibrated-catalog.json",
+        "sha256": "f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b"
+      },
+      {
+        "file": "scripts/admin-stock-catalog-contract.mjs",
+        "sha256": "561b37825e38999b5ced44d01a9fe2aa93e1e8f608f8000a045b2c39db917812"
+      },
+      {
+        "file": "docs/acceptance/ADMIN_STOCK_INSTALLATION_CALIBRATION_20261011.json",
+        "sha256": "e005e38c1f3c4b83e3328f423fc4f771fd651f76b058e197b9a28df1dc0f20f5"
+      }
+    ],
+    "transitions": [
+      {
+        "name": "create_product_draft_server",
+        "beforeMd5": "e0ae0726b5d19da69a023eb59bc98722"
+      },
+      {
+        "name": "execute_admin_product_intake_command_v1",
+        "beforeMd5": "d0c8b9094f90c57f1893fca4d4c91806"
+      },
+      {
+        "name": "execute_admin_intake_ai_v1",
+        "beforeMd5": "acde04b0dbcaa3b5c02283c63a185320"
+      }
+    ],
+    "helper": "k2_private.assert_imported_draft_target_v1(p_product_id uuid, p_expected_version bigint)",
+    "expectedAfterSha256": "f623935337292fa37ec80d77e331237c71c40bae670697ea71d8b6f9d2efb81a",
+    "stockReads": {
+      "expectedCanonicalSha256": "98b576aeec6521ecb7825420ab3579f1afdd9d5bd78787c710855c94f7365987",
+      "sourceSha256": "ccd55d177244c82a693cbeedf779611050e48aa3ba4f7fc12909450341a75db3",
+      "fragmentCount": 13,
+      "nativeQualified": false
+    },
+    "derivedSourceSha256": "94ae1e88f074117f1f8cd1e31c928ec91aa58db524b802806af7a59cac988152",
+    "references": {
+      "contractPath": "supabase/prepared/protected_reference_catalog_delta.json",
+      "expectedCanonicalSha256": "8a71131773cc4886b678e414b9dd040e76ad0539fc1bfdfdbfadd52266ad9bed",
+      "fragments": [
+        "supabase/prepared/protected_reference_normalization.sql",
+        "supabase/prepared/protected_reference_creation.sql"
+      ],
+      "nativeQualified": false
+    }
+  },
+  "conservation": {
+    "physicalSelected": 151,
+    "rowsAndSequencesSha256": "40e6fbc6593376b330f62bfad5a2885efeb67342a567ac5679baa474845b04c9",
+    "schemaSha256": "f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b"
+  },
+  "observedMarkers": [
+    "K2_ADMIN_STOCK_BOUNDARY_CHECKS_OK",
+    "K2_ADMIN_STOCK_GLOBAL500_ADMITTED_OK",
+    "K2_STOCK_WRITER_SETUP_OK",
+    "K2_STOCK_CANONICAL_WRITER_LOCKS_rollback_OBSERVED",
+    "K2_STOCK_CANONICAL_WRITER_LOCKS_commit_OBSERVED",
+    "K2_STOCK_READER_AFTER_rollback_OK",
+    "K2_STOCK_READER_AFTER_commit_OK",
+    "K2_STOCK_WRITER_CLEANUP_OK",
+    "K2_ADMIN_STOCK_WRITER_SNAPSHOT_OK",
+    "K2_ADMIN_STOCK_BOUNDARY_CONSERVATION_OK",
+    "K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK",
+    "K2_GUARDED_FRESH_REPLAY_OK",
+    "K2_OCI_GUEST_SUCCESS"
+  ],
+  "repeatedMarkers": {
+    "K2_STOCK_READER_OLD_WHILE_WRITER_HELD": 2
+  },
+  "pins": [
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/stock-boundary-preparation.json",
+      "sha256": "74cad4f9984b299dc5e08e8c7ee43c8c22185da6e7ecae6ff46bfbd901ae7a81"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/stock-boundary-preparer-source.mjs",
+      "sha256": "658584ed9a6b4f49d6af9166151646865b44abe15a160e5beed2cea4f6489852"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/imported-composition.json",
+      "sha256": "e0f737f7de4d5faf1071614d414f522e6237ccdb9bf640d8fb0294d4ca2ca615"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/guarded-package.json",
+      "sha256": "6f9d53d03411ae184db67d7d30ed0f7bc3e5c632f54a1dcef417e1222d1ce70a"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/preparation.json",
+      "sha256": "187d7e62e047ddad4e887ea905416f19ae6a81e8a6209afa0174dc0f2ce8ffe5"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/preparer-source.mjs",
+      "sha256": "94ae1e88f074117f1f8cd1e31c928ec91aa58db524b802806af7a59cac988152"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/stock-boundary-overlay.cpio",
+      "sha256": "7fed5b9a25179c78c4802b69e65ba1763616daeb4255a5d25007373e10addfce"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/initramfs.cpio",
+      "sha256": "6c47eb352c229fb1a3164ec1b5919bf224286ec70199bf982f8f0dfc7e99cd9c"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/captured-baseline-check.sql",
+      "sha256": "aff237ec2224cbd9849391e25cdd1dc7646b59f7d3c61850fd5a6ca8e89a6e4b"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/captured-foundation.sql",
+      "sha256": "cb7cebec0fcf40d9d6fbeed80b18654901b73bb6f5bcae0782c68f592ad6c60c"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/captured-restore.sql",
+      "sha256": "57c1cf8abe1b36ba078d125751cf91b01c0a46faf9ca0a5be9cd561e60bd9637"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/cold-authority.sql",
+      "sha256": "da1ab048555c6d3f009b0f6ae811e51528d299ef3d7f4d8daa60632a65948fd1"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/cold-catalog.sql",
+      "sha256": "6ba79c208b3bc30e79b1b520d1876e589ac734f9799a147bd07d2e7e6aa76a54"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/foundation-metadata.sql",
+      "sha256": "ba80db4dcc15ed07c1fcf4b6b3a3f62c651f8e1f17155a1bb3cc32297baedbeb"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/foundation-rows.sql",
+      "sha256": "c3ab70a6b9692ca9df71392f75df92593652b4ef92fff2b8907ade2eada31822"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/full-contents.sql",
+      "sha256": "b7f27c8f502548b73f15cee53018c5e701f4025ed36c92a94097ce81333ba9c1"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/image-probe.sh",
+      "sha256": "8dabd6dd9cab9eab1ce30d9dee8193dc7345fb58dc685f9fd925360a2a481a48"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/init.sh",
+      "sha256": "294e8a50070df02fbce164db8723b937b0f4100f612a451930c2ae40fc8a3232"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/managed-check.sql",
+      "sha256": "6d672122ff9422a7a762d459c3ac68c09e7796f98c076dd7510fe16efc7cf5b0"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/managed-fixtures.sql",
+      "sha256": "dc39aabdfcc689bf6948b7e8052c84eb97fad1afbb200164a74c58430456a974"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/managed-settings.conf",
+      "sha256": "7997d9ec01a9b9a3306bb5ead38e6f6c006b7354912daac9c7130283669ccdf8"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/original-row-projection.sql",
+      "sha256": "98b83bb916c9178406ded4c4d6c030ff9c1ed0f3b39bda92e7be1e6826251010"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/preserved-foundation.dump",
+      "sha256": "f02a7598776b38d35d9d8656178a05ba8e45577668a1be48da2c7553ee696e10"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/race-blocker.sql",
+      "sha256": "8c132ca0ec2b7b2e517eefd78c0b4fa679bbbe49cbc81c529d841420c9a098bd"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/race-catalog.sql",
+      "sha256": "10b5ebadfbb099ad8d3cbc624220b731ec49ddbd9f2c855412f922631d277ceb"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/race-drift.sql",
+      "sha256": "1da0f0f60730e26e5fe867e205ec2b73eb2925346d5b43eb61f4abba627f0f46"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/race-install.sql",
+      "sha256": "e174d1c974925ff0ae739acc689bcdb860d03695b467043db51b12164a56a6e6"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/race-locks.sql",
+      "sha256": "22a5193af083cd96b8305ece001c330abadad71062df463d6831ede53d17984f"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/race-observer.sql",
+      "sha256": "e5eb75ea07860b29b8559fe47872d2e15eee56bf241d8835b2fa329e640a930b"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/race-recover.sql",
+      "sha256": "b1ca683e1308b0fc0a79e14e3f9a9cdd7187983196fdf30ec55b027d495cc7d5"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/role-bootstrap.sql",
+      "sha256": "619a43276c9c7ae166cc7f81bb018b2433e577952ab78969efa845fabd504d01"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/stock-boundaries.sql",
+      "sha256": "bbd2e4090b844d7d413002cc115b031ce4ed9b0717f2836fd47d70464de3bbb6"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/stock-boundary-rows.sql",
+      "sha256": "8bdc0e2e75151079afa8a00c5133c8023639992ceacc9026e0679f3dc0919d37"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/stock-writer-cleanup.sql",
+      "sha256": "de1c94246c934481e4fc33fde4000de6f9ead9b5f7c5c76e1886db1ef61e22a3"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/stock-writer-setup.sql",
+      "sha256": "3d7fcbf569b40af4f58bd30a15948f6b2c7934b15c67905fd3881b178b374f58"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/stock-writer-snapshot.sh",
+      "sha256": "bcdd7d48537f23ed95cd255103b4de8dc8ae4053382fb3a34184a6a42825b034"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/staging/k2/vault-probe.sql",
+      "sha256": "cd15118a69ac9ea0fcd2081e2755c46d4b7391f50d456480755dd9911f7b974d"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/execution01/result.json",
+      "sha256": "f61d770723983dca254c7a71504c51de15f652452678ac1b60cc0047c65d8250"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/execution01/launch.json",
+      "sha256": "fc28d416595c0ed21e787e58a05649be4d9ff2267a424bba61567669a5be4988"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/execution01/serial.log",
+      "sha256": "c3a839dc0b971cb53a06785fadb9c587090baf44ab54f584c0a02fcda77dabb7"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/execution01/stderr.log",
+      "sha256": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/execution01/before-catalog.json",
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/execution01/after-catalog.json",
+      "sha256": "f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported71/execution01/rollback-catalog.json",
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    }
+  ],
+  "runnerPin": {
+    "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/run-oci-imported71.mjs",
+    "sha256": "98875ec2c1499a28b22f30990c5e97933af89fa49581ba5924887b1d168cffbf"
+  },
+  "preparedDiagnostics": [
+    {
+      "case": "oci-imported68",
+      "executed": false,
+      "reason": "Synthetic hub failed canonical Manila eligibility;70 uses preserved canonical hub",
+      "pins": [
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported68/stock-boundary-preparation.json",
+          "sha256": "0ebb1a207040bf49a3a37b781b91f45d1b6286804c261a9fd579c9a06fc0dbfb"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported68/stock-boundary-preparer-source.mjs",
+          "sha256": "658584ed9a6b4f49d6af9166151646865b44abe15a160e5beed2cea4f6489852"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported68/staging/k2/stock-writer-setup.sql",
+          "sha256": "b3aa11dc3fa32e53a4aae06bdb678d414b65f1a5f6b6966e343d7684613521b0"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported68/staging/k2/stock-writer-cleanup.sql",
+          "sha256": "2b78dfe7427821eb40dd11e8ade960e2aab0744f5558ffb85f54ddb90b219e80"
+        }
+      ]
+    },
+    {
+      "case": "oci-imported69",
+      "executed": false,
+      "reason": "Synthetic hub failed canonical Manila eligibility;70 uses preserved canonical hub",
+      "pins": [
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported69/stock-boundary-preparation.json",
+          "sha256": "cc28d5b559f11eab080933f6c2a15d5bb5240d578ff8dc5f94cfa270a39bb0dc"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported69/stock-boundary-preparer-source.mjs",
+          "sha256": "658584ed9a6b4f49d6af9166151646865b44abe15a160e5beed2cea4f6489852"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported69/staging/k2/stock-writer-setup.sql",
+          "sha256": "b3aa11dc3fa32e53a4aae06bdb678d414b65f1a5f6b6966e343d7684613521b0"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported69/staging/k2/stock-writer-cleanup.sql",
+          "sha256": "2b78dfe7427821eb40dd11e8ade960e2aab0744f5558ffb85f54ddb90b219e80"
+        }
+      ]
+    }
+  ],
+  "development": {
+    "command": "npm run verify:development",
+    "session": 82052,
+    "exit": 0,
+    "adminChecks": 30,
+    "routeControlGaps": 0
+  },
+  "review": {
+    "status": "verified",
+    "reviewer": "stock_recovery_review",
+    "critical": 0,
+    "important": 0,
+    "scope": "Independent source/raw/result/catalog/single and repeated markers/151 rows+sequences/44artifact/24composition/6source/7stage+overlay/runner/prefix/initramfs/14 diagnostic pins and scoped receipt review"
+  },
+  "retirement": {
+    "status": "verified",
+    "output": "63d3a3",
+    "exit": 0,
+    "guestAndControllerMatchingCommandsAbsent": true,
+    "cases": [
+      70,
+      71
+    ],
+    "successfulGuestPid": 6408,
+    "scope": "Parent read-only CIM command match; reviewer did not rerun process query"
+  },
+  "scope": "Global500lot read returns exact admitted500ID set/one product/zero reservations/orders. Actual unchanged signed lots_reconcile uses normal origin triggers/signature/role controls. Independent transaction held after writer completes has backend_xid and granted RowExclusive locks on products,product_batches,inventory_balances; reader returns exact old lot10/20 withheld1each, two reservation/order links and stock28. Rollback retains old; commit yields exact lots4/6 withheld1each and stock8, same complete holds/order links. Synthetic setup/cleanup restores exact canonical hub/config/nonce/rate state; full151physical/sequence/schema conservation and original cold catalog/authority recovered.",
+  "limitations": [
+    "This observes completed canonical writer held before transaction end; does not pause reader statement at a mid-statement commit or claim arbitrary schedules",
+    "Lot recount tested; canonical purchase/reservation/payment/fulfillment concurrency is separate",
+    "Holds/order setup is synthetic owner replica; no canonical hold creation claim",
+    "No provider/hosted/human-review/Website/media/Live/customer acceptance"
+  ],
+  "nextAction": "MAP-018 explicit human-review control/protected Website assignment and recovery UI under IDEA-20261001-03, then remaining rendered media/Live/customer/hosted/provider/owner gates",
+  "recovery": "Revert writer/global500 tests and preparer opt-in only; preserve68–70 archives. No production change or rollback.",
+  "failedCases": [
+    {
+      "case": "oci-imported70",
+      "controllerSession": 52131,
+      "controllerExit": 1,
+      "guestExit": 0,
+      "reason": "Assertion helper unparenthesized CASE syntax; exact500lot marker only, canonical writer not exercised",
+      "fullRecoveryVerified": false,
+      "pins": [
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported70/stock-boundary-preparation.json",
+          "sha256": "62f1db9a8fdbc456806176b20d63cb2b3a092486d5ccc87bb5446898a6568901"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported70/stock-boundary-preparer-source.mjs",
+          "sha256": "658584ed9a6b4f49d6af9166151646865b44abe15a160e5beed2cea4f6489852"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported70/staging/k2/stock-writer-setup.sql",
+          "sha256": "844a921dcef2e735bdb65bbee2776513821e2973bc23e11cd229ebf045814f85"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported70/execution01/result.json",
+          "sha256": "fc1a8d119ff9376e30c4a22535d345d3fd6eade6e76b7a0752b275782ef99589"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported70/execution01/launch.json",
+          "sha256": "2d0d07284794b4098a571f5712bc3c5502bf285d8a7a19b7d64e1b8afc0268a1"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported70/execution01/serial.log",
+          "sha256": "42bcc1bdf1516a3f98f0c4a4e793fe7c2ea4e21b3d2ccfa5b198904338b41d79"
+        }
+      ]
+    }
+  ]
+}
