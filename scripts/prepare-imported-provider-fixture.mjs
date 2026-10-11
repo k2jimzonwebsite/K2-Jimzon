@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
 import {assertReferenceCatalogDelta} from './reference-catalog-contract.mjs'
+import {assertAdminStockCatalogDelta} from './admin-stock-catalog-contract.mjs'
 
 const root = 'D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const caseName = process.argv.find(a => a.startsWith('--case='))?.slice(7) || 'oci-imported01'
@@ -13,8 +14,10 @@ const productMasterTransport = process.argv.includes('--product-master-transport
 const customerTariffTransport = process.argv.includes('--customer-tariff-transport')
 const categoryPolicyTransport = process.argv.includes('--category-policy-transport')
 const references = process.argv.includes('--references')
+const staffStock = process.argv.includes('--staff-stock')
 if (categoryPolicyTransport && (!productMasterTransport || !customerTariffTransport)) throw Error('CATEGORY_TRANSPORT_REQUIRES_MASTER_TARIFF_UNION')
 if (references && !categoryPolicyTransport) throw Error('REFERENCE_INSTALL_REQUIRES_FULL_TRANSPORT_UNION')
+if (staffStock && !references) throw Error('STAFF_STOCK_REQUIRES_FULL_REFERENCE_UNION')
 if (!/^oci-imported\d{2}$/.test(caseName)) throw Error('OWNED_IMPORTED_FIXTURE_NAME_REQUIRED')
 const sha = bytes => createHash('sha256').update(bytes).digest('hex')
 const sourcePath = path.join(root, 'oci-envelope12/preparer-source.mjs')
@@ -131,12 +134,25 @@ const referenceContractPath='supabase/prepared/protected_reference_catalog_delta
 const referenceCatalogPath=path.join(root,'oci-imported39/execution01/reference-installed-catalog.json')
 const referencePaths=['supabase/prepared/protected_reference_normalization.sql','supabase/prepared/protected_reference_creation.sql']
 let referenceExpected=null,referenceFragments=[]
+const stockContractPath='supabase/prepared/admin_stock_catalog_delta.json'
+const stockSourcePath='supabase/prepared/admin_product_stock_read.sql'
+const stockCatalogPath=path.join(root,'oci-imported53/execution01/calibrated-catalog.json')
+let stockContract=null,stockFragment=''
 if(references){
   const referenceContract=JSON.parse(fs.readFileSync(referenceContractPath))
   assert.equal(sha(fs.readFileSync(referenceCatalogPath)),'be85021470fc2976e36fbdeff750641d45810c8c30818f06155336a600866df7')
   const referenceSources=Object.fromEntries(referencePaths.map(file=>[file,fs.readFileSync(file,'utf8')]))
   referenceExpected=assertReferenceCatalogDelta(expected,JSON.parse(fs.readFileSync(referenceCatalogPath)),referenceContract,referenceSources)
   referenceFragments=referencePaths.map(file=>referenceSources[file])
+}
+if(staffStock){
+  stockContract=JSON.parse(fs.readFileSync(stockContractPath))
+  const calibration=JSON.parse(fs.readFileSync('docs/acceptance/ADMIN_STOCK_INSTALLATION_CALIBRATION_20261011.json'))
+  assert.equal(sha(fs.readFileSync(stockContractPath)),calibration.contractPin.sha256)
+  assert.equal(calibration.controllerExit,0);assert.equal(calibration.review.status,'verified')
+  assert.equal(sha(fs.readFileSync(stockCatalogPath)),calibration.result.catalogs.calibrated.sha256)
+  stockFragment=fs.readFileSync(stockSourcePath,'utf8')
+  referenceExpected=assertAdminStockCatalogDelta(referenceExpected,JSON.parse(fs.readFileSync(stockCatalogPath)),stockContract,stockFragment)
 }
 derived = derived.replace(afterAnchor, () => (references
   ? 'Object.assign(after,' + JSON.stringify(referenceExpected) + ');\n'
@@ -145,7 +161,7 @@ assert.equal(derived.split('fragments:fixed.fragments').length, 2)
 const fragmentStart = fragment.indexOf('\nbegin;')
 assert.ok(fragmentStart >= 0 && fragment.split('\nbegin;').length === 2 && /commit;\s*$/.test(fragment))
 const importedBody = fragment.slice(fragmentStart + 1).replace(/^begin;/, '').replace(/commit;\s*$/, '')
-derived = derived.replace('fragments:fixed.fragments', () => 'fragments:[...fixed.fragments,' + JSON.stringify(importedBody) + (productMasterTransport ? ',' + JSON.stringify(transport) : '') + (customerTariffTransport ? ',' + JSON.stringify(tariffTransport) : '') + (categoryPolicyTransport ? ',' + JSON.stringify(categoryTransport) : '') + referenceFragments.map(sql=>','+JSON.stringify(sql)).join('') + ']')
+derived = derived.replace('fragments:fixed.fragments', () => 'fragments:[...fixed.fragments,' + JSON.stringify(importedBody) + (productMasterTransport ? ',' + JSON.stringify(transport) : '') + (customerTariffTransport ? ',' + JSON.stringify(tariffTransport) : '') + (categoryPolicyTransport ? ',' + JSON.stringify(categoryTransport) : '') + referenceFragments.map(sql=>','+JSON.stringify(sql)).join('') + (staffStock?','+JSON.stringify(stockFragment):'') + ']')
 const generated = path.join(root, 'prepare-' + caseName + '.mjs')
 assert.ok(!fs.existsSync(path.join(root, caseName)) && !fs.existsSync(generated))
 fs.writeFileSync(generated, derived, { flag: 'wx' })
@@ -162,9 +178,11 @@ const record = {
     ...(productMasterTransport ? [transportPath] : []), ...(customerTariffTransport ? [tariffTransportPath] : []),
     ...(categoryPolicyTransport ? [categoryTransportPath] : [])]
     .concat(references?[referenceContractPath,referenceCatalogPath,...referencePaths,'scripts/reference-catalog-contract.mjs']:[])
+    .concat(staffStock?[stockContractPath,stockSourcePath,stockCatalogPath,'scripts/admin-stock-catalog-contract.mjs','docs/acceptance/ADMIN_STOCK_INSTALLATION_CALIBRATION_20261011.json']:[])
     .map(file => ({ file, sha256: sha(fs.readFileSync(file)) })),
   transitions: transitions.map(([name, beforeMd5]) => ({ name, beforeMd5 })),
   helper: helper.identity, expectedAfterSha256: sha(JSON.stringify(expected)),
+  stockReads:staffStock?{expectedCanonicalSha256:stockContract.afterCanonicalSha256,sourceSha256:stockContract.source.sha256,fragmentCount:13,nativeQualified:false}:null,
   derivedSourceSha256: sha(derived),
   references: references?{contractPath:referenceContractPath,expectedCanonicalSha256:JSON.parse(fs.readFileSync(referenceContractPath)).afterCanonicalSha256,fragments:referencePaths,nativeQualified:false}:null,
 }
