@@ -12,10 +12,14 @@ const prepared=spawnSync(process.execPath,['scripts/prepare-imported-provider-fi
 assert.equal(prepared.status,0,prepared.stderr)
 const pkg=JSON.parse(fs.readFileSync(path.join(dir,'guarded-package.json')))
 assert.equal(sha(pkg.sql),'e6eda8085254f27f0dd30c01f77c3a53bfc4a1652c59ad472a68558079bab052')
+const globalCaps=process.argv.includes('--global-caps')
 const stage=path.join(dir,'staging/k2'),test='tests/sql/admin-stock-boundaries.sql',rows=path.join(root,'oci-imported58/staging/k2/revised-all-rows.sql')
 const prior=JSON.parse(fs.readFileSync(path.join(root,'oci-imported58/revised-qualification.json')))
 assert.equal(sha(fs.readFileSync(rows)),prior.files['revised-all-rows.sql'])
-fs.copyFileSync(test,path.join(stage,'stock-boundaries.sql'),fs.constants.COPYFILE_EXCL)
+if(globalCaps){
+ const setup=fs.readFileSync(test,'utf8'),anchor='do $held$';assert.equal(setup.split(anchor).length,2)
+ fs.writeFileSync(path.join(stage,'stock-boundaries.sql'),setup.slice(0,setup.indexOf(anchor))+fs.readFileSync('tests/sql/admin-stock-global-caps.sql','utf8'),{flag:'wx'})
+}else fs.copyFileSync(test,path.join(stage,'stock-boundaries.sql'),fs.constants.COPYFILE_EXCL)
 fs.copyFileSync(rows,path.join(stage,'stock-boundary-rows.sql'),fs.constants.COPYFILE_EXCL)
 const command=file=>`su postgres -s /bin/sh -c 'psql -X -q -t -A -P pager=off -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f /tmp/${file}'`
 let probe=fs.readFileSync(path.join(stage,'image-probe.sh'),'utf8')
@@ -39,9 +43,10 @@ const tar=spawnSync('tar.exe',['-cf',overlay,'--format=newc','-C',overlayStage,'
 const initramfs=path.join(dir,'initramfs.cpio'),prefixSha256=sha(fs.readFileSync(initramfs));fs.appendFileSync(initramfs,fs.readFileSync(overlay))
 const runnerFile=path.join(root,'run-'+name+'.mjs');let runner=fs.readFileSync(runnerFile,'utf8')
 const old="stdout.includes('K2_PROTECTED_CONCURRENT_DRIFT_REFUSED_AND_RECOVERED')";assert.equal(runner.split(old).length,2)
-runner=runner.replace(old,"stdout.includes('K2_ADMIN_STOCK_BOUNDARY_CHECKS_OK')&&stdout.includes('K2_ADMIN_STOCK_BOUNDARY_CONSERVATION_OK')")
+runner=runner.replace(old,"stdout.includes('K2_ADMIN_STOCK_BOUNDARY_CHECKS_OK')&&stdout.includes('K2_ADMIN_STOCK_BOUNDARY_CONSERVATION_OK')"+(globalCaps?"&&stdout.includes('K2_ADMIN_STOCK_GLOBAL_CAPS_OK')":""))
 fs.writeFileSync(runnerFile,runner)
 const record={owningMap:'MAP-018',idea:'IDEA-20261011-01',case:name,providerWrites:false,sqlSha256:sha(pkg.sql),physicalSelection:prior.physicalSelection,prefixSha256,overlaySha256:sha(fs.readFileSync(overlay)),initramfsSha256:sha(fs.readFileSync(initramfs)),runnerSha256:sha(runner),sources:[test,'scripts/prepare-admin-stock-boundary-fixture.mjs'].map(file=>({file,sha256:sha(fs.readFileSync(file))})),files:files.map(file=>({file,sha256:sha(fs.readFileSync(path.join(stage,file)))})),scope:'Synthetic rollback-only current Staff/SuperAdmin/Customer reader admission, held physical stock, evidence-based clearance/quarantine, taxonomy Unknown and per-SKU lot cap; not genuine Auth or canonical writer qualification'}
+if(globalCaps){record.globalCaps=true;record.sources.push({file:'tests/sql/admin-stock-global-caps.sql',sha256:sha(fs.readFileSync('tests/sql/admin-stock-global-caps.sql'))});record.scope='Owned synthetic global501lots refusal, exact1000reservation/order identities and linkage,1001reservation refusal, independent501product refusal and exact500product completeness; shared setup and full physical/schema/cold recovery retained. Orders derive from reservations; no isolated order overflow or canonical writer acceptance.'}
 fs.writeFileSync(path.join(dir,'stock-boundary-preparation.json'),JSON.stringify(record,null,2)+'\n',{flag:'wx'})
 fs.copyFileSync('scripts/prepare-admin-stock-boundary-fixture.mjs',path.join(dir,'stock-boundary-preparer-source.mjs'),fs.constants.COPYFILE_EXCL)
 console.log(JSON.stringify({case:name,prepared:true,providerWrites:false,physical:record.physicalSelection.length}))
