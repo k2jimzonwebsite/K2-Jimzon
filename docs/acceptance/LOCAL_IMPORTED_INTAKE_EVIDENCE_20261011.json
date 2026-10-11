@@ -1,0 +1,285 @@
+{
+  "schemaVersion": 1,
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "date": "2026-10-11",
+  "scope": "Genuine local BFF Auth/MFA intake session and binary evidence registration/replay/download/cleanup; original captured recovery; no browser/imported product/provider acceptance",
+  "prerequisiteReceipts": [
+    "docs/acceptance/LOCAL_IMPORTED_MEDIA_TRANSPORT_20261011.json",
+    "docs/acceptance/LOCAL_BROWSER_AUTH_20261010.json"
+  ],
+  "image": "supabase/storage-api:v1.79.20",
+  "manifestDigest": "sha256:0d40b3dfd686fbcfddb71e4a818722bff1be4026b837f7e70ee8178b41a81456",
+  "appliedLocalSettings": {
+    "freezeAt": "drop-bucketid-objname-index",
+    "hashRefresh": false,
+    "installRoles": false,
+    "queue": false,
+    "vectorMigrations": false,
+    "fileBackend": true,
+    "maximumFileBytes": 4194304
+  },
+  "sourcePins": {
+    "scripts/prepare-imported-media-fixture.mjs": "981ac35faa17f95e0ad26e4fd4395c259656079c8e9b76570d848d376b7e6064",
+    "scripts/imported-intake-evidence-probe.inc.mjs": "521e28ae95ddfe3afab5bcffd094ccc11e523394216d5815b9b7d79bdbf8e6f4",
+    "scripts/fixture-admin-http-body.mjs": "509d7b4033846328fe04ea3381b779c8bb15574d111c5a5af68493ea5bde6821",
+    "scripts/storage-runtime-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+    "server/admin-bff/product-intake.js": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37"
+  },
+  "dependencyPins": {
+    "package-lock.json": "e248630a980ba18780cf9bd738f1c0b8f89324f1a534425c7797628c891e0225",
+    "node_modules/@supabase/supabase-js/package.json": "02e42e8011329ed38c1f774fc7b3c0b9329a93a26d39deb79e5ad31ffccb16d8",
+    "node_modules/sharp/package.json": "ad4a2535d72eb638053a38867b1abf43c328cd1c1dbae5cf4172d498365a8b97"
+  },
+  "cases": [
+    {
+      "case": "oci-imported-media07",
+      "privateCase": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media07",
+      "controllerSession": 88863,
+      "controllerExit": 0,
+      "result": {
+        "owningMap": "MAP-023/018",
+        "scope": "Genuine local BFF Auth/MFA intake session and binary evidence registration/replay/download/cleanup; original captured recovery; no browser/imported product/provider acceptance",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "7168",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media07\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 7028,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": true,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": true,
+        "processStopped": true,
+        "serialSha256": "8de8bcc276c37c97c9fe5bb17723fc4492aaed98c1d1f7af31b861fd844bd179"
+      },
+      "hostDriver": {
+        "owningMap": "MAP-018",
+        "scope": "Genuine local BFF Auth/MFA intake session and binary evidence registration/replay/download/cleanup; original captured recovery; no browser/imported product/provider acceptance",
+        "providerWrites": false,
+        "checks": [
+          "admin_create_confirmed_user",
+          "wrong_password_refused",
+          "password_login",
+          "server_validated_user",
+          "totp_enroll",
+          "totp_challenge",
+          "totp_verify",
+          "assurance_level",
+          "aal2_server_validated_user",
+          "prior_taxonomy_diagnostic_not_repeated",
+          "routed_fresh_http_session_refused",
+          "routed_missing_bot_secret_refused",
+          "routed_wrong_password_refused",
+          "routed_password_pending_cookie_mfa_required",
+          "routed_pending_cookie_not_active",
+          "routed_pending_probe_cleared_cookie_relogin_recovers",
+          "routed_wrong_totp_refused",
+          "routed_real_totp_registry_active_cookie",
+          "routed_http_cookie_session_restored",
+          "routed_protected_security_review_actual_auth_mfa_events",
+          "routed_logout_missing_csrf_refused",
+          "routed_logout_registry_inactive_server_refresh_refused",
+          "routed_saved_old_cookie_refused_after_logout",
+          "routed_logout_cleared_cookie_refused",
+          "genuine_bff_intake_three_binary_images_replay_conflict_retention_readback_cleanup",
+          "global_logout",
+          "logout_refresh_refused",
+          "admin_hard_delete_user"
+        ],
+        "aal1": {
+          "role": "authenticated",
+          "aal": "aal1",
+          "signatureVerified": true
+        },
+        "aal2": {
+          "role": "authenticated",
+          "aal": "aal2",
+          "signatureVerified": true
+        },
+        "routedStage": "GET_product-intake_session?sessionId=67dd6158-5d93-48c5-9792-3768a747f33d",
+        "lastRoutedResponse": {
+          "status": 200,
+          "code": "success"
+        },
+        "botScope": "Missing-secret refusal real; positive local flow explicitly allows unconfigured provider. No Cloudflare/provider acceptance.",
+        "routedLogoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "intakeStage": "synthetic_media_cleanup",
+        "intakeReply": {
+          "status": 200,
+          "code": "success"
+        },
+        "intakeEvidence": {
+          "sessionId": "67dd6158-5d93-48c5-9792-3768a747f33d",
+          "requestId": "b290ba95-f45d-4621-a573-9433f7fa6bcb",
+          "created": true,
+          "sessionReplay": true,
+          "images": [
+            {
+              "sessionId": "67dd6158-5d93-48c5-9792-3768a747f33d",
+              "slot": "PRIMARY",
+              "path": "0e67b68a-a728-40f1-af13-ae08346261ba/67dd6158-5d93-48c5-9792-3768a747f33d/primary-825f3c9c-a8f1-4f21-87c7-1b6034d21b47-bd4287f511bb7ecc.png",
+              "size": 284,
+              "type": "image/png",
+              "width": 160,
+              "height": 120,
+              "sha256": "bd4287f511bb7ecc568bba235d312194c4f9e63ba3971d9c142a462816b5306c",
+              "uploadStatus": "uploaded",
+              "fileName": "primary.png",
+              "exactReplay": true,
+              "filenameConflict": true,
+              "retainedDownload": true
+            },
+            {
+              "sessionId": "67dd6158-5d93-48c5-9792-3768a747f33d",
+              "slot": "BACK",
+              "path": "0e67b68a-a728-40f1-af13-ae08346261ba/67dd6158-5d93-48c5-9792-3768a747f33d/back-5a77feb1-08c8-4712-ba2f-0015d7ab3cde-3e1f5906b3431581.png",
+              "size": 284,
+              "type": "image/png",
+              "width": 160,
+              "height": 120,
+              "sha256": "3e1f5906b343158160521689044fbaddadb25bfc226dbeb6e2b3b1965fd44fbe",
+              "uploadStatus": "uploaded",
+              "fileName": "back.png",
+              "exactReplay": true,
+              "filenameConflict": true,
+              "retainedDownload": true
+            },
+            {
+              "sessionId": "67dd6158-5d93-48c5-9792-3768a747f33d",
+              "slot": "BARCODE",
+              "path": "0e67b68a-a728-40f1-af13-ae08346261ba/67dd6158-5d93-48c5-9792-3768a747f33d/barcode-f244e542-524e-455d-84b1-0ec15bd0c28f-22b87617f9ae5e88.png",
+              "size": 284,
+              "type": "image/png",
+              "width": 160,
+              "height": 120,
+              "sha256": "22b87617f9ae5e886e6ad3ce7362367a49a7b3672e8ff3557331c15bf9853154",
+              "uploadStatus": "uploaded",
+              "fileName": "barcode.png",
+              "exactReplay": true,
+              "filenameConflict": true,
+              "retainedDownload": true
+            }
+          ],
+          "protectedReadback": true,
+          "disposableCleanup": true
+        },
+        "routedTransport": {
+          "calls": {
+            "auth": 36,
+            "rest": 71,
+            "storage": 16,
+            "routed": 28
+          },
+          "scope": "Native Node request/response streams through production api/admin/index.js and real Auth/PostgREST; no hosted Vercel or browser-cookie-jar proof"
+        },
+        "logoutRefusal": {
+          "name": "AuthApiError",
+          "status": 400,
+          "code": "refresh_token_not_found"
+        },
+        "passed": true
+      },
+      "authorityWitnesses": 2,
+      "conservation": true,
+      "privateRecovery": true,
+      "projectionHashLines": [
+        "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-before.json",
+        "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c  /tmp/auth-rows-after.json",
+        "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-before.json",
+        "e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460  /tmp/auth-schema-after.json"
+      ],
+      "pins": {
+        "executed-source.mjs": "f6310f7e45e338650745c7ddda9cac1632c85af51f7b785a3260d8d0d26b7a3f",
+        "executed-derivation.mjs": "981ac35faa17f95e0ad26e4fd4395c259656079c8e9b76570d848d376b7e6064",
+        "preparation.json": "e8d22ee902c7c297e8bdf66a7da61e8ac74e18a28e28466754ec85e13bb20d73",
+        "media-source-pins.json": "f681ffb17a0e6901171951ebb6c497f7d78c187fc8bd8b8c7414322f7cd6511b",
+        "staging/k2/init.sh": "9b22bc3a8f887f405d64c4ef5c3e8edf4fb4048f84f5bb4b89a281279ad01d81",
+        "staging/k2/image-probe.sh": "7dc294ba2ac307b86662fc90816dbd53285b59155f94980c2a2caaf558a17e22",
+        "bff-helper.mjs": "c40b8ad2a239d8a8ab8d96717260a26b87134a9787ba398c6eb65eae568ed7a2",
+        "host-driver.mjs": "2c4173185d7de4ebbc4461a14943b976a40bf51d06fe27362ae81a554171b500",
+        "runner-source.mjs": "3397885ee94c18175e5a00f156071271c3252d6333bf7b9588b494201de5e6c8",
+        "host-driver-result.json": "c58f39e8bdc6a60db1a090e340b0c1434ffcc52d68d0d76300aa4cfe1049ef29",
+        "execution01/result.json": "0782774d1d05344574cf6b25b01a9db9993e9bc760fb5d2ba29868ccd3e07867",
+        "execution01/serial.log": "8de8bcc276c37c97c9fe5bb17723fc4492aaed98c1d1f7af31b861fd844bd179",
+        "execution01/stderr.log": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc",
+        "execution01/launch.json": "55cb093a7427ba1b9a16f14bac72998e3b1d01190d476341e07a951d8cce9db7",
+        "intake-probe.executed.mjs": "521e28ae95ddfe3afab5bcffd094ccc11e523394216d5815b9b7d79bdbf8e6f4"
+      }
+    }
+  ],
+  "hostRetirement": {
+    "pid": 7028,
+    "processAbsent": true,
+    "ports": [
+      54392,
+      54393,
+      54394,
+      54395,
+      54396,
+      54397
+    ],
+    "listeners": 0,
+    "verification": "Independent read-only host check chunkcf0585 exit0 after native terminal"
+  },
+  "verification": {
+    "native": {
+      "command": "node scripts/prepare-imported-media-fixture.mjs --case=oci-imported-media07 --intake-evidence",
+      "session": 88863,
+      "exit": 0
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "session": 23201,
+      "exit": 0,
+      "adminSessionChecks": 20,
+      "routeControlGaps": 0
+    },
+    "review": {
+      "agent": "/root/reference_endpoint_review",
+      "sourceCritical": 0,
+      "sourceImportant": 0,
+      "actualEvidence": "Read-only current/executed/staged/raw native07 review: no Critical/Important findings; pins, recovery and scope consistent"
+    }
+  },
+  "limits": [
+    "Loopback actual BFF/Auth/PostgREST/Storage; no browser or hosted acceptance",
+    "Synthetic local bot opt-in; no Cloudflare/provider acceptance",
+    "Three synthetic PNGs160x120,284normalized bytes each; no decoded4MiB image witness",
+    "Session creation and evidence only; no imported CSV/review/inventory/publication/Website listing",
+    "Original88 captured-column projections/two sequences and full installed schema/private recovery; not all149 physical relation contents or provider media bytes",
+    "No post-journey cold original reconstruction, production changes, activation or live clearance",
+    "Disposable synthetic session deletion is local fixture cleanup, not a production staff deletion workflow"
+  ],
+  "recovery": "Preserve07 and previous immutable cases. Shared original rows/schema/private sequences and two authority checks pass; local guest/PID/listeners absent. Revert only new local opt-in/probe. No app/SQL/provider rollback required.",
+  "nextAction": "MAP-018: extend this qualified shared fixture to genuine imported CSV/review/canonical stock/publication/Website listing; reuse accepted media proof. Hosted/provider/owner and human gates remain."
+}

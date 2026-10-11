@@ -6,6 +6,7 @@ import {createHash} from 'node:crypto'
 import {pathToFileURL} from 'node:url'
 const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const name=process.argv.find(a=>a.startsWith('--case='))?.slice(7)
+const intakeEvidence=process.argv.includes('--intake-evidence')
 assert.match(name||'',/^oci-imported-media\d{2}$/)
 assert.ok(!fs.existsSync(path.join(root,name)),'Fresh fixture required')
 const hash=b=>createHash('sha256').update(b).digest('hex')
@@ -15,7 +16,7 @@ const pin=file=>{const bytes=fs.readFileSync(path.join(root,base.case,file));ass
 const once=(s,b,a)=>{assert.equal(s.split(b).length,2,b.slice(0,100));return s.replace(b,()=>a)}
 let source=pin('executed-source.mjs').replaceAll(base.case,name)
 let helper=pin('bff-helper.mjs'),driver=pin('host-driver.mjs')
-const scope='Genuine local Auth/MFA actual Storage upload/download/remove through unified proxy and binary Admin fixture adapter; original captured recovery; no browser/intake registration/provider acceptance'
+const scope=intakeEvidence?'Genuine local BFF Auth/MFA intake session and binary evidence registration/replay/download/cleanup; original captured recovery; no browser/imported product/provider acceptance':'Genuine local Auth/MFA actual Storage upload/download/remove through unified proxy and binary Admin fixture adapter; original captured recovery; no browser/intake registration/provider acceptance'
 helper=helper.slice(0,helper.indexOf('async function browserProbe('))
 helper=once(helper,"import http from 'node:http'","import http from 'node:http'\nconst {readFixtureAdminHttpBody}=await import(pathToFileURL(path.join(process.cwd(),'scripts/fixture-admin-http-body.mjs')).href)")
 helper=once(helper,"const calls={auth:0,rest:0,routed:0}","const calls={auth:0,rest:0,storage:0,routed:0}")
@@ -25,8 +26,14 @@ helper=once(helper,"calls[isAuth?'auth':'rest']++","calls[isAuth?'auth':isRest?'
 helper=once(helper,"port:isAuth?54392:54394,method:req.method,path:req.url.slice(8)","port:isAuth?54392:isRest?54394:54397,method:req.method,path:req.url.slice(isStorage?11:8)")
 helper=once(helper,"const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>16384){res.writeHead(413);res.end();return}chunks.push(chunk)}req.body=Buffer.concat(chunks).toString('utf8');","try{req.body=await readFixtureAdminHttpBody(req)}catch(error){if(error.message!=='FIXTURE_BODY_TOO_LARGE')throw error;res.writeHead(413);res.end();return}req.query=Object.fromEntries(new URL(req.url,'http://127.0.0.1:54396').searchParams);")
 // Keep HTTP BFF prerequisites, without repeating completed visible UI acceptance.
-helper=once(helper,'await browserProbe(credentials,report,uid);','await mediaTransportProbe(uid,report,credentials);')
-helper+="\nconst {mediaTransportProbe}=await import(pathToFileURL(path.join(process.cwd(),'scripts/imported-media-transport-probe.inc.mjs')).href)\n"
+const probeFile=intakeEvidence?'scripts/imported-intake-evidence-probe.inc.mjs':'scripts/imported-media-transport-probe.inc.mjs'
+helper=once(helper,'await browserProbe(credentials,report,uid);',intakeEvidence?'await intakeEvidenceProbe(uid,report,credentials,request,jar);':'await mediaTransportProbe(uid,report,credentials);')
+helper+=`\nconst {${intakeEvidence?'intakeEvidenceProbe':'mediaTransportProbe'}}=await import(pathToFileURL(path.join(process.cwd(),${JSON.stringify(probeFile)})).href)\n`
+if(intakeEvidence){
+ helper=once(helper,"{cookie,csrf=true}={}","{cookie,csrf=true,headers:extraHeaders={}}={}")
+ helper=once(helper,"cookie:cookie??[...jar].map(([k,v])=>k+'='+v).join('; ')","cookie:cookie??[...jar].map(([k,v])=>k+'='+v).join('; '),...extraHeaders")
+ helper=once(helper,'body:JSON.stringify(body)','body:Buffer.isBuffer(body)?body:JSON.stringify(body)')
+}
 driver=once(driver,'await taxonomy(verified.access_token,uid,report)',"report.checks.push('prior_taxonomy_diagnostic_not_repeated')")
 driver=driver.replace(/scope:'[^']*'/,()=> 'scope:'+JSON.stringify(scope))
 fs.writeFileSync('.tools/probe-local-imported-media.mjs',helper)
@@ -83,7 +90,7 @@ extraction+='/bin/busybox chmod 755 /http/umoci\\n/http/umoci unpack --image /ht
 source=once(source,"const run='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image-probe.sh';",payload+"\nconst run='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image-probe.sh';")
 source=once(source, "\"args[args.indexOf('-m')+1]='4096';args", "\"args[args.indexOf('-m')+1]='7168';args").replace('hostfwd=tcp:127.0.0.1:54394-:9997','hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996')
 source=once(source,"stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&","stdout.includes('K2_STORAGE_INTEGRATED_HTTP_READY')&&stdout.includes('K2_STORAGE_INTEGRATED_STOPPED_EXIT_')&&stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&")
-const sources=['scripts/prepare-imported-media-fixture.mjs','scripts/imported-media-transport-probe.inc.mjs','scripts/fixture-admin-http-body.mjs','scripts/storage-runtime-layout.mjs']
+const sources=['scripts/prepare-imported-media-fixture.mjs',probeFile,'scripts/fixture-admin-http-body.mjs','scripts/storage-runtime-layout.mjs',...(intakeEvidence?['server/admin-bff/product-intake.js']:[])]
 const pins=Object.fromEntries(sources.map(f=>[f,hash(fs.readFileSync(f))]))
 source=once(source,'const prep=JSON.parse',`fs.writeFileSync(path.join(out,'media-source-pins.json'),${JSON.stringify(JSON.stringify(pins,null,2))},{flag:'wx'});\nconst prep=JSON.parse`)
 const derived='.tools/derived-imported-media.mjs';fs.writeFileSync(derived,source)
