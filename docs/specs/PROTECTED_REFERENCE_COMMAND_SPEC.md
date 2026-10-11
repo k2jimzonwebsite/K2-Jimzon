@@ -1,5 +1,8 @@
 # Protected brand/category creation
 
+**11 October protected reference signed-writer ordering / MAP-018 / IDEA-20261010-06:** `docs/acceptance/PROTECTED_REFERENCE_ORDERING_20261011.json` preserves actual native36/controller25105 SQLSTATE40P01 between reference category creation and the existing signed category-policy command. Owned-only verifier-entry scheduling pause bypasses no check and exact original definition/full pg_proc metadata are restored. Sequential Skeptic/Guardian/Advocate/Arbiter APPROVED moving only reference exclusive policy entry after successful verifier, before receipt/hierarchy/reference resources; existing wrappers and creation ownership/deadlines remain. Native37/controller31563 terminal0 observes no category lock at pause, existing policy completion before release, then reference success with one event, two signed receipts, one policy event and cleared context. Native38 affected five same-key/reparent schedules and authority probes pass. All original cold catalogs/authority recover and PIDs are independently absent. Development40634exit0/19checks/0routegaps retained. Single RPC is supported; arbitrary category-mutation-then-signed-RPC transactions are outside this order. Exact whole new metadata/revised installer conservation and genuine editor/Auth/BFF creation-to-paired-Save remain MAP-018; no provider/deployment/activation. Recovery reverts only this prepared order/test extension and retains36/37/38. Disposable cold recovery is not populated production recovery.
+
+
 **11 October protected reference extended proof / MAP-018 / IDEA-20261010-06:** `docs/acceptance/PROTECTED_REFERENCE_EXTENDED_20261011.json` preserves native34 actual stored-index EXEC denial and native35/controller39012 terminal0. The pure normalized-key helper is now postgres-owned SECURITY DEFINER with empty search_path and EXEC only for existing authenticated/service_role table writers; private schema, inner cleaner and mutation/context/event privileges remain closed. Actual same-key commit/exact-receipt, rollback/create and changed-body refusal plus ordinary Staff reparent commit/refusal and rollback/create schedules pass. Staff/service existing UPDATE and normalized duplicate refusal, private/unsigned/anon/AAL1/tampered-signature refusal, upgrade/isolation refusal, SuperAdmin command, exact helper metadata and four events/receipts/five nonces-rate hits/cleared context pass. Original cold catalog/authority recover and PID9728 is independently absent. Development76426exit0/19checks/0routegaps. Source audit separately found potential verifier/rate-before-policy versus reference policy-before-verifier inversion across existing signed Admin commands; no actual deadlock proof or correction is claimed. This remains MAP-018 before activation alongside exact new metadata/revised installer conservation and genuine editor/Auth/BFF creation-to-paired-Save. No provider or production change. Recovery retains34/35 and reverts only this prepared helper/test extension; disposable cold reconstruction is not populated production recovery.
 
 
@@ -76,8 +79,10 @@ reason and created/reused outcome. Exact same-key/body replay returns the saved
 receipt after current authorization; changed-body same key refuses. New commands
 use the existing20/minute maintenance convention, subject to review.
 
-Acquire the strongest category policy lock before receipt/category/reference
-resources for category creation; never upgrade a shared lock. Preserve actual
+After successful signature verification, acquire the strongest category policy lock
+before receipt/category/reference resources for category creation; never upgrade a
+shared lock. Verifier nonce/rate resources precede category entry, matching existing
+signed Admin writers in the same transaction. Any failure rolls back both. Preserve actual
 READ COMMITTED and already armed lock<=2s/statement<=10s requirements. No setting
 timeouts inside the routine may be presented as an armed request timer.
 
@@ -138,13 +143,16 @@ Competing transaction rollback permits the waiting insertion to win. Same-key
 receipt contention returns in-progress and retries the same key/body. Exercise
 all four cases plus an independent identity-changing UPDATE collision.
 
-Complete category order: read current actor/Admin/AAL2 authorization; acquire
-exclusive policy entry (armed deadlines/READ COMMITTED); verify signature/nonce;
+Complete category order: read current actor/Admin/AAL2 authorization; require
+armed deadlines/READ COMMITTED; verify signature/nonce/rate; acquire exclusive
+policy entry;
 validate exact body/hash; read or claim receipt; validate parent full hierarchy
 using effective_category_minimum_v1 and the existing private singleton maximum
 depth (missing/invalid configuration refuses); establish signed context; insert
 or fresh-read reuse; write one event and completed receipt; clear context.
-No nonce/rate/receipt write precedes the category entry lock. Replay follows
+Verifier nonce/rate writes precede category entry; receipt/category/reference
+resources follow it in the same RPC transaction. Arbitrary transactions mixing
+category mutation before a signed RPC are outside this supported order. Replay follows
 current authorization and signature verification but returns its historical
 receipt before current parent validation. Replays never recreate missing rows.
 Brands omit the category lock/parent walk. SQL failures roll back nonce, claim,
@@ -281,3 +289,11 @@ the narrow correction; original User Advocate/UI/assignment approvals stand.
 No production authorization or privileged-owner immunity follows.
 All objections must be resolved here before implementation. Remaining execution
 actions live solely in MAP-018, not in this specification.
+
+### Existing signed writer order correction review (11 October)
+
+Native36 diagnostic serial reproduces SQLSTATE40P01 between the actual signed reference-category and category-policy-set commands. The owned-only verifier-entry pause changes scheduling, bypasses no check, and is restored with exact definition/metadata before recovery. Captured existing Admin wrappers verify/signature-rate-nonce resources before category policy entry; reference uses the opposite order. Proposal: move only reference exclusive policy entry immediately after successful verifier and before receipt/hierarchy/reference resources. Strongest entry remains before category rows and fresh hierarchy validation; READ COMMITTED, armed deadlines, shared-to-exclusive refusal, Admin/SuperAdmin ownership and receipt identity remain. Alternative patching existing wrappers is rejected as broad unrelated risk; accepting avoidable timeout/deadlock is rejected as broken compatibility. This proposal was subsequently APPROVED and implemented as recorded below; native36/37 final receipts are in PROTECTED_REFERENCE_ORDERING_20261011.json.
+
+Sequential correction review: Skeptic APPROVED (clarified that pause is before verifier tuple writes; green must hold no category lock at pause), Guardian APPROVED (same transaction rollback and unchanged armed deadlines), User Advocate APPROVED (no creation/assignment/retry or staff-operation pause change). Arbiter subsequently APPROVED; final native36 controller/cold evidence is preserved in PROTECTED_REFERENCE_ORDERING_20261011.json.
+
+Arbiter APPROVED the bounded verifier→exclusive-policy correction; all objections resolved. The superseded pre-verifier entry is replaced by the above current rule. Native37 green scheduling witness and native38 affected category concurrency/authority requalification now pass with final controller/cold receipts. No broader readiness claim.

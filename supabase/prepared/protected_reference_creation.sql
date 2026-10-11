@@ -153,11 +153,12 @@ begin
   raise exception using errcode='22023',message='K2_REFERENCE_INPUT_INVALID';
  end if;
  v_payload:=p_payload_text::jsonb;v_kind:=v_payload->>'kind';
- -- Select strongest policy entry before verifier nonce/rate/receipt resources.
- if v_kind='category' then perform k2_private.lock_category_policy_v1(true);end if;
  if not k2_private.verify_admin_bff_request(p_action,p_timestamp,p_nonce,p_idempotency_key,p_payload_text,p_signature) then
   raise exception using errcode='28000',message='K2_ADMIN_REQUEST_REPLAYED';
  end if;
+ -- Match existing signed writers: verifier resources, then strongest category
+ -- entry before receipt/hierarchy/reference rows. Failure rolls back both.
+ if v_kind='category' then perform k2_private.lock_category_policy_v1(true);end if;
  if jsonb_typeof(v_payload) is distinct from 'object'
   or not(v_payload ?& array['kind','name','parentId','reason'])
   or (v_payload-array['kind','name','parentId','reason'])<>'{}'::jsonb

@@ -1,0 +1,548 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "classification": "Owned PostgreSQL17.6 deterministic signed-command order diagnostic, then affected concurrency/authority qualification",
+  "providerWrites": false,
+  "privateEvidenceRoot": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc",
+  "red": {
+    "case": "oci-imported36",
+    "controllerSession": 25105,
+    "controllerExit": 0,
+    "result": {
+      "owningMap": "MAP-023/018",
+      "scope": "Owned reference concurrency probe on captured PostgreSQL17.6; base/cold recovery retained; no whole revised installation or provider qualification",
+      "providerWrites": false,
+      "arguments": [
+        "-L",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+        "-machine",
+        "pc",
+        "-accel",
+        "whpx",
+        "-m",
+        "4096",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-nic",
+        "none",
+        "-no-reboot",
+        "-kernel",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+        "-initrd",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported36\\initramfs.cpio",
+        "-append",
+        "console=ttyS0 rdinit=/bin/sh loglevel=3"
+      ],
+      "pid": 20520,
+      "exit": 0,
+      "timedOut": false,
+      "guestSuccess": true,
+      "serverModuleProbe": true,
+      "postgresVersion": "17.6",
+      "moduleGucs": true,
+      "catalogs": {
+        "before": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        },
+        "after": {
+          "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+          "bytes": 2396732
+        },
+        "rollback": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        }
+      },
+      "fullCatalogRollback": true,
+      "processStopped": true,
+      "serialSha256": "ecdb04f4e865be46ba3a8544d5e17eef6258bf02afc94951d4fe0ba30ecb0258"
+    },
+    "preparationSha256": "338e11a1873661911ef053e2799bcf32ab2e5382cf31b04df8db325ba0b8c6b9",
+    "resultSha256": "6f07784a359a25af07a938a71f3fe14b1f485be29980e7e28248345b057d6a85",
+    "preparation": {
+      "owningMap": "MAP-018",
+      "idea": "IDEA-20261010-06",
+      "case": "oci-imported36",
+      "mode": "green",
+      "phase": "concurrency",
+      "extended": false,
+      "ordering": true,
+      "orderingGreen": false,
+      "scope": "Owned captured PostgreSQL17.6 concurrency probe, not whole revised installation qualification",
+      "providerWrites": false,
+      "sources": [
+        {
+          "file": "tests/native/protected-reference-ordering.sh",
+          "sha256": "197c3a0f5e3fa9bb8014ff3489243e2b053a39758d6b061f313b95340f9771aa"
+        },
+        {
+          "file": "tests/sql/protected-reference-concurrency-setup.sql",
+          "sha256": "2f0bfa347cca5f85e9ddf7729e365df1cc76c13a9b9804474cb7f627bef10526"
+        },
+        {
+          "file": "tests/sql/protected-reference-ordering-setup.sql",
+          "sha256": "866cea7695b8fb9f6fe6be8a121d461613ae06f67dda46f688795ee4b77a5e23"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_normalization.sql",
+          "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_creation.sql",
+          "sha256": "0f1babb607e9d511659910478c923b0c7abc8dc90f0d6c5a17b10921469e4cfe"
+        },
+        {
+          "file": "scripts/prepare-reference-normalization-fixture.mjs",
+          "sha256": "0efa98bb4228ce46d01a5787dcee1da03ce95c0d3322eff6ed9108386205bc99"
+        },
+        {
+          "file": "scripts/prepare-imported-provider-fixture.mjs",
+          "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+        }
+      ],
+      "runnerSha256": "6bef4d6de67d58db241308e9b1264c0f1dc3cecd9e5bf4e5da7dc6f9280f36e0",
+      "initramfsSha256": "287d355a125a012ab33667bcadec70fb38828fc7ef6df6c280c8585ae4cb8df6",
+      "staged": [
+        {
+          "file": "reference-concurrency-test.sh",
+          "sha256": "197c3a0f5e3fa9bb8014ff3489243e2b053a39758d6b061f313b95340f9771aa"
+        },
+        {
+          "file": "reference-concurrency-setup.sql",
+          "sha256": "2f0bfa347cca5f85e9ddf7729e365df1cc76c13a9b9804474cb7f627bef10526"
+        },
+        {
+          "file": "reference-ordering-setup.sql",
+          "sha256": "866cea7695b8fb9f6fe6be8a121d461613ae06f67dda46f688795ee4b77a5e23"
+        },
+        {
+          "file": "reference-normalization-install.sql",
+          "sha256": "db07b8ecf04dd8134153b6f10ac625a3b67b1fcfa20805b706fb50146de0b75c"
+        },
+        {
+          "file": "init.sh",
+          "sha256": "5a0ed3dd17d6c201e9d1e27bdce3e3066bc87ec16bf04ee04f6f572a811f4749"
+        },
+        {
+          "file": "image-probe.sh",
+          "sha256": "d246abf53a6c11ebe9909ee88f7db85520eaa44fa21669b3c9359d3bb9f4d0bc"
+        }
+      ]
+    },
+    "pins": [
+      {
+        "file": "tests/native/protected-reference-ordering.sh",
+        "sha256": "197c3a0f5e3fa9bb8014ff3489243e2b053a39758d6b061f313b95340f9771aa",
+        "currentSourceMatches": false
+      },
+      {
+        "file": "tests/sql/protected-reference-concurrency-setup.sql",
+        "sha256": "2f0bfa347cca5f85e9ddf7729e365df1cc76c13a9b9804474cb7f627bef10526",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "tests/sql/protected-reference-ordering-setup.sql",
+        "sha256": "866cea7695b8fb9f6fe6be8a121d461613ae06f67dda46f688795ee4b77a5e23",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/protected_reference_normalization.sql",
+        "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/protected_reference_creation.sql",
+        "sha256": "0f1babb607e9d511659910478c923b0c7abc8dc90f0d6c5a17b10921469e4cfe",
+        "currentSourceMatches": false
+      },
+      {
+        "file": "scripts/prepare-reference-normalization-fixture.mjs",
+        "sha256": "0efa98bb4228ce46d01a5787dcee1da03ce95c0d3322eff6ed9108386205bc99",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "scripts/prepare-imported-provider-fixture.mjs",
+        "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0",
+        "currentSourceMatches": true
+      }
+    ],
+    "independentProcessAbsent": true,
+    "runtimeSourceRecovery": "git937ef71 supabase/prepared/protected_reference_creation.sql",
+    "diagnosticShellArchive": "docs\\acceptance\\sources\\reference-ordering-red36\\protected-reference-ordering.sh"
+  },
+  "green": {
+    "case": "oci-imported37",
+    "controllerSession": 31563,
+    "controllerExit": 0,
+    "result": {
+      "owningMap": "MAP-023/018",
+      "scope": "Owned reference concurrency probe on captured PostgreSQL17.6; base/cold recovery retained; no whole revised installation or provider qualification",
+      "providerWrites": false,
+      "arguments": [
+        "-L",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+        "-machine",
+        "pc",
+        "-accel",
+        "whpx",
+        "-m",
+        "4096",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-nic",
+        "none",
+        "-no-reboot",
+        "-kernel",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+        "-initrd",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported37\\initramfs.cpio",
+        "-append",
+        "console=ttyS0 rdinit=/bin/sh loglevel=3"
+      ],
+      "pid": 8432,
+      "exit": 0,
+      "timedOut": false,
+      "guestSuccess": true,
+      "serverModuleProbe": true,
+      "postgresVersion": "17.6",
+      "moduleGucs": true,
+      "catalogs": {
+        "before": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        },
+        "after": {
+          "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+          "bytes": 2396732
+        },
+        "rollback": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        }
+      },
+      "fullCatalogRollback": true,
+      "processStopped": true,
+      "serialSha256": "34fe0e08ced595271b0802209b2640053d9ae3953df3759465be2c179c5075ee"
+    },
+    "preparationSha256": "f2d97d052ce07c18331772ee7d1a3537cf304f0b04c91f677b30aa0c803e9e01",
+    "resultSha256": "b644b5f255cb2eb5786da768e555505a4a322e4a457028cd9a8aaa2c1f01d201",
+    "preparation": {
+      "owningMap": "MAP-018",
+      "idea": "IDEA-20261010-06",
+      "case": "oci-imported37",
+      "mode": "green",
+      "phase": "concurrency",
+      "extended": false,
+      "ordering": true,
+      "orderingGreen": true,
+      "scope": "Owned captured PostgreSQL17.6 concurrency probe, not whole revised installation qualification",
+      "providerWrites": false,
+      "sources": [
+        {
+          "file": "tests/native/protected-reference-ordering.sh",
+          "sha256": "fc789f8d42cc2e2029fe231779c8890c51cada23bec87757f832e2a44b23a4d8"
+        },
+        {
+          "file": "tests/sql/protected-reference-concurrency-setup.sql",
+          "sha256": "2f0bfa347cca5f85e9ddf7729e365df1cc76c13a9b9804474cb7f627bef10526"
+        },
+        {
+          "file": "tests/sql/protected-reference-ordering-setup.sql",
+          "sha256": "866cea7695b8fb9f6fe6be8a121d461613ae06f67dda46f688795ee4b77a5e23"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_normalization.sql",
+          "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_creation.sql",
+          "sha256": "adc0eac81830a83244cc6848e8d0d89b1480c7fd32e88b1b01223e60a4ac2c02"
+        },
+        {
+          "file": "scripts/prepare-reference-normalization-fixture.mjs",
+          "sha256": "0efa98bb4228ce46d01a5787dcee1da03ce95c0d3322eff6ed9108386205bc99"
+        },
+        {
+          "file": "scripts/prepare-imported-provider-fixture.mjs",
+          "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+        }
+      ],
+      "runnerSha256": "c35cccf9b41c74136e13f1b331d369b9477c13f3523c91e0228eb5a40070315c",
+      "initramfsSha256": "fd7b921bd15e5a4b65dc78e5250507506e200d8948858ba2192331263bea274d",
+      "staged": [
+        {
+          "file": "reference-concurrency-test.sh",
+          "sha256": "fc789f8d42cc2e2029fe231779c8890c51cada23bec87757f832e2a44b23a4d8"
+        },
+        {
+          "file": "reference-concurrency-setup.sql",
+          "sha256": "2f0bfa347cca5f85e9ddf7729e365df1cc76c13a9b9804474cb7f627bef10526"
+        },
+        {
+          "file": "reference-ordering-setup.sql",
+          "sha256": "866cea7695b8fb9f6fe6be8a121d461613ae06f67dda46f688795ee4b77a5e23"
+        },
+        {
+          "file": "reference-normalization-install.sql",
+          "sha256": "ed468dba4889496bfcd45255b8571ff1e05bea42e9a56f4374658fc063d92fb3"
+        },
+        {
+          "file": "init.sh",
+          "sha256": "5a0ed3dd17d6c201e9d1e27bdce3e3066bc87ec16bf04ee04f6f572a811f4749"
+        },
+        {
+          "file": "image-probe.sh",
+          "sha256": "3a652523dfd0a3823a40b765495ad833ebe1ac2b0bbd6c2de53207c4e1cf306d"
+        }
+      ]
+    },
+    "pins": [
+      {
+        "file": "tests/native/protected-reference-ordering.sh",
+        "sha256": "fc789f8d42cc2e2029fe231779c8890c51cada23bec87757f832e2a44b23a4d8",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "tests/sql/protected-reference-concurrency-setup.sql",
+        "sha256": "2f0bfa347cca5f85e9ddf7729e365df1cc76c13a9b9804474cb7f627bef10526",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "tests/sql/protected-reference-ordering-setup.sql",
+        "sha256": "866cea7695b8fb9f6fe6be8a121d461613ae06f67dda46f688795ee4b77a5e23",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/protected_reference_normalization.sql",
+        "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/protected_reference_creation.sql",
+        "sha256": "adc0eac81830a83244cc6848e8d0d89b1480c7fd32e88b1b01223e60a4ac2c02",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "scripts/prepare-reference-normalization-fixture.mjs",
+        "sha256": "0efa98bb4228ce46d01a5787dcee1da03ce95c0d3322eff6ed9108386205bc99",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "scripts/prepare-imported-provider-fixture.mjs",
+        "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0",
+        "currentSourceMatches": true
+      }
+    ],
+    "independentProcessAbsent": true
+  },
+  "affected": {
+    "case": "oci-imported38",
+    "controllerSession": 59516,
+    "controllerExit": 0,
+    "result": {
+      "owningMap": "MAP-023/018",
+      "scope": "Owned reference concurrency probe on captured PostgreSQL17.6; base/cold recovery retained; no whole revised installation or provider qualification",
+      "providerWrites": false,
+      "arguments": [
+        "-L",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+        "-machine",
+        "pc",
+        "-accel",
+        "whpx",
+        "-m",
+        "4096",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-nic",
+        "none",
+        "-no-reboot",
+        "-kernel",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+        "-initrd",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported38\\initramfs.cpio",
+        "-append",
+        "console=ttyS0 rdinit=/bin/sh loglevel=3"
+      ],
+      "pid": 18024,
+      "exit": 0,
+      "timedOut": false,
+      "guestSuccess": true,
+      "serverModuleProbe": true,
+      "postgresVersion": "17.6",
+      "moduleGucs": true,
+      "catalogs": {
+        "before": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        },
+        "after": {
+          "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+          "bytes": 2396732
+        },
+        "rollback": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        }
+      },
+      "fullCatalogRollback": true,
+      "processStopped": true,
+      "serialSha256": "45b9ae9737dfac4db5a9c8670712ce01696a1bfc8d1c86711c45f0dfeec96b76"
+    },
+    "preparationSha256": "1a13f940724250c04fa3dafc391b9b9855fcd61178e67a90875dc240781eab7a",
+    "resultSha256": "19a947040523ae6da6ffc63aad028a0d8ea231774fcc62af9e13e75557f2b22e",
+    "preparation": {
+      "owningMap": "MAP-018",
+      "idea": "IDEA-20261010-06",
+      "case": "oci-imported38",
+      "mode": "green",
+      "phase": "concurrency",
+      "extended": true,
+      "ordering": false,
+      "orderingGreen": false,
+      "scope": "Owned captured PostgreSQL17.6 concurrency probe, not whole revised installation qualification",
+      "providerWrites": false,
+      "sources": [
+        {
+          "file": "tests/native/protected-reference-concurrency.sh",
+          "sha256": "18f58700c7fcefebd9bc6a04459f9e5e6501afabc063429ace543716cc4f5afc"
+        },
+        {
+          "file": "tests/sql/protected-reference-concurrency-setup.sql",
+          "sha256": "2f0bfa347cca5f85e9ddf7729e365df1cc76c13a9b9804474cb7f627bef10526"
+        },
+        {
+          "file": "tests/sql/protected-reference-authority.sql",
+          "sha256": "1709012578d14f29a4d7ee81b5044a9ab2dcfa51bc38630bf79364a69e744c79"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_normalization.sql",
+          "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_creation.sql",
+          "sha256": "adc0eac81830a83244cc6848e8d0d89b1480c7fd32e88b1b01223e60a4ac2c02"
+        },
+        {
+          "file": "scripts/prepare-reference-normalization-fixture.mjs",
+          "sha256": "0efa98bb4228ce46d01a5787dcee1da03ce95c0d3322eff6ed9108386205bc99"
+        },
+        {
+          "file": "scripts/prepare-imported-provider-fixture.mjs",
+          "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+        }
+      ],
+      "runnerSha256": "3af914e33e83de2a5eba427a8474d26241b6c53a80061ebfc129a1d5fb0f1533",
+      "initramfsSha256": "1150c5ca53cb6ddd51c6f6c75f61564e128c99ed0ca589fa43394f9d198ae037",
+      "staged": [
+        {
+          "file": "reference-concurrency-test.sh",
+          "sha256": "18f58700c7fcefebd9bc6a04459f9e5e6501afabc063429ace543716cc4f5afc"
+        },
+        {
+          "file": "reference-concurrency-setup.sql",
+          "sha256": "2f0bfa347cca5f85e9ddf7729e365df1cc76c13a9b9804474cb7f627bef10526"
+        },
+        {
+          "file": "reference-authority-test.sql",
+          "sha256": "1709012578d14f29a4d7ee81b5044a9ab2dcfa51bc38630bf79364a69e744c79"
+        },
+        {
+          "file": "reference-normalization-install.sql",
+          "sha256": "ed468dba4889496bfcd45255b8571ff1e05bea42e9a56f4374658fc063d92fb3"
+        },
+        {
+          "file": "init.sh",
+          "sha256": "d0107a39caed3e94c63516080d331114c66b2fb323fce6154ddbee4fa389a262"
+        },
+        {
+          "file": "image-probe.sh",
+          "sha256": "5b204d7ffc445ee6a48fefdd6bb09a1697d4b8c0fe5d56d41e8ce256a2bea990"
+        }
+      ]
+    },
+    "pins": [
+      {
+        "file": "tests/native/protected-reference-concurrency.sh",
+        "sha256": "18f58700c7fcefebd9bc6a04459f9e5e6501afabc063429ace543716cc4f5afc",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "tests/sql/protected-reference-concurrency-setup.sql",
+        "sha256": "2f0bfa347cca5f85e9ddf7729e365df1cc76c13a9b9804474cb7f627bef10526",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "tests/sql/protected-reference-authority.sql",
+        "sha256": "1709012578d14f29a4d7ee81b5044a9ab2dcfa51bc38630bf79364a69e744c79",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/protected_reference_normalization.sql",
+        "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "supabase/prepared/protected_reference_creation.sql",
+        "sha256": "adc0eac81830a83244cc6848e8d0d89b1480c7fd32e88b1b01223e60a4ac2c02",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "scripts/prepare-reference-normalization-fixture.mjs",
+        "sha256": "0efa98bb4228ce46d01a5787dcee1da03ce95c0d3322eff6ed9108386205bc99",
+        "currentSourceMatches": true
+      },
+      {
+        "file": "scripts/prepare-imported-provider-fixture.mjs",
+        "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0",
+        "currentSourceMatches": true
+      }
+    ],
+    "independentProcessAbsent": true
+  },
+  "correction": "Move only reference exclusive category-policy entry immediately after successful verifier, before receipt/hierarchy/reference resources. Existing signed wrappers unchanged. Same RPC transaction rolls back nonce/rate on failure; authorization, strongest entry, deadlines and upgrade refusal remain.",
+  "diagnostic": "Owned fixture temporarily inserts a conditional advisory scheduling pause at the real verifier entry before its existing checks/writes; no checks bypassed. Red exact reference holds category then pauses; real existing signed category-policy command holds rate tuple and waits category. Release produces actual40P01. Green paused reference holds no category lock; existing policy completes before release; reference then succeeds. Original verifier full pg_proc metadata and exact definition restored in each fixture.",
+  "behavior": [
+    "Green one reference event, two completed signed receipts, one policy event and one correctly parented new category; private context empty",
+    "Affected same-key commit exact receipt/rollback create/conflict refusal and ordinary Staff reparent commit refusal/rollback create pass",
+    "Existing Staff/service writer UPDATE and duplicate denial; private/unsigned/anon/AAL1/tampered-signature/upgrade/isolation denials; signed SuperAdmin rollback-only probe pass",
+    "All three original cold catalogs/authority recovered, independently absent PIDs"
+  ],
+  "development": {
+    "command": "npm run verify:development",
+    "session": 40634,
+    "exit": 0,
+    "sessionReferenceTests": 19,
+    "failures": 0,
+    "routeControlGaps": 0
+  },
+  "limitations": [
+    "Controlled scheduling is a native diagnostic, not genuine hosted Auth/PostgREST/BFF traffic",
+    "Single RPC supported; arbitrary transactions mutating category before signed command are outside the accepted order",
+    "Inherited after-catalog precedes reference fragments; whole revised installer/new metadata conservation/replay/drift remain",
+    "Disposable cold reconstruction is not populated data-retaining production recovery",
+    "Editor durable pending-body/key and creation-to-paired-Save proof remain",
+    "No provider change, route activation, deployment or real-host/physical acceptance"
+  ],
+  "recovery": "Revert this prepared-only ordering/test/fixture extension together; retain actual36/37/38 and previous receipts. No provider rollback; fresh native successors only.",
+  "nextAction": "MAP-018: integrate and qualify exact new metadata/affected installer conservation, then existing editor/durable retry/Secure Sheet and genuine Auth/PostgREST/BFF creation-to-paired-Save."
+}

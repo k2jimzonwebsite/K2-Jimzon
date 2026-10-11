@@ -14,15 +14,21 @@ const phase = process.argv.includes('--concurrency') ? 'concurrency'
 assert.ok(phase !== 'concurrency' || mode === 'green', 'Concurrency qualifies the existing creation component')
 const extended = process.argv.includes('--extended-concurrency')
 assert.ok(!extended || phase === 'concurrency')
+const ordering = process.argv.includes('--ordering')
+const orderingGreen = process.argv.includes('--ordering-green')
+assert.ok(!ordering || phase === 'concurrency' && !extended)
+assert.ok(!orderingGreen || ordering)
 const target = path.resolve(root, caseName)
 assert.equal(path.dirname(target), path.resolve(root))
 assert.ok(!fs.existsSync(target), 'Fresh owned fixture required; never reuse a prior case')
 const sha = bytes => createHash('sha256').update(bytes).digest('hex')
-const testFile = phase === 'concurrency' ? 'tests/native/protected-reference-concurrency.sh'
+const testFile = ordering ? 'tests/native/protected-reference-ordering.sh'
+  : phase === 'concurrency' ? 'tests/native/protected-reference-concurrency.sh'
   : `tests/sql/protected-reference-${phase}.sql`
 const sources = [testFile]
 if (phase === 'concurrency') sources.push('tests/sql/protected-reference-concurrency-setup.sql')
 if (extended) sources.push('tests/sql/protected-reference-authority.sql')
+if (ordering) sources.push('tests/sql/protected-reference-ordering-setup.sql')
 const installs = []
 if (mode === 'green' || phase === 'creation') installs.push('supabase/prepared/protected_reference_normalization.sql')
 if (mode === 'green' && phase !== 'normalization') installs.push('supabase/prepared/protected_reference_creation.sql')
@@ -46,6 +52,10 @@ if (extended) {
   fs.copyFileSync('tests/sql/protected-reference-authority.sql',path.join(stage,'reference-authority-test.sql'),fs.constants.COPYFILE_EXCL)
   added.push('reference-authority-test.sql')
 }
+if (ordering) {
+  fs.copyFileSync('tests/sql/protected-reference-ordering-setup.sql',path.join(stage,'reference-ordering-setup.sql'),fs.constants.COPYFILE_EXCL)
+  added.push('reference-ordering-setup.sql')
+}
 if (installs.length) {
   fs.writeFileSync(path.join(stage, 'reference-normalization-install.sql'),
     "begin;\nset local statement_timeout='10s';\nset local lock_timeout='2s';\n"
@@ -65,7 +75,7 @@ assert.equal(probe.split(anchor).length, 2)
 const marker = `K2_REFERENCE_${phase.toUpperCase()}`
 const tests = (installs.length ? `${command('reference-normalization-install.sql')}\n` : '') + (mode === 'red'
   ? `set +e\n${command('reference-normalization-test.sql')} > /tmp/reference-normalization.log 2>&1\nreference_status=$?\nset -e\ncat /tmp/reference-normalization.log\n[ "$reference_status" -eq 3 ]\ngrep -q ${marker}_MISSING /tmp/reference-normalization.log\necho ${marker}_EXPECTED_RED_OK\n`
-  : phase === 'concurrency' ? `${extended ? 'K2_REFERENCE_SCHEDULE_SET=extended ' : ''}/bin/sh /tmp/reference-concurrency-test.sh\n`
+  : phase === 'concurrency' ? `${ordering ? `K2_REFERENCE_ORDERING_EXPECTATION=${orderingGreen ? 'green' : 'red'} ` : extended ? 'K2_REFERENCE_SCHEDULE_SET=extended ' : ''}/bin/sh /tmp/reference-concurrency-test.sh\n`
     : `${command('reference-normalization-test.sql')}\n`)
 probe = probe.replace(anchor, anchor + tests)
 fs.writeFileSync(path.join(stage, 'image-probe.sh'), probe)
@@ -93,7 +103,7 @@ assert.equal(runner.split(oldScope).length, 2)
 runner = runner.replace(oldScope, `Owned reference ${phase} probe on captured PostgreSQL17.6; base/cold recovery retained; no whole revised installation or provider qualification`)
 fs.writeFileSync(path.join(target, 'runner-source.mjs'), runner, { flag: 'wx' })
 sources.push('scripts/prepare-reference-normalization-fixture.mjs', 'scripts/prepare-imported-provider-fixture.mjs')
-const receipt = { owningMap: 'MAP-018', idea: 'IDEA-20261010-06', case: caseName, mode, phase, extended,
+const receipt = { owningMap: 'MAP-018', idea: 'IDEA-20261010-06', case: caseName, mode, phase, extended, ordering, orderingGreen,
   scope: `Owned captured PostgreSQL17.6 ${phase} probe, not whole revised installation qualification`,
   providerWrites: false, sources: sources.map(file => ({ file, sha256: sha(fs.readFileSync(file)) })),
   runnerSha256: sha(runner),
