@@ -8,7 +8,7 @@ import { readActiveSession } from '../server/admin-bff/security.js'
 import { createServerSupabase, restoreAuthSession } from '../server/admin-bff/supabase.js'
 
 export async function intakeEvidenceProbe(uid, report, credentials, request, jar, workflow = {}) {
-  assert.equal(process.env.SUPABASE_URL, 'http://127.0.0.1:54395')
+  assert.equal(process.env.SUPABASE_URL, workflow.publicMedia ? 'https://127.0.0.1:54395' : 'http://127.0.0.1:54395')
   const requestId = randomUUID(), key = randomUUID(), paths = []
   const good = (stage, reply) => {
     report.intakeStage = stage

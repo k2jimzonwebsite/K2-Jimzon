@@ -8,6 +8,7 @@ export async function readFixtureAdminHttpBody(req) {
     chunks.push(chunk)
   }
   const bytes = Buffer.concat(chunks)
-  return new URL(req.url, 'http://127.0.0.1').pathname === '/api/admin/product-intake/evidence'
+  const route = new URL(req.url, 'http://127.0.0.1').pathname
+  return route === '/api/admin/product-intake/evidence' || route === '/api/admin/product-media'
     ? bytes : bytes.toString('utf8')
 }

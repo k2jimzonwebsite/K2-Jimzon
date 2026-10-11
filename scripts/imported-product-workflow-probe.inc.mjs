@@ -3,10 +3,15 @@ import assert from 'node:assert/strict'
 import {randomUUID,createHash} from 'node:crypto'
 import {CATALOG_COLUMNS} from '../server/admin-bff/catalog-spreadsheet.js'
 import {intakeEvidenceProbe} from './imported-intake-evidence-probe.inc.mjs'
+import sharp from 'sharp'
+import {decodeEvidenceImage} from '../server/admin-bff/product-intake.js'
 
-export async function importedProductProbe(uid,report,credentials,request,jar){
+export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false}={}){
+ let mediaCleanup,mediaPath
  const command=async(expect,route,body,key=randomUUID())=>expect(route,await request(route,'POST',body,{headers:{'x-k2-idempotency-key':key}})).result
+ try{
  await intakeEvidenceProbe(uid,report,credentials,request,jar,{
+  publicMedia,
   before:async({client,cleanup,request,good,expect})=>{
    const values=Object.fromEntries(CATALOG_COLUMNS.map(k=>[k,'']))
    Object.assign(values,{template_version:'k2-catalog-v1',name:'Synthetic pantry '+randomUUID(),description:'Imported description to preserve',ingredients:'Synthetic label ingredients',country_of_origin:'Spain',primary_image_url:'https://example.invalid/imported-supplied.jpg',internal_notes:'Explicit synthetic CSV provenance'})
@@ -43,6 +48,26 @@ export async function importedProductProbe(uid,report,credentials,request,jar){
    assert.equal(product.description,'Staff accepted correction');assert.equal(product.brand_id,brand.id);assert.equal(product.category_id,category.id)
    assert.equal(Number(product.catalog_record_version),Number(baseline.catalog_record_version)+1)
    report.importedProduct.reviewedOriginalIdentity=true;report.importedProduct.rejectedIngredientsPreserved=true;report.importedProduct.reviewReplay=true
+   if(publicMedia){
+    mediaCleanup=cleanup.storage.from('product-images')
+    const bytes=await sharp({create:{width:180,height:140,channels:3,background:{r:184,g:93,b:42}}}).png().toBuffer()
+    const decoded=await decodeEvidenceImage(bytes,'image/png'),uploadKey=randomUUID()
+    mediaPath=`${uid}/product-media/${uploadKey}-${decoded.sha256.slice(0,16)}.${decoded.extension}`
+    const uploadHeaders={'content-type':'image/png','x-k2-idempotency-key':uploadKey}
+    const uploaded=expect('public_media_upload',await request('product-media','POST',bytes,{headers:uploadHeaders})).media
+    assert.deepEqual(expect('public_media_upload_replay',await request('product-media','POST',bytes,{headers:uploadHeaders})).media,uploaded)
+    const url=client.storage.from('product-images').getPublicUrl(mediaPath).data.publicUrl
+    assert.equal(uploaded.publicUrl,url);assert.ok(url.startsWith('https://127.0.0.1:54395/storage/v1/object/public/product-images/'))
+    const mediaBody={sku,primary:{url,objectPath:mediaPath},lifestyle:[],secondary:[],reason:'Explicit synthetic public product image'},assignmentKey=randomUUID()
+    const assigned=expect('public_media_assign',await request('product-media/assign','POST',mediaBody,{headers:{'x-k2-idempotency-key':assignmentKey}}))
+    assert.deepEqual(expect('public_media_assign_replay',await request('product-media/assign','POST',mediaBody,{headers:{'x-k2-idempotency-key':assignmentKey}})),assigned)
+    const saved=good('public_media_product_readback',await client.from('products').select('primary_image_url').eq('id',baseline.id).single())
+    assert.equal(saved.primary_image_url,url)
+    const anonymous=await fetch(url);assert.equal(anonymous.status,200)
+    const retained=Buffer.from(await anonymous.arrayBuffer());assert.deepEqual(retained,decoded.buffer)
+    const dimensions=await sharp(retained).metadata();assert.equal(dimensions.width,180);assert.equal(dimensions.height,140)
+    report.publicMedia={url,objectPath:mediaPath,sha256:decoded.sha256,bytes:retained.length,width:180,height:140,uploadReplay:true,assignmentReplay:true,canonicalReadback:true,anonymousDownload:true,certificateValidation:true,browserRendered:false}
+   }
    await command(expect,'product-master',{action:'category_policy_set',payload:{categoryId:category.id,minimumDays:150,expectedVersion:0,reason:'Explicit synthetic shelf-life admission'}})
    // Existing owned fixture catalogs supply real canonical custody identifiers.
    good('fixture_hub',await cleanup.from('hubs').upsert({id:'HUB-MNL-CENTRAL',name:'Synthetic workflow hub',code:'SYN-WORKFLOW',country:'PH',role:'Synthetic test'},{onConflict:'id',ignoreDuplicates:true}))
@@ -69,4 +94,14 @@ export async function importedProductProbe(uid,report,credentials,request,jar){
    report.checks.push('genuine_bff_csv_review_original_identity_canonical_stock_publication_website_listing')
   }
  })
+ }finally{
+  if(mediaPath){
+   const removed=await mediaCleanup.remove([mediaPath]);assert.equal(removed.error,null,'public_media_disposable_cleanup')
+   const absent=await fetch(report.publicMedia?.url||process.env.SUPABASE_URL+'/storage/v1/object/public/product-images/'+mediaPath)
+   assert.ok([400,404].includes(absent.status),'public_media_cleanup_http_not_found')
+   const absentBody=await absent.json()
+   assert.equal(Number(absentBody.statusCode),404,'public_media_cleanup_storage_not_found')
+   if(report.publicMedia){report.publicMedia.disposableCleanup=true;report.publicMedia.cleanupNotFound={httpStatus:absent.status,storageStatus:Number(absentBody.statusCode)}}
+  }
+ }
 }

@@ -4,9 +4,11 @@ import path from 'node:path'
 import assert from 'node:assert/strict'
 import {createHash} from 'node:crypto'
 import {pathToFileURL} from 'node:url'
+import {execFileSync} from 'node:child_process'
 const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const name=process.argv.find(a=>a.startsWith('--case='))?.slice(7)
-const productWorkflow=process.argv.includes('--product-workflow')
+const publicMedia=process.argv.includes('--public-media')
+const productWorkflow=publicMedia||process.argv.includes('--product-workflow')
 const intakeEvidence=productWorkflow||process.argv.includes('--intake-evidence')
 assert.match(name||'',/^oci-imported-media\d{2}$/)
 assert.ok(!fs.existsSync(path.join(root,name)),'Fresh fixture required')
@@ -17,9 +19,20 @@ const pin=file=>{const bytes=fs.readFileSync(path.join(root,base.case,file));ass
 const once=(s,b,a)=>{assert.equal(s.split(b).length,2,b.slice(0,100));return s.replace(b,()=>a)}
 let source=pin('executed-source.mjs').replaceAll(base.case,name)
 let helper=pin('bff-helper.mjs'),driver=pin('host-driver.mjs')
-const scope=productWorkflow?'Genuine local BFF CSV imported Draft/review/stock/publication/Website listing and Storage packaging evidence; offline fixture restoration; no browser/provider acceptance':intakeEvidence?'Genuine local BFF Auth/MFA intake session and binary evidence registration/replay/download/cleanup; original captured recovery; no browser/imported product/provider acceptance':'Genuine local Auth/MFA actual Storage upload/download/remove through unified proxy and binary Admin fixture adapter; original captured recovery; no browser/intake registration/provider acceptance'
+const scope=publicMedia?'Genuine local BFF imported product flow with HTTPS product-image upload/assignment/replay/anonymous normalized bytes; offline fixture restoration; older admitted installer foundation, no browser/provider acceptance':productWorkflow?'Genuine local BFF CSV imported Draft/review/stock/publication/Website listing and Storage packaging evidence; offline fixture restoration; no browser/provider acceptance':intakeEvidence?'Genuine local BFF Auth/MFA intake session and binary evidence registration/replay/download/cleanup; original captured recovery; no browser/imported product/provider acceptance':'Genuine local Auth/MFA actual Storage upload/download/remove through unified proxy and binary Admin fixture adapter; original captured recovery; no browser/intake registration/provider acceptance'
 helper=helper.slice(0,helper.indexOf('async function browserProbe('))
 helper=once(helper,"import http from 'node:http'","import http from 'node:http'\nconst {readFixtureAdminHttpBody}=await import(pathToFileURL(path.join(process.cwd(),'scripts/fixture-admin-http-body.mjs')).href)")
+if(publicMedia){
+ const certFile=path.resolve('.tools',name+'-cert.pem'),keyFile=path.resolve('.tools',name+'-key.pem')
+ assert.ok(!fs.existsSync(certFile)&&!fs.existsSync(keyFile),'Fresh local TLS inputs required')
+ execFileSync('C:/Program Files/Git/mingw64/bin/openssl.exe',['req','-x509','-newkey','rsa:2048','-nodes','-keyout',keyFile,'-out',certFile,'-days','2','-subj','/CN=K2 owned loopback fixture','-addext','subjectAltName=IP:127.0.0.1'],{stdio:'ignore'})
+ const cert=fs.readFileSync(certFile,'utf8'),key=fs.readFileSync(keyFile,'utf8')
+ helper=once(helper,"import http from 'node:http'",`import http from 'node:http'\nimport https from 'node:https'\nimport tls from 'node:tls'\nconst fixtureTls={cert:${JSON.stringify(cert)},key:${JSON.stringify(key)}}`)
+ helper=once(helper,' const vars={'," const originalCas=tls.getCACertificates('default');tls.setDefaultCACertificates([...originalCas,fixtureTls.cert]);\n const vars={")
+ helper=once(helper,"SUPABASE_URL:'http://127.0.0.1:54395'","SUPABASE_URL:'https://127.0.0.1:54395'")
+ helper=once(helper,'const proxy=http.createServer((req,res)=>{','const proxy=https.createServer(fixtureTls,(req,res)=>{')
+ helper=once(helper,'for(const server of [routed,proxy]){','tls.setDefaultCACertificates(originalCas);for(const server of [routed,proxy]){')
+}
 helper=once(helper,"const calls={auth:0,rest:0,routed:0}","const calls={auth:0,rest:0,storage:0,routed:0}")
 helper=once(helper,"const isAuth=req.url.startsWith('/auth/v1/'),isRest=req.url.startsWith('/rest/v1/')","const isAuth=req.url.startsWith('/auth/v1/'),isRest=req.url.startsWith('/rest/v1/'),isStorage=req.url.startsWith('/storage/v1/')")
 helper=once(helper,'if(!isAuth&&!isRest)','if(!isAuth&&!isRest&&!isStorage)')
@@ -30,6 +43,7 @@ helper=once(helper,"const chunks=[];let size=0;for await(const chunk of req){siz
 const probeFile=productWorkflow?'scripts/imported-product-workflow-probe.inc.mjs':intakeEvidence?'scripts/imported-intake-evidence-probe.inc.mjs':'scripts/imported-media-transport-probe.inc.mjs'
 const probeName=productWorkflow?'importedProductProbe':intakeEvidence?'intakeEvidenceProbe':'mediaTransportProbe'
 helper=once(helper,'await browserProbe(credentials,report,uid);',intakeEvidence?`await ${probeName}(uid,report,credentials,request,jar);`:'await mediaTransportProbe(uid,report,credentials);')
+if(publicMedia)helper=once(helper,'await importedProductProbe(uid,report,credentials,request,jar);','await importedProductProbe(uid,report,credentials,request,jar,{publicMedia:true});')
 helper+=`\nconst {${probeName}}=await import(pathToFileURL(path.join(process.cwd(),${JSON.stringify(probeFile)})).href)\n`
 if(intakeEvidence){
  helper=once(helper,"{cookie,csrf=true}={}","{cookie,csrf=true,headers:extraHeaders={}}={}")
@@ -145,7 +159,7 @@ extraction+='/bin/busybox chmod 755 /http/umoci\\n/http/umoci unpack --image /ht
 source=once(source,"const run='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image-probe.sh';",payload+"\nconst run='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image-probe.sh';")
 source=once(source, "\"args[args.indexOf('-m')+1]='4096';args", "\"args[args.indexOf('-m')+1]='7168';args").replace('hostfwd=tcp:127.0.0.1:54394-:9997','hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996')
 source=once(source,"stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&","stdout.includes('K2_STORAGE_INTEGRATED_HTTP_READY')&&stdout.includes('K2_STORAGE_INTEGRATED_STOPPED_EXIT_')&&stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&")
-const sources=['scripts/prepare-imported-media-fixture.mjs',probeFile,'scripts/fixture-admin-http-body.mjs','scripts/storage-runtime-layout.mjs',...(intakeEvidence?['server/admin-bff/product-intake.js']:[]),...(productWorkflow?['scripts/imported-intake-evidence-probe.inc.mjs','server/admin-bff/catalog-spreadsheet.js','server/admin-bff/product-master.js','server/admin-bff/channels.js']:[])]
+const sources=['scripts/prepare-imported-media-fixture.mjs',probeFile,'scripts/fixture-admin-http-body.mjs','scripts/storage-runtime-layout.mjs',...(intakeEvidence?['server/admin-bff/product-intake.js']:[]),...(productWorkflow?['scripts/imported-intake-evidence-probe.inc.mjs','server/admin-bff/catalog-spreadsheet.js','server/admin-bff/product-master.js','server/admin-bff/channels.js']:[]),...(publicMedia?['server/admin-bff/product-media.js']:[])]
 const pins=Object.fromEntries(sources.map(f=>[f,hash(fs.readFileSync(f))]))
 if(productWorkflow)source=once(source,'const prep=JSON.parse',`const sourceInputs=${JSON.stringify(pins)};fs.mkdirSync(path.join(out,'source-inputs'));for(const [file,expected]of Object.entries(sourceInputs)){const bytes=fs.readFileSync(file);assert.equal(sha(bytes),expected,file);fs.writeFileSync(path.join(out,'source-inputs',file.replaceAll('/','--')),bytes,{flag:'wx'});}\nconst prep=JSON.parse`)
 source=once(source,'const prep=JSON.parse',`fs.writeFileSync(path.join(out,'media-source-pins.json'),${JSON.stringify(JSON.stringify(pins,null,2))},{flag:'wx'});\nconst prep=JSON.parse`)

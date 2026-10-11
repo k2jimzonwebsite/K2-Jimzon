@@ -45,6 +45,20 @@ test('evidence transport accepts the exact 4MiB image bound with bytes intact', 
   assert.equal(result.body.digest, digest(bytes))
   assert.equal(result.body.size, bytes.length)
 })
+
+test('public product image upload preserves binary bytes through the production image reader', async () => {
+  const bytes = Buffer.from([137,80,78,71,13,10,26,10,0,255,254,128])
+  const result = await request('/api/admin/product-media?fixture=true', bytes, true)
+  assert.equal(result.status, 200)
+  assert.deepEqual(result.body, { size: bytes.length, digest: digest(bytes), buffer: true })
+})
+
+test('product media assignment keeps JSON understood by the production JSON reader', async () => {
+  const value = { sku: 'SYNTHETIC', primary: null, lifestyle: [], secondary: [], reason: 'Synthetic assignment' }
+  const result = await request('/api/admin/product-media/assign', Buffer.from(JSON.stringify(value)))
+  assert.equal(result.status, 200)
+  assert.deepEqual(result.body, { string: true, parsed: value })
+})
 test('fixture transport refuses a byte beyond its 4MiB maximum', async () => {
   const result = await request('/api/admin/product-intake/evidence', Buffer.alloc(4 * 1024 * 1024 + 1), true)
   assert.equal(result.status, 413)
