@@ -387,6 +387,7 @@ export default function Sheet({ canManageProducts = false }) {
 
   return (
     <div className="flex flex-col h-full bg-adm-sunken">
+      {secureCatalog && <p className="shrink-0 border-b border-adm-line px-3 py-3 text-sm text-white/80 lg:px-6">Brands and categories are read-only here. Switch to Grid, then Edit a product to review or create references.</p>}
       <div className="shrink-0 border-b border-adm-line bg-adm-surface">
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none px-3 py-2 lg:px-6 lg:py-3">
           <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-adm-sm bg-blue text-white px-3.5 min-h-[44px] text-sm font-bold transition hover:bg-blue-deep">
@@ -617,6 +618,17 @@ export default function Sheet({ canManageProducts = false }) {
                         return (
                           <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="text-center p-0 min-w-[60px]">
                             <input type="checkbox" data-k2-cell={`${position}:${colIdx}`} checked={Boolean(val)} onChange={(e) => updateField(i, col, e.target.checked)} className="cursor-pointer mx-auto block w-4 h-4 text-blue" />
+                          </Cell>
+                        )
+                      }
+
+                      if (secureCatalog && ['brand_id', 'category_id'].includes(field)) {
+                        return (
+                          <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="min-w-[170px]">
+                            <div className="min-h-11 px-2.5 py-2 text-sm">
+                              <span className="block text-white/90">{val === null ? 'Not assigned' : typeof val === 'string' && val ? 'Assigned' : 'Assignment unavailable'}</span>
+                              <span className="block text-white/60">Grid → Edit</span>
+                            </div>
                           </Cell>
                         )
                       }

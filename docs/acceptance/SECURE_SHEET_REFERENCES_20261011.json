@@ -1,0 +1,109 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "date": "2026-10-11",
+  "scope": "Actual Sheet/shared hook rendered with intercepted synthetic APIs and synthetic public key. No genuine Auth/database/provider/host acceptance.",
+  "changes": [
+    "Secure Sheet brand/category cells display canonical nullable assignment status with Grid → Edit guidance instead of anonymous dropdown/create controls.",
+    "A wrapping instruction above the wide table gives the protected workflow location on phones.",
+    "Shared useReferenceOptions blocks secure brand/category initial reads, explicit reload and create before transport, including its BulkCsvImportModal caller. Supplier/warehouse and legacy non-secure behavior stay separate."
+  ],
+  "failures": [
+    {
+      "controller": 76484,
+      "exit": 1,
+      "classification": "test fixture setup",
+      "finding": "Sheet CommonJS react-barcode import required test-server dependency bundling; no feature red claim."
+    },
+    {
+      "controller": 35844,
+      "exit": 1,
+      "classification": "actual hook red and Sheet locator calibration",
+      "finding": "Hook probe returned two ok:true synthetic direct creates rather than protected guidance. Sheet test selected text input values as row text, so its status failure is not valid feature evidence."
+    },
+    {
+      "controller": 58802,
+      "exit": 1,
+      "passed": 1,
+      "failed": 1,
+      "finding": "Hook guard passes; Sheet row locator still used input value as text."
+    },
+    {
+      "controller": 92361,
+      "exit": 1,
+      "passed": 1,
+      "failed": 1,
+      "finding": "Sheet status/guidance passes; test erroneously expected no unrelated supplier/warehouse/status dropdowns in the entire row; scope corrected to taxonomy cells."
+    }
+  ],
+  "rendered": {
+    "command": "npx playwright test --config playwright.sheet-reference.config.js tests/admin-secure-sheet-reference.spec.js --timeout 20000",
+    "exit": 0,
+    "passed": 2,
+    "failed": 0,
+    "checks": [
+      "Both canonical assigned and nullable unassigned brand/category statuses",
+      "No taxonomy dropdowns",
+      "No anonymous taxonomy requests on Sheet mount",
+      "Explicit secure hook reload/create refused with no taxonomy transport",
+      "Above-table guidance visible and overflow<=1px at375/1440"
+    ]
+  },
+  "existingContracts": {
+    "command": "npx playwright test --config playwright.sheet-reference.config.js tests/sheet-reference-fields-contract.spec.js --timeout 20000",
+    "exit": 0,
+    "passed": 13,
+    "qualification": "Existing source/component contracts, not runtime/provider proof."
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "controller": 63004,
+    "exit": 0,
+    "checks": 20,
+    "routeControlGaps": 0,
+    "earlierController": 58757,
+    "earlierExit": 0,
+    "repeatReason": "Bounded visual inspection found mobile cell clipping; final source correction added wrapping above-table guidance, so final gate follows that new code edit."
+  },
+  "review": {
+    "agent": "reference_endpoint_review",
+    "critical": 0,
+    "important": 0,
+    "scope": "Sheet taxonomy cells/shared-hook guards before final simple guidance copy addition."
+  },
+  "design": {
+    "skills": [
+      "ui-ux-pro-max",
+      "impeccable",
+      "design-taste-frontend",
+      "emil-design-eng"
+    ],
+    "register": "Admin Operate/product",
+    "before": "Secure taxonomy dropdowns offered direct create/assignment.",
+    "after": "Read-only canonical assignment status and protected Grid → Edit guidance.",
+    "why": "Route taxonomy creation/assignment through the already prepared canonical editor without offering a failing anonymous operation.",
+    "inspection": "One375/1440 batch, then one375 confirmation after above-table guidance correction. Existing wide table/sticky SKU partly clips cell content on phone; wrapping instruction is readable without horizontal scrolling. This is not full Sheet mobile or physical-device acceptance.",
+    "directory": "docs/evidence/20261011-secure-sheet-reference"
+  },
+  "remaining": [
+    "Genuine local Auth/PostgREST/BFF/rendered protected creation → paired Product Master Save and exact full recovery",
+    "Existing wider staff/phone acceptance, provider authorization and separate actual-host production gates in MAP-018"
+  ],
+  "recovery": "Revert only Sheet.jsx protected taxonomy display/guidance and useReferenceOptions.js protected guards together with this fixture/tests. Preserve editor48176c1 and all prior receipts. No provider rollback required because no provider state changed.",
+  "providerWrites": false,
+  "deployment": false,
+  "productionClear": false,
+  "sourceSha256": {
+    "src/views/admin/Sheet.jsx": "626b2a60c375b0794e8045a86915415cf2680e584d62c34fb7f200adc9c60f7b",
+    "src/views/admin/useReferenceOptions.js": "50d9755155b1c4741ac04ec68a3967b1ff23cf791e6822de17967f9a9aee5d13",
+    "tests/admin-secure-sheet-reference.spec.js": "64069352514597daba4242f12b3522c275292ed095a43d3183866427fa31f518",
+    "tests/fixtures/admin-sheet-reference-harness.jsx": "41292c41370815b3e625f7aea4107b6e24146b2c7f790715a59e20a13770192a",
+    "tests/fixtures/admin-sheet-reference-harness.html": "a2de53c434e482ae19269e7669030e0ad443a1ebceb32c23a4b959efd0bdd5a6",
+    "tests/fixtures/admin-sheet-reference-vite.config.js": "b34e1ab2735524545e49e4d287a7f726ef9b3f60ab4a67e97a3c6b0cb245e9a4",
+    "playwright.sheet-reference.config.js": "dfcbc5d3c8011d8366e61c2761a56ef83c766877c98f713a665d4394d644d364"
+  },
+  "imageSha256": {
+    "secure-sheet-1440.png": "c63aad21073ad022d51bd946a1f731e2ad8131887259885dea7f84304cd02c5d",
+    "secure-sheet-375.png": "365623add9daa6983893629d4a481aaed3c375e34bbc2a753e6d3c6b23c2fcb8"
+  }
+}

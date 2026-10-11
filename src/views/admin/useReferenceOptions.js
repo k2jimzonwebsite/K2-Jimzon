@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { adminBffEnabled } from '../../services/adminBffService'
 import {
   REFERENCE_FIELDS,
   cleanReferenceName,
@@ -53,6 +54,7 @@ const REFERENCE_QUERIES = Object.freeze({
  * create button in the second case produces a failure nobody can act on.
  */
 export function useReferenceOptions() {
+  const protectedTaxonomy = adminBffEnabled()
   const [state, setState] = useState(() => {
     const initial = {}
     for (const field of Object.keys(REFERENCE_FIELDS)) {
@@ -62,6 +64,10 @@ export function useReferenceOptions() {
   })
 
   const loadField = useCallback(async (field) => {
+    if (protectedTaxonomy && ['brand_id', 'category_id'].includes(field)) {
+      setState(prev => ({ ...prev, [field]: { options: [], loading: false, error: 'Review brands and categories in Grid → Edit.' } }))
+      return
+    }
     const query = REFERENCE_QUERIES[field]
     if (!query || !supabase) {
       setState(prev => ({ ...prev, [field]: { options: [], loading: false, error: 'unavailable' } }))
@@ -74,7 +80,7 @@ export function useReferenceOptions() {
         ? { options: [], loading: false, error: error.message }
         : { options: data || [], loading: false, error: '' },
     }))
-  }, [])
+  }, [protectedTaxonomy])
 
   useEffect(() => {
     for (const field of Object.keys(REFERENCE_FIELDS)) loadField(field)
@@ -89,6 +95,9 @@ export function useReferenceOptions() {
    * nobody is left believing they added something they did not.
    */
   const createOption = useCallback(async (field, rawName) => {
+    if (protectedTaxonomy && ['brand_id', 'category_id'].includes(field)) {
+      return { ok: false, error: 'Create or assign brands and categories in Grid → Edit.' }
+    }
     const config = REFERENCE_FIELDS[field]
     const query = REFERENCE_QUERIES[field]
     if (!config || !query) return { ok: false, error: 'Unknown reference field.' }
@@ -121,7 +130,7 @@ export function useReferenceOptions() {
       },
     }))
     return { ok: true, id: inserted.id, reused: false, name: inserted.name }
-  }, [])
+  }, [protectedTaxonomy])
 
   return { referenceState: state, createOption, reloadReference: loadField }
 }
