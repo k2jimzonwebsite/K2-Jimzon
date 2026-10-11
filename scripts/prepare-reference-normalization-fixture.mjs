@@ -9,13 +9,17 @@ const root = 'D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const caseName = process.argv.find(value => value.startsWith('--case='))?.slice(7)
 assert.match(caseName || '', /^oci-imported\d{2}$/)
 const mode = process.argv.includes('--red') ? 'red' : 'green'
+const phase = process.argv.includes('--creation') ? 'creation' : 'normalization'
 const target = path.resolve(root, caseName)
 assert.equal(path.dirname(target), path.resolve(root))
 assert.ok(!fs.existsSync(target), 'Fresh owned fixture required; never reuse a prior case')
 const sha = bytes => createHash('sha256').update(bytes).digest('hex')
-const testFile = 'tests/sql/protected-reference-normalization.sql'
+const testFile = `tests/sql/protected-reference-${phase}.sql`
 const sources = [testFile]
-if (mode === 'green') sources.push('supabase/prepared/protected_reference_normalization.sql')
+const installs = []
+if (mode === 'green' || phase === 'creation') installs.push('supabase/prepared/protected_reference_normalization.sql')
+if (mode === 'green' && phase === 'creation') installs.push('supabase/prepared/protected_reference_creation.sql')
+sources.push(...installs)
 for (const file of sources) assert.ok(fs.existsSync(file), file)
 const result = spawnSync(process.execPath, ['scripts/prepare-imported-provider-fixture.mjs',
   `--case=${caseName}`, '--product-master-transport', '--customer-tariff-transport', '--category-policy-transport'],
@@ -26,10 +30,10 @@ const stage = path.join(target, 'staging/k2')
 const sql = fs.readFileSync(testFile, 'utf8')
 fs.writeFileSync(path.join(stage, 'reference-normalization-test.sql'), sql, { flag: 'wx' })
 const added = ['reference-normalization-test.sql']
-if (mode === 'green') {
+if (installs.length) {
   fs.writeFileSync(path.join(stage, 'reference-normalization-install.sql'),
     "begin;\nset local statement_timeout='10s';\nset local lock_timeout='2s';\n"
-      + fs.readFileSync(sources[1], 'utf8') + '\ncommit;\n', { flag: 'wx' })
+      + installs.map(file => fs.readFileSync(file, 'utf8')).join('\n') + '\ncommit;\n', { flag: 'wx' })
   added.push('reference-normalization-install.sql')
 }
 const command = file => `su postgres -s /bin/sh -c 'psql -X -q -t -A -P pager=off -h /tmp -U postgres -d postgres -v ON_ERROR_STOP=1 -f /tmp/${file}'`
@@ -42,9 +46,10 @@ assert.ok(raceStart > 0 && raceEnd > raceStart)
 probe = probe.slice(0, raceStart) + probe.slice(raceEnd)
 const anchor = 'echo K2_ALL88_COMMITTED_ORIGINAL_PROJECTIONS_OK\n'
 assert.equal(probe.split(anchor).length, 2)
-const tests = mode === 'red'
-  ? `set +e\n${command('reference-normalization-test.sql')} > /tmp/reference-normalization.log 2>&1\nreference_status=$?\nset -e\ncat /tmp/reference-normalization.log\n[ "$reference_status" -eq 3 ]\ngrep -q K2_REFERENCE_NORMALIZATION_MISSING /tmp/reference-normalization.log\necho K2_REFERENCE_NORMALIZATION_EXPECTED_RED_OK\n`
-  : `${command('reference-normalization-install.sql')}\n${command('reference-normalization-test.sql')}\n`
+const marker = `K2_REFERENCE_${phase.toUpperCase()}`
+const tests = (installs.length ? `${command('reference-normalization-install.sql')}\n` : '') + (mode === 'red'
+  ? `set +e\n${command('reference-normalization-test.sql')} > /tmp/reference-normalization.log 2>&1\nreference_status=$?\nset -e\ncat /tmp/reference-normalization.log\n[ "$reference_status" -eq 3 ]\ngrep -q ${marker}_MISSING /tmp/reference-normalization.log\necho ${marker}_EXPECTED_RED_OK\n`
+  : `${command('reference-normalization-test.sql')}\n`)
 probe = probe.replace(anchor, anchor + tests)
 fs.writeFileSync(path.join(stage, 'image-probe.sh'), probe)
 let init = fs.readFileSync(path.join(stage, 'init.sh'), 'utf8')
@@ -65,14 +70,14 @@ const runnerFile = path.join(root, `run-${caseName}.mjs`)
 let runner = fs.readFileSync(runnerFile, 'utf8')
 const oldMarker = "stdout.includes('K2_PROTECTED_CONCURRENT_DRIFT_REFUSED_AND_RECOVERED')"
 assert.equal(runner.split(oldMarker).length, 2)
-runner = runner.replace(oldMarker, `stdout.includes('${mode === 'red' ? 'K2_REFERENCE_NORMALIZATION_EXPECTED_RED_OK' : 'K2_REFERENCE_NORMALIZATION_CHECKS_OK'}')`)
+runner = runner.replace(oldMarker, `stdout.includes('${marker}_${mode === 'red' ? 'EXPECTED_RED_OK' : 'CHECKS_OK'}')`)
 const oldScope = 'Complete guarded10s envelope/fresh/exact replay/cold archive recovery on actual local postgres target; provider physical/locale/project/host qualification separate'
 assert.equal(runner.split(oldScope).length, 2)
-runner = runner.replace(oldScope, 'Owned reference normalization probe on captured PostgreSQL17.6; base/cold recovery retained; no whole revised installation or provider qualification')
+runner = runner.replace(oldScope, `Owned reference ${phase} probe on captured PostgreSQL17.6; base/cold recovery retained; no whole revised installation or provider qualification`)
 fs.writeFileSync(path.join(target, 'runner-source.mjs'), runner, { flag: 'wx' })
 sources.push('scripts/prepare-reference-normalization-fixture.mjs', 'scripts/prepare-imported-provider-fixture.mjs')
-const receipt = { owningMap: 'MAP-018', idea: 'IDEA-20261010-06', case: caseName, mode,
-  scope: 'Owned captured PostgreSQL17.6 normalization probe, not whole revised installation qualification',
+const receipt = { owningMap: 'MAP-018', idea: 'IDEA-20261010-06', case: caseName, mode, phase,
+  scope: `Owned captured PostgreSQL17.6 ${phase} probe, not whole revised installation qualification`,
   providerWrites: false, sources: sources.map(file => ({ file, sha256: sha(fs.readFileSync(file)) })),
   runnerSha256: sha(runner),
   initramfsSha256: sha(fs.readFileSync(path.join(target, 'initramfs.cpio'))),

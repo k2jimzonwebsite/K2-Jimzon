@@ -1,0 +1,340 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "recordedAt": "2026-10-11T03:16:50.748Z",
+  "classification": "Owned PostgreSQL17.6 synthetic-signer authenticated-role command proof; component only",
+  "providerWrites": false,
+  "privateEvidenceRoot": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc",
+  "cases": [
+    {
+      "case": "oci-imported28",
+      "session": 50937,
+      "controllerExit": 0,
+      "classification": "Expected missing-command red",
+      "pid": 4944,
+      "vmExit": 0,
+      "timedOut": false,
+      "guestSuccess": true,
+      "processStopped": true,
+      "fullCatalogRollback": true,
+      "catalogs": {
+        "before": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        },
+        "after": {
+          "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+          "bytes": 2396732
+        },
+        "rollback": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        }
+      },
+      "markers": [
+        "K2_REFERENCE_CREATION_MISSING",
+        "K2_REFERENCE_CREATION_EXPECTED_RED_OK",
+        "K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK"
+      ],
+      "serialSha256": "746344897ae54ffc2c0f79839b3e584ce85cefbaa056b67760572ca6efc3003d",
+      "resultSha256": "702956fb14c44e891eabae39d3489d2f97668401f9986bb2356d93deba001f35",
+      "preparationSha256": "4ab8454ed620910e9ec2dbe0075f4313e55df949f7d711a3302b0b22a106b90e",
+      "sourcePins": [
+        {
+          "file": "tests/sql/protected-reference-creation.sql",
+          "sha256": "d9bb29e1cb4edd7eb60eb875c4795302872f42f1fbb306570b0d90452806e37f"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_normalization.sql",
+          "sha256": "20a588aa2f4ef349c9ac544747e1dd551a0aace68a761fb518dbe97499cf5126"
+        },
+        {
+          "file": "scripts/prepare-reference-normalization-fixture.mjs",
+          "sha256": "1fe93aed59f38acebeeb22be6fe7ee05c67bf542ee6ef7166a52dcaa2f9de7c2"
+        },
+        {
+          "file": "scripts/prepare-imported-provider-fixture.mjs",
+          "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+        }
+      ],
+      "stagedPins": [
+        {
+          "file": "reference-normalization-test.sql",
+          "sha256": "d9bb29e1cb4edd7eb60eb875c4795302872f42f1fbb306570b0d90452806e37f"
+        },
+        {
+          "file": "reference-normalization-install.sql",
+          "sha256": "f4f3ccba4ab7a29455d6cef035736efecc529968e83c9e9c053c050f0cad61ef"
+        },
+        {
+          "file": "init.sh",
+          "sha256": "3c6058f223945d23b665953ab236c11bfb2cf929931088f9efec8947aa12ff95"
+        },
+        {
+          "file": "image-probe.sh",
+          "sha256": "9ea19d6868849d06518a7daf7556af77e332d25ce9d597d268011e31ad29e23c"
+        }
+      ],
+      "runnerSha256": "1c32d2bad687707d8c8a36281f0e2cab1e1ec05c05cf92b82a23bc4a52337e1e",
+      "initramfsSha256": "c8358bd7b13e68a7bfc182888303a5cd98bb99f98f8c2ac2d94aa3bf320fb8c4"
+    },
+    {
+      "case": "oci-imported30",
+      "session": 60885,
+      "controllerExit": 1,
+      "classification": "SQL compilation failure; no cold recovery proof",
+      "pid": 5352,
+      "vmExit": 0,
+      "timedOut": false,
+      "guestSuccess": false,
+      "processStopped": true,
+      "fullCatalogRollback": false,
+      "catalogs": null,
+      "markers": [],
+      "serialSha256": "6fb931cc29fbe3a904078d4296a9e71e481dd188aa80586088e4173e6a78ac3a",
+      "resultSha256": "bc81ced4e8000ade83a77f575667b07685ee8ba75e36d0b994ae500cbe0a868b",
+      "preparationSha256": "55df05a4d42ccd195e0e256f6a0ff0e2a30da704462bd617631321be3f1862e9",
+      "sourcePins": [
+        {
+          "file": "tests/sql/protected-reference-creation.sql",
+          "sha256": "98fbc66cb38f31277444f1b084946d6be8af0ad68e4d0c5d6fd3a022d03b379f"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_normalization.sql",
+          "sha256": "20a588aa2f4ef349c9ac544747e1dd551a0aace68a761fb518dbe97499cf5126"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_creation.sql",
+          "sha256": "66073bdbbaea1fca1b8eb6c472b17a7861f4ad882658aeac67e03b10bc61c2d6"
+        },
+        {
+          "file": "scripts/prepare-reference-normalization-fixture.mjs",
+          "sha256": "1fe93aed59f38acebeeb22be6fe7ee05c67bf542ee6ef7166a52dcaa2f9de7c2"
+        },
+        {
+          "file": "scripts/prepare-imported-provider-fixture.mjs",
+          "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+        }
+      ],
+      "stagedPins": [
+        {
+          "file": "reference-normalization-test.sql",
+          "sha256": "98fbc66cb38f31277444f1b084946d6be8af0ad68e4d0c5d6fd3a022d03b379f"
+        },
+        {
+          "file": "reference-normalization-install.sql",
+          "sha256": "aeaef1c6d1815acb71ea658aa2e01e3154cbce5348882a3e7b5a25f8e7e12d7f"
+        },
+        {
+          "file": "init.sh",
+          "sha256": "3c6058f223945d23b665953ab236c11bfb2cf929931088f9efec8947aa12ff95"
+        },
+        {
+          "file": "image-probe.sh",
+          "sha256": "31bf5a69b3fcad94d184644dd55ef8370b9bf456d4818944375277de4a0abc17"
+        }
+      ],
+      "runnerSha256": "39eea032a194db95be3c6a5c3400bbf0d1706b72bd82e1bcf356cf95d2c98c08",
+      "initramfsSha256": "9bf6f980efd35d0231fa26dd367523638496180f4473f8c62a60c38934485210"
+    },
+    {
+      "case": "oci-imported31",
+      "session": 30596,
+      "controllerExit": 1,
+      "classification": "Test temporary-schema grant failure; no cold recovery proof",
+      "pid": 13860,
+      "vmExit": 0,
+      "timedOut": false,
+      "guestSuccess": false,
+      "processStopped": true,
+      "fullCatalogRollback": false,
+      "catalogs": null,
+      "markers": [],
+      "serialSha256": "4199ee929e09e0057f599caa78a42ea6a5d660b4ad7ca93d1da8e18cef63049c",
+      "resultSha256": "b765a51b15f06670fe241a023071a5903a81010d612f94676ede0270aa2d5497",
+      "preparationSha256": "dee7559b6119424c60603a0e9ba22c698a00f20cfb0fba126f7965765f9b6115",
+      "sourcePins": [
+        {
+          "file": "tests/sql/protected-reference-creation.sql",
+          "sha256": "98fbc66cb38f31277444f1b084946d6be8af0ad68e4d0c5d6fd3a022d03b379f"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_normalization.sql",
+          "sha256": "20a588aa2f4ef349c9ac544747e1dd551a0aace68a761fb518dbe97499cf5126"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_creation.sql",
+          "sha256": "0f1babb607e9d511659910478c923b0c7abc8dc90f0d6c5a17b10921469e4cfe"
+        },
+        {
+          "file": "scripts/prepare-reference-normalization-fixture.mjs",
+          "sha256": "1fe93aed59f38acebeeb22be6fe7ee05c67bf542ee6ef7166a52dcaa2f9de7c2"
+        },
+        {
+          "file": "scripts/prepare-imported-provider-fixture.mjs",
+          "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+        }
+      ],
+      "stagedPins": [
+        {
+          "file": "reference-normalization-test.sql",
+          "sha256": "98fbc66cb38f31277444f1b084946d6be8af0ad68e4d0c5d6fd3a022d03b379f"
+        },
+        {
+          "file": "reference-normalization-install.sql",
+          "sha256": "a72e74100c85c77e5e3debb76d8fece8831db2dba2e576e807595511762d47e1"
+        },
+        {
+          "file": "init.sh",
+          "sha256": "3c6058f223945d23b665953ab236c11bfb2cf929931088f9efec8947aa12ff95"
+        },
+        {
+          "file": "image-probe.sh",
+          "sha256": "31bf5a69b3fcad94d184644dd55ef8370b9bf456d4818944375277de4a0abc17"
+        }
+      ],
+      "runnerSha256": "717a8713e665e50c4154414603936f666d83329bde7230ce469ec648b2c79904",
+      "initramfsSha256": "09bd1197d2bc253b77f37d877d8be308308bb7c725d82d495aa65a5c732becf2"
+    },
+    {
+      "case": "oci-imported32",
+      "session": 26661,
+      "controllerExit": 0,
+      "classification": "Basic authenticated-role signed SQL command green and cold recovery",
+      "pid": 12972,
+      "vmExit": 0,
+      "timedOut": false,
+      "guestSuccess": true,
+      "processStopped": true,
+      "fullCatalogRollback": true,
+      "catalogs": {
+        "before": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        },
+        "after": {
+          "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+          "bytes": 2396732
+        },
+        "rollback": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        }
+      },
+      "markers": [
+        "K2_REFERENCE_CREATION_CHECKS_OK",
+        "K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK"
+      ],
+      "serialSha256": "74d4fbaeea04e14c88cd2957e348017a91c63dd01baec50ed8393d45f06fdea3",
+      "resultSha256": "7da5aa39d2bfde6cf6fa28b5f8a5538f11d21aabcd8505b3cfef3c2c8cb4a1f4",
+      "preparationSha256": "8350b8110b70706ca2219968fd2f64b2572ca743a1419d78f6485a46535d845e",
+      "sourcePins": [
+        {
+          "file": "tests/sql/protected-reference-creation.sql",
+          "sha256": "6bc835a161da454bdde09b4dc4df131601e663fc67befd27889aed1d9355ee41"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_normalization.sql",
+          "sha256": "20a588aa2f4ef349c9ac544747e1dd551a0aace68a761fb518dbe97499cf5126"
+        },
+        {
+          "file": "supabase/prepared/protected_reference_creation.sql",
+          "sha256": "0f1babb607e9d511659910478c923b0c7abc8dc90f0d6c5a17b10921469e4cfe"
+        },
+        {
+          "file": "scripts/prepare-reference-normalization-fixture.mjs",
+          "sha256": "1fe93aed59f38acebeeb22be6fe7ee05c67bf542ee6ef7166a52dcaa2f9de7c2"
+        },
+        {
+          "file": "scripts/prepare-imported-provider-fixture.mjs",
+          "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+        }
+      ],
+      "stagedPins": [
+        {
+          "file": "reference-normalization-test.sql",
+          "sha256": "6bc835a161da454bdde09b4dc4df131601e663fc67befd27889aed1d9355ee41"
+        },
+        {
+          "file": "reference-normalization-install.sql",
+          "sha256": "a72e74100c85c77e5e3debb76d8fece8831db2dba2e576e807595511762d47e1"
+        },
+        {
+          "file": "init.sh",
+          "sha256": "3c6058f223945d23b665953ab236c11bfb2cf929931088f9efec8947aa12ff95"
+        },
+        {
+          "file": "image-probe.sh",
+          "sha256": "31bf5a69b3fcad94d184644dd55ef8370b9bf456d4818944375277de4a0abc17"
+        }
+      ],
+      "runnerSha256": "c369bcefc5a6c6de62381bb4516952224fd59737df443700753e330471619429",
+      "initramfsSha256": "6d2805004b6d5ddc29d2ed335c50b4d506d5834fb5412b89b9b8c262e99d4431"
+    }
+  ],
+  "currentSources": [
+    {
+      "file": "supabase/prepared/protected_reference_creation.sql",
+      "sha256": "0f1babb607e9d511659910478c923b0c7abc8dc90f0d6c5a17b10921469e4cfe"
+    },
+    {
+      "file": "tests/sql/protected-reference-creation.sql",
+      "sha256": "6bc835a161da454bdde09b4dc4df131601e663fc67befd27889aed1d9355ee41"
+    },
+    {
+      "file": "scripts/prepare-reference-normalization-fixture.mjs",
+      "sha256": "1fe93aed59f38acebeeb22be6fe7ee05c67bf542ee6ef7166a52dcaa2f9de7c2"
+    },
+    {
+      "file": "scripts/run-reference-normalization-fixture.mjs",
+      "sha256": "8a33c64712586e26cbc9ab8c2c39fb976aae17d7db708ada553b353b97e55dab"
+    },
+    {
+      "file": "supabase/prepared/protected_reference_normalization.sql",
+      "sha256": "20a588aa2f4ef349c9ac544747e1dd551a0aace68a761fb518dbe97499cf5126"
+    }
+  ],
+  "preservedPreparedOnly": [
+    {
+      "case": "oci-imported29",
+      "reason": "Superseded before execution by common isolation/deadline admission correction",
+      "preparationSha256": "26071275855c14dea791faf4c6a3ecc85fb8d2a930a7a9033cae75c04da54c4a"
+    }
+  ],
+  "verifiedBehavior": [
+    "Admin creates normalized brand",
+    "Same-key same-body fresh-signature returns exact historical receipt",
+    "New-key equivalent brand reuses identity without rewrite",
+    "Same-key changed body refuses named idempotency conflict",
+    "Category root and child preserve exact parent",
+    "Equivalent category under same parent reuses identity",
+    "Same category name with different parent retains distinct identity",
+    "Current Staff signed command refuses",
+    "Unsigned Admin brand and Staff category inserts refuse",
+    "Independent owner inserts and identity updates cannot introduce normalized duplicates",
+    "Exactly six successful distinct-key events and receipts; context cleared",
+    "Unarmed brand command refuses exact deadline error"
+  ],
+  "development": {
+    "command": "npm run verify:development",
+    "session": 20505,
+    "exit": 0,
+    "sessionReferenceTests": 19,
+    "failures": 0,
+    "routeControlGaps": 0
+  },
+  "independentStop": {
+    "command": "Get-Process for all four case PIDs",
+    "absentCount": 4
+  },
+  "limitations": [
+    "Synthetic Auth claims and signer, not genuine Auth/PostgREST/BFF/browser proof",
+    "No concurrent writer/commit/rollback/reparent/delete or timeout schedule qualification",
+    "Native exact after-catalog is inherited accepted base captured before new fragments, not exact new metadata proof",
+    "No whole revised installer/replay/drift/authority/data/sequence recovery qualification",
+    "No InventoryGrid creation/durable retry/Secure Sheet repair yet",
+    "No provider application, Admin route activation, deployment or real-host/physical inventory acceptance"
+  ],
+  "recovery": "Preserve executed28/30/31/32 and prepared29. Revert this prepared SQL/test and preparer opt-in together; no provider rollback. Rehearse only fresh pinned successors.",
+  "nextAction": "MAP-018: qualify category/all-writer concurrency, authority and affected installer boundaries; connect existing InventoryGrid creation and frozen actor-scoped retry, stop Secure Sheet direct taxonomy writes, then prove genuine creation-to-paired-Save chain."
+}

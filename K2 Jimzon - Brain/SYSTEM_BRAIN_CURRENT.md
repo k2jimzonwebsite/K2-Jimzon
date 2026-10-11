@@ -1,5 +1,8 @@
 # K2 Jimzon  -  System Brain (Current State)
 
+**11 October protected reference creation / MAP-018 / IDEA-20261010-06:** `docs/acceptance/PROTECTED_REFERENCE_CREATION_20261011.json` records observed missing-command red28 and native green32/controller26661 terminal0 on owned captured PostgreSQL17.6. Prepared SQL adds the signed Admin/SuperAdmin command, all-writer normalized unique identities, backend/xid/actor/key/hash context, immutable events and category statement policy entry. Synthetic signer executes as authenticated; Admin create/reuse, exact receipt replay, changed-body refusal, category parent identity, Staff/unsigned creation refusal, independent duplicate INSERT/UPDATE, unarmed-brand refusal and six events/receipts with cleared context pass. Original full cold catalog and global/managed authority recover; all four executed case PIDs are independently absent. Failed30 compilation and31 test-schema grant are preserved;29 remains prepared-only. Final development20505exit0 (19 session/reference checks, zero route gaps). This is component proof: inherited after-catalog precedes new fragments; concurrent schedules, exact new metadata/full affected installer conservation, genuine Auth/BFF/browser creation→paired Save, durable retry/editor and Secure Sheet repair remain MAP-018. No provider, route activation, deployment or real-host claim. Recovery: revert prepared fragment/test and fixture opt-in together, retain evidence, use fresh successors only.
+
+
 11October MAP-018 / IDEA-20261010-06 SQL normalization component: actual owned
 PostgreSQL17.6 red26/session18240 proves missing-helper refusal; green27/session44585
 executes the prepared functions and character tests. Both terminal0, exact cold
