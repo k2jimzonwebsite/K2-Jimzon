@@ -1,0 +1,88 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "classification": "Locally prepared browser recovery/client foundation; not yet connected to staff UI",
+  "providerWrites": false,
+  "deployed": false,
+  "renderedStaffFlowVerified": false,
+  "genuineAuthVerified": false,
+  "files": [
+    {
+      "file": "src/lib/referenceCommandRecovery.js",
+      "sha256": "556336be9dd7d0ac74539117c0faba154880d997c6d61d338c7abe902d687215"
+    },
+    {
+      "file": "src/services/adminBffService.js",
+      "sha256": "aaf26e6e0c464e268dcb6d01ff912952cc0612c7cf6a2d283f6369e71986460c"
+    },
+    {
+      "file": "tests/reference-command-recovery.test.mjs",
+      "sha256": "c8396e52cf521f7d7256a565af972160bbdf977c4cd2baf33d82d9a8651201f3"
+    },
+    {
+      "file": "tests/admin-reference-client.test.mjs",
+      "sha256": "c11fbe66662d46b03bfb49a4b33e52aa2d12d76d426fed9e32b490fed51ff1da"
+    }
+  ],
+  "behavior": [
+    "One unresolved protected reference creation per actor, with only actorId/key/literal payloadText/pending state in browser storage",
+    "Reload restores exact literal payload bytes and key; an unresolved command refuses changed body or new key",
+    "Foreign actor isolation; corruption and storage denial fail closed; matching-key acknowledgement only",
+    "Raw payload8192bytes and complete escaped record16384bytes bounded before persistence",
+    "Protected GET and POST reuse existing BFF request timeouts/credentials; POST requires supplied UUID and sends literal bodyText with current CSRF",
+    "Reference-specific in-progress/conflict recovery wording leaves unrelated command behavior unchanged"
+  ],
+  "verification": {
+    "red": [
+      {
+        "command": "node --test tests/reference-command-recovery.test.mjs",
+        "exit": 1,
+        "reason": "Missing durable reference recovery"
+      },
+      {
+        "command": "node --test tests/admin-reference-client.test.mjs",
+        "exit": 1,
+        "reason": "Missing protected reference client"
+      },
+      {
+        "command": "node --test tests/admin-reference-client.test.mjs",
+        "exit": 1,
+        "reason": "Global in-progress wording changed unrelated cancellation behavior; corrected with reference-only override"
+      }
+    ],
+    "focused": {
+      "command": "node --test tests/reference-command-recovery.test.mjs tests/admin-reference-client.test.mjs",
+      "exit": 0,
+      "tests": 9,
+      "failed": 0,
+      "skipped": 0,
+      "actualLoopbackHttp": true,
+      "syntheticResponse": true,
+      "escalatedForLoopback": true
+    },
+    "environmentFailure": "Sandboxed Node loopback HTTP could not reach fixture; same unchanged source passes with approved local networking. No external API involved.",
+    "sizeBoundary": "Initial8050-tab test fixture was16348bytes, below16384; corrected to8080tabs (request8184bytes, storedrecord16408bytes) to exercise actual escaping boundary.",
+    "development": {
+      "command": "npm run verify:development",
+      "session": 78795,
+      "exit": 0,
+      "sessionReferenceTests": 19,
+      "routeControlGaps": 0
+    }
+  },
+  "review": {
+    "reviewer": "reference_endpoint_review",
+    "critical": 0,
+    "important": 0,
+    "sourceAndScopeReviewed": true
+  },
+  "limits": [
+    "No staff UI edit, screenshot, Web Lock or cross-tab claim yet",
+    "UI must hold the matching Web Lock, check same current actor/session/role, distinguish unknown from definitive rollback, and display a committed outcome before clearing",
+    "Creation does not assign a product; existing signed paired Product Master Save remains owner",
+    "Genuine Auth/PostgREST/BFF/rendered creation-to-Save, Secure Sheet removal, hosted/provider acceptance remain MAP-018",
+    "No SQL, installer, deployment, provider, activation or role widening"
+  ],
+  "nextAction": "MAP-018: connect the existing InventoryGrid initial taxonomy controls to approved AdminDialog creation/recovery; supply current actor, hold Web Locks across persist/send/acknowledge, reconcile historical receipt versus refreshed current options, retain unsaved selection on paired Save failure. Remove Secure Sheet direct taxonomy operations and qualify rendered/genuine Auth chain.",
+  "recovery": "Revert the new recovery module/tests and the reference-only client exports/messages/bodyText request option together. Existing callers send object bodies and are unchanged; no provider rollback."
+}
