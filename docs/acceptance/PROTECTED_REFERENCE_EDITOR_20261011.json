@@ -1,0 +1,136 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "date": "2026-10-11",
+  "scope": "Locally prepared editor, synthetic intercepted browser APIs and focused backend/client tests. Not genuine Auth/database/hosted acceptance.",
+  "behavior": [
+    "Admin/SuperAdmin creation entry points in eligible Product Master initial assignment; actor-scoped pending review remains reachable after reload.",
+    "Matching Web Lock protects hold/send/acknowledge. Queued retry revalidates the held key. Current session actor and role are checked before sending or acknowledging.",
+    "Optional expected-actor header is refused by BFF before RPC if current authorized actor differs; new editor always sends it.",
+    "Literal body and key remain held across unknown replies, permission refusal and reload. Confirmed creation fills only unsaved product choice; paired Save remains separate.",
+    "Fresh complete reference read at acknowledgement refuses automatic selection after deletion, rename or reparent. Historical outcome can be acknowledged without selecting.",
+    "Read/receipt name validation shares the exact approved printable-space/control/well-formed semantics, including accepted U+FEFF. Historical names are not subjected to the current creation length limit."
+  ],
+  "observedFailures": [
+    {
+      "controller": 20775,
+      "exit": 1,
+      "finding": "Missing Create brand entry point before connection."
+    },
+    {
+      "controller": 69069,
+      "exit": 1,
+      "finding": "Test calibration: reason label includes help text and storage removal needs asynchronous acknowledgement wait; flow had reached unsaved selection."
+    },
+    {
+      "controller": 29820,
+      "exit": 1,
+      "finding": "Actual stale-at-acknowledgement selection; fixed by fresh reference read."
+    },
+    {
+      "controller": 78008,
+      "exit": 1,
+      "finding": "Actual U+FEFF option name rejected by JavaScript trim; fixed by shared exact text validation."
+    },
+    {
+      "controller": 82806,
+      "exit": 1,
+      "passed": 2,
+      "failed": 1,
+      "finding": "Test calibration: product editor overlay blocked fixture actor-switch button; close editor first. Actor test then passed."
+    },
+    {
+      "controller": 57370,
+      "exit": 1,
+      "finding": "Test calibration: select label includes option text; use prefix match. Category parent test then passed."
+    }
+  ],
+  "focused": {
+    "command": "node --test tests/reference-command-recovery.test.mjs tests/admin-reference-client.test.mjs tests/admin-reference-handler.test.mjs",
+    "exit": 0,
+    "passed": 16,
+    "failed": 0
+  },
+  "rendered": {
+    "command": "npx playwright test --config playwright.product-master.config.js tests/admin-reference-workflow.spec.js --timeout 25000",
+    "controller": 39294,
+    "exit": 0,
+    "passed": 8,
+    "failed": 0,
+    "apis": "synthetic intercepted",
+    "browser": "Chromium",
+    "cases": [
+      "unsaved selection and failed paired Save retention",
+      "lost reply close/reload exact body/key/actor retry",
+      "changed reference before acknowledgement",
+      "U+FEFF options and receipt acknowledgement",
+      "current permission and actor refusals preserve held bytes",
+      "actor switch isolation",
+      "two-page actual Web Lock queued retry refusal",
+      "category parent exact payload and unsaved selection"
+    ]
+  },
+  "existingTaxonomyRegression": {
+    "command": "npx playwright test --config playwright.product-master.config.js tests/admin-initial-taxonomy-choice.spec.js --timeout 25000",
+    "exit": 0,
+    "passed": 3,
+    "failed": 0
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "controller": 41668,
+    "exit": 0,
+    "sessionReferenceChecks": 20,
+    "routeControlGaps": 0
+  },
+  "review": {
+    "agent": "reference_endpoint_review",
+    "critical": 0,
+    "important": 0,
+    "resolvedImportant": "U+FEFF read/receipt trim mismatch",
+    "limits": "Bounded current editor slice; genuine Auth/BFF/database and Secure Sheet remain unfinished."
+  },
+  "design": {
+    "skills": [
+      "ui-ux-pro-max",
+      "impeccable",
+      "design-taste-frontend",
+      "emil-design-eng"
+    ],
+    "register": "Admin product/Operate",
+    "preserved": "Existing Admin type, tokens, 44px controls and AdminDialog stack; no new animation.",
+    "viewports": [
+      375,
+      1440
+    ],
+    "inspection": "One four-image batch: creation confirmation and failed paired Save. Text/buttons wrap within dialog, no horizontal overflow >1px in rendered assertions. Product editor retains scrolling; this is not physical-device or full accessibility acceptance.",
+    "directory": "docs/evidence/20261011-reference-editor"
+  },
+  "remaining": [
+    "Secure Sheet brand/category creation/assignment guidance and secure hook guard",
+    "Genuine local Auth/PostgREST/BFF/rendered creation-to-paired-Save proof and exact recovery",
+    "MAP-named provider, activation, separate production-artifact and real-host acceptance gates"
+  ],
+  "recovery": "Revert this editor/actor-header/shared-name-helper/test slice together on the feature branch; retain earlier foundation and receipts. No provider rollback is needed because no provider state changed. Pending unknown requests must remain until reviewed, not silently deleted.",
+  "providerWrites": false,
+  "deployment": false,
+  "productionClear": false,
+  "sourceSha256": {
+    "src/views/admin/ReferenceCreationDialog.jsx": "15b531ceff03a7c76b9a9ce24e851aecfbeb1b2355facc999d2140bca1767e95",
+    "src/views/admin/InventoryGrid.jsx": "e4eed8d8d8aa75837e49c6b1bef98353cf90fa8d1226cd6b1785a3734d2e788e",
+    "src/views/admin/Admin.jsx": "c2d1edb2bfe64aae1ba8dc7009525b07d1654a7612386804ba40cacc02ed3df5",
+    "src/lib/referenceCommandRecovery.js": "b9e05bb94658c44bca607f6b1440e1f0f1ba5f93a7e01976befe8c0212912b55",
+    "src/services/adminBffService.js": "ba620399f94e078d60d2c1d4b6ed3d89d53d500b3e765d8c692a6e7e0ec3ab51",
+    "server/admin-bff/references.js": "fc402debb63588e533c08c8da21147e73109d58cc37673e86c6d2760df445684",
+    "tests/admin-reference-workflow.spec.js": "d79aabf33ec0e13965fb2434d6eda15e993b52bbcd2ee0154080b0d894d46fdd",
+    "tests/admin-reference-handler.test.mjs": "10a72455f22af586b5a5d727de357698845d0bf8e8c6fc7dfe1997fe413d6e58",
+    "tests/admin-reference-client.test.mjs": "352f60d4a628d4d06dff4bfaf81a60973a56ac6688240c096dcd3bccf84edb27",
+    "tests/fixtures/admin-product-master-harness.jsx": "e05ec7f675e30b46f4c3c22cd863a1c8f80cec5d0e9282ed79f42dc1db5b753a"
+  },
+  "imageSha256": {
+    "reference-1440.png": "3933f7c677327627bcd4458800cba497c42d821838db5500ef84863cf1c8ddb8",
+    "reference-375.png": "be3e70fdd131cbde7aee6b86ad0e439eaaae19c66c467863b2af0889ac9e48ec",
+    "reference-dialog-1440.png": "21754b229c86e2f83b91c8dc4ce1da6a44524539c8499086f5c8dcaf39d3f3b7",
+    "reference-dialog-375.png": "fba4bdd40381ff329d2edfccc47dfb761848831808ba5749b3036c0e172e3053"
+  }
+}

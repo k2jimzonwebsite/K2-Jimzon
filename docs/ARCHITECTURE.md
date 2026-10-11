@@ -1,5 +1,7 @@
 # K2 Jimzon  -  System Architecture
 
+11 October MAP-018 protected reference editor boundary: current session plus matching Web Lock precedes sending held literal body/key; the new client also sends expected actor identity, checked against current BFF authorization before RPC. This header is optional for prior clients and never grants authority. Fresh complete reference read precedes acknowledgement/unsaved selection; canonical assignment stays in the existing paired Product Master Save. docs/acceptance/PROTECTED_REFERENCE_EDITOR_20261011.json proves this only with synthetic browser APIs and focused local handlers. Genuine Auth/database, Secure Sheet and production remain open.
+
 **11 October protected reference browser foundation / MAP-018 / IDEA-20261010-06:** `docs/acceptance/PROTECTED_REFERENCE_BROWSER_RECOVERY_20261011.json` pins the locally prepared actor-scoped literal-body/key recovery module and protected GET/POST browser client. Nine focused checks include actual loopback HTTP byte/key/current-CSRF equality after storage restoration; synthetic responses are not genuine Auth or rendered staff proof. Development78795exit0; independent source review has no Critical/Important findings. Unknown requests remain held; corrupt/oversized storage fails closed. No staff UI is wired yet. MAP-018 owns Web Lock/current-actor/role/outcome reconciliation, InventoryGrid creation-to-paired-Save and Secure Sheet guidance. Revert only this module/test/reference-client slice; no provider, deployment or activation.
 
 

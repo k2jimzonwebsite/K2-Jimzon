@@ -15,6 +15,7 @@ import {
   adminBffEnabled, commandAdminProductMasterBff, getAdminLots, getAdminProductMasterBff, getAdminProducts,
 } from '../../services/adminBffService'
 import { AdminDialog } from '../../components/ui/AdminDialog'
+import ReferenceCreationDialog, { PendingReferenceCreation } from './ReferenceCreationDialog'
 import { applyImageFallback } from '../../lib/imageFallback'
 import {
   DetailBlock,
@@ -178,7 +179,7 @@ function BreakdownRow({ label, data }) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function InventoryGrid({ launchTool, onLaunchToolHandled, canManageMediaCleanup = false, canManageProducts = false }) {
+export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled, canManageMediaCleanup = false, canManageProducts = false }) {
   const secure = adminBffEnabled()
   const [products, setProducts]       = useState([])
   const [batchMap, setBatchMap]       = useState({})
@@ -208,6 +209,8 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
   const [statusDecision, setStatusDecision] = useState(null)
   const [editReason, setEditReason] = useState('')
   const [productTaxonomyReview, setProductTaxonomyReview] = useState(null)
+  const [referenceKind, setReferenceKind] = useState(null)
+  const [referenceNotice, setReferenceNotice] = useState('')
   const [editError, setEditError] = useState('')
   const editOperationKey = useRef(null)
   const [notice, setNotice] = useState(null)
@@ -366,6 +369,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
   })
 
   const openProductEditor = async (product) => {
+    setReferenceNotice('')
     setEditTab('details')
     setEditReason('')
     setEditError('')
@@ -595,6 +599,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
 
 
       {/* Select-all row */}
+      {secure && actorId && <PendingReferenceCreation actorId={actorId} onReview={setReferenceKind} />}
       {visibleProducts.length > 0 && (
         <div className="mb-3 flex items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2">
           <label className="flex items-center gap-2.5 cursor-pointer select-none min-h-11">
@@ -934,6 +939,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                                 <option value="">Choose an existing brand</option>
                                 {productTaxonomyReview.brandOptions.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
                               </select>
+                              {!productTaxonomyReview.originalBrandId && actorId && <button type="button" disabled={saving || !canManageProducts} onClick={() => setReferenceKind('brand')} className={`${secondaryButton} mt-2`}>Create brand</button>}
                             </div>
                             <div>
                               <Label htmlFor="product-initial-category">Canonical category</Label>
@@ -944,8 +950,10 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                                 <option value="">Choose an existing category</option>
                                 {productTaxonomyReview.categoryOptions.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
                               </select>
+                              {!productTaxonomyReview.originalCategoryId && actorId && <button type="button" disabled={saving || !canManageProducts} onClick={() => setReferenceKind('category')} className={`${secondaryButton} mt-2`}>Create category</button>}
                             </div>
                           </div>
+                          {referenceNotice && <p role="status" className="text-base text-white/80">{referenceNotice}</p>}
                         </>
                       ) : productTaxonomyReview.status === 'blocked' ? (
                         <p role="status" className="text-sm text-white/55">Initial assignment is closed because this product has stock or inventory history. Ask an administrator to review the existing records.</p>
@@ -1140,6 +1148,16 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
       )}
 
       {showMediaCleanup && <ProductMediaCleanupModal onClose={() => setShowMediaCleanup(false)} />}
+
+      {referenceKind && <ReferenceCreationDialog key={`${actorId}:${referenceKind}`} actorId={actorId} kind={referenceKind} canCreate={canManageProducts}
+        onClose={() => setReferenceKind(null)} onConfirmed={(reference, refs, message) => {
+          if (editingProduct && productTaxonomyReview?.status === 'eligible') {
+            if (refs) setProductTaxonomyReview(previous => ({ ...previous, brandOptions: refs.brands, categoryOptions: refs.categories }))
+            const original = reference?.kind === 'brand' ? productTaxonomyReview.originalBrandId : productTaxonomyReview.originalCategoryId
+            if (reference && !original) setEditingProduct(previous => ({ ...previous, [reference.kind === 'brand' ? 'brand_id' : 'category_id']: reference.id }))
+            setReferenceNotice(message)
+          } else flash(`${message} Open the product Edit workflow to review existing choices.`)
+        }} />}
 
     </div>
   )

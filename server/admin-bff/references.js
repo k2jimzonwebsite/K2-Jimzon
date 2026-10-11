@@ -64,6 +64,10 @@ export default async function handleReferences(req, res) {
   const authorized = await authorizeAdminRequest(req, res, { csrf: req.method === 'POST' })
   if (!authorized) return undefined
   if (!isAdminRole(authorized.identity.role)) return safeJson(res, 403, { error: { code: 'REFERENCE_ADMIN_REQUIRED' } })
+  if (req.method === 'POST' && req.headers['x-k2-actor-id'] !== undefined
+      && req.headers['x-k2-actor-id'] !== authorized.identity.userId) {
+    return safeJson(res, 403, { error: { code: 'REFERENCE_ACTOR_CHANGED' } })
+  }
   try {
     if (req.method === 'GET') {
       return safeJson(res, 200, { ok: true, references: await readAdminReferences(authorized.client) })

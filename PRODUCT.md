@@ -1,5 +1,7 @@
 # Product
 
+11 October MAP-018 / IDEA-20261010-06: eligible Product Master drafts now have locally prepared Admin/SuperAdmin protected reference creation and pending recovery. Staff see explicit creation-versus-unsaved-assignment outcomes; existing paired Save owns assignment. All four required design skills preserved the Admin product register. Eight synthetic rendered cases and bounded375/1440 inspection pass; genuine authenticated operations and Secure Sheet remain unfinished. Receipt: docs/acceptance/PROTECTED_REFERENCE_EDITOR_20261011.json.
+
 ## Register
 
 brand

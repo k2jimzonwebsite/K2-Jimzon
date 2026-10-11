@@ -1,5 +1,7 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+11 October MAP-018 / IDEA-20261010-06 editor rule: Admin/SuperAdmin creation must remain separate from paired product Save. Keep an unknown command under its original actor, literal payload and key; matching Web Locks and current actor/role checks protect sending and acknowledgement. Use a fresh complete reference read before unsaved selection. A changed/missing/unreadable reference is acknowledged without automatic selection. Local editor evidence: docs/acceptance/PROTECTED_REFERENCE_EDITOR_20261011.json; genuine Auth/database and Secure Sheet acceptance remain open.
+
 **11 October protected reference browser foundation / MAP-018 / IDEA-20261010-06:** `docs/acceptance/PROTECTED_REFERENCE_BROWSER_RECOVERY_20261011.json` pins the locally prepared actor-scoped literal-body/key recovery module and protected GET/POST browser client. Nine focused checks include actual loopback HTTP byte/key/current-CSRF equality after storage restoration; synthetic responses are not genuine Auth or rendered staff proof. Development78795exit0; independent source review has no Critical/Important findings. Unknown requests remain held; corrupt/oversized storage fails closed. No staff UI is wired yet. MAP-018 owns Web Lock/current-actor/role/outcome reconciliation, InventoryGrid creation-to-paired-Save and Secure Sheet guidance. Revert only this module/test/reference-client slice; no provider, deployment or activation.
 
 

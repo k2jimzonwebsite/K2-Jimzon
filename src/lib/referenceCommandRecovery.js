@@ -15,6 +15,11 @@ function text(value, minimum, maximum) {
   return length >= minimum && length <= maximum
 }
 
+// Reads may include historical names beyond the current creation limit.
+export function isReadableReferenceName(value) {
+  return text(value, 1, Number.MAX_SAFE_INTEGER)
+}
+
 export function validateReferencePayloadText(payloadText) {
   try {
     if (typeof payloadText !== 'string' || new TextEncoder().encode(payloadText).length > 8192) throw unsafe()

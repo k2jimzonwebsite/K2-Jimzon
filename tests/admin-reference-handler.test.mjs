@@ -61,6 +61,7 @@ async function run(options = {}) {
     await handleReferences({ method: 'POST', body: payload, headers: {
       origin: 'https://admin.example.test', cookie: cookieHeader, 'content-type': 'application/json',
       'x-k2-csrf': options.csrf === false ? 'wrong' : csrf, 'x-k2-idempotency-key': key,
+      ...(options.expectedActor ? { 'x-k2-actor-id': options.expectedActor } : {}),
     } }, res)
     return { res, calls }
   } finally {
@@ -76,6 +77,13 @@ test('current Staff role cannot create even when cookie claims Admin', async () 
   const { res, calls } = await run({ role: 'Staff' })
   assert.equal(res.statusCode, 403, JSON.stringify({ body: res.body, paths: calls.map(call => call.path) }))
   assert.equal(res.body.error.code, 'REFERENCE_ADMIN_REQUIRED')
+  assert.ok(!calls.some(call => call.path.endsWith('/execute_admin_reference_command_v1')))
+})
+
+test('saved-request actor mismatch refuses before reference dispatch', async () => {
+  const { res, calls } = await run({ expectedActor: key })
+  assert.equal(res.statusCode, 403)
+  assert.equal(res.body.error.code, 'REFERENCE_ACTOR_CHANGED')
   assert.ok(!calls.some(call => call.path.endsWith('/execute_admin_reference_command_v1')))
 })
 

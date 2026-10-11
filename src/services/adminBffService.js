@@ -1,5 +1,5 @@
 import { fetchReadWithRetry, fetchWithTimeout, isRequestTimeoutError } from '../lib/fetchWithTimeout.js'
-import { validateReferencePayloadText } from '../lib/referenceCommandRecovery.js'
+import { referenceRecoveryKey, validateReferencePayloadText } from '../lib/referenceCommandRecovery.js'
 
 export function adminBffEnabled() {
   return String(import.meta.env.VITE_ADMIN_BFF_ENABLED || '').toLowerCase() === 'true'
@@ -271,6 +271,7 @@ const ERROR_MESSAGES = {
   REQUEST_INVALID: 'Check the entered details and try again.',
   REFERENCES_UNAVAILABLE: 'Brand and category choices could not be loaded completely. Refresh before continuing.',
   REFERENCE_ADMIN_REQUIRED: 'Only an Admin or SuperAdmin can create brands and categories. Keep any pending request for an authorized review.',
+  REFERENCE_ACTOR_CHANGED: 'The signed-in account changed. Return to the original account before retrying this saved reference.',
   REFERENCE_INVALID: 'Review the name, category parent and specific creation reason before continuing.',
   REFERENCE_PARENT_INVALID: 'This category parent is no longer valid. Refresh and review the hierarchy.',
   REFERENCE_BUSY: 'Reference creation is busy. Keep this request and retry the same change.',
@@ -298,10 +299,11 @@ function recoveryCsrfToken() {
   return cookieToken('k2_admin_recovery_csrf')
 }
 
-async function adminRequest(path, { method = 'GET', body, bodyText, csrf = false, recoveryCsrf = false, idempotency = false, idempotencyKey, signal, timeoutMs = 15000 } = {}) {
+async function adminRequest(path, { method = 'GET', body, bodyText, expectedActorId, csrf = false, recoveryCsrf = false, idempotency = false, idempotencyKey, signal, timeoutMs = 15000 } = {}) {
   const headers = { Accept: 'application/json' }
   if (body !== undefined || bodyText !== undefined) headers['Content-Type'] = 'application/json'
   if (csrf) headers['X-K2-CSRF'] = csrfToken()
+  if (expectedActorId !== undefined) headers['X-K2-Actor-Id'] = expectedActorId
   if (recoveryCsrf) headers['X-K2-Recovery-CSRF'] = recoveryCsrfToken()
   if (idempotency || idempotencyKey) headers['X-K2-Idempotency-Key'] = idempotencyKey || crypto.randomUUID()
   try {
@@ -410,14 +412,15 @@ export function getAdminReferencesBff(signal) {
   return adminRequest('/api/admin/references', { signal })
 }
 
-export function createAdminReferenceBff(payloadText, idempotencyKey) {
+export function createAdminReferenceBff(payloadText, idempotencyKey, expectedActorId) {
   try {
     validateReferencePayloadText(payloadText)
+    if (expectedActorId !== undefined) referenceRecoveryKey(expectedActorId)
     if (typeof idempotencyKey !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idempotencyKey)) throw new Error('REFERENCE_INVALID')
   } catch {
     return Promise.resolve({ ok: false, code: 'REFERENCE_INVALID', error: ERROR_MESSAGES.REFERENCE_INVALID })
   }
-  return adminRequest('/api/admin/references', { method: 'POST', bodyText: payloadText, csrf: true, idempotencyKey }).then(result => {
+  return adminRequest('/api/admin/references', { method: 'POST', bodyText: payloadText, expectedActorId, csrf: true, idempotencyKey }).then(result => {
     if (result.code === 'COMMAND_IN_PROGRESS') return { ...result, error: 'This reference is still awaiting confirmation. Retry the same saved request.' }
     if (result.code === 'IDEMPOTENCY_CONFLICT') return { ...result, error: 'The saved reference request conflicts with its recorded identity. Keep it and contact the administrator.' }
     return result

@@ -30,15 +30,16 @@ test('HTTP retry after reload sends identical literal bytes, key and current CSR
     let raw = null
     const store = { getItem: () => raw, setItem: (_, value) => { raw = value } }
     const held = holdPendingReference(actorId, key, payloadText, store)
-    assert.equal((await client.createAdminReferenceBff(held.payloadText, held.key)).ok, true)
+    assert.equal((await client.createAdminReferenceBff(held.payloadText, held.key, actorId)).ok, true)
     globalThis.document.cookie = 'k2_admin_csrf=current-csrf'
     const restored = readPendingReference(actorId, store)
-    assert.equal((await client.createAdminReferenceBff(restored.payloadText, restored.key)).ok, true)
+    assert.equal((await client.createAdminReferenceBff(restored.payloadText, restored.key, actorId)).ok, true)
     assert.equal((await client.getAdminReferencesBff()).ok, true)
     assert.equal(requests.length, 3)
     for (const req of requests.slice(0, 2)) {
       assert.equal(req.path, '/api/admin/references'); assert.equal(req.method, 'POST')
       assert.equal(req.body, payloadText); assert.equal(req.headers['x-k2-idempotency-key'], key)
+      assert.equal(req.headers['x-k2-actor-id'], actorId)
       assert.equal(req.headers['content-type'], 'application/json')
     }
     assert.equal(requests[0].headers['x-k2-csrf'], 'first-csrf')

@@ -1,5 +1,7 @@
 # K2 Jimzon  -  Project Directory Map
 
+11 October MAP-018 editor connection: src/views/admin/ReferenceCreationDialog.jsx owns protected creation/pending review and current-read acknowledgement; InventoryGrid owns unsaved selection and existing paired Save; Admin supplies actor identity. Shared recovery/client and server/admin-bff/references.js preserve exact held requests and reject expected-actor mismatch. docs/acceptance/PROTECTED_REFERENCE_EDITOR_20261011.json records local synthetic evidence. Secure Sheet and genuine authenticated command-to-Save remain MAP-018, with no provider or deployment claim.
+
 **11 October protected reference browser foundation / MAP-018 / IDEA-20261010-06:** `docs/acceptance/PROTECTED_REFERENCE_BROWSER_RECOVERY_20261011.json` pins the locally prepared actor-scoped literal-body/key recovery module and protected GET/POST browser client. Nine focused checks include actual loopback HTTP byte/key/current-CSRF equality after storage restoration; synthetic responses are not genuine Auth or rendered staff proof. Development78795exit0; independent source review has no Critical/Important findings. Unknown requests remain held; corrupt/oversized storage fails closed. No staff UI is wired yet. MAP-018 owns Web Lock/current-actor/role/outcome reconciliation, InventoryGrid creation-to-paired-Save and Secure Sheet guidance. Revert only this module/test/reference-client slice; no provider, deployment or activation.
 
 
