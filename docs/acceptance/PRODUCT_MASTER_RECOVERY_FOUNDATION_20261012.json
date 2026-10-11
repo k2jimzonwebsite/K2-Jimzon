@@ -1,0 +1,105 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261012-01",
+  "mergedInto": [
+    "IDEA-20261009-11",
+    "IDEA-20261001-03"
+  ],
+  "date": "2026-10-12",
+  "base": "dd8ceb8",
+  "request": "Prepare durable actor-scoped Product Master update recovery; retain literal body/version/reason/key across restoration and refuse changed authenticated actor before dispatch.",
+  "state": "Locally prepared and verified nonvisual foundation; editor remains in-memory until integration is qualified",
+  "providerWrites": false,
+  "productionWrites": false,
+  "deployment": false,
+  "sourcePins": {
+    "src/lib/productMasterCommandRecovery.js": "b33716b75cc7740c54528e5fd953fde0449f2337ec8307378ac0d2ec6f6b364b",
+    "src/lib/productMasterPatch.js": "c26df918baa9c750724ebe5ce03b69cd1949117bad044082327fdac974576376",
+    "src/services/adminBffService.js": "645f8497ce9227f56f26bf7dadf0537f3e2d262d3b6c6ea9139976b0cbb01be5",
+    "server/admin-bff/product-master.js": "465c3e5d185f703c8451b6f3d53382c2dda99f2bf632aac43e7bff0cc19cb557",
+    "tests/product-master-command-recovery.test.mjs": "7cc80d24a9a8da50f689ba6ebfea0e8e9ed602653e817533cbba8625cc43e173",
+    "tests/admin-product-master-recovery-client.test.mjs": "0460969f53cf517e9a7338a3a5250ff5622c3fd522db1657b7430b2d7ec43f11",
+    "tests/admin-product-master-actor.test.mjs": "45eae936f7984a2331d016e9538e7a3b26247dae7caf08801fd05bf0169ecd62",
+    "package.json": "a41a4b97b7e88c0053f32c5982e6ff137c095297f4972cd700f675c407bd5ab2"
+  },
+  "canonicalPatchExtraction": {
+    "base": "dd8ceb8",
+    "exactCanonicalPatchMove": true,
+    "fieldsSha256": "14b12298c8ae1fa741fa7a30a7ae58301cbee9d7780c5fe2d70bfb6227789454",
+    "functionsSha256": "b915bd6814d7b5109f263446d10728dcf441a0a5048c81d349b6939fa25de268",
+    "noProviderWrites": true
+  },
+  "behavior": [
+    "One unresolved literal update per actor; conflicting body/version/review/key cannot replace it",
+    "Strict request shape, canonical patch semantics,16KiB request/64KiB recovery-record limits; corruption/foreign actor/extra fields preserved and fail closed",
+    "Storage is read back before usable held command returns; failed persistence sends nothing",
+    "Matching actor/key acknowledgement only; caller must hold matching Web Lock for hold/send/clear",
+    "Saved transport requires valid original actor/key, uses exact literal body and current CSRF, does not retry POST automatically or clear storage",
+    "Backend checks provided actor against actual authorized current identity before product RPC; existing current Admin/SuperAdmin/AAL2/registry/CSRF requirements remain",
+    "Shared patch fields/helpers moved exactly from dd8ceb8, no semantic relaxation or alternate validator"
+  ],
+  "verification": [
+    {
+      "command": "node --test tests/product-master-command-recovery.test.mjs",
+      "output": "d3e6aa",
+      "exit": 1,
+      "reason": "Expected missing recovery feature red"
+    },
+    {
+      "command": "node --test tests/admin-product-master-actor.test.mjs",
+      "output": "a048d1",
+      "exit": 1,
+      "passed": 3,
+      "failed": 1,
+      "reason": "Expected changed actor dispatched200 before refusal guard"
+    },
+    {
+      "command": "node --test tests/admin-product-master-recovery-client.test.mjs tests/admin-product-master-actor.test.mjs",
+      "output": "b7eaa7",
+      "exit": 1,
+      "reason": "Expected missing literal client/actor refusal; an unrelated erroneous p_actor assertion was corrected after inspecting actual signing shape"
+    },
+    {
+      "command": "combined65-check focused run",
+      "output": "2642ca",
+      "exit": 1,
+      "reason": "Restricted shell could not reach loopback; invalid pairings:null assumption corrected to numeric element after inspecting unchanged canonical semantics"
+    },
+    {
+      "command": "node --test tests/product-master-command-recovery.test.mjs tests/admin-product-master-recovery-client.test.mjs tests/admin-product-master-actor.test.mjs tests/category-policy-command.checks.mjs",
+      "output": "5b668a",
+      "exit": 0,
+      "passed": 65,
+      "new": 12,
+      "existing": 53,
+      "scope": "Actual local module+loopback HTTP; remote Auth/PostgREST substituted only; actual cookie/auth/handler/HMAC run"
+    },
+    {
+      "command": "node .tools/verify-product-patch-extraction.mjs",
+      "output": "5690b4",
+      "exit": 0,
+      "scope": "Normalized exact text identity of canonical fields and helper/validator bodies against dd8ceb8"
+    },
+    {
+      "command": "npm run verify:development",
+      "session": 22547,
+      "exit": 0,
+      "adminChecks": 42,
+      "routeControlGaps": 0,
+      "scope": "New twelve contracts now included in mandatory development gate"
+    }
+  ],
+  "independentReview": {
+    "agent": "/root/stock_recovery_review",
+    "result": "No Critical/Important findings in unwired foundation; independently confirmed exact extraction against dd8ceb86816f4d43b4edd37ba6bf8cc98ce847c6; source reviewed, runtime65 checks supplied by parent"
+  },
+  "limits": [
+    "Storage restoration tests use an injected store, not rendered browser localStorage/reload",
+    "Editor is not wired to this module/client; existing keep-page-open limitation remains",
+    "Caller-held Web Locks/current actor/role and receipt acknowledgement must be integrated and verified; module does not acquire locks",
+    "Cross-tab/session-switch/late-reply/rendered missing product reconciliation and genuine Auth/PostgREST/database transport remain open",
+    "No product change, actual review, publication, Website assignment, provider or hosted proof"
+  ],
+  "recovery": "Revert foundation modules/client/header guard and three new registered tests together; restore original in-handler patch validator from dd8ceb8. Keep existing HUMAN_REVIEW_EDITOR receipt and provider state unchanged. Persisted pending evidence must not be automatically erased.",
+  "next": "MAP-018: wire InventoryGrid storage before initial send and a recoverable actor-scoped pending region/dialog, Web Lock serialization, current-actor guards, matching acknowledgement and rendered reload/navigation/session/multitab cases; then independent Website assignment/recovery and genuine media/Live/customer/provider/host/owner gates."
+}

@@ -1,5 +1,6 @@
 import { fetchReadWithRetry, fetchWithTimeout, isRequestTimeoutError } from '../lib/fetchWithTimeout.js'
 import { referenceRecoveryKey, validateReferencePayloadText } from '../lib/referenceCommandRecovery.js'
+import { productMasterRecoveryKey, validateProductMasterPayloadText } from '../lib/productMasterCommandRecovery.js'
 
 export function adminBffEnabled() {
   return String(import.meta.env.VITE_ADMIN_BFF_ENABLED || '').toLowerCase() === 'true'
@@ -86,6 +87,7 @@ const ERROR_MESSAGES = {
   OVERVIEW_UNAVAILABLE: 'Operational analytics are temporarily unavailable.',
   PRODUCTS_UNAVAILABLE: 'Product and stock records are temporarily unavailable.',
   PRODUCT_ADMIN_REQUIRED: 'Only an administrator can change product-master records.',
+  PRODUCT_ACTOR_CHANGED: 'The original staff account must resume this saved product decision. Keep it and sign in with that account.',
   PRODUCT_COMMAND_INVALID: 'Review the product details and enter a specific reason before saving.',
   PRODUCT_COMMAND_UNAVAILABLE: 'The product change could not be recorded safely. Refresh and try again.',
   PRODUCT_VERSION_CONFLICT: 'This product changed after you opened it. Refresh and review the latest record.',
@@ -789,6 +791,17 @@ export function commandAdminProductMasterBff(action, payload, idempotencyKey = c
   return adminRequest('/api/admin/product-master', {
     method: 'POST', body: { action, payload }, csrf: true, idempotency: false, idempotencyKey,
   })
+}
+
+export function sendSavedProductMasterBff(payloadText, idempotencyKey, expectedActorId) {
+  try {
+    validateProductMasterPayloadText(payloadText)
+    productMasterRecoveryKey(expectedActorId)
+    if(typeof idempotencyKey !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idempotencyKey)) throw new Error('PRODUCT_COMMAND_INVALID')
+  } catch {
+    return Promise.resolve({ok:false,code:'PRODUCT_COMMAND_INVALID',error:ERROR_MESSAGES.PRODUCT_COMMAND_INVALID})
+  }
+  return adminRequest('/api/admin/product-master', {method:'POST',bodyText:payloadText,expectedActorId,csrf:true,idempotencyKey})
 }
 
 export function createSupplierBff(payload, idempotencyKey = crypto.randomUUID()) {

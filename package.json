@@ -19,7 +19,7 @@
     "security:history": "node scripts/scan-git-history-secrets.mjs",
     "security:bundle": "node scripts/scan-secrets.mjs dist",
     "security:test": "node scripts/test-secret-scan.mjs",
-    "security:test-admin-session": "node --test tests/admin-bff-refresh-token.test.mjs tests/admin-product-read-taxonomy.test.mjs tests/admin-product-stock-read.test.mjs tests/admin-reference-command.test.mjs tests/admin-reference-handler.test.mjs tests/admin-lot-snapshot-read.test.mjs",
+    "security:test-admin-session": "node --test tests/admin-bff-refresh-token.test.mjs tests/admin-product-read-taxonomy.test.mjs tests/admin-product-stock-read.test.mjs tests/admin-reference-command.test.mjs tests/admin-reference-handler.test.mjs tests/admin-lot-snapshot-read.test.mjs tests/product-master-command-recovery.test.mjs tests/admin-product-master-recovery-client.test.mjs tests/admin-product-master-actor.test.mjs",
     "security:env-contract": "node scripts/verify-deployment-environment-contract.mjs",
     "security:test-env-contract": "node scripts/verify-deployment-environment-contract.mjs --self-test",
     "security:files": "node scripts/verify-tracked-sensitive-files.mjs",
