@@ -1,0 +1,208 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "classification": "Actual owned PostgreSQL17.6 exact installed catalog capture before synthetic commands; not whole revised installer qualification",
+  "providerWrites": false,
+  "privateEvidenceRoot": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc",
+  "case": "oci-imported39",
+  "controllerSession": 91337,
+  "controllerExit": 0,
+  "result": {
+    "owningMap": "MAP-023/018",
+    "scope": "Owned reference creation probe on captured PostgreSQL17.6; base/cold recovery retained; no whole revised installation or provider qualification",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "none",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported39\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 21924,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "catalogs": {
+      "before": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      },
+      "after": {
+        "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+        "bytes": 2396732
+      },
+      "rollback": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      }
+    },
+    "fullCatalogRollback": true,
+    "processStopped": true,
+    "serialSha256": "a67dbf31907d2d4476e662f0fd9fbbeb5a8452aee83cebcb8b29544ed4cf3171"
+  },
+  "independentProcessAbsent": true,
+  "resultSha256": "093c15783fb2bb7f2bf03386d3f2863e9bd282ba3fe0484796952d32aad9ae3a",
+  "preparationSha256": "84c699e1ee3bc679253bcd5a5307d4590a59fb7308f5428d380dd060daf8ab54",
+  "executedPins": [
+    {
+      "file": "tests/sql/protected-reference-creation.sql",
+      "sha256": "6bc835a161da454bdde09b4dc4df131601e663fc67befd27889aed1d9355ee41",
+      "matchingSource": "tests/sql/protected-reference-creation.sql"
+    },
+    {
+      "file": "supabase/prepared/protected_reference_normalization.sql",
+      "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896",
+      "matchingSource": "supabase/prepared/protected_reference_normalization.sql"
+    },
+    {
+      "file": "supabase/prepared/protected_reference_creation.sql",
+      "sha256": "adc0eac81830a83244cc6848e8d0d89b1480c7fd32e88b1b01223e60a4ac2c02",
+      "matchingSource": "supabase/prepared/protected_reference_creation.sql"
+    },
+    {
+      "file": "scripts/prepare-reference-normalization-fixture.mjs",
+      "sha256": "fd2e77da27514e662a1fbb2108f08c02899ae27d0ac3bf68e38af26b1c38cbac",
+      "matchingSource": "scripts/prepare-reference-normalization-fixture.mjs"
+    },
+    {
+      "file": "scripts/prepare-imported-provider-fixture.mjs",
+      "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0",
+      "matchingSource": "scripts/prepare-imported-provider-fixture.mjs"
+    },
+    {
+      "file": "scripts/reference-metadata-frame.mjs",
+      "sha256": "dfce27fe0f73ba5b13d8923956e319e56ea6d1114d5609c43f55cc8f549b113e",
+      "matchingSource": "docs/acceptance/sources/reference-metadata39/reference-metadata-frame.mjs"
+    },
+    {
+      "file": "scripts/run-reference-normalization-fixture.mjs",
+      "sha256": "b8ddda72cbcf4f2e705f4f0c74e988572f5cfe028f3c39af783350b3e932342b",
+      "matchingSource": "docs/acceptance/sources/reference-metadata39/run-reference-normalization-fixture.mjs"
+    }
+  ],
+  "stagedPins": [
+    {
+      "file": "reference-normalization-test.sql",
+      "sha256": "6bc835a161da454bdde09b4dc4df131601e663fc67befd27889aed1d9355ee41"
+    },
+    {
+      "file": "reference-metadata.sql",
+      "sha256": "10b5ebadfbb099ad8d3cbc624220b731ec49ddbd9f2c855412f922631d277ceb"
+    },
+    {
+      "file": "reference-normalization-install.sql",
+      "sha256": "ed468dba4889496bfcd45255b8571ff1e05bea42e9a56f4374658fc063d92fb3"
+    },
+    {
+      "file": "init.sh",
+      "sha256": "66eb96d0d8b4afb5f56f84a2bc0be65ec1af8d4c3421bab3fd8d736b2f6e78e5"
+    },
+    {
+      "file": "image-probe.sh",
+      "sha256": "789710b2e50a570592a0a15964a68a08306faaa6577f8ad83ed208b005cc4edd"
+    }
+  ],
+  "runnerSha256": "fc0cc5975c54185793e9b398a98fe7c387af303e3ebc4199f2ad44a226b36698",
+  "initramfsSha256": "923b38c7e05078fd66b12e5c70e75a35f7b3f80dbb12a5ff0dd435182aaf9097",
+  "metadata": {
+    "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported39\\execution01\\reference-installed-catalog.json",
+    "sha256": "be85021470fc2976e36fbdeff750641d45810c8c30818f06155336a600866df7",
+    "resultFileSha256": "6add15a0c61c85eb91dc8d711ab7bf5398ea9fe9eb2c714c09436916c6203d8b",
+    "querySha256": "10b5ebadfbb099ad8d3cbc624220b731ec49ddbd9f2c855412f922631d277ceb",
+    "canonicalQueryMatches": true,
+    "counts": {
+      "functions": 268,
+      "relations": 163,
+      "types": 344
+    },
+    "observedChangedObjects": {
+      "functions": [
+        "k2_private.clean_reference_name_v1(p_value text)",
+        "k2_private.guard_category_reference_entry_v1()",
+        "k2_private.guard_reference_context_clear_v1()",
+        "k2_private.guard_reference_event_immutable_v1()",
+        "k2_private.guard_reference_insert_v1()",
+        "k2_private.reference_name_key_v1(p_value text)",
+        "k2_private.verify_admin_bff_request(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+        "public.execute_admin_reference_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)"
+      ],
+      "relations": [
+        "k2_private.reference_command_context",
+        "k2_private.reference_events",
+        "public.brands",
+        "public.categories"
+      ],
+      "types": [
+        "k2_private._reference_command_context",
+        "k2_private._reference_events",
+        "k2_private.reference_command_context",
+        "k2_private.reference_events"
+      ]
+    }
+  },
+  "extractionCorrection": {
+    "finding": "Original extraction omitted exact exit0/timedOutfalse/errorabsent guards",
+    "executedSourcesArchived": true,
+    "currentStrongGateAppliedToActualResult": true,
+    "decodedFrameMatchesSavedCatalog": true,
+    "tests": "Three missing-feature red→green, then fourth terminal gate red→green; four pass including eight bad terminal variants",
+    "currentSourcePins": [
+      {
+        "file": "scripts/reference-metadata-frame.mjs",
+        "sha256": "3c603f3b69201573ebc8bf8b6b5f72e020c09630482db5359ff79ac3cb0fc5e2"
+      },
+      {
+        "file": "scripts/run-reference-normalization-fixture.mjs",
+        "sha256": "dd1535e14224000a22a92a94da6f9679c2676631daa2b3385e9ed45c674e496e"
+      },
+      {
+        "file": "scripts/prepare-reference-normalization-fixture.mjs",
+        "sha256": "fd2e77da27514e662a1fbb2108f08c02899ae27d0ac3bf68e38af26b1c38cbac"
+      },
+      {
+        "file": "tests/reference-metadata-frame.test.mjs",
+        "sha256": "be30881a60b12307b412f193b0a40ca48105754c648cf5743c651fdab517b39b"
+      }
+    ]
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "session": 1016,
+    "exit": 0,
+    "sessionReferenceTests": 19,
+    "failures": 0,
+    "routeControlGaps": 0
+  },
+  "limitations": [
+    "Actual metadata capture is not yet a reviewed semantic delta contract or composition into guarded fresh/replay/drift/conservation installer",
+    "Inherited after-catalog remains accepted pre-reference base; distinct reference-installed capture is the new catalog",
+    "Synthetic creation witness is not genuine Auth/PostgREST/BFF/browser acceptance",
+    "Disposable cold reconstruction is not populated data-retaining production recovery",
+    "No provider/production/route activation or physical acceptance"
+  ],
+  "nextAction": "MAP-018: constrain exact metadata delta to the accepted reference design, compose the two pinned fragments into the existing guarded installer and qualify fresh/replay/drift/authority/rows/sequences/recovery; then editor and genuine creation-to-paired-Save.",
+  "recovery": "Revert only opt-in metadata capture/extractor/test files; retain actual39 and archived executed tool versions. No provider rollback; use fresh successors only."
+}

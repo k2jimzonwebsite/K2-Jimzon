@@ -18,6 +18,8 @@ const ordering = process.argv.includes('--ordering')
 const orderingGreen = process.argv.includes('--ordering-green')
 assert.ok(!ordering || phase === 'concurrency' && !extended)
 assert.ok(!orderingGreen || ordering)
+const captureMetadata = process.argv.includes('--capture-metadata')
+assert.ok(!captureMetadata || mode === 'green' && phase === 'creation')
 const target = path.resolve(root, caseName)
 assert.equal(path.dirname(target), path.resolve(root))
 assert.ok(!fs.existsSync(target), 'Fresh owned fixture required; never reuse a prior case')
@@ -44,6 +46,11 @@ const sql = fs.readFileSync(testFile, 'utf8')
 const stagedTest = phase === 'concurrency' ? 'reference-concurrency-test.sh' : 'reference-normalization-test.sql'
 fs.writeFileSync(path.join(stage, stagedTest), sql, { flag: 'wx' })
 const added = [stagedTest]
+if (captureMetadata) {
+  // Reuse the exact full catalog query already staged by the canonical builder.
+  fs.copyFileSync(path.join(stage,'race-catalog.sql'),path.join(stage,'reference-metadata.sql'),fs.constants.COPYFILE_EXCL)
+  added.push('reference-metadata.sql')
+}
 if (phase === 'concurrency') {
   fs.copyFileSync('tests/sql/protected-reference-concurrency-setup.sql',path.join(stage,'reference-concurrency-setup.sql'),fs.constants.COPYFILE_EXCL)
   added.push('reference-concurrency-setup.sql')
@@ -73,7 +80,9 @@ probe = probe.slice(0, raceStart) + probe.slice(raceEnd)
 const anchor = 'echo K2_ALL88_COMMITTED_ORIGINAL_PROJECTIONS_OK\n'
 assert.equal(probe.split(anchor).length, 2)
 const marker = `K2_REFERENCE_${phase.toUpperCase()}`
-const tests = (installs.length ? `${command('reference-normalization-install.sql')}\n` : '') + (mode === 'red'
+const metadataCapture = captureMetadata
+  ? `${command('reference-metadata.sql')} > /tmp/k2-reference-metadata.json\necho K2_REFERENCE_METADATA_BEGIN\n/bin/busybox base64 /tmp/k2-reference-metadata.json\necho K2_REFERENCE_METADATA_END\n` : ''
+const tests = (installs.length ? `${command('reference-normalization-install.sql')}\n` : '') + metadataCapture + (mode === 'red'
   ? `set +e\n${command('reference-normalization-test.sql')} > /tmp/reference-normalization.log 2>&1\nreference_status=$?\nset -e\ncat /tmp/reference-normalization.log\n[ "$reference_status" -eq 3 ]\ngrep -q ${marker}_MISSING /tmp/reference-normalization.log\necho ${marker}_EXPECTED_RED_OK\n`
   : phase === 'concurrency' ? `${ordering ? `K2_REFERENCE_ORDERING_EXPECTATION=${orderingGreen ? 'green' : 'red'} ` : extended ? 'K2_REFERENCE_SCHEDULE_SET=extended ' : ''}/bin/sh /tmp/reference-concurrency-test.sh\n`
     : `${command('reference-normalization-test.sql')}\n`)
@@ -103,7 +112,8 @@ assert.equal(runner.split(oldScope).length, 2)
 runner = runner.replace(oldScope, `Owned reference ${phase} probe on captured PostgreSQL17.6; base/cold recovery retained; no whole revised installation or provider qualification`)
 fs.writeFileSync(path.join(target, 'runner-source.mjs'), runner, { flag: 'wx' })
 sources.push('scripts/prepare-reference-normalization-fixture.mjs', 'scripts/prepare-imported-provider-fixture.mjs')
-const receipt = { owningMap: 'MAP-018', idea: 'IDEA-20261010-06', case: caseName, mode, phase, extended, ordering, orderingGreen,
+if (captureMetadata) sources.push('scripts/reference-metadata-frame.mjs','scripts/run-reference-normalization-fixture.mjs')
+const receipt = { owningMap: 'MAP-018', idea: 'IDEA-20261010-06', case: caseName, mode, phase, extended, ordering, orderingGreen, captureMetadata,
   scope: `Owned captured PostgreSQL17.6 ${phase} probe, not whole revised installation qualification`,
   providerWrites: false, sources: sources.map(file => ({ file, sha256: sha(fs.readFileSync(file)) })),
   runnerSha256: sha(runner),
