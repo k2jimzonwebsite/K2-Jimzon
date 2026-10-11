@@ -1,0 +1,150 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "classification": "Six actual owned PostgreSQL17.6 holder/waiter schedules; synthetic signer and actors",
+  "providerWrites": false,
+  "privateEvidenceRoot": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc",
+  "case": "oci-imported33",
+  "session": 77351,
+  "controllerExit": 0,
+  "pid": 11492,
+  "vmExit": 0,
+  "timedOut": false,
+  "processStopped": true,
+  "fullCatalogRollback": true,
+  "catalogs": {
+    "before": {
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+      "bytes": 1337443
+    },
+    "after": {
+      "sha256": "f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a",
+      "bytes": 2396732
+    },
+    "rollback": {
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+      "bytes": 1337443
+    }
+  },
+  "serialSha256": "3ba5360a6d7efb96e4b6603f8e9d28f640155eadeea0da80750d0d1c404fa7eb",
+  "resultSha256": "02582d0052e024d33c6c4a6e3e47b62c9f73df537bfb1fbd205c4853699fca0b",
+  "preparationSha256": "d3fe83a7ec2193f939ede8bb558be5e596da0adb1e01196379d6a18caa66b681",
+  "sourcePins": [
+    {
+      "file": "tests/native/protected-reference-concurrency.sh",
+      "sha256": "9d065b0ecb668c12a5484395d8a726fa5b7f0c181ea7c59eda9fddd436bf1063"
+    },
+    {
+      "file": "tests/sql/protected-reference-concurrency-setup.sql",
+      "sha256": "933bb22a297db3418aeb3eb91bb00537e00ddd15dc441aa1a1b9db3b34791e44"
+    },
+    {
+      "file": "supabase/prepared/protected_reference_normalization.sql",
+      "sha256": "20a588aa2f4ef349c9ac544747e1dd551a0aace68a761fb518dbe97499cf5126"
+    },
+    {
+      "file": "supabase/prepared/protected_reference_creation.sql",
+      "sha256": "0f1babb607e9d511659910478c923b0c7abc8dc90f0d6c5a17b10921469e4cfe"
+    },
+    {
+      "file": "scripts/prepare-reference-normalization-fixture.mjs",
+      "sha256": "961225e8720422da8262aa0ba2598e80b50823b653ba7d48639441a429f2cb64"
+    },
+    {
+      "file": "scripts/prepare-imported-provider-fixture.mjs",
+      "sha256": "eef614a6bd91b621efd6d9e53f991f9e11f3fce605181e8da2f46bd194c3f2d0"
+    }
+  ],
+  "stagedPins": [
+    {
+      "file": "reference-concurrency-test.sh",
+      "sha256": "9d065b0ecb668c12a5484395d8a726fa5b7f0c181ea7c59eda9fddd436bf1063"
+    },
+    {
+      "file": "reference-concurrency-setup.sql",
+      "sha256": "933bb22a297db3418aeb3eb91bb00537e00ddd15dc441aa1a1b9db3b34791e44"
+    },
+    {
+      "file": "reference-normalization-install.sql",
+      "sha256": "a72e74100c85c77e5e3debb76d8fece8831db2dba2e576e807595511762d47e1"
+    },
+    {
+      "file": "init.sh",
+      "sha256": "bf541acb8856cf5a57932c2462d110a45bf69db1551c9347e59c9b5c962b54e2"
+    },
+    {
+      "file": "image-probe.sh",
+      "sha256": "effa844120d54d4e277c1e9e967f7f08062dfd2530ce2c3538c9cc95cb108698"
+    }
+  ],
+  "runnerSha256": "33c94d801de4fe97f8e1021e939d9b89d2ced8bd00591d155924e092bc512fa0",
+  "initramfsSha256": "0ebd5c8921abd93fc609ecbf46f87570f7394bbce1cd526971a69d675d4d5253",
+  "schedules": [
+    {
+      "name": "brand_commit",
+      "marker": "K2_REFERENCE_SCHEDULE_brand_commit_OK",
+      "count": 1,
+      "wait": "Uncommitted competing identity transactionid"
+    },
+    {
+      "name": "brand_rollback",
+      "marker": "K2_REFERENCE_SCHEDULE_brand_rollback_OK",
+      "count": 1,
+      "wait": "Uncommitted competing identity transactionid"
+    },
+    {
+      "name": "parent_commit",
+      "marker": "K2_REFERENCE_SCHEDULE_parent_commit_OK",
+      "count": 1,
+      "wait": "Exact category-policy advisory namespace/resource objsubid2"
+    },
+    {
+      "name": "parent_rollback",
+      "marker": "K2_REFERENCE_SCHEDULE_parent_rollback_OK",
+      "count": 1,
+      "wait": "Exact category-policy advisory namespace/resource objsubid2"
+    },
+    {
+      "name": "lock_expiry",
+      "marker": "K2_REFERENCE_SCHEDULE_lock_expiry_OK",
+      "count": 1,
+      "wait": "Uncommitted competing identity transactionid"
+    },
+    {
+      "name": "statement_expiry",
+      "marker": "K2_REFERENCE_SCHEDULE_statement_expiry_OK",
+      "count": 1,
+      "wait": "Uncommitted competing identity transactionid"
+    }
+  ],
+  "behavior": [
+    "Committed independent brand insertion is reused by signed waiter",
+    "Rolled-back independent brand insertion lets signed waiter create",
+    "Ordinary Staff parent deletion holds exclusive entry; signed child waiter rechecks missing parent after commit and refuses22023",
+    "Rolled-back parent deletion lets signed child waiter create after fresh hierarchy validation",
+    "Actual waiting unique insertion expires55P03 under armed2s lock timeout",
+    "Actual waiting unique insertion expires57014 under armed500ms statement timeout",
+    "Three successful command events/receipts, cleared context and no failed-command business rows"
+  ],
+  "development": {
+    "command": "npm run verify:development",
+    "session": 39756,
+    "exit": 0,
+    "sessionReferenceTests": 19,
+    "failures": 0,
+    "routeControlGaps": 0
+  },
+  "independentStop": {
+    "command": "Get-Process -Id 11492",
+    "absent": true
+  },
+  "limitations": [
+    "No same-key holder/waiter or category reparent schedule yet",
+    "No genuine Auth/PostgREST/BFF/browser proof",
+    "Inherited after-catalog is pre-reference accepted base; no exact new metadata or whole revised installer conservation/replay/drift proof",
+    "Cold baseline reconstruction is disposable recovery, not populated data-retaining production recovery",
+    "No provider change, route activation, deployment or real-host/physical acceptance"
+  ],
+  "nextAction": "MAP-018: remaining same-key/reparent/authority/new metadata and affected installer qualification, then existing editor/durable recovery/Secure Sheet and genuine creation-to-paired-Save chain.",
+  "recovery": "Revert only this concurrency test/setup and existing fixture opt-in; retain actual33 and previous failures/receipts. No provider rollback; fresh successors only."
+}
