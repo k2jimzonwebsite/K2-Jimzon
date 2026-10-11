@@ -1,0 +1,334 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261011-01",
+  "case": "oci-imported53",
+  "privateCase": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53",
+  "providerWrites": false,
+  "controllerSession": 14597,
+  "controllerExit": 0,
+  "result": {
+    "owningMap": "MAP-023/018",
+    "scope": "Complete guarded10s envelope/fresh/exact replay/cold archive recovery on actual local postgres target; provider physical/locale/project/host qualification separate",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "none",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 25368,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "catalogs": {
+      "before": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      },
+      "after": {
+        "sha256": "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667",
+        "bytes": 2428955
+      },
+      "rollback": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      },
+      "calibrated": {
+        "sha256": "f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b",
+        "bytes": 2435014
+      }
+    },
+    "fullCatalogRollback": true,
+    "processStopped": true,
+    "serialSha256": "4195bfd647319326b6523a87ed39936bcee1850a4a5b90a238c5ec038fe2a86d"
+  },
+  "manifest": {
+    "owningMap": "MAP-018",
+    "idea": "IDEA-20261011-01",
+    "case": "oci-imported53",
+    "providerWrites": false,
+    "prepared": true,
+    "nativeVerified": false,
+    "prefixSha256": "267c50095d12e6a7e20e29e4df1e671fd3e3996f5a7f5dd865e2d90265b736fb",
+    "sourcePins": {
+      "supabase/prepared/admin_product_stock_read.sql": "ccd55d177244c82a693cbeedf779611050e48aa3ba4f7fc12909450341a75db3",
+      "scripts/prepare-admin-stock-calibration-fixture.mjs": "d9de729c08b789e9f96022398395b5461e40a5cc9951e636a4a51bcf2dfc8ad8"
+    },
+    "overlaySha256": "3fb0c89e50f5625fb237b15951701255b37d59d37b92fc6e8e31f7fee0995fa6",
+    "files": {
+      "admin-stock-calibrate.sql": "f159b37e132292cad8e32e5369c86ded83255428065871533c47d7cdc2f1cea6",
+      "init.sh": "3ae90432a1a2d5f3d80e51fad67547d188dd73e5f2f7a9c2582e10a00f1d80a0",
+      "image-probe.sh": "743cf383aa56d376c918e7d9c8c22d5e4276e969e565ee819327bf20d6627eaf"
+    },
+    "runnerSha256": "e64e30a79b4bffb12c6dcff10d45b5cda5a3d841720639d7dd69b298da495af8",
+    "scope": "Exact two-read-function rollback calibration on accepted base; new full installation not yet composed or qualified"
+  },
+  "composition": {
+    "owningMap": "MAP-018",
+    "idea": "IDEA-20261010-08",
+    "providerWrites": false,
+    "scope": "Prepared captured-authority fixture; native execution and provider acceptance unverified",
+    "sources": [
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\preparer-source.mjs",
+        "sha256": "2f6942385816d838cdc61fe628b6d2e96c08b1df9f4dc302027d3cd5d7d1325c"
+      },
+      {
+        "file": "supabase/prepared/imported_draft_continuation.sql",
+        "sha256": "26ec4db009173aef02e3954504c05991937fb4d503769fc5133f3ebaa999d52a"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\execution01\\after-catalog.json",
+        "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\imported-draft-025b3682-3b76-465e-bd2a-5c2c0c597314\\combined-imported-install.sql",
+        "sha256": "abc2abd5d685913d07508bd704aa1ecc0a29c6b0bae0f870cb47cb5ca82f85d5"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\before-catalog.json",
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-baseline14\\execution01\\after-catalog.json",
+        "sha256": "abb347eb1c28ff7e42368d97a1aca7f7dea6b71a38c2abf2b3b93d6794917c62"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-envelope12\\guarded-package.json",
+        "sha256": "fa0ef714dd5d3582a8b99a57faa1cef1cb4ad0a56fffbfeee0442d3d8692a55b"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\authority-inventory.json",
+        "sha256": "52bcd96910e4b32dd195e375bcbbef468471d1c166095d3d1b11d29e48ecde7a"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-admission-20261008\\provider-managed-ddl-authority.json",
+        "sha256": "1f6dac40000249a40a7ad45fa5b71f7cbf348f14144f69f1768282e311a3b06a"
+      },
+      {
+        "file": "scripts/prepare-imported-provider-fixture.mjs",
+        "sha256": "5fbf18263a0b0523a50fe26b0c0b655cd56bbc3fea41ceb460ccddc8794f60b8"
+      },
+      {
+        "file": "docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs",
+        "sha256": "4b528247a9905f8fb622bf703eb44344efa7f8490652ddbac0c4ef5c2ceb4ed4"
+      },
+      {
+        "file": "supabase/prepared/product_master_version_conflict_transport.sql",
+        "sha256": "ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476"
+      },
+      {
+        "file": "supabase/prepared/customer_tariff_version_conflict_transport.sql",
+        "sha256": "efe76030dfc116ace181492b02d03cacf4a5e7140ecb30141575a6d2ea8ed166"
+      },
+      {
+        "file": "supabase/prepared/category_policy_version_conflict_transport.sql",
+        "sha256": "974b404f066282f001963d8ba7d548c5e137f95f40c57a73d480abeba7abc6b0"
+      },
+      {
+        "file": "supabase/prepared/protected_reference_catalog_delta.json",
+        "sha256": "d482c3e3fd6ca89a95097d24801b9d2dd98a0631449e44739b1758341985d42b"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported39\\execution01\\reference-installed-catalog.json",
+        "sha256": "be85021470fc2976e36fbdeff750641d45810c8c30818f06155336a600866df7"
+      },
+      {
+        "file": "supabase/prepared/protected_reference_normalization.sql",
+        "sha256": "ae8888a727fd92930abad3b1712a088cf288df524ecaee8afca21318e8f9a896"
+      },
+      {
+        "file": "supabase/prepared/protected_reference_creation.sql",
+        "sha256": "adc0eac81830a83244cc6848e8d0d89b1480c7fd32e88b1b01223e60a4ac2c02"
+      },
+      {
+        "file": "scripts/reference-catalog-contract.mjs",
+        "sha256": "8acf5671543000e966d0228e595ee5d22c898e2d92fda8d06e810d6e0e52631b"
+      }
+    ],
+    "transitions": [
+      {
+        "name": "create_product_draft_server",
+        "beforeMd5": "e0ae0726b5d19da69a023eb59bc98722"
+      },
+      {
+        "name": "execute_admin_product_intake_command_v1",
+        "beforeMd5": "d0c8b9094f90c57f1893fca4d4c91806"
+      },
+      {
+        "name": "execute_admin_intake_ai_v1",
+        "beforeMd5": "acde04b0dbcaa3b5c02283c63a185320"
+      }
+    ],
+    "helper": "k2_private.assert_imported_draft_target_v1(p_product_id uuid, p_expected_version bigint)",
+    "expectedAfterSha256": "f623935337292fa37ec80d77e331237c71c40bae670697ea71d8b6f9d2efb81a",
+    "derivedSourceSha256": "cd3084b8b3db3b0e0e7c16f9fd41b15f73fe22cd17ceaaa57d2a3347409eb30b",
+    "references": {
+      "contractPath": "supabase/prepared/protected_reference_catalog_delta.json",
+      "expectedCanonicalSha256": "8a71131773cc4886b678e414b9dd040e76ad0539fc1bfdfdbfadd52266ad9bed",
+      "fragments": [
+        "supabase/prepared/protected_reference_normalization.sql",
+        "supabase/prepared/protected_reference_creation.sql"
+      ],
+      "nativeQualified": false
+    }
+  },
+  "contract": {
+    "version": 1,
+    "owningMap": "MAP-018",
+    "idea": "IDEA-20261011-01",
+    "providerWrites": false,
+    "scope": "Exact native two-function calibration only; full guarded union not composed/qualified",
+    "beforeCanonicalSha256": "8a71131773cc4886b678e414b9dd040e76ad0539fc1bfdfdbfadd52266ad9bed",
+    "afterCanonicalSha256": "98b576aeec6521ecb7825420ab3579f1afdd9d5bd78787c710855c94f7365987",
+    "source": {
+      "file": "supabase/prepared/admin_product_stock_read.sql",
+      "sha256": "ccd55d177244c82a693cbeedf779611050e48aa3ba4f7fc12909450341a75db3"
+    },
+    "functions": {
+      "public.read_admin_lot_snapshot_v1(p_sku text)": "23442a1f3573ff4842a51201bd292df73cfbb37f038c943d5b84c74cb5532292",
+      "public.read_admin_product_stock_v1(p_skus text[])": "e333c26e4b08a8192eeb1500c3674a583cb686f1551627c6f92bfffe34b70480"
+    },
+    "nativeCase": "oci-imported53",
+    "nativeSerialSha256": "4195bfd647319326b6523a87ed39936bcee1850a4a5b90a238c5ec038fe2a86d"
+  },
+  "pins": [
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\stock-calibration.json",
+      "sha256": "52376e75e37645b196321df9b15d8ced6ddac812a4f3807c9d72b8e950633a1e"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\stock-calibration-preparer.mjs",
+      "sha256": "d9de729c08b789e9f96022398395b5461e40a5cc9951e636a4a51bcf2dfc8ad8"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\stock-calibration-overlay.cpio",
+      "sha256": "3fb0c89e50f5625fb237b15951701255b37d59d37b92fc6e8e31f7fee0995fa6"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\imported-composition.json",
+      "sha256": "b166cbbf28afeae20df43ce846b81e06d4cf5f7bb63121d9468faeb469d746e2"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\guarded-package.json",
+      "sha256": "12ec45b2b68e00d25800317bc68d68efff508c86b2067dad057792cf8a9bc6c2"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\preparation.json",
+      "sha256": "1d9c8578e0e10717148add3ccf90f890c42a79ed011d0aa17446d5c57b7b29ec"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\execution01\\result.json",
+      "sha256": "81fa9b19be7abc63841c63b4298ff5a3a08e602e1ab105111858bf332fc14252"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\execution01\\serial.log",
+      "sha256": "4195bfd647319326b6523a87ed39936bcee1850a4a5b90a238c5ec038fe2a86d"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\execution01\\before-catalog.json",
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\execution01\\after-catalog.json",
+      "sha256": "afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\execution01\\rollback-catalog.json",
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\execution01\\calibrated-catalog.json",
+      "sha256": "f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\staging\\k2\\admin-stock-calibrate.sql",
+      "sha256": "f159b37e132292cad8e32e5369c86ded83255428065871533c47d7cdc2f1cea6"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\staging\\k2\\init.sh",
+      "sha256": "3ae90432a1a2d5f3d80e51fad67547d188dd73e5f2f7a9c2582e10a00f1d80a0"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported53\\staging\\k2\\image-probe.sh",
+      "sha256": "743cf383aa56d376c918e7d9c8c22d5e4276e969e565ee819327bf20d6627eaf"
+    }
+  ],
+  "contractPin": {
+    "file": "supabase/prepared/admin_stock_catalog_delta.json",
+    "sha256": "587428f90372bd4cdfb5060ae73bb8cfc18f643684705ec23958c28b5b80cf04"
+  },
+  "observedMarkers": [
+    "K2_ADMIN_STOCK_CALIBRATION_ROLLBACK_OK",
+    "K2_GUARDED_FRESH_REPLAY_OK",
+    "K2_ALL88_COMMITTED_ORIGINAL_PROJECTIONS_OK",
+    "K2_PROTECTED_CONCURRENT_DRIFT_REFUSED_AND_RECOVERED",
+    "K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK",
+    "K2_OCI_GUEST_SUCCESS"
+  ],
+  "review": {
+    "agent": "/root/reference_endpoint_review",
+    "critical": 0,
+    "important": 0,
+    "status": "verified",
+    "scope": "Independent final15artifact/19composition/2source pins, exact two-function bodies/security metadata, unchanged existing functions/other fields, canonical/full rollback, serial projection/cold authority and absentPID. Calibration only;13-fragment/package/stock/provider acceptance open."
+  },
+  "scope": "Exact native two-function calibration only; full guarded union not composed/qualified",
+  "limits": [
+    "No13-fragment guarded installer/fresh/replay/drift/interruption acceptance yet",
+    "Read source/body/ACL and exact two-function delta proven; extra roles/held/clearance/cap/concurrent writer remain active MAP work",
+    "Original88 projection/two sequences and cold catalog authority reconstruction preserved; this is not retained production data recovery",
+    "No provider write/activation/main/release"
+  ],
+  "nextAction": "MAP-018: validate constrained delta and compose both reads into existing guarded package; qualify complete fresh/exact replay/drift/interruption/recovery and remaining stock-role cases",
+  "recovery": "Preserve53 and accepted41/31 archives. Rollback calibration is byte-exact to admitted base; original archive reconstructed. Revert this preparer/calibration contract/receipt only; no provider rollback.",
+  "retirement": {
+    "pid": 25368,
+    "processCount": 0,
+    "chunk": "bdc3ef",
+    "exit": 0
+  },
+  "preparation": {
+    "command": "node scripts/prepare-admin-stock-calibration-fixture.mjs oci-imported53",
+    "session": 48244,
+    "exit": 0,
+    "freshnessRefusal": {
+      "attempt": "oci-imported42",
+      "chunk": "ac3146",
+      "exit": 1,
+      "fixtureMutation": false,
+      "scope": "Existing42–52 retained; guard refused before preparer dispatch"
+    }
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "session": 28550,
+    "exit": 0,
+    "adminSessionChecks": 30,
+    "routeControlGaps": 0
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261011-01",
+  "providerWrites": false,
+  "scope": "Exact native two-function calibration only; full guarded union not composed/qualified",
+  "beforeCanonicalSha256": "8a71131773cc4886b678e414b9dd040e76ad0539fc1bfdfdbfadd52266ad9bed",
+  "afterCanonicalSha256": "98b576aeec6521ecb7825420ab3579f1afdd9d5bd78787c710855c94f7365987",
+  "source": {
+    "file": "supabase/prepared/admin_product_stock_read.sql",
+    "sha256": "ccd55d177244c82a693cbeedf779611050e48aa3ba4f7fc12909450341a75db3"
+  },
+  "functions": {
+    "public.read_admin_lot_snapshot_v1(p_sku text)": "23442a1f3573ff4842a51201bd292df73cfbb37f038c943d5b84c74cb5532292",
+    "public.read_admin_product_stock_v1(p_skus text[])": "e333c26e4b08a8192eeb1500c3674a583cb686f1551627c6f92bfffe34b70480"
+  },
+  "nativeCase": "oci-imported53",
+  "nativeSerialSha256": "4195bfd647319326b6523a87ed39936bcee1850a4a5b90a238c5ec038fe2a86d"
+}
