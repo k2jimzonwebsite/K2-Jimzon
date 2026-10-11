@@ -16,3 +16,15 @@ export function parseStorageMigrationLedger(dump) {
   rows.forEach((row,index) => assert.equal(row.id,index,'Complete consecutive migration ledger required'))
   return rows
 }
+export function qualifyStorageMigrationBoundary(captured, intended, freezeAt) {
+  assert.ok(captured.length > 0)
+  assert.equal(freezeAt,captured.at(-1).name,'Freeze must cover the complete captured ledger')
+  assert.ok(intended.length >= captured.length,'Every captured migration must be available')
+  intended.forEach((row,index) => assert.equal(row.id,index))
+  captured.forEach((row,index) => {
+    assert.equal(row.id,index)
+    assert.equal(intended[index].name,row.name,'Historical migration name changed')
+    assert.equal(intended[index].hash,row.hash,'Historical migration hash changed')
+  })
+  return {freezeAt,capturedCount:captured.length,pending:intended.slice(captured.length).map(({id,name})=>({id,name}))}
+}

@@ -7,9 +7,21 @@ const { validateMigrationHashes } = require('postgres-migrations/dist/validation
   const captured = JSON.parse(fs.readFileSync('/k2-storage-ledger.json'))
   const intended = await loadMigrationFiles('./migrations/tenant')
   const compared = intended.map(row => ({ id:row.id, name:row.name, hash:row.hash, capturedHash:captured[row.id]?.hash, nameMatches:captured[row.id]?.name === row.name }))
-  const mismatch = compared.filter(row => row.hash !== row.capturedHash || !row.nameMatches)
+  const mismatch = compared.filter(row => row.id < captured.length && (row.hash !== row.capturedHash || !row.nameMatches))
   const ahead = captured.filter(row => row.id > intended.at(-1).id).map(row => ({ id:row.id, name:row.name }))
   assert.equal(captured.length,73)
+  if(fs.existsSync('/k2-storage-compatible-audit.json')) {
+    const {qualifyStorageMigrationBoundary}=await import('/k2-storage-ledger.mjs')
+    const {freezeAt}=JSON.parse(fs.readFileSync('/k2-storage-compatible-audit.json'))
+    const boundary=qualifyStorageMigrationBoundary(captured,intended,freezeAt)
+    assert.equal(intended.length,74)
+    assert.equal(mismatch.length,0)
+    assert.deepEqual(boundary.pending,[{id:73,name:'revoke-grants-to-unused-operations'}])
+    validateMigrationHashes(intended.slice(0,captured.length),captured)
+    console.log('K2_STORAGE_MIGRATION_AUDIT '+JSON.stringify({capturedCount:73,imageCount:74,matchingCount:73,mismatch:[],ahead:[],validatorAccepted:true,boundary,compared,scope:'Actual package complete captured migration validation only; freeze configuration prepared, not service startup or database compatibility acceptance'}))
+    console.log('K2_STORAGE_MIGRATION_AUDIT_OK')
+    return
+  }
   assert.equal(intended.length,70)
   assert.deepEqual(mismatch.map(row => row.id),[65])
   assert.equal(mismatch[0].nameMatches,true)

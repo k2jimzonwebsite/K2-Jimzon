@@ -1,0 +1,864 @@
+{
+  "schemaVersion": 1,
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "date": "2026-10-11",
+  "privateCase": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\storage-runtime03",
+  "scope": "Actual no-NIC pinned v1.79.20 package validates every captured migration0–72; service/database startup and configured preservation not accepted",
+  "image": "supabase/storage-api:v1.79.20",
+  "indexDigest": "sha256:b393ac5759a45a934557a150ecdb97157bbdd419e0193e4c5dc5770b9ddd7ee1",
+  "manifestDigest": "sha256:0d40b3dfd686fbcfddb71e4a818722bff1be4026b837f7e70ee8178b41a81456",
+  "configDigest": "sha256:69ee351140c12b328349f766e62e0c4a852889e7740dbb6095a9379e7b392ee0",
+  "release": "https://github.com/supabase/storage/releases/tag/v1.79.20",
+  "layers": [
+    {
+      "name": "00.tar.gz",
+      "digest": "sha256:d0c1d894c237d8192cbcd37e435031ad4eddec173299568a5a05869c2e40dfa3",
+      "size": 3848507,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "01.tar.gz",
+      "digest": "sha256:f0bff0b17bb68064a96d5a58944f5b142d139bc5edd4c5d49a9829c10d2d11c0",
+      "size": 56381122,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "02.tar.gz",
+      "digest": "sha256:bf5074c0b7fa370ccee86be97cc32f28bd11b6a635d247073257fa2433b9f4db",
+      "size": 1261992,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "03.tar.gz",
+      "digest": "sha256:76bc8d85aed0e37eaaec315a081323df5afac399b7528d81cbccf2c69778f0cb",
+      "size": 447,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "04.tar.gz",
+      "digest": "sha256:8039b21a00ac3547a55afca824e00f384e171876547432e52238e4a12fb36fda",
+      "size": 111210925,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "05.tar.gz",
+      "digest": "sha256:0c91f59dd71981a5f95f8cdc233c0d83a5267785023b740a2b0654b5143fc76a",
+      "size": 93,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "06.tar.gz",
+      "digest": "sha256:1acb983d244bf57ce7a11baf3cc0478227d4d4987b4fe4a26e9c959bf8a6e77f",
+      "size": 179257,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "07.tar.gz",
+      "digest": "sha256:2efc28c1557745195b14d8b99c304996d0c903cb0c1224f28e41b2409fc81506",
+      "size": 658,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "08.tar.gz",
+      "digest": "sha256:e28d095408f78e33b6ce4ccee65b7f58875f5bd38dc0668d9c64754396532cf2",
+      "size": 13010102,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "09.tar.gz",
+      "digest": "sha256:fac84ec337c2f22ecd4c72293710c3cbf88cb5493a58f607620883f9366bf148",
+      "size": 45280,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "10.tar.gz",
+      "digest": "sha256:4ef9ded15992b9ba87d5ebd35b777001b130f01ebd6ef0dbcfa8856bdd6aeea0",
+      "size": 53758400,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "11.tar.gz",
+      "digest": "sha256:57e9e25982a3742337d093cf84b9430d8017da31e838675009437cb1791a766d",
+      "size": 1987981,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "12.tar.gz",
+      "digest": "sha256:19d193252e7800afcb6d434f990626f8a4f1d35d9cce37d408519ef27c38e8f7",
+      "size": 588,
+      "reusedVerifiedLocalBlob": false
+    },
+    {
+      "name": "13.tar.gz",
+      "digest": "sha256:27913f2e112170ac7ecaba322e23bc7d6dd57c0fc25f857bf4c7c852bce999db",
+      "size": 271,
+      "reusedVerifiedLocalBlob": false
+    }
+  ],
+  "pins": {
+    "config.json": "69ee351140c12b328349f766e62e0c4a852889e7740dbb6095a9379e7b392ee0",
+    "index.json": "b393ac5759a45a934557a150ecdb97157bbdd419e0193e4c5dc5770b9ddd7ee1",
+    "manifest.json": "0d40b3dfd686fbcfddb71e4a818722bff1be4026b837f7e70ee8178b41a81456",
+    "migration65-history.json": "36b3c6b850d9c9ee1f315b4759240a04867a863f0035ae72dd27912a06ac21f4",
+    "migration65-official.sql": "426ed592dbded48288f4c619a6d01ea7f76ea5031b4378ff5a9c8fcd2b9667f1",
+    "release.json": "b65569d0047750b7d462086c6210d2bc453787b3010569497889d3824cbe6019",
+    "acquisition.json": "e8e8f285251cbc7bfa5be5fc54a32badf43666d8e4fc381710ac0c4259712aa0",
+    "executed-acquisition.py": "143e49fe9b84978495012b6b95e3765176e0653545a5e7aeff10ca81373ce13f"
+  },
+  "providerWrites": false,
+  "sourceComparison": {
+    "case": "storage-source01",
+    "archiveSha256": "9632be97d3a724121787c0473c0aafb3043db210edadb899e531e5d32f55ddb8",
+    "comparisonSha256": "8c5e3d9f768504a4cc2275ca9ab51b01f1abd1ebf8b26248e1a50a9ebc2e8eec",
+    "sharedTenantHashesMatched": 72,
+    "laterMigration73": true
+  },
+  "rejectedLatest": {
+    "case": "storage-runtime02",
+    "image": "supabase/storage-api:v1.81.0",
+    "manifestDigest": "sha256:92c5fe87ba5291915d0c21ca530ece9a58e13cc76a36a6c84fc69121a8dde799",
+    "historicalMismatchIds": [
+      2,
+      62
+    ],
+    "acquisitionSha256": "4cf800b99d31cb0e7842640e3d8efb6a99b24a6551f5ee03c32e7e760033d9e6",
+    "sourceSha256": "c65ca34512537c7ecd56f9ffec39603583a6994970e054506c1214a1352425b8"
+  },
+  "preparedSettings": {
+    "DB_MIGRATIONS_FREEZE_AT": "drop-bucketid-objname-index",
+    "DB_ALLOW_MIGRATION_REFRESH": "false",
+    "DB_INSTALL_ROLES": "false",
+    "note": "Not applied; must validate complete captured0â€“72. Migration73 is later and must not run during preservation qualification."
+  },
+  "verification": {
+    "boundaryRed": 5,
+    "boundaryGreen": 5,
+    "parserGreen": 7,
+    "layoutGreen": 5,
+    "focusedTotal": 17,
+    "native": "storage-native06/controller0/QEMU0/validatorAccepted73/PID23956absent",
+    "supersededDevelopment": {
+      "session": 66936,
+      "exit": 0,
+      "reason": "Predates diagnostic comparison correction",
+      "logSha256": "a689427acde8e7e8277112219fa5e92073eb34c98de6100959cb61dcf9473514"
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "session": 80721,
+      "exit": 0,
+      "secretScanFiles": 2136,
+      "routeControlGaps": 0,
+      "case": "storage-native06",
+      "preservedLog": "development.log",
+      "sha256": "09a26b17e57f2a0090aef8f4e31fd08ea41c69df19f4db447c27d15c2b37ac6a"
+    },
+    "review": {
+      "reviewer": "/root/reference_endpoint_review",
+      "critical": 0,
+      "important": 0,
+      "sourceAndRawPinsMatched": true,
+      "bothPidsAbsent": true,
+      "scope": "Complete migration ledger validation only, not startup/database compatibility"
+    }
+  },
+  "next": "Do not repeat acquisition or package migration validation. Qualify real startup with exact prepared freeze72/hash-refreshfalse/installrolesfalse settings, compare original Storage/public/private/schema/sequence/authority state and complete recovery in fresh genuine full Admin fixture, then binary4MiB transport and actual upload/Draft-to-listing acceptance.",
+  "archiveInspections": {
+    "storage-runtime02": {
+      "archiveEntries": 102627,
+      "unsafeNames": 0,
+      "whiteoutMarkers": 45,
+      "sharedTenantMatchCount": 70,
+      "mismatch": [
+        {
+          "id": 2,
+          "name": "0002-storage-schema.sql",
+          "hash": "cdc19a79b298ce37cc730487821a1a7b06b98105",
+          "capturedHash": "f6a1fa2c93cbcd16d4e487b362e45fca157a8dbd"
+        },
+        {
+          "id": 62,
+          "name": "0062-object-versioning-core.sql",
+          "hash": "c6567e688f8c4a76887e7c1b117b2d58f4feccba",
+          "capturedHash": "0b855f00ff3be0bfca91efee02a9858912491a9a"
+        }
+      ],
+      "laterIds": [
+        73,
+        74
+      ],
+      "imageSourcePins": {
+        "app/node_modules/postgres-migrations/dist/migration-file.js": "09d01c23bd5ad26b6e8a9d931875eee99880caae87470b3e304d6207f677bcee",
+        "app/node_modules/postgres-migrations/dist/validation.js": "0bb4de18ac3bdafafe54f19930b30dd9e0cc81a959cda3df15160433d263bba1",
+        "app/dist/config.js": "a4f8a64cd521d734f147b3c275eebea38f6a13ef76690dcb97c0abbb67aad768",
+        "app/dist/internal/database/migrations/files.js": "5bec0d85ae712e6ea503527f827e07f33a4db0aa352c969c09b025ec4644b41e",
+        "app/dist/internal/database/migrations/migrate.js": "7a8737c2775fa5065d68bc7033d543e7c260222c66be59132bc89a35372a27a4",
+        "app/dist/start/server.js": "a1ff4ed14a8046ff5e48bcb290d511422bf590a35766201800d02ef690b4569a"
+      },
+      "scope": "Read-only tar inspection; no extraction or execution"
+    },
+    "storage-runtime03": {
+      "archiveEntries": 82262,
+      "unsafeNames": 0,
+      "whiteoutMarkers": 45,
+      "sharedTenantMatchCount": 72,
+      "mismatch": [],
+      "laterIds": [
+        73
+      ],
+      "imageSourcePins": {
+        "app/node_modules/postgres-migrations/dist/migration-file.js": "09d01c23bd5ad26b6e8a9d931875eee99880caae87470b3e304d6207f677bcee",
+        "app/node_modules/postgres-migrations/dist/validation.js": "0bb4de18ac3bdafafe54f19930b30dd9e0cc81a959cda3df15160433d263bba1",
+        "app/dist/config.js": "4f497a1cdddc8fdbcbe08f79b7c0aa508f0dad403c4ebf772c8d33e1207a7025",
+        "app/dist/internal/database/migrations/files.js": "5bec0d85ae712e6ea503527f827e07f33a4db0aa352c969c09b025ec4644b41e",
+        "app/dist/internal/database/migrations/migrate.js": "d1945dcc75cd406b3980ad9cf2f2b153218464198f38d251dfe72af38f01f7c3",
+        "app/dist/start/server.js": "dec901c5204545981131d132456b9af3268b5937f23b5317845f06ca5af284cc"
+      },
+      "scope": "Read-only tar inspection; no extraction or execution"
+    }
+  },
+  "cases": [
+    {
+      "case": "storage-native05",
+      "native": {
+        "owningMap": "MAP-018",
+        "idea": "IDEA-20261009-11",
+        "scope": "Actual image migration loading/hash validation against immutable captured ledger; no database connection/startup/writes",
+        "providerWrites": false,
+        "databaseChanges": false,
+        "nic": "none",
+        "imageTag": "v1.79.20",
+        "packageVersion": "1.11.2",
+        "manifestDigest": "sha256:0d40b3dfd686fbcfddb71e4a818722bff1be4026b837f7e70ee8178b41a81456",
+        "unpackerSha256": "b51c267ec394499e42c6fde47f240b7b7dba57ea49df0b5acd304378b82a3b71",
+        "guestInitSha256": "3e55a9e7ada0d517bc2362fd96792fbc39af06ad2888c2bcb5d9a29c227ad5a5",
+        "sourceSha256": "656f7cf28f0ed90ae3c4227fec7a8c8550b2fc2dc761a64ec2c840295bd8aa15",
+        "layoutSourceSha256": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+        "baseInitramfsSha256": "1f878a079d9c2260765e89b227b16f06747965deb612f2cc265b28941561a992",
+        "capturedRestoreSha256": "57c1cf8abe1b36ba078d125751cf91b01c0a46faf9ca0a5be9cd561e60bd9637",
+        "ledgerSourceSha256": "37216053fcea60fa6fbc723c93cbc2ff01a9e5a313e39b29fe95d6b645d5e0f6",
+        "auditSourceSha256": "f960c379738c9a387a2f0648e8a99f70babed30e28218691e458682d35eec09f",
+        "nodeVersion": "24.21.0",
+        "pid": 2776,
+        "exit": 0,
+        "processStopped": true,
+        "nativeAdmission": false,
+        "migrationAudit": null,
+        "migrationAuditVerified": false,
+        "serialSha256": "9c36e97109cf1da6968f0c569eeba3e7bb61e67de3c8a1e31bf680fd8842fd9c"
+      },
+      "controllerExit": 1,
+      "independentProcessAbsent": true,
+      "hashes": {
+        "result.json": "5046cbb66a87dfcd51d15917efdc1825133888f8eda5458bfe3911b876414651",
+        "serial.log": "9c36e97109cf1da6968f0c569eeba3e7bb61e67de3c8a1e31bf680fd8842fd9c",
+        "stderr.log": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc",
+        "launch.json": "e4557505234b9d4d8df37070ca579fc2453c22b1b81d31348e9438fc59e16eb4",
+        "executed-source.mjs": "656f7cf28f0ed90ae3c4227fec7a8c8550b2fc2dc761a64ec2c840295bd8aa15",
+        "executed-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+        "executed-ledger.mjs": "37216053fcea60fa6fbc723c93cbc2ff01a9e5a313e39b29fe95d6b645d5e0f6",
+        "staging/storage/ledger.json": "eb27aaec66baf0a9f25fcd193c4e4f17d1767da80bb35ed5c6a44c8f02d15c27",
+        "staging/storage/migration-audit.cjs": "f960c379738c9a387a2f0648e8a99f70babed30e28218691e458682d35eec09f",
+        "staging/storage/ledger.mjs": "37216053fcea60fa6fbc723c93cbc2ff01a9e5a313e39b29fe95d6b645d5e0f6",
+        "staging/storage/compatible-audit.json": "e321ddb294ee63726f828e82072f0e93e7cd00e12b5cad274ab18298cbb7cb12",
+        "staging/storage/init.sh": "3e55a9e7ada0d517bc2362fd96792fbc39af06ad2888c2bcb5d9a29c227ad5a5",
+        "superseded-development.log": "a689427acde8e7e8277112219fa5e92073eb34c98de6100959cb61dcf9473514"
+      },
+      "reason": "Diagnostic counted pending73 as a historical mismatch; actual1!==0/no-NIC guest shutdown preserved. Corrected only comparison subset; all captured0–72 validation retained."
+    },
+    {
+      "case": "storage-native06",
+      "native": {
+        "owningMap": "MAP-018",
+        "idea": "IDEA-20261009-11",
+        "scope": "Actual image migration loading/hash validation against immutable captured ledger; no database connection/startup/writes",
+        "providerWrites": false,
+        "databaseChanges": false,
+        "nic": "none",
+        "imageTag": "v1.79.20",
+        "packageVersion": "1.11.2",
+        "manifestDigest": "sha256:0d40b3dfd686fbcfddb71e4a818722bff1be4026b837f7e70ee8178b41a81456",
+        "unpackerSha256": "b51c267ec394499e42c6fde47f240b7b7dba57ea49df0b5acd304378b82a3b71",
+        "guestInitSha256": "3e55a9e7ada0d517bc2362fd96792fbc39af06ad2888c2bcb5d9a29c227ad5a5",
+        "sourceSha256": "656f7cf28f0ed90ae3c4227fec7a8c8550b2fc2dc761a64ec2c840295bd8aa15",
+        "layoutSourceSha256": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+        "baseInitramfsSha256": "1f878a079d9c2260765e89b227b16f06747965deb612f2cc265b28941561a992",
+        "capturedRestoreSha256": "57c1cf8abe1b36ba078d125751cf91b01c0a46faf9ca0a5be9cd561e60bd9637",
+        "ledgerSourceSha256": "37216053fcea60fa6fbc723c93cbc2ff01a9e5a313e39b29fe95d6b645d5e0f6",
+        "auditSourceSha256": "f83fbdb8438bd292b739f2746096f3afc258aa48957b1b3fdeedfe8696a94920",
+        "nodeVersion": "24.21.0",
+        "pid": 23956,
+        "exit": 0,
+        "processStopped": true,
+        "nativeAdmission": true,
+        "migrationAudit": {
+          "capturedCount": 73,
+          "imageCount": 74,
+          "matchingCount": 73,
+          "mismatch": [],
+          "ahead": [],
+          "validatorAccepted": true,
+          "boundary": {
+            "freezeAt": "drop-bucketid-objname-index",
+            "capturedCount": 73,
+            "pending": [
+              {
+                "id": 73,
+                "name": "revoke-grants-to-unused-operations"
+              }
+            ]
+          },
+          "compared": [
+            {
+              "id": 0,
+              "name": "create-migrations-table",
+              "hash": "e18db593bcde2aca2a408c4d1100f6abba2195df",
+              "capturedHash": "e18db593bcde2aca2a408c4d1100f6abba2195df",
+              "nameMatches": true
+            },
+            {
+              "id": 1,
+              "name": "initialmigration",
+              "hash": "6ab16121fbaa08bbd11b712d05f358f9b555d777",
+              "capturedHash": "6ab16121fbaa08bbd11b712d05f358f9b555d777",
+              "nameMatches": true
+            },
+            {
+              "id": 2,
+              "name": "storage-schema",
+              "hash": "f6a1fa2c93cbcd16d4e487b362e45fca157a8dbd",
+              "capturedHash": "f6a1fa2c93cbcd16d4e487b362e45fca157a8dbd",
+              "nameMatches": true
+            },
+            {
+              "id": 3,
+              "name": "pathtoken-column",
+              "hash": "2cb1b0004b817b29d5b0a971af16bafeede4b70d",
+              "capturedHash": "2cb1b0004b817b29d5b0a971af16bafeede4b70d",
+              "nameMatches": true
+            },
+            {
+              "id": 4,
+              "name": "add-migrations-rls",
+              "hash": "427c5b63fe1c5937495d9c635c263ee7a5905058",
+              "capturedHash": "427c5b63fe1c5937495d9c635c263ee7a5905058",
+              "nameMatches": true
+            },
+            {
+              "id": 5,
+              "name": "add-size-functions",
+              "hash": "79e081a1455b63666c1294a440f8ad4b1e6a7f84",
+              "capturedHash": "79e081a1455b63666c1294a440f8ad4b1e6a7f84",
+              "nameMatches": true
+            },
+            {
+              "id": 6,
+              "name": "change-column-name-in-get-size",
+              "hash": "ded78e2f1b5d7e616117897e6443a925965b30d2",
+              "capturedHash": "ded78e2f1b5d7e616117897e6443a925965b30d2",
+              "nameMatches": true
+            },
+            {
+              "id": 7,
+              "name": "add-rls-to-buckets",
+              "hash": "e7e7f86adbc51049f341dfe8d30256c1abca17aa",
+              "capturedHash": "e7e7f86adbc51049f341dfe8d30256c1abca17aa",
+              "nameMatches": true
+            },
+            {
+              "id": 8,
+              "name": "add-public-to-buckets",
+              "hash": "fd670db39ed65f9d08b01db09d6202503ca2bab3",
+              "capturedHash": "fd670db39ed65f9d08b01db09d6202503ca2bab3",
+              "nameMatches": true
+            },
+            {
+              "id": 9,
+              "name": "fix-search-function",
+              "hash": "af597a1b590c70519b464a4ab3be54490712796b",
+              "capturedHash": "af597a1b590c70519b464a4ab3be54490712796b",
+              "nameMatches": true
+            },
+            {
+              "id": 10,
+              "name": "search-files-search-function",
+              "hash": "b595f05e92f7e91211af1bbfe9c6a13bb3391e16",
+              "capturedHash": "b595f05e92f7e91211af1bbfe9c6a13bb3391e16",
+              "nameMatches": true
+            },
+            {
+              "id": 11,
+              "name": "add-trigger-to-auto-update-updated_at-column",
+              "hash": "7425bdb14366d1739fa8a18c83100636d74dcaa2",
+              "capturedHash": "7425bdb14366d1739fa8a18c83100636d74dcaa2",
+              "nameMatches": true
+            },
+            {
+              "id": 12,
+              "name": "add-automatic-avif-detection-flag",
+              "hash": "8e92e1266eb29518b6a4c5313ab8f29dd0d08df9",
+              "capturedHash": "8e92e1266eb29518b6a4c5313ab8f29dd0d08df9",
+              "nameMatches": true
+            },
+            {
+              "id": 13,
+              "name": "add-bucket-custom-limits",
+              "hash": "cce962054138135cd9a8c4bcd531598684b25e7d",
+              "capturedHash": "cce962054138135cd9a8c4bcd531598684b25e7d",
+              "nameMatches": true
+            },
+            {
+              "id": 14,
+              "name": "use-bytes-for-max-size",
+              "hash": "941c41b346f9802b411f06f30e972ad4744dad27",
+              "capturedHash": "941c41b346f9802b411f06f30e972ad4744dad27",
+              "nameMatches": true
+            },
+            {
+              "id": 15,
+              "name": "add-can-insert-object-function",
+              "hash": "934146bc38ead475f4ef4b555c524ee5d66799e5",
+              "capturedHash": "934146bc38ead475f4ef4b555c524ee5d66799e5",
+              "nameMatches": true
+            },
+            {
+              "id": 16,
+              "name": "add-version",
+              "hash": "76debf38d3fd07dcfc747ca49096457d95b1221b",
+              "capturedHash": "76debf38d3fd07dcfc747ca49096457d95b1221b",
+              "nameMatches": true
+            },
+            {
+              "id": 17,
+              "name": "drop-owner-foreign-key",
+              "hash": "f1cbb288f1b7a4c1eb8c38504b80ae2a0153d101",
+              "capturedHash": "f1cbb288f1b7a4c1eb8c38504b80ae2a0153d101",
+              "nameMatches": true
+            },
+            {
+              "id": 18,
+              "name": "add_owner_id_column_deprecate_owner",
+              "hash": "e7a511b379110b08e2f214be852c35414749fe66",
+              "capturedHash": "e7a511b379110b08e2f214be852c35414749fe66",
+              "nameMatches": true
+            },
+            {
+              "id": 19,
+              "name": "alter-default-value-objects-id",
+              "hash": "02e5e22a78626187e00d173dc45f58fa66a4f043",
+              "capturedHash": "02e5e22a78626187e00d173dc45f58fa66a4f043",
+              "nameMatches": true
+            },
+            {
+              "id": 20,
+              "name": "list-objects-with-delimiter",
+              "hash": "cd694ae708e51ba82bf012bba00caf4f3b6393b7",
+              "capturedHash": "cd694ae708e51ba82bf012bba00caf4f3b6393b7",
+              "nameMatches": true
+            },
+            {
+              "id": 21,
+              "name": "s3-multipart-uploads",
+              "hash": "8c804d4a566c40cd1e4cc5b3725a664a9303657f",
+              "capturedHash": "8c804d4a566c40cd1e4cc5b3725a664a9303657f",
+              "nameMatches": true
+            },
+            {
+              "id": 22,
+              "name": "s3-multipart-uploads-big-ints",
+              "hash": "9737dc258d2397953c9953d9b86920b8be0cdb73",
+              "capturedHash": "9737dc258d2397953c9953d9b86920b8be0cdb73",
+              "nameMatches": true
+            },
+            {
+              "id": 23,
+              "name": "optimize-search-function",
+              "hash": "9d7e604cddc4b56a5422dc68c9313f4a1b6f132c",
+              "capturedHash": "9d7e604cddc4b56a5422dc68c9313f4a1b6f132c",
+              "nameMatches": true
+            },
+            {
+              "id": 24,
+              "name": "operation-function",
+              "hash": "8312e37c2bf9e76bbe841aa5fda889206d2bf8aa",
+              "capturedHash": "8312e37c2bf9e76bbe841aa5fda889206d2bf8aa",
+              "nameMatches": true
+            },
+            {
+              "id": 25,
+              "name": "custom-metadata",
+              "hash": "d974c6057c3db1c1f847afa0e291e6165693b990",
+              "capturedHash": "d974c6057c3db1c1f847afa0e291e6165693b990",
+              "nameMatches": true
+            },
+            {
+              "id": 26,
+              "name": "objects-prefixes",
+              "hash": "215cabcb7f78121892a5a2037a09fedf9a1ae322",
+              "capturedHash": "215cabcb7f78121892a5a2037a09fedf9a1ae322",
+              "nameMatches": true
+            },
+            {
+              "id": 27,
+              "name": "search-v2",
+              "hash": "859ba38092ac96eb3964d83bf53ccc0b141663a6",
+              "capturedHash": "859ba38092ac96eb3964d83bf53ccc0b141663a6",
+              "nameMatches": true
+            },
+            {
+              "id": 28,
+              "name": "object-bucket-name-sorting",
+              "hash": "c73a2b5b5d4041e39705814fd3a1b95502d38ce4",
+              "capturedHash": "c73a2b5b5d4041e39705814fd3a1b95502d38ce4",
+              "nameMatches": true
+            },
+            {
+              "id": 29,
+              "name": "create-prefixes",
+              "hash": "ad2c1207f76703d11a9f9007f821620017a66c21",
+              "capturedHash": "ad2c1207f76703d11a9f9007f821620017a66c21",
+              "nameMatches": true
+            },
+            {
+              "id": 30,
+              "name": "update-object-levels",
+              "hash": "2be814ff05c8252fdfdc7cfb4b7f5c7e17f0bed6",
+              "capturedHash": "2be814ff05c8252fdfdc7cfb4b7f5c7e17f0bed6",
+              "nameMatches": true
+            },
+            {
+              "id": 31,
+              "name": "objects-level-index",
+              "hash": "b40367c14c3440ec75f19bbce2d71e914ddd3da0",
+              "capturedHash": "b40367c14c3440ec75f19bbce2d71e914ddd3da0",
+              "nameMatches": true
+            },
+            {
+              "id": 32,
+              "name": "backward-compatible-index-on-objects",
+              "hash": "e0c37182b0f7aee3efd823298fb3c76f1042c0f7",
+              "capturedHash": "e0c37182b0f7aee3efd823298fb3c76f1042c0f7",
+              "nameMatches": true
+            },
+            {
+              "id": 33,
+              "name": "backward-compatible-index-on-prefixes",
+              "hash": "b480e99ed951e0900f033ec4eb34b5bdcb4e3d49",
+              "capturedHash": "b480e99ed951e0900f033ec4eb34b5bdcb4e3d49",
+              "nameMatches": true
+            },
+            {
+              "id": 34,
+              "name": "optimize-search-function-v1",
+              "hash": "ca80a3dc7bfef894df17108785ce29a7fc8ee456",
+              "capturedHash": "ca80a3dc7bfef894df17108785ce29a7fc8ee456",
+              "nameMatches": true
+            },
+            {
+              "id": 35,
+              "name": "add-insert-trigger-prefixes",
+              "hash": "458fe0ffd07ec53f5e3ce9df51bfdf4861929ccc",
+              "capturedHash": "458fe0ffd07ec53f5e3ce9df51bfdf4861929ccc",
+              "nameMatches": true
+            },
+            {
+              "id": 36,
+              "name": "optimise-existing-functions",
+              "hash": "6ae5fca6af5c55abe95369cd4f93985d1814ca8f",
+              "capturedHash": "6ae5fca6af5c55abe95369cd4f93985d1814ca8f",
+              "nameMatches": true
+            },
+            {
+              "id": 37,
+              "name": "add-bucket-name-length-trigger",
+              "hash": "3944135b4e3e8b22d6d4cbb568fe3b0b51df15c1",
+              "capturedHash": "3944135b4e3e8b22d6d4cbb568fe3b0b51df15c1",
+              "nameMatches": true
+            },
+            {
+              "id": 38,
+              "name": "iceberg-catalog-flag-on-buckets",
+              "hash": "02716b81ceec9705aed84aa1501657095b32e5c5",
+              "capturedHash": "02716b81ceec9705aed84aa1501657095b32e5c5",
+              "nameMatches": true
+            },
+            {
+              "id": 39,
+              "name": "add-search-v2-sort-support",
+              "hash": "6706c5f2928846abee18461279799ad12b279b78",
+              "capturedHash": "6706c5f2928846abee18461279799ad12b279b78",
+              "nameMatches": true
+            },
+            {
+              "id": 40,
+              "name": "fix-prefix-race-conditions-optimized",
+              "hash": "7ad69982ae2d372b21f48fc4829ae9752c518f6b",
+              "capturedHash": "7ad69982ae2d372b21f48fc4829ae9752c518f6b",
+              "nameMatches": true
+            },
+            {
+              "id": 41,
+              "name": "add-object-level-update-trigger",
+              "hash": "07fcf1a22165849b7a029deed059ffcde08d1ae0",
+              "capturedHash": "07fcf1a22165849b7a029deed059ffcde08d1ae0",
+              "nameMatches": true
+            },
+            {
+              "id": 42,
+              "name": "rollback-prefix-triggers",
+              "hash": "771479077764adc09e2ea2043eb627503c034cd4",
+              "capturedHash": "771479077764adc09e2ea2043eb627503c034cd4",
+              "nameMatches": true
+            },
+            {
+              "id": 43,
+              "name": "fix-object-level",
+              "hash": "84b35d6caca9d937478ad8a797491f38b8c2979f",
+              "capturedHash": "84b35d6caca9d937478ad8a797491f38b8c2979f",
+              "nameMatches": true
+            },
+            {
+              "id": 44,
+              "name": "vector-bucket-type",
+              "hash": "99c20c0ffd52bb1ff1f32fb992f3b351e3ef8fb3",
+              "capturedHash": "99c20c0ffd52bb1ff1f32fb992f3b351e3ef8fb3",
+              "nameMatches": true
+            },
+            {
+              "id": 45,
+              "name": "vector-buckets",
+              "hash": "049e27196d77a7cb76497a85afae669d8b230953",
+              "capturedHash": "049e27196d77a7cb76497a85afae669d8b230953",
+              "nameMatches": true
+            },
+            {
+              "id": 46,
+              "name": "buckets-objects-grants",
+              "hash": "fedeb96d60fefd8e02ab3ded9fbde05632f84aed",
+              "capturedHash": "fedeb96d60fefd8e02ab3ded9fbde05632f84aed",
+              "nameMatches": true
+            },
+            {
+              "id": 47,
+              "name": "iceberg-table-metadata",
+              "hash": "649df56855c24d8b36dd4cc1aeb8251aa9ad42c2",
+              "capturedHash": "649df56855c24d8b36dd4cc1aeb8251aa9ad42c2",
+              "nameMatches": true
+            },
+            {
+              "id": 48,
+              "name": "iceberg-catalog-ids",
+              "hash": "e0e8b460c609b9999ccd0df9ad14294613eed939",
+              "capturedHash": "e0e8b460c609b9999ccd0df9ad14294613eed939",
+              "nameMatches": true
+            },
+            {
+              "id": 49,
+              "name": "buckets-objects-grants-postgres",
+              "hash": "072b1195d0d5a2f888af6b2302a1938dd94b8b3d",
+              "capturedHash": "072b1195d0d5a2f888af6b2302a1938dd94b8b3d",
+              "nameMatches": true
+            },
+            {
+              "id": 50,
+              "name": "search-v2-optimised",
+              "hash": "6323ac4f850aa14e7387eb32102869578b5bd478",
+              "capturedHash": "6323ac4f850aa14e7387eb32102869578b5bd478",
+              "nameMatches": true
+            },
+            {
+              "id": 51,
+              "name": "index-backward-compatible-search",
+              "hash": "2ee395d433f76e38bcd3856debaf6e0e5b674011",
+              "capturedHash": "2ee395d433f76e38bcd3856debaf6e0e5b674011",
+              "nameMatches": true
+            },
+            {
+              "id": 52,
+              "name": "drop-not-used-indexes-and-functions",
+              "hash": "5cc44c8696749ac11dd0dc37f2a3802075f3a171",
+              "capturedHash": "5cc44c8696749ac11dd0dc37f2a3802075f3a171",
+              "nameMatches": true
+            },
+            {
+              "id": 53,
+              "name": "drop-index-lower-name",
+              "hash": "d0cb18777d9e2a98ebe0bc5cc7a42e57ebe41854",
+              "capturedHash": "d0cb18777d9e2a98ebe0bc5cc7a42e57ebe41854",
+              "nameMatches": true
+            },
+            {
+              "id": 54,
+              "name": "drop-index-object-level",
+              "hash": "6289e048b1472da17c31a7eba1ded625a6457e67",
+              "capturedHash": "6289e048b1472da17c31a7eba1ded625a6457e67",
+              "nameMatches": true
+            },
+            {
+              "id": 55,
+              "name": "prevent-direct-deletes",
+              "hash": "262a4798d5e0f2e7c8970232e03ce8be695d5819",
+              "capturedHash": "262a4798d5e0f2e7c8970232e03ce8be695d5819",
+              "nameMatches": true
+            },
+            {
+              "id": 56,
+              "name": "fix-optimized-search-function",
+              "hash": "b823ed1e418101032fa01374edc9a436e54e3ed4",
+              "capturedHash": "b823ed1e418101032fa01374edc9a436e54e3ed4",
+              "nameMatches": true
+            },
+            {
+              "id": 57,
+              "name": "s3-multipart-uploads-metadata",
+              "hash": "f127886e00d1b374fadbc7c6b31e09336aad5287",
+              "capturedHash": "f127886e00d1b374fadbc7c6b31e09336aad5287",
+              "nameMatches": true
+            },
+            {
+              "id": 58,
+              "name": "operation-ergonomics",
+              "hash": "00ca5d483b3fe0d522133d9002ccc5df98365120",
+              "capturedHash": "00ca5d483b3fe0d522133d9002ccc5df98365120",
+              "nameMatches": true
+            },
+            {
+              "id": 59,
+              "name": "drop-unused-functions",
+              "hash": "38456f13e39691c2bbb4b5151d0d1cdbabd4a8c4",
+              "capturedHash": "38456f13e39691c2bbb4b5151d0d1cdbabd4a8c4",
+              "nameMatches": true
+            },
+            {
+              "id": 60,
+              "name": "optimize-existing-functions-again",
+              "hash": "db35e1c91a9201e59f4fef8d972c2f277d68b157",
+              "capturedHash": "db35e1c91a9201e59f4fef8d972c2f277d68b157",
+              "nameMatches": true
+            },
+            {
+              "id": 61,
+              "name": "mark-filename-immutable",
+              "hash": "fe0096517ae9d60aaec1d110172ba9036dc66bb7",
+              "capturedHash": "fe0096517ae9d60aaec1d110172ba9036dc66bb7",
+              "nameMatches": true
+            },
+            {
+              "id": 62,
+              "name": "object-versioning-core",
+              "hash": "0b855f00ff3be0bfca91efee02a9858912491a9a",
+              "capturedHash": "0b855f00ff3be0bfca91efee02a9858912491a9a",
+              "nameMatches": true
+            },
+            {
+              "id": 63,
+              "name": "fix-search-name-relative-to-prefix",
+              "hash": "c7485e417624f795ce8bb2da21927f48e088904d",
+              "capturedHash": "c7485e417624f795ce8bb2da21927f48e088904d",
+              "nameMatches": true
+            },
+            {
+              "id": 64,
+              "name": "fix-search-by-timestamp-sqli",
+              "hash": "0af424ecd388a39bb1645184b222185a12149675",
+              "capturedHash": "0af424ecd388a39bb1645184b222185a12149675",
+              "nameMatches": true
+            },
+            {
+              "id": 65,
+              "name": "objects-key-version-index",
+              "hash": "da319c4b89ba800ce795d1b699f3a70675138058",
+              "capturedHash": "da319c4b89ba800ce795d1b699f3a70675138058",
+              "nameMatches": true
+            },
+            {
+              "id": 66,
+              "name": "objects-current-version-index",
+              "hash": "191466c93aa2c46a00e36505577c5fcab8d7cb4b",
+              "capturedHash": "191466c93aa2c46a00e36505577c5fcab8d7cb4b",
+              "nameMatches": true
+            },
+            {
+              "id": 67,
+              "name": "objects-null-version-index",
+              "hash": "15bfe8c35b66642b6c78ba60060fa8793bd2207a",
+              "capturedHash": "15bfe8c35b66642b6c78ba60060fa8793bd2207a",
+              "nameMatches": true
+            },
+            {
+              "id": 68,
+              "name": "bucket-lifecycle-configuration",
+              "hash": "3c08f6f889922f399519722a932b51007c11bebc",
+              "capturedHash": "3c08f6f889922f399519722a932b51007c11bebc",
+              "nameMatches": true
+            },
+            {
+              "id": 69,
+              "name": "validate-bucket-lifecycle-constraints",
+              "hash": "4febacaaaa0e61e2b783bef081fe03a287e65eb3",
+              "capturedHash": "4febacaaaa0e61e2b783bef081fe03a287e65eb3",
+              "nameMatches": true
+            },
+            {
+              "id": 70,
+              "name": "list-objects-with-versions",
+              "hash": "5c17c3777616cd8d7b18b82835525fa3205af57b",
+              "capturedHash": "5c17c3777616cd8d7b18b82835525fa3205af57b",
+              "nameMatches": true
+            },
+            {
+              "id": 71,
+              "name": "objects-delete-marker-index",
+              "hash": "6d14858e66c66f8d6accf8a2630aefd1527fddba",
+              "capturedHash": "6d14858e66c66f8d6accf8a2630aefd1527fddba",
+              "nameMatches": true
+            },
+            {
+              "id": 72,
+              "name": "drop-bucketid-objname-index",
+              "hash": "302beb09e1b469d7d4db19566f2389d280b64aa3",
+              "capturedHash": "302beb09e1b469d7d4db19566f2389d280b64aa3",
+              "nameMatches": true
+            },
+            {
+              "id": 73,
+              "name": "revoke-grants-to-unused-operations",
+              "hash": "ba9244051be09f22f714fc0170a2539f8b5f0e68",
+              "nameMatches": false
+            }
+          ],
+          "scope": "Actual package complete captured migration validation only; freeze configuration prepared, not service startup or database compatibility acceptance"
+        },
+        "migrationAuditVerified": true,
+        "serialSha256": "1ebf808bc49d97fd495469f4ae882e5384f925981e071e006a8246a204b95342"
+      },
+      "controllerExit": 0,
+      "independentProcessAbsent": true,
+      "hashes": {
+        "result.json": "0a1dc276079c3c356107312d490844fb797ada01af9d4d0823969bdacde5b598",
+        "serial.log": "1ebf808bc49d97fd495469f4ae882e5384f925981e071e006a8246a204b95342",
+        "stderr.log": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc",
+        "launch.json": "4f8c959b06cc962eabf3903b9a7867d7e1cbea9a5e296260528ce71e691f9faf",
+        "executed-source.mjs": "656f7cf28f0ed90ae3c4227fec7a8c8550b2fc2dc761a64ec2c840295bd8aa15",
+        "executed-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+        "executed-ledger.mjs": "37216053fcea60fa6fbc723c93cbc2ff01a9e5a313e39b29fe95d6b645d5e0f6",
+        "staging/storage/ledger.json": "eb27aaec66baf0a9f25fcd193c4e4f17d1767da80bb35ed5c6a44c8f02d15c27",
+        "staging/storage/migration-audit.cjs": "f83fbdb8438bd292b739f2746096f3afc258aa48957b1b3fdeedfe8696a94920",
+        "staging/storage/ledger.mjs": "37216053fcea60fa6fbc723c93cbc2ff01a9e5a313e39b29fe95d6b645d5e0f6",
+        "staging/storage/compatible-audit.json": "e321ddb294ee63726f828e82072f0e93e7cd00e12b5cad274ab18298cbb7cb12",
+        "staging/storage/init.sh": "3e55a9e7ada0d517bc2362fd96792fbc39af06ad2888c2bcb5d9a29c227ad5a5",
+        "development.log": "09a26b17e57f2a0090aef8f4e31fd08ea41c69df19f4db447c27d15c2b37ac6a"
+      }
+    }
+  ],
+  "sourcePins": {
+    "scripts/prepare-storage-runtime-fixture.mjs": "656f7cf28f0ed90ae3c4227fec7a8c8550b2fc2dc761a64ec2c840295bd8aa15",
+    "scripts/storage-runtime-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+    "scripts/storage-migration-ledger.mjs": "37216053fcea60fa6fbc723c93cbc2ff01a9e5a313e39b29fe95d6b645d5e0f6",
+    "scripts/storage-migration-audit.inc.cjs": "f83fbdb8438bd292b739f2746096f3afc258aa48957b1b3fdeedfe8696a94920",
+    "tests/storage-migration-ledger.checks.mjs": "81329e5e74d02471830704d4a2820da7b5a63cfe37d4ca416f8d0cb324ac4c15",
+    "tests/storage-runtime-layout.checks.mjs": "91df6bd89b7c61b0f900994ab26a700a8b54c68379296b636f83749543b670e3"
+  },
+  "recovery": "No database or provider access; guests powered off/PIDs2776 and23956absent. Preserve rejected runtime02, matched runtime03, source01, failed native05 and successful06. Source revert only diagnostic extension/boundary slice; no database recovery needed. Fresh successors only."
+}

@@ -9,15 +9,19 @@ import { parseStorageMigrationLedger } from './storage-migration-ledger.mjs'
 const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const caseName=process.argv.find(value=>value.startsWith('--case='))?.slice(7)
 assert.match(caseName||'',/^storage-native\d{2}$/)
-const out=path.join(root,caseName), input=path.join(root,'storage-runtime01')
-const migrationAudit=process.argv.includes('--migration-audit')
+const compatibleAudit=process.argv.includes('--compatible-migration-audit')
+const out=path.join(root,caseName), input=path.join(root,compatibleAudit?'storage-runtime03':'storage-runtime01')
+const migrationAudit=compatibleAudit||process.argv.includes('--migration-audit')
 assert.ok(!fs.existsSync(out),'Fresh native fixture required')
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex')
-const receipt=JSON.parse(fs.readFileSync('docs/acceptance/LOCAL_STORAGE_RUNTIME_PREPARATION_20261011.json'))
+const receipt=JSON.parse(fs.readFileSync(compatibleAudit?'docs/acceptance/LOCAL_STORAGE_COMPATIBLE_RUNTIME_20261011.json':'docs/acceptance/LOCAL_STORAGE_RUNTIME_PREPARATION_20261011.json'))
 assert.equal(path.resolve(receipt.privateCase),path.resolve(input))
 const pin=file=>{const bytes=fs.readFileSync(path.join(input,file));assert.equal(sha(bytes),receipt.pins[file],file);return bytes}
 for(const file of Object.keys(receipt.pins))pin(file)
 const layout=describeStorageLayout({manifest:pin('manifest.json'),config:pin('config.json'),layers:receipt.layers.map(layer=>fs.readFileSync(path.join(input,'layers',layer.name))),expectedManifestDigest:receipt.manifestDigest})
+const imageConfig=JSON.parse(pin('config.json'))
+const nodeVersion=imageConfig.config.Env.find(value=>value.startsWith('NODE_VERSION='))?.slice(13)
+assert.match(nodeVersion||'',/^24\.\d+\.\d+$/)
 const unpacker=fs.readFileSync(path.join(root,'umoci-runtime01/umoci.linux.amd64'))
 assert.equal(sha(unpacker),'b51c267ec394499e42c6fde47f240b7b7dba57ea49df0b5acd304378b82a3b71')
 fs.mkdirSync(out)
@@ -35,6 +39,10 @@ if(migrationAudit){
   assert.equal(capturedRestoreSha256,'57c1cf8abe1b36ba078d125751cf91b01c0a46faf9ca0a5be9cd561e60bd9637')
   fs.writeFileSync(path.join(payload,'ledger.json'),JSON.stringify(parseStorageMigrationLedger(captured.toString('utf8'))),{flag:'wx'})
   fs.copyFileSync('scripts/storage-migration-audit.inc.cjs',path.join(payload,'migration-audit.cjs'),fs.constants.COPYFILE_EXCL)
+  if(compatibleAudit){
+    fs.copyFileSync('scripts/storage-migration-ledger.mjs',path.join(payload,'ledger.mjs'),fs.constants.COPYFILE_EXCL)
+    fs.writeFileSync(path.join(payload,'compatible-audit.json'),JSON.stringify({freezeAt:'drop-bucketid-objname-index'}),{flag:'wx'})
+  }
 }
 const init=`set -eu
 trap 'echo K2_STORAGE_NATIVE_FAILED; /bin/busybox poweroff -f' EXIT
@@ -49,6 +57,8 @@ echo K2_STORAGE_WHITEOUT_MARKERS_ABSENT
 /bin/busybox chroot /storage-bundle/rootfs /usr/local/bin/node --version
 /bin/busybox chroot /storage-bundle/rootfs /bin/sh -c 'cd /app && /usr/local/bin/node' < /storage/dependency-probe.cjs
 ${migrationAudit?`/bin/busybox cp /storage/ledger.json /storage-bundle/rootfs/k2-storage-ledger.json
+${compatibleAudit?`/bin/busybox cp /storage/ledger.mjs /storage-bundle/rootfs/k2-storage-ledger.mjs
+/bin/busybox cp /storage/compatible-audit.json /storage-bundle/rootfs/k2-storage-compatible-audit.json`:''}
 /bin/busybox chroot /storage-bundle/rootfs /bin/sh -c 'cd /app && /usr/local/bin/node' < /storage/migration-audit.cjs`:''}
 echo K2_STORAGE_NATIVE_OK
 trap - EXIT
@@ -68,17 +78,18 @@ fs.copyFileSync('scripts/storage-runtime-layout.mjs',path.join(out,'executed-lay
 fs.copyFileSync('scripts/storage-migration-ledger.mjs',path.join(out,'executed-ledger.mjs'),fs.constants.COPYFILE_EXCL)
 const report={owningMap:'MAP-018',idea:'IDEA-20261009-11',scope:'Native public OCI filesystem unpack and Node/Storage dependency admission only; no database/service health/upload/provider acceptance',providerWrites:false,databaseChanges:false,nic:'none',imageTag:'v1.74.0',packageVersion:'1.11.2',manifestDigest:receipt.manifestDigest,unpackerSha256:sha(unpacker),guestInitSha256:sha(init),sourceSha256:sha(fs.readFileSync(new URL(import.meta.url))),layoutSourceSha256:sha(fs.readFileSync('scripts/storage-runtime-layout.mjs')),baseInitramfsSha256:sha(fs.readFileSync(base))}
 if(migrationAudit)Object.assign(report,{scope:'Actual image migration loading/hash validation against immutable captured ledger; no database connection/startup/writes',capturedRestoreSha256,ledgerSourceSha256:sha(fs.readFileSync('scripts/storage-migration-ledger.mjs')),auditSourceSha256:sha(fs.readFileSync(path.join(payload,'migration-audit.cjs')))})
+Object.assign(report,{imageTag:compatibleAudit?'v1.79.20':'v1.74.0',nodeVersion})
 if(process.argv.includes('--prepare-only')){fs.writeFileSync(path.join(out,'preparation.json'),JSON.stringify(report,null,2),{flag:'wx'});console.log(JSON.stringify(report));process.exit(0)}
 let stdout='',stderr='',sent=false
 const child=spawn(launch.exe,args,{windowsHide:true,stdio:['pipe','pipe','pipe']});report.pid=child.pid
 fs.writeFileSync(path.join(out,'launch.json'),JSON.stringify({exe:launch.exe,args,pid:child.pid},null,2),{flag:'wx'})
 report.exit=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>{report.timedOut=true;child.kill()},180000);child.on('error',error=>{clearTimeout(timer);reject(error)});child.stdout.on('data',bytes=>{stdout+=bytes;if(!sent&&/~ #\s*$/.test(stdout)){sent=true;(async()=>{for(const char of '/bin/sh /storage/init.sh\n'){if(child.exitCode!==null||child.signalCode!==null)return;child.stdin.write(char);await new Promise(resolve=>setTimeout(resolve,15))}})().catch(error=>{stderr+=error.message;child.kill()})}});child.stderr.on('data',bytes=>stderr+=bytes);child.on('close',code=>{clearTimeout(timer);resolve(code)})})
 report.processStopped=child.exitCode!==null||child.signalCode!==null
-report.nativeAdmission=stdout.includes('K2_STORAGE_NATIVE_OK')&&stdout.includes('K2_STORAGE_OCI_UNPACK_OK')&&stdout.includes('K2_STORAGE_WHITEOUT_MARKERS_ABSENT')&&stdout.includes('v24.20.0')&&stdout.includes('K2_STORAGE_PACKAGE_OK supa-storage 1.11.2')&&!stdout.includes('K2_STORAGE_NATIVE_FAILED')
+report.nativeAdmission=stdout.includes('K2_STORAGE_NATIVE_OK')&&stdout.includes('K2_STORAGE_OCI_UNPACK_OK')&&stdout.includes('K2_STORAGE_WHITEOUT_MARKERS_ABSENT')&&stdout.includes('v'+nodeVersion)&&stdout.includes('K2_STORAGE_PACKAGE_OK supa-storage 1.11.2')&&!stdout.includes('K2_STORAGE_NATIVE_FAILED')
 if(migrationAudit){
   const line=stdout.split(/\r?\n/).find(line=>line.startsWith('K2_STORAGE_MIGRATION_AUDIT '))
   report.migrationAudit=line?JSON.parse(line.slice('K2_STORAGE_MIGRATION_AUDIT '.length)):null
-  report.migrationAuditVerified=stdout.includes('K2_STORAGE_MIGRATION_AUDIT_OK')&&report.migrationAudit?.validatorRefused===true
+  report.migrationAuditVerified=stdout.includes('K2_STORAGE_MIGRATION_AUDIT_OK')&&(compatibleAudit?report.migrationAudit?.validatorAccepted===true:report.migrationAudit?.validatorRefused===true)
   report.nativeAdmission=report.nativeAdmission&&report.migrationAuditVerified
 }
 fs.writeFileSync(path.join(out,'serial.log'),stdout,{flag:'wx'});fs.writeFileSync(path.join(out,'stderr.log'),stderr,{flag:'wx'});report.serialSha256=sha(stdout)
