@@ -10,6 +10,7 @@ import sessionsRevoke from '../../prepared-api/admin/sessions/revoke.js'
 import overview from '../../prepared-api/admin/overview.js'
 import products from '../../prepared-api/admin/products.js'
 import productMaster from '../../prepared-api/admin/product-master.js'
+import references from '../../prepared-api/admin/references.js'
 import productMedia from '../../prepared-api/admin/product-media.js'
 import productMediaAssign from '../../prepared-api/admin/product-media/assign.js'
 import productMediaOrphans from '../../prepared-api/admin/product-media/orphans.js'
@@ -121,6 +122,7 @@ const ROUTES = new Map([
   ['overview', overview],
   ['products', products],
   ['product-master', productMaster],
+  ['references', references],
   ['product-media', productMedia],
   ['product-media/assign', productMediaAssign],
   ['product-media/orphans', productMediaOrphans],
@@ -211,6 +213,7 @@ const ROUTES = new Map([
 ])
 
 const ADMIN_POST_ROUTES = new Set([
+  'references',
   'product-intake/ai',
   'product-intake/public-seo-draft',
   'auth/login', 'auth/logout', 'auth/mfa',
@@ -286,7 +289,7 @@ export const ADMIN_BFF_ROUTE_CONTROLS = Object.freeze(Object.fromEntries(
     const staffAccessMethods = route === 'staff-access'
       ? Object.freeze({ POST: Object.freeze({ csrf: true, idempotency: true, rateLimit: 'database' }) })
       : undefined
-    const productMasterMethods = route === 'product-master'
+    const productMasterMethods = route === 'product-master' || route === 'references'
       ? Object.freeze({ GET: Object.freeze({ csrf: false, idempotency: false, rateLimit: 'database' }) })
       : undefined
     const ownerCloseMethods = route === 'owner-close/session' || route === 'owner-close/coverage' || route === 'owner-close/fees' || route === 'owner-close/stock' || route === 'owner-close/pasabuy' || route === 'owner-close/bookkeeping'

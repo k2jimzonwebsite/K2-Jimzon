@@ -1,0 +1,111 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-06",
+  "date": "2026-10-11",
+  "classification": "Prepared BFF endpoint with executed local unit/transport checks only",
+  "ownerScope": "Admin/SuperAdmin creation; understanding confirmed; no production authorization",
+  "designReview": {
+    "status": "APPROVED",
+    "skeptic": "Six accepted objections resolved in spec",
+    "constraintGuardian": "APPROVED",
+    "userAdvocate": "APPROVED",
+    "arbiter": "APPROVED"
+  },
+  "evidence": [
+    {
+      "command": "node --test tests/admin-reference-command.test.mjs",
+      "initialRed": {
+        "pass": 0,
+        "fail": 6,
+        "exit": 1
+      },
+      "finalGreen": {
+        "pass": 9,
+        "fail": 0,
+        "exit": 0
+      }
+    },
+    {
+      "command": "node --test tests/admin-reference-command.test.mjs tests/admin-reference-handler.test.mjs",
+      "pass": 15,
+      "fail": 0,
+      "exit": 0,
+      "scope": "Remote Auth/PostgREST transport stub; real cookie/authorization/signing/handler; no native or live proof"
+    },
+    {
+      "command": "node scripts/verify-admin-bff.mjs",
+      "exit": 0
+    },
+    {
+      "command": "npm run security:surfaces",
+      "exit": 0,
+      "dynamicOperations": 0,
+      "classificationGaps": 0
+    },
+    {
+      "command": "npm run verify:development",
+      "session": 88888,
+      "exit": 0,
+      "sessionReferenceChecks": 19
+    }
+  ],
+  "failedEvidence": [
+    {
+      "command": "npm run verify:development",
+      "session": 44679,
+      "exit": 1,
+      "reason": "Dynamic table expression required explicit source inventory review; changed to literal branches"
+    },
+    {
+      "kind": "Review regression",
+      "reason": "Accepted U+FEFF name refused by JS trim options reader",
+      "red": {
+        "pass": 8,
+        "fail": 1
+      },
+      "resolution": "Shared exact printable whitespace validation; green9/9"
+    }
+  ],
+  "review": {
+    "status": "No remaining Critical/Important findings after correction",
+    "agent": "reference_endpoint_review"
+  },
+  "sourcePins": [
+    {
+      "file": "server/admin-bff/references.js",
+      "sha256": "4a1f51904b4d35a521f3f2eb17980a78c91976765b188e230b9262914063a879"
+    },
+    {
+      "file": "server/admin-bff/router.js",
+      "sha256": "44e51642dc690ba24e969a6943235de36643aa249ff88e2c00dfa2cfb1b7c0a4"
+    },
+    {
+      "file": "prepared-api/admin/references.js",
+      "sha256": "c68bb3a39b6a02a1ffe823b9122e401fbfe577c27fbaa2541bb042c1bc8f9c3d"
+    },
+    {
+      "file": "tests/admin-reference-command.test.mjs",
+      "sha256": "a91ddc92de1962768067595031f7759c3e88d36c25eb0a0be5324a68baff40a9"
+    },
+    {
+      "file": "tests/admin-reference-handler.test.mjs",
+      "sha256": "7ed543b02c24f8def339374e449988cbc176123a23ac0147a20be071b78ea9f5"
+    },
+    {
+      "file": "package.json",
+      "sha256": "bd3f13bdc31f79d8503723ec4df9b3dc460182fc7bbeaf0989353a39f998ee32"
+    },
+    {
+      "file": "docs/specs/PROTECTED_REFERENCE_COMMAND_SPEC.md",
+      "sha256": "d7c23fb256a913eeca683df061a415d439ee1537b1805c26f846fe1a983d51d0"
+    }
+  ],
+  "remainingOwner": "MAP-018",
+  "limits": [
+    "SQL routine, normalization/index/context guards not prepared or installed",
+    "Editor creation/durable retry not implemented; existing browser workflow remains unfixed",
+    "No native concurrency/all-writer proof or end-to-end workflow",
+    "No provider changes, main push, deployment or release"
+  ],
+  "recovery": "Revert prepared endpoint/forwarder/router/test-gate slice together; no provider state changed; preserve prior fixtures"
+}

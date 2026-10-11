@@ -1,5 +1,13 @@
 # K2 Jimzon  -  Project Directory Map
 
+11October MAP-018 / IDEA-20261010-06: prepared-api/admin/references.js forwards
+the single router's references route to server/admin-bff/references.js. Focused
+command/read and handler tests live in tests/admin-reference-command.test.mjs
+and tests/admin-reference-handler.test.mjs and join the existing session security
+gate. Approved contract: docs/specs/PROTECTED_REFERENCE_COMMAND_SPEC.md. Evidence:
+docs/acceptance/PROTECTED_REFERENCE_ENDPOINT_20261011.json. This is locally tested
+BFF preparation; database/editor/native qualification remains MAP-018.
+
 11 October MAP-018 / IDEA-20261010-08 evidence reconciliation: COMBINED_INSTALLER_EVIDENCE_RECONCILIATION_20261011.json freshly matches14 current composition inputs,22 actual imported23 staged artifacts,3 catalog frames, serial and SQL. Accepted imported19/23 use identical all-three package;16 interruption/drift controls and cold/replay already exist. The broad repeat-installation action is removed from MAP. Retained populated repair/drift/resumption are separate accepted scopes, with149 installer versus168 populated relation counts preserved. Concurrent administrative authority, provider API semantics, canonical Draft-to-listing and hosted/owner activation remain open; no new execution/provider/deployment claim.
 
 11 October genuine post-repair request resumption qualified locally (MAP-018 / IDEA-20261010-08): fresh04/session84749 terminal0; actual known-three correction/no-op/full-state/catalog conservation precedes healthy Auth/PostgREST restart. Retained staff/guest cookies replay exact category/tariff/two old order receipts and conserve old business/conversation/message rows. New customer separate cookies and actual127.0.0.2 peer receives rate2/20000 quote, one accepted order/one hold and exact receipt replay without duplicate effects. Existing unused stale-test key preserves exact three-key observer/catalog; IP900s5/contact3600s3 limits are unchanged. Full168relations/11sequences/44525rows repair initial/final SHA18c27fe2c094ea30eb65aa3349021e4be9b04b5198d702371ce1fcf2e5169007; four authority witnesses, separate original88/two-sequence reconstruction and corrected installed-catalog recovery pass. PID18244/five ports independently absent. docs/acceptance/RETAINED_RESUMPTION_20261011.json binds actual/source pins; independent actual-evidence review found no findings. Failed01 recovery unverified; failed02/03 original recovery verified and all remain preserved. No production availability/provider/hosted claim; remaining integration/activation stays MAP-018.

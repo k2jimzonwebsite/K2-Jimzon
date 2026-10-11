@@ -1,5 +1,14 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+11October MAP-018 / IDEA-20261010-06 protected taxonomy target: owner confirms
+Admin/SuperAdmin creation. The approved PROTECTED_REFERENCE_COMMAND_SPEC.md owns
+exact name/parent equivalence, signed creation, historical receipt/current identity
+separation and recoverable creation versus paired initial Draft assignment. One
+canonical command must enforce database/all-writer authority and uniqueness;
+browser list-before-insert is insufficient. The prepared references BFF endpoint
+has passing local transport tests only. SQL, native and editor gates remain
+MAP-018; no new deployed operation or activation is established.
+
 11October fresh activation readback: K2 identity preflight exits0; readiness exits0 with8verified/2owner/3script-connector/0failed. Actual installed Vercel connector reaches both separate projects and production deployments at b6ef5863308e60caa4d9b16da3978c5a8f50f37a. Admin enabled non-staged /api/admin/:path*404 rule observed; actual unauthenticated session GET404, Admin/Storefront roots200. This closes connector-unreachable wording for project/deployment/route inspection only; it does not close route activation, preview behavior, provider advisor, physical stock, full staff/customer workflow or hosted acceptance. Preserve disabled route until exact owner-authorized activation. Receipt K2_READINESS_ROUTE_OBSERVATION_20261011.json. Protected creation role is now owner-confirmed Admin/SuperAdmin only; separate concurrent administrative authority understanding remains pending.
 
 

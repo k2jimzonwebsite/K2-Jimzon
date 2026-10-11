@@ -1,6 +1,23 @@
 # K2 Jimzon  -  System Brain (Current State)
 
-11October IDEA-20261010-06 current boundary audit: PROTECTED_REFERENCE_BOUNDARY_AUDIT_20261011.json pins seven current sources and exact accepted combined19 catalog f1554696.... Brands/categories have no normalized-name unique index; captured is_staff() all-operation policies remain broader than owner-approved protected-command role. Category parent FK exists, current creation omits parent and browser duplicate match ignores hierarchy. Do not equate list-before-insert or Admin-only BFF with database/all-writer duplicate or role proof. Preserve category semantics and explicit created-but-unassigned recovery; suppliers keep existing procurement ownership. Understanding scope is presented for confirmation, then minimal command design and required sequential review; no behavior/provider change.
+11October MAP-018 / IDEA-20261010-06 endpoint preparation: sequential design
+review APPROVED; server/admin-bff/references.js and its prepared-api/router entry
+now enforce current Admin/SuperAdmin BFF admission, exact raw-command validation,
+complete bounded hierarchy reads and signed reference_create RPC dispatch.
+Receipt history is separate from current-reference readback. Fifteen focused
+checks pass with stubbed remote Auth/PostgREST transport; no native SQL proof.
+Review's U+FEFF reader mismatch reproduced red then fixed green. Development
+session88888 exits0, including19 session/reference checks and0 surface gaps.
+Initial session44679 failed on dynamic table inventory; literal branches fixed
+the focused gate before final development run. Evidence:
+docs/acceptance/PROTECTED_REFERENCE_ENDPOINT_20261011.json. SQL routine/unique
+indexes/context guards, editor creation/durable retry, native complete chain and
+affected installer conservation remain MAP-018. Existing direct browser workflow
+is not yet repaired. No provider writes, deployment, push or release.
+11October IDEA-20261010-06 understanding confirmed: owner says proceed after presented protected-reference scope. Role remains Admin/SuperAdmin only. Decision register: docs/specs/PROTECTED_REFERENCE_COMMAND_SPEC.md now has APPROVED sequential review; PROTECTED_REFERENCE_ENDPOINT_20261011.json records prepared BFF source and passing local transport tests. SQL/native/editor work remains MAP-018. Database normalized identity and all-writer guard, category entry deadlines, signed receipt and current-editor assignment/recovery are targets, not prepared/executed/deployed facts. Remaining actions stay solely MAP-018; no provider or release approval follows.
+
+
+11October IDEA-20261010-06 current boundary audit: PROTECTED_REFERENCE_BOUNDARY_AUDIT_20261011.json pins seven current sources and exact accepted combined19 catalog f1554696.... Brands/categories have no normalized-name unique index; captured is_staff() all-operation policies remain broader than owner-approved protected-command role. Category parent FK exists, current creation omits parent and browser duplicate match ignores hierarchy. Do not equate list-before-insert or Admin-only BFF with database/all-writer duplicate or role proof. Preserve category semantics and explicit created-but-unassigned recovery; suppliers keep existing procurement ownership. Understanding/role now confirmed and sequential design approved; endpoint-only local transport preparation is separately recorded in PROTECTED_REFERENCE_ENDPOINT_20261011.json. Captured database state remains unchanged.
 
 
 11October fresh activation readback: K2 identity preflight exits0; readiness exits0 with8verified/2owner/3script-connector/0failed. Actual installed Vercel connector reaches both separate projects and production deployments at b6ef5863308e60caa4d9b16da3978c5a8f50f37a. Admin enabled non-staged /api/admin/:path*404 rule observed; actual unauthenticated session GET404, Admin/Storefront roots200. This closes connector-unreachable wording for project/deployment/route inspection only; it does not close route activation, preview behavior, provider advisor, physical stock, full staff/customer workflow or hosted acceptance. Preserve disabled route until exact owner-authorized activation. Receipt K2_READINESS_ROUTE_OBSERVATION_20261011.json. Protected creation role is now owner-confirmed Admin/SuperAdmin only; separate concurrent administrative authority understanding remains pending.
