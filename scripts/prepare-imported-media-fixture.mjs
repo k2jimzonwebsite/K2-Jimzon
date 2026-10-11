@@ -9,10 +9,11 @@ import {catalogValueHash} from './reference-catalog-contract.mjs'
 import {extendAdminStockReadFixture} from './admin-stock-read-fixture.inc.mjs'
 const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const name=process.argv.find(a=>a.startsWith('--case='))?.slice(7)
-const staffStock=process.argv.includes('--staff-stock')
-const browserInventory=staffStock||process.argv.includes('--browser-inventory')
+const stockRoleTransport=process.argv.includes('--stock-role-transport')
+const staffStock=stockRoleTransport||process.argv.includes('--staff-stock')
+const browserInventory=(!stockRoleTransport&&staffStock)||process.argv.includes('--browser-inventory')
 const browserWorkflow=browserInventory||process.argv.includes('--browser-workflow')
-const currentInstallation=browserWorkflow||process.argv.includes('--current-installation')
+const currentInstallation=stockRoleTransport||browserWorkflow||process.argv.includes('--current-installation')
 const publicMedia=currentInstallation||process.argv.includes('--public-media')
 const productWorkflow=publicMedia||process.argv.includes('--product-workflow')
 const intakeEvidence=productWorkflow||process.argv.includes('--intake-evidence')
@@ -29,9 +30,16 @@ const scope=publicMedia?'Genuine local BFF imported product flow with HTTPS prod
 const executionScope=browserInventory?'Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save/first-inventory/Under Review publication, joined to qualified backend public-media/Live/Website commands; offline recovery. No customer browser/hosted/provider acceptance':browserWorkflow?'Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save, joined to previously qualified stock/media/Website commands; offline recovery. No customer browser/hosted/provider acceptance':currentInstallation?'Genuine local complete accepted reference/category/tariff installer with protected reference creation and imported product/public-media/stock/Website commands; exact offline application restoration; no browser/provider acceptance':scope
 let installationPins
 if(currentInstallation){
- const installation=JSON.parse(fs.readFileSync('docs/acceptance/PROTECTED_REFERENCE_INSTALLATION_20261011.json'))
- assert.equal(installation.case,'oci-imported41');assert.equal(installation.controllerExit,0)
- assert.equal(installation.package.sqlSha256,'e051cd65f6b9b070c70754b61ef521a772bc2bad46c211e918081e23b945457f')
+ const installationReceipt=stockRoleTransport?'docs/acceptance/ADMIN_STOCK_GUARDED_INSTALLATION_20261011.json':'docs/acceptance/PROTECTED_REFERENCE_INSTALLATION_20261011.json'
+ const installation=JSON.parse(fs.readFileSync(installationReceipt))
+ if(stockRoleTransport){
+  assert.equal(installation.case,'oci-imported56')
+  installation.package={sqlSha256:installation.sqlSha256}
+  installation.target={canonicalSha256:installation.contract.afterCanonicalSha256}
+  installation.stagedPins=installation.pins.filter(p=>p.file.includes(path.join('staging','k2')+path.sep)).map(p=>({file:path.basename(p.file),sha256:p.sha256}))
+ }else assert.equal(installation.case,'oci-imported41')
+ assert.equal(installation.controllerExit,0)
+ assert.equal(installation.package.sqlSha256,stockRoleTransport?'e6eda8085254f27f0dd30c01f77c3a53bfc4a1652c59ad472a68558079bab052':'e051cd65f6b9b070c70754b61ef521a772bc2bad46c211e918081e23b945457f')
  const input=path.join(root,installation.case),inputs=installation.sourcePins.concat(installation.stagedPins.map(p=>({file:path.join(input,'staging/k2',p.file),sha256:p.sha256})))
  for(const p of inputs)assert.equal(hash(fs.readFileSync(p.file)),p.sha256,p.file)
  const expectedFile=path.join(input,'execution01/after-catalog.json'),expectedBytes=fs.readFileSync(expectedFile)
@@ -43,7 +51,7 @@ if(currentInstallation){
  source=once(source,"probe+=psql('postgres','race-install.sql')+'\\n'","probe+=psql('postgres','race-install.sql')+'\\n';\nprobe+=psql('supabase_admin','race-catalog.sql')+' > /tmp/full-current-installed.json\\ncmp -s /tmp/current-installed-expected.json /tmp/full-current-installed.json\\nsha256sum /tmp/current-installed-expected.json /tmp/full-current-installed.json\\necho K2_FULL_ACCEPTED_INSTALLER_METADATA_OK\\n'")
  source=once(source,"fs.writeFileSync(path.join(k2,'init.sh'),init,{flag:'wx'})","init=init.replace('/bin/busybox cp /k2/race-install.sql /k2root/tmp/race-install.sql',()=>'/bin/busybox cp /k2/current-installed-expected.json /k2root/tmp/current-installed-expected.json\\n/bin/busybox cp /k2/race-install.sql /k2root/tmp/race-install.sql');\nfs.writeFileSync(path.join(k2,'init.sh'),init,{flag:'wx'})")
  source=once(source,"stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&","stdout.includes('K2_FULL_ACCEPTED_INSTALLER_METADATA_OK')&&stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&")
- installationPins={receipt:'docs/acceptance/PROTECTED_REFERENCE_INSTALLATION_20261011.json',receiptSha256:hash(fs.readFileSync('docs/acceptance/PROTECTED_REFERENCE_INSTALLATION_20261011.json')),inputs,expectedFile,expectedSha256:hash(expectedBytes),expectedCanonicalSha256:installation.target.canonicalSha256,package:installation.package}
+ installationPins={receipt:installationReceipt,receiptSha256:hash(fs.readFileSync(installationReceipt)),inputs,expectedFile,expectedSha256:hash(expectedBytes),expectedCanonicalSha256:installation.target.canonicalSha256,package:installation.package}
 }
 helper=helper.slice(0,helper.indexOf('async function browserProbe('))
 helper=once(helper,"import http from 'node:http'","import http from 'node:http'\nconst {readFixtureAdminHttpBody}=await import(pathToFileURL(path.join(process.cwd(),'scripts/fixture-admin-http-body.mjs')).href)")
@@ -68,7 +76,7 @@ helper=once(helper,"const chunks=[];let size=0;for await(const chunk of req){siz
 const probeFile=productWorkflow?'scripts/imported-product-workflow-probe.inc.mjs':intakeEvidence?'scripts/imported-intake-evidence-probe.inc.mjs':'scripts/imported-media-transport-probe.inc.mjs'
 const probeName=productWorkflow?'importedProductProbe':intakeEvidence?'intakeEvidenceProbe':'mediaTransportProbe'
 helper=once(helper,'await browserProbe(credentials,report,uid);',intakeEvidence?`await ${probeName}(uid,report,credentials,request,jar);`:'await mediaTransportProbe(uid,report,credentials);')
-if(publicMedia)helper=once(helper,'await importedProductProbe(uid,report,credentials,request,jar);',`await importedProductProbe(uid,report,credentials,request,jar,{publicMedia:true,currentInstallation:${currentInstallation},browserWorkflow:${browserWorkflow},browserInventory:${browserInventory},staffStock:${staffStock},browserOut:path.dirname(new URL(import.meta.url).pathname.replace(/^\\/([A-Za-z]:)/,'$1'))});`)
+if(publicMedia)helper=once(helper,'await importedProductProbe(uid,report,credentials,request,jar);',`await importedProductProbe(uid,report,credentials,request,jar,{publicMedia:true,currentInstallation:${currentInstallation},browserWorkflow:${browserWorkflow},browserInventory:${browserInventory},staffStock:${staffStock},stockRoleTransport:${stockRoleTransport},browserOut:path.dirname(new URL(import.meta.url).pathname.replace(/^\\/([A-Za-z]:)/,'$1'))});`)
 helper+=`\nconst {${probeName}}=await import(pathToFileURL(path.join(process.cwd(),${JSON.stringify(probeFile)})).href)\n`
 if(browserWorkflow){
  // Those refusal/logout contracts are already qualified. Avoid exhausting the
@@ -190,7 +198,7 @@ source=once(source,"const run='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image
 source=once(source, "\"args[args.indexOf('-m')+1]='4096';args", "\"args[args.indexOf('-m')+1]='7168';args").replace('hostfwd=tcp:127.0.0.1:54394-:9997','hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996')
 source=once(source,"stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&","stdout.includes('K2_STORAGE_INTEGRATED_HTTP_READY')&&stdout.includes('K2_STORAGE_INTEGRATED_STOPPED_EXIT_')&&stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&")
 const sources=['scripts/prepare-imported-media-fixture.mjs',probeFile,'scripts/fixture-admin-http-body.mjs','scripts/storage-runtime-layout.mjs',...(intakeEvidence?['server/admin-bff/product-intake.js']:[]),...(productWorkflow?['scripts/imported-intake-evidence-probe.inc.mjs','server/admin-bff/catalog-spreadsheet.js','server/admin-bff/product-master.js','server/admin-bff/channels.js']:[]),...(publicMedia?['server/admin-bff/product-media.js']:[]),...(currentInstallation?['server/admin-bff/references.js','scripts/reference-catalog-contract.mjs']:[])]
-if(staffStock){source=extendAdminStockReadFixture(source,once);sources.push('scripts/admin-stock-read-fixture.inc.mjs','scripts/admin-stock-read-probe.inc.mjs','supabase/prepared/admin_product_stock_read.sql','server/admin-bff/product-stock.js','prepared-api/admin/products.js','server/admin-bff/lots.js')}
+if(staffStock){if(!stockRoleTransport)source=extendAdminStockReadFixture(source,once);sources.push('scripts/admin-stock-read-fixture.inc.mjs','scripts/admin-stock-read-probe.inc.mjs','supabase/prepared/admin_product_stock_read.sql','server/admin-bff/product-stock.js','prepared-api/admin/products.js','server/admin-bff/lots.js')}
 if(browserWorkflow)sources.push('scripts/imported-intake-browser-probe.inc.mjs','src/views/admin/ProductIntakeSessionModal.jsx','src/views/admin/InventoryGrid.jsx','src/services/productIntakeService.js')
 const pins=Object.fromEntries(sources.map(f=>[f,hash(fs.readFileSync(f))]))
 if(productWorkflow)source=once(source,'const prep=JSON.parse',`const sourceInputs=${JSON.stringify(pins)};fs.mkdirSync(path.join(out,'source-inputs'));for(const [file,expected]of Object.entries(sourceInputs)){const bytes=fs.readFileSync(file);assert.equal(sha(bytes),expected,file);fs.writeFileSync(path.join(out,'source-inputs',file.replaceAll('/','--')),bytes,{flag:'wx'});}\nconst prep=JSON.parse`)

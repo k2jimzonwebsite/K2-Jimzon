@@ -1,0 +1,750 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261011-01",
+  "case": "oci-imported-media37",
+  "privateCase": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media37",
+  "providerWrites": false,
+  "controllerSession": 56095,
+  "controllerExit": 0,
+  "result": {
+    "owningMap": "MAP-023/018",
+    "scope": "Genuine local complete accepted reference/category/tariff installer with protected reference creation and imported product/public-media/stock/Website commands; exact offline application restoration; no browser/provider acceptance",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "7168",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 12392,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "processStopped": true,
+    "serialSha256": "8517d9e82a5f0d4540dc9072750ec6bff2d1afdaf5ffb001dfe84baff6e74d05"
+  },
+  "hostDriver": {
+    "owningMap": "MAP-018",
+    "scope": "Genuine local complete accepted reference/category/tariff installer with protected reference creation and imported product/public-media/stock/Website commands; exact offline application restoration; no browser/provider acceptance",
+    "providerWrites": false,
+    "checks": [
+      "admin_create_confirmed_user",
+      "wrong_password_refused",
+      "password_login",
+      "server_validated_user",
+      "totp_enroll",
+      "totp_challenge",
+      "totp_verify",
+      "assurance_level",
+      "aal2_server_validated_user",
+      "prior_taxonomy_diagnostic_not_repeated",
+      "routed_fresh_http_session_refused",
+      "routed_missing_bot_secret_refused",
+      "routed_wrong_password_refused",
+      "routed_password_pending_cookie_mfa_required",
+      "routed_pending_cookie_not_active",
+      "routed_pending_probe_cleared_cookie_relogin_recovers",
+      "routed_wrong_totp_refused",
+      "routed_real_totp_registry_active_cookie",
+      "routed_http_cookie_session_restored",
+      "routed_protected_security_review_actual_auth_mfa_events",
+      "routed_logout_missing_csrf_refused",
+      "routed_logout_registry_inactive_server_refresh_refused",
+      "routed_saved_old_cookie_refused_after_logout",
+      "routed_logout_cleared_cookie_refused",
+      "genuine_bff_csv_review_original_identity_canonical_stock_publication_website_listing",
+      "genuine_bff_intake_three_binary_images_replay_conflict_retention_readback_cleanup",
+      "global_logout",
+      "logout_refresh_refused",
+      "auth_user_deletion_deferred_to_offline_fixture_recovery"
+    ],
+    "aal1": {
+      "role": "authenticated",
+      "aal": "aal1",
+      "signatureVerified": true
+    },
+    "aal2": {
+      "role": "authenticated",
+      "aal": "aal2",
+      "signatureVerified": true
+    },
+    "routedStage": "POST_channels",
+    "lastRoutedResponse": {
+      "status": 200,
+      "code": "success"
+    },
+    "botScope": "Missing-secret refusal real; positive local flow explicitly allows unconfigured provider. No Cloudflare/provider acceptance.",
+    "routedLogoutRefusal": {
+      "name": "AuthApiError",
+      "status": 400,
+      "code": "refresh_token_not_found"
+    },
+    "intakeStage": "synthetic_media_cleanup",
+    "intakeReply": {
+      "status": 200,
+      "code": "success"
+    },
+    "importedBaseline": {
+      "status": "Draft",
+      "published": false,
+      "primaryImagePreserved": true
+    },
+    "integratedReferences": {
+      "created": [
+        {
+          "id": "54770ab1-70ce-485c-956f-66bce591fa97",
+          "kind": "brand",
+          "name": "MAP018 synthetic brand e8b25093-fd25-4e20-90ce-63a2bc97e60c",
+          "parentId": null
+        },
+        {
+          "id": "f6ff5b89-fe20-4bea-bac8-d51b78820bed",
+          "kind": "category",
+          "name": "MAP018 synthetic category 2addcb02-4b68-42d7-8788-e22ed31abc07",
+          "parentId": null
+        }
+      ],
+      "exactReplay": true,
+      "protectedBff": true,
+      "offlineTaxonomySeeds": false
+    },
+    "importedProduct": {
+      "id": "a4cd0197-535b-4317-83a2-60c9573d238d",
+      "sku": "K2-SKU-001001",
+      "catalogId": "08506cc2-6987-4eef-a4e1-ccd9081dce43",
+      "baselineVersion": "1",
+      "importedDraft": true,
+      "zeroBatches": true,
+      "syntheticMediaUrl": "https://example.invalid/imported-supplied.jpg",
+      "reviewedOriginalIdentity": true,
+      "rejectedIngredientsPreserved": true,
+      "reviewReplay": true,
+      "canonicalStock": 6,
+      "stockReplay": true,
+      "liveOriginalIdentity": true,
+      "websiteListing": {
+        "sku": "K2-SKU-001001",
+        "status": "Active",
+        "channel_source": "website"
+      },
+      "websiteReplay": true
+    },
+    "staffStockRead": {
+      "scope": "Current-role genuine local Auth/PostgREST/BFF reads using accepted native56 installer; provider/hosted acceptance separate",
+      "providerWrites": false,
+      "noLots": {
+        "rpc": [
+          {
+            "sku": "K2-SKU-001001",
+            "stock_from_batches": 0
+          }
+        ],
+        "catalog": 0,
+        "master": 0,
+        "physical": 0,
+        "snapshotComplete": true
+      },
+      "eligible": {
+        "rpc": [
+          {
+            "sku": "K2-SKU-001001",
+            "stock_from_batches": 6
+          }
+        ],
+        "catalog": 6,
+        "master": 6,
+        "physical": 6,
+        "snapshotComplete": true
+      },
+      "publicDraftOfferAbsent": true,
+      "invalidInputsRefused": 4,
+      "currentPolicy": {
+        "rpc": [
+          {
+            "sku": "K2-SKU-001001",
+            "stock_from_batches": 0
+          }
+        ],
+        "catalog": 0,
+        "master": 0,
+        "physical": 6,
+        "snapshotComplete": true
+      },
+      "restoredPolicy": {
+        "rpc": [
+          {
+            "sku": "K2-SKU-001001",
+            "stock_from_batches": 6
+          }
+        ],
+        "catalog": 6,
+        "master": 6,
+        "physical": 6,
+        "snapshotComplete": true
+      },
+      "anonymousRefused": true,
+      "aal1Refused": true,
+      "currentRoleTransport": {
+        "auth": "Existing genuine Auth-issued AAL2 session; profile changes are synthetic owner setup",
+        "roles": {
+          "Staff": {
+            "rpc": [
+              {
+                "sku": "K2-SKU-001001",
+                "stock_from_batches": 6
+              }
+            ],
+            "catalog": 6,
+            "master": {
+              "refused": 403
+            },
+            "physical": 6,
+            "snapshotComplete": true
+          },
+          "SuperAdmin": {
+            "rpc": [
+              {
+                "sku": "K2-SKU-001001",
+                "stock_from_batches": 6
+              }
+            ],
+            "catalog": 6,
+            "master": 6,
+            "physical": 6,
+            "snapshotComplete": true
+          },
+          "Customer": {
+            "rpcRefused": 2,
+            "bffRefused": 3
+          }
+        },
+        "restoredAdmin": {
+          "rpc": [
+            {
+              "sku": "K2-SKU-001001",
+              "stock_from_batches": 6
+            }
+          ],
+          "catalog": 6,
+          "master": 6,
+          "physical": 6,
+          "snapshotComplete": true
+        }
+      },
+      "passed": true
+    },
+    "intakeEvidence": {
+      "sessionId": "8d6d8412-a745-430d-a2d9-894400a37a80",
+      "requestId": "1dbedc29-ed11-4faf-b243-8a74c0bf3a3f",
+      "created": true,
+      "sessionReplay": true,
+      "images": [
+        {
+          "sessionId": "8d6d8412-a745-430d-a2d9-894400a37a80",
+          "slot": "PRIMARY",
+          "path": "c3ade09f-83ce-4cb7-a0bb-0193a36eb975/8d6d8412-a745-430d-a2d9-894400a37a80/primary-9dd970c4-6c43-45f0-a0c8-f00e38b6fab6-bd4287f511bb7ecc.png",
+          "size": 284,
+          "type": "image/png",
+          "width": 160,
+          "height": 120,
+          "sha256": "bd4287f511bb7ecc568bba235d312194c4f9e63ba3971d9c142a462816b5306c",
+          "uploadStatus": "uploaded",
+          "fileName": "primary.png",
+          "exactReplay": true,
+          "filenameConflict": true,
+          "retainedDownload": true
+        },
+        {
+          "sessionId": "8d6d8412-a745-430d-a2d9-894400a37a80",
+          "slot": "BACK",
+          "path": "c3ade09f-83ce-4cb7-a0bb-0193a36eb975/8d6d8412-a745-430d-a2d9-894400a37a80/back-e2801107-a4f1-42e9-8002-f3d09a0cdcd5-3e1f5906b3431581.png",
+          "size": 284,
+          "type": "image/png",
+          "width": 160,
+          "height": 120,
+          "sha256": "3e1f5906b343158160521689044fbaddadb25bfc226dbeb6e2b3b1965fd44fbe",
+          "uploadStatus": "uploaded",
+          "fileName": "back.png",
+          "exactReplay": true,
+          "filenameConflict": true,
+          "retainedDownload": true
+        },
+        {
+          "sessionId": "8d6d8412-a745-430d-a2d9-894400a37a80",
+          "slot": "BARCODE",
+          "path": "c3ade09f-83ce-4cb7-a0bb-0193a36eb975/8d6d8412-a745-430d-a2d9-894400a37a80/barcode-4a3d7b31-646a-4b1d-aa35-e2599072a166-22b87617f9ae5e88.png",
+          "size": 284,
+          "type": "image/png",
+          "width": 160,
+          "height": 120,
+          "sha256": "22b87617f9ae5e886e6ad3ce7362367a49a7b3672e8ff3557331c15bf9853154",
+          "uploadStatus": "uploaded",
+          "fileName": "barcode.png",
+          "exactReplay": true,
+          "filenameConflict": true,
+          "retainedDownload": true
+        }
+      ],
+      "protectedReadback": true,
+      "disposableCleanup": true
+    },
+    "publicMedia": {
+      "url": "https://127.0.0.1:54395/storage/v1/object/public/product-images/c3ade09f-83ce-4cb7-a0bb-0193a36eb975/product-media/00eb8265-acab-414f-9a58-253b74e19a04-e511005c7a59f146.png",
+      "objectPath": "c3ade09f-83ce-4cb7-a0bb-0193a36eb975/product-media/00eb8265-acab-414f-9a58-253b74e19a04-e511005c7a59f146.png",
+      "sha256": "e511005c7a59f146f409b1e35064be9cd8dcd99814f0ea5b2255dff9b458a1e0",
+      "bytes": 341,
+      "width": 180,
+      "height": 140,
+      "uploadReplay": true,
+      "assignmentReplay": true,
+      "canonicalReadback": true,
+      "anonymousDownload": true,
+      "certificateValidation": true,
+      "browserRendered": false,
+      "disposableCleanup": true,
+      "cleanupNotFound": {
+        "httpStatus": 400,
+        "storageStatus": 404
+      }
+    },
+    "routedTransport": {
+      "calls": {
+        "auth": 87,
+        "rest": 281,
+        "storage": 21,
+        "routed": 77
+      },
+      "scope": "Native Node request/response streams through production api/admin/index.js and real Auth/PostgREST; no hosted Vercel or browser-cookie-jar proof"
+    },
+    "logoutRefusal": {
+      "name": "AuthApiError",
+      "status": 400,
+      "code": "refresh_token_not_found"
+    },
+    "passed": true
+  },
+  "installation": {
+    "receipt": "docs/acceptance/ADMIN_STOCK_GUARDED_INSTALLATION_20261011.json",
+    "receiptSha256": "0390c06a03467e8fcb67afea4732186d77c45ebfc96401dd2ffbef7036d3667d",
+    "inputs": [
+      {
+        "file": "scripts/admin-stock-catalog-contract.mjs",
+        "sha256": "561b37825e38999b5ced44d01a9fe2aa93e1e8f608f8000a045b2c39db917812"
+      },
+      {
+        "file": "scripts/test-admin-stock-catalog-contract.mjs",
+        "sha256": "a88dda7ab1604fabb9e68c90b7ec0d3e86266e8386b6b7a4056f7281875fdb97"
+      },
+      {
+        "file": "scripts/test-admin-stock-installation-composition.mjs",
+        "sha256": "12e3b8b4e53779209fdf9cdbbaee269d6d24f9a95c79ec998d468235c12bed47"
+      },
+      {
+        "file": "scripts/prepare-imported-provider-fixture.mjs",
+        "sha256": "092032a0b067061effe21762800234fd0d267fa6d9d85c2e70474da3aeef3490"
+      },
+      {
+        "file": "docs/acceptance/sources/admin-stock-installer/operating-replay-package-before.mjs",
+        "sha256": "4b528247a9905f8fb622bf703eb44344efa7f8490652ddbac0c4ef5c2ceb4ed4"
+      },
+      {
+        "file": "docs/acceptance/sources/admin-stock-installer/operating-replay-package-after.mjs",
+        "sha256": "0745352c4309f9cc885fee69d94f55bd191133d822aa82dddb839b8a6cb7f3c7"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\captured-baseline-check.sql",
+        "sha256": "aff237ec2224cbd9849391e25cdd1dc7646b59f7d3c61850fd5a6ca8e89a6e4b"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\captured-foundation.sql",
+        "sha256": "cb7cebec0fcf40d9d6fbeed80b18654901b73bb6f5bcae0782c68f592ad6c60c"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\captured-restore.sql",
+        "sha256": "57c1cf8abe1b36ba078d125751cf91b01c0a46faf9ca0a5be9cd561e60bd9637"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\cold-authority.sql",
+        "sha256": "da1ab048555c6d3f009b0f6ae811e51528d299ef3d7f4d8daa60632a65948fd1"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\cold-catalog.sql",
+        "sha256": "6ba79c208b3bc30e79b1b520d1876e589ac734f9799a147bd07d2e7e6aa76a54"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\foundation-metadata.sql",
+        "sha256": "ba80db4dcc15ed07c1fcf4b6b3a3f62c651f8e1f17155a1bb3cc32297baedbeb"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\foundation-rows.sql",
+        "sha256": "c3ab70a6b9692ca9df71392f75df92593652b4ef92fff2b8907ade2eada31822"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\full-contents.sql",
+        "sha256": "b7f27c8f502548b73f15cee53018c5e701f4025ed36c92a94097ce81333ba9c1"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\image-probe.sh",
+        "sha256": "63b06f69ec4e12178daaa192951a7a8c0fccfe1ab87abb1126a6a896f7482bd6"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\init.sh",
+        "sha256": "40380821b7a2a066d164c1f391c92269516ca38c142e8fc55e29cfbeb6e144c2"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\managed-check.sql",
+        "sha256": "6d672122ff9422a7a762d459c3ac68c09e7796f98c076dd7510fe16efc7cf5b0"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\managed-fixtures.sql",
+        "sha256": "dc39aabdfcc689bf6948b7e8052c84eb97fad1afbb200164a74c58430456a974"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\managed-settings.conf",
+        "sha256": "7997d9ec01a9b9a3306bb5ead38e6f6c006b7354912daac9c7130283669ccdf8"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\original-row-projection.sql",
+        "sha256": "98b83bb916c9178406ded4c4d6c030ff9c1ed0f3b39bda92e7be1e6826251010"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\preserved-foundation.dump",
+        "sha256": "f02a7598776b38d35d9d8656178a05ba8e45577668a1be48da2c7553ee696e10"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\race-blocker.sql",
+        "sha256": "8c132ca0ec2b7b2e517eefd78c0b4fa679bbbe49cbc81c529d841420c9a098bd"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\race-catalog.sql",
+        "sha256": "10b5ebadfbb099ad8d3cbc624220b731ec49ddbd9f2c855412f922631d277ceb"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\race-drift.sql",
+        "sha256": "1da0f0f60730e26e5fe867e205ec2b73eb2925346d5b43eb61f4abba627f0f46"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\race-install.sql",
+        "sha256": "e174d1c974925ff0ae739acc689bcdb860d03695b467043db51b12164a56a6e6"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\race-locks.sql",
+        "sha256": "22a5193af083cd96b8305ece001c330abadad71062df463d6831ede53d17984f"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\race-observer.sql",
+        "sha256": "e5eb75ea07860b29b8559fe47872d2e15eee56bf241d8835b2fa329e640a930b"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\race-recover.sql",
+        "sha256": "b1ca683e1308b0fc0a79e14e3f9a9cdd7187983196fdf30ec55b027d495cc7d5"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\role-bootstrap.sql",
+        "sha256": "619a43276c9c7ae166cc7f81bb018b2433e577952ab78969efa845fabd504d01"
+      },
+      {
+        "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\staging\\k2\\vault-probe.sql",
+        "sha256": "cd15118a69ac9ea0fcd2081e2755c46d4b7391f50d456480755dd9911f7b974d"
+      }
+    ],
+    "expectedFile": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported56\\execution01\\after-catalog.json",
+    "expectedSha256": "f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b",
+    "expectedCanonicalSha256": "98b576aeec6521ecb7825420ab3579f1afdd9d5bd78787c710855c94f7365987",
+    "package": {
+      "sqlSha256": "e6eda8085254f27f0dd30c01f77c3a53bfc4a1652c59ad472a68558079bab052"
+    }
+  },
+  "sourcePins": {
+    "scripts/prepare-imported-media-fixture.mjs": "ebb623f627ee2c7ee260389517198bea873ee4478d0f14ddbf76ee81c1da1eb3",
+    "scripts/imported-product-workflow-probe.inc.mjs": "c7e9189642d4a989ff60259ca7e594fa7a5c259c0d4d82b256b48acac1fd3f5f",
+    "scripts/fixture-admin-http-body.mjs": "e178ac738b6a972ff02c61e2245f598af2bae57c09e2a636bb07e992858cdd0f",
+    "scripts/storage-runtime-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+    "server/admin-bff/product-intake.js": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37",
+    "scripts/imported-intake-evidence-probe.inc.mjs": "4e84f4350f0722831909f4eaba5912c20269d14d39710a501f218f12f612ab9f",
+    "server/admin-bff/catalog-spreadsheet.js": "48463a6d90b7af0d535034ff82182c08d728911a23bf6cae423ffa490c827d62",
+    "server/admin-bff/product-master.js": "be5e920c73cc2046798d66903759e7e75b61c7ebd6f6289807d85f943fb86bf7",
+    "server/admin-bff/channels.js": "36418ddff9378ebf2c40f4568a53b1f9c9136100640524cf0ba8ab5e32f72186",
+    "server/admin-bff/product-media.js": "9eda473df524a8a06cc003873e88d4b0e4607f0c4d651844791fd4dbbbac7d72",
+    "server/admin-bff/references.js": "fc402debb63588e533c08c8da21147e73109d58cc37673e86c6d2760df445684",
+    "scripts/reference-catalog-contract.mjs": "8acf5671543000e966d0228e595ee5d22c898e2d92fda8d06e810d6e0e52631b",
+    "scripts/admin-stock-read-fixture.inc.mjs": "2900a264536555a0252484decf1eeddf1dd1df57bc2d9989f24af439b08d6ce9",
+    "scripts/admin-stock-read-probe.inc.mjs": "354593cdd7eedbe68c273522fe80a1c7dda6a22d23fd52902a0d3221985309ca",
+    "supabase/prepared/admin_product_stock_read.sql": "ccd55d177244c82a693cbeedf779611050e48aa3ba4f7fc12909450341a75db3",
+    "server/admin-bff/product-stock.js": "b1fc9cc4e8eabcfcb9b6873ffb2f68587cc940eabfd618c0ef562f24d3adfc45",
+    "prepared-api/admin/products.js": "257276537a6975373a00e74659363cd1f240e558de0ceb72697c0abb843977cd",
+    "server/admin-bff/lots.js": "f19f05e8f55b053ad5f7f4c569a0199577411ae335728c74194c0f52feaadbb0"
+  },
+  "pins": [
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\preparation.json",
+      "sha256": "50e3add8e72cbe5991d347e0a16ebe247ce4bf9f1bcdc47162b00ad8cbdc28f0"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\media-source-pins.json",
+      "sha256": "ae3f7c28e7a133384a4902258e8455410f96f22df8f6b555c22590a3523b3331"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\full-installation-pins.json",
+      "sha256": "cd80b4f17a8185fae2f1e6c6f2b5efc245bfe424cbc55ae49f7277643faa7042"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\executed-source.mjs",
+      "sha256": "98768f1478309537c58f92bbe28572a3f15097ebdcdaea62165824b9b42fffda"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\executed-derivation.mjs",
+      "sha256": "ebb623f627ee2c7ee260389517198bea873ee4478d0f14ddbf76ee81c1da1eb3"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\runner-source.mjs",
+      "sha256": "d7bd983b68300aa515bd713ce812f15495bd8fd0ce4c3d8f17caeeb09850a212"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\bff-helper.mjs",
+      "sha256": "4e253bd52a9a35b2050ba94e8f5aeaefe90ffac5d0067e4dbab26a4c21933f02"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\host-driver.mjs",
+      "sha256": "3bfd602a3625c32ce7273343cfd5bc8582aa87c8632fce488ca8934679350b60"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\host-driver-result.json",
+      "sha256": "7487111f78f7af4fb66a96d1cea73202dc62e441a45c8516f70b2ad28aa8d3bf"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\initramfs.cpio",
+      "sha256": "d42c6ad0fd1815eae59e93599add86ef104b483e1fff2cd3861128080f2e4b1e"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\overlay.cpio",
+      "sha256": "64c293a348546cc836249502edf7fb64a7a1236699d111f437938d97a3ecd1a3"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\staging\\k2\\current-installed-expected.json",
+      "sha256": "f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\staging\\k2\\image-probe.sh",
+      "sha256": "5d1c09a8da40db5024c91e0249760b51cbfde278029104f9def6ce40aa341ead"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\staging\\k2\\init.sh",
+      "sha256": "73f51a04ef05c4d4579eeed992c57c484f1e13a1426f522c4cee72e183b53348"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\staging\\k2\\race-catalog.sql",
+      "sha256": "10b5ebadfbb099ad8d3cbc624220b731ec49ddbd9f2c855412f922631d277ceb"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\staging\\k2\\race-install.sql",
+      "sha256": "e174d1c974925ff0ae739acc689bcdb860d03695b467043db51b12164a56a6e6"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\execution01\\launch.json",
+      "sha256": "cf6047d16aed1a2c546411361c69532ff1be54fb9a37ffeaa4c65d2bc5357b90"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\execution01\\result.json",
+      "sha256": "357f1704d168a1d6c65b7808a06619fc5e3c825615ba10a1e8329a22389e0b0e"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\execution01\\serial.log",
+      "sha256": "8517d9e82a5f0d4540dc9072750ec6bff2d1afdaf5ffb001dfe84baff6e74d05"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media37\\execution01\\stderr.log",
+      "sha256": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc"
+    }
+  ],
+  "conservation": {
+    "applicationTables": 107,
+    "tableHashes": {
+      "k2_private-admin_bff_secrets": "0ba34f528dab5d1bcd27f0a6cec1c04cf4e855a22a9e9b86b677898b077e1a34",
+      "k2_private-admin_command_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-admin_request_nonces": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-admin_request_rate_buckets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-admin_session_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-admin_sessions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-ai_spend_control_config": "184d7a0965120e81691dd4e78bc914f8c22afa8371768d8828123da17a044e1a",
+      "k2_private-ai_spend_control_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-catalog_import_operations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-catalog_import_row_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-category_lot_command_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-category_policy_command_config": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-category_shelf_life_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-category_shelf_life_policy": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-channel_verification_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-customer_account_notifications": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-customer_account_settings": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-customer_delivery_rate_heads": "df41604481ed29640b5a9ceee1c9509e54d49f57a620b862acda2b022c2e2a80",
+      "k2_private-customer_delivery_rate_versions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-delivery_psgc_locations": "5e08d97551a2ba9a1249013b71ee1dacbd79b15a3c753768175280d2cd3efe4b",
+      "k2_private-express_delivery_acceptances": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-express_delivery_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-express_delivery_quotes": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-globe_review_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-guest_account_claim_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-guest_bff_secrets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-guest_conversation_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-guest_rate_buckets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-guest_request_nonces": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-intake_ai_jobs": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-order_delivery_construction_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-order_delivery_snapshots": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-order_payment_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-product_delete_operations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-product_intake_evidence_cleanup_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-product_master_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-product_media_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-product_media_orphan_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-reference_command_context": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-reference_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-staff_delete_credentials": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-staff_invitation_operations": "19f8c77c8dbf2a25e96f833dbf66636a9152295ebc894b5945e548bcd121f8cf",
+      "k2_private-storefront_auth_rate_buckets": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-storefront_auth_rate_nonces": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-website_listing_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-wholesale_inquiry_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "k2_private-wholesale_inquiry_receipts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-audit_logs": "9eaa92a3a7618f16ecbe6ef0019c6d57f5bd7e586a32030aade40dd4a520dfc7",
+      "public-batch_change_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-brands": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-categories": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channel_connections": "825074baa12066c2b04c5e782ce7a21e9a284e8bfe7ac79dabae39358805b5fa",
+      "public-channel_credentials": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channel_event_inbox": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channel_identities": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channel_listings": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channel_shops": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-channels": "b521c4c138fb00db1b347bcec36cb7030b619e46d5c7f7452fc76b46e1b04ff0",
+      "public-consignment_items": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-consignment_scan_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-consignments": "8a4880119b90cbb1ff3e336840984138a9cf8160184f06b334b942ebb61d73c3",
+      "public-conversation_events": "438a4e1d7077b8d410a2712b6ac22d94b810733dcd8e7125644c0cccdbea2963",
+      "public-conversations": "3ab503ba9b0db398e0e4da4c9afa01484005214cc921b03c7e46bfb216916e46",
+      "public-coupon_redemptions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-coupons": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-custodians": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-customer_accounts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-customer_claim_requests": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-customer_contact_points": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-customers": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-delivery_cost_rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-delivery_courier_options": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-delivery_locality_rules": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-delivery_quote_snapshots": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-delivery_rate_sources": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-error_reports": "4f83f496dbf3ce2f05c108060ce85136b818257943e150d451ba0aaf2d3a9958",
+      "public-globe_products": "5385dcc65ac609026b0ffd6f2cd8fb97c7ccba2eba481f19c084e48bffc1c783",
+      "public-guest_access_grant_scopes": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-guest_access_grants": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-hubs": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-inventory_balances": "aeffe3095235747fb992c39327adcf62a0ed2c117d1f1ddf34e2dfb87d79c87d",
+      "public-inventory_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-inventory_reservations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-messages": "73042f6136a28339e4f3fd20a33c62b6055669478edea35381767d28eb4bbc7f",
+      "public-notifications": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-order_request_events": "6af64929ff9737811d11bc0a46fc03bfbc9131beca5bfbe689f7df259213e0a8",
+      "public-order_request_items": "98ff9cb52c0fb8054b337c684b4f4c09948caa59ddf9c8dbb033cb851a01cfed",
+      "public-order_requests": "4ca443a068e7d5876055bce649c3ee16feab00cccc17475b80a40f2467f15e0c",
+      "public-orders": "79908b3c1bffb93352b9a85608ab677402225794bf588db62985c87a56c27663",
+      "public-packing_scan_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-pasabuy_events": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-pasabuy_quotes": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-pasabuy_requests": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-po_lines": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-product_batches": "13605899382ef80766744cb05e90a5562fe8b2d7cefa8674ce4ac369945c02f2",
+      "public-product_deletions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-product_drafts": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-product_intake_sessions": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-products": "9a1668345f59eff5475a40f52fab35ae1b8cc5ae83de2202586dcbd86ac32e2a",
+      "public-products_old": "756786d903f1b2965c70e914586c9199735ccd6a0cc33857689f44289122a609",
+      "public-purchase_orders": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-reviews": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-staff_allocations": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-suppliers": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-user_profiles": "b7378c72ac9ceaad048dcf219fa361ebf96f682bef065eb6b2b61927b74f74cc",
+      "public-warehouses": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public-wholesale_inquiries": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sequenceSha256": "56236a44372da27f6914beb5aa2f16b1afcb2447dac333f8fa0281c6f9d643a0",
+    "installedSchemaSha256": "f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b",
+    "original88ProjectionSha256": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+    "capturedAuthorityWitnesses": 2
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "session": 62798,
+    "exit": 0,
+    "adminChecks": 30,
+    "routeControlGaps": 0
+  },
+  "retirement": {
+    "command": "Read-only owned process and six loopback-listener absence",
+    "output": "c9edb3",
+    "exit": 0,
+    "pid": 12392,
+    "matchingGuestControllerAbsent": true,
+    "listenersAbsent": [
+      54392,
+      54393,
+      54394,
+      54395,
+      54396,
+      54397
+    ]
+  },
+  "review": {
+    "status": "verified",
+    "reviewer": "stock_recovery_review",
+    "critical": 0,
+    "important": 0,
+    "scope": "Independent final source/raw/18current+18archive/30installation/107table/sequence/schema/role/currentAuth review; parent OS retirementc9edb3"
+  },
+  "preparation": {
+    "red": "fbaac4",
+    "green": "b3ed99",
+    "staleOld41Guard": "017398",
+    "wrongTestFileCorrected": true
+  },
+  "failure": {
+    "case": "oci-imported-media35",
+    "controllerExit": 1,
+    "reason": "Observed expected Staff PRODUCT_ADMIN_REQUIRED403; prior test expected200",
+    "restorationMarkers": "107table/sequence/startup/twoauthority present; no accepted complete receipt"
+  },
+  "scope": "Genuine local Auth-issued AAL2 session, current Staff/SuperAdmin admission and Customer refusal for canonical stock/atomic lot RPCs and protected BFF, with Admin-only Product Master enforced. Exact accepted13-fragment installer/catalog and full application offline restoration.",
+  "limits": [
+    "Profile changes use synthetic owned service setup; no canonical staff-role writer qualification",
+    "No repeated browser/UI acceptance; no hosted/production bot or provider behavior claim",
+    "Concurrent canonical writers/atomic snapshot and global lot/reservation/order caps remain",
+    "Human-review/Website/media/Live/customer/hosted/provider/owner end-state remains open"
+  ],
+  "nextAction": "MAP-018: concurrent canonical-writer/atomic snapshot and global snapshot-cap qualification, then human-review/Website and complete product/hosted/provider/owner gates",
+  "recovery": "Revert only stock-role transport opt-in/probe/new test; preserve35diagnostic,36prepared-only and37accepted. No provider rollback."
+}

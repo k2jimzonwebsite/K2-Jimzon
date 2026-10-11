@@ -8,7 +8,7 @@ import {decodeEvidenceImage} from '../server/admin-bff/product-intake.js'
 import {importedIntakeBrowserProbe} from './imported-intake-browser-probe.inc.mjs'
 import {adminStockReadProbe} from './admin-stock-read-probe.inc.mjs'
 
-export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false,browserWorkflow=false,browserInventory=false,staffStock=false,browserOut}={}){
+export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false,browserWorkflow=false,browserInventory=false,staffStock=false,stockRoleTransport=false,browserOut}={}){
  let mediaCleanup,mediaPath
  const command=async(expect,route,body,key=randomUUID())=>expect(route,await request(route,'POST',body,{headers:{'x-k2-idempotency-key':key}})).result
  const prepareStock=async({expect,cleanup,good},categoryId)=>{
@@ -116,7 +116,7 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
    assert.equal(batches.reduce((n,b)=>n+Number(b.quantity),0),6)
    assert.equal(batches.reduce((n,b)=>n+Number(b.reserved_quantity),0),0)
    report.importedProduct.canonicalStock=6;report.importedProduct.stockReplay=!browserInventory
-   if(staffStock)await adminStockReadProbe({client,request,good,expect,credentials,target,report,phase:'after'})
+   if(staffStock)await adminStockReadProbe({client,request,good,expect,credentials,target,report,phase:'after',stockRoleTransport,cleanup,uid,jar})
    if(!browserInventory)await command(expect,'product-intake/publication',{sessionId,requestedStatus:'under_review',reason:'Explicit synthetic staff package review'})
    const current=good('publication_master',await client.from('products').select('*').eq('id',baseline.id).single())
    await command(expect,'product-master',{action:'update',payload:{sku,patch:{srp:100,is_human_reviewed:true},expectedUpdatedAt:current.updated_at,reason:'Explicit synthetic Admin pricing and human review'}})
