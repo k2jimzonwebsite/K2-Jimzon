@@ -1,0 +1,72 @@
+// MAP-018 / IDEA-20261009-11. Genuine local command journey, synthetic business facts.
+import assert from 'node:assert/strict'
+import {randomUUID,createHash} from 'node:crypto'
+import {CATALOG_COLUMNS} from '../server/admin-bff/catalog-spreadsheet.js'
+import {intakeEvidenceProbe} from './imported-intake-evidence-probe.inc.mjs'
+
+export async function importedProductProbe(uid,report,credentials,request,jar){
+ const command=async(expect,route,body,key=randomUUID())=>expect(route,await request(route,'POST',body,{headers:{'x-k2-idempotency-key':key}})).result
+ await intakeEvidenceProbe(uid,report,credentials,request,jar,{
+  before:async({client,cleanup,request,good,expect})=>{
+   const values=Object.fromEntries(CATALOG_COLUMNS.map(k=>[k,'']))
+   Object.assign(values,{template_version:'k2-catalog-v1',name:'Synthetic pantry '+randomUUID(),description:'Imported description to preserve',ingredients:'Synthetic label ingredients',country_of_origin:'Spain',primary_image_url:'https://example.invalid/imported-supplied.jpg',internal_notes:'Explicit synthetic CSV provenance'})
+   const csv=CATALOG_COLUMNS.join(',')+'\n'+CATALOG_COLUMNS.map(k=>values[k]).join(',')
+   const body={csvText:csv,fileSha256:createHash('sha256').update(csv).digest('hex'),operationId:randomUUID(),selectedRowNumbers:[2],chunkIndex:0,finalChunk:true,reason:'Explicit synthetic imported Draft test'}
+   const result=await command(expect,'catalog-import/commit',body)
+   const sku=result.rows[0].sku
+   const baseline=good('imported_product_read',await client.from('products').select('*').eq('sku',sku).single())
+   report.importedBaseline={status:baseline.status,published:baseline.published,primaryImagePreserved:baseline.primary_image_url===values.primary_image_url}
+   assert.equal(baseline.status,'Draft','imported_status_draft');assert.equal(baseline.published,false,'imported_unpublished');assert.equal(baseline.primary_image_url,values.primary_image_url,'imported_media_preserved')
+   const stock=good('imported_zero_stock',await client.from('product_batches').select('id').eq('sku',sku));assert.deepEqual(stock,[])
+   const brands=good('canonical_brand',await client.from('brands').select('id,name').eq('id','b7000000-0000-4000-8000-000000000001'))
+   const categories=good('canonical_category',await client.from('categories').select('id,name').eq('id','b7000000-0000-4000-8000-000000000002'))
+   assert.equal(brands.length,1);assert.equal(categories.length,1)
+   const brand=brands[0],category=categories[0]
+   report.importedProduct={id:baseline.id,sku,catalogId:baseline.catalog_id,baselineVersion:String(baseline.catalog_record_version),importedDraft:true,zeroBatches:true,syntheticMediaUrl:values.primary_image_url}
+   return {baseline,brand,category,existingProduct:{productId:baseline.id,recordVersion:String(baseline.catalog_record_version)}}
+  },
+  after:async({client,cleanup,request,good,expect,target,sessionId,requestId})=>{
+   const {baseline,brand,category}=target,sku=baseline.sku
+   const reviewedPayload={meta:{schemaVersion:'k2.product-content.v3'},product:{name:baseline.name,description:'Staff accepted correction',ingredients:'Rejected AI suggestion',origin:'Italy',brand:brand.name,category:category.name}}
+   const fieldDecisions={name:'accepted',description:'accepted',ingredients:'rejected',origin:'accepted',brand:'accepted',category:'accepted'}
+   const step=async(next,patch={})=>command(expect,'product-intake/step',{sessionId,step:next,patch})
+   await step('packaging_evidence')
+   await step('research_handoff',{evidenceChecklist:{ingredients:true,allergens:true,storage:true,expiry:true},categoryType:'food'})
+   await step('field_review')
+   await step('draft_saved',{draftPayload:reviewedPayload,fieldDecisions,fieldProvenance:{sources:[]}})
+   const body={sessionId,requestId,reviewedPayload,fieldDecisions},key=randomUUID()
+   const reviewed=await command(expect,'product-intake/draft',body,key)
+   assert.equal(reviewed.product_id,baseline.id);assert.equal(reviewed.sku,sku)
+   assert.deepEqual(await command(expect,'product-intake/draft',body,key),reviewed)
+   const product=good('reviewed_product_read',await client.from('products').select('*').eq('id',baseline.id).single())
+   for(const field of ['id','sku','catalog_id','primary_image_url','ingredients','internal_notes'])assert.equal(product[field],baseline[field])
+   assert.equal(product.description,'Staff accepted correction');assert.equal(product.brand_id,brand.id);assert.equal(product.category_id,category.id)
+   assert.equal(Number(product.catalog_record_version),Number(baseline.catalog_record_version)+1)
+   report.importedProduct.reviewedOriginalIdentity=true;report.importedProduct.rejectedIngredientsPreserved=true;report.importedProduct.reviewReplay=true
+   await command(expect,'product-master',{action:'category_policy_set',payload:{categoryId:category.id,minimumDays:150,expectedVersion:0,reason:'Explicit synthetic shelf-life admission'}})
+   // Existing owned fixture catalogs supply real canonical custody identifiers.
+   good('fixture_hub',await cleanup.from('hubs').upsert({id:'HUB-MNL-CENTRAL',name:'Synthetic workflow hub',code:'SYN-WORKFLOW',country:'PH',role:'Synthetic test'},{onConflict:'id',ignoreDuplicates:true}))
+   good('fixture_custodian',await cleanup.from('custodians').upsert({id:'CUST-STAFF-ELENA',name:'Synthetic workflow custodian',role:'Synthetic test',hub_id:'HUB-MNL-CENTRAL'},{onConflict:'id',ignoreDuplicates:true}))
+   const expiry=new Date(Date.now()+400*86400000).toISOString().slice(0,10)
+   const inventory={sessionId,inventoryRequestId:randomUUID(),source:'reconciliation',inventory:{quantity:6,boxCode:'SYN-WORKFLOW-BOX',batchCode:'SYN-WORKFLOW-LOT',expiryDate:expiry,isNonExpiry:false,unitCost:40,ownerCode:'SYNTHETIC-OWNER',hubLocation:'HUB-MNL-CENTRAL',custodian:'CUST-STAFF-ELENA',reason:'Explicit dummy opening stock; no physical inventory claim'}}
+   const inventoryKey=randomUUID(),stock=await command(expect,'product-intake/inventory',inventory,inventoryKey)
+   assert.equal(stock.success,true);assert.deepEqual(await command(expect,'product-intake/inventory',inventory,inventoryKey),stock)
+   const batches=good('canonical_stock',await client.from('product_batches').select('quantity,reserved_quantity').eq('sku',sku))
+   assert.equal(batches.reduce((n,b)=>n+Number(b.quantity),0),6)
+   assert.equal(batches.reduce((n,b)=>n+Number(b.reserved_quantity),0),0)
+   report.importedProduct.canonicalStock=6;report.importedProduct.stockReplay=true
+   await command(expect,'product-intake/publication',{sessionId,requestedStatus:'under_review',reason:'Explicit synthetic staff package review'})
+   const current=good('publication_master',await client.from('products').select('*').eq('id',baseline.id).single())
+   await command(expect,'product-master',{action:'update',payload:{sku,patch:{srp:100,is_human_reviewed:true},expectedUpdatedAt:current.updated_at,reason:'Explicit synthetic Admin pricing and human review'}})
+   await command(expect,'product-intake/publication',{sessionId,requestedStatus:'live',reason:'Explicit synthetic final publication review'})
+   const final=good('live_product',await client.from('products').select('*').eq('id',baseline.id).single())
+   assert.equal(final.status,'Live')
+   const listingKey=randomUUID(),assignment={action:'website_listing_set',sku,assigned:true,expectedUpdatedAt:null,reason:'Explicit synthetic Website assignment'}
+   const listing=await command(expect,'channels',assignment,listingKey);assert.deepEqual(await command(expect,'channels',assignment,listingKey),listing)
+   const row=good('website_listing',await client.from('channel_listings').select('sku,status,channel_source').eq('sku',sku).eq('channel_source','website').single())
+   assert.equal(row.status,'Active')
+   report.importedProduct.liveOriginalIdentity=true;report.importedProduct.websiteListing=row;report.importedProduct.websiteReplay=true
+   report.checks.push('genuine_bff_csv_review_original_identity_canonical_stock_publication_website_listing')
+  }
+ })
+}

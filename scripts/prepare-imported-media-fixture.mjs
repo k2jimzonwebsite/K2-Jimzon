@@ -6,7 +6,8 @@ import {createHash} from 'node:crypto'
 import {pathToFileURL} from 'node:url'
 const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const name=process.argv.find(a=>a.startsWith('--case='))?.slice(7)
-const intakeEvidence=process.argv.includes('--intake-evidence')
+const productWorkflow=process.argv.includes('--product-workflow')
+const intakeEvidence=productWorkflow||process.argv.includes('--intake-evidence')
 assert.match(name||'',/^oci-imported-media\d{2}$/)
 assert.ok(!fs.existsSync(path.join(root,name)),'Fresh fixture required')
 const hash=b=>createHash('sha256').update(b).digest('hex')
@@ -16,7 +17,7 @@ const pin=file=>{const bytes=fs.readFileSync(path.join(root,base.case,file));ass
 const once=(s,b,a)=>{assert.equal(s.split(b).length,2,b.slice(0,100));return s.replace(b,()=>a)}
 let source=pin('executed-source.mjs').replaceAll(base.case,name)
 let helper=pin('bff-helper.mjs'),driver=pin('host-driver.mjs')
-const scope=intakeEvidence?'Genuine local BFF Auth/MFA intake session and binary evidence registration/replay/download/cleanup; original captured recovery; no browser/imported product/provider acceptance':'Genuine local Auth/MFA actual Storage upload/download/remove through unified proxy and binary Admin fixture adapter; original captured recovery; no browser/intake registration/provider acceptance'
+const scope=productWorkflow?'Genuine local BFF CSV imported Draft/review/stock/publication/Website listing and Storage packaging evidence; offline fixture restoration; no browser/provider acceptance':intakeEvidence?'Genuine local BFF Auth/MFA intake session and binary evidence registration/replay/download/cleanup; original captured recovery; no browser/imported product/provider acceptance':'Genuine local Auth/MFA actual Storage upload/download/remove through unified proxy and binary Admin fixture adapter; original captured recovery; no browser/intake registration/provider acceptance'
 helper=helper.slice(0,helper.indexOf('async function browserProbe('))
 helper=once(helper,"import http from 'node:http'","import http from 'node:http'\nconst {readFixtureAdminHttpBody}=await import(pathToFileURL(path.join(process.cwd(),'scripts/fixture-admin-http-body.mjs')).href)")
 helper=once(helper,"const calls={auth:0,rest:0,routed:0}","const calls={auth:0,rest:0,storage:0,routed:0}")
@@ -26,9 +27,10 @@ helper=once(helper,"calls[isAuth?'auth':'rest']++","calls[isAuth?'auth':isRest?'
 helper=once(helper,"port:isAuth?54392:54394,method:req.method,path:req.url.slice(8)","port:isAuth?54392:isRest?54394:54397,method:req.method,path:req.url.slice(isStorage?11:8)")
 helper=once(helper,"const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>16384){res.writeHead(413);res.end();return}chunks.push(chunk)}req.body=Buffer.concat(chunks).toString('utf8');","try{req.body=await readFixtureAdminHttpBody(req)}catch(error){if(error.message!=='FIXTURE_BODY_TOO_LARGE')throw error;res.writeHead(413);res.end();return}req.query=Object.fromEntries(new URL(req.url,'http://127.0.0.1:54396').searchParams);")
 // Keep HTTP BFF prerequisites, without repeating completed visible UI acceptance.
-const probeFile=intakeEvidence?'scripts/imported-intake-evidence-probe.inc.mjs':'scripts/imported-media-transport-probe.inc.mjs'
-helper=once(helper,'await browserProbe(credentials,report,uid);',intakeEvidence?'await intakeEvidenceProbe(uid,report,credentials,request,jar);':'await mediaTransportProbe(uid,report,credentials);')
-helper+=`\nconst {${intakeEvidence?'intakeEvidenceProbe':'mediaTransportProbe'}}=await import(pathToFileURL(path.join(process.cwd(),${JSON.stringify(probeFile)})).href)\n`
+const probeFile=productWorkflow?'scripts/imported-product-workflow-probe.inc.mjs':intakeEvidence?'scripts/imported-intake-evidence-probe.inc.mjs':'scripts/imported-media-transport-probe.inc.mjs'
+const probeName=productWorkflow?'importedProductProbe':intakeEvidence?'intakeEvidenceProbe':'mediaTransportProbe'
+helper=once(helper,'await browserProbe(credentials,report,uid);',intakeEvidence?`await ${probeName}(uid,report,credentials,request,jar);`:'await mediaTransportProbe(uid,report,credentials);')
+helper+=`\nconst {${probeName}}=await import(pathToFileURL(path.join(process.cwd(),${JSON.stringify(probeFile)})).href)\n`
 if(intakeEvidence){
  helper=once(helper,"{cookie,csrf=true}={}","{cookie,csrf=true,headers:extraHeaders={}}={}")
  helper=once(helper,"cookie:cookie??[...jar].map(([k,v])=>k+'='+v).join('; ')","cookie:cookie??[...jar].map(([k,v])=>k+'='+v).join('; '),...extraHeaders")
@@ -36,6 +38,10 @@ if(intakeEvidence){
 }
 driver=once(driver,'await taxonomy(verified.access_token,uid,report)',"report.checks.push('prior_taxonomy_diagnostic_not_repeated')")
 driver=driver.replace(/scope:'[^']*'/,()=> 'scope:'+JSON.stringify(scope))
+if(productWorkflow){
+ driver=once(driver,"good('admin_hard_delete_user',await admin.auth.admin.deleteUser(uid,false));uid=null","report.checks.push('auth_user_deletion_deferred_to_offline_fixture_recovery');uid=null")
+ driver=once(driver,"if(uid){const cleanup=await admin.auth.admin.deleteUser(uid,false);report.failedPathUserCleanup=!cleanup.error}","if(uid)report.failedPathUserCleanup='deferred_to_offline_fixture_recovery'")
+}
 fs.writeFileSync('.tools/probe-local-imported-media.mjs',helper)
 fs.writeFileSync('.tools/drive-local-imported-media.mjs',driver)
 source=source.replaceAll('.tools/probe-local-browser-boundary.mjs','.tools/probe-local-imported-media.mjs').replaceAll('.tools/drive-local-browser-auth.mjs','.tools/drive-local-imported-media.mjs')
@@ -75,6 +81,55 @@ probe=probe.replace('echo K2_POSTGREST_HEALTH_OK\\n',()=> 'echo K2_POSTGREST_HEA
 probe=probe.replace('kill "$rest_pid" 2>/dev/null || true\\n',()=>${JSON.stringify(stop)}+'kill "$rest_pid" 2>/dev/null || true\\n');
 probe=probe.replace('/bin/busybox timeout 120 /bin/busybox nc','/bin/busybox timeout 300 /bin/busybox nc');
 `
+// Full journey cleanup is an offline disposable-fixture operation, never a product command.
+// Capture every original application row and sequence before any synthetic actor is created.
+if(productWorkflow){
+ const baseline=`su postgres -s /bin/sh -c 'psql -X -q -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1' <<'PRODUCTBASELINE'
+COPY (SELECT id FROM auth.users ORDER BY id) TO '/tmp/product-original-auth.ids';
+CREATE TEMP TABLE product_fixture_tables AS SELECT n.nspname,c.relname FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relkind='r' AND n.nspname IN ('public','k2_private');
+COPY product_fixture_tables TO '/tmp/product-fixture-tables.rows';
+SELECT 'K2_PRODUCT_BASELINE_TABLES_'||count(*) FROM product_fixture_tables;
+DO $capture$ DECLARE r record; cols text; BEGIN FOR r IN SELECT * FROM product_fixture_tables LOOP SELECT string_agg(quote_ident(attname),',' ORDER BY attnum) INTO cols FROM pg_catalog.pg_attribute WHERE attrelid=format('%I.%I',r.nspname,r.relname)::regclass AND attnum>0 AND NOT attisdropped AND attgenerated=''; EXECUTE format('COPY (SELECT %s FROM %I.%I t ORDER BY to_jsonb(t)::text COLLATE "C") TO %L',cols,r.nspname,r.relname,'/tmp/product-before-'||r.nspname||'-'||r.relname||'.rows'); EXECUTE format('COPY (SELECT to_jsonb(t)::text FROM %I.%I t ORDER BY to_jsonb(t)::text COLLATE "C") TO %L',r.nspname,r.relname,'/tmp/product-before-'||r.nspname||'-'||r.relname||'.full'); END LOOP; END $capture$;
+DO $capture$ DECLARE r record; v bigint; called boolean; statements text:=''; BEGIN FOR r IN SELECT n.nspname,c.relname FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relkind='S' AND n.nspname IN ('public','k2_private') ORDER BY n.nspname,c.relname LOOP EXECUTE format('SELECT last_value,is_called FROM %I.%I',r.nspname,r.relname) INTO v,called; statements:=statements||format('SELECT pg_catalog.setval(%L,%s,%L);',format('%I.%I',r.nspname,r.relname),v,called)||chr(10); END LOOP; CREATE TEMP TABLE product_fixture_sequences(statement text); INSERT INTO product_fixture_sequences VALUES(statements); END $capture$;
+COPY product_fixture_sequences TO '/tmp/product-fixture-sequences.copy';
+PRODUCTBASELINE
+echo K2_PRODUCT_FIXTURE_BASELINE_CAPTURED
+`
+ const prerequisites=`su postgres -s /bin/sh -c 'psql -X -q -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1' <<'PRODUCTPREREQUISITES'
+INSERT INTO public.brands(id,name) VALUES('b7000000-0000-4000-8000-000000000001','MAP018 Synthetic pantry brand');
+INSERT INTO public.categories(id,name) VALUES('b7000000-0000-4000-8000-000000000002','MAP018 Synthetic pantry category');
+INSERT INTO k2_private.category_policy_command_config(singleton,maximum_depth) VALUES(true,10) ON CONFLICT(singleton) DO NOTHING;
+PRODUCTPREREQUISITES
+echo K2_SYNTHETIC_PRODUCT_PREREQUISITES_READY
+`
+ const sequenceRecheck=baseline.slice(baseline.indexOf('DO $capture$ DECLARE r record; v bigint;'),baseline.indexOf('PRODUCTBASELINE\necho')).replace('CREATE TEMP TABLE product_fixture_sequences(statement text);','TRUNCATE product_fixture_sequences;').replace('/tmp/product-fixture-sequences.copy','/tmp/product-fixture-sequences-after.copy')
+ const restore=`su postgres -s /bin/sh -c 'psql -X -q -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1' <<'PRODUCTRECOVERY'
+BEGIN;
+CREATE TEMP TABLE product_fixture_tables(nspname name,relname name);
+COPY product_fixture_tables FROM '/tmp/product-fixture-tables.rows';
+SET LOCAL session_replication_role=replica;
+DO $restore$ DECLARE r record; cols text; BEGIN FOR r IN SELECT * FROM product_fixture_tables LOOP EXECUTE format('DELETE FROM %I.%I',r.nspname,r.relname); END LOOP; FOR r IN SELECT * FROM product_fixture_tables LOOP SELECT string_agg(quote_ident(attname),',' ORDER BY attnum) INTO cols FROM pg_catalog.pg_attribute WHERE attrelid=format('%I.%I',r.nspname,r.relname)::regclass AND attnum>0 AND NOT attisdropped AND attgenerated=''; EXECUTE format('COPY %I.%I(%s) FROM %L',r.nspname,r.relname,cols,'/tmp/product-before-'||r.nspname||'-'||r.relname||'.rows'); END LOOP; END $restore$;
+CREATE TEMP TABLE product_fixture_sequences(statement text);
+COPY product_fixture_sequences FROM '/tmp/product-fixture-sequences.copy';
+DO $restore$ BEGIN EXECUTE (SELECT statement FROM product_fixture_sequences); END $restore$;
+SET LOCAL session_replication_role=origin;
+CREATE TEMP TABLE product_original_auth(id uuid PRIMARY KEY);
+COPY product_original_auth FROM '/tmp/product-original-auth.ids';
+DELETE FROM auth.users a WHERE NOT EXISTS(SELECT 1 FROM product_original_auth b WHERE b.id=a.id);
+COMMIT;
+${sequenceRecheck}
+DO $capture$ DECLARE r record; BEGIN FOR r IN SELECT * FROM product_fixture_tables LOOP EXECUTE format('COPY (SELECT to_jsonb(t)::text FROM %I.%I t ORDER BY to_jsonb(t)::text COLLATE "C") TO %L',r.nspname,r.relname,'/tmp/product-after-'||r.nspname||'-'||r.relname||'.full'); END LOOP; END $capture$;
+PRODUCTRECOVERY
+for before in /tmp/product-before-*.full;do after=$(echo "$before" | sed 's/product-before-/product-after-/');if ! cmp -s "$before" "$after";then echo "K2_PRODUCT_ROW_RECOVERY_MISMATCH_$before";sha256sum "$before" "$after";exit 1;fi;done
+sha256sum /tmp/product-before-*.full /tmp/product-after-*.full
+cmp -s /tmp/product-fixture-sequences.copy /tmp/product-fixture-sequences-after.copy
+sha256sum /tmp/product-fixture-sequences.copy /tmp/product-fixture-sequences-after.copy
+echo K2_PRODUCT_ALL_APPLICATION_SEQUENCES_RECOVERED
+echo K2_PRODUCT_ALL_APPLICATION_ROWS_RECOVERED
+`
+ const productInject=`\nprobe=probe.replace("su postgres -s /bin/sh -c 'psql -X -q -t -A -P pager=off -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f /tmp/original-row-projection.sql' > /tmp/auth-rows-before.json",()=>${JSON.stringify(baseline)}+"su postgres -s /bin/sh -c 'psql -X -q -t -A -P pager=off -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f /tmp/original-row-projection.sql' > /tmp/auth-rows-before.json\\n"+${JSON.stringify(prerequisites)});\nprobe=probe.replace('echo K2_BFF_PRIVATE_RECOVERY_OK\\n',()=> 'echo K2_BFF_PRIVATE_RECOVERY_OK\\n'+${JSON.stringify(restore)});\n`
+ source=once(source,"fs.writeFileSync(path.join(k2,'image-probe.sh'),probe,{flag:'wx'})",productInject+"\nfs.writeFileSync(path.join(k2,'image-probe.sh'),probe,{flag:'wx'})")
+}
 source=once(source,"fs.writeFileSync(path.join(k2,'image-probe.sh'),probe,{flag:'wx'})",inject+"\nfs.writeFileSync(path.join(k2,'image-probe.sh'),probe,{flag:'wx'})")
 const payload=`
 const storageReceipt=JSON.parse(fs.readFileSync('docs/acceptance/LOCAL_STORAGE_COMPATIBLE_RUNTIME_20261011.json'));
@@ -90,8 +145,9 @@ extraction+='/bin/busybox chmod 755 /http/umoci\\n/http/umoci unpack --image /ht
 source=once(source,"const run='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image-probe.sh';",payload+"\nconst run='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image-probe.sh';")
 source=once(source, "\"args[args.indexOf('-m')+1]='4096';args", "\"args[args.indexOf('-m')+1]='7168';args").replace('hostfwd=tcp:127.0.0.1:54394-:9997','hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996')
 source=once(source,"stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&","stdout.includes('K2_STORAGE_INTEGRATED_HTTP_READY')&&stdout.includes('K2_STORAGE_INTEGRATED_STOPPED_EXIT_')&&stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&")
-const sources=['scripts/prepare-imported-media-fixture.mjs',probeFile,'scripts/fixture-admin-http-body.mjs','scripts/storage-runtime-layout.mjs',...(intakeEvidence?['server/admin-bff/product-intake.js']:[])]
+const sources=['scripts/prepare-imported-media-fixture.mjs',probeFile,'scripts/fixture-admin-http-body.mjs','scripts/storage-runtime-layout.mjs',...(intakeEvidence?['server/admin-bff/product-intake.js']:[]),...(productWorkflow?['scripts/imported-intake-evidence-probe.inc.mjs','server/admin-bff/catalog-spreadsheet.js','server/admin-bff/product-master.js','server/admin-bff/channels.js']:[])]
 const pins=Object.fromEntries(sources.map(f=>[f,hash(fs.readFileSync(f))]))
+if(productWorkflow)source=once(source,'const prep=JSON.parse',`const sourceInputs=${JSON.stringify(pins)};fs.mkdirSync(path.join(out,'source-inputs'));for(const [file,expected]of Object.entries(sourceInputs)){const bytes=fs.readFileSync(file);assert.equal(sha(bytes),expected,file);fs.writeFileSync(path.join(out,'source-inputs',file.replaceAll('/','--')),bytes,{flag:'wx'});}\nconst prep=JSON.parse`)
 source=once(source,'const prep=JSON.parse',`fs.writeFileSync(path.join(out,'media-source-pins.json'),${JSON.stringify(JSON.stringify(pins,null,2))},{flag:'wx'});\nconst prep=JSON.parse`)
 const derived='.tools/derived-imported-media.mjs';fs.writeFileSync(derived,source)
 if(!process.argv.includes('--prepare-only'))await import(pathToFileURL(path.join(process.cwd(),derived)).href)

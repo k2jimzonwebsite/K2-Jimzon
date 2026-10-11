@@ -7,7 +7,7 @@ import { decodeEvidenceImage } from '../server/admin-bff/product-intake.js'
 import { readActiveSession } from '../server/admin-bff/security.js'
 import { createServerSupabase, restoreAuthSession } from '../server/admin-bff/supabase.js'
 
-export async function intakeEvidenceProbe(uid, report, credentials, request, jar) {
+export async function intakeEvidenceProbe(uid, report, credentials, request, jar, workflow = {}) {
   assert.equal(process.env.SUPABASE_URL, 'http://127.0.0.1:54395')
   const requestId = randomUUID(), key = randomUUID(), paths = []
   const good = (stage, reply) => {
@@ -43,6 +43,8 @@ export async function intakeEvidenceProbe(uid, report, credentials, request, jar
   const headers = { 'x-k2-idempotency-key': key }
   let sessionId
   try {
+    const target = workflow.before ? await workflow.before({ client, cleanup, request, good, expect, report }) : null
+    if (target) body.existingProduct = target.existingProduct
     const before = good('synthetic_session_absent', await cleanup.from('product_intake_sessions').select('id').eq('created_by', uid).eq('request_id', requestId))
     assert.deepEqual(before, [])
     const created = expect('intake_session_create', await request('product-intake/session', 'POST', body, { headers })).result
@@ -84,6 +86,10 @@ export async function intakeEvidenceProbe(uid, report, credentials, request, jar
       assert.equal(row.upload_status, 'uploaded')
     }
     report.intakeEvidence.protectedReadback = true
+    if (workflow.after) await workflow.after({ client, cleanup, request, good, expect, report, target, sessionId, requestId })
+  } catch (error) {
+    report.intakeFailedStage = report.intakeStage
+    throw error
   } finally {
     // Delete only this fixture actor/request before its Auth FK is hard-deleted.
     const removed = good('synthetic_session_cleanup', await cleanup.from('product_intake_sessions').delete().eq('created_by', uid).eq('request_id', requestId).select('id'))
