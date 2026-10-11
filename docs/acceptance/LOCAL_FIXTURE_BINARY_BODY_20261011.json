@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "date": "2026-10-11",
+  "scope": "Local fixture request-body adapter; real loopback streams into production image/JSON readers. Adapter not yet wired into full Admin fixture.",
+  "sourcePins": {
+    "scripts/fixture-admin-http-body.mjs": "509d7b4033846328fe04ea3381b779c8bb15574d111c5a5af68493ea5bde6821",
+    "tests/fixture-admin-http-body.checks.mjs": "809edf72cd4b57b7692f3921c470f6144eefb721e184cb085a89b951ee59fc1e"
+  },
+  "verification": {
+    "red": {
+      "session": 14538,
+      "exit": 1,
+      "passed": 2,
+      "failed": 3,
+      "reasons": [
+        "Small binary body decoded to UTF8 and unavailable to consumed-stream image reader",
+        "Exact4MiB refused413 by16KiB limit",
+        "Large catalog JSON refused413"
+      ]
+    },
+    "green": {
+      "toolChunk": "39c2f6",
+      "command": "node --test tests/fixture-admin-http-body.checks.mjs",
+      "exit": 0,
+      "passed": 5,
+      "failed": 0
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "session": 63842,
+      "exit": 0,
+      "adminSessionChecks": 20,
+      "routeControlGaps": 0
+    },
+    "review": {
+      "agent": "/root/reference_endpoint_review",
+      "critical": 0,
+      "important": 0
+    }
+  },
+  "behavior": "Bound actual streamed bytes at4MiB. Exact /api/admin/product-intake/evidence pathname including queries retains Buffer; other routes retain UTF8 string. Production readers keep their own stricter limits.",
+  "limits": [
+    "Raw byte transport only; no decoded valid image or actual Storage upload",
+    "No native full Admin integration",
+    "No app/UI/provider/configuration/deployment change"
+  ],
+  "recovery": "Revert adapter/test only. Loopback test servers close in finally; no database state. MAP018 owns wiring and real upload/cleanup/imported workflow acceptance.",
+  "next": "Wire adapter into one genuine imported fixture and add actual Storage proxy/process with preserved recovery."
+}
