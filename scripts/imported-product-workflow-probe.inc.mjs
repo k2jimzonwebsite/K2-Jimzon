@@ -6,7 +6,7 @@ import {intakeEvidenceProbe} from './imported-intake-evidence-probe.inc.mjs'
 import sharp from 'sharp'
 import {decodeEvidenceImage} from '../server/admin-bff/product-intake.js'
 
-export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false}={}){
+export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false}={}){
  let mediaCleanup,mediaPath
  const command=async(expect,route,body,key=randomUUID())=>expect(route,await request(route,'POST',body,{headers:{'x-k2-idempotency-key':key}})).result
  try{
@@ -23,8 +23,21 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
    report.importedBaseline={status:baseline.status,published:baseline.published,primaryImagePreserved:baseline.primary_image_url===values.primary_image_url}
    assert.equal(baseline.status,'Draft','imported_status_draft');assert.equal(baseline.published,false,'imported_unpublished');assert.equal(baseline.primary_image_url,values.primary_image_url,'imported_media_preserved')
    const stock=good('imported_zero_stock',await client.from('product_batches').select('id').eq('sku',sku));assert.deepEqual(stock,[])
-   const brands=good('canonical_brand',await client.from('brands').select('id,name').eq('id','b7000000-0000-4000-8000-000000000001'))
-   const categories=good('canonical_category',await client.from('categories').select('id,name').eq('id','b7000000-0000-4000-8000-000000000002'))
+   let brandId='b7000000-0000-4000-8000-000000000001',categoryId='b7000000-0000-4000-8000-000000000002'
+   if(currentInstallation){
+    const created=[]
+    for(const kind of ['brand','category']){
+     const payload={kind,name:'MAP018 synthetic '+kind+' '+randomUUID(),parentId:null,reason:'Explicit synthetic integrated product reference'},key=randomUUID()
+     const reply=expect('integrated_'+kind+'_create',await request('references','POST',payload,{headers:{'x-k2-idempotency-key':key,'x-k2-actor-id':uid}}))
+     assert.equal(reply.result.reference.kind,kind);assert.equal(reply.result.reused,false);assert.equal(reply.currentReference.status,'available')
+     assert.deepEqual(expect('integrated_'+kind+'_replay',await request('references','POST',payload,{headers:{'x-k2-idempotency-key':key,'x-k2-actor-id':uid}})).result,reply.result)
+     created.push(reply.result.reference)
+     if(kind==='brand')brandId=reply.result.reference.id;else categoryId=reply.result.reference.id
+    }
+    report.integratedReferences={created,exactReplay:true,protectedBff:true,offlineTaxonomySeeds:false}
+   }
+   const brands=good('canonical_brand',await client.from('brands').select('id,name').eq('id',brandId))
+   const categories=good('canonical_category',await client.from('categories').select('id,name').eq('id',categoryId))
    assert.equal(brands.length,1);assert.equal(categories.length,1)
    const brand=brands[0],category=categories[0]
    report.importedProduct={id:baseline.id,sku,catalogId:baseline.catalog_id,baselineVersion:String(baseline.catalog_record_version),importedDraft:true,zeroBatches:true,syntheticMediaUrl:values.primary_image_url}

@@ -5,9 +5,11 @@ import assert from 'node:assert/strict'
 import {createHash} from 'node:crypto'
 import {pathToFileURL} from 'node:url'
 import {execFileSync} from 'node:child_process'
+import {catalogValueHash} from './reference-catalog-contract.mjs'
 const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const name=process.argv.find(a=>a.startsWith('--case='))?.slice(7)
-const publicMedia=process.argv.includes('--public-media')
+const currentInstallation=process.argv.includes('--current-installation')
+const publicMedia=currentInstallation||process.argv.includes('--public-media')
 const productWorkflow=publicMedia||process.argv.includes('--product-workflow')
 const intakeEvidence=productWorkflow||process.argv.includes('--intake-evidence')
 assert.match(name||'',/^oci-imported-media\d{2}$/)
@@ -20,6 +22,25 @@ const once=(s,b,a)=>{assert.equal(s.split(b).length,2,b.slice(0,100));return s.r
 let source=pin('executed-source.mjs').replaceAll(base.case,name)
 let helper=pin('bff-helper.mjs'),driver=pin('host-driver.mjs')
 const scope=publicMedia?'Genuine local BFF imported product flow with HTTPS product-image upload/assignment/replay/anonymous normalized bytes; offline fixture restoration; older admitted installer foundation, no browser/provider acceptance':productWorkflow?'Genuine local BFF CSV imported Draft/review/stock/publication/Website listing and Storage packaging evidence; offline fixture restoration; no browser/provider acceptance':intakeEvidence?'Genuine local BFF Auth/MFA intake session and binary evidence registration/replay/download/cleanup; original captured recovery; no browser/imported product/provider acceptance':'Genuine local Auth/MFA actual Storage upload/download/remove through unified proxy and binary Admin fixture adapter; original captured recovery; no browser/intake registration/provider acceptance'
+const executionScope=currentInstallation?'Genuine local complete accepted reference/category/tariff installer with protected reference creation and imported product/public-media/stock/Website commands; exact offline application restoration; no browser/provider acceptance':scope
+let installationPins
+if(currentInstallation){
+ const installation=JSON.parse(fs.readFileSync('docs/acceptance/PROTECTED_REFERENCE_INSTALLATION_20261011.json'))
+ assert.equal(installation.case,'oci-imported41');assert.equal(installation.controllerExit,0)
+ assert.equal(installation.package.sqlSha256,'e051cd65f6b9b070c70754b61ef521a772bc2bad46c211e918081e23b945457f')
+ const input=path.join(root,installation.case),inputs=installation.sourcePins.concat(installation.stagedPins.map(p=>({file:path.join(input,'staging/k2',p.file),sha256:p.sha256})))
+ for(const p of inputs)assert.equal(hash(fs.readFileSync(p.file)),p.sha256,p.file)
+ const expectedFile=path.join(input,'execution01/after-catalog.json'),expectedBytes=fs.readFileSync(expectedFile)
+ assert.equal(hash(expectedBytes),installation.result.catalogs.after.sha256)
+ assert.equal(catalogValueHash(JSON.parse(expectedBytes)),installation.target.canonicalSha256)
+ const files=['race-install.sql','race-catalog.sql']
+ const copy=files.map(file=>`fs.writeFileSync(path.join(k2,${JSON.stringify(file)}),pin(${JSON.stringify(path.join(input,'staging/k2',file))},${JSON.stringify(installation.stagedPins.find(p=>p.file===file).sha256)}),{flag:'wx'});`).join('\n')
+ source=once(source,"const overlay=path.join(out,'overlay.cpio')",copy+`\nfs.writeFileSync(path.join(k2,'current-installed-expected.json'),pin(${JSON.stringify(expectedFile)},${JSON.stringify(hash(expectedBytes))}),{flag:'wx'});\n`+"const overlay=path.join(out,'overlay.cpio')")
+ source=once(source,"probe+=psql('postgres','race-install.sql')+'\\n'","probe+=psql('postgres','race-install.sql')+'\\n';\nprobe+=psql('supabase_admin','race-catalog.sql')+' > /tmp/full-current-installed.json\\ncmp -s /tmp/current-installed-expected.json /tmp/full-current-installed.json\\nsha256sum /tmp/current-installed-expected.json /tmp/full-current-installed.json\\necho K2_FULL_ACCEPTED_INSTALLER_METADATA_OK\\n'")
+ source=once(source,"fs.writeFileSync(path.join(k2,'init.sh'),init,{flag:'wx'})","init=init.replace('/bin/busybox cp /k2/race-install.sql /k2root/tmp/race-install.sql',()=>'/bin/busybox cp /k2/current-installed-expected.json /k2root/tmp/current-installed-expected.json\\n/bin/busybox cp /k2/race-install.sql /k2root/tmp/race-install.sql');\nfs.writeFileSync(path.join(k2,'init.sh'),init,{flag:'wx'})")
+ source=once(source,"stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&","stdout.includes('K2_FULL_ACCEPTED_INSTALLER_METADATA_OK')&&stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&")
+ installationPins={receipt:'docs/acceptance/PROTECTED_REFERENCE_INSTALLATION_20261011.json',receiptSha256:hash(fs.readFileSync('docs/acceptance/PROTECTED_REFERENCE_INSTALLATION_20261011.json')),inputs,expectedFile,expectedSha256:hash(expectedBytes),expectedCanonicalSha256:installation.target.canonicalSha256,package:installation.package}
+}
 helper=helper.slice(0,helper.indexOf('async function browserProbe('))
 helper=once(helper,"import http from 'node:http'","import http from 'node:http'\nconst {readFixtureAdminHttpBody}=await import(pathToFileURL(path.join(process.cwd(),'scripts/fixture-admin-http-body.mjs')).href)")
 if(publicMedia){
@@ -43,7 +64,7 @@ helper=once(helper,"const chunks=[];let size=0;for await(const chunk of req){siz
 const probeFile=productWorkflow?'scripts/imported-product-workflow-probe.inc.mjs':intakeEvidence?'scripts/imported-intake-evidence-probe.inc.mjs':'scripts/imported-media-transport-probe.inc.mjs'
 const probeName=productWorkflow?'importedProductProbe':intakeEvidence?'intakeEvidenceProbe':'mediaTransportProbe'
 helper=once(helper,'await browserProbe(credentials,report,uid);',intakeEvidence?`await ${probeName}(uid,report,credentials,request,jar);`:'await mediaTransportProbe(uid,report,credentials);')
-if(publicMedia)helper=once(helper,'await importedProductProbe(uid,report,credentials,request,jar);','await importedProductProbe(uid,report,credentials,request,jar,{publicMedia:true});')
+if(publicMedia)helper=once(helper,'await importedProductProbe(uid,report,credentials,request,jar);',`await importedProductProbe(uid,report,credentials,request,jar,{publicMedia:true,currentInstallation:${currentInstallation}});`)
 helper+=`\nconst {${probeName}}=await import(pathToFileURL(path.join(process.cwd(),${JSON.stringify(probeFile)})).href)\n`
 if(intakeEvidence){
  helper=once(helper,"{cookie,csrf=true}={}","{cookie,csrf=true,headers:extraHeaders={}}={}")
@@ -51,7 +72,7 @@ if(intakeEvidence){
  helper=once(helper,'body:JSON.stringify(body)','body:Buffer.isBuffer(body)?body:JSON.stringify(body)')
 }
 driver=once(driver,'await taxonomy(verified.access_token,uid,report)',"report.checks.push('prior_taxonomy_diagnostic_not_repeated')")
-driver=driver.replace(/scope:'[^']*'/,()=> 'scope:'+JSON.stringify(scope))
+driver=driver.replace(/scope:'[^']*'/,()=> 'scope:'+JSON.stringify(executionScope))
 if(productWorkflow){
  driver=once(driver,"good('admin_hard_delete_user',await admin.auth.admin.deleteUser(uid,false));uid=null","report.checks.push('auth_user_deletion_deferred_to_offline_fixture_recovery');uid=null")
  driver=once(driver,"if(uid){const cleanup=await admin.auth.admin.deleteUser(uid,false);report.failedPathUserCleanup=!cleanup.error}","if(uid)report.failedPathUserCleanup='deferred_to_offline_fixture_recovery'")
@@ -60,7 +81,7 @@ fs.writeFileSync('.tools/probe-local-imported-media.mjs',helper)
 fs.writeFileSync('.tools/drive-local-imported-media.mjs',driver)
 source=source.replaceAll('.tools/probe-local-browser-boundary.mjs','.tools/probe-local-imported-media.mjs').replaceAll('.tools/drive-local-browser-auth.mjs','.tools/drive-local-imported-media.mjs')
 source=once(source,"fs.copyFileSync(path.join(process.cwd(),'.tools/prepare-auth-bff-probe.mjs'),path.join(out,'executed-derivation.mjs'),fs.constants.COPYFILE_EXCL)","fs.copyFileSync(path.join(process.cwd(),'scripts/prepare-imported-media-fixture.mjs'),path.join(out,'executed-derivation.mjs'),fs.constants.COPYFILE_EXCL)")
-source=source.replace(/prep.scope='[^']*'/,()=> 'prep.scope='+JSON.stringify(scope))
+source=source.replace(/prep.scope='[^']*'/,()=> 'prep.scope='+JSON.stringify(executionScope))
 source=once(source,"postgres://authenticator@127.0.0.1:5432/postgres?sslmode=disable","postgres://authenticator@127.0.0.1:5432/postgres?sslmode=disable&options=-clock_timeout%3D2000%20-cstatement_timeout%3D10000")
 const startup=JSON.parse(fs.readFileSync('docs/acceptance/LOCAL_STORAGE_STARTUP_20261011.json'))
 const accepted=startup.cases.find(c=>c.name==='oci-storage-startup02')
@@ -110,8 +131,7 @@ PRODUCTBASELINE
 echo K2_PRODUCT_FIXTURE_BASELINE_CAPTURED
 `
  const prerequisites=`su postgres -s /bin/sh -c 'psql -X -q -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1' <<'PRODUCTPREREQUISITES'
-INSERT INTO public.brands(id,name) VALUES('b7000000-0000-4000-8000-000000000001','MAP018 Synthetic pantry brand');
-INSERT INTO public.categories(id,name) VALUES('b7000000-0000-4000-8000-000000000002','MAP018 Synthetic pantry category');
+${currentInstallation?'':"INSERT INTO public.brands(id,name) VALUES('b7000000-0000-4000-8000-000000000001','MAP018 Synthetic pantry brand');\nINSERT INTO public.categories(id,name) VALUES('b7000000-0000-4000-8000-000000000002','MAP018 Synthetic pantry category');"}
 INSERT INTO k2_private.category_policy_command_config(singleton,maximum_depth) VALUES(true,10) ON CONFLICT(singleton) DO NOTHING;
 PRODUCTPREREQUISITES
 echo K2_SYNTHETIC_PRODUCT_PREREQUISITES_READY
@@ -159,9 +179,10 @@ extraction+='/bin/busybox chmod 755 /http/umoci\\n/http/umoci unpack --image /ht
 source=once(source,"const run='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image-probe.sh';",payload+"\nconst run='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image-probe.sh';")
 source=once(source, "\"args[args.indexOf('-m')+1]='4096';args", "\"args[args.indexOf('-m')+1]='7168';args").replace('hostfwd=tcp:127.0.0.1:54394-:9997','hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996')
 source=once(source,"stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&","stdout.includes('K2_STORAGE_INTEGRATED_HTTP_READY')&&stdout.includes('K2_STORAGE_INTEGRATED_STOPPED_EXIT_')&&stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&")
-const sources=['scripts/prepare-imported-media-fixture.mjs',probeFile,'scripts/fixture-admin-http-body.mjs','scripts/storage-runtime-layout.mjs',...(intakeEvidence?['server/admin-bff/product-intake.js']:[]),...(productWorkflow?['scripts/imported-intake-evidence-probe.inc.mjs','server/admin-bff/catalog-spreadsheet.js','server/admin-bff/product-master.js','server/admin-bff/channels.js']:[]),...(publicMedia?['server/admin-bff/product-media.js']:[])]
+const sources=['scripts/prepare-imported-media-fixture.mjs',probeFile,'scripts/fixture-admin-http-body.mjs','scripts/storage-runtime-layout.mjs',...(intakeEvidence?['server/admin-bff/product-intake.js']:[]),...(productWorkflow?['scripts/imported-intake-evidence-probe.inc.mjs','server/admin-bff/catalog-spreadsheet.js','server/admin-bff/product-master.js','server/admin-bff/channels.js']:[]),...(publicMedia?['server/admin-bff/product-media.js']:[]),...(currentInstallation?['server/admin-bff/references.js','scripts/reference-catalog-contract.mjs']:[])]
 const pins=Object.fromEntries(sources.map(f=>[f,hash(fs.readFileSync(f))]))
 if(productWorkflow)source=once(source,'const prep=JSON.parse',`const sourceInputs=${JSON.stringify(pins)};fs.mkdirSync(path.join(out,'source-inputs'));for(const [file,expected]of Object.entries(sourceInputs)){const bytes=fs.readFileSync(file);assert.equal(sha(bytes),expected,file);fs.writeFileSync(path.join(out,'source-inputs',file.replaceAll('/','--')),bytes,{flag:'wx'});}\nconst prep=JSON.parse`)
 source=once(source,'const prep=JSON.parse',`fs.writeFileSync(path.join(out,'media-source-pins.json'),${JSON.stringify(JSON.stringify(pins,null,2))},{flag:'wx'});\nconst prep=JSON.parse`)
+if(currentInstallation)source=once(source,'const prep=JSON.parse',`fs.writeFileSync(path.join(out,'full-installation-pins.json'),${JSON.stringify(JSON.stringify(installationPins,null,2))},{flag:'wx'});\nconst prep=JSON.parse`)
 const derived='.tools/derived-imported-media.mjs';fs.writeFileSync(derived,source)
 if(!process.argv.includes('--prepare-only'))await import(pathToFileURL(path.join(process.cwd(),derived)).href)
