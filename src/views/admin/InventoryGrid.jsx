@@ -17,6 +17,8 @@ import {
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import ReferenceCreationDialog, { PendingReferenceCreation } from './ReferenceCreationDialog'
 import { applyImageFallback } from '../../lib/imageFallback'
+import useProductMasterRecovery from '../../hooks/useProductMasterRecovery'
+import ProductMasterRecovery, { PendingProductDecision } from './ProductMasterRecovery'
 import {
   DetailBlock,
   EmptyState,
@@ -216,9 +218,12 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   const [referenceKind, setReferenceKind] = useState(null)
   const [referenceNotice, setReferenceNotice] = useState('')
   const [editError, setEditError] = useState('')
-  const editOperationKey = useRef(null)
-  const editRequest = useRef(null)
-  const [editPending, setEditPending] = useState(false)
+  const recovery = useProductMasterRecovery({ actorId, enabled: secure, canManageProducts })
+  const editPending = Boolean(recovery.pending)
+  const [showProductRecovery, setShowProductRecovery] = useState(false)
+  const editIdentity = useRef(null)
+  if (editIdentity.current?.actorId !== actorId || editIdentity.current?.canManageProducts !== canManageProducts) editIdentity.current = { actorId, canManageProducts }
+  useEffect(() => { setEditingProduct(null); setShowProductRecovery(false); setSaving(false); setEditError('') }, [actorId, canManageProducts])
   const [notice, setNotice] = useState(null)
   const [search, setSearch] = useState('')
   const [stockFilter, setStockFilter] = useState('all')
@@ -403,9 +408,6 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
     setEditReason('')
     setEditError('')
     setProductTaxonomyReview(null)
-    editOperationKey.current = null
-    editRequest.current = null
-    setEditPending(false)
     if (!secure) { setEditingProduct(product); return }
     if (!canManageProducts) { flash('Only an administrator can change product-master records.', true); return }
     const result = await getAdminProductMasterBff(product.sku)
@@ -426,8 +428,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
         return
       }
       setSaving(true)
-      const operationKey = editOperationKey.current || crypto.randomUUID()
-      editOperationKey.current = operationKey
+      const savingIdentity = editIdentity.current
       const patch = buildPayload(editingProduct)
       // Expiry is a batch fact, not product-master data. The legacy direct-write
       // editor still displays it, but the signed Product Master does not edit it.
@@ -436,27 +437,14 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
         patch.brand_id = editingProduct.brand_id
         patch.category_id = editingProduct.category_id
       }
-      const payload = editRequest.current || {
+      const payload = {
         sku: editingProduct.sku, patch,
         expectedUpdatedAt: editingProduct.updated_at, reason: editReason.trim(),
       }
-      editRequest.current = payload
-      const result = await commandAdminProductMasterBff('update', payload, operationKey)
+      const result = await recovery.save(payload)
+      if (editIdentity.current !== savingIdentity) return
       setSaving(false)
-      if (!result.ok) {
-        // Only an initial explicit rejection can release the request. After a
-        // lost reply, even a later auth refusal does not resolve the first save.
-        const rejected = ['PRODUCT_COMMAND_INVALID', 'PRODUCT_VERSION_CONFLICT', 'PRODUCT_TAXONOMY_INITIAL_ONLY',
-          'PRODUCT_NOT_FOUND', 'PRODUCT_ADMIN_REQUIRED', 'ORIGIN_DENIED', 'SESSION_EXPIRED',
-          'SESSION_REVOKED', 'MFA_REQUIRED', 'STAFF_ACCESS_REQUIRED', 'RATE_LIMITED'].includes(result.code)
-        if (!editPending && rejected) { editOperationKey.current = null; editRequest.current = null }
-        else setEditPending(true)
-        setEditError(result.error)
-        return
-      }
-      editOperationKey.current = null
-      editRequest.current = null
-      setEditPending(false)
+      if (!result.ok) { setEditError(result.error); return }
       const savedSku = editingProduct.sku
       setEditingProduct(null)
       setEditReason('')
@@ -651,6 +639,12 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
 
       {/* Select-all row */}
       {secure && actorId && <PendingReferenceCreation actorId={actorId} onReview={setReferenceKind} />}
+      {secure && <PendingProductDecision recovery={recovery} onReview={() => setShowProductRecovery(true)} />}
+      {secure && showProductRecovery && <ProductMasterRecovery recovery={recovery} canManageProducts={canManageProducts}
+        onClose={() => setShowProductRecovery(false)} onRecorded={async sku => {
+          setShowProductRecovery(false); setEditingProduct(null); setEditReason(''); setEditError('')
+          await fetchProducts(); flash(`${sku} decision was recorded. Current product facts were refreshed.`)
+        }} />}
       {visibleProducts.length > 0 && (
         <div className="mb-3 flex items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2">
           <label className="flex items-center gap-2.5 cursor-pointer select-none min-h-11">
@@ -898,7 +892,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-2 md:p-4 animate-in fade-in">
           <AdminDialog
             onClose={() => { setEditingProduct(null); setEditError('') }}
-            closeDisabled={saving || editPending}
+            closeDisabled={saving}
             labelledBy="product-editor-title"
           >
           <div className="w-full max-w-3xl rounded-adm border border-adm-line bg-adm-surface shadow-2xl flex flex-col max-h-[96vh]">
@@ -909,7 +903,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                 <h3 id="product-editor-title" className="font-sans text-xl font-semibold text-white">Edit Product</h3>
                 <p className="text-sm text-white/60 font-mono mt-0.5">{editingProduct.sku}</p>
               </div>
-              <button onClick={() => { setEditingProduct(null); setEditError('') }} disabled={saving || editPending} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10 disabled:opacity-50" aria-label="Close product editor">
+              <button onClick={() => { setEditingProduct(null); setEditError('') }} disabled={saving} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10 disabled:opacity-50" aria-label="Close product editor">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -1170,21 +1164,21 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
               <div className="shrink-0 space-y-3 border-t border-adm-line bg-black/20 px-4 py-4 sm:px-6">
                 <p className="text-sm text-white/55 italic">Product details save separately from photos, publication, and batch reconciliation.</p>
                 {editError && <StateBanner tone="danger">{editError}</StateBanner>}
-                {editPending && <StateBanner tone="warning">This save may already be recorded. Retry the same saved decision before changing or closing it. Keep this page open; reloading loses this pending request.</StateBanner>}
+                {editPending && <StateBanner tone="warning">A product decision is saved for confirmation. Closing or reloading keeps it. Review the pending decision before another save.</StateBanner>}
                 {secure && <label className="block text-sm font-semibold text-white/70">Reason for this change
-                  <textarea disabled={saving || editPending} value={editReason} onChange={(event) => { setEditReason(event.target.value.slice(0, 500)); editOperationKey.current = null }} minLength={8} maxLength={500} required className="mt-1 min-h-[88px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" />
+                  <textarea disabled={saving || editPending} value={editReason} onChange={(event) => setEditReason(event.target.value.slice(0, 500))} minLength={8} maxLength={500} required className="mt-1 min-h-[88px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" />
                       <span className="mt-1 block text-xs font-normal text-white/45">Saved permanently in this product's change history.</span>
                 </label>}
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                   <button type="button" onClick={() => { setEditingProduct(null); setEditError('') }}
-                    disabled={saving || editPending}
+                    disabled={saving}
                     className="min-h-11 rounded-adm-sm px-4 py-2 text-base font-semibold text-white/60 transition-colors hover:text-white">
                     Cancel
                   </button>
-                  <button type="submit" disabled={saving || (secure && editReason.trim().length < 8)}
+                  <button type={editPending ? 'button' : 'submit'} onClick={editPending ? () => setShowProductRecovery(true) : undefined} disabled={saving || (secure && !editPending && editReason.trim().length < 8)}
                     className="flex min-h-11 items-center justify-center gap-2 rounded-adm-sm bg-blue px-6 py-2 text-base font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-blue/90 active:scale-[0.98] disabled:opacity-50">
                     {saving && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
-                    {saving ? 'Saving…' : editPending ? 'Retry saved decision' : 'Save Changes'}
+                    {saving ? 'Saving…' : editPending ? 'Review saved decision' : 'Save Changes'}
                   </button>
                 </div>
               </div>

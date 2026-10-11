@@ -1,0 +1,117 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261012-01",
+  "mergedInto": [
+    "IDEA-20261009-11",
+    "IDEA-20261001-03"
+  ],
+  "date": "2026-10-12",
+  "base": "9c23824",
+  "request": "Make uncertain Product Master saves recoverable across editor closure, reload, missing catalog rows, staff changes and concurrent browser tabs without replacing the original decision.",
+  "state": "Locally prepared and verified rendered browser recovery; synthetic API responses only",
+  "providerWrites": false,
+  "productionWrites": false,
+  "deployment": false,
+  "sourcePins": {
+    "src/hooks/useProductMasterRecovery.js": "c9c430a49ec387f93150bbf025a43e16f6c91df1a3a4395524ee06588f87fa4d",
+    "src/views/admin/ProductMasterRecovery.jsx": "9282fd6bc4a61fb8cad973a838c32577b471149843f86cd3dbd3f37d6e5ffda6",
+    "src/views/admin/InventoryGrid.jsx": "86d857d33800c10b171e698700069426e042e9237332e54bb8db1dc7c3343a99",
+    "tests/admin-product-master-recovery.spec.js": "aa0a21456e96d9fe2b3b595eecb51072d9ab125dbca8d427b94a198d789aa460",
+    "tests/admin-human-review-editor.spec.js": "56f88fda50a1a28e8e75f61eed2771fd5fee497c0b16ff44a18e058c304179ce",
+    "tests/admin-product-master-ui.spec.js": "026dae92e8c7a19add70d2d6cb4cf0224aa352d7472fe5808c137d6e0bc90e40",
+    "tests/fixtures/admin-product-master-harness.jsx": "0fd4167f13d56820b678ed68c60f84077e654f7da2a741775e42311260e3705f",
+    "src/lib/productMasterCommandRecovery.js": "b33716b75cc7740c54528e5fd953fde0449f2337ec8307378ac0d2ec6f6b364b",
+    "src/lib/productMasterPatch.js": "c26df918baa9c750724ebe5ce03b69cd1949117bad044082327fdac974576376",
+    "src/services/adminBffService.js": "645f8497ce9227f56f26bf7dadf0537f3e2d262d3b6c6ea9139976b0cbb01be5",
+    "server/admin-bff/product-master.js": "465c3e5d185f703c8451b6f3d53382c2dda99f2bf632aac43e7bff0cc19cb557"
+  },
+  "screenshots": {
+    "docs/design-checkpoints/20261012-product-master-recovery/product-recovery-375.png": "6d553d9c9c03ae031eccec9fd2a37c7ca3cecfa5ec342567f71d9b24a856303b",
+    "docs/design-checkpoints/20261012-product-master-recovery/product-recovery-1440.png": "b515c56f0411f80a470570377179b5f074539661113b8e4bcec17cd0101598f4"
+  },
+  "behavior": [
+    "Persist and read back original actor/literal update bytes/version/reason/key before POST; use the sole shared canonical patch validator",
+    "One unresolved product update per actor; same-origin Web Lock covers storage comparison, session checks, persistence, send and acknowledgement",
+    "Pending region survives absent product/reload; fields/reason freeze but closing an idle editor keeps the durable request",
+    "Explicit reviewed retry sends identical literal bytes/key/actor with current CSRF; no automatic POST retry",
+    "Current cookie identity and Admin/SuperAdmin role checked before dispatch and after valid SKU/status/timestamp receipt; backend actor header guard remains",
+    "Scope objects reject old/unmounted and A-to-B-to-A replies; operation tokens prevent older completion clearing newer busy state",
+    "Unknown, malformed success, resumed permission/version refusal, corrupt or unavailable storage retain evidence; initial explicit known refusal may release only that fresh command",
+    "Matching storage readback and receipt required to clear; current product facts refresh separately from the historical decision"
+  ],
+  "verification": [
+    {
+      "command": "initial new recovery browser red",
+      "session": 68213,
+      "exit": 1,
+      "output": "7c90a2",
+      "reason": "Durable record absent before integration; earlier56263 used a premature copy assertion and was corrected"
+    },
+    {
+      "command": "six-case recovery browser slice",
+      "session": 31727,
+      "exit": 0,
+      "passed": 6,
+      "output": "dd6cef"
+    },
+    {
+      "command": "npx playwright test tests/admin-product-master-recovery.spec.js tests/admin-human-review-editor.spec.js tests/admin-product-master-ui.spec.js tests/admin-reference-workflow.spec.js --config playwright.product-master.config.js",
+      "session": 92953,
+      "exit": 1,
+      "passed": 36,
+      "failed": 2,
+      "output": "4ecf98",
+      "reason": "Two-tab test clicked a replaced Save button and timed out; legacy assertion read updatePayload before newly asynchronous session check completed. Coordinated both tabs before persistence and awaited actual dispatch."
+    },
+    {
+      "command": "npx playwright test tests/admin-product-master-recovery.spec.js tests/admin-human-review-editor.spec.js tests/admin-product-master-ui.spec.js tests/admin-reference-workflow.spec.js --config playwright.product-master.config.js",
+      "session": 42828,
+      "exit": 0,
+      "passed": 39,
+      "newRecoveryCases": 10,
+      "output": "b1cafa",
+      "scope": "Real browser components/localStorage/Web Locks/two pages; all API and Auth responses intercepted synthetic, fixture Supabase aborted"
+    },
+    {
+      "command": "npx playwright test tests/admin-product-master-recovery.spec.js --grep \"two tabs|retained editor\" --config playwright.product-master.config.js",
+      "exit": 0,
+      "passed": 2,
+      "output": "5f07c8",
+      "scope": "Final strengthened second-tab refusal assertion and A-to-B-to-A held-response recovery"
+    },
+    {
+      "command": "npm run verify:development",
+      "session": 71567,
+      "exit": 0,
+      "adminChecks": 42,
+      "routeControlGaps": 0,
+      "output": "94a13c",
+      "scope": "Once after final application edits; synthetic project/readiness contracts are not provider inspection"
+    }
+  ],
+  "design": {
+    "skills": [
+      "ui-ux-pro-max",
+      "impeccable",
+      "design-taste-frontend",
+      "emil-design-eng"
+    ],
+    "register": "Existing Admin product/Operate; incumbent typography, tokens, density and dialog keyboard behavior",
+    "inspection": "One375/1440 capture batch and final confirmation; primary inspected final retained captures, independent reviewer inspected initial visually identical captures. No horizontal overflow or overlap observed. Full accessibility/zoom/device/performance acceptance remains unverified."
+  },
+  "independentReview": {
+    "agent": "/root/stock_recovery_review",
+    "initial": "Important retained-component working latch identified; actual production already keys Grid by actor/role.",
+    "resolution": "Scope identity and per-operation tokens corrected latch and ABA late response; retained-component resume and two actual-page tests pass.",
+    "final": "No remaining Critical/Important findings in source/visual slice; runtime terminal results supplied by parent"
+  },
+  "limits": [
+    "No genuine Auth/database/rendered end-to-end or actual staff review proof",
+    "No Website assignment/publication/hosted/deployment proof",
+    "A resumed version conflict stays held; no safe-discard control or proven non-applied reconciliation is claimed",
+    "Browser-local persistence does not survive clearing browser data or switching devices; Web Locks are required; unavailable storage fails before dispatch",
+    "Receipt proves historical command, not current field values; current read may fail independently"
+  ],
+  "recovery": "Revert only this hook/dialog/Grid integration and browser fixture/tests as one slice to 9c23824; preserve foundation and all pending localStorage evidence. Before issuing a replacement decision, reconcile the original actor, literal payload/key and canonical receipt/current record. Never automatically erase an unknown or corrupt saved request.",
+  "next": "MAP-018: qualify genuine Auth/PostgREST/BFF/rendered human-review and unknown-command receipt/current-state reconciliation, including proven non-applied resumed version conflicts; then independent protected Website assignment/recovery, media/Live/customer/hosted/provider/owner gates. No production authorization follows from local UI evidence."
+}

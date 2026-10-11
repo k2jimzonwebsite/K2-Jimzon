@@ -436,6 +436,7 @@ const product = {
 }
 
 test('keeps secure Product Master edit, lifecycle, and delete decisions usable at 375px', async ({ page }, testInfo) => {
+  await page.route('**/api/admin/session', route => route.fulfill({ json: { ok: true, user: { userId: '11111111-1111-4111-8111-111111111111', role: 'Admin' } } }))
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.context().addCookies([{
     name: 'k2_admin_csrf', value: 'visual-csrf-token', url: 'http://localhost:5181',
@@ -470,7 +471,8 @@ test('keeps secure Product Master edit, lifecycle, and delete decisions usable a
       contentType: 'application/json',
       body: JSON.stringify({
         ok: true,
-        result: action === 'delete' ? { ok: false, code: 'PRODUCT_HAS_HISTORY' } : { success: true },
+        result: action === 'delete' ? { ok: false, code: 'PRODUCT_HAS_HISTORY' } : action === 'update'
+          ? { sku: product.sku, status: product.status, updatedAt: '2026-10-12T00:00:01Z' } : { success: true },
       }),
     })
   })
@@ -519,7 +521,7 @@ test('keeps secure Product Master edit, lifecycle, and delete decisions usable a
   await editor.getByLabel('Canonical category').selectOption('f8c1e338-e2a4-4d09-858a-1cf223400002')
   await editor.getByLabel('Reason for this change').fill('Assign reviewed canonical taxonomy.')
   await editor.getByRole('button', { name: 'Save Changes' }).click()
-  expect(updatePayload).toMatchObject({
+  await expect.poll(() => updatePayload).toMatchObject({
     sku: product.sku,
     patch: {
       brand_id: 'f8c1e338-e2a4-4d09-858a-1cf223400001',
