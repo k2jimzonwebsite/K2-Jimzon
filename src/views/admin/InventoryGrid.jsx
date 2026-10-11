@@ -183,6 +183,10 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   const secure = adminBffEnabled()
   const [products, setProducts]       = useState([])
   const [batchMap, setBatchMap]       = useState({})
+  const [batchReadStatus, setBatchReadStatus] = useState('loading')
+  const catalogRead = useRef(0)
+  const batchRead = useRef(0)
+  const batchesReady = !secure || batchReadStatus === 'ready'
   const [loading, setLoading]         = useState(true)
   const [editingProduct, setEditingProduct] = useState(null)
   const [photoProduct, setPhotoProduct] = useState(null)
@@ -223,7 +227,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
       const refresh = () => { if (document.visibilityState === 'visible') fetchProducts() }
       const timer = window.setInterval(refresh, 30_000)
       document.addEventListener('visibilitychange', refresh)
-      return () => { window.clearInterval(timer); document.removeEventListener('visibilitychange', refresh) }
+      return () => { catalogRead.current++; batchRead.current++; window.clearInterval(timer); document.removeEventListener('visibilitychange', refresh) }
     }
     if (!supabase) return undefined
     fetchBatches()
@@ -236,8 +240,11 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
 
   const fetchProducts = async () => {
     if (secure) {
+      const read = ++catalogRead.current
       setLoading(true)
+      fetchBatches()
       const result = await getAdminProducts()
+      if (read !== catalogRead.current) return
       if (!result.ok) flash(result.error || 'Product records could not be loaded.', true)
       else {
         setProducts(result.products || [])
@@ -246,7 +253,6 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
         const live = new Set((result.products || []).map(product => product.sku))
         setSelected(prev => new Set([...prev].filter(sku => live.has(sku))))
       }
-      setBatchMap({})
       setLoading(false)
       return
     }
@@ -267,8 +273,24 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   // derived owned stock and flags unresolved allocations under OWNER-002.
   const fetchBatches = async () => {
     if (secure) {
+      const read = ++batchRead.current
+      setBatchReadStatus('loading')
+      setBatchMap({})
+      setStockFilter(current => ['expiry', 'unresolved'].includes(current) ? 'all' : current)
       const result = await getAdminLots('')
-      if (result.ok && result.data?.lots) {
+      if (read !== batchRead.current) return
+      try {
+        if (!result.ok || result.data?.complete !== true || !Array.isArray(result.data.lots)
+          || result.data.lots.length > 500 || !result.data.derivedStock) throw new Error('BATCH_READ_INCOMPLETE')
+        for (const lot of result.data.lots) {
+          if (!lot.sku || !Number.isSafeInteger(lot.quantity) || lot.quantity < 0
+            || !result.data.derivedStock[lot.sku]) throw new Error('BATCH_READ_INCOMPLETE')
+        }
+        for (const ds of Object.values(result.data.derivedStock)) {
+          if (typeof ds.requiresReconciliation !== 'boolean'
+            || [ds.committedQuantity, ds.heldQuantity, ds.unresolvedCount, ds.unresolvedQuantity].some(q => !Number.isSafeInteger(q) || q < 0)
+            || (!ds.requiresReconciliation && (!Number.isSafeInteger(ds.ownedQuantity) || ds.ownedQuantity < 0))) throw new Error('BATCH_READ_INCOMPLETE')
+        }
         const map = {}
         for (const r of result.data.lots) {
           const q = Number(r.quantity) || 0
@@ -311,8 +333,12 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
           }
         }
         setBatchMap(map)
-        return
+        setBatchReadStatus('ready')
+      } catch {
+        setBatchMap({})
+        setBatchReadStatus('unavailable')
       }
+      return
     }
     if (!supabase) return
     const { data, error } = await supabase.from('product_batches').select('sku, quantity, hub, custodian, channel, expiry_date, is_pinned, inventory_status, reserved_quantity')
@@ -482,7 +508,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
 
   const selectedProducts = products.filter(p => selected.has(p.sku))
 
-  const inventoryMetrics = useMemo(() => computeInventoryMetrics(products, batchMap), [batchMap, products])
+  const inventoryMetrics = useMemo(() => computeInventoryMetrics(secure ? products.map(p => ({ ...p, expiry_date: null })) : products, batchMap), [batchMap, products, secure])
 
   const visibleProducts = useMemo(() => {
     const term = search.trim().toLowerCase()
@@ -493,7 +519,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
       const raw = product?.stock_available
       const stock = raw === null || raw === undefined || raw === '' ? Number.NaN : Number(raw)
       const threshold = Number(product.reorder_level) || 5
-      const expiry = getExpiryHealth(batchMap[product.sku]?.earliestExpiry || product.expiry_date)
+      const expiry = getExpiryHealth(batchMap[product.sku]?.earliestExpiry || (!secure ? product.expiry_date : null))
       if (stockFilter === 'out') return Number.isFinite(stock) && stock <= 0
       if (stockFilter === 'unknown') return !Number.isFinite(stock)
       if (stockFilter === 'low') return Number.isFinite(stock) && stock > 0 && stock <= threshold
@@ -525,7 +551,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
         title="Inventory & stock checks"
         description="Find a product or batch and check stock or expiry. Counts come from saved records."
         status={loading ? 'Loading inventory evidence' : `${products.length} SKUs loaded`}
-        statusTone={inventoryMetrics.out || inventoryMetrics.expiryRisk || inventoryMetrics.unresolved ? 'warning' : 'success'}
+        statusTone={!batchesReady || inventoryMetrics.out || inventoryMetrics.expiryRisk || inventoryMetrics.unresolved ? 'warning' : 'success'}
         actions={(
           <div data-tour="inventory-actions" className="flex flex-wrap gap-2">
             <button
@@ -552,9 +578,14 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
         { label: 'Out of stock', value: loading ? '--' : inventoryMetrics.out, detail: 'Immediate replenishment review', tone: inventoryMetrics.out ? 'text-crimson' : 'text-white' },
         { label: 'Low stock', value: loading ? '--' : inventoryMetrics.low, detail: 'At or below reorder level', tone: inventoryMetrics.low ? 'text-amber' : 'text-white' },
         ...(inventoryMetrics.unknown > 0 ? [{ label: 'Unknown stock', value: loading ? '--' : inventoryMetrics.unknown, detail: 'Stock read unconfirmed or missing', tone: 'text-amber' }] : []),
-        ...(inventoryMetrics.unresolved > 0 ? [{ label: 'Unresolved stock', value: loading ? '--' : inventoryMetrics.unresolved, detail: 'Attribution reconciliation required', tone: 'text-crimson' }] : []),
-        { label: 'Expiry risk', value: loading ? '--' : inventoryMetrics.expiryRisk, detail: 'Expired or within 90 days', tone: inventoryMetrics.expiryRisk ? 'text-amber' : 'text-white' },
+        ...(!batchesReady || inventoryMetrics.unresolved > 0 ? [{ label: 'Unresolved stock', value: !batchesReady ? 'Unknown' : loading ? '--' : inventoryMetrics.unresolved, detail: batchesReady ? 'Attribution reconciliation required' : 'Allocation read unconfirmed', tone: batchesReady ? 'text-crimson' : 'text-amber' }] : []),
+        { label: 'Expiry risk', value: !batchesReady ? 'Unknown' : loading ? '--' : inventoryMetrics.expiryRisk, detail: 'Expired or within 90 days', tone: inventoryMetrics.expiryRisk ? 'text-amber' : 'text-white' },
       ]} />
+
+      {secure && !batchesReady && <div role="status" className="flex flex-wrap items-center justify-between gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken p-3 text-sm text-white/80">
+        <p>{batchReadStatus === 'loading' ? 'Loading batch details…' : 'Batch details are unavailable. Counts, custody and expiry are unknown until the complete read succeeds.'}</p>
+        {batchReadStatus === 'unavailable' && <button type="button" onClick={fetchBatches} className={secondaryButton}>Retry batch details</button>}
+      </div>}
 
       {showAiScanner && (
         <ScanToAiModal onClose={() => setShowAiScanner(false)}
@@ -590,9 +621,9 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
               ['low', 'Low', inventoryMetrics.low],
               ...(inventoryMetrics.unknown > 0 ? [['unknown', 'Unknown', inventoryMetrics.unknown]] : []),
               ...(inventoryMetrics.unresolved > 0 ? [['unresolved', 'Unresolved', inventoryMetrics.unresolved]] : []),
-              ['expiry', 'Expiry', inventoryMetrics.expiryRisk],
+              ['expiry', 'Expiry', batchesReady ? inventoryMetrics.expiryRisk : 'Unknown'],
               ['drafts', 'Drafts', inventoryMetrics.drafts],
-            ].map(([value, label, count]) => <button key={value} onClick={() => setStockFilter(value)} aria-pressed={stockFilter === value} className={`min-h-11 shrink-0 rounded-adm-sm px-3 text-xs font-semibold transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${stockFilter === value ? 'bg-blue text-white' : 'text-white/45 hover:bg-white/[0.05] hover:text-white'}`}>{label} <span className="ml-1 font-mono text-xs opacity-70">{count}</span></button>)}
+            ].map(([value, label, count]) => <button key={value} onClick={() => setStockFilter(value)} disabled={!batchesReady && ['expiry', 'unresolved'].includes(value)} aria-pressed={stockFilter === value} className={`min-h-11 shrink-0 rounded-adm-sm px-3 text-xs font-semibold transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${stockFilter === value ? 'bg-blue text-white' : 'text-white/45 hover:bg-white/[0.05] hover:text-white disabled:cursor-not-allowed disabled:opacity-60'}`}>{label} <span className="ml-1 font-mono text-xs opacity-70">{count}</span></button>)}
           </div>
         </div>
       </section>
@@ -632,7 +663,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {visibleProducts.map(p => {
-            const primaryExpiryDate = batchMap[p.sku]?.earliestExpiry || p.expiry_date
+            const primaryExpiryDate = batchesReady ? (batchMap[p.sku]?.earliestExpiry || (!secure ? p.expiry_date : null)) : null
             const expiryHealth = getExpiryHealth(primaryExpiryDate)
             const attentionCount = batchMap[p.sku]?.attention || 0
 
@@ -724,9 +755,9 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                     <div className="pt-1">
                       <button
                         onClick={() => setBatchProduct(p)}
-                        className="w-full text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-neutral-200 py-2 rounded-adm-sm border border-adm-line transition-colors text-center"
+                        className="w-full min-h-11 text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-neutral-200 py-2 rounded-adm-sm border border-adm-line transition-colors text-center"
                       >
-                        Batches ({batchMap[p.sku]?.count ?? p.batches?.length ?? 0})
+                        Batches ({batchesReady ? (batchMap[p.sku]?.count ?? (!secure ? p.batches?.length : 0) ?? 0) : 'Unknown'})
                       </button>
                     </div>
 

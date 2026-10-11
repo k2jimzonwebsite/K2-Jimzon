@@ -1397,3 +1397,15 @@ owner-required K2 records remain authoritative. No cosmetic follow-up expands H.
 | Missing or failed stock read. | Existing explicit Unknown state retained. | Absence cannot prove zero. |
 
 The existing batch/custody/expiry map remains cleared/unloaded; this table does not claim that part of Inventory is corrected. Evidence: docs/acceptance/LOCAL_ADMIN_PRODUCT_STOCK_READ_20261011.json.
+
+
+11 October MAP-018 / IDEA-20261011-01 secure batch-read hardening. Required ui-ux-pro-max, Impeccable, design-taste-frontend and emil-design-eng applied to existing Admin Operate/product register; incumbent typography/density/dark tokens retained. Three bounded synthetic full-page captures (375/1440 ready and375 unavailable) inspected, plus actual native stock overview. Retry keyboard focus and44px height, no horizontal overflow and late-response protection pass. Native lower batch fields are DOM-verified below initial screenshot viewport. Full accessibility/zoom/device/performance and existing crowded production header remain unverified. Evidence: docs/acceptance/LOCAL_ADMIN_BATCH_SNAPSHOT_READ_20261011.json.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Secure catalog refresh cleared the batch map without loading it, implying zero. | Initial, intake and visibility refresh load complete batch evidence; verified batch1/physical6 shown locally. | Staff must distinguish an empty read from an unread inventory. |
+| Separate queries could combine physical stock before handover with allocations after. | A protected bounded atomic snapshot feeds the existing owned-stock derivation. | Physical and allocation totals must describe the same state. |
+| Failed or partial data could retain stale details or show zero expiry risk. | Stale details clear; Unknown metrics/batch count, disabled expiry filter and keyboard-accessible retry. | Missing evidence must not imply healthy stock. |
+| An older response could overwrite a later refresh. | Response generations reject old/unmounted results. | The latest read must own the register. |
+
+Remaining native concurrency/cap/role cases and full UI/product/hosted acceptance stay MAP-018; no optional redesign or production release.

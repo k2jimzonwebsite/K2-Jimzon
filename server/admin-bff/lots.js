@@ -90,48 +90,34 @@ export function validateLotCommand(action, body) {
 
 export async function readLotData(client, requestedSku = '') {
   const sku = text(requestedSku, { max: 120 })
-  let query = client.from('product_batches')
-    .select('id,sku,box_code,batch_code,quantity,quantity_available,reserved_quantity,net_weight_g,expiry_date,best_before_date,landed_date,hub,custodian,channel,is_pinned,inventory_status,clearance_approved_at,clearance_approved_by,created_at,updated_at')
-    .order('expiry_date', { ascending: true, nullsFirst: false }).limit(sku ? 200 : 500)
-  if (sku) query = query.eq('sku', sku)
-  const { data, error } = await query
-  if (error) throw new Error('LOTS_UNAVAILABLE')
-  const lots = data || []
-  const skus = [...new Set(lots.map((item) => item.sku).filter(Boolean))]
-  let productNames = {}
-  if (skus.length) {
-    const products = await client.from('products').select('sku,name,title').in('sku', skus).limit(500)
-    if (products.error) throw new Error('LOTS_UNAVAILABLE')
-    productNames = Object.fromEntries((products.data || []).map((item) => [item.sku, item.name || item.title || item.sku]))
+  const { data: snapshot, error } = await client.rpc('read_admin_lot_snapshot_v1', { p_sku: sku })
+  const unavailable = () => { throw new Error('LOTS_UNAVAILABLE') }
+  if (error || !snapshot || snapshot.complete !== true || snapshot.schemaVersion !== 'k2.admin-lot-snapshot.v1'
+    || typeof snapshot.asOf !== 'string' || !Number.isFinite(Date.parse(snapshot.asOf))) unavailable()
+  for (const [field, limit] of [['lots', sku ? 200 : 500], ['products', 500], ['reservations', 1000], ['orders', 1000]]) {
+    if (!Array.isArray(snapshot[field]) || snapshot[field].length > limit) unavailable()
   }
-
-  let reservations = []
-  if (skus.length) {
-    let resQuery = client.from('inventory_reservations')
-      .select('id,order_request_id,sku,batch_id,quantity,packed_quantity,status,expires_at,committed_at,committed_by,commit_cause,commit_reason,created_at')
-      .eq('status', 'active')
-    if (sku) {
-      resQuery = resQuery.eq('sku', sku)
-    } else {
-      resQuery = resQuery.in('sku', skus)
+  const { lots, products, reservations, orders } = snapshot
+  const unique = (rows, key) => {
+    const keys = rows.map(row => row?.[key])
+    if (keys.some(value => typeof value !== 'string' || !value.trim()) || new Set(keys).size !== keys.length) unavailable()
+  }
+  unique(lots, 'id'); unique(products, 'sku'); unique(reservations, 'id'); unique(orders, 'id')
+  const productNames = Object.fromEntries(products.map(item => [item.sku, item.name || item.title || item.sku]))
+  const ordersMap = new Map(orders.map(order => [order.id, order]))
+  const batches = new Map(lots.map(batch => [batch.id, batch]))
+  try {
+    for (const batch of lots) {
+      if (!productNames[batch.sku] || (sku && batch.sku !== sku)) unavailable()
+      const quantity = strictInteger(batch.quantity, 'LOTS_UNAVAILABLE', { min: 0 })
+      strictInteger(batch.reserved_quantity, 'LOTS_UNAVAILABLE', { min: 0, max: quantity })
     }
-    const resResult = await (typeof resQuery.limit === 'function' ? resQuery.limit(1000) : resQuery)
-    if (resResult.error) throw new Error('LOTS_UNAVAILABLE')
-    reservations = resResult.data || []
-  }
-
-  const orderIds = [...new Set(reservations.map((r) => r.order_request_id).filter(Boolean))]
-  const ordersMap = new Map()
-  if (orderIds.length > 0) {
-    const ordersQuery = client.from('order_requests')
-      .select('id,status,payment_status')
-      .in('id', orderIds)
-    const ordersResult = await (typeof ordersQuery.limit === 'function' ? ordersQuery.limit(1000) : ordersQuery)
-    if (ordersResult.error) throw new Error('LOTS_UNAVAILABLE')
-    for (const o of ordersResult.data || []) {
-      ordersMap.set(o.id, o)
+    for (const reservation of reservations) {
+      if (reservation.status !== 'active' || !ordersMap.has(reservation.order_request_id)
+        || batches.get(reservation.batch_id)?.sku !== reservation.sku) unavailable()
+      strictInteger(reservation.quantity, 'LOTS_UNAVAILABLE', { min: 1 })
     }
-  }
+  } catch { unavailable() }
 
   const derivedStock = deriveCatalogOwnedStock({ batches: lots, reservations, orders: ordersMap })
 
@@ -160,7 +146,8 @@ export async function readLotData(client, requestedSku = '') {
       activeAllocations: allocationsByBatch[item.id] || [],
     })),
     derivedStock,
-    asOf: new Date().toISOString(),
+    asOf: snapshot.asOf,
+    complete: true,
   }
 }
 

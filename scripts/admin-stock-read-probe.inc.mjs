@@ -12,7 +12,13 @@ export async function adminStockReadProbe({client,request,good,expect,credential
     assert.equal(catalog.products.find(p=>p.sku===sku)?.stock_available,value)
     const master=expect('staff_master_'+phase,await request('product-master?sku='+sku))
     assert.equal(master.product.stock_available,value)
-    return {rpc:rows,catalog:value,master:value}
+    const snapshot=good('staff_lot_snapshot_'+phase,await client.rpc('read_admin_lot_snapshot_v1',{p_sku:sku}))
+    assert.equal(snapshot.complete,true);assert.equal(snapshot.schemaVersion,'k2.admin-lot-snapshot.v1')
+    const lotRead=expect('staff_lot_bff_'+phase,await request('lots?sku='+sku)).data
+    assert.equal(lotRead.complete,true)
+    const physical=lotRead.lots.reduce((sum,b)=>sum+b.quantity,0)
+    assert.equal(physical,phase==='before'?0:6)
+    return {rpc:rows,catalog:value,master:value,physical,snapshotComplete:true}
   }
   report.staffStockRead ||= {scope:'Current protected staff stock independent of Website offers; prepared SQL extension, not accepted provider envelope',providerWrites:false}
   if(phase==='before'){
@@ -40,11 +46,13 @@ export async function adminStockReadProbe({client,request,good,expect,credential
   const anon=createServerSupabase()
   const denied=await anon.rpc('read_admin_product_stock_v1',{p_skus:[sku]})
   assert.equal(denied.error?.code,'42501')
+  assert.equal((await anon.rpc('read_admin_lot_snapshot_v1',{p_sku:sku})).error?.code,'42501')
   report.staffStockRead.anonymousRefused=true
   good('staff_stock_aal1_login',await anon.auth.signInWithPassword({email:credentials.email,password:credentials.password}))
   assert.equal(good('staff_stock_aal1_level',await anon.auth.mfa.getAuthenticatorAssuranceLevel()).currentLevel,'aal1')
   const aal1=await anon.rpc('read_admin_product_stock_v1',{p_skus:[sku]})
   assert.equal(aal1.error?.code,'42501')
+  assert.equal((await anon.rpc('read_admin_lot_snapshot_v1',{p_sku:sku})).error?.code,'42501')
   report.staffStockRead.aal1Refused=true
   good('staff_stock_aal1_local_logout',await anon.auth.signOut({scope:'local'}))
   report.staffStockRead.passed=true

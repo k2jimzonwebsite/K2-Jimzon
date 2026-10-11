@@ -138,6 +138,9 @@ export async function importedIntakeBrowserProbe({credentials,uid,report,target,
      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1))
      await page.screenshot({path:path.join(out,'staff-stock-register-'+name+'.png')})
     }
+    await page.getByRole('button',{name:'Batches (1)',exact:true}).waitFor()
+    await page.getByText('6 pcs in 1 lot',{exact:true}).waitFor()
+    result.staffBatchesRendered=true
     result.staffStockRendered=true
    }
    result.phoneFirstInventory=true;result.publicationUnderReview=true

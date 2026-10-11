@@ -12,6 +12,7 @@ begin
   to_regprocedure('public.read_admin_product_stock_v1(text[])');
  if current_user<>'postgres' or current_setting('server_version_num')<>'170006'
   or to_regprocedure('public.read_admin_product_stock_v1(text[])') is not null
+  or to_regprocedure('public.read_admin_lot_snapshot_v1(text)') is not null
   or md5(replace(pg_catalog.pg_get_functiondef('k2_private.effective_category_minimum_v1(uuid,integer)'::regprocedure),chr(13)||chr(10),chr(10)))
      <> '26ce6255f014a870f8a358f3de2638a8'
   or md5(replace(pg_catalog.pg_get_functiondef('k2_private.lot_is_eligible_for_minimum_v1(public.product_batches,integer,timestamptz)'::regprocedure),chr(13)||chr(10),chr(10)))
@@ -62,3 +63,57 @@ begin
 end $stock$;
 revoke all on function public.read_admin_product_stock_v1(text[]) from public,anon,authenticated,service_role;
 grant execute on function public.read_admin_product_stock_v1(text[]) to authenticated;
+
+-- Physical custody and allocations must share a statement snapshot. Cap+1
+-- refuses incomplete scopes; the single JSON row cannot be PostgREST-truncated.
+create function public.read_admin_lot_snapshot_v1(p_sku text)
+returns jsonb language plpgsql stable security definer set search_path=''
+as $lots$
+declare v_result jsonb; v_limit integer;
+begin
+ if auth.uid() is null or not coalesce(public.is_staff(),false)
+  or coalesce(auth.jwt()->>'aal','')<>'aal2' then
+  raise exception using errcode='42501',message='K2_ADMIN_REQUIRED';
+ end if;
+ if p_sku is null or length(p_sku)>120 or p_sku<>btrim(p_sku) then
+  raise exception using errcode='22023',message='K2_ADMIN_LOT_READ_INVALID';
+ end if;
+ v_limit:=case when p_sku='' then 500 else 200 end;
+ with lots as materialized (
+  select b.id,b.sku,b.box_code,b.batch_code,b.quantity,b.quantity_available,
+   b.reserved_quantity,b.expiry_date,b.best_before_date,
+   b.landed_date,b.hub,b.custodian,b.channel,b.is_pinned,b.inventory_status,
+   b.clearance_approved_at,b.clearance_approved_by,b.created_at,b.updated_at
+  from public.product_batches b where p_sku='' or b.sku=p_sku
+  order by b.expiry_date nulls last,b.id limit v_limit+1
+ ), reservations as materialized (
+  select r.id,r.order_request_id,r.sku,r.batch_id,r.quantity,r.packed_quantity,
+   r.status,r.expires_at,r.committed_at,r.committed_by,r.commit_cause,
+   r.commit_reason,r.created_at
+  from public.inventory_reservations r
+  where r.status='active' and (p_sku='' or r.sku=p_sku) order by r.id limit 1001
+ ), skus as materialized (select l.sku from lots l union select r.sku from reservations r),
+ products as materialized (
+  select p.sku,p.name,p.title from public.products p join skus s on s.sku=p.sku
+  order by p.sku limit 501
+ ), orders as materialized (
+  select o.id,o.status,o.payment_status from public.order_requests o
+  where exists(select 1 from reservations r where r.order_request_id=o.id)
+  order by o.id limit 1001
+ )
+ select jsonb_build_object('schemaVersion','k2.admin-lot-snapshot.v1',
+  'complete',true,'asOf',pg_catalog.statement_timestamp(),
+  'lots',coalesce((select jsonb_agg(l) from lots l),'[]'::jsonb),
+  'products',coalesce((select jsonb_agg(p) from products p),'[]'::jsonb),
+  'reservations',coalesce((select jsonb_agg(r) from reservations r),'[]'::jsonb),
+  'orders',coalesce((select jsonb_agg(o) from orders o),'[]'::jsonb)) into v_result;
+ if jsonb_array_length(v_result->'lots')>v_limit
+  or jsonb_array_length(v_result->'products')>500
+  or jsonb_array_length(v_result->'reservations')>1000
+  or jsonb_array_length(v_result->'orders')>1000 then
+  raise exception using errcode='54000',message='K2_ADMIN_LOT_READ_SCOPE_TOO_LARGE';
+ end if;
+ return v_result;
+end $lots$;
+revoke all on function public.read_admin_lot_snapshot_v1(text) from public,anon,authenticated,service_role;
+grant execute on function public.read_admin_lot_snapshot_v1(text) to authenticated;

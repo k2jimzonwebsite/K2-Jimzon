@@ -165,44 +165,11 @@ test('readLotData integrates derived stock and allocation visibility', async () 
   const ordersData = [
     { id: 'o1', status: 'confirmed', payment_status: 'pending' },
   ]
-  const mockClient = {
-    from: (table) => {
-      if (table === 'product_batches') {
-        return {
-          select: () => ({
-            order: () => ({
-              limit: () => ({
-                eq: () => Promise.resolve({ data: batchesData, error: null }),
-                then: (cb) => Promise.resolve({ data: batchesData, error: null }).then(cb),
-              }),
-            }),
-          }),
-        }
-      }
-      if (table === 'products') {
-        return { select: () => ({ in: () => ({ limit: () => Promise.resolve({ data: [{ sku: 'SKU-READ', name: 'Test Product' }], error: null }) }) }) }
-      }
-      if (table === 'inventory_reservations') {
-        return {
-          select: () => ({
-            eq: () => ({
-              eq: () => Promise.resolve({ data: reservationsData, error: null }),
-              limit: () => Promise.resolve({ data: reservationsData, error: null }),
-              in: () => Promise.resolve({ data: reservationsData, error: null }),
-            }),
-          }),
-        }
-      }
-      if (table === 'order_requests') {
-        return {
-          select: () => ({
-            in: () => Promise.resolve({ data: ordersData, error: null }),
-          }),
-        }
-      }
-      return { select: () => Promise.resolve({ data: [], error: null }) }
-    },
-  }
+  const mockClient = { rpc: async () => ({ error: null, data: {
+    schemaVersion: 'k2.admin-lot-snapshot.v1', complete: true, asOf: '2026-10-11T06:00:00Z',
+    lots: batchesData, products: [{ sku: 'SKU-READ', name: 'Test Product' }],
+    reservations: reservationsData, orders: ordersData,
+  } }) }
 
   const result = await readLotData(mockClient, 'SKU-READ')
   expect(result.lots).toBeDefined()
