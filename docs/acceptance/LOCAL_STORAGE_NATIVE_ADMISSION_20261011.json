@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "date": "2026-10-11",
+  "scope": "Actual local no-NIC OCI unpack and Node/Storage dependency admission only",
+  "priorAcquisition": "LOCAL_STORAGE_RUNTIME_PREPARATION_20261011.json",
+  "imageTag": "supabase/storage-api:v1.74.0",
+  "package": {
+    "name": "supa-storage",
+    "version": "1.11.2",
+    "note": "Actual package.json version is distinct from image tag/config VERSION; no running Storage service version is claimed"
+  },
+  "unpacker": {
+    "version": "0.6.0",
+    "source": "https://github.com/opencontainers/umoci/releases/tag/v0.6.0",
+    "sha256": "b51c267ec394499e42c6fde47f240b7b7dba57ea49df0b5acd304378b82a3b71"
+  },
+  "cases": [
+    {
+      "case": "storage-native01",
+      "owningMap": "MAP-018",
+      "idea": "IDEA-20261009-11",
+      "scope": "Native public OCI filesystem unpack and Node/Storage dependency admission only; no database/service health/upload/provider acceptance",
+      "providerWrites": false,
+      "databaseChanges": false,
+      "nic": "none",
+      "manifestDigest": "sha256:63da55733ce9d7592d860739acb94f0b6189d880b7565d247ee5b195be854db1",
+      "unpackerSha256": "b51c267ec394499e42c6fde47f240b7b7dba57ea49df0b5acd304378b82a3b71",
+      "guestInitSha256": "f72d63d21a0cbe58b8e2c4351fb45b2cfa8749b0475bebbb69ccca4d617200c4",
+      "sourceSha256": "f3ba9b829e96fc616db7907d7205df562b3556ac817ef9d046438be9d7961a03",
+      "layoutSourceSha256": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+      "baseInitramfsSha256": "1f878a079d9c2260765e89b227b16f06747965deb612f2cc265b28941561a992",
+      "pid": 24456,
+      "exit": 0,
+      "processStopped": true,
+      "nativeAdmission": false,
+      "serialSha256": "17dfcf07faed7f10297768de3812237999ee0531f6626616f75f80f8b958f060",
+      "independentProcessAbsent": true,
+      "hashes": {
+        "result.json": "939674429fd72ab58390cdac84bee7dbd6e07cbc2c11d84fbde3c1b6630606dc",
+        "serial.log": "17dfcf07faed7f10297768de3812237999ee0531f6626616f75f80f8b958f060",
+        "stderr.log": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc",
+        "launch.json": "99962132bdb61cca7906936fe3d5d79c4d358193a287bdc044c730633f0d8bb5",
+        "executed-source.mjs": "f3ba9b829e96fc616db7907d7205df562b3556ac817ef9d046438be9d7961a03",
+        "executed-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+        "staging/storage/init.sh": "f72d63d21a0cbe58b8e2c4351fb45b2cfa8749b0475bebbb69ccca4d617200c4"
+      }
+    },
+    {
+      "case": "storage-native02",
+      "owningMap": "MAP-018",
+      "idea": "IDEA-20261009-11",
+      "scope": "Native public OCI filesystem unpack and Node/Storage dependency admission only; no database/service health/upload/provider acceptance",
+      "providerWrites": false,
+      "databaseChanges": false,
+      "nic": "none",
+      "manifestDigest": "sha256:63da55733ce9d7592d860739acb94f0b6189d880b7565d247ee5b195be854db1",
+      "unpackerSha256": "b51c267ec394499e42c6fde47f240b7b7dba57ea49df0b5acd304378b82a3b71",
+      "guestInitSha256": "48bf83cba435a00fd6d3fe2d64c29b5642c65bf932c1d2a5a311af410944b687",
+      "sourceSha256": "a7cac2f8e96ea048ed2e3a0125297853cf72f77b4aa12c35773397da4c90d692",
+      "layoutSourceSha256": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+      "baseInitramfsSha256": "1f878a079d9c2260765e89b227b16f06747965deb612f2cc265b28941561a992",
+      "pid": 1780,
+      "exit": 0,
+      "processStopped": true,
+      "nativeAdmission": false,
+      "serialSha256": "c1e40ae88ed6ff1bff769943843d953b40c4bd49bf133ffb8978b50ba20be339",
+      "independentProcessAbsent": true,
+      "hashes": {
+        "result.json": "f9b11fa52af0a87886a99bbd6b37e848425072369e985518d207ebde36e1a703",
+        "serial.log": "c1e40ae88ed6ff1bff769943843d953b40c4bd49bf133ffb8978b50ba20be339",
+        "stderr.log": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc",
+        "launch.json": "55046228df0d806659263c987490f2aa799365ea3d4f5eb9a715e4912297de95",
+        "executed-source.mjs": "a7cac2f8e96ea048ed2e3a0125297853cf72f77b4aa12c35773397da4c90d692",
+        "executed-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+        "staging/storage/init.sh": "48bf83cba435a00fd6d3fe2d64c29b5642c65bf932c1d2a5a311af410944b687",
+        "staging/storage/dependency-probe.cjs": "fde667a3fb33e287008445d0d7d30d8e563684855d2341b515ed2a48d2d18e84"
+      }
+    },
+    {
+      "case": "storage-native03",
+      "owningMap": "MAP-018",
+      "idea": "IDEA-20261009-11",
+      "scope": "Native public OCI filesystem unpack and Node/Storage dependency admission only; no database/service health/upload/provider acceptance",
+      "providerWrites": false,
+      "databaseChanges": false,
+      "nic": "none",
+      "imageTag": "v1.74.0",
+      "packageVersion": "1.11.2",
+      "manifestDigest": "sha256:63da55733ce9d7592d860739acb94f0b6189d880b7565d247ee5b195be854db1",
+      "unpackerSha256": "b51c267ec394499e42c6fde47f240b7b7dba57ea49df0b5acd304378b82a3b71",
+      "guestInitSha256": "4ab2ed2fb5883a9b38fcaac4efe1917645c28b5aab9c2e0f83b2b12f72c88188",
+      "sourceSha256": "7eeb68bb5b86795538de15d3b2915f3cde013d669963e35302b8bb2a92fc335a",
+      "layoutSourceSha256": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+      "baseInitramfsSha256": "1f878a079d9c2260765e89b227b16f06747965deb612f2cc265b28941561a992",
+      "pid": 3424,
+      "exit": 0,
+      "processStopped": true,
+      "nativeAdmission": true,
+      "serialSha256": "58ab6b3e6b0f6be338755910f23266dced331e0b9fed127af7e9d7153aed06a9",
+      "independentProcessAbsent": true,
+      "hashes": {
+        "result.json": "8ce35b238edcbd3eda3a0e7497e6579528f67a99d10e132b83e0144c24e8b9a8",
+        "serial.log": "58ab6b3e6b0f6be338755910f23266dced331e0b9fed127af7e9d7153aed06a9",
+        "stderr.log": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc",
+        "launch.json": "53d4634a43c8369fdbb6128b2ba0e29143d6877da8db81fe8c39ed03903cfa0d",
+        "executed-source.mjs": "7eeb68bb5b86795538de15d3b2915f3cde013d669963e35302b8bb2a92fc335a",
+        "executed-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+        "staging/storage/init.sh": "4ab2ed2fb5883a9b38fcaac4efe1917645c28b5aab9c2e0f83b2b12f72c88188",
+        "staging/storage/dependency-probe.cjs": "a3cf695d046469390d28058701f7679bb42e9862cfd1cc7968c6a6c643bfde9d"
+      }
+    }
+  ],
+  "sourcePins": {
+    "scripts/storage-runtime-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+    "scripts/prepare-storage-runtime-fixture.mjs": "7eeb68bb5b86795538de15d3b2915f3cde013d669963e35302b8bb2a92fc335a",
+    "tests/storage-runtime-layout.checks.mjs": "91df6bd89b7c61b0f900994ab26a700a8b54c68379296b636f83749543b670e3"
+  },
+  "checks": {
+    "focused": "node --test tests/storage-runtime-layout.checks.mjs: missing-feature5red then5green",
+    "development": {
+      "command": "npm run verify:development",
+      "session": 52330,
+      "exit": 0,
+      "logSha256": "b35ed413229012b2e24fe0424941e93c6e3637fa92d4b1e1a83bbd9d6b8e1e2d",
+      "secretScanFiles": 2130,
+      "privateLog": "storage-native03/development.log"
+    },
+    "independentReview": "No Critical/Important findings; raw03/source/init pins and PID3424 absence independently checked"
+  },
+  "failures": {
+    "beforeCaseCreation": "Initial path comparison refused slash/backslash difference before staging; corrected to resolved absolute comparison",
+    "storageNative01": "Guest2048MiB root tmpfs ENOSPC during layer10; no database/NIC; terminal failure preserved",
+    "storageNative02": "Unpack/whiteout absence/Node pass; inherited chroot PATH lacked node. Source inspection also found actual package version1.11.2; no successful dependency claim. Terminal failure preserved"
+  },
+  "verified": [
+    "umoci0.6.0 executes and applies all pinned OCI layers in real Linux guest",
+    "No .wh.* markers remain in the unpacked image",
+    "Actual Node reports24.20.0",
+    "Actual supa-storage package1.11.2 loads pg without a database connection",
+    "Successful03 uses3072MiB and no NIC/host disk mounts; terminal0/nativeAdmission true",
+    "All three actual process IDs independently absent; disposable RAM filesystem is gone"
+  ],
+  "unverified": [
+    "Per-path full filesystem equivalence beyond standard umoci application and exercised checks",
+    "Captured database Storage migration/version/hash/ACL compatibility and authority conservation",
+    "Storage service startup/health with complete original database/private/Storage recovery",
+    "Actual private packaging upload/registration/readback/cleanup",
+    "Connected genuine imported CSV/review/canonical stock/publication/Website listing",
+    "Hosted provider, real stock, owner release and human acceptance"
+  ],
+  "next": "MAP-018: admit Storage startup against the existing genuine captured local full Admin fixture with existing-image PATH/env, explicit migration/hash/role settings and exact original storage/public/private/schema/sequence/authority recovery; then actual binary uploads and imported Draft-to-listing journey. The source startup always calls tenant migrations; source config offers DB_MIGRATIONS_FREEZE_AT, DB_ALLOW_MIGRATION_REFRESH and DB_INSTALL_ROLES. These source observations are not an applied configuration or compatible ledger proof.",
+  "recovery": "Preserve immutable01/02/03 and public acquisition. All guests are stopped; no database/provider writes occurred. Revert only the new preparer/layout/test slice for source rollback. Reproduce with fresh storage-nativeNN, never overwrite or restart a disposed case.",
+  "providerWrites": false,
+  "databaseChanges": false,
+  "deployed": false
+}
