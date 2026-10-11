@@ -1,5 +1,7 @@
 # K2 Jimzon Master Action Plan
 
+**MAP-018 / IDEA-20261009-11 next required staff workflow fixes:** Rendered phone first-inventory/Under Review qualified locally in LOCAL_IMPORTED_FIRST_INVENTORY_BROWSER_20261011.json (native24/controller45339 terminal0, canonical6/zero reserved, full107 rows/sequences/original/schema/private/two authority recovery, development19629exit0 and retired host). Completed browser interaction slice removed from active queue; latest independent source/raw review remains required because reviewer usage limit prevented it. Preserve immutable18–24/source/TLS evidence; receipt owns failures and recovery. Next implementation in this existing accepted scope: correct Admin stock read boundary (public offer projection intentionally omits internal Drafts; do not weaken storefront eligibility or fork stock truth), explicit human-review control in secure Grid, and protected Website assignment/recovery UI under IDEA-20261001-03. Then actual rendered public-media/Live/Website and separate Storefront/customer journey, exact hosted/human/provider/owner launch gates. No production write/main/release authorization inferred. Reuse accepted intake/inventory/Under Review/backend/Auth/installer proofs; optional polish stays deferred.
+
 
 
 

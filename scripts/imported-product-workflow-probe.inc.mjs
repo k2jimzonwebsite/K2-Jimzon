@@ -7,13 +7,18 @@ import sharp from 'sharp'
 import {decodeEvidenceImage} from '../server/admin-bff/product-intake.js'
 import {importedIntakeBrowserProbe} from './imported-intake-browser-probe.inc.mjs'
 
-export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false,browserWorkflow=false,browserOut}={}){
+export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false,browserWorkflow=false,browserInventory=false,browserOut}={}){
  let mediaCleanup,mediaPath
  const command=async(expect,route,body,key=randomUUID())=>expect(route,await request(route,'POST',body,{headers:{'x-k2-idempotency-key':key}})).result
+ const prepareStock=async({expect,cleanup,good},categoryId)=>{
+  await command(expect,'product-master',{action:'category_policy_set',payload:{categoryId,minimumDays:150,expectedVersion:0,reason:'Explicit synthetic shelf-life admission'}})
+  good('fixture_hub',await cleanup.from('hubs').upsert({id:'HUB-MNL-CENTRAL',name:'Synthetic workflow hub',code:'SYN-WORKFLOW',country:'PH',role:'Synthetic test'},{onConflict:'id',ignoreDuplicates:true}))
+  good('fixture_custodian',await cleanup.from('custodians').upsert({id:'CUST-STAFF-ELENA',name:'Synthetic workflow custodian',role:'Synthetic test',hub_id:'HUB-MNL-CENTRAL'},{onConflict:'id',ignoreDuplicates:true}))
+ }
  try{
  await intakeEvidenceProbe(uid,report,credentials,request,jar,{
   publicMedia,
-  ...(browserWorkflow ? {browser: context => importedIntakeBrowserProbe({...context,credentials,uid,report,out:browserOut})} : {}),
+  ...(browserWorkflow ? {browser: context => importedIntakeBrowserProbe({...context,credentials,uid,report,out:browserOut,browserInventory})} : {}),
   before:async({client,cleanup,request,good,expect})=>{
    const values=Object.fromEntries(CATALOG_COLUMNS.map(k=>[k,'']))
    Object.assign(values,{template_version:'k2-catalog-v1',name:'Synthetic pantry '+randomUUID(),description:'Imported description to preserve',ingredients:'Synthetic label ingredients',country_of_origin:'Spain',primary_image_url:'https://example.invalid/imported-supplied.jpg',internal_notes:'Explicit synthetic CSV provenance'})
@@ -42,8 +47,15 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
    const categories=good('canonical_category',await client.from('categories').select('id,name').eq('id',categoryId))
    assert.equal(brands.length,1);assert.equal(categories.length,1)
    const brand=brands[0],category=categories[0]
+   if(browserInventory)await prepareStock({expect,cleanup,good},category.id)
    report.importedProduct={id:baseline.id,sku,catalogId:baseline.catalog_id,baselineVersion:String(baseline.catalog_record_version),importedDraft:true,zeroBatches:true,syntheticMediaUrl:values.primary_image_url}
-   return {baseline,brand,category,existingProduct:{productId:baseline.id,recordVersion:String(baseline.catalog_record_version)}}
+   const readReviewedVersion=async()=>{
+    const reviewed=good('review_before_inventory_readback',await client.from('products').select('id,sku,catalog_record_version').eq('id',baseline.id).single())
+    assert.equal(reviewed.id,baseline.id);assert.equal(reviewed.sku,baseline.sku)
+    assert.equal(Number(reviewed.catalog_record_version),Number(baseline.catalog_record_version)+1)
+    return String(reviewed.catalog_record_version)
+   }
+   return {baseline,brand,category,readReviewedVersion,existingProduct:{productId:baseline.id,recordVersion:String(baseline.catalog_record_version)}}
   },
   after:async({client,cleanup,request,good,expect,target,sessionId,requestId})=>{
    const {baseline,brand,category}=target,sku=baseline.sku
@@ -63,7 +75,12 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
    const product=good('reviewed_product_read',await client.from('products').select('*').eq('id',baseline.id).single())
    for(const field of ['id','sku','catalog_id','primary_image_url','ingredients','internal_notes'])assert.equal(product[field],baseline[field])
    assert.equal(product.description,'Staff accepted correction');assert.equal(product.brand_id,brand.id);assert.equal(product.category_id,category.id)
-   assert.equal(Number(product.catalog_record_version),Number(baseline.catalog_record_version)+1)
+   if(browserInventory){
+    assert.equal(Number(report.intakeBrowser.reviewRecordVersion),Number(baseline.catalog_record_version)+1)
+    assert.ok(Number(product.catalog_record_version)>=Number(report.intakeBrowser.reviewRecordVersion))
+    report.importedProduct.reviewRecordVersion=report.intakeBrowser.reviewRecordVersion
+    report.importedProduct.recordVersionAfterStockAndPublication=String(product.catalog_record_version)
+   }else assert.equal(Number(product.catalog_record_version),Number(baseline.catalog_record_version)+1)
    report.importedProduct.reviewedOriginalIdentity=true;report.importedProduct.rejectedIngredientsPreserved=true;report.importedProduct.reviewReplay=!browserWorkflow
    if(publicMedia){
     mediaCleanup=cleanup.storage.from('product-images')
@@ -85,19 +102,19 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
     const dimensions=await sharp(retained).metadata();assert.equal(dimensions.width,180);assert.equal(dimensions.height,140)
     report.publicMedia={url,objectPath:mediaPath,sha256:decoded.sha256,bytes:retained.length,width:180,height:140,uploadReplay:true,assignmentReplay:true,canonicalReadback:true,anonymousDownload:true,certificateValidation:true,browserRendered:false}
    }
-   await command(expect,'product-master',{action:'category_policy_set',payload:{categoryId:category.id,minimumDays:150,expectedVersion:0,reason:'Explicit synthetic shelf-life admission'}})
+   if(!browserInventory){
    // Existing owned fixture catalogs supply real canonical custody identifiers.
-   good('fixture_hub',await cleanup.from('hubs').upsert({id:'HUB-MNL-CENTRAL',name:'Synthetic workflow hub',code:'SYN-WORKFLOW',country:'PH',role:'Synthetic test'},{onConflict:'id',ignoreDuplicates:true}))
-   good('fixture_custodian',await cleanup.from('custodians').upsert({id:'CUST-STAFF-ELENA',name:'Synthetic workflow custodian',role:'Synthetic test',hub_id:'HUB-MNL-CENTRAL'},{onConflict:'id',ignoreDuplicates:true}))
+   await prepareStock({expect,cleanup,good},category.id)
    const expiry=new Date(Date.now()+400*86400000).toISOString().slice(0,10)
    const inventory={sessionId,inventoryRequestId:randomUUID(),source:'reconciliation',inventory:{quantity:6,boxCode:'SYN-WORKFLOW-BOX',batchCode:'SYN-WORKFLOW-LOT',expiryDate:expiry,isNonExpiry:false,unitCost:40,ownerCode:'SYNTHETIC-OWNER',hubLocation:'HUB-MNL-CENTRAL',custodian:'CUST-STAFF-ELENA',reason:'Explicit dummy opening stock; no physical inventory claim'}}
    const inventoryKey=randomUUID(),stock=await command(expect,'product-intake/inventory',inventory,inventoryKey)
    assert.equal(stock.success,true);assert.deepEqual(await command(expect,'product-intake/inventory',inventory,inventoryKey),stock)
+   }
    const batches=good('canonical_stock',await client.from('product_batches').select('quantity,reserved_quantity').eq('sku',sku))
    assert.equal(batches.reduce((n,b)=>n+Number(b.quantity),0),6)
    assert.equal(batches.reduce((n,b)=>n+Number(b.reserved_quantity),0),0)
-   report.importedProduct.canonicalStock=6;report.importedProduct.stockReplay=true
-   await command(expect,'product-intake/publication',{sessionId,requestedStatus:'under_review',reason:'Explicit synthetic staff package review'})
+   report.importedProduct.canonicalStock=6;report.importedProduct.stockReplay=!browserInventory
+   if(!browserInventory)await command(expect,'product-intake/publication',{sessionId,requestedStatus:'under_review',reason:'Explicit synthetic staff package review'})
    const current=good('publication_master',await client.from('products').select('*').eq('id',baseline.id).single())
    await command(expect,'product-master',{action:'update',payload:{sku,patch:{srp:100,is_human_reviewed:true},expectedUpdatedAt:current.updated_at,reason:'Explicit synthetic Admin pricing and human review'}})
    await command(expect,'product-intake/publication',{sessionId,requestedStatus:'live',reason:'Explicit synthetic final publication review'})

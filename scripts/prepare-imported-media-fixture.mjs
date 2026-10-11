@@ -8,7 +8,8 @@ import {execFileSync} from 'node:child_process'
 import {catalogValueHash} from './reference-catalog-contract.mjs'
 const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const name=process.argv.find(a=>a.startsWith('--case='))?.slice(7)
-const browserWorkflow=process.argv.includes('--browser-workflow')
+const browserInventory=process.argv.includes('--browser-inventory')
+const browserWorkflow=browserInventory||process.argv.includes('--browser-workflow')
 const currentInstallation=browserWorkflow||process.argv.includes('--current-installation')
 const publicMedia=currentInstallation||process.argv.includes('--public-media')
 const productWorkflow=publicMedia||process.argv.includes('--product-workflow')
@@ -23,7 +24,7 @@ const once=(s,b,a)=>{assert.equal(s.split(b).length,2,b.slice(0,100));return s.r
 let source=pin('executed-source.mjs').replaceAll(base.case,name)
 let helper=pin('bff-helper.mjs'),driver=pin('host-driver.mjs')
 const scope=publicMedia?'Genuine local BFF imported product flow with HTTPS product-image upload/assignment/replay/anonymous normalized bytes; offline fixture restoration; older admitted installer foundation, no browser/provider acceptance':productWorkflow?'Genuine local BFF CSV imported Draft/review/stock/publication/Website listing and Storage packaging evidence; offline fixture restoration; no browser/provider acceptance':intakeEvidence?'Genuine local BFF Auth/MFA intake session and binary evidence registration/replay/download/cleanup; original captured recovery; no browser/imported product/provider acceptance':'Genuine local Auth/MFA actual Storage upload/download/remove through unified proxy and binary Admin fixture adapter; original captured recovery; no browser/intake registration/provider acceptance'
-const executionScope=browserWorkflow?'Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save, joined to previously qualified stock/media/Website commands; offline recovery. No customer browser/hosted/provider acceptance':currentInstallation?'Genuine local complete accepted reference/category/tariff installer with protected reference creation and imported product/public-media/stock/Website commands; exact offline application restoration; no browser/provider acceptance':scope
+const executionScope=browserInventory?'Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save/first-inventory/Under Review publication, joined to qualified backend public-media/Live/Website commands; offline recovery. No customer browser/hosted/provider acceptance':browserWorkflow?'Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save, joined to previously qualified stock/media/Website commands; offline recovery. No customer browser/hosted/provider acceptance':currentInstallation?'Genuine local complete accepted reference/category/tariff installer with protected reference creation and imported product/public-media/stock/Website commands; exact offline application restoration; no browser/provider acceptance':scope
 let installationPins
 if(currentInstallation){
  const installation=JSON.parse(fs.readFileSync('docs/acceptance/PROTECTED_REFERENCE_INSTALLATION_20261011.json'))
@@ -65,7 +66,7 @@ helper=once(helper,"const chunks=[];let size=0;for await(const chunk of req){siz
 const probeFile=productWorkflow?'scripts/imported-product-workflow-probe.inc.mjs':intakeEvidence?'scripts/imported-intake-evidence-probe.inc.mjs':'scripts/imported-media-transport-probe.inc.mjs'
 const probeName=productWorkflow?'importedProductProbe':intakeEvidence?'intakeEvidenceProbe':'mediaTransportProbe'
 helper=once(helper,'await browserProbe(credentials,report,uid);',intakeEvidence?`await ${probeName}(uid,report,credentials,request,jar);`:'await mediaTransportProbe(uid,report,credentials);')
-if(publicMedia)helper=once(helper,'await importedProductProbe(uid,report,credentials,request,jar);',`await importedProductProbe(uid,report,credentials,request,jar,{publicMedia:true,currentInstallation:${currentInstallation},browserWorkflow:${browserWorkflow},browserOut:path.dirname(new URL(import.meta.url).pathname.replace(/^\\/([A-Za-z]:)/,'$1'))});`)
+if(publicMedia)helper=once(helper,'await importedProductProbe(uid,report,credentials,request,jar);',`await importedProductProbe(uid,report,credentials,request,jar,{publicMedia:true,currentInstallation:${currentInstallation},browserWorkflow:${browserWorkflow},browserInventory:${browserInventory},browserOut:path.dirname(new URL(import.meta.url).pathname.replace(/^\\/([A-Za-z]:)/,'$1'))});`)
 helper+=`\nconst {${probeName}}=await import(pathToFileURL(path.join(process.cwd(),${JSON.stringify(probeFile)})).href)\n`
 if(browserWorkflow){
  // Those refusal/logout contracts are already qualified. Avoid exhausting the
