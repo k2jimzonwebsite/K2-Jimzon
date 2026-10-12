@@ -1,0 +1,241 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T16:04:47.002Z",
+  "state": "actual-client-to-pooler-verify-full-observed-upstream-and-live-adoption-unqualified",
+  "projectRef": "pixplcjqivlfflickobf",
+  "providerReads": true,
+  "providerWrites": false,
+  "installedSupabaseConnectorReached": false,
+  "replacementProbeDispatched": false,
+  "originalApiOutcome": "UNKNOWN",
+  "automaticRetryAllowed": false,
+  "preflight": {
+    "tool": "ada624",
+    "command": "npm run preflight:k2-project",
+    "passed": true
+  },
+  "readiness": {
+    "tool": "d4a7ed",
+    "command": "npm run readiness:k2-live",
+    "exitCode": 0,
+    "verified": 8,
+    "owner": 2,
+    "connector": 3,
+    "blocked": 0,
+    "scope": "Read-only preconditions, never write authorization or completion"
+  },
+  "prerequisites": {
+    "tool": "84c014",
+    "sslEnforcement": {
+      "currentConfig": {
+        "database": false
+      },
+      "appliedSuccessfully": true
+    },
+    "certificateInitialAttempt": {
+      "url": "https://supabase.com/downloads/prod-ca-2021.crt",
+      "status": 404
+    },
+    "directHostDns": "OS lookup unavailable; no direct-host connection attempted",
+    "dashboardSource": {
+      "url": "https://supabase.com/dashboard/project/pixplcjqivlfflickobf/database/settings",
+      "title": "Settings | Database | K2jimzon | Supabase",
+      "certificateHref": "https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt",
+      "method": "Actual authenticated K2 browser link href; no setting changed"
+    }
+  },
+  "execution": {
+    "tool": "a86710",
+    "owningMap": "MAP-018",
+    "projectRef": "pixplcjqivlfflickobf",
+    "recordedAt": "2026-10-12T16:02:10.503Z",
+    "providerWrites": false,
+    "identityVerified": true,
+    "connectionKind": "pooler",
+    "host": "aws-0-ap-southeast-1.pooler.supabase.com",
+    "port": 5432,
+    "requestedSslMode": "verify-full",
+    "rootCertificate": {
+      "url": "https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt",
+      "source": "Authenticated exact K2 dashboard Download certificate link",
+      "bytes": 1367,
+      "sha256": "700723581420dd1ac98fd7e9ac529f0ef210eadcaf87fc868a3ad7d114c2f3b7",
+      "subject": "C=US\nST=Delware\nL=New Castle\nO=Supabase Inc\nCN=Supabase Root 2021 CA",
+      "issuer": "C=US\nST=Delware\nL=New Castle\nO=Supabase Inc\nCN=Supabase Root 2021 CA",
+      "validFrom": "Apr 28 10:56:53 2021 GMT",
+      "validTo": "Apr 26 10:56:53 2031 GMT",
+      "fingerprint256": "80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA"
+    },
+    "query": {
+      "file": "C:\\Users\\jerze\\K2 JImzon\\.tools\\map018-controlled-tls-20261012-01\\pooler-readonly.sql",
+      "bytes": 2306,
+      "sha256": "d03eee37d65237e17cc16bb0740468d59956dc6902d58149bbca06235d686b28"
+    },
+    "client": {
+      "file": "C:\\Users\\jerze\\K2 JImzon\\.tools\\postgresql-17.11\\runtime\\pgsql\\bin\\psql.exe",
+      "sha256": "5bb3fad8a7ff555abff37921a24ee3d9e377c15408b5e7267aa9245596965ca0",
+      "verifiedVersion": {
+        "tool": "d663fe",
+        "output": "psql (PostgreSQL) 17.11"
+      }
+    },
+    "status": 0,
+    "signal": null,
+    "error": null,
+    "stdout": "You are connected to database \"postgres\" as user \"postgres.pixplcjqivlfflickobf\" on host \"aws-0-ap-southeast-1.pooler.supabase.com\" (address \"52.74.252.201\") at port \"5432\".\r\nSSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, compression: off, ALPN: none)\r\n{\"pid\": 2210144, \"phase\": 1, \"sslRows\": 1, \"database\": \"postgres\", \"readOnly\": \"on\", \"superuser\": false, \"backendTls\": {\"ssl\": false, \"bits\": null, \"cipher\": null, \"version\": null}, \"application\": \"Supavisor\", \"currentRole\": \"postgres\", \"sessionRole\": \"postgres\", \"backendStart\": \"2026-10-12T16:02:23.181858+00:00\", \"serverVersion\": \"170006\", \"clientEncoding\": \"UTF8\"}\r\n\r\n{\"pid\": 2210144, \"phase\": 2, \"sslRows\": 1, \"database\": \"postgres\", \"readOnly\": \"on\", \"superuser\": false, \"backendTls\": {\"ssl\": false, \"bits\": null, \"cipher\": null, \"version\": null}, \"application\": \"Supavisor\", \"currentRole\": \"postgres\", \"sessionRole\": \"postgres\", \"backendStart\": \"2026-10-12T16:02:23.181858+00:00\", \"serverVersion\": \"170006\", \"clientEncoding\": \"UTF8\"}\r\n{\"pid\": 2210144, \"phase\": 3, \"sslRows\": 1, \"database\": \"postgres\", \"readOnly\": \"on\", \"superuser\": false, \"backendTls\": {\"ssl\": false, \"bits\": null, \"cipher\": null, \"version\": null}, \"application\": \"Supavisor\", \"currentRole\": \"postgres\", \"sessionRole\": \"postgres\", \"backendStart\": \"2026-10-12T16:02:23.181858+00:00\", \"serverVersion\": \"170006\", \"clientEncoding\": \"UTF8\"}\r\n",
+    "stderr": "",
+    "observations": [
+      {
+        "pid": 2210144,
+        "phase": 1,
+        "sslRows": 1,
+        "database": "postgres",
+        "readOnly": "on",
+        "superuser": false,
+        "backendTls": {
+          "ssl": false,
+          "bits": null,
+          "cipher": null,
+          "version": null
+        },
+        "application": "Supavisor",
+        "currentRole": "postgres",
+        "sessionRole": "postgres",
+        "backendStart": "2026-10-12T16:02:23.181858+00:00",
+        "serverVersion": "170006",
+        "clientEncoding": "UTF8"
+      },
+      {
+        "pid": 2210144,
+        "phase": 2,
+        "sslRows": 1,
+        "database": "postgres",
+        "readOnly": "on",
+        "superuser": false,
+        "backendTls": {
+          "ssl": false,
+          "bits": null,
+          "cipher": null,
+          "version": null
+        },
+        "application": "Supavisor",
+        "currentRole": "postgres",
+        "sessionRole": "postgres",
+        "backendStart": "2026-10-12T16:02:23.181858+00:00",
+        "serverVersion": "170006",
+        "clientEncoding": "UTF8"
+      },
+      {
+        "pid": 2210144,
+        "phase": 3,
+        "sslRows": 1,
+        "database": "postgres",
+        "readOnly": "on",
+        "superuser": false,
+        "backendTls": {
+          "ssl": false,
+          "bits": null,
+          "cipher": null,
+          "version": null
+        },
+        "application": "Supavisor",
+        "currentRole": "postgres",
+        "sessionRole": "postgres",
+        "backendStart": "2026-10-12T16:02:23.181858+00:00",
+        "serverVersion": "170006",
+        "clientEncoding": "UTF8"
+      }
+    ],
+    "passed": true,
+    "clientTls": true,
+    "scope": "Three SELECT-only identity observations across two explicit READ ONLY transactions on one client connection, with CA/hostname verification; no full-size/writable/commit-loss/cancellation or terminal provider-job proof."
+  },
+  "pins": [
+    {
+      "file": ".tools/probe-controlled-tls-prerequisites01.mjs",
+      "bytes": 2765,
+      "sha256": "f11cb14cfa21def6c18c3ce85614d655b3d4d9192759de4c04b98bac8773a1fa"
+    },
+    {
+      "file": ".tools/probe-controlled-pooler01.mjs",
+      "bytes": 5636,
+      "sha256": "07ccc421e6ef9853e211e617758f7cddf48ab3d68b06ef307a8a0d64405e077c"
+    },
+    {
+      "file": ".tools/map018-controlled-tls-20261012-01/prerequisites.json",
+      "bytes": 696,
+      "sha256": "e7f70bab84e7ebf8f23f07759de380770008bb44f88ea09df6e62d1ed4496c06"
+    },
+    {
+      "file": ".tools/map018-controlled-tls-20261012-01/ssl-enforcement-response.json",
+      "bytes": 63,
+      "sha256": "8d82b722856dd9353d98917dcf657e98524aa91d69be7069c9e48ec6dc110783"
+    },
+    {
+      "file": ".tools/map018-controlled-tls-20261012-01/readiness.log",
+      "bytes": 2801,
+      "sha256": "1739beeefdaddeafd94c73fb3572567a75ba282ec6e81dda918a37c0af147639"
+    },
+    {
+      "file": ".tools/map018-controlled-tls-20261012-01/dashboard-certificate-source.json",
+      "bytes": 335,
+      "sha256": "833b10066ba1e2f8d3256f8aef58b98074fe66f27ec5356abdd38674f7569393"
+    },
+    {
+      "file": ".tools/map018-controlled-tls-20261012-01/prod-ca-2021.crt",
+      "bytes": 1367,
+      "sha256": "700723581420dd1ac98fd7e9ac529f0ef210eadcaf87fc868a3ad7d114c2f3b7"
+    },
+    {
+      "file": ".tools/map018-controlled-tls-20261012-01/pooler-readonly.sql",
+      "bytes": 2306,
+      "sha256": "d03eee37d65237e17cc16bb0740468d59956dc6902d58149bbca06235d686b28"
+    },
+    {
+      "file": ".tools/map018-controlled-tls-20261012-01/pooler-result.json",
+      "bytes": 4852,
+      "sha256": "14df44f05fdd9cb979bf0e4871a5a4926a829251a0dbb5dae9b02c311f81c248"
+    }
+  ],
+  "review": {
+    "source": "APPROVED",
+    "runtime": "APPROVED",
+    "correctedImportant": "Force PGGSSENCMODE disable and require actual positive SSL conninfo; verify-full alone is insufficient when GSS encryption takes precedence.",
+    "critical": 0,
+    "important": 0,
+    "independent9Pins": true,
+    "independentRawResultEquality": true,
+    "independentRootCaAndSqlAndClientHash": true
+  },
+  "qualified": "Actual pinned psql executable and authenticated-dashboard CA, exact K2 session-pooler5432, GSS encryption disabled, verify-full plus observed TLS, three actual same-PID/start identity observations across two explicit READ ONLY transactions; all observed current/session roles postgres/non-superuser/UTF8.",
+  "limits": [
+    "Client TLS verification covers client-to-pooler only. All three exact pg_stat_ssl rows report ssl false on the database backend connection; end-to-end TLS is not established.",
+    "Requested PGAPPNAME did not reach the backend: observed application is Supavisor. Existing strict intent application binding remains unchanged and cannot accept these observations as installer execution intent.",
+    "Stable PID/start across this bounded read-only schedule does not prove all pooler affinity, writable/full-size transaction behavior, client-loss cancellation or terminal backend/platform work.",
+    "SSL enforcement currentConfig.database false is observed configuration, not a tested plaintext-acceptance result; it was not changed.",
+    "No actual direct-host SQL/TLS connection attempted. Unavailable OS DNS lookup does not establish permanent endpoint/network unavailability.",
+    "Server backendStart is later than host recordedAt in this receipt. Clock alignment is unqualified; do not invent chronology or weaken strict intent timestamp refusal.",
+    "Original UNKNOWN Management API request remains a distinct unresolved live gate. No replacement, installer, flag, role, setting, migration history or release write occurred."
+  ],
+  "remaining": "MAP-018: qualify explicit actual backend application binding and host/server clock observations read-only; resolve supported transport meeting both TLS boundaries without unapproved provider setting changes, then in-place data-retaining recovery/later-business-data policy and original-UNKNOWN disposition. Separate exact write authorization, immediate backup/identity/zero-failed readiness and full operational/hosted/human/release acceptance remain.",
+  "recovery": "psql completed exit0 and both READ ONLY transactions rolled back; no provider rollback. Preserve raw TLS01, native10, all source/envelope/backups and original UNKNOWN request. Revert only local probe/receipt documentation if rejected; never modify provider SSL, network, connection or role settings under this scope.",
+  "sources": [
+    {
+      "title": "Supabase SSL enforcement and verification",
+      "url": "https://supabase.com/docs/guides/platform/ssl-enforcement"
+    },
+    {
+      "title": "Supabase session-pooler semantics",
+      "url": "https://supabase.com/docs/guides/troubleshooting/supavisor-and-connection-terminology-explained-9pr_ZO"
+    },
+    {
+      "title": "PostgreSQL17 libpq TLS",
+      "url": "https://www.postgresql.org/docs/17/libpq-ssl.html"
+    },
+    {
+      "title": "PostgreSQL17 GSS encryption precedence",
+      "url": "https://www.postgresql.org/docs/17/libpq-connect.html"
+    }
+  ]
+}

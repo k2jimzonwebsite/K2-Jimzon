@@ -1,0 +1,247 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T15:50:17.364Z",
+  "state": "local-intent-retention-and-same-session-execution-qualified-reviewed",
+  "providerReads": false,
+  "providerWrites": false,
+  "providerAcceptance": false,
+  "originalApiOutcome": "UNKNOWN",
+  "automaticRetryAllowed": false,
+  "case": {
+    "directory": ".tools/map018-controlled-native-20261012-10",
+    "startTool": "a0b063",
+    "owningMap": "MAP-018",
+    "providerWrites": false,
+    "scope": "Local native10 intent refusal/conservation and host retention before unchanged envelope execution, matching observed backend through local COMMIT acknowledgement loss. No provider/pooler/TLS or host-crash durability proof.",
+    "startedAt": "2026-10-12T15:47:27.944Z",
+    "timedOut": false,
+    "pid": 4072,
+    "retention": {
+      "intentId": "89400000-0000-4000-8000-000000000010",
+      "session": {
+        "pid": 676,
+        "state": "idle in transaction",
+        "database": "postgres",
+        "readOnly": "off",
+        "superuser": false,
+        "application": "k2-controlled-install-89400000-0000-4000-8000-000000000010",
+        "currentRole": "postgres",
+        "sessionRole": "postgres",
+        "backendStart": "2026-10-12T15:47:59.522302Z",
+        "serverVersion": 170006
+      },
+      "observed": {
+        "file": "observed-session.json",
+        "bytes": 311,
+        "sha256": "b82810ad2b4969080995ed6a8230b30ee123c500c1ee7a30441b35172c64232e"
+      },
+      "intent": {
+        "file": "retained-intent.json",
+        "bytes": 1255,
+        "sha256": "bf7193f10072b1ff234cebbf06284ea90c9c5183d4fa59368cb96964f29871e4"
+      },
+      "fsyncAndIndependentReadback": true,
+      "retainedAt": "2026-10-12T15:48:00.737Z",
+      "beforeGuestRelease": true,
+      "hostCrashDurabilityQualified": false
+    },
+    "exit": 0,
+    "stopped": true,
+    "controls": [
+      {
+        "name": "K2_INTENT_HANDOFF_REFUSAL_CONSERVATION_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_INTENT_SAME_SESSION_THROUGH_COMMIT_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_BEFORE_COMMIT_PENDING_RECEIPT_ABSENT_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_PSQL_COMMIT_REPLY_LOST_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_LOST_COMMIT_ACK_TERMINAL_APPLICATION_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_EXACT_RECEIPT_ROUNDTRIP_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_NATIVE_CASE_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_OCI_GUEST_SUCCESS",
+        "passed": true
+      }
+    ],
+    "protocol": {
+      "backendPid": 676,
+      "backendConnectionClosed": true,
+      "backendCommitReceived": true,
+      "clientClosed": true,
+      "frontendQueryCount": 13,
+      "commitAcknowledgementsForwarded": 0,
+      "frontendCommitForwarded": true,
+      "readyForQueryIdleWithheld": true
+    },
+    "retentionMatched": true,
+    "passed": true,
+    "finishedAt": "2026-10-12T15:50:01.607Z",
+    "serialSha256": "1f7ad93a4fb37f84918d0bf9c593b868db3837c36fa27388887068303b07df2d",
+    "stagingPins": 28,
+    "terminalTool": "9e87f6",
+    "independentGuestAbsence": {
+      "tool": "df7805",
+      "pid": 4072,
+      "absent": true,
+      "method": "Elevated read-only Windows CIM query with Stop error handling",
+      "restrictedAttempt": "567bbb unavailable; not absence evidence"
+    }
+  },
+  "files": [
+    {
+      "file": "scripts/prepare-controlled-migration-intent.mjs",
+      "bytes": 4026,
+      "sha256": "6c9482a796a7e9d898278c8629d4fdffdfac0e62428daace7eb5d91b2acbc2db"
+    },
+    {
+      "file": ".tools/create-controlled-intent10.mjs",
+      "bytes": 6868,
+      "sha256": "30ba11385cefd6b2bfe730a2e9682c627f62f6118975c620ceb85c3e58893d51"
+    },
+    {
+      "file": ".tools/prepare-controlled-native10.mjs",
+      "bytes": 23396,
+      "sha256": "240d61e921833342bf83f5f344b12a9b972f3a267935ed461866a13a5a8192a0"
+    },
+    {
+      "file": ".tools/run-controlled-native10.mjs",
+      "bytes": 6639,
+      "sha256": "0737c60623d7c9c897ff4e1483fcef8cd469fe9fc6666d9630de5c24b5de5cbf"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-10/preparation.json",
+      "bytes": 5168,
+      "sha256": "8301b740cf949e2f5d56756f8748fcc09b5a8de7a3dc0a691b60a5b7d6f3457e"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-10/result.json",
+      "bytes": 2673,
+      "sha256": "4843a5149e9c590964955d980982f28213d1f9dacbfd4aaab670bcaa4b320f64"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-10/serial.log",
+      "bytes": 5279073,
+      "sha256": "1f7ad93a4fb37f84918d0bf9c593b868db3837c36fa27388887068303b07df2d"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-10/observed-session.json",
+      "bytes": 311,
+      "sha256": "b82810ad2b4969080995ed6a8230b30ee123c500c1ee7a30441b35172c64232e"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-10/retained-intent.json",
+      "bytes": 1255,
+      "sha256": "bf7193f10072b1ff234cebbf06284ea90c9c5183d4fa59368cb96964f29871e4"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-10/retention-receipt.json",
+      "bytes": 892,
+      "sha256": "0e7927685409b23cb9e41b08dfba7fca8402b29ccb19fe3eb6aaf97b12d52254"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-10/before-catalog.json",
+      "bytes": 1337443,
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-10/committed-catalog.json",
+      "bytes": 2437873,
+      "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e"
+    }
+  ],
+  "runtimeHashes": [
+    {
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+      "guestFile": "/tmp/controlled-before-catalog.json"
+    },
+    {
+      "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e",
+      "guestFile": "/tmp/controlled-committed-catalog.json"
+    },
+    {
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+      "guestFile": "/tmp/controlled-negative-catalog.json"
+    },
+    {
+      "sha256": "1beeac52d8a89c719987806f39a39ce14abbc2ed64f3dafdc9f2070bbe084645",
+      "guestFile": "/tmp/controlled-before-rows.json"
+    },
+    {
+      "sha256": "70d30af2d2d2d6bc62a45c4958ca123d5d0cea087c894df36e3659bed3a84943",
+      "guestFile": "/tmp/controlled-committed-rows.json"
+    },
+    {
+      "sha256": "1beeac52d8a89c719987806f39a39ce14abbc2ed64f3dafdc9f2070bbe084645",
+      "guestFile": "/tmp/controlled-negative-rows.json"
+    },
+    {
+      "sha256": "5f5da3a4f31fdb933e72c727a0eaff2236c87d46d8bca3b19e342f25ed209dfc",
+      "guestFile": "/tmp/controlled-before-history.txt"
+    },
+    {
+      "sha256": "53cce2144df6b1a9d7f84c6846dde5f6ef74f384ca132b3b4cb95355ee4648b5",
+      "guestFile": "/tmp/controlled-committed-history.txt"
+    },
+    {
+      "sha256": "5f5da3a4f31fdb933e72c727a0eaff2236c87d46d8bca3b19e342f25ed209dfc",
+      "guestFile": "/tmp/controlled-negative-history.txt"
+    },
+    {
+      "sha256": "d806f63f13e1aa7dae65461201544daa595f5f1e0f62c580d32d198fe17ccec4",
+      "guestFile": "/tmp/controlled-commit-backend.json"
+    }
+  ],
+  "qualification": "Actual local psql shell-handoff failure yields exit3/INTENT_HANDOFF_REFUSED before unchanged complete envelope; full baseline catalog, protected rows/sequences and history conserve. Successful client begins a read-only-by-behavior preparation transaction, queries actual current/session roles and backend identity, then pauses. Independent observer captures idle-in-transaction state. Host constructs exact pinned intent, exclusively creates/fsyncs/closes session, intent and retention receipt, independently reads bytes back, then sends the matching hash. Guest rechecks identical observed identity before release, rolls back the SELECT-only preparation transaction, and executes byte-exact complete envelope on the same connection. Matching PID/start/application through final COMMIT is observed independently. Existing local proxy withholds actual COMMIT/idle ReadyForQuery; original backend terminality, byte-exact source receipt, expected catalog, original row projection and authority pass.",
+  "limits": [
+    "Network-disabled isolated genuine PostgreSQL17.6, not actual K2 pooler/provider/TLS or hosted acceptance.",
+    "Host exclusive creation/fsync/readback establishes tested custody before release, not authenticated attestation, immutable offsite custody, directory durability under host crash or every filesystem failure.",
+    "Original serialized candidate retains authorized/dispatched/durablyRetained/providerAcceptance false. Separate observed retention/runtime receipts supply bounded evidence; no retrospective alteration of candidate bytes.",
+    "Initial current/session role observations and independent PID/start/application matching qualify this local session schedule, not every privilege change or pooler reassignment. Preparation transaction rolls back before conserved installer transaction.",
+    "Failure control uses an actual failed shell command; it does not inject disk exhaustion/fsync failure or lost/corrupt acknowledgement.",
+    "No production dispatcher, classifier or automatic retry exists; original Management API attempt remains UNKNOWN/no retry."
+  ],
+  "review": {
+    "source": "APPROVED",
+    "runtime": "APPROVED",
+    "correctedImportant": "Duplicate exact proxy JSON from normal completion and EXIT diagnostics caused false negative. Actual09 red0161c8 and corrected raw duplicate/conflicting identity check0ff963 preserve refusal on disagreement.",
+    "critical": 0,
+    "important": 0,
+    "independent12FilePins": true,
+    "independent28StagingPins": true,
+    "independent10RuntimeHashes": true,
+    "independentExactIntentReconstruction": true,
+    "independentNegativeConservation": true,
+    "independentRetainedIdentityThroughCommit": true
+  },
+  "remaining": "MAP-018: actual read-only pooler/TLS qualification, then in-place data-retaining recovery and later-business-data policy. Disk/fsync/corrupt-ack and host-crash failure schedules remain untested before any eventual production dispatcher. Original API UNKNOWN terminal evidence or separately reviewed owner-accepted isolation; distinct exact write authorization/fresh backup/identity/zero-failed readiness/full operational/hosted/human/release acceptance remain.",
+  "recovery": "Owned native10 guest4072 independently confirmed absent by elevated CIM df7805. Restricted initial CIM567bbb was unavailable and supplies no absence evidence. Preserve immutable native10, prior accepted/failed cases, source/envelope/backups and original UNKNOWN request. Revert only unactivated local fixture/receipt documentation if rejected; no provider rollback. Never restore stale original snapshot over later business data.",
+  "sources": [
+    {
+      "title": "PostgreSQL17 psql SHELL_ERROR and variable interpolation",
+      "url": "https://www.postgresql.org/docs/17/app-psql.html"
+    }
+  ]
+}
