@@ -144,3 +144,107 @@ Drift01 remains unexecuted and superseded by drift02 for explicit cmp status1 en
 
 Executed local resumption qualification,11October: 11 October genuine post-repair request resumption qualified locally (MAP-018 / IDEA-20261010-08): fresh04/session84749 terminal0; actual known-three correction/no-op/full-state/catalog conservation precedes healthy Auth/PostgREST restart. Retained staff/guest cookies replay exact category/tariff/two old order receipts and conserve old business/conversation/message rows. New customer separate cookies and actual127.0.0.2 peer receives rate2/20000 quote, one accepted order/one hold and exact receipt replay without duplicate effects. Existing unused stale-test key preserves exact three-key observer/catalog; IP900s5/contact3600s3 limits are unchanged. Full168relations/11sequences/44525rows repair initial/final SHA18c27fe2c094ea30eb65aa3349021e4be9b04b5198d702371ce1fcf2e5169007; four authority witnesses, separate original88/two-sequence reconstruction and corrected installed-catalog recovery pass. PID18244/five ports independently absent. docs/acceptance/RETAINED_RESUMPTION_20261011.json binds actual/source pins; independent actual-evidence review found no findings. Failed01 recovery unverified; failed02/03 original recovery verified and all remain preserved. No production availability/provider/hosted claim; remaining integration/activation stays MAP-018.
 Source initial2red; actual retiring-listener EOF, distinct-customer generation and exact observer-selection regressions each failed before correction; final6green including actual ephemeral TCP/HTTP. Final source development97011 exit0. The guest remains running under its existing bounded limit after host-control failure to permit guarded recovery. Normal request nonce/rate/session changes after restart are distinct from exact full repair conservation. Full native proof reuses known matrix/drift evidence rather than rerunning them.
+
+
+## Full controlled-installation profile candidate, 13 October 2026
+
+Existing owner-confirmed understanding applies: retain operational records and
+saved command receipts, keep shopping available, test locally first, and introduce
+no emergency pause or publication drain. This amendment changes the qualification
+profile and receipt-conservation evidence, not that recovery behavior. The broad
+prelaunch preparation direction and that existing confirmed scope supersede a
+repeated understanding-confirmation loop. No replacement/provider write is
+accepted here. Owning IDs remain IDEA-20261010-08 and IDEA-20261009-08 in MAP-018.
+
+Understanding: qualify the existing three exact corrections against the complete
+current fourteen-fragment installation, with its successful full-source migration
+receipt and later canonical business changes retained. Staff/customer operations
+continue to use existing writers. Full physical rows, materialized views and
+sequence counters, catalog and global/managed authority are evidence requirements.
+No original-snapshot overwrite, fresh-only installer replay, history deletion,
+new pause control, looser drift admission, additional privilege or longer deadline.
+
+Assumptions and constraints: one coordinator and immutable fresh local fixtures;
+original postgres/non-superuser role, positive 2s lock/10s statement limits, no
+new service/cost/UI. The tested settled observation boundary is fixture-only,
+not an operational traffic pause or universal availability guarantee. Genuine
+signed native operations are distinct from real Auth/HTTP/rendered evidence;
+reuse accepted unchanged service-boundary evidence without relabeling it as a
+new full-profile runtime. Raw snapshots remain private, including Auth/customer,
+signing and complete migration-source bytes. Maintainers get bounded counts,
+exact hashes, failures, recovery and the next MAP action in durable receipts.
+
+Evidence reconciliation: CONTROLLED_TRANSPORT_RECOVERY_PROFILE_AUDIT_20261013.json
+pins eight source/accepted evidence inputs. Current full corrected catalog
+1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e has the
+same three corrected definition hashes as the accepted retained repair. A prior
+candidate derived by changing only those definitions is a synthetic fault state,
+not an observed native starting state. The existing constructor currently refuses
+this full catalog/package and must continue refusing all unadmitted combinations.
+
+Alternatives: recommended local preparation extends the sole existing constructor
+with one fixed matched prior/corrected/exact-package triple; no second repair
+implementation. Repeating the earlier profile cannot qualify the changed complete
+catalog/history composition. Cold reconstruction remains disposable cleanup and
+cannot retain later operational changes. Neither rejected alternative substitutes
+for this gate.
+
+Proposed qualification: construct an immutable matched pair from the full accepted
+catalog, the three exact retained prior definitions and the full original guarded
+package. Couple each allowed catalog pair to its exact package bytes, so old/new
+cross-profile packages refuse. Original profiles must remain byte-compatible.
+Extract the same canonical complete catalog and authority serializers from the
+matched pinned package, preserving all target/owned-marker/permission/deadline
+checks. Apply only the existing three pinned correction fragments. No generated
+business SQL or fresh-only table fragment is a recovery method.
+
+Use a fresh network-disabled owned PostgreSQL17.6 fixture. Execute the unchanged
+complete controlled envelope once and require exact source receipt/current after
+state before population. Populate later business facts through existing canonical
+signed commands, including retained policy/rate histories and accepted old/new
+orders with exact holds/charges and original actor/body/key receipts; fixture
+setup facts are labelled separately. If actual necessary prerequisites change
+the complete catalog, stop and independently calibrate/review a fixed exact profile;
+do not wildcard or silently admit them. No provider implementation follows from
+a local profile.
+
+Before each repair/refusal capture, establish the existing actual settled fixture
+boundary with no other clients; compare every permanent non-system relation and
+sequence. The existing retainedSnapshotSql discovers migration history rather
+than excluding it. Prove the exact source/version/name/idempotency ledger entry
+unchanged through all eight known states, no-op repeats, interruptions after each
+actual correction and unknown body/owner/ACL/search_path/schema refusals. Complete
+current corrected catalog and global/managed authority must match. A retained
+receipt never means recovered current code is still the original installed state;
+record the current state and history meaning separately. Refuse installer replay
+under its existing receipt rule.
+
+After repair, reuse existing canonical signed operations to verify historical
+category/tariff/order command results and agreed charges, retained links and a new
+current-rate accepted order with one hold/exact retry. Separate normal nonce/rate
+and other command effects from the zero-row/sequence repair transition. Where
+existing genuine Auth/HTTP/rendered evidence is unchanged, link its precise prior
+scope; do not claim concurrent/live availability from fixture resumption. Cold
+original reconstruction may occur only after retained-state assertions, as labelled
+fixture cleanup. Every failed diagnostic, terminal/owned-process absence and exact
+executed source remains retained.
+
+Decision register: owner scope reused; exact full-profile/history qualification
+recommended; old-profile-only replay and cold restore rejected as substitutes.
+Structured Skeptic/Guardian/Advocate/Arbiter review pending. Implementation remains
+unstarted until review resolves objections. TLS/current-host route and cross-clock
+intent chronology, original API UNKNOWN disposition, exact write authorization,
+immediate backup/identity/zero-failed readiness and full operational/hosted/human/
+release acceptance stay open in MAP-018. Audit/design revert needs no provider
+rollback; preserve all full source/envelope/backups and prior accepted/failed cases.
+
+Skeptic APPROVED for bounded local scope. Acceptance interpretation retained: each
+interruption/drift refusal conserves its exact starting catalog/data/authority;
+only successful repair reaches the corrected catalog. Three-definition equality
+is source evidence only; full-profile native qualification remains required.
+Earlier service evidence and fixture resumption keep their stated scope.
+
+Constraint Guardian APPROVED bounded local preparation/qualification. Fixed
+matched profile/package, complete physical/history conservation, private snapshots,
+actual settled observations and unchanged authority/deadlines satisfy constraints;
+prerequisite differences still require calibration/review before admission.

@@ -1,0 +1,283 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "state": "direct-endpoint-observed-current-host-dns-and-ipv6-route-refuse-before-sql",
+  "providerWrites": false,
+  "providerReads": true,
+  "sqlExecuted": false,
+  "installedSupabaseConnectorReached": false,
+  "originalApiOutcome": "UNKNOWN",
+  "automaticRetryAllowed": false,
+  "preflight": {
+    "tool": "91c62d",
+    "passed": true
+  },
+  "readiness": {
+    "tool": "755781",
+    "verified": 8,
+    "owner": 2,
+    "connector": 3,
+    "failed": 0
+  },
+  "dashboard": {
+    "owningMap": "MAP-018",
+    "source": "Authenticated exact K2 Connect > Direct Connection dialog",
+    "url": "https://supabase.com/dashboard/project/pixplcjqivlfflickobf/database/settings?showConnect=true&connectTab=direct",
+    "host": "db.pixplcjqivlfflickobf.supabase.co",
+    "port": 5432,
+    "database": "postgres",
+    "user": "postgres",
+    "notice": "Direct connections use IPv6 by default",
+    "providerWrites": false
+  },
+  "dns": {
+    "tool": "59c652",
+    "result": {
+      "owningMap": "MAP-018",
+      "host": "db.pixplcjqivlfflickobf.supabase.co",
+      "providerWrites": false,
+      "recordedAt": "2026-10-12T16:17:01.383Z",
+      "lookup": {
+        "error": {
+          "code": "ENOTFOUND",
+          "syscall": "getaddrinfo",
+          "hostname": "db.pixplcjqivlfflickobf.supabase.co"
+        }
+      },
+      "resolve4": {
+        "error": {
+          "code": "ECONNREFUSED",
+          "syscall": "queryA",
+          "hostname": "db.pixplcjqivlfflickobf.supabase.co"
+        }
+      },
+      "resolve6": {
+        "error": {
+          "code": "ECONNREFUSED",
+          "syscall": "queryAaaa",
+          "hostname": "db.pixplcjqivlfflickobf.supabase.co"
+        }
+      }
+    }
+  },
+  "httpsDns": {
+    "tool": "074cde",
+    "result": {
+      "owningMap": "MAP-018",
+      "host": "db.pixplcjqivlfflickobf.supabase.co",
+      "method": "GET HTTPS Google Public DNS JSON, no credentials or client subnet",
+      "providerWrites": false,
+      "observations": [
+        {
+          "type": "A",
+          "httpStatus": 200,
+          "data": {
+            "Status": 0,
+            "TC": false,
+            "RD": true,
+            "RA": true,
+            "AD": false,
+            "CD": false,
+            "Question": [
+              {
+                "name": "db.pixplcjqivlfflickobf.supabase.co.",
+                "type": 1
+              }
+            ],
+            "Authority": [
+              {
+                "name": "supabase.co.",
+                "type": 6,
+                "TTL": 30,
+                "data": "christina.ns.cloudflare.com. dns.cloudflare.com. 2417307681 10000 2400 604800 30"
+              }
+            ],
+            "edns_client_subnet": "0.0.0.0/0",
+            "Comment": "Response from 108.162.193.211."
+          }
+        },
+        {
+          "type": "AAAA",
+          "httpStatus": 200,
+          "data": {
+            "Status": 0,
+            "TC": false,
+            "RD": true,
+            "RA": true,
+            "AD": false,
+            "CD": false,
+            "Question": [
+              {
+                "name": "db.pixplcjqivlfflickobf.supabase.co.",
+                "type": 28
+              }
+            ],
+            "Answer": [
+              {
+                "name": "db.pixplcjqivlfflickobf.supabase.co.",
+                "type": 28,
+                "TTL": 60,
+                "data": "2406:da18:167b:f900:a497:88a5:8e7c:6db5"
+              }
+            ],
+            "edns_client_subnet": "0.0.0.0/0",
+            "Comment": "Response from 108.162.194.193."
+          }
+        }
+      ]
+    }
+  },
+  "directAttempt": {
+    "tool": "29b95f",
+    "stderrTool": "0d0301",
+    "result": {
+      "hostWindow": {
+        "before": "2026-10-12T16:19:42.682Z",
+        "after": "2026-10-12T16:19:42.833Z",
+        "monotonicElapsedMs": 150.0935
+      },
+      "bindingObserved": false,
+      "clockObservations": [],
+      "owningMap": "MAP-018",
+      "projectRef": "pixplcjqivlfflickobf",
+      "recordedAt": "2026-10-12T16:19:42.833Z",
+      "providerWrites": false,
+      "identityVerified": true,
+      "connectionKind": "direct",
+      "host": "db.pixplcjqivlfflickobf.supabase.co",
+      "port": 5432,
+      "requestedSslMode": "verify-full",
+      "rootCertificate": {
+        "url": "https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt",
+        "source": "Authenticated exact K2 dashboard Download certificate link",
+        "bytes": 1367,
+        "sha256": "700723581420dd1ac98fd7e9ac529f0ef210eadcaf87fc868a3ad7d114c2f3b7",
+        "subject": "C=US\nST=Delware\nL=New Castle\nO=Supabase Inc\nCN=Supabase Root 2021 CA",
+        "issuer": "C=US\nST=Delware\nL=New Castle\nO=Supabase Inc\nCN=Supabase Root 2021 CA",
+        "validFrom": "Apr 28 10:56:53 2021 GMT",
+        "validTo": "Apr 26 10:56:53 2031 GMT",
+        "fingerprint256": "80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA"
+      },
+      "query": {
+        "file": "C:\\Users\\jerze\\K2 JImzon\\.tools\\map018-controlled-direct-20261013-01\\pooler-readonly.sql",
+        "bytes": 3330,
+        "sha256": "e6ae4a54090a4e81a10598268bdc522c5b69014a668013bb8d166284f9269a8f"
+      },
+      "client": {
+        "file": "C:\\Users\\jerze\\K2 JImzon\\.tools\\postgresql-17.11\\runtime\\pgsql\\bin\\psql.exe",
+        "sha256": "5bb3fad8a7ff555abff37921a24ee3d9e377c15408b5e7267aa9245596965ca0"
+      },
+      "status": 2,
+      "signal": null,
+      "error": null,
+      "stdout": "",
+      "stderr": "psql: error: could not translate host name \"db.pixplcjqivlfflickobf.supabase.co\" to address: Name or service not known\r\n",
+      "observations": [],
+      "passed": false,
+      "clientTls": false,
+      "scope": "Four SELECT-only observations plus transaction-local application_name across two explicit READ ONLY transactions on one exact dashboard-confirmed direct connection, with CA/hostname verification and database-side TLS required; no full-size/writable/commit-loss/cancellation or terminal provider-job proof."
+    }
+  },
+  "tcp": {
+    "tool": "be4618",
+    "result": {
+      "owningMap": "MAP-018",
+      "host": "db.pixplcjqivlfflickobf.supabase.co",
+      "address": "2406:da18:167b:f900:a497:88a5:8e7c:6db5",
+      "port": 5432,
+      "source": "Actual HTTPS DNS AAAA response, no DNSSEC authentication claim",
+      "credentialsSent": false,
+      "sqlSent": false,
+      "providerWrites": false,
+      "recordedAt": "2026-10-12T16:20:04.282Z",
+      "result": {
+        "state": "error",
+        "code": "ENETUNREACH",
+        "syscall": "connect"
+      }
+    }
+  },
+  "pins": [
+    {
+      "file": ".tools/probe-controlled-direct01.mjs",
+      "bytes": 6603,
+      "sha256": "3562fd3c07da5c12994de560f8ce4a8cd979763d0711e1331c73455f30ed9f24"
+    },
+    {
+      "file": ".tools/map018-controlled-direct-20261013-01/dns.json",
+      "bytes": 617,
+      "sha256": "b843a401a79c8ded1f961153cf593452583c2045254873f05690afcc385c9e8b"
+    },
+    {
+      "file": ".tools/map018-controlled-direct-20261013-01/dashboard-endpoint.json",
+      "bytes": 421,
+      "sha256": "3f7835cd6189b469fce69537126124a9b0d993325894b0771af410a5b25cfbc9"
+    },
+    {
+      "file": ".tools/map018-controlled-direct-20261013-01/doh.json",
+      "bytes": 1559,
+      "sha256": "fb8852ab7ad6e141529331e4edc7d753d99fe7cc436bd08911c20cf5826d371f"
+    },
+    {
+      "file": ".tools/map018-controlled-direct-20261013-01/doh-A.json",
+      "bytes": 357,
+      "sha256": "1dd8aeb6e1095fcb834f60f37b5826605b1e1b3782674401e78783c318206b87"
+    },
+    {
+      "file": ".tools/map018-controlled-direct-20261013-01/doh-AAAA.json",
+      "bytes": 339,
+      "sha256": "ad1666e0e2f9336b42f86546b3d0f77975318248b1b6ed5a6f24d4265f3f1a76"
+    },
+    {
+      "file": ".tools/map018-controlled-direct-20261013-01/prod-ca-2021.crt",
+      "bytes": 1367,
+      "sha256": "700723581420dd1ac98fd7e9ac529f0ef210eadcaf87fc868a3ad7d114c2f3b7"
+    },
+    {
+      "file": ".tools/map018-controlled-direct-20261013-01/pooler-readonly.sql",
+      "bytes": 3330,
+      "sha256": "e6ae4a54090a4e81a10598268bdc522c5b69014a668013bb8d166284f9269a8f"
+    },
+    {
+      "file": ".tools/map018-controlled-direct-20261013-01/pooler-result.json",
+      "bytes": 2206,
+      "sha256": "9dbc65dfa2af64382dcc84324341be36329cc3e39e5f455125780b3376615bc3"
+    },
+    {
+      "file": ".tools/map018-controlled-direct-20261013-01/ipv6-tcp.json",
+      "bytes": 440,
+      "sha256": "8bb875b77085ffe27123d2b52555109be909de66ddd18844d1f55574249c2adb"
+    }
+  ],
+  "review": {
+    "source": "APPROVED",
+    "sourceSha256": "3562fd3c07da5c12994de560f8ce4a8cd979763d0711e1331c73455f30ed9f24",
+    "runtime": "APPROVED",
+    "correctedImportant": "Distinct startup/local labels and baseline inequality prevent false rollback-restoration claim. Red36c187 reproduced unchanged-label acceptance; green2a3288 checks unchanged refusal, real transition and wrong reset refusal. No live direct query reached.",
+    "critical": 0,
+    "important": 0,
+    "independent10Pins": true,
+    "independentRawEquality": true,
+    "credentialMaterialAbsent": true
+  },
+  "qualified": "Authenticated exact K2 dashboard direct endpoint/user/port, actual local DNS errors, public HTTPS DNS response with one exact IPv6 answer and no A answer, libpq DNS refusal before authentication/SQL, credential-free IPv6 TCP ENETUNREACH from this host.",
+  "limits": [
+    "No direct database authentication/TLS/query occurred; prepared SQL and CA pins never imply execution.",
+    "HTTPS DNS answer AD:false is not DNSSEC authentication or proof of endpoint availability. No system DNS/network/IPv4-add-on change.",
+    "Current host failures are not proof of permanent endpoint absence or failure from another supported IPv6 host.",
+    "Shared pooler client TLS, backend ssl:false and cross-clock discrepancy remain as separately recorded; strict intent guards unchanged.",
+    "No replacement Management API attempt, installer, provider configuration/schema/data/history write or release."
+  ],
+  "remaining": "MAP-018: obtain a supported execution path meeting direct/end-to-end TLS and trusted intent chronology, without assuming a network/settings change is authorized. In-place data-retaining deactivation/recovery and later-business-data policy can be prepared locally while this live path remains unqualified. Original UNKNOWN disposition and separate exact write authorization/immediate backup/identity/zero-failed readiness/full operational/hosted/human/release gates remain.",
+  "recovery": "No provider transaction began; no provider rollback. Preserve immutable direct01/TLS01/TLS02/native10/source/envelope/backups/original UNKNOWN. Revert only local unactivated probe/receipt docs; never toggle SSL, DNS, network or purchase IPv4 under this scope.",
+  "sources": [
+    {
+      "title": "Supabase direct connections and IP versions",
+      "url": "https://supabase.com/docs/guides/database/connecting-to-postgres"
+    },
+    {
+      "title": "Google Public DNS JSON over HTTPS",
+      "url": "https://developers.google.com/speed/public-dns/docs/doh/json"
+    }
+  ]
+}

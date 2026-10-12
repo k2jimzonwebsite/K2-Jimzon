@@ -1,0 +1,236 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "state": "read-only-transaction-local-label-qualified-clock-discrepancy-observed",
+  "providerWrites": false,
+  "providerReads": true,
+  "installedSupabaseConnectorReached": false,
+  "originalApiOutcome": "UNKNOWN",
+  "automaticRetryAllowed": false,
+  "preflight": {
+    "tool": "77db13",
+    "passed": true,
+    "restrictedAttempt": "218e95 refused before queries"
+  },
+  "readiness": {
+    "tool": "70facc",
+    "verified": 8,
+    "owner": 2,
+    "connector": 3,
+    "failed": 0,
+    "restrictedAttempt": "aca2e0 identity refusal, no query"
+  },
+  "executionTool": "75ff61",
+  "execution": {
+    "hostWindow": {
+      "before": "2026-10-12T16:14:15.363Z",
+      "after": "2026-10-12T16:14:16.411Z",
+      "monotonicElapsedMs": 1047.1363
+    },
+    "bindingObserved": true,
+    "clockObservations": [
+      {
+        "phase": 1,
+        "serverNow": "2026-10-12T16:14:29.221734+00:00",
+        "statementTime": "2026-10-12T16:14:29.217319+00:00",
+        "backendStart": "2026-10-12T16:14:29.062972+00:00"
+      },
+      {
+        "phase": 2,
+        "serverNow": "2026-10-12T16:14:29.294858+00:00",
+        "statementTime": "2026-10-12T16:14:29.293809+00:00",
+        "backendStart": "2026-10-12T16:14:29.062972+00:00"
+      },
+      {
+        "phase": 3,
+        "serverNow": "2026-10-12T16:14:29.617823+00:00",
+        "statementTime": "2026-10-12T16:14:29.616983+00:00",
+        "backendStart": "2026-10-12T16:14:29.062972+00:00"
+      },
+      {
+        "phase": 4,
+        "serverNow": "2026-10-12T16:14:29.797216+00:00",
+        "statementTime": "2026-10-12T16:14:29.796046+00:00",
+        "backendStart": "2026-10-12T16:14:29.062972+00:00"
+      }
+    ],
+    "owningMap": "MAP-018",
+    "projectRef": "pixplcjqivlfflickobf",
+    "recordedAt": "2026-10-12T16:14:16.411Z",
+    "providerWrites": false,
+    "identityVerified": true,
+    "connectionKind": "pooler",
+    "host": "aws-0-ap-southeast-1.pooler.supabase.com",
+    "port": 5432,
+    "requestedSslMode": "verify-full",
+    "rootCertificate": {
+      "url": "https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt",
+      "source": "Authenticated exact K2 dashboard Download certificate link",
+      "bytes": 1367,
+      "sha256": "700723581420dd1ac98fd7e9ac529f0ef210eadcaf87fc868a3ad7d114c2f3b7",
+      "subject": "C=US\nST=Delware\nL=New Castle\nO=Supabase Inc\nCN=Supabase Root 2021 CA",
+      "issuer": "C=US\nST=Delware\nL=New Castle\nO=Supabase Inc\nCN=Supabase Root 2021 CA",
+      "validFrom": "Apr 28 10:56:53 2021 GMT",
+      "validTo": "Apr 26 10:56:53 2031 GMT",
+      "fingerprint256": "80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA"
+    },
+    "query": {
+      "file": "C:\\Users\\jerze\\K2 JImzon\\.tools\\map018-controlled-tls-20261013-02\\pooler-readonly.sql",
+      "bytes": 3332,
+      "sha256": "6c44ba47e9b70b26eb47438331b3c24fd0a2949608a40a58f1e64b86b38521d0"
+    },
+    "client": {
+      "file": "C:\\Users\\jerze\\K2 JImzon\\.tools\\postgresql-17.11\\runtime\\pgsql\\bin\\psql.exe",
+      "sha256": "5bb3fad8a7ff555abff37921a24ee3d9e377c15408b5e7267aa9245596965ca0"
+    },
+    "status": 0,
+    "signal": null,
+    "error": null,
+    "stdout": "You are connected to database \"postgres\" as user \"postgres.pixplcjqivlfflickobf\" on host \"aws-0-ap-southeast-1.pooler.supabase.com\" (address \"54.255.219.82\") at port \"5432\".\r\nSSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, compression: off, ALPN: none)\r\n{\"pid\": 2211439, \"phase\": 1, \"sslRows\": 1, \"database\": \"postgres\", \"readOnly\": \"on\", \"serverNow\": \"2026-10-12T16:14:29.221734+00:00\", \"superuser\": false, \"backendTls\": {\"ssl\": false, \"bits\": null, \"cipher\": null, \"version\": null}, \"application\": \"Supavisor\", \"currentRole\": \"postgres\", \"sessionRole\": \"postgres\", \"backendStart\": \"2026-10-12T16:14:29.062972+00:00\", \"serverVersion\": \"170006\", \"statementTime\": \"2026-10-12T16:14:29.217319+00:00\", \"clientEncoding\": \"UTF8\"}\r\n{\"pid\": 2211439, \"phase\": 2, \"sslRows\": 1, \"database\": \"postgres\", \"readOnly\": \"on\", \"serverNow\": \"2026-10-12T16:14:29.294858+00:00\", \"superuser\": false, \"backendTls\": {\"ssl\": false, \"bits\": null, \"cipher\": null, \"version\": null}, \"application\": \"k2-controlled-readonly-20261013-02\", \"currentRole\": \"postgres\", \"sessionRole\": \"postgres\", \"backendStart\": \"2026-10-12T16:14:29.062972+00:00\", \"serverVersion\": \"170006\", \"statementTime\": \"2026-10-12T16:14:29.293809+00:00\", \"clientEncoding\": \"UTF8\"}\r\n\r\n{\"pid\": 2211439, \"phase\": 3, \"sslRows\": 1, \"database\": \"postgres\", \"readOnly\": \"on\", \"serverNow\": \"2026-10-12T16:14:29.617823+00:00\", \"superuser\": false, \"backendTls\": {\"ssl\": false, \"bits\": null, \"cipher\": null, \"version\": null}, \"application\": \"k2-controlled-readonly-20261013-02\", \"currentRole\": \"postgres\", \"sessionRole\": \"postgres\", \"backendStart\": \"2026-10-12T16:14:29.062972+00:00\", \"serverVersion\": \"170006\", \"statementTime\": \"2026-10-12T16:14:29.616983+00:00\", \"clientEncoding\": \"UTF8\"}\r\n{\"pid\": 2211439, \"phase\": 4, \"sslRows\": 1, \"database\": \"postgres\", \"readOnly\": \"on\", \"serverNow\": \"2026-10-12T16:14:29.797216+00:00\", \"superuser\": false, \"backendTls\": {\"ssl\": false, \"bits\": null, \"cipher\": null, \"version\": null}, \"application\": \"Supavisor\", \"currentRole\": \"postgres\", \"sessionRole\": \"postgres\", \"backendStart\": \"2026-10-12T16:14:29.062972+00:00\", \"serverVersion\": \"170006\", \"statementTime\": \"2026-10-12T16:14:29.796046+00:00\", \"clientEncoding\": \"UTF8\"}\r\n",
+    "stderr": "",
+    "observations": [
+      {
+        "pid": 2211439,
+        "phase": 1,
+        "sslRows": 1,
+        "database": "postgres",
+        "readOnly": "on",
+        "serverNow": "2026-10-12T16:14:29.221734+00:00",
+        "superuser": false,
+        "backendTls": {
+          "ssl": false,
+          "bits": null,
+          "cipher": null,
+          "version": null
+        },
+        "application": "Supavisor",
+        "currentRole": "postgres",
+        "sessionRole": "postgres",
+        "backendStart": "2026-10-12T16:14:29.062972+00:00",
+        "serverVersion": "170006",
+        "statementTime": "2026-10-12T16:14:29.217319+00:00",
+        "clientEncoding": "UTF8"
+      },
+      {
+        "pid": 2211439,
+        "phase": 2,
+        "sslRows": 1,
+        "database": "postgres",
+        "readOnly": "on",
+        "serverNow": "2026-10-12T16:14:29.294858+00:00",
+        "superuser": false,
+        "backendTls": {
+          "ssl": false,
+          "bits": null,
+          "cipher": null,
+          "version": null
+        },
+        "application": "k2-controlled-readonly-20261013-02",
+        "currentRole": "postgres",
+        "sessionRole": "postgres",
+        "backendStart": "2026-10-12T16:14:29.062972+00:00",
+        "serverVersion": "170006",
+        "statementTime": "2026-10-12T16:14:29.293809+00:00",
+        "clientEncoding": "UTF8"
+      },
+      {
+        "pid": 2211439,
+        "phase": 3,
+        "sslRows": 1,
+        "database": "postgres",
+        "readOnly": "on",
+        "serverNow": "2026-10-12T16:14:29.617823+00:00",
+        "superuser": false,
+        "backendTls": {
+          "ssl": false,
+          "bits": null,
+          "cipher": null,
+          "version": null
+        },
+        "application": "k2-controlled-readonly-20261013-02",
+        "currentRole": "postgres",
+        "sessionRole": "postgres",
+        "backendStart": "2026-10-12T16:14:29.062972+00:00",
+        "serverVersion": "170006",
+        "statementTime": "2026-10-12T16:14:29.616983+00:00",
+        "clientEncoding": "UTF8"
+      },
+      {
+        "pid": 2211439,
+        "phase": 4,
+        "sslRows": 1,
+        "database": "postgres",
+        "readOnly": "on",
+        "serverNow": "2026-10-12T16:14:29.797216+00:00",
+        "superuser": false,
+        "backendTls": {
+          "ssl": false,
+          "bits": null,
+          "cipher": null,
+          "version": null
+        },
+        "application": "Supavisor",
+        "currentRole": "postgres",
+        "sessionRole": "postgres",
+        "backendStart": "2026-10-12T16:14:29.062972+00:00",
+        "serverVersion": "170006",
+        "statementTime": "2026-10-12T16:14:29.796046+00:00",
+        "clientEncoding": "UTF8"
+      }
+    ],
+    "passed": true,
+    "clientTls": true,
+    "scope": "Four SELECT-only observations plus transaction-local application_name across two explicit READ ONLY transactions on one client connection, with CA/hostname verification; no full-size/writable/commit-loss/cancellation or terminal provider-job proof."
+  },
+  "pins": [
+    {
+      "file": ".tools/probe-controlled-pooler02.mjs",
+      "bytes": 6490,
+      "sha256": "1d84dc2c3039e14ca5d5fbe9cda0a73136603879fad85cf6ee2d4d9a5c3a81ee"
+    },
+    {
+      "file": ".tools/map018-controlled-tls-20261013-02/prod-ca-2021.crt",
+      "bytes": 1367,
+      "sha256": "700723581420dd1ac98fd7e9ac529f0ef210eadcaf87fc868a3ad7d114c2f3b7"
+    },
+    {
+      "file": ".tools/map018-controlled-tls-20261013-02/pooler-readonly.sql",
+      "bytes": 3332,
+      "sha256": "6c44ba47e9b70b26eb47438331b3c24fd0a2949608a40a58f1e64b86b38521d0"
+    },
+    {
+      "file": ".tools/map018-controlled-tls-20261013-02/pooler-result.json",
+      "bytes": 7804,
+      "sha256": "4a709f8b9de316312d3e17a9b7c2dfdad62d070ddeef8c5ddbedd53024f0772d"
+    }
+  ],
+  "review": {
+    "source": "APPROVED",
+    "sourceSha256": "1d84dc2c3039e14ca5d5fbe9cda0a73136603879fad85cf6ee2d4d9a5c3a81ee",
+    "runtime": "APPROVED",
+    "critical": 0,
+    "important": 0,
+    "independent4Pins": true,
+    "exactRawResultEquality": true,
+    "credentialMaterialAbsent": true
+  },
+  "qualified": "Explicit transaction-local application label reaches the actual backend in phases2/3; rollback restores distinct baseline Supavisor in phase4. Four observations retain PID/start/current and session postgres/non-superuser/readOnly on/UTF8. Actual client TLS with verify-full/GSS disabled.",
+  "limits": [
+    "No strict installer UUID label, idle writable transaction, same-session full-size installer through COMMIT, all pooler affinity or independent observer proof.",
+    "Server timestamps are beyond host before/after wall-clock window; monotonic elapsed duration is retained. This does not establish synchronization, precise offset, clock accuracy or justified timestamp correction. Strict intent chronological refusal remains unchanged.",
+    "Backend SSL remains false in all four observations; both TLS boundaries remain required.",
+    "No provider configuration/database/schema/data/history write, replacement API attempt, installer, release or deployment. Original API remains UNKNOWN/no retry."
+  ],
+  "remaining": "MAP-018: supported transport meeting both TLS boundaries and trusted cross-clock intent chronology, then in-place data-retaining recovery/later-business-data policy. Independently reviewed original UNKNOWN disposition, separate exact write authorization, immediate backup/identity/zero-failed readiness and full operational/hosted/human/release gates remain.",
+  "recovery": "Both READ ONLY transactions rolled back; transaction-local label restored, client exits0. Preserve immutable TLS01/TLS02/native10/source/envelope/backups/original UNKNOWN. Revert only unactivated local probe/receipt docs; no provider rollback.",
+  "sources": [
+    {
+      "title": "PostgreSQL17 SET LOCAL",
+      "url": "https://www.postgresql.org/docs/17/sql-set.html"
+    },
+    {
+      "title": "PostgreSQL17 date/time observations",
+      "url": "https://www.postgresql.org/docs/17/functions-datetime.html"
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "owningMap": "MAP-018",
+  "ideas": [
+    "IDEA-20261010-08",
+    "IDEA-20261009-08"
+  ],
+  "classification": "Source and accepted evidence reconciliation; full-package recovery profile candidate, no implementation or runtime",
+  "providerReads": false,
+  "providerWrites": false,
+  "sourceSqlSha256": "8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99",
+  "correctedCatalogSha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e",
+  "derivedPriorCandidateSha256": "a7e4c6d8ac12ebca39b37e9987edc871597af9df37583115c868cf70c6850925",
+  "derivedPriorObserved": false,
+  "targets": [
+    {
+      "identity": "public.execute_admin_product_master_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "priorDefinitionSha256": "b9553f8fc638395ce9b5db66197eeaa8b1a9271b218c73dececffae7fefa78d2",
+      "correctedDefinitionSha256": "c7e9f53fe80c68ce99401caf10d31f4ee272bd506a0c0f3bc7f6363c97f38b94",
+      "nonDefinitionMetadataChanged": false
+    },
+    {
+      "identity": "public.execute_customer_delivery_rates_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)",
+      "priorDefinitionSha256": "15f0d4d3373ae753c062d37c70d91def0dc6bb1d292f99f6935e2d2db26fbb81",
+      "correctedDefinitionSha256": "151af34efea459c7b0b20938e50a2b05ae081c603296ca6abc1b0dba93dd521b",
+      "nonDefinitionMetadataChanged": false
+    },
+    {
+      "identity": "k2_private.mutate_category_policy_v1(p_category_id uuid, p_action text, p_minimum_days integer, p_expected_version bigint, p_reason text, p_max_depth integer)",
+      "priorDefinitionSha256": "4de418fc3b9204f6dbe72beb708ce3becd1b9ae7d6439997c29452b2e3f9e75c",
+      "correctedDefinitionSha256": "d3ec75173304d4c8709b81ea0f2e0d101dffa47d7ce85202d29d7efa783f570a",
+      "nonDefinitionMetadataChanged": false
+    }
+  ],
+  "pins": [
+    {
+      "file": ".tools/map018-controlled-native-20261012-10/committed-catalog.json",
+      "bytes": 2437873,
+      "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/retained-code-pair01/prior-catalog.json",
+      "bytes": 2317458,
+      "sha256": "bb3983d843c41dfa94f490c03f3f2b6f73767d225e6061c591e975b28fab1b08"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported76/guarded-package.json",
+      "bytes": 9232760,
+      "sha256": "ddf4def0eceb753480eb4e36c4d775e665b868b9ede62e49dbc74a7832904ac9"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "bytes": 9173,
+      "sha256": "9e1bd5e2872defa019bcb9ac779c429e8090282530ea5c6394b002e3061c6f8e"
+    },
+    {
+      "file": "docs/acceptance/RETAINED_POPULATED_REPAIR_20261011.json",
+      "bytes": 10082,
+      "sha256": "eb07d87865d3670e086e86cb1898a107df2aa18910e08fbc5e4f200685f8f137"
+    },
+    {
+      "file": "docs/acceptance/RETAINED_DRIFT_REFUSAL_20261011.json",
+      "bytes": 9385,
+      "sha256": "b125a4209251a09416f98bddc30c3c4c287b50ce0d557fc1c58e8b931e411163"
+    },
+    {
+      "file": "docs/acceptance/RETAINED_RESUMPTION_20261011.json",
+      "bytes": 9750,
+      "sha256": "cf7490fe3ac49232990e1b70a3126c5dafab6a2b7d298d4acc7521d43f74f50c"
+    },
+    {
+      "file": "docs/acceptance/CONTROLLED_TRANSPORT_INTENT_RUNTIME_20261012.json",
+      "bytes": 11293,
+      "sha256": "66f39c2599f5efb6d7f1d95e513baebab944d8eab7aadd817bd5d7470fefae12"
+    }
+  ],
+  "review": {
+    "design": "PENDING",
+    "skeptic": {
+      "status": "APPROVED",
+      "interpretation": "Exact starting state conserved for faults/refusals; corrected catalog required only for success. Full-profile native qualification and precise existing service scopes remain."
+    },
+    "guardian": {
+      "status": "APPROVED",
+      "reason": "Fixed matched profile/package, complete physical/history conservation, private evidence and unchanged authority/deadlines; prerequisites require separate calibration/review."
+    }
+  },
+  "findings": [
+    "Current full installed catalog has byte-exact same three corrected definitions as accepted retained repair; no new correction logic is needed.",
+    "Existing constructor admits only old matched catalogs and old combined19 package. Full installed catalog/package is refused until separately reviewed fixed matched profile addition; no dynamic catalog admission.",
+    "Physical observer discovers all permanent non-system relations/materialized views/sequences, including migration history. New successful full-source receipt must be conserved byte-exact across repair/repeats/refusals and later canonical commands.",
+    "Existing accepted population/resumption receipts qualify earlier catalog composition only. Reuse unchanged boundary evidence and run affected full-profile/history/later-data controls; do not label original88 or cold restore as full retention."
+  ],
+  "remaining": "MAP-018 fixed full-package profile and owned native fixture qualification, with complete populated data/sequence/catalog/global/managed evidence and exact historical receipt preserved; original UNKNOWN/live TLS/clock/write authorization/backup/readiness and full operational/hosted/human/release gates remain.",
+  "recovery": "Audit/design docs only; preserve all prior fixtures and source. No provider/runtime rollback applies."
+}
