@@ -1,0 +1,84 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T15:31:57.048Z",
+  "state": "offline-intent-serialization-prepared-reviewed-runtime-unqualified",
+  "providerReads": false,
+  "providerWrites": false,
+  "providerAcceptance": false,
+  "originalApiOutcome": "UNKNOWN",
+  "automaticRetryAllowed": false,
+  "files": [
+    {
+      "file": "scripts/prepare-controlled-migration-intent.mjs",
+      "bytes": 4026,
+      "sha256": "6c9482a796a7e9d898278c8629d4fdffdfac0e62428daace7eb5d91b2acbc2db"
+    },
+    {
+      "file": "scripts/test-controlled-migration-intent.mjs",
+      "bytes": 4950,
+      "sha256": "75e55d38f8b12cc4db74e5de2b19dfa5dd6ecdf730edef48d070bd3342132e17"
+    },
+    {
+      "file": ".tools/map018-controlled-intent-20261012-01/synthetic-intent.json",
+      "bytes": 1282,
+      "sha256": "456b2db245f8df56e4541dae03522467074a8f15947003700c20817b6510ba6f"
+    },
+    {
+      "file": ".tools/map018-controlled-intent-20261012-01/synthetic-session.json",
+      "bytes": 296,
+      "sha256": "8984c952fed8f76384ac536dac15674325b2e031c0bf68f9b17487cb827f28cd"
+    },
+    {
+      "file": ".tools/map018-controlled-intent-20261012-01/manifest.json",
+      "bytes": 358,
+      "sha256": "22aaada5db8df5e2af6555348ba4721a6b964acd56bee64068c16c7065209043"
+    }
+  ],
+  "qualification": {
+    "contracts": 5,
+    "redMissingFeature": "1fd866",
+    "initialGreen": "874ee4",
+    "calendarRed": "46c58d",
+    "calendarGreen": "e3336c",
+    "microsecondRed": "29621b",
+    "finalGreen": "a47e79",
+    "scope": "Complete source/body/envelope fixed hashes and sizes; deterministic target/session/receipt serialization; altered-size and equal-length artifact mutation refusal; foreign target, extra/secret-bearing fields, raw session evidence pin, current/session role, PID/start/application/state, calendar and full-microsecond ordering refusal."
+  },
+  "review": {
+    "status": "APPROVED",
+    "critical": 0,
+    "important": 0,
+    "correctedImportant": "Date.parse truncates microseconds; validated UTC timestamps now compare date/time plus six-digit fractions. The formerly accepted backend start 999 microseconds after intent is refused.",
+    "constructorSha256": "6c9482a796a7e9d898278c8629d4fdffdfac0e62428daace7eb5d91b2acbc2db",
+    "testSha256": "75e55d38f8b12cc4db74e5de2b19dfa5dd6ecdf730edef48d070bd3342132e17",
+    "independentFrozenReconstruction": true,
+    "independent5FilePins": true
+  },
+  "frozenCandidate": {
+    "directory": ".tools/map018-controlled-intent-20261012-01",
+    "synthetic": true,
+    "preparedOnly": true,
+    "intentSha256": "456b2db245f8df56e4541dae03522467074a8f15947003700c20817b6510ba6f",
+    "intentBytes": 1282,
+    "tool": "b518ca"
+  },
+  "limits": [
+    "Pure constructor has no environment/filesystem/network/dispatch access. It authenticates no supplied observation or evidence provenance.",
+    "Synthetic target and session are contract fixtures; none is described as observed on K2 or as a real pre-dispatch session.",
+    "Caller-supplied K2 identity receipt hash binds a record but proves no fresh project identity, TLS, authorization or readiness.",
+    "Deterministic bytes and Object.freeze do not establish durable storage or tamper resistance. durablyRetained remains false.",
+    "Existing case09 acknowledgement-loss evidence is not retroactively given pre-dispatch intent. No classifier/dispatcher or provider outcome changed."
+  ],
+  "development": {
+    "command": "npm run verify:development",
+    "startTool": "beda3a",
+    "terminalTool": "a6869f",
+    "exitCode": 0,
+    "adminChecks": 53,
+    "routeClassificationGaps": 0,
+    "secretScanFiles": 2286
+  },
+  "remaining": "MAP-018: fresh local durable intent retention before installer body; evidence provenance and same observed session execution; actual pooler/TLS; in-place data-retaining recovery and later-business-data policy; original API UNKNOWN terminal evidence or separately reviewed owner-accepted isolation; distinct exact write authorization, fresh backup/identity/readiness and full operational/real-host/release gates.",
+  "recovery": "Revert only the two unactivated intent scripts and new intent documentation if rejected. Preserve frozen synthetic01, original source/envelope, all accepted/failed fixtures, backups and UNKNOWN API request. No provider rollback applies."
+}

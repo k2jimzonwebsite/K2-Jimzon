@@ -1,0 +1,192 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T15:21:32.291Z",
+  "state": "local-complete-envelope-commit-acknowledgement-loss-qualified-reviewed",
+  "providerReads": false,
+  "providerWrites": false,
+  "providerAcceptance": false,
+  "originalApiOutcome": "UNKNOWN",
+  "automaticRetryAllowed": false,
+  "envelopeSha256": "c3cd02e1e88a1865c306232e0ff3c1a9b39101ae25f0a836a92e086a92e48157",
+  "case": {
+    "directory": ".tools/map018-controlled-native-20261012-09",
+    "startTool": "e33f9e",
+    "startOutput": "4351b2",
+    "owningMap": "MAP-018",
+    "providerWrites": false,
+    "scope": "Affected local genuine psql COMMIT acknowledgement loss through a Unix-socket fault proxy; unchanged complete envelope, actual withheld backend COMMIT and idle ReadyForQuery, terminal original backend, exact committed catalog/receipt/rows/authority. No pooler/provider/TLS proof.",
+    "startedAt": "2026-10-12T15:15:23.214Z",
+    "timedOut": false,
+    "pid": 8652,
+    "exit": 0,
+    "stopped": true,
+    "controls": [
+      {
+        "name": "K2_CONTROLLED_BEFORE_COMMIT_PENDING_RECEIPT_ABSENT_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_PSQL_COMMIT_REPLY_LOST_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_LOST_COMMIT_ACK_TERMINAL_APPLICATION_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_EXACT_RECEIPT_ROUNDTRIP_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_NATIVE_CASE_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_OCI_GUEST_SUCCESS",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "finishedAt": "2026-10-12T15:21:22.177Z",
+    "serialSha256": "b4aeef721b5d780097bba150c31953a4608661d88cda7263c36fc4bb18ad819c",
+    "stagingPins": 23,
+    "protocol": {
+      "clientClosed": true,
+      "backendCommitReceived": true,
+      "readyForQueryIdleWithheld": true,
+      "backendPid": 657,
+      "backendConnectionClosed": true,
+      "frontendCommitForwarded": true,
+      "frontendQueryCount": 10,
+      "commitAcknowledgementsForwarded": 0
+    },
+    "hashes": [
+      {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "guestFile": "/tmp/controlled-before-catalog.json"
+      },
+      {
+        "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e",
+        "guestFile": "/tmp/controlled-committed-catalog.json"
+      },
+      {
+        "sha256": "1beeac52d8a89c719987806f39a39ce14abbc2ed64f3dafdc9f2070bbe084645",
+        "guestFile": "/tmp/controlled-before-rows.json"
+      },
+      {
+        "sha256": "342005f18e08111729233726a9795339d1c68f62ed014f4cb5abda66406be0aa",
+        "guestFile": "/tmp/controlled-committed-rows.json"
+      },
+      {
+        "sha256": "5f5da3a4f31fdb933e72c727a0eaff2236c87d46d8bca3b19e342f25ed209dfc",
+        "guestFile": "/tmp/controlled-before-history.txt"
+      },
+      {
+        "sha256": "53cce2144df6b1a9d7f84c6846dde5f6ef74f384ca132b3b4cb95355ee4648b5",
+        "guestFile": "/tmp/controlled-committed-history.txt"
+      },
+      {
+        "sha256": "7981702e16713db322b939e8f1708fe55258e7ed294492a3a6b3b6d29587f7ab",
+        "guestFile": "/tmp/controlled-commit-backend.json"
+      }
+    ],
+    "terminalTool": "942b5b"
+  },
+  "files": [
+    {
+      "file": ".tools/controlled-commit-loss-proxy.pl",
+      "bytes": 4355,
+      "sha256": "d420b645cf0907efc0907f62579548a94cfa9cfa88a16cf30d6e44d6bc0bb5b4"
+    },
+    {
+      "file": ".tools/controlled-commit-loss.fragment.sh",
+      "bytes": 3166,
+      "sha256": "67523703ef0527af91ed83abcf90f9d4f2ae749cc450b1be8a9914c3acb321b0"
+    },
+    {
+      "file": ".tools/create-controlled-commit-loss09.mjs",
+      "bytes": 4340,
+      "sha256": "87125133ac790233fbd5b2f853bca4824a84db15552838c8dd2d80926e6110c9"
+    },
+    {
+      "file": ".tools/prepare-controlled-native09.mjs",
+      "bytes": 18190,
+      "sha256": "59f336151efb2874016960e38ead31a4f66a6fdc9d0810fbc7b9f2ea17ad1550"
+    },
+    {
+      "file": ".tools/run-controlled-native09.mjs",
+      "bytes": 3362,
+      "sha256": "e098e15695116379eb1adecad94e84ba1339c8fcb85bb372e8cc22c1444cc093"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-09/preparation.json",
+      "bytes": 4409,
+      "sha256": "5d141a488a6acff63aa007854bc15b02b179e6108ceecdf83c78556f4263c6d3"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-09/result.json",
+      "bytes": 1264,
+      "sha256": "ef6c8bc160ef18a092db1942f483fcd11faa750a85d3b1ac254d151a9990b954"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-09/serial.log",
+      "bytes": 5277993,
+      "sha256": "b4aeef721b5d780097bba150c31953a4608661d88cda7263c36fc4bb18ad819c"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-09/before-catalog.json",
+      "bytes": 1337443,
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-09/committed-catalog.json",
+      "bytes": 2437873,
+      "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e"
+    }
+  ],
+  "qualification": "Actual psql sends unchanged complete envelope through one local Unix-socket proxy. Before final COMMIT forward, exact backend PID is independently observed idle in transaction with receipt absent. Proxy forwards COMMIT, observes real CommandComplete(COMMIT) followed by ReadyForQuery idle, delivers neither to psql and closes both connection legs. Client exits nonzero. Independent exact PID/application disappearance, byte-exact original-source receipt, expected full committed catalog, original row projection and authority checks pass.",
+  "limits": [
+    "Network-disabled isolated genuine PostgreSQL 17.6; no actual K2 pooler, provider, end-to-end TLS or real-host proof.",
+    "The fixture deliberately closes transport after backend COMMIT completion; it does not reproduce every possible commit race, server crash, cancel or provider job.",
+    "The local known backend identity/visibility cannot establish terminality of the earlier UNKNOWN Management API request.",
+    "No production dispatcher or reconciliation classifier was added. No retry or replacement-write authorization follows."
+  ],
+  "review": {
+    "status": "APPROVED",
+    "critical": 0,
+    "important": 0,
+    "independent10FilePins": true,
+    "independent23StagingPins": true,
+    "independent7RuntimeHashes": true,
+    "independentDecodedCatalogFrames": true,
+    "independentActualCommitReplyLoss": true,
+    "independentOriginalPidIdentityTerminalAndAbsence": true,
+    "scope": "One isolated Unix-socket fault withholding real COMMIT acknowledgement and idleReadyForQuery; no provider/pooler/TLS/classifier/dispatcher/retry proof."
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "startTool": "4a3ee9",
+    "terminalTool": "2d2c27",
+    "exitCode": 0,
+    "adminChecks": 53,
+    "routeClassificationGaps": 0,
+    "secretScanFiles": 2282
+  },
+  "remaining": "MAP-018: source/body/envelope/target/session intent binding and actual pooler/TLS qualification; in-place data-retaining deactivation/postactivation data recovery policy; original API UNKNOWN terminal evidence or separately reviewed owner-accepted isolation disposition; distinct exact write authorization, fresh backup/identity/zero-failed readiness and all operational/real-host/release gates.",
+  "recovery": "Fresh owned NIC-none RAM guest stopped. Preserve immutable case09 and all original source/envelope/backup/earlier failed evidence. Revert local test fixture/receipt documentation if rejected; no provider rollback. Never apply stale snapshots over later business data.",
+  "sources": [
+    {
+      "title": "PostgreSQL17 protocol message formats",
+      "url": "https://www.postgresql.org/docs/17/protocol-message-formats.html"
+    },
+    {
+      "title": "PostgreSQL17 protocol message flow",
+      "url": "https://www.postgresql.org/docs/17/protocol-flow.html"
+    }
+  ]
+}
