@@ -1,0 +1,184 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T13:52:11.776Z",
+  "state": "local-original-cold-reconstruction-with-history-retained-qualified-reviewed-live-data-retaining-deactivation-unqualified",
+  "providerReads": false,
+  "providerWrites": false,
+  "providerAcceptance": false,
+  "originalApiOutcome": "UNKNOWN",
+  "automaticRetryAllowed": false,
+  "envelopeSha256": "c3cd02e1e88a1865c306232e0ff3c1a9b39101ae25f0a836a92e086a92e48157",
+  "case": {
+    "directory": ".tools/map018-controlled-native-20261012-03",
+    "startTool": "7be875",
+    "terminalTool": "1e8757",
+    "exit": 0,
+    "stopped": true,
+    "pid": 12424,
+    "timedOut": false,
+    "controls": [
+      {
+        "name": "K2_CONTROLLED_EXACT_RECEIPT_ROUNDTRIP_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_COLD_RECOVERY_HISTORY_RETAINED_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_RECOVERED_CURRENT_BEFORE_REFUSES_REINSTALL_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_NATIVE_CASE_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_OCI_GUEST_SUCCESS",
+        "passed": true
+      }
+    ],
+    "stagingPinsChecked": 48,
+    "serialSha256": "de6bc5b7a80e3fdc84257bb660f789ac8024f7412dbfa73f3ba1324f06e19942",
+    "hashes": [
+      {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "guestFile": "/tmp/controlled-before-catalog.json"
+      },
+      {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "guestFile": "/tmp/controlled-recovered-catalog.json"
+      },
+      {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "guestFile": "/tmp/controlled-refused-catalog.json"
+      },
+      {
+        "sha256": "1beeac52d8a89c719987806f39a39ce14abbc2ed64f3dafdc9f2070bbe084645",
+        "guestFile": "/tmp/controlled-before-rows.json"
+      },
+      {
+        "sha256": "1beeac52d8a89c719987806f39a39ce14abbc2ed64f3dafdc9f2070bbe084645",
+        "guestFile": "/tmp/controlled-recovered-rows.json"
+      },
+      {
+        "sha256": "1beeac52d8a89c719987806f39a39ce14abbc2ed64f3dafdc9f2070bbe084645",
+        "guestFile": "/tmp/controlled-refused-rows.json"
+      },
+      {
+        "sha256": "5f5da3a4f31fdb933e72c727a0eaff2236c87d46d8bca3b19e342f25ed209dfc",
+        "guestFile": "/tmp/controlled-before-history.txt"
+      },
+      {
+        "sha256": "53cce2144df6b1a9d7f84c6846dde5f6ef74f384ca132b3b4cb95355ee4648b5",
+        "guestFile": "/tmp/controlled-committed-history.txt"
+      },
+      {
+        "sha256": "53cce2144df6b1a9d7f84c6846dde5f6ef74f384ca132b3b4cb95355ee4648b5",
+        "guestFile": "/tmp/controlled-recovered-history.txt"
+      },
+      {
+        "sha256": "53cce2144df6b1a9d7f84c6846dde5f6ef74f384ca132b3b4cb95355ee4648b5",
+        "guestFile": "/tmp/controlled-refused-history.txt"
+      },
+      {
+        "sha256": "bd5de1e080373534f353f6128613c26154db22f0b8319eff561eefd2f0155166",
+        "guestFile": "/tmp/controlled-receipt.bin"
+      }
+    ]
+  },
+  "sourceConservation": "Same exact full16.6MBenvelope and six acceptednative77 recovery/capture scripts; no constructor/business body changes.",
+  "observed": {
+    "beforeRecoveredRefusedCatalogSha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+    "committedRecoveredRefusedHistorySha256": "53cce2144df6b1a9d7f84c6846dde5f6ef74f384ca132b3b4cb95355ee4648b5",
+    "fullSelectedRowsAndSequencesConserved": true,
+    "binaryAllSixLedgerColumnsRetained": true,
+    "sourceStatementBytes": 8278524,
+    "sourceStatementSha256": "8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99",
+    "authorityAssertions": 2,
+    "currentState": "Captured original BEFORE with one retained historical successful receipt. This is recovered/history-retained, not current APPLIED or proven original non-application.",
+    "reinstall": "Existing receipt collision refuses before installer; protected rows/catalog/history remain conserved."
+  },
+  "pins": [
+    {
+      "file": ".tools/prepare-controlled-native03.mjs",
+      "bytes": 15659,
+      "sha256": "80c897f1007910f1bea225ed284ae3406f24aaab553e896af9a8068d300ad70d"
+    },
+    {
+      "file": ".tools/run-controlled-native03.mjs",
+      "bytes": 3320,
+      "sha256": "501b897bd57d8e5657be62bb38c6a0cee62e663d0ed213f3b8ca795304fa6637"
+    },
+    {
+      "file": ".tools/controlled-cold-recovery.fragment.sh",
+      "bytes": 3668,
+      "sha256": "dbce58ce2bd9731bfa2fa3e071f8d3533c0aaae3e96bfa1530cdcdfb53923d2a"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-03/preparation.json",
+      "bytes": 8304,
+      "sha256": "40ca568a6846d615550f0e9ed7cfda765fac19a363f5af24062f8a0c2d9d56f9"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-03/launch.json",
+      "bytes": 676,
+      "sha256": "0aa0014f3cd74306d863930ad6dede6173713996a29070e9aab64cbf522f20d5"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-03/result.json",
+      "bytes": 1116,
+      "sha256": "0a2976dbadf876ca1c96a5c8c2a62df9c92656476211e2a814fa6f864a72e891"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-03/serial.log",
+      "bytes": 3788515,
+      "sha256": "de6bc5b7a80e3fdc84257bb660f789ac8024f7412dbfa73f3ba1324f06e19942"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-03/stderr.log",
+      "bytes": 369,
+      "sha256": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-03/before-catalog.json",
+      "bytes": 1337443,
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-03/recovered-catalog.json",
+      "bytes": 1337443,
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    }
+  ],
+  "review": {
+    "status": "APPROVED",
+    "critical": 0,
+    "important": 0,
+    "independent48StagingPins": true,
+    "independentFramesSerialHashes": true,
+    "independentRowsSequencesHistoryBinaryReceipt": true,
+    "independentPidAbsence": true,
+    "scope": "Cold reconstruction of captured original data plus retained historical receipt only."
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "startTool": "469ef8",
+    "terminalTool": "62a015",
+    "exitCode": 0,
+    "adminChecks": 53,
+    "routeClassificationGaps": 0,
+    "secretScanFiles": 2280
+  },
+  "preservedPreparationFailure": {
+    "tool": "1cf7ca",
+    "cause": "String.raw template interpolated unset setup variable before artifacts/guest; corrected generatorf8aead. No runtime recovery failure or provider effect."
+  },
+  "remaining": "MAP-018: replyloss/runningbackend/terminal reconciliation; actual pooler/TLS leg/source binding; in-place data-retaining deactivation and postactivation business-data recovery policy/qualification remain unproven and must not be replaced by this cold snapshot proof. Original unknownAPI blocks replacementlive until terminal evidence or separately reviewed owner-accepted isolation; distinct exactwrite/backup/identity/readiness/release and full operational acceptance remain.",
+  "recovery": "QEMU guest stopped/PIDabsent; all drop/recreate/restore operations occurred exclusively inside owned no-network RAMguest. Preserve private immutable case03/cases01-02/source/envelope/backups/unknown API attempt. This cold reconstruction is not authorized or qualified production rollback; never restore stale original snapshots over later business data."
+}

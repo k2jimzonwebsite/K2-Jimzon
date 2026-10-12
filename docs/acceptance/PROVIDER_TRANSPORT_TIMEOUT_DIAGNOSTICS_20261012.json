@@ -1,0 +1,112 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T13:07:12.471Z",
+  "state": "read-only-timeout-diagnostics-and-independent-review-complete-outcome-still-unknown",
+  "priorReceipt": "PROVIDER_TRANSPORT_EXECUTION_20261012.json",
+  "providerWritesThisContinuation": false,
+  "providerReadOnly": true,
+  "probeAttemptsTotal": 2,
+  "automaticRetryAllowed": false,
+  "fullSizeOutcome": "UNKNOWN",
+  "logs": {
+    "tool": "8940c3",
+    "httpStatus": 200,
+    "source": "postgres_logs",
+    "timeWindow": [
+      "2026-10-12T13:00:30Z",
+      "2026-10-12T13:04:00Z"
+    ],
+    "returnedEntries": 1,
+    "observed": "One K2_TRANSPORT_INSIDE_FAILURE/P0001 event only.",
+    "limitation": "No matching full-size record in this filter/window; no inference of absent execution, successful rollback or terminal management request. No provider logging setting changed.",
+    "apiDocumentation": "https://supabase.com/docs/reference/api/v1-get-project-logs",
+    "queryDocumentation": "https://supabase.com/docs/guides/observability/advanced-log-filtering"
+  },
+  "laterReadback": {
+    "tool": "41a0a1",
+    "recordedAt": "2026-10-12T13:05:42.259Z",
+    "allProbeSchemasAbsent": true,
+    "allProbeHistoryAbsent": true,
+    "protectedCatalogAndGlobalManagedAuthorityMatch": true,
+    "businessAndSequencesMatch": true,
+    "queryByteConservationTool": "8d8e16",
+    "limitation": "Independent later sampled state only; no deployed provider completion/queue guarantee."
+  },
+  "independentReview": {
+    "status": "APPROVED",
+    "critical": 0,
+    "important": 0,
+    "scope": "Two executed bounded attempts and sampled reconciliation only.",
+    "prior31PinsVerified": true,
+    "exactAuthorizedBodiesVerified": true,
+    "backupRestorePinsVerified": true,
+    "conservationVerified": true,
+    "logsAbsenceInterpretation": "Correctly no terminal-outcome proof.",
+    "providerCalls": false,
+    "harnessSourcePins": {
+      "capture": "581051fabdcf1b590198b51c06bebefd719001573865c6935d16f33e2de81d98",
+      "dispatch": "c0633d263d5484ff947e20090750e74a4b4032b83759aaa69d4e3e899051cf36",
+      "restore": "1d0cf99f1957d7c362124c06da97885cf745a9153c8962414f44629931a167ca"
+    }
+  },
+  "pins": [
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_timeout_later-after_commit_failure.json",
+      "bytes": 318,
+      "sha256": "f5db7d7a93dc9be976fbc6e8c22ee3468e3e1aedf4e88b711babdd2802736971"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_timeout_later-business.json",
+      "bytes": 21824,
+      "sha256": "eeeffb625a6e8785b75374c74a3fd9fe9c994384adb428dc61e9a54e32216316"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_timeout_later-catalog.json",
+      "bytes": 1397818,
+      "sha256": "192388e10b8502cf19136c30431593b7760c9fd4cad6bc9e4e579ca01fe99737"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_timeout_later-inside_failure.json",
+      "bytes": 318,
+      "sha256": "c4828145b17338f1ba5689ee6ed9e21fda540874a2d0450d714ed27378f1675a"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_timeout_later-namespace-cleanup.json",
+      "bytes": 301,
+      "sha256": "214cc3482ab85b81b716671d451007f08a225408c1e442e71d42891e59e76ff3"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_timeout_later-snapshot.json",
+      "bytes": 2430256,
+      "sha256": "02529c4fbb880c70edf5856bdee41db01ead2e7a8b0d55509b443c5eda632f00"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_timeout_later-success.json",
+      "bytes": 318,
+      "sha256": "1edfa3fccf8aafa26a706250b94de0e55140f0193da395732372fdd8d876ab1c"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/capture-timeout-later.mjs",
+      "bytes": 4428,
+      "sha256": "68f5f785c3b4be8196ba2831b691129636ebaa900ebd9802f5e292d4fd43c3ee"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/timeout-postgres-logs-01.json",
+      "bytes": 758,
+      "sha256": "6f4eda5132042bb5763dcfe227508e9ea2cb8ab992a5e53919e20365b42831d0"
+    }
+  ],
+  "rootCauseInvestigation": {
+    "working": "2426byte intended exception reaches API/Postgres and returns response.",
+    "failed": "9214478byte request AbortSignal.timeout(30000) yielded TimeoutError with no captured response.",
+    "unprovenHypotheses": [
+      "Upload/proxy/request acceptance delay before SQL execution.",
+      "Provider processing or deferred witness refusal whose response was not received."
+    ],
+    "insufficientEvidence": "No client upload progress/request identifier/raw response/server full-size event; cannot locate the failing component or choose a fix.",
+    "reproduction": "Prohibited retry under exact one-attempt packet; no changed body dispatched."
+  },
+  "nextRequiredAction": "MAP-018 retains read-only provider terminal evidence investigation; if unavailable, prepare separately reviewed controlled transport alternative under existing local engineering direction, preserving timed-out outcome UNKNOWN and obtaining distinct exact write authorization before any replacement. Tail/cleanup/installer/main/deploy remain stopped.",
+  "recovery": "Preserve both attempts/uncertain response/readbacks/logs, encrypted backup and frozen packet. No current marker exists to clean. Do not mutate or retry from sampled absence. Independent review resolves former harness-review limitation only."
+}

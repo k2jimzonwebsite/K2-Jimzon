@@ -1,0 +1,106 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "date": "2026-10-12",
+  "state": "LOCAL_PREPARATION_REVIEWED_AND_REMOTE_CUSTODY_VERIFIED",
+  "packageDirectory": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-current-offsite-package-20261012-02",
+  "packageIndexSha256": "76ff3164f5d1b1533bcf6cafe32c4cdce2da018dbcf051e73ad577480257ad06",
+  "totalFiles": 8,
+  "indexedCompanionAndEnvelopeFiles": 7,
+  "files": [
+    {
+      "name": "provider-current-before-20261012-01.k2backup",
+      "bytes": 858743,
+      "sha256": "57da06c0cf9d61eab9b36c0be524d51943a293508901a9002976c398b16be05f"
+    },
+    {
+      "name": "provider-current-before-20261012-01.k2backup.integrity-verification.json",
+      "bytes": 759,
+      "sha256": "f6ce33e7d720b4c1dc29dcd7133bfd665f31e291295d20903e0364adef9d8b38"
+    },
+    {
+      "name": "provider-current-before-20261012-01.k2backup.manifest.json",
+      "bytes": 686,
+      "sha256": "e35f47bac6eaebe9f25b607ae47da5123e81bac2eb7d74458a43ca95b0025997"
+    },
+    {
+      "name": "provider-current-before-20261012-01.k2backup.restore-verification.json",
+      "bytes": 395,
+      "sha256": "d2132f4a2479c9b2c6e288e485f67498cf821eccf3f6348320b9b0adb32c14a7"
+    },
+    {
+      "name": "README.md",
+      "bytes": 2082,
+      "sha256": "250a158bf87dd4eb3747d08774d4a54c8d0dcef5d7c97ad7490ff76f3652d3e7"
+    },
+    {
+      "name": "recovery-scope.json",
+      "bytes": 1761,
+      "sha256": "d34703f99d9400190daae16d284f6e3440db9dfc582d072ba60cf605cdcacbcd"
+    },
+    {
+      "name": "role-bootstrap.json",
+      "bytes": 1424,
+      "sha256": "3103fd3a86509e7fcb2084e1f59578c1e69973b4df8e488140bfe651daa40282"
+    }
+  ],
+  "preparationTools": [
+    "81b986",
+    "dacd90"
+  ],
+  "sourceRestoreReceipt": "CURRENT_BACKUP_RESTORE_20261012.json",
+  "ownerSavedPassphraseMatch": "OWNER_CONFIRMED: it is the same; configuration not changed; decryption/restore evidence remains independently recorded",
+  "passwordManagerAndOfflineRecoveryCopies": "UNVERIFIED",
+  "intendedDriveFolderId": "1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo",
+  "intendedDriveFolderUrl": "https://drive.google.com/drive/folders/1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo",
+  "uploadAuthorized": true,
+  "uploaded": true,
+  "independentRemoteRetrieval": true,
+  "providerWrites": false,
+  "secretsIncluded": false,
+  "supersededPreparation": "Package01 retained unchanged; included no explicit role-bootstrap companion. Package02 includes exact15 NOLOGIN prerequisites and states repository-helper/runtime dependency.",
+  "scope": "Encrypted database envelope plus immutable manifest/integrity/restore receipts, redacted recovery scope, exact local NOLOGIN prerequisites, README and byte index. Qualified isolated local recovery; not standalone provider/Storage/Vault recovery.",
+  "next": "MAP018: offsite custody complete for this October12 capture. Verify password-manager/offline recovery copies separately; qualify actual owner-authorized migration transport/history atomicity/full outcome decisions and authority disposition, then refreshed live backup/identity/readiness and separate deployments/real-host/human acceptance. This backup does not authorize database writes.",
+  "recovery": "Preserve original encrypted backup/source evidence and both local prepared packages; no remote or provider rollback needed. No passphrase/database URL in package or committed receipt.",
+  "destinationMetadataRead": {
+    "provider": "Actual connected Google Drive files.get",
+    "folderId": "1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo",
+    "folderTitle": "K2 Production Backups",
+    "mimeType": "application/vnd.google-apps.folder",
+    "shared": false,
+    "returnedPermissions": [
+      {
+        "type": "user",
+        "role": "owner",
+        "emailAddress": "k2jimzonwebsite@gmail.com"
+      }
+    ],
+    "canAddChildren": "NOT RETURNED; no write capability inferred",
+    "sharingChanges": false
+  },
+  "independentReview": {
+    "status": "APPROVED",
+    "evidence": [
+      "2f01c5",
+      "a1096c"
+    ],
+    "critical": 0,
+    "important": 0,
+    "allEightFilesIndexAndSevenHashesSizesVerified": true,
+    "originalsByteIdentical": true,
+    "exact15NoLoginPrerequisitesVerified": true,
+    "textualCompanionsNoObservedCredentialsPersonalRecordValuesOrPlaintextDump": true,
+    "helperRuntimeDependenciesAndExclusionsExplicit": true,
+    "scope": "Local encrypted/redacted package preparation only",
+    "uploadDecryptionOrRestoreRepeated": false
+  },
+  "rootVerification": {
+    "command": "65c69f",
+    "allEightExactFiles": true,
+    "indexedHashesAndSizesMatch": true,
+    "noAdditionalFiles": true,
+    "exact15NoLoginPrerequisites": true
+  },
+  "authorization": "Owner explicitly answered: Upload and verify the eight-file package. Applies only to encrypted/redacted backup package and retrieval; no database or sharing changes.",
+  "custodyReceipt": "CURRENT_BACKUP_OFFSITE_CUSTODY_20261012.json"
+}

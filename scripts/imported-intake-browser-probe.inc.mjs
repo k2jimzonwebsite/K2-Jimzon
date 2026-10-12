@@ -5,7 +5,7 @@ import {chromium} from 'playwright'
 import sharp from 'sharp'
 import {decodeEvidenceImage} from '../server/admin-bff/product-intake.js'
 
-export async function importedIntakeBrowserProbe({credentials,uid,report,target,out,trackRequest,trackPath,browserInventory=false,staffStock=false}) {
+export async function importedIntakeBrowserProbe({credentials,uid,report,target,out,trackRequest,trackPath,browserInventory=false,staffStock=false,browserListing=false}) {
  const origin='http://127.0.0.1:54396',observed=[]
  report.intakeBrowser={scope:'Actual local password/MFA, imported Draft selection, three packaging uploads, manual field review and Save. Public test widget/unconfigured local bot fixture. No hosted/provider acceptance.',requests:observed,checks:[]}
  const result=report.intakeBrowser
@@ -146,6 +146,7 @@ export async function importedIntakeBrowserProbe({credentials,uid,report,target,
    result.phoneFirstInventory=true;result.publicationUnderReview=true
    result.checks.push('actual_phone_first_inventory_and_under_review_publication')
   }
+  if(browserListing){const {renderedListingBrowserProbe}=await import('./rendered-listing-browser-probe.inc.mjs');await renderedListingBrowserProbe({page,uid,report,target,out})}
   await drain()
   assert.match(sessionId||'',/^[0-9a-f-]{36}$/i);assert.match(requestId||'',/^[0-9a-f-]{36}$/i)
   result.sessionId=sessionId;result.requestId=requestId;result.manualReview=true;result.phoneSave=true

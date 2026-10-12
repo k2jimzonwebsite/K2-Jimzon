@@ -12,7 +12,7 @@ export function PendingProductDecision({ recovery, onReview }) {
   </section>
 }
 
-export default function ProductMasterRecovery({ recovery, canManageProducts, onClose, onRecorded }) {
+export default function ProductMasterRecovery({ recovery, canManageProducts, onClose, onRecorded, onNotApplied }) {
   const body = recovery.pending && JSON.parse(recovery.pending.payloadText)
   return <div className="fixed inset-0 z-[110] flex items-end justify-center bg-black/75 sm:items-center sm:p-4">
     <AdminDialog onClose={onClose} closeDisabled={recovery.working} labelledBy="product-recovery-title">
@@ -28,7 +28,15 @@ export default function ProductMasterRecovery({ recovery, canManageProducts, onC
         </div>}
         {!canManageProducts && <p role="alert" className="text-base text-crimson">Only the original Admin or SuperAdmin can resolve this decision. The request stays saved.</p>}
         {recovery.error && <p role="alert" className="break-words text-base text-crimson">{recovery.error}</p>}
-        <button type="button" className={primaryButton} disabled={recovery.working || !canManageProducts || !body} onClick={async () => {
+        {recovery.canReconcile && <div className="space-y-3">
+          <p className="text-base text-white/80">Opens the latest product details. Your previous edits and reason will not carry over.</p>
+          <button type="button" className={primaryButton} disabled={recovery.working || !canManageProducts || !body} onClick={async () => {
+            const result = await recovery.reviewLatest()
+            if (result.nonApplied) onNotApplied(result.product, result.taxonomyReview)
+            else if (result.ok) onRecorded(result.result.sku)
+          }}>{recovery.working ? 'Checking latest product…' : 'Review latest product'}</button>
+        </div>}
+        <button type="button" className={recovery.canReconcile ? secondaryButton : primaryButton} disabled={recovery.working || !canManageProducts || !body} onClick={async () => {
           const result = await recovery.retry()
           if (result.ok) onRecorded(result.result.sku)
         }}>{recovery.working ? 'Confirming saved decision…' : 'Retry saved decision'}</button>

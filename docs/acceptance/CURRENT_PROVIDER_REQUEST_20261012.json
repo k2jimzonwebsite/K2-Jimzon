@@ -1,0 +1,152 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "date": "2026-10-12",
+  "state": "current-exact-request-locally-qualified",
+  "providerWrites": false,
+  "providerRequestsDispatched": false,
+  "ownerApprovalRecorded": false,
+  "scope": "Same no-network request constructor requires exact locally qualified native77 SQL. Independently approved current K2 read-only observation also passes constructor input checks. No actual migration transport, installed connector, history atomicity or deployed acceptance is inferred.",
+  "sqlSha256": "8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99",
+  "sqlBytes": 8278524,
+  "querySource": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported77/guarded-package.json",
+  "querySourceSha256": "ddf4def0eceb753480eb4e36c4d775e665b868b9ede62e49dbc74a7832904ac9",
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261009-workspace-maintenance/provider-request.mjs",
+      "sha256": "94a2cc0e87c4060bf998ee3ce24e9b3a4508cfd48ae5a54cbd390ff8d589500b"
+    },
+    {
+      "file": "docs/evidence/20261009-workspace-maintenance/provider-request.test.mjs",
+      "sha256": "3a00af0b90de5444eebe149f8ea223b60c49139e02442ec8f88a35d90bab9099"
+    },
+    {
+      "file": "docs/evidence/20261009-workspace-maintenance/provider-request-review.json",
+      "sha256": "a9b58346cf64cb490ec8a6c3ab003253cd6ed64293482de68b5dbeb6a492bfe9"
+    }
+  ],
+  "baseline": {
+    "manifestFile": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-request-baseline-20261012-01/archive.json",
+    "manifestSha256": "04d4ad2f91135399d7d384c96650d9bf8ecbcac3268665d7f767000b8232b765",
+    "files": [
+      {
+        "source": "docs\\evidence\\20261009-workspace-maintenance\\provider-request.mjs",
+        "archiveFile": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-request-baseline-20261012-01\\provider-request.mjs",
+        "bytes": 905,
+        "sha256": "68c4c388dfa3fa6bc74a5cda55519a739703f84991bcca3d5d73e612135c47d2"
+      },
+      {
+        "source": "docs\\evidence\\20261009-workspace-maintenance\\provider-request.test.mjs",
+        "archiveFile": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-request-baseline-20261012-01\\provider-request.test.mjs",
+        "bytes": 1411,
+        "sha256": "ad4e7200d1417812cb4a67a33081195a7c4921a90f056a0d9daa3bae3eec1381"
+      },
+      {
+        "source": "docs\\evidence\\20261009-workspace-maintenance\\provider-request-review.json",
+        "archiveFile": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-request-baseline-20261012-01\\provider-request-review.json",
+        "bytes": 1015,
+        "sha256": "e23c766278a63271614d0d55ad7278f2e15c518b5f5c7bedba702a60dac37f40"
+      },
+      {
+        "source": "docs\\evidence\\20261009-workspace-maintenance\\provider-binding-readback.json",
+        "archiveFile": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-request-baseline-20261012-01\\provider-binding-readback.json",
+        "bytes": 1687,
+        "sha256": "3ef311efd0225547fa4aa5afc80e00088256c8f14ecf67202384931c0125498b"
+      },
+      {
+        "source": "docs\\evidence\\20261009-workspace-maintenance\\provider-transport-audit.json",
+        "archiveFile": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-request-baseline-20261012-01\\provider-transport-audit.json",
+        "bytes": 1979,
+        "sha256": "9d6390d0d0c2de199de9296841ba7fbfd5972dcd5485db0c47f37fe1316a0454"
+      },
+      {
+        "source": "docs\\evidence\\20261009-workspace-maintenance\\provider-reconciliation.sql",
+        "archiveFile": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-request-baseline-20261012-01\\provider-reconciliation.sql",
+        "bytes": 9157,
+        "sha256": "c2c3d0d624a238a12d069600803ca57f45cec1592924b78600660d8385f27fab"
+      },
+      {
+        "source": "docs\\evidence\\20261009-workspace-maintenance\\provider-history-readback.sql",
+        "archiveFile": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\provider-request-baseline-20261012-01\\provider-history-readback.sql",
+        "bytes": 957,
+        "sha256": "e3692a936a9b0d618da39e49192ea7a8711b535246ee1105a115d31954e85c14"
+      }
+    ],
+    "archiveTool": "94a458",
+    "historicalTests": {
+      "tool": "ec51d4",
+      "exit": 0,
+      "checks": 8
+    }
+  },
+  "focused": {
+    "redTool": "40e7fb",
+    "redFails": 2,
+    "greenTool": "cdca9f",
+    "exit": 0,
+    "checks": 13
+  },
+  "currentProjectObservation": {
+    "id": "pixplcjqivlfflickobf",
+    "name": "K2jimzon",
+    "region": "ap-southeast-1",
+    "status": "ACTIVE_HEALTHY",
+    "version": "17.6.1.155",
+    "evidence": "PROVIDER_RECONCILIATION_PREPARATION_20261012.json",
+    "runtimeReview": "9ec6f6",
+    "observedAt": "2026-10-12T10:46:13.364Z",
+    "scope": "Actual intended K2 owner-controlled Management API current-before read only; installed connector not reached"
+  },
+  "review": {
+    "status": "APPROVED-local-preparation-only",
+    "tool": "edf91c",
+    "critical": 0,
+    "important": 0,
+    "currentSourcePinsVerified": 3,
+    "historicalPinsVerified": 7
+  },
+  "remaining": "MASTER_ACTION_PLAN.md MAP-018 owns full unknown-outcome/actual transport/live/host/human gates; no automatic uncertain retry.",
+  "recovery": "Restore constructor/test/review from preserved baseline seven-file archive after verifying hashes; retain current request receipt, immutable76/77 and all prior failed cases. No provider rollback is needed.",
+  "reviewedSourcePins": [
+    {
+      "file": "docs/evidence/20261009-workspace-maintenance/provider-request.mjs",
+      "sha256": "94a2cc0e87c4060bf998ee3ce24e9b3a4508cfd48ae5a54cbd390ff8d589500b"
+    },
+    {
+      "file": "docs/evidence/20261009-workspace-maintenance/provider-request.test.mjs",
+      "sha256": "3a00af0b90de5444eebe149f8ea223b60c49139e02442ec8f88a35d90bab9099"
+    },
+    {
+      "file": "docs/evidence/20261009-workspace-maintenance/provider-request-review.json",
+      "sha256": "123eab2b16b602cb543103e4fa3220300a53126246c036a26d7a227d3f56fa07"
+    }
+  ],
+  "reviewedPacketSnapshot": {
+    "file": "docs/evidence/20261009-workspace-maintenance/provider-request-review.json",
+    "sha256": "123eab2b16b602cb543103e4fa3220300a53126246c036a26d7a227d3f56fa07",
+    "text": "{\n  \"owningMap\": \"MAP-018 / MAP-023 installation dependency\",\n  \"idea\": \"IDEA-20261009-08\",\n  \"tool\": \"supabase_apply_migration\",\n  \"project_id\": \"pixplcjqivlfflickobf\",\n  \"name\": \"k2_category_operating_full_cutover\",\n  \"querySource\": \"D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported77/guarded-package.json\",\n  \"queryProperty\": \"sql\",\n  \"queryBytes\": 8278524,\n  \"querySha256\": \"8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99\",\n  \"preparedOnly\": true,\n  \"dispatched\": false,\n  \"ownerApprovalRecorded\": false,\n  \"remainingGates\": [\n    \"fresh exact K2 identity/project-version/schema/global/managed read-only preflight\",\n    \"full catalog/global/managed/targeted-history unknown-outcome decision qualification without automatic retry\",\n    \"actual intended-provider payload size and nested-transaction/migration-history semantics\",\n    \"honest authority-through-commit disposition retaining observed counterexample\",\n    \"verified same-target backup/recovery and named exact owner live authorization with zero-failed readiness\",\n    \"separate artifact deployment and real-host/human full product acceptance\"\n  ],\n  \"transportAudit\": \"provider-transport-audit.json\",\n  \"localQualification\": {\n    \"installerReceipt\": \"docs/acceptance/STOREFRONT_VIEW_COMPOSITION_20261012.json\",\n    \"recoveryReceipt\": \"docs/acceptance/STOREFRONT_VIEW_RECOVERY_PREPARATION_20261012.json\",\n    \"installerCase\": 76,\n    \"recoveryCase\": 77,\n    \"scope\": \"Independent local qualification only\"\n  },\n  \"currentProjectObservation\": \"UNVERIFIED: existing17.6.1.155 binding is retained historical test input, not fresh provider evidence\",\n  \"reviewStatus\": \"PENDING-current-exact-request-source-review\"\n}\n"
+  },
+  "metadataOnlyChangesAfterReview": [
+    "reviewStatus APPROVED-local-preparation-only",
+    "reviewEvidence edf91c",
+    "developmentEvidence26d748exit0",
+    "currentProjectObservation actual read-only K2 current-before witness 3f5b1730 / review9ec6f6",
+    "currentObservedInputPreparation8f05a2 no dispatch",
+    "repeat fresh preflight requirement before live action"
+  ],
+  "development": {
+    "command": "npm run verify:development",
+    "startTool": "40a953",
+    "terminalTool": "26d748",
+    "exit": 0,
+    "adminChecks": 53,
+    "routeGaps": 0
+  },
+  "currentObservedInputPreparation": {
+    "tool": "8f05a2",
+    "exactSqlBytes": 8278524,
+    "frozen": true,
+    "migrationRequestDispatched": false
+  },
+  "managementApiPreparedBodyReceipt": "PROVIDER_TRANSPORT_HISTORY_20261012.json"
+}

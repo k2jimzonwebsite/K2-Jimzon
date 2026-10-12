@@ -1,0 +1,154 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "date": "2026-10-12",
+  "state": "actual-fresh-encrypted-backup-isolated-restore-and-99-table-3-sequence-comparison-reviewed",
+  "providerWrites": false,
+  "newProviderReads": true,
+  "productionRestoreExecuted": false,
+  "scope": "Fresh encrypted real K2 database backup restored into an exclusively owned local PostgreSQL17.11/C target. Existing helper restore checks plus all enumerated ordinary/partitioned table fingerprints and sequence states match current read-only K2. This is neither production restoration nor provider role/owner/ACL/locale/Vault/setting/Storage-object/media equivalence or original dump snapshot-atomicity proof.",
+  "dependencyReceipt": "PROVIDER_TRANSPORT_HISTORY_20261012.json",
+  "backupEncryptedSha256": "57da06c0cf9d61eab9b36c0be524d51943a293508901a9002976c398b16be05f",
+  "backupDumpSha256": "171c4116166ef763b93208ece43dc0a45feeb4caa9b5846daeb3b1ff8087ff8a",
+  "evidencePins": [
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-current-restore-20261012-01/controller-result.json",
+      "sha256": "bb146f7ebfb36ced800a272f7f270f0835578d1e7e2626333c0dd1db45d02354"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-current-restore-20261012-01/postgres.log",
+      "sha256": "2c8b473a70772267f2eb0835acc15fe9b878cd2e762e49f8333af044eabcdbe3"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-current-restore-20261012-02/controller-result.json",
+      "sha256": "3d9fe3aaf82a72eefe8b1d6a574cc0e267c56cc25ea1b940202ebbbb92989b12"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-current-restore-20261012-02/role-bootstrap.json",
+      "sha256": "3103fd3a86509e7fcb2084e1f59578c1e69973b4df8e488140bfe651daa40282"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-current-restore-20261012-02/row-sequence-comparison.json",
+      "sha256": "820670e99f5acb7530549832935566a67ac0a065593f70cf34ad82cf587f7a99"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-current-restore-20261012-02/cleanup.json",
+      "sha256": "6ffa91acfc5e474c0e7d1c05a91a58e7549c3168416dd2211eabf58068c6be1a"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-current-before-20261012-01.k2backup.restore-verification.json",
+      "sha256": "d2132f4a2479c9b2c6e288e485f67498cf821eccf3f6348320b9b0adb32c14a7"
+    }
+  ],
+  "sourcePins": [
+    {
+      "file": "scripts/verify-current-production-restore.mjs",
+      "sha256": "1214f15afcb3055c5fb6fe34cec709188191d213bc6f4f84f82e3382b14c45a0"
+    },
+    {
+      "file": "scripts/verify-map017-production-backup-restore.mjs",
+      "sha256": "5077ba00933dd2f2e972b7e7207e1ce00505f7d275431cb78378dc4eb96eaf8a"
+    },
+    {
+      "file": "scripts/backup-current-production.mjs",
+      "sha256": "5ee27314cc90a6a84a3d8a99fd9cd652bd80826c2586ea32bb6201e765bdac5a"
+    },
+    {
+      "file": "scripts/create-map017-production-backup.mjs",
+      "sha256": "73bab255eec1e5673eb289bfd802d496fb3a5596d65475e1515ff9bf9b516d00"
+    },
+    {
+      "file": "scripts/backup-database-encrypted.mjs",
+      "sha256": "41d08bf3e733a0b1263beaec6b735923018f7bc45d649178cb773bc02b458d6c"
+    }
+  ],
+  "failedCase": {
+    "case": "provider-current-restore-20261012-01",
+    "controllerTool": "335b47",
+    "status": "FAILED",
+    "refusal": "CURRENT_RESTORE_REFUSAL: PG_RESTORE_FAILED",
+    "diagnosticTool": "05696a",
+    "serverError": "role authenticated does not exist",
+    "stopTool": "cf7819",
+    "actualHostAbsenceTool": "68fc96",
+    "originalEvidencePreserved": true,
+    "derivedDataRemoved": true,
+    "recovery": "Fresh successor; reproduce from same encrypted envelope/source helpers, never resume partial case."
+  },
+  "acceptedCase": {
+    "case": "provider-current-restore-20261012-02",
+    "preparationTools": [
+      "8c1dde",
+      "033423"
+    ],
+    "roleBootstrapTool": "69c4ab",
+    "localCapturedNamesCreated": 15,
+    "allRoleNamesNoLogin": true,
+    "capturedProviderRoleAttributesAndMembershipsReproduced": false,
+    "restoreTool": "5ec5b6",
+    "exit": 0,
+    "publicRelations": 51,
+    "latestMigrationVersion": "20260928092634",
+    "managedVaultEntriesExcluded": 10
+  },
+  "rowSequenceComparison": {
+    "tool": "4a30b4",
+    "exit": 0,
+    "tables": 99,
+    "sequences": 3,
+    "matched": 102,
+    "differences": 0,
+    "readOnly": true,
+    "sort": "Only result relation identities sorted; every identity/kind/count/hash/sequence value retained.",
+    "diagnosticCorrection": "Earlier2a375f unsorted UNION ALL result comparison failed due unordered execution. Corrected deterministic identity ordering; no semantic data/schema difference suppressed."
+  },
+  "cleanup": {
+    "tool": "41e1d8",
+    "exit": 0,
+    "ownedTargetDropped": true,
+    "serverStopped": true,
+    "actualProcessesAfter": 0,
+    "actualListenersAfter": 0,
+    "derivedCase01And02DataDirectoriesRemoved": true,
+    "evidenceCasesPreserved": true,
+    "encryptedBackupPreserved": true
+  },
+  "review": {
+    "status": "APPROVED",
+    "tools": [
+      "f10927",
+      "1ee730",
+      "7777ff"
+    ],
+    "critical": 0,
+    "important": 0,
+    "independentEvidencePinsAnd102UniqueIdentitiesVerified": true,
+    "restoreOrProviderReadsRepeated": false,
+    "scope": "Isolated PostgreSQL17.11 restore and current-source data correspondence only; metadata/ACL/provider equivalence, original dump snapshot atomicity, Vault, Storage/media and full operational recovery remain unverified."
+  },
+  "ownerPassphraseCustody": "OWNER_CONFIRMED saved copy matches the configured working passphrase (current chat); no configuration edit or secret retrieval. Password-manager and separate offline-copy custody still unverified.",
+  "offsiteCustody": "VERIFIED actual8-file upload and independent exact-byte retrieval, all hashes/sizes/owner-only-unshared parent metadata match; CURRENT_BACKUP_OFFSITE_CUSTODY_20261012.json, e190ba. Local index historical prepared-only flags remain immutable.",
+  "remaining": "MAP018: fresh isolated backup restore and offsite custody complete in scoped receipts; password-manager/offline recovery copies remain unverified. Actual migration transport/history atomicity/full outcome/authority disposition and named exact write authorization/fresh live gates, separate deployments and real-host/human acceptance remain. No database write inferred.",
+  "recovery": "No provider rollback needed. Preserve encrypted backup and immutable failed/passing evidence. Both derived local data directories were removed only after server/PID/listener absence and explicit absolute path checks. Reproduce with a fresh isolated marked target, same helper pins and recorded NOLOGIN role-name prerequisites; no credentials/PII in committed artifacts.",
+  "verificationCadence": "No application source edit this turn: retain final development3ef6ef; no unaffected application build/browser/test/release rerun.",
+  "driveInspection": {
+    "folderId": "1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo",
+    "folderUrl": "https://drive.google.com/drive/folders/1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo",
+    "fileCount": 33,
+    "newestPackage": "current-20260929-pre-intake.k2backup",
+    "newestEnvelopeCreated": "2026-09-29T04:08:49.94Z",
+    "freshOctober12NamedMatches": 0,
+    "passphraseNamedMatches": 0,
+    "targetedSearches": [
+      "K2",
+      "passphrase",
+      "recovery",
+      "password",
+      "credentials",
+      "backup"
+    ],
+    "savedPassphraseRead": false,
+    "limitation": "Accessible search and this33-child folder listing only; no claim that a differently named or inaccessible saved key does not exist.",
+    "evidence": "Current-thread actual connected Google Drive search/folder-fetch and September29 companion-fetch outputs; metadata summarized here, no credential contents retrieved."
+  }
+}

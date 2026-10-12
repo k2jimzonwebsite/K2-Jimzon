@@ -1,0 +1,132 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261001-03",
+  "date": "2026-10-12",
+  "ownerDecision": "Explicit reasoned Admin/SuperAdmin assign/remove; independent publication/stock; safe original interrupted request and fresh current assignment before new decisions",
+  "changed": [
+    "Bounded protected per-SKU Website read distinguishes absent from existing unassigned rows with real UUID/version",
+    "Optional original-actor header checked before signed dispatch",
+    "Shared recovery storage/hook extraction preserves original Product Master namespace/validation and guards",
+    "Separate reason/version Website dialog and pending banner, literal durable actor/body/key, Web Locks/current session/generation guards",
+    "Historical receipt/current assignment separate; exact resumed stale reconciliation opens fresh assignment with blank reason",
+    "Receipt validation and malformed/corrupt/incomplete reads fail closed; no automatic retry/discard"
+  ],
+  "sourcePins": {
+    "src/lib/savedAdminCommandRecovery.js": "e0da2c7df37547ee56ccace2e7e81737f04433088ed0e4e38ec5a408ef3f8899",
+    "src/lib/productMasterCommandRecovery.js": "2601d405d2ca6d2d9a08b72bf4e71e93b17f288d8ca98c1689e68b230f155beb",
+    "src/lib/websiteAssignmentRecovery.js": "f99bc6553e78dcce6d43d40a1aaa415969b836b84bbe54133eaa98eb6d913277",
+    "src/hooks/useSavedAdminDecisionRecovery.js": "e176b61ce7d19454bb36a453615b6e2432c0f4fcb6e94ee86830b06f80f754a0",
+    "src/hooks/useProductMasterRecovery.js": "08452a22a56b15951f707f868b0c6231b1786fe439951539b49c7429085525b9",
+    "src/hooks/useWebsiteAssignmentRecovery.js": "1918dba5f9c21c14b30335e11d25fe715eea0416acc53953c845c5e45f72cbd4",
+    "src/services/adminBffService.js": "f97c682401dea1743ec433b6291e07a3ff35a9bfe7f9707a5e9665d9bd3c426e",
+    "server/admin-bff/channels.js": "b23b53652bba21588a401fa5c6fa5d6ef8ce210191fa26ed658ed73a4d0af861",
+    "src/views/admin/WebsiteAssignmentDialog.jsx": "f76a7dc649cf9aefc5771b1a8e0d3c1a318b7da2be1f98e62548454cadd550f6",
+    "src/views/admin/InventoryGrid.jsx": "6827f2786547652a0d0a0f36ec46c5d5a75ec035599bae475145600ee52ab895",
+    "tests/website-assignment-recovery.test.mjs": "00632ca10a9f67b1cd12e592b1a2d218a371f705f397d411ece0df71385fba97",
+    "tests/admin-website-assignment-actor.test.mjs": "a3d547917f9724306b72c15bf0e8abd1d4816b3e23bf80b95e08683b17d223fb",
+    "tests/admin-website-assignment.spec.js": "d20cd4e762bbad489ab4289e50aaea200d262fa9d046e0f66518c9d9bfea33b2",
+    "package.json": "fa23ac7336a1232803987fc2bb2870f48db352fd082a740d1618bd01719e4583",
+    "docs/design-checkpoints/20261012-website-assignment/website-375.png": "6d5d76a268ffae1c5b5c430ada3a794f2ba25f0aedaef593b1e9e5c833df4bb2",
+    "docs/design-checkpoints/20261012-website-assignment/website-1440.png": "5dca3d3838d308999fc81b8f362fbe2dbe2d20fc82e38ba92665ef7d682651ed"
+  },
+  "verification": [
+    {
+      "tool": "173df4",
+      "exit": 1,
+      "purpose": "Initial missing Website recovery and original-actor guard red"
+    },
+    {
+      "tool": "67cb1c",
+      "exit": 1,
+      "purpose": "Per-SKU protected read red"
+    },
+    {
+      "tool": "15c151",
+      "exit": 1,
+      "passed": 15,
+      "failed": 2,
+      "purpose": "UUID pattern typo caught and corrected; Product Master persistence6 passed"
+    },
+    {
+      "tool": "464ff5",
+      "exit": 0,
+      "passed": 11,
+      "purpose": "Website persistence/actor/read contracts green"
+    },
+    {
+      "tool": "3e045b",
+      "exit": 1,
+      "purpose": "Reviewer malformed single null/false row red"
+    },
+    {
+      "tool": "68643b",
+      "exit": 0,
+      "purpose": "Only exact zero rows can mean absent, malformed row refused"
+    },
+    {
+      "tool": "78aeb5",
+      "exit": 0,
+      "passed": 21,
+      "purpose": "Product Master rendered regression after shared extraction"
+    },
+    {
+      "tool": "4a7929",
+      "exit": 1,
+      "purpose": "Failing-first absent Website control"
+    },
+    {
+      "tool": "83368a",
+      "exit": 1,
+      "purpose": "Test asserted unchecked input before async second write; explicit write/completion wait corrected"
+    },
+    {
+      "tool": "3f4a3b",
+      "exit": 0,
+      "passed": 8,
+      "purpose": "Assign/remove/reload/stale/malformed/unavailable/corrupt recovery"
+    },
+    {
+      "tool": "01c350",
+      "exit": 1,
+      "passed": 4,
+      "failed": 1,
+      "purpose": "Synthetic actor fixture attempted physical click behind modal; established synthetic external identity click corrected"
+    },
+    {
+      "tool": "6d14ac",
+      "exit": 1,
+      "purpose": "Reviewer delayed Web Lock completion reproduced stale result on subsequent save"
+    },
+    {
+      "tool": "6f62c9",
+      "exit": 0,
+      "passed": 14,
+      "purpose": "Final complete Website cases incl corrected handoff/actor ABA/two actual tabs/storage ABA"
+    },
+    {
+      "tool": "26ec85",
+      "exit": 0,
+      "passed": 18,
+      "purpose": "17 existing Grid/editor regressions plus keyboard/44px target/reduced-motion/Escape/focus restoration Website check"
+    },
+    {
+      "tool": "579286",
+      "exit": 0,
+      "command": "npm run verify:development",
+      "adminChecks": 53,
+      "routeControlGaps": 0,
+      "purpose": "Final engineering development gate"
+    }
+  ],
+  "review": {
+    "sequentialDesign": "APPROVED after Skeptic existing-unassigned version clarification",
+    "independentCode": "APPROVED after two Important issues fixed and failing-first qualified",
+    "visual": "Primary inspected375/1440 durable screenshots, readable copy, fit and controls; no new motion/style"
+  },
+  "limits": [
+    "Rendered API/Auth responses synthetic; BFF tests substitute only remote Auth/PostgREST",
+    "Genuine consolidated rendered backend chain and hosted/human/provider acceptance outstanding",
+    "No SQL, provider configuration, deployment, main push or release"
+  ],
+  "recovery": "Scoped source revert of Website/shared slice; safest full current engineering rollback restores named files to4f69445 while preserving all Product Master and Website pending localStorage records. Original Product Master namespace unchanged. Resolve original Website actor/literal body/key through protected command before replacement; never erase evidence. No provider rollback."
+}

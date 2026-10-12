@@ -1,0 +1,40 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T13:15:10.743Z",
+  "state": "controlled-transport-design-approved-local-construction-only",
+  "design": {
+    "file": "docs/specs/CONTROLLED_MIGRATION_TRANSPORT.md",
+    "bytes": 14053,
+    "sha256": "0e7e1c97b877f2b1b71cc22aa2e5a7190c6b99802c2565f2541e40cd4ddee946"
+  },
+  "sourceAuditTool": "1ebbfa",
+  "originalSqlSha256": "8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99",
+  "originalSqlBytes": 8278524,
+  "originalBodyModified": false,
+  "implementationBegun": false,
+  "providerReadsThisContinuation": false,
+  "providerWritesThisContinuation": false,
+  "priorEvidencePinsVerified": {
+    "execution": 31,
+    "timeoutDiagnostics": 9,
+    "tool": "8aff0e"
+  },
+  "reviews": {
+    "skeptic": {
+      "initial": "REVISE",
+      "acceptedCorrections": [
+        "Original unknown request gates replacement live dispatch",
+        "Refusal-only transport replay and receipt collision outcomes",
+        "Exact receipt/source/body/envelope/target/session binding",
+        "Safe UTF8 SQL-data roundtrip and history-retained recovered-state meaning"
+      ]
+    },
+    "constraintGuardian": "APPROVED local construction/qualification including complete extra8MB receipt cost under unchanged deadlines",
+    "userAdvocate": "APPROVED local-only; new envelope and exact permitted writes must be separate from oldsource/approval/release",
+    "arbiter": "APPROVED local construction/qualification; accepted all4objections and Guardian/Advocate dispositions; no unresolved design objection"
+  },
+  "ownerAuthorizationScope": "Existing prelaunch direction permits local preparation; original APIprobe approval does not authorize this direct transport, replacement probe, installer or release.",
+  "remaining": "MAP-018: read-only exact ledger metadata/grant/convention capture; strict envelope preparation preserving complete14-fragment body; affected full-size local transaction/replay/refusal/failure/conservation/recovery qualification and independent code/evidence review. Original API full-size outcome UNKNOWN/no retry gates replacement dispatch until terminal evidence or separately reviewed owner-accepted isolation disposition. Exact writes require separate authorization and fresh identity/readiness/backup/recovery.",
+  "recovery": "No provider rollback for design. Revert only candidate/current documentation if rejected; preserve installer/unknown attempts/frozen artifacts/backups/receipts. No duplicate SQL/business logic."
+}

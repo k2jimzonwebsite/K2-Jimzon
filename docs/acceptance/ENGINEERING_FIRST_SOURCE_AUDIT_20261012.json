@@ -1,0 +1,103 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261012-01 merged into IDEA-20261009-11/IDEA-20261001-03",
+  "date": "2026-10-12",
+  "branch": "codex/dummy-production-acceptance",
+  "head": "4f69445e78006b64aa318fd4956b1466a776a1ad",
+  "scope": "Engineering-first current source audit; not complete cross-surface acceptance",
+  "providerWrites": false,
+  "deployed": false,
+  "sourcePins": [
+    {
+      "file": "src/hooks/useProductMasterRecovery.js",
+      "sha256": "c9c430a49ec387f93150bbf025a43e16f6c91df1a3a4395524ee06588f87fa4d"
+    },
+    {
+      "file": "src/lib/productMasterCommandRecovery.js",
+      "sha256": "b33716b75cc7740c54528e5fd953fde0449f2337ec8307378ac0d2ec6f6b364b"
+    },
+    {
+      "file": "src/views/admin/ProductMasterRecovery.jsx",
+      "sha256": "9282fd6bc4a61fb8cad973a838c32577b471149843f86cd3dbd3f37d6e5ffda6"
+    },
+    {
+      "file": "src/views/admin/InventoryGrid.jsx",
+      "sha256": "86d857d33800c10b171e698700069426e042e9237332e54bb8db1dc7c3343a99"
+    },
+    {
+      "file": "src/services/adminBffService.js",
+      "sha256": "645f8497ce9227f56f26bf7dadf0537f3e2d262d3b6c6ea9139976b0cbb01be5"
+    },
+    {
+      "file": "server/admin-bff/product-master.js",
+      "sha256": "465c3e5d185f703c8451b6f3d53382c2dda99f2bf632aac43e7bff0cc19cb557"
+    },
+    {
+      "file": "server/admin-bff/channels.js",
+      "sha256": "36418ddff9378ebf2c40f4568a53b1f9c9136100640524cf0ba8ab5e32f72186"
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_product_master_boundary.sql",
+      "sha256": "6b0c0bba69533fb813d8460363767c7058119433afab13a6059532fc639f1979"
+    },
+    {
+      "file": "supabase/prepared/product_master_version_conflict_transport.sql",
+      "sha256": "ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476"
+    },
+    {
+      "file": "scripts/prepare-imported-media-fixture.mjs",
+      "sha256": "932f35c9fd614b9e31889b8b9b18c9a18f90829cffc10bb1feedc3b2ff69cfc7"
+    },
+    {
+      "file": "scripts/product-master-recovery-transport-probe.inc.mjs",
+      "sha256": "a6406d7d8119a0e26b1074af1dc2b0856429fba4fa6c9e6794cd6d4b9f5b4246"
+    },
+    {
+      "file": "tests/sql/product-master-recovery-transport-witness.sql",
+      "sha256": "dba6ae626396a166c96a2ec27c69e52fe979afa0147c7e9e53515ae4498ec342"
+    }
+  ],
+  "findings": [
+    {
+      "id": "saved-command-replacement",
+      "kind": "engineering",
+      "observed": "Restored Product Master version refusal remains held. No non-applied reconciliation state or replacement workflow exists.",
+      "evidence": "useProductMasterRecovery.js: initial explicit refusal only clears fresh requests; restored requests retain original key.",
+      "remaining": "Qualify genuine exact-key receipt/version behavior, then implement reviewed explicit non-applied reconciliation under existing actor/Web Lock guards."
+    },
+    {
+      "id": "website-assignment-control",
+      "kind": "engineering",
+      "observed": "Signed Website listing set command exists; InventoryGrid pricing section lacks protected Website assignment/recovery control.",
+      "evidence": "server/admin-bff/channels.js versus InventoryGrid Website settings.",
+      "remaining": "Wire independent reasoned/versioned Website assignment and durable unknown-outcome recovery; retain product publication as separate decision."
+    },
+    {
+      "id": "connected-rendered-chain",
+      "kind": "acceptance-and-possible-engineering",
+      "observed": "Archived local component/backend/browser slices do not establish complete current rendered human-review/media/Live/Website/customer recovery chain.",
+      "remaining": "Finish required engineering, compile separate artifacts, then consolidate actual maintained operational/recovery paths; fix focused reproduced failures."
+    },
+    {
+      "id": "privileged-authority",
+      "kind": "owner-and-provider",
+      "observed": "MAP retains privileged post-final-check authority counterexample and unanswered boundary decision.",
+      "remaining": "Resolve required authority boundary and qualify accepted approach before provider activation; no stronger catalog permission inferred."
+    },
+    {
+      "id": "provider-release",
+      "kind": "owner-and-provider",
+      "observed": "Local credentials and installed source are not activation authorization; exact request transport/unknown outcome, current backups/readiness and hosted acceptance remain.",
+      "remaining": "Named MAP authorization, K2 identity preflight, zero-failed readiness, approved backup/rollback, separate artifacts and real-host evidence."
+    }
+  ],
+  "nativeProbe": {
+    "case": "oci-imported-media40",
+    "preparationCommand": "node scripts/test-product-master-recovery-transport-mode.mjs oci-imported-media40",
+    "preparationExit": 0,
+    "runtimeStatus": "locally verified; rendered/replacement UI not qualified",
+    "receipt": "docs/acceptance/PRODUCT_MASTER_RECOVERY_TRANSPORT_20261012.json"
+  },
+  "verificationOrder": "Engineering first, focused checks for changed behavior, final development once, separate target compilation, consolidated operational acceptance; release gate only before owner-requested promotion",
+  "recovery": "Preserve all private fixtures/archives and pending original actor/body/key; scoped feature-branch revert only. No provider state changed."
+}

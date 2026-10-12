@@ -1,0 +1,144 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "date": "2026-10-12",
+  "state": "actual-read-only-history-prepared-management-body-and-fresh-backup-qualified-isolated-restore-reviewed",
+  "providerWrites": false,
+  "providerMigrationRequestsDispatched": false,
+  "installedSupabaseConnectorReached": false,
+  "actualReadOnlyRequestsExecuted": true,
+  "scope": "Actual owner-controlled K2 read-only migration history; exact offline credential-free Management API body; fresh encrypted backup with qualified isolated restore and current-source99-table/3-sequence correspondence. No actual migration transport, history atomicity, installation, provider equivalence or deployed acceptance.",
+  "apiHistory": {
+    "tool": "da5e2d",
+    "terminalTool": "dcc650",
+    "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-history-api-readback-20261012-01.json",
+    "sha256": "6103cfe792f07f71143b4bc2b057c9d8f8536c6f925d7097a7badc70bdd234e9",
+    "listHttp": 200,
+    "detailHttp": 200,
+    "entries": 10,
+    "latestVersion": "20260928092634",
+    "latestName": "order_payment_receipt_chat_20260928",
+    "targetedFullCutoverCount": 0,
+    "detailKeys": [
+      "version",
+      "name",
+      "statements",
+      "created_by"
+    ]
+  },
+  "sqlHistory": {
+    "tool": "50c821",
+    "comparisonTool": "d54e30",
+    "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-history-sql-readback-20261012-01.json",
+    "sha256": "bad29093933ed8fbb8116e530fe2fdf94dc4593a515ed86cc374960cc6555041",
+    "querySha256": "3ea1f2f89df44bea3d7b8a0a06127d06ebe190eac2e74fa664d718ad4827e616",
+    "httpStatus": 201,
+    "canonicalSource": "docs/evidence/20261009-workspace-maintenance/provider-history-readback.sql",
+    "change": "Only exact existing migration version/name predicate substituted",
+    "orderedPinsDeepEqualApi": true,
+    "idempotencyKey": null,
+    "comparisonCorrection": "Initial JSON string equality was false solely from object key ordering; deep equality and all identities/pins pass."
+  },
+  "historicalCorrespondence": {
+    "tool": "413458",
+    "storedStatements": 1,
+    "storedBytes": 11629,
+    "storedSha256": "fc7c2e4ec905ef372fff9a92db4eda9a94c9d0effdbef5af65cec311e427ddeb",
+    "localFile": "supabase/migrations/20260928_order_payment_receipt_chat.sql",
+    "localBytes": 11644,
+    "localSha256": "d775e6aea782816fad51b02c864b106bfb587a0ea941400eed4893985beeab86",
+    "exactStoredEqualsLocalRemovingOnlyAnchoredBeginAndCommit": true,
+    "limits": "Original dispatched bytes and responsible transform unproven. This one existing historical entry is not a serialization/atomicity contract for the current 14-fragment installer."
+  },
+  "preparedManagementBody": {
+    "tool": "aaac2c",
+    "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-management-request-20261012-01.json",
+    "sha256": "fa64cc8ecffbeb2da2cff69fe4ca67f87ff54da01c6efa093bf25932174744b3",
+    "method": "POST",
+    "endpoint": "https://api.supabase.com/v1/projects/pixplcjqivlfflickobf/database/migrations",
+    "bodyKeys": [
+      "name",
+      "query"
+    ],
+    "bodyBytes": 9214478,
+    "sqlBytes": 8278524,
+    "sqlSha256": "8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99",
+    "name": "k2_category_operating_full_cutover",
+    "sameRequestConstructorReused": true,
+    "credentialFree": true,
+    "dispatched": false,
+    "limits": "Exact offline wire body only. API size acceptance, transaction execution/history atomicity and exact owner write authorization unverified."
+  },
+  "officialReferences": [
+    {
+      "url": "https://supabase.com/docs/reference/api/v1-apply-a-migration",
+      "observed": "POST migrations query required/name optional/rollback optional string/empty200 documented; no read_only or documented read-only dry-run field."
+    },
+    {
+      "url": "https://supabase.com/docs/reference/api/v1-run-a-query",
+      "observed": "Separate experimental query endpoint supports read_only boolean; its observed read-only success does not qualify migration POST."
+    },
+    {
+      "url": "https://supabase.com/docs/reference/api/v1-list-migration-history",
+      "observed": "GET migration history versions/names documented; actual K2 read succeeds."
+    },
+    {
+      "url": "https://supabase.com/docs/reference/api/introduction",
+      "observed": "Migration endpoint lists three-minute timeout; not payload-size or inner transaction/history atomicity guarantee."
+    }
+  ],
+  "review": {
+    "status": "APPROVED-scoped-history-and-prepared-body-only",
+    "evidence": [
+      "0bd31e",
+      "c074af",
+      "755205"
+    ],
+    "critical": 0,
+    "important": 0,
+    "noProviderRequery": true
+  },
+  "readiness": {
+    "command": "npm run readiness:k2-live",
+    "tool": "d0b9bc",
+    "exit": 0,
+    "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-readiness-20261012-01.json",
+    "sha256": "de71f5579ec1547bf5acd8bbff0cdf6537c206d01c6f5ac19eda4bfcaf2e905e",
+    "verified": 8,
+    "owner": 2,
+    "scriptConnector": 3,
+    "failed": 0,
+    "limits": "Preconditions only; not authorization. Script connector labels are not actual installed connector inspection."
+  },
+  "freshBackup": {
+    "startTool": "c65c26",
+    "terminalTool": "58a6bf",
+    "exit": 0,
+    "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-current-before-20261012-01.k2backup",
+    "backupId": "current-pixplcjqivlfflickobf-2026-10-12T111332004Z-57da06c0cf9d",
+    "encryptedBytes": 858743,
+    "encryptedSha256": "57da06c0cf9d61eab9b36c0be524d51943a293508901a9002976c398b16be05f",
+    "dumpBytes": 858679,
+    "dumpSha256": "171c4116166ef763b93208ece43dc0a45feeb4caa9b5846daeb3b1ff8087ff8a",
+    "manifestSha256": "e35f47bac6eaebe9f25b607ae47da5123e81bac2eb7d74458a43ca95b0025997",
+    "integrityTool": "6afbcb",
+    "integrityFile": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-current-before-20261012-01.k2backup.integrity-verification.json",
+    "integritySha256": "f6ce33e7d720b4c1dc29dcd7133bfd665f31e291295d20903e0364adef9d8b38",
+    "authenticatedInMemoryDecryption": true,
+    "tamperedEnvelopeRefused": true,
+    "plaintextWritten": false,
+    "artifactConsistencyReview": {
+      "status": "APPROVED",
+      "tool": "b4c46d",
+      "critical": 0,
+      "important": 0,
+      "decryptionReproduced": false
+    },
+    "restoreVerification": "Qualified isolated PostgreSQL17.11 restore/current-source99-table3-sequence correspondence APPROVED; see CURRENT_BACKUP_RESTORE_20261012.json. Historical original manifest remains immutable with its creation-time Pending field.",
+    "offsiteCustody": "VERIFIED actual8-file upload and independent exact-byte retrieval, all hashes/sizes/owner-only-unshared parent metadata match; CURRENT_BACKUP_OFFSITE_CUSTODY_20261012.json, e190ba. Local index historical prepared-only flags remain immutable.",
+    "ownerPassphraseCustody": "OWNER_CONFIRMED saved copy matches the configured working passphrase (current chat); no configuration edit or secret retrieval. Password-manager and separate offline-copy custody still unverified."
+  },
+  "remaining": "MAP018: fresh isolated backup restore and offsite custody complete in scoped receipts; password-manager/offline recovery copies remain unverified. Actual migration transport/history atomicity/full outcome/authority disposition and named exact write authorization/fresh live gates, separate deployments and real-host/human acceptance remain. No database write inferred.",
+  "recovery": "No provider rollback: only read operations and new encrypted/private evidence/prepared body were created. Preserve immutable captures, historical/source receipts, current backup and original actor/body/key. Restore uses a fresh exclusively owned local target; never overwrite provider/current local databases.",
+  "verificationCadence": "No application code edit this batch; preserve prior final development3ef6ef. No redundant application/build/browser/release run."
+}

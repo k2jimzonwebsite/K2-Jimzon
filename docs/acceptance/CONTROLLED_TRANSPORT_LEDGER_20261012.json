@@ -1,0 +1,350 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T13:21:46.020Z",
+  "state": "actual-ledger-and-pooler-readonly-capability-observed-local-envelope-not-built",
+  "providerWrites": false,
+  "providerReadOnly": true,
+  "installedSupabaseConnectorReached": false,
+  "replacementProbeDispatched": false,
+  "implementationBegun": false,
+  "identityTool": "626a25",
+  "ledgerCapture": {
+    "tool": "996b77",
+    "httpStatus": 201,
+    "role": "supabase_read_only_user",
+    "readOnly": "on",
+    "schema": {
+      "acl": null,
+      "name": "supabase_migrations",
+      "owner": "postgres",
+      "postgresUsage": true
+    },
+    "table": {
+      "acl": null,
+      "rls": false,
+      "kind": "r",
+      "owner": "postgres",
+      "columns": [
+        {
+          "acl": null,
+          "name": "version",
+          "type": "text",
+          "default": null,
+          "notNull": true,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "acl": null,
+          "name": "statements",
+          "type": "text[]",
+          "default": null,
+          "notNull": false,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "acl": null,
+          "name": "name",
+          "type": "text",
+          "default": null,
+          "notNull": false,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "acl": null,
+          "name": "created_by",
+          "type": "text",
+          "default": null,
+          "notNull": false,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "acl": null,
+          "name": "idempotency_key",
+          "type": "text",
+          "default": null,
+          "notNull": false,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "acl": null,
+          "name": "rollback",
+          "type": "text[]",
+          "default": null,
+          "notNull": false,
+          "identity": "",
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        {
+          "ready": true,
+          "valid": true,
+          "definition": "CREATE UNIQUE INDEX schema_migrations_idempotency_key_key ON supabase_migrations.schema_migrations USING btree (idempotency_key)"
+        },
+        {
+          "ready": true,
+          "valid": true,
+          "definition": "CREATE UNIQUE INDEX schema_migrations_pkey ON supabase_migrations.schema_migrations USING btree (version)"
+        }
+      ],
+      "forceRls": false,
+      "policies": [],
+      "triggers": [],
+      "constraints": [
+        {
+          "name": "schema_migrations_idempotency_key_key",
+          "deferred": false,
+          "validated": true,
+          "deferrable": false,
+          "definition": "UNIQUE (idempotency_key)"
+        },
+        {
+          "name": "schema_migrations_pkey",
+          "deferred": false,
+          "validated": true,
+          "deferrable": false,
+          "definition": "PRIMARY KEY (version)"
+        }
+      ],
+      "postgresInsert": true,
+      "postgresSelect": true
+    },
+    "eventTriggers": [
+      {
+        "name": "issue_graphql_placeholder",
+        "tags": [
+          "DROP EXTENSION"
+        ],
+        "event": "sql_drop",
+        "enabled": "O",
+        "function": "extensions.set_graphql_placeholder()"
+      },
+      {
+        "name": "issue_pg_cron_access",
+        "tags": [
+          "CREATE EXTENSION"
+        ],
+        "event": "ddl_command_end",
+        "enabled": "O",
+        "function": "extensions.grant_pg_cron_access()"
+      },
+      {
+        "name": "issue_pg_graphql_access",
+        "tags": [
+          "CREATE EXTENSION"
+        ],
+        "event": "ddl_command_end",
+        "enabled": "O",
+        "function": "extensions.grant_pg_graphql_access()"
+      },
+      {
+        "name": "issue_pg_net_access",
+        "tags": [
+          "CREATE EXTENSION"
+        ],
+        "event": "ddl_command_end",
+        "enabled": "O",
+        "function": "extensions.grant_pg_net_access()"
+      },
+      {
+        "name": "pgrst_ddl_watch",
+        "tags": null,
+        "event": "ddl_command_end",
+        "enabled": "O",
+        "function": "extensions.pgrst_ddl_watch()"
+      },
+      {
+        "name": "pgrst_drop_watch",
+        "tags": null,
+        "event": "sql_drop",
+        "enabled": "O",
+        "function": "extensions.pgrst_drop_watch()"
+      }
+    ],
+    "ledger": [
+      {
+        "name": "operations_hardening_20260809",
+        "version": "20260809163606",
+        "idempotencyKey": null,
+        "statementCount": 1
+      },
+      {
+        "name": "security_boundary_hardening_20260810",
+        "version": "20260809164204",
+        "idempotencyKey": null,
+        "statementCount": 1
+      },
+      {
+        "name": "deprecated_rpc_lockdown_20260810",
+        "version": "20260809164442",
+        "idempotencyKey": null,
+        "statementCount": 1
+      },
+      {
+        "name": "harden_admin_delete_pin",
+        "version": "20260815082132",
+        "idempotencyKey": null,
+        "statementCount": 1
+      },
+      {
+        "name": "remove_legacy_delete_products_rpc",
+        "version": "20260815082633",
+        "idempotencyKey": null,
+        "statementCount": 1
+      },
+      {
+        "name": "map017_public_write_boundary_hardening",
+        "version": "20260824143000",
+        "idempotencyKey": "sha256:D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62",
+        "statementCount": 3
+      },
+      {
+        "name": "map017_existing_functions_and_error_reports",
+        "version": "20260909023000",
+        "idempotencyKey": "sha256:7BA3F473C3313890F57899A657CD1234FEDAFEEB43DB7465819919EF1FB71E05",
+        "statementCount": 2
+      },
+      {
+        "name": "admin_globe_direct_rpc",
+        "version": "20260921033348",
+        "idempotencyKey": null,
+        "statementCount": 1
+      },
+      {
+        "name": "map017_stock_public_grant_revocation_20260925",
+        "version": "20260925111537",
+        "idempotencyKey": null,
+        "statementCount": 1
+      },
+      {
+        "name": "order_payment_receipt_chat_20260928",
+        "version": "20260928092634",
+        "idempotencyKey": null,
+        "statementCount": 1
+      }
+    ]
+  },
+  "officialSource": {
+    "commit": "c6bbe3221b551c9310d2ff5754dce8c50b485adc",
+    "treeTool": "5d1a27",
+    "sourceTool": "1b3a22",
+    "files": [
+      "https://github.com/supabase/cli/blob/c6bbe3221b551c9310d2ff5754dce8c50b485adc/apps/cli-go/pkg/migration/history.go",
+      "https://github.com/supabase/cli/blob/c6bbe3221b551c9310d2ff5754dce8c50b485adc/apps/cli-go/pkg/migration/file.go"
+    ],
+    "convention": "INSERT(version,name,statements) with text-array parsed statements; no claim of private API, exact single-whole-source custom serialization or end-to-end deployed equivalence."
+  },
+  "directConnection": {
+    "connectionKind": "pooler",
+    "initial": {
+      "tool": "eac538",
+      "status": 0,
+      "actualFacts": {
+        "tls": {
+          "ssl": false,
+          "bits": null,
+          "version": null
+        },
+        "role": "postgres",
+        "database": "postgres",
+        "readOnly": "off",
+        "roleSuper": false,
+        "backendPid": 2199299,
+        "schemaUsage": true,
+        "sessionRole": "postgres",
+        "serverVersion": "170006",
+        "postgresInsert": true
+      },
+      "assertion": "REFUSED: PGOPTIONS default_transaction_read_only=on ignored and backend TLS false; ran SELECT only."
+    },
+    "successor": {
+      "tool": "6a991a",
+      "status": 0,
+      "explicitReadOnly": "on",
+      "clientTls": true,
+      "facts": {
+        "tls": {
+          "ssl": false,
+          "bits": null,
+          "version": null
+        },
+        "role": "postgres",
+        "database": "postgres",
+        "readOnly": "on",
+        "roleSuper": false,
+        "backendPid": 2199299,
+        "schemaUsage": true,
+        "sessionRole": "postgres",
+        "serverVersion": "170006",
+        "postgresInsert": true
+      },
+      "scope": "Explicit readonly transaction SELECT/ROLLBACK only; client TLS and backend SSL describe separate legs."
+    },
+    "limits": [
+      "No writable transaction, full-size acceptance, pooler transaction affinity, cancellation or terminal visibility proof.",
+      "Startup GUC cannot be relied on as readonly guard.",
+      "Client TLS does not prove pooler-to-backend TLS; backend pg_stat_ssl reported false.",
+      "Existing capability is not authorization."
+    ]
+  },
+  "pins": [
+    {
+      "file": ".tools/map018-controlled-ledger-20261012-01/capture.sql",
+      "bytes": 2610,
+      "sha256": "b61ba2884f68e98a332b24c102088aba30f7fd18c323b7f66039df64410e9375"
+    },
+    {
+      "file": ".tools/map018-controlled-ledger-20261012-01/cli-file.go",
+      "bytes": 8341,
+      "sha256": "560a3d2bdcc74acb3e778acc2d76552d7860d3e73de27de9a1ebb6eabe0c2bcb"
+    },
+    {
+      "file": ".tools/map018-controlled-ledger-20261012-01/cli-history.go",
+      "bytes": 3839,
+      "sha256": "9be7d7a3b22e0fb3606aa24652837a515723f0df5f2c5aebf2a0cb9261c60beb"
+    },
+    {
+      "file": ".tools/map018-controlled-ledger-20261012-01/cli-tree.json",
+      "bytes": 1197271,
+      "sha256": "131b5536828df277f1bd4c1ba9c189dfe5e27f88e47814316c696638aed0e7aa"
+    },
+    {
+      "file": ".tools/map018-controlled-ledger-20261012-01/direct-readonly-confirmed.json",
+      "bytes": 1306,
+      "sha256": "2c834ce9576be53a3b4a92f7d1ad696acdb725100b57ce2ee96c4e6aa0dbeccc"
+    },
+    {
+      "file": ".tools/map018-controlled-ledger-20261012-01/direct-readonly.sql",
+      "bytes": 729,
+      "sha256": "ffcf4848cb00e9555b74d10732276d2116c8a1cf652d80497ded4cc1d2372cb5"
+    },
+    {
+      "file": ".tools/map018-controlled-ledger-20261012-01/direct-session.json",
+      "bytes": 1333,
+      "sha256": "f766316c05c5cb493d37f7ce3e25411dde99f8c5a31add50babec7a4a827bdba"
+    },
+    {
+      "file": ".tools/map018-controlled-ledger-20261012-01/provider-capture.json",
+      "bytes": 4539,
+      "sha256": "91a59a6933ff6f4f9697726c9a69621361fa24a866018a946ad9ef730171fd28"
+    }
+  ],
+  "review": {
+    "status": "APPROVED",
+    "critical": 0,
+    "important": 0,
+    "scope": "Scoped ledger/connection observations only; no write/fullsize/affinity/cancellation/terminal qualification.",
+    "queryPinVerified": true,
+    "officialGitBlobHashesMatchPinnedTree": true,
+    "initialReadOnlyMetadata": "Historical requested readOnly:true is contradicted by actual off; assertion correctly rejected, preserve failure unchanged.",
+    "providerCalls": false
+  },
+  "remaining": "MAP-018 local strict-constructor/envelope qualification conserves full14-fragment source and2s10s/permissions, actual ledger constraints/idempotency collision and custom statement-array roundtrip; pooler/session/terminal/recovery affected behavior and independent review remain. Original APItimeout UNKNOWN/no retry gates live replacement. No direct/write/install/release permission follows.",
+  "recovery": "Preserve failed initial assertion and explicit-readonly successor/private conninfo/source captures. No provider rollback required; never overwrite receipts or expose raw credential-bearing environment. Revert only this capture/design/status if rejected."
+}

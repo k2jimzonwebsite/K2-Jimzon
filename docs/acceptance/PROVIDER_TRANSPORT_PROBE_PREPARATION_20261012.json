@@ -1,0 +1,256 @@
+{
+  "owningMap": "MAP-018",
+  "ideas": [
+    "IDEA-20261009-07",
+    "IDEA-20261009-08"
+  ],
+  "recordedAt": "2026-10-12T12:31:01.038Z",
+  "state": "exact-probe-and-cleanup-prepared-locally-qualified-reviewed-not-provider-authorized",
+  "projectRef": "pixplcjqivlfflickobf",
+  "providerReadsThisPreparation": false,
+  "providerWrites": false,
+  "providerRequestsDispatched": false,
+  "installedSupabaseConnectorReached": false,
+  "mainPromotion": false,
+  "deployment": false,
+  "ownerDecision": {
+    "coordinatedWindow": "Accepted with stated limits in session01a12ffa, 12 October 2026",
+    "sqlAuthorization": false,
+    "remainingControls": "Named coordinator, administrator/automation inventory, deferral and interval qualification before activation."
+  },
+  "sources": [
+    {
+      "file": "scripts/prepare-provider-transport-probe.mjs",
+      "bytes": 10765,
+      "sha256": "166c226263f98e2e413e7c31c57f367911cfaef7a1cb339e35312f4a7e60204b"
+    },
+    {
+      "file": "scripts/test-provider-transport-probe.mjs",
+      "bytes": 2506,
+      "sha256": "447698af3143f8355d137887f873ac302455385cfde11814748cf83801472131"
+    },
+    {
+      "file": "scripts/test-provider-transport-probe-native.mjs",
+      "bytes": 9522,
+      "sha256": "4a2c8c3930a83a93b34047c5b8e81989ad2932e11a974e72e7aaf726f00552dc"
+    }
+  ],
+  "artifactDirectory": ".tools/map018-transport-20261012-02",
+  "manifestPin": {
+    "file": ".tools/map018-transport-20261012-02/manifest.json",
+    "bytes": 3165,
+    "sha256": "18b8123f9691570e1a7eeaa2e175c64df8e3ec61402dfdd2d54a309cd3c3583b"
+  },
+  "artifacts": [
+    {
+      "file": "success.request.json",
+      "bytes": 9214478,
+      "sha256": "e0d15ec7ccf56d1b81bae7aeb9515d3185f6663d1a99eae9cebaab64bc942a80"
+    },
+    {
+      "file": "success.probe.sql",
+      "bytes": 9214373,
+      "sha256": "a418ff9b3ed7f59f88f0b21ee7e2d435f93d2feace267f5fb8fccb8381689d35"
+    },
+    {
+      "file": "success.cleanup.request.json",
+      "bytes": 5009,
+      "sha256": "1356a0b4451202929f973b571a1d6226f3fccbf86c8cdd78cb5eacdb957e741d"
+    },
+    {
+      "file": "success.cleanup.sql",
+      "bytes": 4842,
+      "sha256": "2dedd3d97d141d5469ccdc9f3b84938ff432e2f3dc386e0b0cc9676e4a74134c"
+    },
+    {
+      "file": "success.readback.sql",
+      "bytes": 928,
+      "sha256": "c32d112f9b76d6a8cf99cdd40de58a2dc0c04b8014c9bd04f38d135b55da10dc"
+    },
+    {
+      "file": "success.marker-readback.sql",
+      "bytes": 88,
+      "sha256": "88b7505e31ead6f6271f27e2b4516264eaeed643e882f2e95ba23f8f709bf00d"
+    },
+    {
+      "file": "inside_failure.request.json",
+      "bytes": 2426,
+      "sha256": "2faad7aea53c8a06ef641b975a76a16ef579f65120c1a7694c2206c56eed9959"
+    },
+    {
+      "file": "inside_failure.probe.sql",
+      "bytes": 2323,
+      "sha256": "b1a202fe18cd0cb73bf8c41a02ad1b070d6b987bb6da7d87840e89eb281bf5f6"
+    },
+    {
+      "file": "inside_failure.cleanup.request.json",
+      "bytes": 4996,
+      "sha256": "5a951a465b3f8f31621968ed8ba9adfc96ffee9801d0fb0f7951b387a4b1333d"
+    },
+    {
+      "file": "inside_failure.cleanup.sql",
+      "bytes": 4830,
+      "sha256": "a50fb7f8dafb51adb40576bd74f3f60fdfb23b6a38f9ac448e629ee22351eb7c"
+    },
+    {
+      "file": "inside_failure.readback.sql",
+      "bytes": 925,
+      "sha256": "962f5b86fc688fc561066ce4023435b62fa63e21151019812ccf7797e1a19264"
+    },
+    {
+      "file": "inside_failure.marker-readback.sql",
+      "bytes": 87,
+      "sha256": "5b5e1dbbaef85a27e3a98999cd72c3d7660349306d1f9acfa7e2462a407b049c"
+    },
+    {
+      "file": "after_commit_failure.request.json",
+      "bytes": 2454,
+      "sha256": "eb9996db464e00ea0aa9628710693e7bdc5a47111997c46941e407fbe9006178"
+    },
+    {
+      "file": "after_commit_failure.probe.sql",
+      "bytes": 2351,
+      "sha256": "d41d68849be5f13b4462bb80d2c7c91c943e271de36f723b37b4e2d4b911bddb"
+    },
+    {
+      "file": "after_commit_failure.cleanup.request.json",
+      "bytes": 4983,
+      "sha256": "63db49d25ba63602df0b6af8639a400cd3093353f2b0daaf95b6264e28e7e79e"
+    },
+    {
+      "file": "after_commit_failure.cleanup.sql",
+      "bytes": 4818,
+      "sha256": "dbc09b96c9fbf727d1f289fef698adbc8c0139a43765c49b6c3483028de1453c"
+    },
+    {
+      "file": "after_commit_failure.readback.sql",
+      "bytes": 922,
+      "sha256": "4ba1e4934cbc95cd09e2f67f44b7fbb8d82168afe2ef8756a80c56ca7b4ddb12"
+    },
+    {
+      "file": "after_commit_failure.marker-readback.sql",
+      "bytes": 86,
+      "sha256": "3334bb4cd2a98f708280f28de31270765c7b958c24251daaf9d8afe317a23d72"
+    }
+  ],
+  "contractEvidence": {
+    "redTool": "8ee38a",
+    "firstGreenTool": "3af1a9",
+    "finalGreenTool": "0503a3",
+    "command": "node --test scripts/test-provider-transport-probe.mjs",
+    "passed": 3,
+    "failed": 0
+  },
+  "nativeEvidence": {
+    "receiptPin": {
+      "file": ".tools/map018-transport-native-gfvXdz/receipt.json",
+      "bytes": 1844,
+      "sha256": "9bf4a79eafce9b82750154912ddbe4775088b72fbe83fc3fe552715b4557d886"
+    },
+    "command": "node scripts/test-provider-transport-probe-native.mjs",
+    "terminalTool": "6f68bd",
+    "exitCode": 0,
+    "results": [
+      {
+        "name": "raw envelope without same-transaction history refuses and rolls back",
+        "passed": true
+      },
+      {
+        "name": "inner exception rolls back marker and leaves no history",
+        "passed": true
+      },
+      {
+        "name": "platform-history write failure rolls back synthetic marker",
+        "passed": true
+      },
+      {
+        "name": "subtransaction history xmin is conservatively refused",
+        "passed": true
+      },
+      {
+        "name": "full-size atomic wrapper commits durable witness and exact statement pin",
+        "passed": true
+      },
+      {
+        "name": "pre-existing names refuse without changing accepted witness",
+        "passed": true
+      },
+      {
+        "name": "cleanup refuses ACL drift and preserves objects",
+        "passed": true
+      },
+      {
+        "name": "cleanup refuses extra object and preserves all marker objects",
+        "passed": true
+      },
+      {
+        "name": "exact cleanup succeeds and retains successful migration history",
+        "passed": true
+      },
+      {
+        "name": "post-commit error exposes committed marker/history in split schedule",
+        "passed": true
+      },
+      {
+        "name": "synthetic business control remains exact",
+        "passed": true
+      }
+    ],
+    "stopped": true,
+    "scope": "Synthetic ordinary PostgreSQL17.6 transaction schedules only; not actual API, captured full provider, installer or business recovery."
+  },
+  "preservedFailures": [
+    {
+      "case": ".tools/map018-transport-native-9VUS0e",
+      "reason": "Inherited captured output handles timed out; replaced with immutable output file descriptors; cluster stopped."
+    },
+    {
+      "case": ".tools/map018-transport-native-DWrMts",
+      "reason": "Sandbox loopback permission refusal10013; cluster stopped; local-only escalation used."
+    },
+    {
+      "case": ".tools/map018-transport-native-OHYe7f",
+      "reason": "Early psql refusal closed input pipe; immutable input SQL -f replaced large stdin; cluster stopped."
+    }
+  ],
+  "reviews": {
+    "skeptic": "REVISE resolved: xmin limits, durable witness, locked guarded cleanup",
+    "constraintGuardian": "APPROVED local construction only",
+    "userAdvocate": "APPROVED exact bounded preparation; provider authorization remains separate",
+    "arbiter": "APPROVED isolated qualification",
+    "codeReview": "APPROVED no Critical/Important findings; independent stopped/port check and final offline15-property byte-conservation across3variants;18case02pins and15unchangedcase01files verified"
+  },
+  "byteConservation": {
+    "archivedConstructorSha256": "c9bbb39a4bc2bd57b1b4c340ff2e443ce786ac1bfa95efcfbcd75e26784e69ae",
+    "fields": [
+      "query",
+      "doBody",
+      "body",
+      "cleanupQuery",
+      "readbackQuery"
+    ],
+    "variants": 3,
+    "exact": true,
+    "newMarkerProjection": "Prepared/source-reviewed only; exact projection not separately native-executed",
+    "cleanupJson": "Offline exact envelope wrapping previously qualified cleanup SQL"
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "startTool": "706963",
+    "terminalTool": "5a6410",
+    "exitCode": 0,
+    "adminChecks": 53,
+    "routeClassificationGaps": 0,
+    "secretScanFiles": 2269,
+    "scope": "Local development checks, mocked project/readiness contracts; no live readiness or provider qualification"
+  },
+  "limits": [
+    "Ordinary synthetic PostgreSQL17.6 schedules are not the actual Management API.",
+    "Finite controls cannot prove all platform history-writer failure modes.",
+    "Current installer classifier remains UNKNOWN; no automatic retry.",
+    "Coordinated window cannot exclude uncooperative administrators or Supabase-managed changes.",
+    "No full installer, activation, release or real-host/human acceptance follows."
+  ],
+  "recovery": "Preserve immutable cases01/02 and all failed/native receipts. No provider rollback required for preparation. Revert only these3scripts and associated current documentation if rejected; preserve all other work. Any later approved cleanup must match exact objects/witnesses and uses DROP RESTRICT in a locked transaction; unknown state stops mutation.",
+  "nextRequiredAction": "Owner review of exact bounded6request packet in PROVIDER_TRANSPORT_QUALIFICATION.md; if specifically authorized, fresh K2 identity, immediate backup/recovery and readiness0failed before dispatch; no business installer or release authorization inferred."
+}

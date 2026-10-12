@@ -1,0 +1,104 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "date": "2026-10-12",
+  "state": "actual-k2-current-before-read-only-witness-independently-approved",
+  "providerWrites": false,
+  "providerRequestsDispatched": true,
+  "actualQueryExecuted": true,
+  "scope": "Extend SAME read-only query terminal projection only; complete accepted catalog CTE remains byte-identical. Return full catalog, exact reused native77 global roles/memberships/event query, existing exported eight managed settings, and ordered stored-statement byte/hash pins reused from historical history readback. No request serialization, transaction atomicity or applied/non-applied result is inferred.",
+  "sourcePins": [
+    {
+      "file": "docs/evidence/20261009-workspace-maintenance/provider-reconciliation.sql",
+      "sha256": "a1646de7e381a0e5c4e2e7ff71e761ebf0120c5226ca9e0f43938084b27ce55e"
+    },
+    {
+      "file": "scripts/test-provider-reconciliation-preparation.mjs",
+      "sha256": "be876c850b8ff313d12296ac7136d6965a17ecc0def569f8d0b2ad7fb9e99677"
+    },
+    {
+      "file": "docs/evidence/20261004-category-shelf-life/operating-replay-package.mjs",
+      "sha256": "d932e55c67b6f8669aa7d51a2c03d408d1bac84adbb01598ad8dbc6c01a99ffa"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported77/staging/k2/full-contents.sql",
+      "sha256": "4f69ac2be65725f3b75cd45930c971afbb84e7ff287d10209446f024142a31cd"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-request-baseline-20261012-01/provider-reconciliation.sql",
+      "sha256": "c2c3d0d624a238a12d069600803ca57f45cec1592924b78600660d8385f27fab"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-request-baseline-20261012-01/provider-history-readback.sql",
+      "sha256": "e3692a936a9b0d618da39e49192ea7a8711b535246ee1105a115d31954e85c14"
+    }
+  ],
+  "focused": {
+    "command": "node scripts/test-provider-reconciliation-preparation.mjs",
+    "redTool": "0b7285",
+    "greenTool": "f7f464",
+    "passed": true,
+    "scope": "Source/projection preservation only; not PostgreSQL execution"
+  },
+  "review": {
+    "status": "APPROVED-source-only",
+    "tool": "cfc3a3",
+    "critical": 0,
+    "important": 0,
+    "verifiedSourcePins": 6
+  },
+  "remaining": "MAP-018: complete applied/non-applied/ambiguous outcome decision qualification, retaining UNKNOWN where actual transport serialization/history atomicity is unproven; actual transport/live/real-host/human gates. Repeat fresh preflight before authorized live steps; never automatically retry.",
+  "recovery": "Restore exact historical query from seven-file archive and remove only new source-conservation test; preserve readback evidence, native76/77 and original actor/body/key. No provider rollback needed.",
+  "development": {
+    "command": "npm run verify:development",
+    "startTool": "5bae4d",
+    "terminalTool": "ae7d5b",
+    "exit": 0,
+    "adminChecks": 53,
+    "routeGaps": 0
+  },
+  "identityPreflight": {
+    "tool": "54edb6",
+    "exit": 0,
+    "projectRef": "pixplcjqivlfflickobf",
+    "exactOwnerControlledEnvironment": true
+  },
+  "readOnlyRuntime": {
+    "status": "PASSED-independent-current-before-readability-comparison",
+    "tool": "d29556",
+    "receiptPin": {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/provider-reconciliation-readback-20261012-01.json",
+      "sha256": "3f5b17309a0520bb0c6b1f983c9cf5e9d174600381bca5bfa9dd57e36ae422fb"
+    },
+    "primaryAuditTool": "730647",
+    "projectObservation": {
+      "id": "pixplcjqivlfflickobf",
+      "name": "K2jimzon",
+      "region": "ap-southeast-1",
+      "status": "ACTIVE_HEALTHY",
+      "version": "17.6.1.155"
+    },
+    "observedRole": "supabase_read_only_user",
+    "serverVersionNum": "170006",
+    "tables": 88,
+    "functions": 145,
+    "globalRoles": 31,
+    "memberships": 22,
+    "eventTriggers": 6,
+    "managedSettingsReadable": 8,
+    "targetedMigrationReceipts": 0,
+    "currentCatalogExactlyMatchesNative77Before": true,
+    "currentGlobalExactlyMatchesCaptured": true,
+    "currentManagedExactlyMatchesCaptured": true,
+    "limits": "Current BEFORE state only; after/history serialization/atomicity and applied/non-applied/ambiguous decision qualification remain unverified. Installed connector not reached; only owner-controlled K2 management API observed.",
+    "httpStatus": 201
+  },
+  "providerMigrationRequestsDispatched": false,
+  "readOnlyRuntimeReview": {
+    "status": "APPROVED-current-before-readability-only",
+    "tool": "9ec6f6",
+    "critical": 0,
+    "important": 0,
+    "noProviderRequery": true
+  }
+}

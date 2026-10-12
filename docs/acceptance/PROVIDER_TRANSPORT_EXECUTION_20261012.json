@@ -1,0 +1,228 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T13:03:36.991Z",
+  "state": "authorized-first-control-qualified-full-size-timeout-unknown-further-writes-stopped",
+  "ownerAuthorization": {
+    "questionId": "call_65d6de961784425d82a1293553937def",
+    "answer": "Authorize the exact probe and guarded cleanup packet",
+    "scope": "Exact3probes and conditional guardedcleanup only; no installer/release"
+  },
+  "projectRef": "pixplcjqivlfflickobf",
+  "providerRequestsDispatched": 2,
+  "providerDatabaseEffectsObserved": false,
+  "providerWriteAttempts": true,
+  "installedSupabaseConnectorReached": false,
+  "preconditions": {
+    "identityTool": "834cdf",
+    "backupTerminal": "7e4c9d",
+    "backupId": "current-pixplcjqivlfflickobf-2026-10-12T125332320Z-b3fd71d7c8cb",
+    "encryptedSha256": "b3fd71d7c8cb68e62958aa132020a9fe49ca8f0772c1f913c370c20ee4483c08",
+    "restoreTerminal": "a36c4f",
+    "restorePassed": true,
+    "localClusterStopped": true,
+    "independentListenerAbsence": "97b6de",
+    "readinessTool": "b4977c",
+    "failed": 0,
+    "owner": 2,
+    "connector": 3,
+    "beforeTool": "8a1a65",
+    "initialNamesAbsent": true
+  },
+  "innerFailure": {
+    "dispatchTool": "880d72",
+    "httpStatus": 400,
+    "error": "K2_TRANSPORT_INSIDE_FAILURE",
+    "readbackTool": "a6c75b",
+    "schemaAbsent": true,
+    "historyAbsent": true,
+    "protectedCatalogAndAuthorityMatch": true,
+    "businessAndSequencesMatch": true
+  },
+  "fullSize": {
+    "dispatchTool": "611a7e",
+    "terminalTool": "a42dfe",
+    "bodyBytes": 9214478,
+    "bodySha256": "e0d15ec7ccf56d1b81bae7aeb9515d3185f6663d1a99eae9cebaab64bc942a80",
+    "httpResponseCaptured": false,
+    "transportError": "TimeoutError",
+    "outcome": "UNKNOWN",
+    "automaticRetryAllowed": false,
+    "readbackTool": "f862c7",
+    "schemaAbsentAtReadback": true,
+    "historyAbsentAtReadback": true,
+    "protectedCatalogAndAuthorityMatch": true,
+    "businessAndSequencesMatch": true,
+    "activityTool": "96bf14",
+    "matchingActive": 0,
+    "matchingIdleTransaction": 0,
+    "activityLimit": "Only observable matching pg_stat_activity at sampled instant; not a platform job/completion contract or proof of no future effect."
+  },
+  "tailProbeDispatched": false,
+  "cleanupDispatched": false,
+  "cleanupRequiredAtReadback": false,
+  "review": {
+    "originalFrozenSql": "Previously independently APPROVED",
+    "executionHarness": "Independent reviewer failed usage limit; primary source inspection/syntax and actual guarded read-only captures used as fallback; independent harness review remains unverified."
+  },
+  "pins": [
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_inside-after_commit_failure.json",
+      "bytes": 318,
+      "sha256": "7e5abec2a9f8e294b8a1b8de15a447ed3169ccf223096cad62c35da36f5ad323"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_inside-business.json",
+      "bytes": 21824,
+      "sha256": "15f20639fca9c6dd1bb354c96f48307c58a3c337e3e617eb19853137dcce3a16"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_inside-catalog.json",
+      "bytes": 1397818,
+      "sha256": "3d10a693b16f04774ebff967092d3bfd3ab650143d87daf3bce1793a6df0255d"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_inside-inside_failure.json",
+      "bytes": 318,
+      "sha256": "061bead315497e9f4a27907462951f0702fb00c1b89d70dfd3648dcd86d16c0d"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_inside-namespace-cleanup.json",
+      "bytes": 301,
+      "sha256": "7d6a3eac49784b42e2b9620556f6aa9bb18749ec3d6f0069be1bd290230bcd69"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_inside-snapshot.json",
+      "bytes": 2430249,
+      "sha256": "db8e372649a9808ca4d1b22d73724fe3c3b1446b723cfbc52057d4fb26eba76a"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_inside-success.json",
+      "bytes": 318,
+      "sha256": "93093eca78c17824320c1060964a7d46b7af2480769575859e759c8601881f5f"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_success-after_commit_failure.json",
+      "bytes": 318,
+      "sha256": "bf75c4c4f296f8258e4b088f661640420c5b8bb1ea4b8077e6c01c44363720c8"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_success-business.json",
+      "bytes": 21824,
+      "sha256": "57a8b510b40b14d8a2f120e4b654435c4c81c1ffec3aad817cc7cc25711de400"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_success-catalog.json",
+      "bytes": 1397818,
+      "sha256": "c790d77c21ea5c789930c50ede41ca7f3d3d6130602f114c9f5e8143d9c92579"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_success-inside_failure.json",
+      "bytes": 318,
+      "sha256": "c94b51b395203fd8c18f40739d3ce15a4d37304710b63656c03780b569d6d9f4"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_success-namespace-cleanup.json",
+      "bytes": 301,
+      "sha256": "21a138d64a27824758d88120fa76b8a62c719881cc17d1c457731070ae54888b"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_success-snapshot.json",
+      "bytes": 2430250,
+      "sha256": "852257d331ba81639b51ae3ce257233ebe8f499f620e0b51f5ddb2d3622f6bb5"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/after_success-success.json",
+      "bytes": 318,
+      "sha256": "297638442196c59c335ae635f30766105d6243c86efe78486a78e95fff76dd0f"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/before-after_commit_failure.json",
+      "bytes": 318,
+      "sha256": "f182299da35765f5be35f665b49058591eb23c4e3bf1919d380869879712037f"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/before-business.json",
+      "bytes": 21824,
+      "sha256": "e9840b292eab0fe822cdee505b164ffd4f212dc719c31310f943161d9f3479bd"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/before-catalog.json",
+      "bytes": 1397818,
+      "sha256": "d66d7c2f71c33b7ddd945952ecfb45b0f693ffc132c70ff5eed862bc82815f0a"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/before-inside_failure.json",
+      "bytes": 318,
+      "sha256": "c0e575af25bc114c618e7c4908fa50658102e070b0728e408cda71eb0fc62baf"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/before-namespace-cleanup.json",
+      "bytes": 301,
+      "sha256": "70ac9b9fee9eade42bb60bb33bde07433150117a2558fc33ec68f048ec5d9b45"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/before-snapshot.json",
+      "bytes": 2430191,
+      "sha256": "2bee7384dcc3a2b99ef792c80f723afb05f50f9ede971752e923f383926a1c66"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/before-success.json",
+      "bytes": 318,
+      "sha256": "89616460602ad3ceec7d60b5c181009b88a17b9a7c96b7299d45f06bd8997c7f"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/capture.mjs",
+      "bytes": 4549,
+      "sha256": "581051fabdcf1b590198b51c06bebefd719001573865c6935d16f33e2de81d98"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/dispatch.mjs",
+      "bytes": 4376,
+      "sha256": "c0633d263d5484ff947e20090750e74a4b4032b83759aaa69d4e3e899051cf36"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/inside_failure-dispatch-intent.json",
+      "bytes": 286,
+      "sha256": "d560b5dbd67c11c0699785e6b875d374c3ac02137c978d751af7b5d742839e42"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/inside_failure-response.json",
+      "bytes": 330,
+      "sha256": "9d6d53965383f9e5158039564e40977f1b1ac5c5ee0511478fa4d217d19e3771"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/owner-authorization.json",
+      "bytes": 373,
+      "sha256": "15c1096f139033fce13883c30469246b6ce2ff0e12aab91967b3a0526d7ea425"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/restore-result.json",
+      "bytes": 851,
+      "sha256": "511a09f0b1f4a814bedb03e31421df1c3dfb22f446eead7ff58522f0ec234e39"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/restore.mjs",
+      "bytes": 2726,
+      "sha256": "1d0cf99f1957d7c362124c06da97885cf745a9153c8962414f44629931a167ca"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/success-dispatch-intent.json",
+      "bytes": 289,
+      "sha256": "ec6d5dcb05679b88f2a771c1ce148b753aaa81124701b3877a82d19d1f50ef60"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/success-uncertain.json",
+      "bytes": 122,
+      "sha256": "260bdde5ddec0e7e406ff7967f1df60ae80d82f74ca2fbf168e49fad9de9d10e"
+    },
+    {
+      "file": ".tools/map018-provider-probes-20261012-01/timeout-activity-readback.json",
+      "bytes": 529,
+      "sha256": "a748b1cf6c559143e9eeee1853eb6cd9e1c141a62fe04cf95c1319fb7582dcaf"
+    }
+  ],
+  "scope": "Actual first-control refusal and sampled timeout reconciliation only; no complete transport qualification, size acceptance, history atomicity, installation outcome or full readiness.",
+  "recovery": "Preserve dispatch-intent/uncertain/raw readbacks and encrypted backup. Do not retry either probe, send tail or cleanup unknown objects. Read-only reconciliation must explain terminal provider outcome first; any later marker must match exact witnessed guards before the already-authorized conditional cleanup. No business installer/main/deploy approval.",
+  "nextRequiredAction": "MAP-018: investigate timed-out full-size request through read-only platform evidence; preserve UNKNOWN/no retry and obtain independent execution evidence review when available. Tested inner rollback does not close size/co-commit/all-failure gates."
+}

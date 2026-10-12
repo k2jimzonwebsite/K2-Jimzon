@@ -1,0 +1,879 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261012-01",
+  "status": "Native50 combined local Admin/Storefront recovery and complete disposable restoration independently reviewed and APPROVED",
+  "providerWrites": false,
+  "hostedAcceptance": false,
+  "preparation": {
+    "red": "44804d",
+    "green41": "2dbbe8",
+    "green42": "2d96b0",
+    "green43": "10cd33",
+    "customer": {
+      "red": "153ab2",
+      "green45": "cc7d15",
+      "green46": "5020ef",
+      "green47": "6d6cda",
+      "review": "Guardian approved final47 cleanup and same-product order assertions",
+      "green49": "293e0a"
+    },
+    "customerVisibility": {
+      "red": "752851",
+      "green48": "c9cec9",
+      "status": "Guardian approved; native48 anonymous exact SKU projection passed"
+    },
+    "schemaBaselineCorrection": {
+      "red": "5041ab",
+      "green50": "a4160b",
+      "rootCause": "Temporaryview prerequisite was incorrectly before schema capture; moved customer-only prerequisite immediately after exact original schema capture",
+      "status": "native50 passed complete schema/authority restoration"
+    }
+  },
+  "review": "Guardian independently approved native44 exact archived sources/artifacts,107fulltable pairs,sequences,originalprojection,installedschema,bothauthoritywitnesses and absence of PID/listeners",
+  "development": {
+    "initial": {
+      "command": "npm run verify:development",
+      "session": 77042,
+      "tool": "5b77a7",
+      "exit": 1,
+      "passedAdminChecks": 52,
+      "failedAdminChecks": 1,
+      "failure": "Sandbox loopback request did not reach disposable HTTP server"
+    },
+    "exactRerun": {
+      "command": "node --test tests/admin-product-master-recovery-client.test.mjs",
+      "tool": "b9b48f",
+      "exit": 0,
+      "passed": 2,
+      "permittedLoopback": true
+    },
+    "remainingPrebuild": {
+      "session": 60568,
+      "tool": "45770e",
+      "exit": 0,
+      "zeroRouteGaps": true,
+      "secretScan": true,
+      "importIntegrity": true
+    },
+    "final": {
+      "command": "npm run verify:development",
+      "session": 60933,
+      "tool": "425e75",
+      "exit": 0,
+      "adminChecks": 53,
+      "routeGaps": 0,
+      "secretFiles": 2233
+    }
+  },
+  "cases": [
+    {
+      "case": "oci-imported-media42",
+      "privateCase": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media42",
+      "session": 73976,
+      "tool": "52a5f8",
+      "exit": 1,
+      "failure": "Unhandled pending response timeout while trying to upload into already-filled primary photo slot",
+      "renderedAcceptance": false,
+      "fullOriginalRecovery": "UNVERIFIED: controller exited before recovery receipt",
+      "independentAbsentPid": 780,
+      "independentAbsentListenerPorts": [
+        54392,
+        54393,
+        54394,
+        54395,
+        54396,
+        54397
+      ],
+      "absenceEvidence": [
+        "f9b875",
+        "f2d2fc"
+      ],
+      "correction": "Remove existing primary through actual screen control; attach rejection handlers immediately to pending response observers, retaining original awaited promise and existing finally paths",
+      "reuse": "Forbidden; preserve immutable private source/input/serial evidence"
+    },
+    {
+      "case": "oci-imported-media44",
+      "privateCase": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media44",
+      "session": 96051,
+      "tool": "f5123f",
+      "exit": 0,
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Genuine owned local captured PostgreSQL/Auth/Storage and rendered imported Draft intake, stock, primary photo, Product Master applied/non-applied recovery, Live and separate Website assignment/recovery. Full offline application restoration; synthetic facts; no customer browser/provider/hosted acceptance.",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "7168",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media44\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 17700,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": true,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": true,
+        "processStopped": true,
+        "serialSha256": "b2f00cf594ac06351b67bf02b65c1632f1c2d1c48a78d59499a9e061114fc6e6"
+      },
+      "rendered": {
+        "scope": "Owned local Auth/MFA, BFF/PostgreSQL/Storage and actual Admin screens. Synthetic product, image, stock and reasons. No customer browser, provider, hosted or human acceptance.",
+        "checks": [
+          "rendered_primary_upload_assignment_and_anonymous_normalized_bytes",
+          "rendered_lost_after_real_commit_reload_literal_actor_body_key_replay",
+          "rendered_proven_non_applied_exact_recheck_current_read_blank_reason_fresh_key",
+          "rendered_independent_live_publication",
+          "rendered_website_lost_after_commit_reload_exact_replay_current_assignment"
+        ],
+        "writes": [
+          {
+            "body": "{\"action\":\"update\",\"payload\":{\"sku\":\"K2-SKU-001001\",\"patch\":{\"name\":\"Synthetic pantry bcbeedbf-93ae-46ca-b661-c51411c886bf\",\"short\":null,\"barcode\":null,\"subcategory\":null,\"country_of_origin\":\"Italy\",\"origin\":\"Italy\",\"net_weight\":null,\"package_type\":null,\"size\":null,\"description\":\"Staff accepted correction\",\"why_buy\":\"\",\"why_rare\":null,\"usage_instructions\":\"\",\"storage_instructions\":\"\",\"ingredients\":\"Synthetic label ingredients\",\"allergens\":\"\",\"finished_product_details\":\"\",\"pairings\":[],\"cost_price\":0,\"srp\":100,\"wholesale_price\":0,\"dealer_price\":0,\"reorder_level\":0,\"slug\":null,\"seo_keywords\":[],\"is_featured\":false,\"is_human_reviewed\":true,\"product_video_url\":null,\"internal_notes\":\"Explicit synthetic CSV provenance\"},\"expectedUpdatedAt\":\"2026-10-12T05:11:26.627174+00:00\",\"reason\":\"Explicit synthetic human review after photo approval\"}}",
+            "key": "3c301590-d754-46c1-b0b1-13a140275a17",
+            "actor": "e29d5132-9d98-46e2-86d2-32dd54f899fb"
+          },
+          {
+            "body": "{\"action\":\"update\",\"payload\":{\"sku\":\"K2-SKU-001001\",\"patch\":{\"name\":\"Synthetic pantry bcbeedbf-93ae-46ca-b661-c51411c886bf\",\"short\":null,\"barcode\":null,\"subcategory\":null,\"country_of_origin\":\"Italy\",\"origin\":\"Italy\",\"net_weight\":null,\"package_type\":null,\"size\":null,\"description\":\"Staff accepted correction\",\"why_buy\":\"\",\"why_rare\":null,\"usage_instructions\":\"\",\"storage_instructions\":\"\",\"ingredients\":\"Synthetic label ingredients\",\"allergens\":\"\",\"finished_product_details\":\"\",\"pairings\":[],\"cost_price\":0,\"srp\":100,\"wholesale_price\":0,\"dealer_price\":0,\"reorder_level\":0,\"slug\":null,\"seo_keywords\":[],\"is_featured\":false,\"is_human_reviewed\":true,\"product_video_url\":null,\"internal_notes\":\"Explicit synthetic CSV provenance\"},\"expectedUpdatedAt\":\"2026-10-12T05:11:26.627174+00:00\",\"reason\":\"Explicit synthetic human review after photo approval\"}}",
+            "key": "3c301590-d754-46c1-b0b1-13a140275a17",
+            "actor": "e29d5132-9d98-46e2-86d2-32dd54f899fb"
+          },
+          {
+            "body": "{\"action\":\"update\",\"payload\":{\"sku\":\"K2-SKU-001001\",\"patch\":{\"name\":\"Synthetic pantry bcbeedbf-93ae-46ca-b661-c51411c886bf\",\"short\":null,\"barcode\":null,\"subcategory\":null,\"country_of_origin\":\"Italy\",\"origin\":\"Italy\",\"net_weight\":null,\"package_type\":null,\"size\":null,\"description\":\"Staff accepted correction\",\"why_buy\":\"\",\"why_rare\":null,\"usage_instructions\":\"\",\"storage_instructions\":\"\",\"ingredients\":\"Synthetic label ingredients\",\"allergens\":\"\",\"finished_product_details\":\"\",\"pairings\":[],\"cost_price\":0,\"srp\":110,\"wholesale_price\":0,\"dealer_price\":0,\"reorder_level\":0,\"slug\":null,\"seo_keywords\":[],\"is_featured\":false,\"is_human_reviewed\":false,\"product_video_url\":null,\"internal_notes\":\"Explicit synthetic CSV provenance\"},\"expectedUpdatedAt\":\"2026-10-12T05:11:27.630382+00:00\",\"reason\":\"Explicit synthetic change lost before server dispatch\"}}",
+            "key": "9d9cbc26-ff06-4a35-823d-5394fd9b85ba",
+            "actor": "e29d5132-9d98-46e2-86d2-32dd54f899fb"
+          },
+          {
+            "body": "{\"action\":\"update\",\"payload\":{\"sku\":\"K2-SKU-001001\",\"patch\":{\"name\":\"Synthetic pantry bcbeedbf-93ae-46ca-b661-c51411c886bf\",\"short\":null,\"barcode\":null,\"subcategory\":null,\"country_of_origin\":\"Italy\",\"origin\":\"Italy\",\"net_weight\":null,\"package_type\":null,\"size\":null,\"description\":\"Staff accepted correction\",\"why_buy\":\"\",\"why_rare\":null,\"usage_instructions\":\"\",\"storage_instructions\":\"\",\"ingredients\":\"Synthetic label ingredients\",\"allergens\":\"\",\"finished_product_details\":\"\",\"pairings\":[],\"cost_price\":0,\"srp\":110,\"wholesale_price\":0,\"dealer_price\":0,\"reorder_level\":0,\"slug\":null,\"seo_keywords\":[],\"is_featured\":false,\"is_human_reviewed\":false,\"product_video_url\":null,\"internal_notes\":\"Explicit synthetic CSV provenance\"},\"expectedUpdatedAt\":\"2026-10-12T05:11:27.630382+00:00\",\"reason\":\"Explicit synthetic change lost before server dispatch\"}}",
+            "key": "9d9cbc26-ff06-4a35-823d-5394fd9b85ba",
+            "actor": "e29d5132-9d98-46e2-86d2-32dd54f899fb"
+          },
+          {
+            "body": "{\"action\":\"update\",\"payload\":{\"sku\":\"K2-SKU-001001\",\"patch\":{\"name\":\"Synthetic pantry bcbeedbf-93ae-46ca-b661-c51411c886bf\",\"short\":null,\"barcode\":null,\"subcategory\":null,\"country_of_origin\":\"Italy\",\"origin\":\"Italy\",\"net_weight\":null,\"package_type\":null,\"size\":null,\"description\":\"Staff accepted correction\",\"why_buy\":\"\",\"why_rare\":null,\"usage_instructions\":\"\",\"storage_instructions\":\"\",\"ingredients\":\"Synthetic label ingredients\",\"allergens\":\"\",\"finished_product_details\":\"\",\"pairings\":[],\"cost_price\":0,\"srp\":110,\"wholesale_price\":0,\"dealer_price\":0,\"reorder_level\":0,\"slug\":null,\"seo_keywords\":[],\"is_featured\":false,\"is_human_reviewed\":false,\"product_video_url\":null,\"internal_notes\":\"Explicit synthetic CSV provenance\"},\"expectedUpdatedAt\":\"2026-10-12T05:11:27.630382+00:00\",\"reason\":\"Explicit synthetic change lost before server dispatch\"}}",
+            "key": "9d9cbc26-ff06-4a35-823d-5394fd9b85ba",
+            "actor": "e29d5132-9d98-46e2-86d2-32dd54f899fb"
+          },
+          {
+            "body": "{\"action\":\"website_listing_set\",\"sku\":\"K2-SKU-001001\",\"assigned\":true,\"expectedUpdatedAt\":null,\"reason\":\"Explicit synthetic independent Website assignment\"}",
+            "key": "0ba6267a-dd61-4797-9b22-926ec014350d",
+            "actor": "e29d5132-9d98-46e2-86d2-32dd54f899fb"
+          },
+          {
+            "body": "{\"action\":\"website_listing_set\",\"sku\":\"K2-SKU-001001\",\"assigned\":true,\"expectedUpdatedAt\":null,\"reason\":\"Explicit synthetic independent Website assignment\"}",
+            "key": "0ba6267a-dd61-4797-9b22-926ec014350d",
+            "actor": "e29d5132-9d98-46e2-86d2-32dd54f899fb"
+          }
+        ],
+        "stage": "complete",
+        "lostCommittedReceipt": {
+          "ok": true,
+          "result": {
+            "listing": {
+              "id": "5f91ecf5-0d0d-4f48-97cc-42da7e1d3537",
+              "sku": "K2-SKU-001001",
+              "assigned": true,
+              "updatedAt": "2026-10-12T05:11:33.003144+00:00"
+            }
+          }
+        },
+        "passed": true
+      },
+      "intakeChecks": [
+        "real_password_mfa_http_only_session",
+        "actual_phone_first_inventory_and_under_review_publication",
+        "actual_imported_selection_three_uploads_manual_review_phone_save"
+      ],
+      "intakePassed": true,
+      "publicMedia": {
+        "url": "https://127.0.0.1:54395/storage/v1/object/public/product-images/e29d5132-9d98-46e2-86d2-32dd54f899fb/product-media/f1a15657-5a2b-407f-88b3-9529e9df7bf9-e511005c7a59f146.png",
+        "sha256": "e511005c7a59f146f409b1e35064be9cd8dcd99814f0ea5b2255dff9b458a1e0",
+        "browserAssigned": true,
+        "anonymousBytes": true,
+        "disposableCleanup": true,
+        "cleanupNotFound": {
+          "httpStatus": 400,
+          "storageStatus": 404
+        }
+      },
+      "importedProduct": {
+        "id": "c6089112-6ecf-4114-b024-68c88acb0a22",
+        "sku": "K2-SKU-001001",
+        "catalogId": "dc684747-08d4-4333-8faf-fa36617863e8",
+        "baselineVersion": "1",
+        "importedDraft": true,
+        "zeroBatches": true,
+        "syntheticMediaUrl": "https://example.invalid/imported-supplied.jpg",
+        "reviewRecordVersion": "2",
+        "recordVersionAfterStockAndPublication": "9",
+        "reviewedOriginalIdentity": true,
+        "rejectedIngredientsPreserved": true,
+        "reviewReplay": false,
+        "canonicalStock": 6,
+        "stockReplay": false,
+        "liveOriginalIdentity": true,
+        "websiteListing": {
+          "sku": "K2-SKU-001001",
+          "status": "Active",
+          "channel_source": "website"
+        },
+        "websiteReplay": true
+      },
+      "fullOriginalRecovery": {
+        "rows": true,
+        "sequences": true,
+        "rowPairs": 107
+      },
+      "independentHost": {
+        "pid": 17700,
+        "absent": true,
+        "ports": [
+          54392,
+          54393,
+          54394,
+          54395,
+          54396,
+          54397
+        ],
+        "tool": "5d0953"
+      },
+      "sourcePins": {
+        "scripts/prepare-imported-media-fixture.mjs": "d6674044f524949c7d0f661deecaa99b1912dedaf09bdf777fed478a3172f192",
+        "scripts/imported-product-workflow-probe.inc.mjs": "82c75792ec1cfe74609aeade26ac4c5951023edb8d12438477fdf1e7d18ee6ce",
+        "scripts/fixture-admin-http-body.mjs": "e178ac738b6a972ff02c61e2245f598af2bae57c09e2a636bb07e992858cdd0f",
+        "scripts/storage-runtime-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+        "server/admin-bff/product-intake.js": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37",
+        "scripts/imported-intake-evidence-probe.inc.mjs": "4e84f4350f0722831909f4eaba5912c20269d14d39710a501f218f12f612ab9f",
+        "server/admin-bff/catalog-spreadsheet.js": "48463a6d90b7af0d535034ff82182c08d728911a23bf6cae423ffa490c827d62",
+        "server/admin-bff/product-master.js": "465c3e5d185f703c8451b6f3d53382c2dda99f2bf632aac43e7bff0cc19cb557",
+        "server/admin-bff/channels.js": "b23b53652bba21588a401fa5c6fa5d6ef8ce210191fa26ed658ed73a4d0af861",
+        "server/admin-bff/product-media.js": "9eda473df524a8a06cc003873e88d4b0e4607f0c4d651844791fd4dbbbac7d72",
+        "server/admin-bff/references.js": "fc402debb63588e533c08c8da21147e73109d58cc37673e86c6d2760df445684",
+        "scripts/reference-catalog-contract.mjs": "8acf5671543000e966d0228e595ee5d22c898e2d92fda8d06e810d6e0e52631b",
+        "scripts/imported-intake-browser-probe.inc.mjs": "90ced24652e5470e7754b142deb6b3b5189d689d63156d37c09fb75905f5cb75",
+        "src/views/admin/ProductIntakeSessionModal.jsx": "eefb4b5362aa1e9279108fba0077deeb89337c3ca21e4f957fc8f7578568e80a",
+        "src/views/admin/InventoryGrid.jsx": "6827f2786547652a0d0a0f36ec46c5d5a75ec035599bae475145600ee52ab895",
+        "src/services/productIntakeService.js": "d44cda86d09ccc891c64363cb783131d3b56cf0a7892fb42d0b4c44cf43587b8",
+        "scripts/rendered-listing-browser-probe.inc.mjs": "8c9db447f4225f2d470e9af58a0dab87df077202c1669b0f487786c87d95491a",
+        "scripts/test-rendered-listing-mode.mjs": "75cfa864c2137c34be9dc00279734f6588d171a150fbb8de6dceaf423295ad41",
+        "src/hooks/useSavedAdminDecisionRecovery.js": "e176b61ce7d19454bb36a453615b6e2432c0f4fcb6e94ee86830b06f80f754a0",
+        "src/hooks/useProductMasterRecovery.js": "08452a22a56b15951f707f868b0c6231b1786fe439951539b49c7429085525b9",
+        "src/hooks/useWebsiteAssignmentRecovery.js": "1918dba5f9c21c14b30335e11d25fe715eea0416acc53953c845c5e45f72cbd4",
+        "src/lib/savedAdminCommandRecovery.js": "e0da2c7df37547ee56ccace2e7e81737f04433088ed0e4e38ec5a408ef3f8899",
+        "src/lib/productMasterCommandRecovery.js": "2601d405d2ca6d2d9a08b72bf4e71e93b17f288d8ca98c1689e68b230f155beb",
+        "src/lib/websiteAssignmentRecovery.js": "f99bc6553e78dcce6d43d40a1aaa415969b836b84bbe54133eaa98eb6d913277",
+        "src/views/admin/WebsiteAssignmentDialog.jsx": "f76a7dc649cf9aefc5771b1a8e0d3c1a318b7da2be1f98e62548454cadd550f6",
+        "src/views/admin/ProductMasterRecovery.jsx": "33735f5914232b40aa6a965e68499db32e181ae28e2363cf482b4c179841c1d3",
+        "src/views/admin/PhotoManagerModal.jsx": "4e93eb55799e3baa6fab91f3a584ad5761de3e52994e7f567b186ad9ab376613",
+        "src/components/ui/ImageUploadDropzone.jsx": "20159519b9f834e4278b150be3eaaab42ca3b50e3933b29b8f7efe074096624a",
+        "src/services/adminBffService.js": "f97c682401dea1743ec433b6291e07a3ff35a9bfe7f9707a5e9665d9bd3c426e"
+      },
+      "artifactPins": [
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media44/executed-source.mjs",
+          "sha256": "e23fa70dc3c648e962ff6fb2d19b6ef391e093036faf1fa047b40315130f331e"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media44/executed-derivation.mjs",
+          "sha256": "d6674044f524949c7d0f661deecaa99b1912dedaf09bdf777fed478a3172f192"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media44/bff-helper.mjs",
+          "sha256": "b3995ca4ad9dcb7b66af9679b76b55685c845148def1a14a75c5df744382b005"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media44/host-driver.mjs",
+          "sha256": "bcdbce12948a389e814671475fd85db2c7994e9f8075d1e6aaf95aa94e0cc2ca"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media44/host-driver-result.json",
+          "sha256": "f4846095d2974b6863d5e875e4295d6839144efccededaa183bfa648320aaba9"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media44/execution01/result.json",
+          "sha256": "0fcfd17ebe2e2b940b1fb4c4ff1af4e8e949b772628038d59609bcf40d1064d2"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media44/execution01/serial.log",
+          "sha256": "b2f00cf594ac06351b67bf02b65c1632f1c2d1c48a78d59499a9e061114fc6e6"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media44/execution01/launch.json",
+          "sha256": "504c566acd8a524ab845efc8cca8ddae073df5bb903ae3a5a3241e65a48b8255"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media44/listing-recovery-375.png",
+          "sha256": "a68a66fd275c5716bece7047efab9929e5fd6e9e417cc1323153a6a4c162e254"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media44/listing-recovery-1440.png",
+          "sha256": "368504d24b7a960c7ba213d27241c4766bf09d568fa12ca27bc3ed6b724a9a43"
+        }
+      ]
+    },
+    {
+      "case": "oci-imported-media47",
+      "privateCase": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media47",
+      "session": 98498,
+      "tool": "830b49",
+      "exit": 1,
+      "native": {
+        "owningMap": "MAP-023/018",
+        "scope": "Genuine owned local captured PostgreSQL/Auth/Storage and rendered imported Draft intake, stock, primary photo, Product Master applied/non-applied recovery, Live and separate Website assignment/recovery. Full offline application restoration; synthetic facts; separate local Storefront catalog/cart/pickup quote/order recovery; no provider/hosted/human/payment acceptance.",
+        "providerWrites": false,
+        "arguments": [
+          "-L",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+          "-machine",
+          "pc",
+          "-accel",
+          "whpx",
+          "-m",
+          "7168",
+          "-smp",
+          "1",
+          "-display",
+          "none",
+          "-serial",
+          "stdio",
+          "-monitor",
+          "none",
+          "-nic",
+          "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996",
+          "-no-reboot",
+          "-kernel",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+          "-initrd",
+          "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media47\\initramfs.cpio",
+          "-append",
+          "console=ttyS0 rdinit=/bin/sh loglevel=3"
+        ],
+        "pid": 19436,
+        "exit": 0,
+        "timedOut": false,
+        "guestSuccess": false,
+        "serverModuleProbe": true,
+        "postgresVersion": "17.6",
+        "moduleGucs": false,
+        "processStopped": true,
+        "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+        "serialSha256": "51cc745ecef30940155ca0e8c3f52fee0c0c4968c0b3b90586252ea672cdd8c8"
+      },
+      "customer": {
+        "scope": "Actual separate local Storefront catalog/product/cart/pickup quote and guest order recovery on same canonical Admin product. Synthetic contact and stock, public test bot widget. No real payment, fulfillment, provider, hosted or human acceptance.",
+        "stage": "product",
+        "checks": [],
+        "workerPid": 21300,
+        "passed": false,
+        "failure": {
+          "name": "Error",
+          "message": "expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Synthetic pantry 206f9337-eb3a-46a5-9cff-d57b28765468', exact: true, level: 1 })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Synthetic pantry 206f9337-eb3a-46a5-9cff-d57b28765468', exact: true, level: 1 }) with timeout 5000ms\n  - waiting for getByRole('heading', { name: 'Synthetic pantry 206f9337-eb3a-46a5-9cff-d57b28765468', exact: true, level: 1 })\n"
+        },
+        "failureText": "Italy-sourced goods, fulfilled in Manila · Final stock and delivery are confirmed by K2 staff\nK2 Jimzon\nDIRECT ITALIAN IMPORTS\nSearch the catalog\n\nCATALOG\n\nProduct unavailable\n\nThis product is not in the current published catalog. It may be unavailable, unpublished, or linked from an older page.\n\nBrowse available products\nAsk K2 staff\nChat with K2\nK2 Jimzon\nDIRECT ITALIAN IMPORTS\n\nItalian goods for homes and businesses in the Philippines. Shop what is in stock or ask us to source something from Italy.\n\nWEBSITE · SHOPEE · TIKTOK SHOP · LAZADA · PASABUY\n\nShop\nPantry & baking\nSnacks & sweets\nCoffee & beverages\nBath & body\nSkin care\nServices\nRequest from Italy\nWholesale orders\nBrowse products\nReview your basket\nContact\nContact us\nEmail K2 Jimzon\nMessenger · @k2jimzon\nShopee · k2jimzononlineshop\nManila, Philippines\nFind our shops\n\nThese links open our marketplace shops. Stock and messages there stay in each marketplace until a connector is approved.\n\nPasabuy Italy by K2\n\nLazada\nShopee\nTikTok\n\nJworldbasket\n\nLazada\nShopee\nTikTok\nPrivacy & Data\nTerms of Service\nReturns & Replacements\n\nSubmitting a Website or Pasabuy request does not collect payment. K2 staff confirms availability, delivery, and payment instructions directly.\n\n© 2026 K2 Jimzon · Direct Italian imports\n\nDevelopment preview: fallback products and reviews are illustrative. Production displays database-backed published records.\n\nHome\nShop\nPasabuy\nWholesale\nContact",
+        "workerStopped": true,
+        "workerExit": 0,
+        "workerSignal": null
+      },
+      "adminPassed": true,
+      "fullOriginalRecovery": {
+        "rowsMarker": true,
+        "sequencesMarker": true,
+        "fullHashPairs": 107,
+        "matching": true
+      },
+      "independentHost": {
+        "pids": [
+          19436,
+          21300
+        ],
+        "absent": true,
+        "ports": [
+          54392,
+          54393,
+          54394,
+          54395,
+          54396,
+          54397,
+          54398
+        ],
+        "tool": "a0b440"
+      },
+      "rootCause": "Captured admitted fixture lacks prepared required public.v_storefront_visible_skus; existing prepared exact view reused as guarded temporary prerequisite, no UI defect or provider observation inferred",
+      "sourcePins": {
+        "scripts/prepare-imported-media-fixture.mjs": "7aa9e08cb88eb3cdf00a5a3328666ca719453710e1ae107d802117d81c1e961e",
+        "scripts/imported-product-workflow-probe.inc.mjs": "6d32a7b6b7853b921ff3b516377299d3df275593b78a54dd60bf76acac3c5bc2",
+        "scripts/fixture-admin-http-body.mjs": "e178ac738b6a972ff02c61e2245f598af2bae57c09e2a636bb07e992858cdd0f",
+        "scripts/storage-runtime-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+        "server/admin-bff/product-intake.js": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37",
+        "scripts/imported-intake-evidence-probe.inc.mjs": "4e84f4350f0722831909f4eaba5912c20269d14d39710a501f218f12f612ab9f",
+        "server/admin-bff/catalog-spreadsheet.js": "48463a6d90b7af0d535034ff82182c08d728911a23bf6cae423ffa490c827d62",
+        "server/admin-bff/product-master.js": "465c3e5d185f703c8451b6f3d53382c2dda99f2bf632aac43e7bff0cc19cb557",
+        "server/admin-bff/channels.js": "b23b53652bba21588a401fa5c6fa5d6ef8ce210191fa26ed658ed73a4d0af861",
+        "server/admin-bff/product-media.js": "9eda473df524a8a06cc003873e88d4b0e4607f0c4d651844791fd4dbbbac7d72",
+        "server/admin-bff/references.js": "fc402debb63588e533c08c8da21147e73109d58cc37673e86c6d2760df445684",
+        "scripts/reference-catalog-contract.mjs": "8acf5671543000e966d0228e595ee5d22c898e2d92fda8d06e810d6e0e52631b",
+        "scripts/imported-intake-browser-probe.inc.mjs": "90ced24652e5470e7754b142deb6b3b5189d689d63156d37c09fb75905f5cb75",
+        "src/views/admin/ProductIntakeSessionModal.jsx": "eefb4b5362aa1e9279108fba0077deeb89337c3ca21e4f957fc8f7578568e80a",
+        "src/views/admin/InventoryGrid.jsx": "6827f2786547652a0d0a0f36ec46c5d5a75ec035599bae475145600ee52ab895",
+        "src/services/productIntakeService.js": "d44cda86d09ccc891c64363cb783131d3b56cf0a7892fb42d0b4c44cf43587b8",
+        "scripts/rendered-listing-browser-probe.inc.mjs": "8c9db447f4225f2d470e9af58a0dab87df077202c1669b0f487786c87d95491a",
+        "scripts/test-rendered-listing-mode.mjs": "e38e0440fc8efc18a0e59523df87d8d835eee97a5ad9ecf05c087b9489a415fa",
+        "src/hooks/useSavedAdminDecisionRecovery.js": "e176b61ce7d19454bb36a453615b6e2432c0f4fcb6e94ee86830b06f80f754a0",
+        "src/hooks/useProductMasterRecovery.js": "08452a22a56b15951f707f868b0c6231b1786fe439951539b49c7429085525b9",
+        "src/hooks/useWebsiteAssignmentRecovery.js": "1918dba5f9c21c14b30335e11d25fe715eea0416acc53953c845c5e45f72cbd4",
+        "src/lib/savedAdminCommandRecovery.js": "e0da2c7df37547ee56ccace2e7e81737f04433088ed0e4e38ec5a408ef3f8899",
+        "src/lib/productMasterCommandRecovery.js": "2601d405d2ca6d2d9a08b72bf4e71e93b17f288d8ca98c1689e68b230f155beb",
+        "src/lib/websiteAssignmentRecovery.js": "f99bc6553e78dcce6d43d40a1aaa415969b836b84bbe54133eaa98eb6d913277",
+        "src/views/admin/WebsiteAssignmentDialog.jsx": "f76a7dc649cf9aefc5771b1a8e0d3c1a318b7da2be1f98e62548454cadd550f6",
+        "src/views/admin/ProductMasterRecovery.jsx": "33735f5914232b40aa6a965e68499db32e181ae28e2363cf482b4c179841c1d3",
+        "src/views/admin/PhotoManagerModal.jsx": "4e93eb55799e3baa6fab91f3a584ad5761de3e52994e7f567b186ad9ab376613",
+        "src/components/ui/ImageUploadDropzone.jsx": "20159519b9f834e4278b150be3eaaab42ca3b50e3933b29b8f7efe074096624a",
+        "src/services/adminBffService.js": "f97c682401dea1743ec433b6291e07a3ff35a9bfe7f9707a5e9665d9bd3c426e",
+        "scripts/storefront-fixture-worker.mjs": "80bf42e1572c0cc5b0d41488820b578b78da1cdaa2e02d18836dc93408f30814",
+        "scripts/rendered-customer-browser-probe.inc.mjs": "9943976485d347b9738b50d3d814c65f2e3570b036ed11d5ffcce978d294cd77",
+        "api/storefront/index.js": "4ee180cab32cebf5d38f1c38d642266112613b5e0cea626446e9eeb43e889b15",
+        "server/storefront-bff/router.js": "4009362f65f5b0c086ac7467fa2441df1ce6e9e410136378f8aa6c77e847758d",
+        "server/storefront-bff/security.js": "0ab0526f2cac681bdc425fc8249b6d82161cb3dcd4734d9b745cfb64fa8ad663",
+        "server/storefront-bff/supabase.js": "739fd2853bf30b0bbe780099063450a5c1527202a5dca5aca189a4b3a276e94e",
+        "prepared-api/storefront/order.js": "eefdb744330a837ee19333979fecfe9a61aab2c78dd9e8bdb08adafeb173d9bf",
+        "prepared-api/storefront/order/status.js": "46070cc9af373ca53d3bbd1db0a9839507414423f5e2cd8efe303a2327a6d2fe",
+        "prepared-api/storefront/delivery/quote.js": "62c6832f10166e29d655010109ea40b077d752fdd45b613e5124976614ea20ee",
+        "src/context/StoreContext.jsx": "3481201eac73737ab9659708dec456c643aa0a2b69bbfa7134d8fc8dee501c91",
+        "src/views/MasterProduct.jsx": "cdadc6dfdb1137ba6a9c8e2cdc692877b2f1919117e530313efd429fe530c552",
+        "src/views/Checkout.jsx": "4d1b5f46576abf829c4ec5d78b833b0aa267305f3a7ab63cee5bff45c4da994f",
+        "src/views/Confirmation.jsx": "5f9e3cde32df4d11e10900fe7db3f863989dacaf0ca8a9a50edf16d80bd6fd4a",
+        "src/components/DeliveryEstimate.jsx": "30eb58e5524eb6b832fea2c6493f5a33941f80d79157c979e7907c998add4e1a",
+        "src/services/guestCommerceService.js": "3e5725acb2c4456668dc85d16bd4e7a6fa5126cb82ef58cef2e1c852ec881113",
+        "src/services/checkoutRecovery.js": "779160d243c6937d2aea79385df3125b52407357b96a40f8c11933cc473d6663"
+      },
+      "artifactPins": [
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media47/executed-source.mjs",
+          "sha256": "938b4162c0f20e82a57562a998e0f2057f7bb73b9d1119acb66bb4e797793102"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media47/host-driver-result.json",
+          "sha256": "ba22b27c9333536b5bb86f930106da098bc78673d14429bcff998a263c2f4c2f"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media47/execution01/result.json",
+          "sha256": "990ee4294d3e4d04a1428f545490afd89cf1a6a4eeefa9bb96c8a97170c74ee8"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media47/execution01/serial.log",
+          "sha256": "51cc745ecef30940155ca0e8c3f52fee0c0c4968c0b3b90586252ea672cdd8c8"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media47/customer-failure.png",
+          "sha256": "3c80cea286b13df5243a7575b3b8b018b80815101fa7d7a057595e26bdcc56cd"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media47/storefront-worker.log",
+          "sha256": "d06bb8e93caeadd8c39ef77a813a2c3ea604c10dac265badcf8e72d40b01c80d"
+        }
+      ]
+    },
+    {
+      "case": "oci-imported-media48",
+      "controllerTool": "0c8a41",
+      "exit": 1,
+      "customerStage": "customer_order_readback",
+      "failure": "Test compared canonical UUID to receipt.id; established public receipt contract intentionally has no private ID. Exact retry and confirmation reached, but full customer acceptance not claimed.",
+      "restoration": {
+        "tablePairs": 107,
+        "matchingPairs": 107,
+        "sequenceMarker": true,
+        "rowMarker": true,
+        "schema": "FAILED or unverified at cmp; original-row projection matches; finalschema hash/secondauthority not reached"
+      },
+      "independentStopped": {
+        "qemuPid": 12148,
+        "workerPid": 8652,
+        "ports": [
+          54392,
+          54393,
+          54394,
+          54395,
+          54396,
+          54397,
+          54398
+        ],
+        "tool": "97f545"
+      },
+      "artifactPins": [
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media48/host-driver-result.json",
+          "sha256": "4ed8c7319e64b55b8eb2d80d29c664c50389fc6ee750c7de56ad82a0e8ef613f"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media48/execution01/result.json",
+          "sha256": "b275e36443c4bff09f73d4ba0312ccc84a7c142fac966717643af4bca6623622"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media48/execution01/serial.log",
+          "sha256": "e6ad630f8cf0ec2699cd27fe04f8996b6e1a0f755dc548cc9b0f1324f3c22dd1"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media48/customer-failure.png",
+          "sha256": "4fc5cf746d76b8e68ff58080249cf2237ac3757a692b90bab8f396dbe85be98e"
+        }
+      ]
+    },
+    {
+      "case": "oci-imported-media49",
+      "controllerTool": "0e42bd",
+      "exit": 1,
+      "customer": {
+        "scope": "Actual separate local Storefront catalog/product/cart/pickup quote and guest order recovery on same canonical Admin product. Synthetic contact and stock, public test bot widget. No real payment, fulfillment, provider, hosted or human acceptance.",
+        "stage": "complete",
+        "checks": [
+          "actual_anonymous_narrow_website_projection_exact_same_sku",
+          "anonymous_same_sku_name_price_stock_and_owned_image_rendered",
+          "actual_pickup_quote_acceptance_and_guest_order_lost_after_commit_reload_same_payload_key_receipt_one_hold"
+        ],
+        "workerPid": 6424,
+        "receipt": {
+          "publicReference": "WEB-207021E43D",
+          "totalAmount": 100,
+          "idempotencyKey": "60ff3c90-0917-44ce-bcb2-7efc4dc1b25b",
+          "canonicalOrders": 1,
+          "physicalQuantity": 6,
+          "reservedQuantity": 1
+        },
+        "passed": true,
+        "workerStopped": true,
+        "workerExit": 0,
+        "workerSignal": null
+      },
+      "restoration": "All107 table pairs/sequences/original projection match; schema conservation FAILED because temporaryview was captured before original schema baseline and dropped on recovery. Final schema hashes/secondauthority not reached.",
+      "independentStopped": {
+        "qemuPid": 21480,
+        "workerPid": 6424,
+        "ports": [
+          54392,
+          54393,
+          54394,
+          54395,
+          54396,
+          54397,
+          54398
+        ],
+        "tool": "1f16ff"
+      },
+      "artifactPins": [
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media49/host-driver-result.json",
+          "sha256": "e1b08972ee32a206ce42bc1444a863e6ca64a4c40ee8f61a22df53b252d51e45"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media49/execution01/result.json",
+          "sha256": "840e0898eac42f66feb23825b9e0310322f4134a6c91115510f5102438220fcf"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media49/execution01/serial.log",
+          "sha256": "0d939154464a4e6d0f11227d3f7d6938935f26b37361d36183e8e28102de2032"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media49/customer-product-375.png",
+          "sha256": "cfcc4acd1a2ec3e8cc604415448b69d25594d39236f77f1ebf04250a07dc699f"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media49/customer-checkout-375.png",
+          "sha256": "877db10b525eb94f756bff10499ce9232c0cd6f6029833102fcc413437f6bee4"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media49/customer-confirmation-375.png",
+          "sha256": "fd4816ad0618c461108c17855679a72e23f1f62d955ab223d53a0920bc57066e"
+        }
+      ]
+    },
+    {
+      "case": "oci-imported-media50",
+      "controllerTool": "6e6015",
+      "exit": 0,
+      "providerWrites": false,
+      "customer": {
+        "scope": "Actual separate local Storefront catalog/product/cart/pickup quote and guest order recovery on same canonical Admin product. Synthetic contact and stock, public test bot widget. No real payment, fulfillment, provider, hosted or human acceptance.",
+        "stage": "complete",
+        "checks": [
+          "actual_anonymous_narrow_website_projection_exact_same_sku",
+          "anonymous_same_sku_name_price_stock_and_owned_image_rendered",
+          "actual_pickup_quote_acceptance_and_guest_order_lost_after_commit_reload_same_payload_key_receipt_one_hold"
+        ],
+        "workerPid": 6424,
+        "receipt": {
+          "publicReference": "WEB-D26890D706",
+          "totalAmount": 100,
+          "idempotencyKey": "676baf82-68e1-404e-952b-a879c850b1fe",
+          "canonicalOrders": 1,
+          "physicalQuantity": 6,
+          "reservedQuantity": 1
+        },
+        "passed": true,
+        "workerStopped": true,
+        "workerExit": 0,
+        "workerSignal": null
+      },
+      "renderedListing": {
+        "scope": "Owned local Auth/MFA, BFF/PostgreSQL/Storage and actual Admin screens. Synthetic product, image, stock and reasons. No customer browser, provider, hosted or human acceptance.",
+        "checks": [
+          "rendered_primary_upload_assignment_and_anonymous_normalized_bytes",
+          "rendered_lost_after_real_commit_reload_literal_actor_body_key_replay",
+          "rendered_proven_non_applied_exact_recheck_current_read_blank_reason_fresh_key",
+          "rendered_independent_live_publication",
+          "rendered_website_lost_after_commit_reload_exact_replay_current_assignment"
+        ],
+        "writes": [
+          {
+            "body": "{\"action\":\"update\",\"payload\":{\"sku\":\"K2-SKU-001001\",\"patch\":{\"name\":\"Synthetic pantry ac94ed0e-3edc-4878-827d-e4466438b93c\",\"short\":null,\"barcode\":null,\"subcategory\":null,\"country_of_origin\":\"Italy\",\"origin\":\"Italy\",\"net_weight\":null,\"package_type\":null,\"size\":null,\"description\":\"Staff accepted correction\",\"why_buy\":\"\",\"why_rare\":null,\"usage_instructions\":\"\",\"storage_instructions\":\"\",\"ingredients\":\"Synthetic label ingredients\",\"allergens\":\"\",\"finished_product_details\":\"\",\"pairings\":[],\"cost_price\":0,\"srp\":100,\"wholesale_price\":0,\"dealer_price\":0,\"reorder_level\":0,\"slug\":null,\"seo_keywords\":[],\"is_featured\":false,\"is_human_reviewed\":true,\"product_video_url\":null,\"internal_notes\":\"Explicit synthetic CSV provenance\"},\"expectedUpdatedAt\":\"2026-10-12T05:39:46.198283+00:00\",\"reason\":\"Explicit synthetic human review after photo approval\"}}",
+            "key": "aa282981-9779-4b8b-806b-359ff99b2a72",
+            "actor": "767351d4-ccce-47c2-928b-19e3f3668e2c"
+          },
+          {
+            "body": "{\"action\":\"update\",\"payload\":{\"sku\":\"K2-SKU-001001\",\"patch\":{\"name\":\"Synthetic pantry ac94ed0e-3edc-4878-827d-e4466438b93c\",\"short\":null,\"barcode\":null,\"subcategory\":null,\"country_of_origin\":\"Italy\",\"origin\":\"Italy\",\"net_weight\":null,\"package_type\":null,\"size\":null,\"description\":\"Staff accepted correction\",\"why_buy\":\"\",\"why_rare\":null,\"usage_instructions\":\"\",\"storage_instructions\":\"\",\"ingredients\":\"Synthetic label ingredients\",\"allergens\":\"\",\"finished_product_details\":\"\",\"pairings\":[],\"cost_price\":0,\"srp\":100,\"wholesale_price\":0,\"dealer_price\":0,\"reorder_level\":0,\"slug\":null,\"seo_keywords\":[],\"is_featured\":false,\"is_human_reviewed\":true,\"product_video_url\":null,\"internal_notes\":\"Explicit synthetic CSV provenance\"},\"expectedUpdatedAt\":\"2026-10-12T05:39:46.198283+00:00\",\"reason\":\"Explicit synthetic human review after photo approval\"}}",
+            "key": "aa282981-9779-4b8b-806b-359ff99b2a72",
+            "actor": "767351d4-ccce-47c2-928b-19e3f3668e2c"
+          },
+          {
+            "body": "{\"action\":\"update\",\"payload\":{\"sku\":\"K2-SKU-001001\",\"patch\":{\"name\":\"Synthetic pantry ac94ed0e-3edc-4878-827d-e4466438b93c\",\"short\":null,\"barcode\":null,\"subcategory\":null,\"country_of_origin\":\"Italy\",\"origin\":\"Italy\",\"net_weight\":null,\"package_type\":null,\"size\":null,\"description\":\"Staff accepted correction\",\"why_buy\":\"\",\"why_rare\":null,\"usage_instructions\":\"\",\"storage_instructions\":\"\",\"ingredients\":\"Synthetic label ingredients\",\"allergens\":\"\",\"finished_product_details\":\"\",\"pairings\":[],\"cost_price\":0,\"srp\":110,\"wholesale_price\":0,\"dealer_price\":0,\"reorder_level\":0,\"slug\":null,\"seo_keywords\":[],\"is_featured\":false,\"is_human_reviewed\":false,\"product_video_url\":null,\"internal_notes\":\"Explicit synthetic CSV provenance\"},\"expectedUpdatedAt\":\"2026-10-12T05:39:47.337989+00:00\",\"reason\":\"Explicit synthetic change lost before server dispatch\"}}",
+            "key": "9250e1d5-a168-47c7-a592-0d2add332838",
+            "actor": "767351d4-ccce-47c2-928b-19e3f3668e2c"
+          },
+          {
+            "body": "{\"action\":\"update\",\"payload\":{\"sku\":\"K2-SKU-001001\",\"patch\":{\"name\":\"Synthetic pantry ac94ed0e-3edc-4878-827d-e4466438b93c\",\"short\":null,\"barcode\":null,\"subcategory\":null,\"country_of_origin\":\"Italy\",\"origin\":\"Italy\",\"net_weight\":null,\"package_type\":null,\"size\":null,\"description\":\"Staff accepted correction\",\"why_buy\":\"\",\"why_rare\":null,\"usage_instructions\":\"\",\"storage_instructions\":\"\",\"ingredients\":\"Synthetic label ingredients\",\"allergens\":\"\",\"finished_product_details\":\"\",\"pairings\":[],\"cost_price\":0,\"srp\":110,\"wholesale_price\":0,\"dealer_price\":0,\"reorder_level\":0,\"slug\":null,\"seo_keywords\":[],\"is_featured\":false,\"is_human_reviewed\":false,\"product_video_url\":null,\"internal_notes\":\"Explicit synthetic CSV provenance\"},\"expectedUpdatedAt\":\"2026-10-12T05:39:47.337989+00:00\",\"reason\":\"Explicit synthetic change lost before server dispatch\"}}",
+            "key": "9250e1d5-a168-47c7-a592-0d2add332838",
+            "actor": "767351d4-ccce-47c2-928b-19e3f3668e2c"
+          },
+          {
+            "body": "{\"action\":\"update\",\"payload\":{\"sku\":\"K2-SKU-001001\",\"patch\":{\"name\":\"Synthetic pantry ac94ed0e-3edc-4878-827d-e4466438b93c\",\"short\":null,\"barcode\":null,\"subcategory\":null,\"country_of_origin\":\"Italy\",\"origin\":\"Italy\",\"net_weight\":null,\"package_type\":null,\"size\":null,\"description\":\"Staff accepted correction\",\"why_buy\":\"\",\"why_rare\":null,\"usage_instructions\":\"\",\"storage_instructions\":\"\",\"ingredients\":\"Synthetic label ingredients\",\"allergens\":\"\",\"finished_product_details\":\"\",\"pairings\":[],\"cost_price\":0,\"srp\":110,\"wholesale_price\":0,\"dealer_price\":0,\"reorder_level\":0,\"slug\":null,\"seo_keywords\":[],\"is_featured\":false,\"is_human_reviewed\":false,\"product_video_url\":null,\"internal_notes\":\"Explicit synthetic CSV provenance\"},\"expectedUpdatedAt\":\"2026-10-12T05:39:47.337989+00:00\",\"reason\":\"Explicit synthetic change lost before server dispatch\"}}",
+            "key": "9250e1d5-a168-47c7-a592-0d2add332838",
+            "actor": "767351d4-ccce-47c2-928b-19e3f3668e2c"
+          },
+          {
+            "body": "{\"action\":\"website_listing_set\",\"sku\":\"K2-SKU-001001\",\"assigned\":true,\"expectedUpdatedAt\":null,\"reason\":\"Explicit synthetic independent Website assignment\"}",
+            "key": "32e94760-b140-4e8f-a66f-abe32dabafb6",
+            "actor": "767351d4-ccce-47c2-928b-19e3f3668e2c"
+          },
+          {
+            "body": "{\"action\":\"website_listing_set\",\"sku\":\"K2-SKU-001001\",\"assigned\":true,\"expectedUpdatedAt\":null,\"reason\":\"Explicit synthetic independent Website assignment\"}",
+            "key": "32e94760-b140-4e8f-a66f-abe32dabafb6",
+            "actor": "767351d4-ccce-47c2-928b-19e3f3668e2c"
+          }
+        ],
+        "stage": "complete",
+        "lostCommittedReceipt": {
+          "ok": true,
+          "result": {
+            "listing": {
+              "id": "30508f20-b799-424e-ad6a-e092001e938a",
+              "sku": "K2-SKU-001001",
+              "assigned": true,
+              "updatedAt": "2026-10-12T05:39:52.667713+00:00"
+            }
+          }
+        },
+        "passed": true
+      },
+      "restoration": {
+        "tablePairs": 107,
+        "matchingPairs": 107,
+        "sequenceHash": "56236a44372da27f6914beb5aa2f16b1afcb2447dac333f8fa0281c6f9d643a0",
+        "originalProjectionHash": "bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c",
+        "schemaHash": "f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b",
+        "authorityWitnesses": 2,
+        "finalConservation": true
+      },
+      "independentStopped": {
+        "qemuPid": 17056,
+        "workerPid": 6424,
+        "ports": [
+          54392,
+          54393,
+          54394,
+          54395,
+          54396,
+          54397,
+          54398
+        ],
+        "tool": "e1510d"
+      },
+      "sourcePins": {
+        "scripts/prepare-imported-media-fixture.mjs": "06666301288de9c0c466007bbfcf0d9ccada40477d119392a93cc2e1d5998103",
+        "scripts/imported-product-workflow-probe.inc.mjs": "6d32a7b6b7853b921ff3b516377299d3df275593b78a54dd60bf76acac3c5bc2",
+        "scripts/fixture-admin-http-body.mjs": "e178ac738b6a972ff02c61e2245f598af2bae57c09e2a636bb07e992858cdd0f",
+        "scripts/storage-runtime-layout.mjs": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd",
+        "server/admin-bff/product-intake.js": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37",
+        "scripts/imported-intake-evidence-probe.inc.mjs": "4e84f4350f0722831909f4eaba5912c20269d14d39710a501f218f12f612ab9f",
+        "server/admin-bff/catalog-spreadsheet.js": "48463a6d90b7af0d535034ff82182c08d728911a23bf6cae423ffa490c827d62",
+        "server/admin-bff/product-master.js": "465c3e5d185f703c8451b6f3d53382c2dda99f2bf632aac43e7bff0cc19cb557",
+        "server/admin-bff/channels.js": "b23b53652bba21588a401fa5c6fa5d6ef8ce210191fa26ed658ed73a4d0af861",
+        "server/admin-bff/product-media.js": "9eda473df524a8a06cc003873e88d4b0e4607f0c4d651844791fd4dbbbac7d72",
+        "server/admin-bff/references.js": "fc402debb63588e533c08c8da21147e73109d58cc37673e86c6d2760df445684",
+        "scripts/reference-catalog-contract.mjs": "8acf5671543000e966d0228e595ee5d22c898e2d92fda8d06e810d6e0e52631b",
+        "scripts/imported-intake-browser-probe.inc.mjs": "90ced24652e5470e7754b142deb6b3b5189d689d63156d37c09fb75905f5cb75",
+        "src/views/admin/ProductIntakeSessionModal.jsx": "eefb4b5362aa1e9279108fba0077deeb89337c3ca21e4f957fc8f7578568e80a",
+        "src/views/admin/InventoryGrid.jsx": "6827f2786547652a0d0a0f36ec46c5d5a75ec035599bae475145600ee52ab895",
+        "src/services/productIntakeService.js": "d44cda86d09ccc891c64363cb783131d3b56cf0a7892fb42d0b4c44cf43587b8",
+        "scripts/rendered-listing-browser-probe.inc.mjs": "8c9db447f4225f2d470e9af58a0dab87df077202c1669b0f487786c87d95491a",
+        "scripts/test-rendered-listing-mode.mjs": "54eaa09770b869119244c9bb955f07c1c994bd073b9aa7c94d3e286d78c90221",
+        "src/hooks/useSavedAdminDecisionRecovery.js": "e176b61ce7d19454bb36a453615b6e2432c0f4fcb6e94ee86830b06f80f754a0",
+        "src/hooks/useProductMasterRecovery.js": "08452a22a56b15951f707f868b0c6231b1786fe439951539b49c7429085525b9",
+        "src/hooks/useWebsiteAssignmentRecovery.js": "1918dba5f9c21c14b30335e11d25fe715eea0416acc53953c845c5e45f72cbd4",
+        "src/lib/savedAdminCommandRecovery.js": "e0da2c7df37547ee56ccace2e7e81737f04433088ed0e4e38ec5a408ef3f8899",
+        "src/lib/productMasterCommandRecovery.js": "2601d405d2ca6d2d9a08b72bf4e71e93b17f288d8ca98c1689e68b230f155beb",
+        "src/lib/websiteAssignmentRecovery.js": "f99bc6553e78dcce6d43d40a1aaa415969b836b84bbe54133eaa98eb6d913277",
+        "src/views/admin/WebsiteAssignmentDialog.jsx": "f76a7dc649cf9aefc5771b1a8e0d3c1a318b7da2be1f98e62548454cadd550f6",
+        "src/views/admin/ProductMasterRecovery.jsx": "33735f5914232b40aa6a965e68499db32e181ae28e2363cf482b4c179841c1d3",
+        "src/views/admin/PhotoManagerModal.jsx": "4e93eb55799e3baa6fab91f3a584ad5761de3e52994e7f567b186ad9ab376613",
+        "src/components/ui/ImageUploadDropzone.jsx": "20159519b9f834e4278b150be3eaaab42ca3b50e3933b29b8f7efe074096624a",
+        "src/services/adminBffService.js": "f97c682401dea1743ec433b6291e07a3ff35a9bfe7f9707a5e9665d9bd3c426e",
+        "supabase/migrations/20260929_channel_listing_slices.sql": "0345d67150773ee98858a87c07cc6b4276769f646aef1b928c87ee69435f7d10",
+        "scripts/storefront-fixture-worker.mjs": "80bf42e1572c0cc5b0d41488820b578b78da1cdaa2e02d18836dc93408f30814",
+        "scripts/rendered-customer-browser-probe.inc.mjs": "4941d0d241ffd4d9e1d693026a7b4cb6765e8f2b7bfe90abcc45728549220d42",
+        "api/storefront/index.js": "4ee180cab32cebf5d38f1c38d642266112613b5e0cea626446e9eeb43e889b15",
+        "server/storefront-bff/router.js": "4009362f65f5b0c086ac7467fa2441df1ce6e9e410136378f8aa6c77e847758d",
+        "server/storefront-bff/security.js": "0ab0526f2cac681bdc425fc8249b6d82161cb3dcd4734d9b745cfb64fa8ad663",
+        "server/storefront-bff/supabase.js": "739fd2853bf30b0bbe780099063450a5c1527202a5dca5aca189a4b3a276e94e",
+        "prepared-api/storefront/order.js": "eefdb744330a837ee19333979fecfe9a61aab2c78dd9e8bdb08adafeb173d9bf",
+        "prepared-api/storefront/order/status.js": "46070cc9af373ca53d3bbd1db0a9839507414423f5e2cd8efe303a2327a6d2fe",
+        "prepared-api/storefront/delivery/quote.js": "62c6832f10166e29d655010109ea40b077d752fdd45b613e5124976614ea20ee",
+        "src/context/StoreContext.jsx": "3481201eac73737ab9659708dec456c643aa0a2b69bbfa7134d8fc8dee501c91",
+        "src/views/MasterProduct.jsx": "cdadc6dfdb1137ba6a9c8e2cdc692877b2f1919117e530313efd429fe530c552",
+        "src/views/Checkout.jsx": "4d1b5f46576abf829c4ec5d78b833b0aa267305f3a7ab63cee5bff45c4da994f",
+        "src/views/Confirmation.jsx": "5f9e3cde32df4d11e10900fe7db3f863989dacaf0ca8a9a50edf16d80bd6fd4a",
+        "src/components/DeliveryEstimate.jsx": "30eb58e5524eb6b832fea2c6493f5a33941f80d79157c979e7907c998add4e1a",
+        "src/services/guestCommerceService.js": "3e5725acb2c4456668dc85d16bd4e7a6fa5126cb82ef58cef2e1c852ec881113",
+        "src/services/checkoutRecovery.js": "779160d243c6937d2aea79385df3125b52407357b96a40f8c11933cc473d6663"
+      },
+      "artifactPins": [
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/executed-source.mjs",
+          "sha256": "8a3f9634a7be2be9cb12358566bedc7f08882fe8066cb356a32ea3f2369acd74"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/host-driver-result.json",
+          "sha256": "c63a84e7cbae9a76bef806a9e28f1bfaffb09941833f043f48e1b4f5aa3b457a"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/media-source-pins.json",
+          "sha256": "e85699d1766b6d7466d6b7b01fad7c4774905995cca7ca819143858d82386249"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/full-installation-pins.json",
+          "sha256": "cd80b4f17a8185fae2f1e6c6f2b5efc245bfe424cbc55ae49f7277643faa7042"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/execution01/result.json",
+          "sha256": "876a425ce5e68f901eb10ff15b4b608b33be53d23fca4489f0c72ebb4904ade1"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/execution01/serial.log",
+          "sha256": "5547f81dc5c971b2161e69b0a822dbdd947aa6ece0596a4828d4405a95e343ae"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/execution01/launch.json",
+          "sha256": "a63921c1d40c587705392b84dc6c798c25704c43ed856b41ae6218392cf74e9c"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/customer-product-375.png",
+          "sha256": "3ca4d50a618e16e3a15f20e434e76e35cc30b204439f1b29b0470913cb564d11"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/customer-checkout-375.png",
+          "sha256": "877db10b525eb94f756bff10499ce9232c0cd6f6029833102fcc413437f6bee4"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/customer-confirmation-375.png",
+          "sha256": "87780ca6238f3b7919c668cb427a196543665988a642dcf8c2c634d8cfd9ace9"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/listing-recovery-375.png",
+          "sha256": "1e88031a2761b95784af14ccdfc228de173d19958d8361682f78196d2d7cd0d2"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/listing-recovery-1440.png",
+          "sha256": "c7fcd0389bfee61e1d6a1d982bf3f236b236ee0916142fcb28fb57915ae5434e"
+        },
+        {
+          "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media50/storefront-worker.log",
+          "sha256": "d06bb8e93caeadd8c39ef77a813a2c3ea604c10dac265badcf8e72d40b01c80d"
+        }
+      ],
+      "review": "Independent reviewer native50_review APPROVED12October: no Critical/Important findings; exact46 current/archive source pins,13 artifacts,107fulltable pairs,sequences,originalprojection/installedschema,twoauthority witnesses and stopped processes/seven listeners verified against immutable actual archives. Temporary Website view qualifies local workflow only, not provider composition.",
+      "screenshots": "375 customer product/checkout/confirmation inspected; no overflow assertion passes; synthetic primary photo",
+      "compiledRevalidation": {
+        "tool": "8d9ea0",
+        "artifactFiles": 177,
+        "currentBuildSourcePins": 5
+      },
+      "independentFinalReview": {
+        "date": "2026-10-12",
+        "reviewer": "native50_review",
+        "assessment": "APPROVED within local synthetic runtime scope",
+        "critical": 0,
+        "important": 0,
+        "sourcePins": 46,
+        "artifactPins": 13,
+        "tablePairs": 107,
+        "authorityWitnesses": 2,
+        "stoppedProcessesAndSevenListeners": true,
+        "fixturesRerun": false,
+        "providerCalls": false
+      }
+    }
+  ],
+  "remaining": "Separate authority-through-commit owner understanding/design; complete current production schema composition/request binding, actual provider transaction/history/transport and unknown-outcome reconciliation; backups/readiness/named authorization/activation and real-host/human gates in MAP-018",
+  "recovery": "Revert only opt-in fixture/continuation/test changes; preserve all saved Product Master and Website actor/body/key records and immutable failed/accepted fixtures",
+  "reusedUnaffectedOperationalEvidence": [
+    {
+      "file": "docs/acceptance/TARIFF_ORDER_CONNECTED_20261010.json",
+      "sha256": "e906deba84ad1eba5f119f7e4d1ed7757d3582bb4d96d448efdf76f220f90dd4",
+      "scope": "Sequential genuine local signed tariff publication, accepted-order charge preservation, stale quote refusal and exact disposable recovery verified",
+      "reexecuted": false
+    },
+    {
+      "file": "docs/acceptance/RETAINED_POPULATED_REPAIR_20261011.json",
+      "sha256": "eb07d87865d3670e086e86cb1898a107df2aa18910e08fbc5e4f200685f8f137",
+      "scope": "Executed local signed-populated all-eight known correction repair/repeat/full-state conservation and three actual-correction rollback boundaries; drift/resumption not yet qualified",
+      "reexecuted": false
+    },
+    {
+      "file": "docs/acceptance/RETAINED_DRIFT_REFUSAL_20261011.json",
+      "sha256": "b125a4209251a09416f98bddc30c3c4c287b50ce0d557fc1c58e8b931e411163",
+      "scope": "Executed local signed-populated five unknown-drift refusals with full conservation and exact restored catalog; genuine post-repair resumption remains unverified",
+      "reexecuted": false
+    },
+    {
+      "file": "docs/acceptance/RETAINED_RESUMPTION_20261011.json",
+      "sha256": "cf7490fe3ac49232990e1b70a3126c5dafab6a2b7d298d4acc7521d43f74f50c",
+      "scope": "Executed local known-three repair/no-op/full conservation, actual healthy service restart and genuine retained category/tariff/order receipts, quote and one new one-hold order resumption",
+      "reexecuted": false
+    },
+    {
+      "file": "docs/acceptance/COMBINED_INSTALLER_EVIDENCE_RECONCILIATION_20261011.json",
+      "sha256": "835af4eb106e54d42164ace43a410c80e3ffb3e23eb1f9d7db8e29f026ca0b8d",
+      "scope": "Read-only reconciliation of existing local installation and retained-repair evidence; no new execution or activation",
+      "reexecuted": false
+    }
+  ],
+  "reusedEvidenceLimit": "These prior bounded native receipts are reused for unchanged tariff/retained repair/install boundaries. They do not constitute a new complete production/human/hosted acceptance or privileged authority-through-commit proof."
+}

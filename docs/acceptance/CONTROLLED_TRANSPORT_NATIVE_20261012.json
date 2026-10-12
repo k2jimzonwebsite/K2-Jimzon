@@ -1,0 +1,221 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T13:43:40.304Z",
+  "state": "full-controlled-envelope-affected-local-transaction-controls-qualified-reviewed-recovery-and-transport-open",
+  "providerReads": false,
+  "providerWrites": false,
+  "providerAcceptance": false,
+  "originalApiOutcome": "UNKNOWN",
+  "automaticRetryAllowed": false,
+  "envelope": {
+    "bytes": 16565984,
+    "sha256": "c3cd02e1e88a1865c306232e0ff3c1a9b39101ae25f0a836a92e086a92e48157",
+    "sourceSha256": "8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99",
+    "sourceBytes": 8278524,
+    "bodySha256": "cb969b36d1de42b912276d8a53d7dc63672bbe5320bc30a777e7c0aba3063b49",
+    "bodyBytes": 8278397,
+    "sourceAndBodyConserved": true
+  },
+  "fixture": {
+    "reused": "Accepted native77 captured database/roles/metadata and genuine local PostgreSQL17.6 image; new owned guest NICnone.",
+    "ledgerCalibration": "Local schema/table owner set to observed postgres; other captured metadata/permissions must satisfy exact constructor checks. Not a provider change.",
+    "runtimeIdentity": "postgres non-superuser; existing2s lock/10s statement guards; complete14-fragment installer body.",
+    "stagingPinsChecked": 46,
+    "scope": "Affected local full-envelope receipt constraint failure/commit/roundtrip/replay refusal and conservation; recovery/reply loss/terminal/pooler not included."
+  },
+  "case01": {
+    "directory": ".tools/map018-controlled-native-20261012-01",
+    "terminalTool": "73a6ca",
+    "exit": 0,
+    "stopped": true,
+    "importantReviewFinding": "Nullable receipt <> comparisons could emit OK for NULL; raw markers/result preserved and not accepted as exact receipt proof.",
+    "actualPidAbsenceTool": "b346f0",
+    "supersededBy": "fresh case02 NULL-safe assertion and four corruptions"
+  },
+  "case02": {
+    "directory": ".tools/map018-controlled-native-20261012-02",
+    "startTool": "031dd2",
+    "terminalTool": "fbbc8a",
+    "exit": 0,
+    "timedOut": false,
+    "pid": 28508,
+    "stopped": true,
+    "controls": [
+      {
+        "name": "K2_CONTROLLED_NULL_RECEIPT_REFUSALS_RECOVERED_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_RECEIPT_CONSTRAINT_FULL_ROLLBACK_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_EXACT_RECEIPT_ROUNDTRIP_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_ORIGINAL_PROJECTION_CONSERVED_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_EXISTING_RECEIPT_REFUSAL_CONSERVED_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_NATIVE_CASE_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_OCI_GUEST_SUCCESS",
+        "passed": true
+      }
+    ],
+    "serialSha256": "51de9b2ed2e13e802e22772fe36bc8cddba8247fade5acd28df3d0732757a5c9",
+    "expectedBeforeSha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+    "expectedCommittedSha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e",
+    "rootCatalogAndHashInspection": "9bb9f5",
+    "conservation": [
+      {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "guestFile": "/tmp/controlled-before-catalog.json"
+      },
+      {
+        "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e",
+        "guestFile": "/tmp/controlled-committed-catalog.json"
+      },
+      {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "guestFile": "/tmp/controlled-failure-catalog.json"
+      },
+      {
+        "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e",
+        "guestFile": "/tmp/controlled-refused-catalog.json"
+      },
+      {
+        "sha256": "1beeac52d8a89c719987806f39a39ce14abbc2ed64f3dafdc9f2070bbe084645",
+        "guestFile": "/tmp/controlled-before-rows.json"
+      },
+      {
+        "sha256": "d73c6cecd8782002bbc32579226402d5e40524f69fad5589b0add9cbd773180c",
+        "guestFile": "/tmp/controlled-committed-rows.json"
+      },
+      {
+        "sha256": "1beeac52d8a89c719987806f39a39ce14abbc2ed64f3dafdc9f2070bbe084645",
+        "guestFile": "/tmp/controlled-failure-rows.json"
+      },
+      {
+        "sha256": "d73c6cecd8782002bbc32579226402d5e40524f69fad5589b0add9cbd773180c",
+        "guestFile": "/tmp/controlled-refused-rows.json"
+      },
+      {
+        "sha256": "5f5da3a4f31fdb933e72c727a0eaff2236c87d46d8bca3b19e342f25ed209dfc",
+        "guestFile": "/tmp/controlled-before-history.txt"
+      },
+      {
+        "sha256": "53cce2144df6b1a9d7f84c6846dde5f6ef74f384ca132b3b4cb95355ee4648b5",
+        "guestFile": "/tmp/controlled-committed-history.txt"
+      },
+      {
+        "sha256": "5f5da3a4f31fdb933e72c727a0eaff2236c87d46d8bca3b19e342f25ed209dfc",
+        "guestFile": "/tmp/controlled-failure-history.txt"
+      },
+      {
+        "sha256": "53cce2144df6b1a9d7f84c6846dde5f6ef74f384ca132b3b4cb95355ee4648b5",
+        "guestFile": "/tmp/controlled-null-recovered-history.txt"
+      },
+      {
+        "sha256": "53cce2144df6b1a9d7f84c6846dde5f6ef74f384ca132b3b4cb95355ee4648b5",
+        "guestFile": "/tmp/controlled-refused-history.txt"
+      },
+      {
+        "sha256": "53cce2144df6b1a9d7f84c6846dde5f6ef74f384ca132b3b4cb95355ee4648b5",
+        "guestFile": "/tmp/controlled-valid-history.txt"
+      }
+    ]
+  },
+  "pins": [
+    {
+      "file": ".tools/prepare-controlled-native01.mjs",
+      "bytes": 7786,
+      "sha256": "c817b470b530d8e7d5680c344fb9a0943e4c88db5ba41eaeb77c3270045a22e5"
+    },
+    {
+      "file": ".tools/run-controlled-native01.mjs",
+      "bytes": 3321,
+      "sha256": "38b2df48f48b9c5518257d2d08f284abd9fc707b7becaf6d8638dc436e753782"
+    },
+    {
+      "file": ".tools/prepare-controlled-native02.mjs",
+      "bytes": 9838,
+      "sha256": "4be9dd59da703bbd960ab89d42e84c9cbb6fc65369ef9b24b9908be5d3658cc3"
+    },
+    {
+      "file": ".tools/run-controlled-native02.mjs",
+      "bytes": 3372,
+      "sha256": "2c9be621984004837249487f47fb24a34dce3a02a87245ff12cba7dc33cb2cd7"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-01/result.json",
+      "bytes": 1051,
+      "sha256": "b33e7a02a4e3c753b383a98161ccce43e2299729ae521913d107afa07537bf7b"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-02/preparation.json",
+      "bytes": 7912,
+      "sha256": "2b7b07472285a58ff960d31362d8f4f29a947787d379b4b87570a7481392ea9b"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-02/launch.json",
+      "bytes": 676,
+      "sha256": "f8010a1c8d51238927a5f61686a3b432dba986693856673898fe97190c7b3680"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-02/result.json",
+      "bytes": 1151,
+      "sha256": "6093a3070c1caf12bab0c8c1fb56c655ae543c891abad4a75faa03337ca130e9"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-02/serial.log",
+      "bytes": 5284882,
+      "sha256": "51de9b2ed2e13e802e22772fe36bc8cddba8247fade5acd28df3d0732757a5c9"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-02/stderr.log",
+      "bytes": 369,
+      "sha256": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-02/before-catalog.json",
+      "bytes": 1337443,
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-02/committed-catalog.json",
+      "bytes": 2437873,
+      "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e"
+    }
+  ],
+  "review": {
+    "status": "APPROVED",
+    "critical": 0,
+    "important": 0,
+    "priorNullFindingResolved": true,
+    "independentStaging46PinsVerified": true,
+    "independentSerialAndCatalogFramesVerified": true,
+    "independentRollbackRefusalNullHistoryVerified": true,
+    "independentPidAbsenceVerified": true,
+    "scope": "Affected local constraint-failure rollback, commit, exact8MBreceipt UTF8roundtrip, NULLrefusal, originalprojection and collisionrefusal only; no deactivation/recovery, replyloss, pooler or provider acceptance."
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "startTool": "0219c7",
+    "terminalTool": "af09dd",
+    "exitCode": 0,
+    "adminChecks": 53,
+    "routeClassificationGaps": 0,
+    "secretScanFiles": 2279
+  },
+  "remaining": "MAP-018 affected retained-history deactivation/cold recovery, saved original receipt current-state meaning, replyloss/running backend/terminal reconciliation, independent full authority and sequence conservation where not covered, pooler behavior and TLS-leg disposition. Original APItimeout UNKNOWN gates live replacement; exact separate authorization/fresh backup/identity/readiness before any replacement installation/release. Full operational acceptance remains required.",
+  "recovery": "Both local guests shut down/PIDs absent; local ephemeral guest data is gone. Preserve both immutable cases/failed assertion/source/serial/backups/envelope. Reproduce only fresh marked local successor. Do not infer live rollback or use provider restoration/deactivation from these scoped controls."
+}

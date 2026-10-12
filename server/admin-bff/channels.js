@@ -1,6 +1,7 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
 import { isAdminRole } from './supabase.js'
+import { validWebsiteListing } from '../../src/lib/websiteAssignmentRecovery.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const TIMESTAMP = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})$/
@@ -52,7 +53,33 @@ export default async function handleChannels(req, res) {
   if (req.method === 'POST' && !UUID.test(idempotencyKey)) return safeJson(res, 400, { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } })
   const authorized = await authorizeAdminRequest(req, res, { csrf: req.method === 'POST' })
   if (!authorized) return undefined
+  if (req.method === 'POST' && req.headers['x-k2-actor-id'] !== undefined
+      && req.headers['x-k2-actor-id'] !== authorized.identity.userId) {
+    return safeJson(res, 403, { error: { code: 'CHANNEL_ACTOR_CHANGED' } })
+  }
   if (req.method === 'GET') {
+    if (req.query?.sku !== undefined) {
+      if (!isAdminRole(authorized.identity.role)) return safeJson(res,403,{error:{code:'CHANNEL_ADMIN_REQUIRED'}})
+      const sku=req.query.sku
+      if (typeof sku!=='string'||!/^[A-Za-z0-9._/-]{1,80}$/.test(sku)) return safeJson(res,400,{error:{code:'WEBSITE_LISTING_INVALID'}})
+      const product=await authorized.client.from('products').select('sku').eq('sku',sku).maybeSingle()
+      if (product.error) return safeJson(res,503,{error:{code:'WEBSITE_LISTING_UNAVAILABLE'}})
+      if (!product.data || product.data.sku!==sku) return safeJson(res,404,{error:{code:'PRODUCT_NOT_FOUND'}})
+      const rows=await authorized.client.from('channel_listings').select('id,sku,status,publication_status,updated_at',{count:'exact'})
+        .eq('sku',sku).eq('channel_source','website').is('shop_id',null).limit(2)
+      if (rows.error||!Array.isArray(rows.data)||!Number.isInteger(rows.count)||rows.count!==rows.data.length||rows.count>1) {
+        return safeJson(res,503,{error:{code:'WEBSITE_LISTING_UNAVAILABLE'}})
+      }
+      const row=rows.data[0]
+      if (rows.count===1&&(!row||typeof row!=='object'||Array.isArray(row))) return safeJson(res,503,{error:{code:'WEBSITE_LISTING_UNAVAILABLE'}})
+      const listing=rows.count===0?{id:null,sku,assigned:false,updatedAt:null}
+        :{id:row.id,sku:row.sku,assigned:row.status==='Active'&&['ready','published'].includes(row.publication_status),updatedAt:row.updated_at}
+      if (!validWebsiteListing(listing,sku)||(rows.count===1&&(!['Active','Paused','Unlinked'].includes(row.status)
+          ||!['draft','ready','publishing','published','error','paused'].includes(row.publication_status)))) {
+        return safeJson(res,503,{error:{code:'WEBSITE_LISTING_UNAVAILABLE'}})
+      }
+      return safeJson(res,200,{ok:true,listing})
+    }
     const { data, error } = await authorized.client.rpc('read_admin_channel_readiness_v1')
     if (error || !data) return safeJson(res, 503, { error: { code: 'CHANNEL_READINESS_UNAVAILABLE' } })
     return safeJson(res, 200, { ok: true, channels: data })

@@ -1,0 +1,81 @@
+{
+  "owningMap": "MAP-018",
+  "ideas": [
+    "IDEA-20261012-01",
+    "IDEA-20261009-11",
+    "IDEA-20261001-03"
+  ],
+  "date": "2026-10-12",
+  "ownerDecision": "Confirm historical save without duplicating; replace only after exact non-applied refusal and fresh facts; preserve uncertain requests.",
+  "changed": [
+    "Ephemeral non-applied proof scoped to actor, literal body, key and storage generation",
+    "Explicit exact recheck and validated current product read before matching pending release",
+    "Distinct fresh editor callback with blank reason and no previous unsaved patch",
+    "Scope/generation guards after each await preserve ABA, role and storage invalidations"
+  ],
+  "sourcePins": {
+    "src/hooks/useProductMasterRecovery.js": "397795082c4942493f45f8e51cbeba754d9f29bceaca864b6e7e26ac1b162d4d",
+    "src/views/admin/ProductMasterRecovery.jsx": "33735f5914232b40aa6a965e68499db32e181ae28e2363cf482b4c179841c1d3",
+    "src/views/admin/InventoryGrid.jsx": "38cb8eedbf307f2c07f19499f0ef7d444d268581df373d5a09b87152f7a4aade",
+    "tests/admin-product-master-recovery.spec.js": "7e4392138660f58425aa8e24b14c64c7f5926d549f63d6400a67d61b7327b491",
+    "docs/design-checkpoints/20261012-product-master-non-applied/non-applied-375.png": "a3776cfd0aeb6a88564c3f0165576babe498ba2c9a67634dea114bf84e4126e6",
+    "docs/design-checkpoints/20261012-product-master-non-applied/non-applied-1440.png": "12c1da22b1bde7b6ea68bfc3d171aceda69235b7f6a0cc1982363d0e236c2696"
+  },
+  "verification": [
+    {
+      "tool": "e402a3",
+      "exit": 1,
+      "purpose": "Failing-first absent latest-review action"
+    },
+    {
+      "tool": "e0c3c6",
+      "exit": 0,
+      "passed": 1,
+      "purpose": "First complete non-applied replacement and fresh save"
+    },
+    {
+      "tool": "2518d3",
+      "exit": 1,
+      "passed": 17,
+      "failed": 1,
+      "purpose": "Existing two-tab wording regression corrected"
+    },
+    {
+      "tool": "2300c5",
+      "exit": 0,
+      "passed": 2,
+      "purpose": "Failed tab case and storage invalidation rerun"
+    },
+    {
+      "tool": "4de007",
+      "exit": 0,
+      "passed": 12,
+      "purpose": "Final affected non-applied/identity/storage/read/refusal browser checks"
+    },
+    {
+      "tool": "c27412",
+      "exit": 0,
+      "passed": 17,
+      "purpose": "Existing Product Master editor integration regressions"
+    },
+    {
+      "tool": "5921de",
+      "exit": 0,
+      "command": "npm run verify:development",
+      "adminChecks": 42,
+      "routeControlGaps": 0,
+      "purpose": "Final code development verification"
+    }
+  ],
+  "review": {
+    "sequentialDesign": "Skeptic, Guardian, User Advocate, Arbiter approved after accepted revisions",
+    "independentCode": "Guardian final APPROVED; disabled-hook storage-event issue corrected; no Critical/Important findings",
+    "visual": "Primary inspected durable 375px and1440px screenshots; existing Admin identity, readable copy, no horizontal overflow or new motion"
+  },
+  "limits": [
+    "Browser APIs are synthetic; genuine backend media40 separately qualified",
+    "Complete genuine rendered chain and physical device/hosted acceptance remain unverified",
+    "No provider write, main promotion or deployment"
+  ],
+  "recovery": "Revert only hook/dialog/Grid callback/tests together; retain persisted original actor/body/key and immutable media40."
+}

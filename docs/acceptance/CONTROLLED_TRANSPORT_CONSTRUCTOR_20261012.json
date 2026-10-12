@@ -1,0 +1,76 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T13:29:09.639Z",
+  "state": "offline-controlled-constructor-reviewed-frozen-contracts-and-development-pass-sql-unexecuted",
+  "sources": [
+    {
+      "file": "scripts/prepare-controlled-migration.mjs",
+      "bytes": 4028,
+      "sha256": "a1573f01e1b47be5e59f303040d14a691323161c5627ddced51ac50cb147edf4"
+    },
+    {
+      "file": "scripts/test-controlled-migration-constructor.mjs",
+      "bytes": 3090,
+      "sha256": "0b96b01e404cb2358cdcd85c115cad7402a2542fff675c9018d79ce4965d9390"
+    }
+  ],
+  "sourceSha256": "8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99",
+  "sourceBytes": 8278524,
+  "bodySha256": "cb969b36d1de42b912276d8a53d7dc63672bbe5320bc30a777e7c0aba3063b49",
+  "bodyBytes": 8278397,
+  "envelopePin": {
+    "file": ".tools/map018-controlled-envelope-20261012-01/envelope.sql",
+    "bytes": 16565984,
+    "sha256": "c3cd02e1e88a1865c306232e0ff3c1a9b39101ae25f0a836a92e086a92e48157"
+  },
+  "manifestPin": {
+    "file": ".tools/map018-controlled-envelope-20261012-01/manifest.json",
+    "bytes": 998,
+    "sha256": "b944dd9324c339a2830448d43e61062e1c58c4cb06243af5433efa1c5b0642f8"
+  },
+  "receiptIdentity": {
+    "name": "k2_category_operating_full_cutover_controlled_20261012",
+    "version": "20261012140000",
+    "idempotencyKey": "k2-controlled-v1:sha256:8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99"
+  },
+  "scope": "Strict offline source/capture/query refusal, exact complete-body conservation, safe inert original-source serialization and separately frozen envelope only. No SQL syntax/runtime/deadline/atomicity/recovery/provider qualification.",
+  "contractEvidence": {
+    "command": "node --test scripts/test-controlled-migration-constructor.mjs",
+    "redTool": "702822",
+    "redPassed": 0,
+    "redFailed": 4,
+    "redReason": "Feature missing; explicit NOT_IMPLEMENTED placeholder used, not an import failure.",
+    "greenTool": "feb43f",
+    "greenPassed": 4,
+    "greenFailed": 0,
+    "correction": "Before implementation corrected body-occurrence expectation to executed body plus inert complete-source receipt. No production code existed at the red check."
+  },
+  "developmentEvidence": {
+    "command": "npm run verify:development",
+    "startTool": "4b8bac",
+    "terminalTool": "ec60df",
+    "exitCode": 0,
+    "adminChecks": 53,
+    "routeClassificationGaps": 0,
+    "secretScanFiles": 2278,
+    "scope": "Local application/source/mock guards only; no live readiness or provider effect."
+  },
+  "review": {
+    "status": "APPROVED",
+    "critical": 0,
+    "important": 0,
+    "independentEnvelopeReconstruction": true,
+    "bodyAndManifestVerified": true,
+    "scope": "Offline constructor correctness only; SQL remains unexecuted."
+  },
+  "providerReadsThisBatch": false,
+  "providerWrites": false,
+  "dispatched": false,
+  "authorized": false,
+  "automaticRetryAllowed": false,
+  "originalApiOutcome": "UNKNOWN",
+  "implementationState": "Offline constructor implemented; native SQL/recovery/transport dispatcher/classifier not implemented or qualified.",
+  "remaining": "MAP-018: execute affected full16565984byte envelope in captured local fixture; exact ledger metadata/permissions/name-version-key collisions/refusal, UTF8 text-array roundtrip, insertion failure before commit rollback, loss-of-reply/terminal backend observation, full data/sequence/catalog/authority conservation and retained-history recovery under unchanged2s/10s. Independent evidence review; pooler/client-backend TLS and original UNKNOWN live gate remain. No replacement write/install/release authorization.",
+  "recovery": "Preserve frozen envelope01/source/receipt, originalunknownAPIattempts and backups. Revert only these2scripts and current documentation if rejected, preserving unrelated changes. Constructor contains no environment/credentials/network/dispatch; no provider rollback required."
+}

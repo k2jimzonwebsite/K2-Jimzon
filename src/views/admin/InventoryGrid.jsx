@@ -19,6 +19,8 @@ import ReferenceCreationDialog, { PendingReferenceCreation } from './ReferenceCr
 import { applyImageFallback } from '../../lib/imageFallback'
 import useProductMasterRecovery from '../../hooks/useProductMasterRecovery'
 import ProductMasterRecovery, { PendingProductDecision } from './ProductMasterRecovery'
+import useWebsiteAssignmentRecovery from '../../hooks/useWebsiteAssignmentRecovery'
+import WebsiteAssignmentDialog,{PendingWebsiteDecision} from './WebsiteAssignmentDialog'
 import {
   DetailBlock,
   EmptyState,
@@ -219,11 +221,13 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   const [referenceNotice, setReferenceNotice] = useState('')
   const [editError, setEditError] = useState('')
   const recovery = useProductMasterRecovery({ actorId, enabled: secure, canManageProducts })
+  const websiteRecovery=useWebsiteAssignmentRecovery({actorId,enabled:secure,canManageProducts})
+  const [websiteSku,setWebsiteSku]=useState(null)
   const editPending = Boolean(recovery.pending)
   const [showProductRecovery, setShowProductRecovery] = useState(false)
   const editIdentity = useRef(null)
   if (editIdentity.current?.actorId !== actorId || editIdentity.current?.canManageProducts !== canManageProducts) editIdentity.current = { actorId, canManageProducts }
-  useEffect(() => { setEditingProduct(null); setShowProductRecovery(false); setSaving(false); setEditError('') }, [actorId, canManageProducts])
+  useEffect(() => { setEditingProduct(null); setShowProductRecovery(false);setWebsiteSku(null); setSaving(false); setEditError('') }, [actorId, canManageProducts])
   const [notice, setNotice] = useState(null)
   const [search, setSearch] = useState('')
   const [stockFilter, setStockFilter] = useState('all')
@@ -640,7 +644,14 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
       {/* Select-all row */}
       {secure && actorId && <PendingReferenceCreation actorId={actorId} onReview={setReferenceKind} />}
       {secure && <PendingProductDecision recovery={recovery} onReview={() => setShowProductRecovery(true)} />}
+      {secure&&<PendingWebsiteDecision recovery={websiteRecovery} onReview={setWebsiteSku}/>}
+      {secure&&websiteSku&&<WebsiteAssignmentDialog key={`${actorId}:${websiteSku}:${canManageProducts}`} sku={websiteSku} actorId={actorId} canManageProducts={canManageProducts} recovery={websiteRecovery} onClose={()=>setWebsiteSku(null)}/>}
       {secure && showProductRecovery && <ProductMasterRecovery recovery={recovery} canManageProducts={canManageProducts}
+        onNotApplied={(product, taxonomyReview) => {
+          setShowProductRecovery(false); setEditingProduct(product); setProductTaxonomyReview(taxonomyReview)
+          setEditTab('details'); setEditReason(''); setEditError(''); setReferenceNotice('')
+          flash('Your previous change did not apply. Review the latest details and enter a new reason before saving.')
+        }}
         onClose={() => setShowProductRecovery(false)} onRecorded={async sku => {
           setShowProductRecovery(false); setEditingProduct(null); setEditReason(''); setEditError('')
           await fetchProducts(); flash(`${sku} decision was recorded. Current product facts were refreshed.`)
@@ -785,6 +796,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                     {/* Lifecycle: three visible states, plus a destructive
                         action kept deliberately separate from them. */}
                     <div className="pt-1 space-y-1.5">
+                      {secure&&<button type="button" onClick={()=>setWebsiteSku(p.sku)} disabled={!canManageProducts||!!websiteRecovery.pending||websiteRecovery.storageBlocked} className={`${secondaryButton} w-full`}>Website assignment</button>}
                       <StatusControl
                         value={p.status}
                         disabled={!!statusBusy || (secure && !canManageProducts)}

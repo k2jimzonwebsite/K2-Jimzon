@@ -1,0 +1,206 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T14:16:41.581Z",
+  "state": "local-client-loss-around-commit-qualified-reviewed",
+  "providerReads": false,
+  "providerWrites": false,
+  "providerAcceptance": false,
+  "originalApiOutcome": "UNKNOWN",
+  "automaticRetryAllowed": false,
+  "envelopeSha256": "c3cd02e1e88a1865c306232e0ff3c1a9b39101ae25f0a836a92e086a92e48157",
+  "case": {
+    "directory": ".tools/map018-controlled-native-20261012-08",
+    "startTool": "0eb914",
+    "terminalTool": "6613a4",
+    "owningMap": "MAP-018",
+    "providerWrites": false,
+    "scope": "Affected local genuine psql client kills before/after COMMIT with explicit fault-only barrier/tail, observed running sessions and terminal state, full protected conservation/receipt; no pooler or actual provider proof.",
+    "startedAt": "2026-10-12T14:11:49.095Z",
+    "timedOut": false,
+    "pid": 13096,
+    "exit": 0,
+    "stopped": true,
+    "controls": [
+      {
+        "name": "K2_CONTROLLED_RUNNING_RECEIPT_ABSENT_STILL_UNKNOWN_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_BEFORE_COMMIT_CLIENT_LOSS_TERMINAL_ROLLBACK_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_AFTER_COMMIT_CLIENT_LOSS_TERMINAL_RECEIPT_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_EXACT_RECEIPT_ROUNDTRIP_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_COLD_GLOBAL_AND_MANAGED_AUTHORITY_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_CONTROLLED_NATIVE_CASE_OK",
+        "passed": true
+      },
+      {
+        "name": "K2_OCI_GUEST_SUCCESS",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "finishedAt": "2026-10-12T14:14:20.815Z",
+    "serialSha256": "0a2443591d555d8bebcf631365599dfdbb18109cfbacec3645add02675a6fb85",
+    "stagingPinsChecked": 28,
+    "hashes": [
+      {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "guestFile": "/tmp/controlled-before-catalog.json"
+      },
+      {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "guestFile": "/tmp/controlled-before-loss-catalog.json"
+      },
+      {
+        "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e",
+        "guestFile": "/tmp/controlled-committed-catalog.json"
+      },
+      {
+        "sha256": "1beeac52d8a89c719987806f39a39ce14abbc2ed64f3dafdc9f2070bbe084645",
+        "guestFile": "/tmp/controlled-before-loss-rows.json"
+      },
+      {
+        "sha256": "1beeac52d8a89c719987806f39a39ce14abbc2ed64f3dafdc9f2070bbe084645",
+        "guestFile": "/tmp/controlled-before-rows.json"
+      },
+      {
+        "sha256": "69052e782daaea42d6080fc3fa73e4eeb90656971d94b6185adcdfa17107aef9",
+        "guestFile": "/tmp/controlled-committed-rows.json"
+      },
+      {
+        "sha256": "5f5da3a4f31fdb933e72c727a0eaff2236c87d46d8bca3b19e342f25ed209dfc",
+        "guestFile": "/tmp/controlled-before-history.txt"
+      },
+      {
+        "sha256": "5f5da3a4f31fdb933e72c727a0eaff2236c87d46d8bca3b19e342f25ed209dfc",
+        "guestFile": "/tmp/controlled-before-loss-history.txt"
+      },
+      {
+        "sha256": "53cce2144df6b1a9d7f84c6846dde5f6ef74f384ca132b3b4cb95355ee4648b5",
+        "guestFile": "/tmp/controlled-committed-history.txt"
+      },
+      {
+        "sha256": "16c4c118c2cebe47481f901cb19e9f8674f50563e0304ecdd7b180f2a05282b6",
+        "guestFile": "/tmp/controlled-after-backend.json"
+      },
+      {
+        "sha256": "5d74cba16f4b628075adb4740fc8c725fb0903da778b293590bb7eda530547f0",
+        "guestFile": "/tmp/controlled-before-backend.json"
+      }
+    ]
+  },
+  "files": [
+    {
+      "file": ".tools/prepare-controlled-native08.mjs",
+      "bytes": 20004,
+      "sha256": "ca2e122d5adefb16eb3a0e88f02c59c8a3b4a485529fbad5351249363ce9afb7"
+    },
+    {
+      "file": ".tools/run-controlled-native08.mjs",
+      "bytes": 3388,
+      "sha256": "e1a4d8e809119105935de9e004b9e0a59dbac65fe671999532142cc14f560e6e"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-08/preparation.json",
+      "bytes": 5154,
+      "sha256": "47946889c1942cd86abd0cc9296edc0edc9fa92ae3cab25624d52bf820cec51c"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-08/result.json",
+      "bytes": 1230,
+      "sha256": "c84fe9b03f44a655f43cc87340bbf005bff355300cdec4a90de00def262ecf60"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-08/serial.log",
+      "bytes": 5279437,
+      "sha256": "0a2443591d555d8bebcf631365599dfdbb18109cfbacec3645add02675a6fb85"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-08/before-catalog.json",
+      "bytes": 1337443,
+      "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-08/committed-catalog.json",
+      "bytes": 2437873,
+      "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e"
+    }
+  ],
+  "controls": {
+    "beforeCommit": "Actual psql client killed while observed waiting at a fault-only advisory lock before COMMIT; client exited nonzero. Blocker released, named backend disappeared, receipt absent, complete baseline catalog/rows/sequences/history conserved, authority checked.",
+    "afterCommit": "Actual psql client killed while observed executing a fault-only pg_sleep after COMMIT; client exited nonzero. Named backend disappeared, exact eight-MB UTF8 source receipt and expected committed catalog passed, original row projection and authority conserved.",
+    "runningState": "Observed active waiter and absent receipt before termination. Receipt absence while a backend is active does not establish terminal non-application.",
+    "causality": "Immediate active-wait checks precede both kills. No client ERROR/FATAL/lock-timeout/statement-timeout is allowed before final success. Original two-second lock and ten-second statement deadlines remain unchanged."
+  },
+  "limitations": [
+    "Before loss precedes COMMIT; after loss occurs during a later statement. Neither proves loss of COMMIT acknowledgement itself.",
+    "Isolated genuine PostgreSQL 17.6 with no network interface; no production pooler, provider, end-to-end TLS, real-host or business installation proof.",
+    "Terminal named-session absence is evidence for this fixed isolated guest only; it is not a provider-job terminal proof.",
+    "No new reconciliation classifier or automatic retry authorization."
+  ],
+  "preservedFailures": [
+    {
+      "case": "04",
+      "cause": "OCI layer03 ENOSPC before PostgreSQL or controls; stopped and preserved."
+    },
+    {
+      "case": "05",
+      "cause": "Partial preparation file-reference guard matched shell readiness file; no image or guest."
+    },
+    {
+      "case": "06",
+      "cause": "Client absent before attempted kill; failed, stopped, no accepted client-loss proof. Client log was not exported."
+    },
+    {
+      "case": "07",
+      "cause": "Diagnostics-only same schedule reproduced failure; actual client log reports canceling statement due to lock timeout. Failed, stopped, independently reviewed as diagnostic evidence only.",
+      "serialSha256": "19cf8cb9d1d3b438905a1654f6e9b1aa35267d492990952c9fa16a42f696c357"
+    }
+  ],
+  "review": {
+    "status": "APPROVED",
+    "critical": 0,
+    "important": 0,
+    "independent28StagingPins": true,
+    "independentSerialAndFrames": true,
+    "independentKillsAndTerminalAssertions": true,
+    "independentConservationReceiptAuthority": true,
+    "independentPidAbsence": true,
+    "scope": "Two local kills around COMMIT only; no COMMIT acknowledgement-loss or pooler/provider proof."
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "startTool": "209d76",
+    "terminalTool": "45db21",
+    "exitCode": 0,
+    "adminChecks": 53,
+    "routeClassificationGaps": 0,
+    "secretScanFiles": 2281,
+    "environmentFailure": {
+      "initialTools": [
+        "de4c58",
+        "d40db9"
+      ],
+      "focusedDefault": "a36767",
+      "diagnostic": "656d63",
+      "cause": "Sandbox connect EACCES to synthetic 127.0.0.1 HTTP server; zero requests reached test server. No product-code change.",
+      "focusedLoopbackPermitted": "93d4ef",
+      "focusedPass": 2
+    }
+  },
+  "remaining": "MAP-018: actual COMMIT acknowledgement-loss and terminal reconciliation; exact binding and actual pooler/TLS qualification; in-place data-retaining recovery and postactivation data policy; original API UNKNOWN terminal evidence or separately reviewed owner-accepted isolation disposition; distinct exact write authorization, fresh backup/identity/readiness and remaining full operational/real-host/release gates.",
+  "recovery": "Guest stopped; preserve immutable cases04-08, accepted cases01-03, original source/envelope/backups and original UNKNOWN API attempt. Local fixture changes can be reverted without provider rollback. Never restore a stale original snapshot over later business data."
+}

@@ -1,0 +1,467 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "date": "2026-10-12",
+  "state": "native77-locally-qualified",
+  "providerWrites": false,
+  "providerRequestsDispatched": false,
+  "actualFixturePrepared": true,
+  "nativeRuntimeLaunched": true,
+  "nativeVerified": true,
+  "sourcePins": [
+    {
+      "file": "scripts/prepare-product-master-recovery-fixture.mjs",
+      "sha256": "2ff0295a0aca84a4e797a0749d85ac8ce37b4e1d733703ab9b8137376515897f"
+    },
+    {
+      "file": "scripts/test-storefront-view-recovery-guard.mjs",
+      "sha256": "9d7691b0467c3a3c8c9f402558d1ceb554433f4dae8d009b319dff5f6955b00b"
+    },
+    {
+      "file": "scripts/test-storefront-view-recovery-preparation.mjs",
+      "sha256": "cb62c13784af9172e4a4745a8a80778114f6c1f159a2891711c746e0deb4710a"
+    }
+  ],
+  "retainedInputs": [
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported58/qualification-preparer-source.mjs",
+      "sha256": "1580a56548113ea2c7a5b24a30c02568393b4e3db71ffc4c362a3b581736707d"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported75/staging/k2/image-probe.sh",
+      "sha256": "63b06f69ec4e12178daaa192951a7a8c0fccfe1ab87abb1126a6a896f7482bd6"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/run-oci-imported75.mjs",
+      "sha256": "af1d2e70e08d9bfc3eb56d49e43bdb09134bdeba6f31e94df65f848bf1e15e11"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported56/guarded-package.json",
+      "sha256": "6f9d53d03411ae184db67d7d30ed0f7bc3e5c632f54a1dcef417e1222d1ce70a"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported76/guarded-package.json",
+      "sha256": "ddf4def0eceb753480eb4e36c4d775e665b868b9ede62e49dbc74a7832904ac9"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported76/execution01/after-catalog.json",
+      "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e"
+    }
+  ],
+  "installerSqlSha256": "8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99",
+  "installedCatalogSha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e",
+  "scope": "SAME recovery preparer qualifies exact14-fragment installer in owned native77: seven Website view drift controls plus deliberate transaction interruption; full151-physical/schema conservation, signed synthetic populated replay, empty cold fresh/replay and original catalog/rows/sequences/global/managed authority recovery. Virtual tests are preparation evidence; immutable manifest nativeVerified:false describes its earlier prepared state, superseded here by actual reviewed runtime.",
+  "controls": [
+    "interruption",
+    "website-body-drift",
+    "website-owner-drift",
+    "website-invoker-drift",
+    "website-barrier-drift",
+    "website-acl-drift",
+    "website-column-drift",
+    "website-missing-drift"
+  ],
+  "verification": {
+    "prerequisiteRed": "fd4d34",
+    "prerequisiteGreen": "37ea5b",
+    "missingTraceRed": "423269",
+    "green": "684eeb",
+    "defaultConservationGreen": "e1fc9f",
+    "virtualOnly": true,
+    "physicalSelection": 151,
+    "defaultStockControls": 11,
+    "defaultSqlProbeInitRunnerOutputsByteIdentical": true,
+    "populatedColdAndAllControlSuccessMarkersRequired": true
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "sandboxFailed": {
+      "startTool": "307766",
+      "terminalTool": "b1fc44",
+      "exit": 1,
+      "adminPass": 52,
+      "adminFail": 1
+    },
+    "loopbackDiagnostic": {
+      "tool": "4c03f3",
+      "cause": "connect EACCES 127.0.0.1"
+    },
+    "focusedHostTest": {
+      "command": "node --test tests/admin-product-master-recovery-client.test.mjs",
+      "tool": "8b0b1a",
+      "exit": 0,
+      "checks": 2
+    },
+    "hostGate": {
+      "startTool": "ddc5a4",
+      "terminalTool": "1b91f3",
+      "exit": 0,
+      "adminChecks": 53,
+      "routeGaps": 0
+    }
+  },
+  "review": {
+    "status": "APPROVED-source-and-virtual-checks-only",
+    "tools": [
+      "39478b",
+      "e0a2f7"
+    ],
+    "critical": 0,
+    "important": 0
+  },
+  "remaining": "MAP-018: archive prior request sources and update SAME constructor/review/tests to exact8ca installer, independently qualify full-catalog/global/managed/history unknown-outcome reconciliation, then exact provider transport/live authorization/backup/readiness/real-host/human gates. Authority through commit remains unproven; no automatic uncertain retry.",
+  "recovery": "Revert only new storefront recovery opt-in and two focused tests; preserve existing stock/reference harness, immutable72-76 archives and original saved actor/body/key. No provider rollback needed.",
+  "case77": {
+    "caseName": "oci-imported77",
+    "preparationStartTool": "c499e2",
+    "preparationTerminalTool": "f125c1",
+    "preparationExit": 0,
+    "prelaunchAudit": "faa27f",
+    "noQemuObservedBeforeLaunch": true,
+    "manifestPin": {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported77/revised-qualification.json",
+      "sha256": "90a221be3cfbb411e405c77627eabd1a5422e5c0d39debb9db55a8f7860c97c5"
+    },
+    "manifest": {
+      "owningMap": "MAP-018",
+      "idea": "IDEA-20261009-11",
+      "providerWrites": false,
+      "prepared": true,
+      "nativeVerified": false,
+      "populatedReferenceFixture": true,
+      "caseName": "oci-imported77",
+      "pkgSqlSha256": "8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99",
+      "initialSchemaSha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+      "installedSchemaSha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e",
+      "physicalSelection": [
+        "auth.audit_log_entries",
+        "auth.custom_oauth_providers",
+        "auth.flow_state",
+        "auth.identities",
+        "auth.instances",
+        "auth.mfa_amr_claims",
+        "auth.mfa_challenges",
+        "auth.mfa_factors",
+        "auth.mfa_recovery_code_sets",
+        "auth.mfa_recovery_codes",
+        "auth.oauth_authorizations",
+        "auth.oauth_client_states",
+        "auth.oauth_clients",
+        "auth.oauth_consents",
+        "auth.one_time_tokens",
+        "auth.refresh_tokens",
+        "auth.refresh_tokens_id_seq",
+        "auth.saml_providers",
+        "auth.saml_relay_states",
+        "auth.schema_migrations",
+        "auth.scim_tokens",
+        "auth.scim_users",
+        "auth.sessions",
+        "auth.sso_domains",
+        "auth.sso_providers",
+        "auth.users",
+        "auth.webauthn_challenges",
+        "auth.webauthn_credentials",
+        "k2_private.admin_bff_secrets",
+        "k2_private.admin_command_receipts",
+        "k2_private.admin_request_nonces",
+        "k2_private.admin_request_rate_buckets",
+        "k2_private.admin_session_events",
+        "k2_private.admin_session_events_event_id_seq",
+        "k2_private.admin_sessions",
+        "k2_private.ai_spend_control_config",
+        "k2_private.ai_spend_control_events",
+        "k2_private.ai_spend_control_events_id_seq",
+        "k2_private.catalog_import_operations",
+        "k2_private.catalog_import_row_events",
+        "k2_private.category_lot_command_context",
+        "k2_private.category_policy_command_config",
+        "k2_private.category_shelf_life_events",
+        "k2_private.category_shelf_life_policy",
+        "k2_private.channel_verification_events",
+        "k2_private.channel_verification_events_id_seq",
+        "k2_private.customer_account_notifications",
+        "k2_private.customer_account_settings",
+        "k2_private.customer_delivery_rate_heads",
+        "k2_private.customer_delivery_rate_versions",
+        "k2_private.delivery_psgc_locations",
+        "k2_private.express_delivery_acceptances",
+        "k2_private.express_delivery_context",
+        "k2_private.express_delivery_quotes",
+        "k2_private.globe_review_events",
+        "k2_private.guest_account_claim_events",
+        "k2_private.guest_account_claim_events_id_seq",
+        "k2_private.guest_bff_secrets",
+        "k2_private.guest_conversation_receipts",
+        "k2_private.guest_rate_buckets",
+        "k2_private.guest_request_nonces",
+        "k2_private.intake_ai_jobs",
+        "k2_private.order_delivery_construction_context",
+        "k2_private.order_delivery_snapshots",
+        "k2_private.order_payment_receipts",
+        "k2_private.product_delete_operations",
+        "k2_private.product_intake_evidence_cleanup_events",
+        "k2_private.product_master_events",
+        "k2_private.product_master_events_id_seq",
+        "k2_private.product_media_events",
+        "k2_private.product_media_orphan_events",
+        "k2_private.reference_command_context",
+        "k2_private.reference_events",
+        "k2_private.staff_delete_credentials",
+        "k2_private.staff_invitation_operations",
+        "k2_private.storefront_auth_rate_buckets",
+        "k2_private.storefront_auth_rate_nonces",
+        "k2_private.website_listing_events",
+        "k2_private.website_listing_events_id_seq",
+        "k2_private.wholesale_inquiry_events",
+        "k2_private.wholesale_inquiry_events_id_seq",
+        "k2_private.wholesale_inquiry_receipts",
+        "public.audit_logs",
+        "public.batch_change_events",
+        "public.brands",
+        "public.categories",
+        "public.channel_connections",
+        "public.channel_credentials",
+        "public.channel_event_inbox",
+        "public.channel_identities",
+        "public.channel_listings",
+        "public.channel_shops",
+        "public.channels",
+        "public.consignment_items",
+        "public.consignment_scan_events",
+        "public.consignments",
+        "public.conversation_events",
+        "public.conversations",
+        "public.coupon_redemptions",
+        "public.coupons",
+        "public.custodians",
+        "public.customer_accounts",
+        "public.customer_claim_requests",
+        "public.customer_contact_points",
+        "public.customers",
+        "public.delivery_cost_rows",
+        "public.delivery_courier_options",
+        "public.delivery_locality_rules",
+        "public.delivery_quote_snapshots",
+        "public.delivery_rate_sources",
+        "public.error_reports",
+        "public.globe_products",
+        "public.guest_access_grant_scopes",
+        "public.guest_access_grants",
+        "public.hubs",
+        "public.inventory_balances",
+        "public.inventory_events",
+        "public.inventory_reservations",
+        "public.k2_sku_seq",
+        "public.messages",
+        "public.notifications",
+        "public.order_request_events",
+        "public.order_request_items",
+        "public.order_requests",
+        "public.orders",
+        "public.packing_scan_events",
+        "public.pasabuy_events",
+        "public.pasabuy_quotes",
+        "public.pasabuy_requests",
+        "public.po_lines",
+        "public.product_batches",
+        "public.product_deletions",
+        "public.product_drafts",
+        "public.product_intake_sessions",
+        "public.products",
+        "public.products_old",
+        "public.purchase_orders",
+        "public.reviews",
+        "public.staff_allocations",
+        "public.suppliers",
+        "public.user_profiles",
+        "public.warehouses",
+        "public.wholesale_inquiries",
+        "storage.buckets",
+        "storage.buckets_analytics",
+        "storage.buckets_vectors",
+        "storage.migrations",
+        "storage.objects",
+        "storage.s3_multipart_uploads",
+        "storage.s3_multipart_uploads_parts",
+        "storage.vector_indexes"
+      ],
+      "controls": [
+        {
+          "name": "interruption",
+          "error": "REVISED_EXPLICIT_INSTALL_INTERRUPTION"
+        },
+        {
+          "name": "website-body-drift",
+          "error": "K2_PROVIDER_SCHEMA_DRIFT"
+        },
+        {
+          "name": "website-owner-drift",
+          "error": "K2_PROVIDER_SCHEMA_DRIFT"
+        },
+        {
+          "name": "website-invoker-drift",
+          "error": "K2_PROVIDER_SCHEMA_DRIFT"
+        },
+        {
+          "name": "website-barrier-drift",
+          "error": "K2_PROVIDER_SCHEMA_DRIFT"
+        },
+        {
+          "name": "website-acl-drift",
+          "error": "K2_PROVIDER_SCHEMA_DRIFT"
+        },
+        {
+          "name": "website-column-drift",
+          "error": "K2_PROVIDER_SCHEMA_DRIFT"
+        },
+        {
+          "name": "website-missing-drift",
+          "error": "K2_PROVIDER_SCHEMA_DRIFT"
+        }
+      ],
+      "prefixSha256": "0b92d112a2ab5804ce4ac1640d0397f27d2bd6d5cb6ac7a851e7df36ef9abf69",
+      "overlaySha256": "f79f0c37dddc398820ca55fc02a7715d4643db6afbcb7eea278382f108d8f6cc",
+      "sourceSha256": "2ff0295a0aca84a4e797a0749d85ac8ce37b4e1d733703ab9b8137376515897f",
+      "files": {
+        "revised-all-rows.sql": "8bdc0e2e75151079afa8a00c5133c8023639992ceacc9026e0679f3dc0919d37",
+        "revised-install-body.sql": "cb969b36d1de42b912276d8a53d7dc63672bbe5320bc30a777e7c0aba3063b49",
+        "revised-reference-population.sql": "0a4298084022f70e835c66063f950b3cdfbb7a093d047377e8417922c949ae84",
+        "revised-interruption.sql": "14994d19be43feb22fa10673daa5172e6b0a2da7bb7b7d8ed28529997d803f60",
+        "revised-website-body-drift.sql": "b9935dbc9ebb0c85268e6af883db21843dad47061f774b66beb666f012684daf",
+        "revised-website-owner-drift.sql": "706c4b5e885ada807b16bc34523cf222d0c56c6741c0f07e8bddd5e905dec9ce",
+        "revised-website-invoker-drift.sql": "738199f82e244f55ac2ed652b249b16ba73db4c3a5ae3dcb9d6966d6c27d237d",
+        "revised-website-barrier-drift.sql": "937f18de1c76cae91300e3737c030a4e0b9b02e407c39b0503e90db207257f5a",
+        "revised-website-acl-drift.sql": "93777b2c4bd9f4499a4f053ba3d962900228dc0c807ad988cf8c1f6e73b6bfb5",
+        "revised-website-column-drift.sql": "f7d1946cc400122716df7e7ab187d623dc86c3aa06f212124dba19177487fed2",
+        "revised-website-missing-drift.sql": "18780994fb1af8bc83f58038f04c94e88a1ec63907e1ce744bc0b9baf4cf0b99",
+        "revised-empty-cold.sql": "34f9d88ee7ce69f51aeae4a1d1fcb409c03a616993f9e65eacb7ada422170c2d",
+        "revised-cold-install.sql": "8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99",
+        "init.sh": "8e2bc238bda4d503e56b10315dabed68d89d390cfb82245102c62fe501c98427",
+        "image-probe.sh": "e7c558933880a6632a2a31b49e1694a80d15fbf274717abcee0a4722f41e34ac"
+      },
+      "runnerSha256": "9bd220835ea9c14f2e65d42d3ce918181821a9557e62affdbfa287265a4a42cf",
+      "limits": "Empty cold is original schema after guarded owned truncate/reset, committed full apply/replay, then original archive reconstruction. No provider, interruption mid-fragment, data-retaining deactivation or post-final-check authority qualification.",
+      "stockReads": true,
+      "scope": "Exact fourteen-fragment installer; seven Website-view drift controls plus transaction interruption and existing populated/physical/cold recovery. Accepted stock/reference drift evidence reused; native76 independent runtime review and this source review remain pending.",
+      "storefrontView": true
+    },
+    "reviewNote": "Independent native76/source approval39478b/e0a2f7 supersedes the preparer static review-pending description. No77 runtime acceptance yet.",
+    "controllerSession": 37130,
+    "launchTool": "311cf4",
+    "guestPid": 27776,
+    "executionRoot": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported77/execution01",
+    "controllerExit": 0,
+    "controllerTerminalTool": "99be60",
+    "result": {
+      "owningMap": "MAP-023/018",
+      "scope": "Complete guarded10s envelope/fresh/exact replay/cold archive recovery on actual local postgres target; provider physical/locale/project/host qualification separate",
+      "providerWrites": false,
+      "arguments": [
+        "-L",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+        "-machine",
+        "pc",
+        "-accel",
+        "whpx",
+        "-m",
+        "4096",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-nic",
+        "none",
+        "-no-reboot",
+        "-kernel",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+        "-initrd",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported77\\initramfs.cpio",
+        "-append",
+        "console=ttyS0 rdinit=/bin/sh loglevel=3"
+      ],
+      "pid": 27776,
+      "exit": 0,
+      "timedOut": false,
+      "guestSuccess": true,
+      "serverModuleProbe": true,
+      "postgresVersion": "17.6",
+      "moduleGucs": true,
+      "catalogs": {
+        "before": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        },
+        "after": {
+          "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e",
+          "bytes": 2437873
+        },
+        "rollback": {
+          "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+          "bytes": 1337443
+        }
+      },
+      "fullCatalogRollback": true,
+      "processStopped": true,
+      "serialSha256": "707d9515f095184fc110fad17bc8803a983851ef09d2090d00bc7b3ed7721e82"
+    },
+    "runtimePins": [
+      {
+        "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported77/execution01/result.json",
+        "sha256": "1b4ef0355326b963df467836eb354d8c4212582df407f50c583971bf58df1a58"
+      },
+      {
+        "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported77/execution01/serial.log",
+        "sha256": "707d9515f095184fc110fad17bc8803a983851ef09d2090d00bc7b3ed7721e82"
+      },
+      {
+        "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported77/execution01/before-catalog.json",
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+      },
+      {
+        "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported77/execution01/after-catalog.json",
+        "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e"
+      },
+      {
+        "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported77/execution01/rollback-catalog.json",
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963"
+      }
+    ],
+    "primaryAudit": {
+      "tool": "6a370f",
+      "rawFrames": 3,
+      "exactCatalogMatches76": true,
+      "allPreparedFilePins": true,
+      "eightControls": true,
+      "allControlSchemaRowsConserved": true,
+      "actualHostPidAbsent": 27776
+    },
+    "runtimeReview": {
+      "status": "APPROVED",
+      "tools": [
+        "a662d0",
+        "389edf",
+        "6414fc"
+      ],
+      "critical": 0,
+      "important": 0,
+      "rawFrames": 3,
+      "verifiedManifestFiles": 15,
+      "verifiedSourceRetainedPins": 9,
+      "physicalSelection": 151,
+      "exactControlMarkers": 8,
+      "matchingSchemaRowPairs": 16,
+      "actualHostPidAbsent": 27776
+    }
+  },
+  "currentRequestAudit": {
+    "tool": "2986ed",
+    "oldConstructorRefusesCurrent77": true,
+    "syntheticProjectInput": true,
+    "providerRequestsDispatched": false
+  }
+}

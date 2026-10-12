@@ -1,0 +1,547 @@
+import React, { useEffect, useRef, useState } from 'react'
+import { getDownstream, getUpstream } from './workflowGraph'
+import WorkflowRecords from './WorkflowRecords'
+import { CheckIcon, CopyIcon, SparkleIcon, PlayIcon } from '../../ui/icons'
+
+/**
+ * WorkflowDetailDrawer
+ * Displays the complete operational SOP, step checklist, rulebook safeguards,
+ * barcode test simulator, and direct Admin BOS action triggers for a selected workflow node.
+ */
+export default function WorkflowDetailDrawer({
+  node,
+  workflow,
+  onNavigate = null,
+  onClose = null,
+  onPrevNode = null,
+  onNextNode = null,
+  isFirst = false,
+  isLast = false,
+  isCompleted = false,
+  onToggleComplete = null,
+  onSelectNode = null,
+  onStartTour = null,
+}) {
+  const [checkedItems, setCheckedItems] = useState({})
+  const [simulated, setSimulated] = useState(false)
+  const [showTroubleshooting, setShowTroubleshooting] = useState(false)
+  const [copiedField, setCopiedField] = useState(null)
+  const copyTimerRef = useRef(null)
+
+  useEffect(() => {
+    setCheckedItems({})
+    setSimulated(false)
+    setShowTroubleshooting(false)
+    setCopiedField(null)
+    return function cleanupCopyTimer() {
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current)
+    }
+  }, [node?.id])
+
+  const handleCopy = (fieldKey, text) => {
+    if (!text) return
+    navigator.clipboard?.writeText?.(String(text).trim())
+    setCopiedField(fieldKey)
+    if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current)
+    copyTimerRef.current = window.setTimeout(function resetCopiedField() {
+      setCopiedField(null)
+    }, 2000)
+  }
+
+  if (!node) return null
+
+  const handleCheckboxToggle = (idx) => {
+    const next = { ...checkedItems, [idx]: !checkedItems[idx] }
+    setCheckedItems(next)
+
+  }
+
+  const handleSimulateScan = () => {
+    setSimulated((current) => !current)
+  }
+
+  const checklistCompletedCount = node.checklist.filter((_, i) => checkedItems[i]).length
+  const upstream = getUpstream(node.id)
+  const downstream = getDownstream(node.id)
+
+  const currentWfNodes = workflow?.nodes || []
+  const currentWfIdx = currentWfNodes.findIndex((n) => n.id === node.id)
+  const prevStepNode = currentWfIdx > 0
+    ? currentWfNodes[currentWfIdx - 1]
+    : upstream.find((item) => item.node)?.node || null
+  const nextStepNode = currentWfIdx >= 0 && currentWfIdx < currentWfNodes.length - 1
+    ? currentWfNodes[currentWfIdx + 1]
+    : downstream.find((item) => item.node && item.kind !== 'loopback')?.node || downstream.find((item) => item.node)?.node || null
+
+  return (
+    <div className="flex flex-col rounded-2xl border border-white/10 bg-[#0d131f] p-6 text-white shadow-2xl">
+      {/* Header */}
+      <div className="flex flex-col gap-3 border-b border-white/10 pb-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <span
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-base font-extrabold shadow-sm"
+            style={{ backgroundColor: workflow.accentColor, color: '#030712' }}
+          >
+            {node.step ?? '•'}
+          </span>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-white/50">
+                {node.step == null ? 'Graph entry' : `Step ${node.step}`} · {workflow.title}
+              </span>
+              <span className="text-white/30">·</span>
+              <span className="text-xs text-sky-400 font-medium">{node.location}</span>
+            </div>
+            <h3 className="font-sans text-xl font-bold text-white sm:text-2xl">
+              {node.title}
+            </h3>
+          </div>
+        </div>
+
+        {/* Action button & Completion toggle */}
+        <div className="flex flex-wrap items-center gap-2">
+          {onToggleComplete && (
+            <button
+              type="button"
+              onClick={() => onToggleComplete(node.id)}
+              className={`inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border px-3.5 py-2 text-xs font-bold transition-[transform,background-color,border-color,color] active:scale-[0.98] cursor-pointer ${
+                isCompleted
+                  ? 'border-emerald-500/40 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30'
+                  : 'border-white/20 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              <span>{isCompleted ? 'Reviewed in guide' : 'Mark guide step reviewed'}</span>
+            </button>
+          )}
+
+          {node.adminJump && onNavigate && (
+            <button
+              type="button"
+              onClick={() => onNavigate(node.adminJump)}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-sky-500/30 bg-sky-500/15 px-4 py-2 text-xs font-bold text-sky-300 transition-[transform,background-color,color] hover:bg-sky-500/25 hover:text-white active:scale-[0.98] cursor-pointer"
+            >
+              <span>{node.jumpLabel || 'Open real Admin screen'}</span>
+            </button>
+          )}
+
+          {onStartTour && (
+            <button
+              type="button"
+              onClick={() => onStartTour(workflow?.id)}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-amber-400/40 bg-amber-500/15 px-4 py-2 text-xs font-bold text-amber-300 transition-[transform,background-color,color] hover:bg-amber-500/25 hover:text-white active:scale-[0.98] cursor-pointer"
+            >
+              <PlayIcon size={14} />
+              <span>Play Guided Walkthrough</span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Operational Summary */}
+      <div className="mt-5">
+        <p className="text-sm leading-relaxed text-white/80">
+          {node.summary}
+        </p>
+        <p className="mt-3 rounded-adm-sm border border-amber-500/25 bg-amber-500/10 p-3 text-xs leading-5 text-amber-200">
+          Guide only: checking this step does not save or verify real work. Use the named Admin screen and confirm the saved record there.
+        </p>
+      </div>
+
+      {/* Staff Action Directive: Follow these steps */}
+      <section aria-label="Staff Action Directive" className="mt-6 rounded-2xl border border-sky-500/30 bg-gradient-to-br from-[#0e1a30] via-[#0d1526] to-[#090e18] p-5 shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/10 pb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky-500/20 text-sky-400 border border-sky-500/30">
+                <SparkleIcon size={13} />
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wider text-sky-400">
+                What to do
+              </span>
+            </div>
+            <h4 className="mt-1 font-sans text-lg font-bold text-white">
+              {'Follow these steps'}
+            </h4>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {onStartTour && (
+              <button
+                type="button"
+                onClick={() => onStartTour(node.workflowId === 'new_product_intake' ? 'manual_inventory' : 'auto_inventory')}
+                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 font-bold px-3.5 py-2 text-xs shadow-md transition-all active:scale-[0.98] cursor-pointer"
+              >
+                <SparkleIcon size={14} />
+                <span>Start Spotlight Tour</span>
+              </button>
+            )}
+            {node.adminJump && onNavigate && (
+              <button
+                type="button"
+                onClick={() => onNavigate(node.adminJump)}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-2 text-xs shadow-md shadow-sky-500/20 transition-[transform,background-color] active:scale-[0.98] cursor-pointer"
+              >
+                <span>Jump to {node.actionGuide?.targetScreen || node.jumpLabel || 'Screen'}</span>
+                <span aria-hidden="true">↗</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Interactive Visual Breadcrumb Flow: Prev -> Current -> Next */}
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/40 p-3">
+          <div className="flex flex-wrap items-center gap-2">
+            {prevStepNode ? (
+              <button
+                type="button"
+                onClick={() => onSelectNode?.(prevStepNode.id)}
+                className="min-h-11 flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/10 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
+                title={`Go to previous step: ${prevStepNode.title}`}
+              >
+                <span aria-hidden="true">←</span>
+                <span className="line-clamp-1 max-w-[150px]">Prev: {prevStepNode.step != null ? `Step ${prevStepNode.step}` : 'Entry'}</span>
+              </button>
+            ) : (
+              <span className="min-h-11 inline-flex items-center rounded-lg border border-white/5 bg-white/[0.02] px-3 py-1.5 text-xs text-white/40">
+                Start of flow
+              </span>
+            )}
+
+            <span className="text-white/30 font-bold" aria-hidden="true">→</span>
+
+            <div className="min-h-11 flex items-center gap-2 rounded-lg border border-sky-400/60 bg-sky-500/20 px-3 py-1.5 text-xs font-bold text-white shadow-sm ring-1 ring-sky-400/40">
+              <span className="flex h-2 w-2 rounded-full bg-sky-400 animate-ping" />
+              <span className="line-clamp-1 max-w-[180px]">Active: {node.step != null ? `Step ${node.step}` : 'Entry'}</span>
+            </div>
+
+            <span className="text-white/30 font-bold" aria-hidden="true">→</span>
+
+            {nextStepNode ? (
+              <button
+                type="button"
+                onClick={() => onSelectNode?.(nextStepNode.id)}
+                className="min-h-11 flex items-center gap-1.5 rounded-lg border border-sky-500/40 bg-sky-500/15 px-3 py-1.5 text-xs font-semibold text-sky-200 hover:bg-sky-500/25 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
+                title={`Advance to next step: ${nextStepNode.title}`}
+              >
+                <span className="line-clamp-1 max-w-[150px]">Next: {nextStepNode.step != null ? `Step ${nextStepNode.step}` : 'Complete'}</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            ) : (
+              <span className="min-h-11 inline-flex items-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-300">
+                End of this flow
+              </span>
+            )}
+          </div>
+
+          {/* Keyboard shortcut hint badge */}
+          <div className="hidden md:flex items-center gap-2 text-xs text-white/50">
+            <span>Rehearse:</span>
+            <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 font-mono text-xs font-bold text-white/80">[P] Prev</kbd>
+            <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 font-mono text-xs font-bold text-white/80">[N] Next</kbd>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          {/* Target Screen & What to Click */}
+          <div className="rounded-xl border border-sky-500/20 bg-black/30 p-4">
+            <span className="block text-xs font-bold uppercase tracking-wider text-sky-400">
+              {'1. Open the right screen'}
+            </span>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <span className="rounded-md border border-sky-400/30 bg-sky-400/10 px-2.5 py-1 text-xs font-semibold text-sky-300">
+                Screen: {node.actionGuide?.targetScreen || node.location}
+              </span>
+            </div>
+            <div className="mt-2 rounded-lg border border-white/10 bg-white/[0.04] p-2.5">
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <span className="block text-xs font-bold uppercase tracking-wider text-white/40">
+                  What to click in Admin
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopy('whatToClick', node.actionGuide?.whatToClick || node.jumpLabel)}
+                  className="min-h-11 inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-sky-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
+                  title="Copy click target to clipboard"
+                >
+                  {copiedField === 'whatToClick' ? (
+                    <>
+                      <CheckIcon size={13} className="text-emerald-400" />
+                      <span className="text-emerald-300">Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <CopyIcon size={13} />
+                      <span>Copy target</span>
+                    </>
+                  )}
+                </button>
+              </div>
+              <p className="text-xs font-mono font-medium text-white/95 break-words">
+                {node.actionGuide?.whatToClick || node.jumpLabel || 'Open the named screen and follow its visible action.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Action Directive */}
+          <div className="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div className="flex items-center justify-between gap-2 mb-1">
+              <span className="block text-xs font-bold uppercase tracking-wider text-white/50">
+                {'2. Do the work'}
+              </span>
+              <button
+                type="button"
+                onClick={() => handleCopy('actionDirective', node.actionGuide?.actionDirective || node.summary)}
+                className="min-h-11 inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-sky-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
+                title="Copy instructions"
+              >
+                {copiedField === 'actionDirective' ? (
+                  <>
+                    <CheckIcon size={13} className="text-emerald-400" />
+                    <span className="text-emerald-300">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <CopyIcon size={13} />
+                    <span>Copy SOP</span>
+                  </>
+                )}
+              </button>
+            </div>
+            <p className="mt-2 text-xs leading-relaxed text-white/90">
+              {node.actionGuide?.actionDirective || node.summary}
+            </p>
+          </div>
+
+          {/* Next Action & 1-Click Advance */}
+          <div className="rounded-xl border border-white/10 bg-black/30 p-4">
+            <span className="block text-xs font-bold uppercase tracking-wider text-white/50">
+              {'3. Next step'}
+            </span>
+            <p className="mt-2 text-xs leading-relaxed text-white/90">
+              {node.actionGuide?.nextAction || 'Move to the next step after you confirm the saved record.'}
+            </p>
+            {nextStepNode && onSelectNode && (
+              <button
+                type="button"
+                onClick={() => onSelectNode(nextStepNode.id)}
+                className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-sky-400/40 bg-sky-500/15 px-3 py-2 text-xs font-bold text-sky-200 transition-colors hover:bg-sky-500/25 hover:text-white active:scale-[0.98] cursor-pointer"
+              >
+                <span>Advance to Step {nextStepNode.step}: {nextStepNode.title}</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            )}
+            {!nextStepNode && (
+              <div className="mt-3 flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-300">
+                <CheckIcon size={14} />
+                <span>Final step of {workflow.title} reached</span>
+              </div>
+            )}
+          </div>
+
+          {/* Step Exit Criteria */}
+          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-4">
+            <span className="block text-xs font-bold uppercase tracking-wider text-emerald-400">
+              4. Before moving on
+            </span>
+            <p className="mt-2 text-xs leading-relaxed text-emerald-200/90">
+              {node.actionGuide?.exitCriteria || 'Confirm the saved record before moving on.'}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <WorkflowRecords key={node.id} section={node.adminJump} />
+
+      <div className="mt-6 grid gap-4 xl:grid-cols-3">
+        <GraphContextList title="Where did this come from?" items={upstream} onSelectNode={onSelectNode} empty="This is the single graph entry." />
+        <GraphContextList title="What can you do here?" items={downstream} onSelectNode={onSelectNode} empty="This is a terminal operational outcome." />
+        <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-300">Supporting records</h4>
+          <ul className="mt-3 space-y-2">
+            {(node.grounding || []).map((evidence) => (
+              <li key={`${evidence.kind}:${evidence.ref}`} className="rounded-lg border border-white/8 bg-white/[0.03] px-3 py-2">
+                <span className="block text-xs font-bold uppercase tracking-wider text-white/35">{evidence.kind}</span>
+                <code className="mt-1 block break-all text-xs text-white/70">{evidence.ref}</code>
+              </li>
+            ))}
+            {!node.grounding?.length && <li className="text-xs leading-5 text-white/45">No repository grounding is recorded for this node.</li>}
+          </ul>
+          {node.adminJump && onNavigate && (
+            <button type="button" onClick={() => onNavigate(node.adminJump)} className="mt-3 min-h-11 w-full rounded-adm-sm border border-sky-500/30 bg-sky-500/10 px-3 text-xs font-bold text-sky-300 hover:bg-sky-500/20">Jump to real screen ↗</button>
+          )}
+        </div>
+      </div>
+
+      {/* Training example — never an operational write or verification */}
+      {node.simulation && (
+        <div className="mt-6 rounded-xl border border-purple-500/20 bg-purple-500/5 p-4">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-purple-400">
+              Training example
+            </h4>
+            <button
+              type="button"
+              onClick={handleSimulateScan}
+              className="min-h-11 rounded-lg border border-purple-500/30 bg-purple-500/20 px-3 py-2 text-xs font-bold text-purple-200 transition-[transform,background-color] hover:bg-purple-500/30 active:scale-[0.97]"
+            >
+              {simulated ? 'Reset example response' : 'Show expected record shape'}
+            </button>
+          </div>
+
+          <p className="mt-2 text-xs leading-5 text-white/55">
+            This is a fictional rehearsal value. It does not call a scanner, provider, database command, or customer channel.
+          </p>
+
+          <div className="mt-3 flex flex-col gap-2 font-mono text-xs sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-h-11 items-center justify-between gap-3 rounded bg-black/40 px-3 py-1.5 text-white/70 border border-white/10">
+              <div>
+                <span className="text-white/40">Example input: </span>
+                <span className="text-purple-300 font-bold">{node.simulation.testBarcode}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleCopy('testBarcode', node.simulation.testBarcode)}
+                    className="min-h-11 inline-flex items-center gap-1 rounded-md border border-purple-400/30 bg-purple-500/10 px-2 py-1 text-xs font-semibold text-purple-200 hover:bg-purple-500/20 active:scale-[0.98] cursor-pointer"
+                title="Copy barcode to clipboard"
+              >
+                {copiedField === 'testBarcode' ? (
+                  <>
+                    <CheckIcon size={12} className="text-emerald-400" />
+                    <span className="text-emerald-300">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <CopyIcon size={12} />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
+            <div className="flex-1 rounded bg-black/40 px-3 py-2 text-white/80 border border-white/10 sm:ml-2">
+              <span className="text-white/40">Expected shape: </span>
+              <span className={simulated ? 'text-emerald-400 font-semibold' : 'text-white/70'}>
+                {simulated ? node.simulation.expectedResult : 'Select “Show expected record shape” to rehearse this guide step.'}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Step-by-Step Checklist */}
+      <div className="mt-6">
+        <div className="flex items-center justify-between">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-sky-400">
+            Guide rehearsal checklist ({checklistCompletedCount}/{node.checklist.length})
+          </h4>
+          {checklistCompletedCount === node.checklist.length && (
+            <span className="text-xs font-semibold text-emerald-400">
+              All guide items reviewed
+            </span>
+          )}
+        </div>
+        <div className="mt-3 space-y-2">
+          {node.checklist.map((item, idx) => (
+            <label
+              key={idx}
+              className="flex items-start gap-3 rounded-lg border border-white/5 bg-white/[0.03] p-3 text-xs leading-relaxed text-white/80 transition-colors hover:bg-white/[0.06] cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                checked={!!checkedItems[idx]}
+                onChange={() => handleCheckboxToggle(idx)}
+                className="mt-0.5 h-4 w-4 rounded border-white/20 bg-black/40 text-sky-500 focus:ring-sky-500/30"
+              />
+              <span className={checkedItems[idx] ? 'text-white/40 line-through' : 'text-white/90'}>
+                {item}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Safety Rules & Invariants */}
+      {node.rules && node.rules.length > 0 && (
+        <div className="mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+            Rules to follow
+          </h4>
+          <ul className="mt-2 space-y-1.5 text-xs leading-relaxed text-amber-200/80">
+            {node.rules.map((rule, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <span className="text-amber-400 font-bold">•</span>
+                <span>{rule}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Failure Recovery & Troubleshooting */}
+      {node.troubleshooting && node.troubleshooting.length > 0 && (
+        <div className="mt-6">
+          <button
+            type="button"
+            onClick={() => setShowTroubleshooting(!showTroubleshooting)}
+            className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-white/[0.02] p-3 text-left text-xs font-semibold text-white/70 transition-colors hover:bg-white/5"
+          >
+            <span>Troubleshooting & Failure Recovery ({node.troubleshooting.length} scenarios)</span>
+            <span className="font-mono text-white/40">{showTroubleshooting ? '▲' : '▼'}</span>
+          </button>
+
+          {showTroubleshooting && (
+            <div className="mt-2 space-y-2 rounded-xl border border-white/10 bg-[#090e17] p-3">
+              {node.troubleshooting.map((t, idx) => (
+                <div key={idx} className="border-b border-white/5 pb-2 last:border-b-0 last:pb-0 text-xs">
+                  <p className="font-semibold text-rose-300">If: {t.issue}</p>
+                  <p className="mt-0.5 text-white/70">Action: {t.fix}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Bottom Navigation */}
+      <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-4">
+        <button
+          type="button"
+          onClick={onPrevNode}
+          disabled={isFirst}
+            className="flex min-h-11 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+        >
+          ← Previous Step
+        </button>
+
+        <span className="text-xs font-medium text-white/50">
+          Actor: <span className="text-white/80">{node.actor}</span>
+        </span>
+
+        <button
+          type="button"
+          onClick={onNextNode}
+          disabled={isLast}
+            className="flex min-h-11 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+        >
+          Next Step →
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function GraphContextList({ title, items, onSelectNode, empty }) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+      <h4 className="text-xs font-bold uppercase tracking-wider text-sky-300">{title}</h4>
+      <div className="mt-3 space-y-2">
+        {items.map((item) => (
+          <button key={`${item.from}->${item.to}`} type="button" onClick={() => onSelectNode?.(item.node?.id)} disabled={!item.node} className="min-h-11 w-full rounded-lg border border-white/8 bg-white/[0.03] px-3 py-2 text-left hover:border-sky-400/30 hover:bg-sky-500/8 disabled:opacity-50">
+            <span className="block text-xs font-semibold text-white/85">{item.node?.title || 'Unknown node'}</span>
+            <span className="mt-0.5 block text-xs text-white/45">{item.label || item.kind}{item.condition ? ` · ${item.condition}` : ''}</span>
+          </button>
+        ))}
+        {!items.length && <p className="text-xs leading-5 text-white/45">{empty}</p>}
+      </div>
+    </div>
+  )
+}

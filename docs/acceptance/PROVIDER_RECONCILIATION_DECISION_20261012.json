@@ -1,0 +1,52 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "date": "2026-10-12",
+  "state": "offline-current-state-classifier-independently-approved-all-installation-outcomes-unknown",
+  "scope": "Pure offline classifier, no network/write/retry path. Pins complete accepted native77 package/BEFORE/AFTER bytes and reuses current request constructor. Current catalog/global/managed physical-state classification and targeted stored-statement correspondence are distinct from historical installation outcome. Every installation outcome stays UNKNOWN until actual migration transport/history atomicity qualified. Synthetic AFTER/history controls are not provider observations.",
+  "sourcePins": [
+    {
+      "file": "scripts/provider-reconciliation-decision.mjs",
+      "sha256": "f83627208cc7b8b8dae6f3da4cd08cdfd73ff2ce3af62ca7ad55f0de9292db74"
+    },
+    {
+      "file": "scripts/test-provider-reconciliation-decision.mjs",
+      "sha256": "5ca5bc530b8ea5ce86e3c0dcb78da0b7e693aa9d3f6bab0fd9141dcf04c4315c"
+    }
+  ],
+  "dependencyReceipt": "PROVIDER_RECONCILIATION_PREPARATION_20261012.json",
+  "requestReceipt": "CURRENT_PROVIDER_REQUEST_20261012.json",
+  "focused": {
+    "command": "node scripts/test-provider-reconciliation-decision.mjs",
+    "redTool": "21000c",
+    "greenTool": "e96508",
+    "exit": 0,
+    "checks": 26,
+    "actualBeforeWitness": true,
+    "syntheticAfterAndHistoryOnly": true
+  },
+  "review": {
+    "status": "APPROVED-offline-current-state-only",
+    "reproducedFocusedTool": "33ef61",
+    "critical": 0,
+    "important": 0,
+    "sourcePinsVerified": 2,
+    "reviewer": "view_calibration_review",
+    "limits": "Actual BEFORE witness only; AFTER and history controls synthetic. No transport/history atomicity or full outcome qualification."
+  },
+  "development": {
+    "status": "PASSED",
+    "command": "npm run verify:development",
+    "startTool": "d3e1db",
+    "terminalTool": "3ef6ef",
+    "exit": 0,
+    "adminChecks": 53,
+    "routeGaps": 0
+  },
+  "providerWrites": false,
+  "providerMigrationRequestsDispatched": false,
+  "newProviderReads": false,
+  "automaticRetryAllowed": false,
+  "remaining": "MAP-018 owns full applied/non-applied/ambiguous decision qualification and actual transport/history semantics, authority-through-commit disposition, exact live authorization/backup/readiness, separate deployments and real-host/human acceptance. This classifier deliberately has no APPLIED or NOT_APPLIED branch until those semantics are qualified.",
+  "recovery": "Remove only new offline classifier/test/receipt and restore owning documentation paragraph. Preserve current reconciliation SQL/raw readback/request preparation and immutable native76/77/all failed cases/original actor-body-key. No provider rollback."
+}

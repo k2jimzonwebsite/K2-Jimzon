@@ -7,8 +7,9 @@ import sharp from 'sharp'
 import {decodeEvidenceImage} from '../server/admin-bff/product-intake.js'
 import {importedIntakeBrowserProbe} from './imported-intake-browser-probe.inc.mjs'
 import {adminStockReadProbe} from './admin-stock-read-probe.inc.mjs'
+import {productMasterRecoveryTransportProbe} from './product-master-recovery-transport-probe.inc.mjs'
 
-export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false,browserWorkflow=false,browserInventory=false,staffStock=false,stockRoleTransport=false,browserOut}={}){
+export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false,browserWorkflow=false,browserInventory=false,browserListing=false,browserCustomer=false,staffStock=false,stockRoleTransport=false,productMasterRecoveryTransport=false,browserOut}={}){
  let mediaCleanup,mediaPath
  const command=async(expect,route,body,key=randomUUID())=>expect(route,await request(route,'POST',body,{headers:{'x-k2-idempotency-key':key}})).result
  const prepareStock=async({expect,cleanup,good},categoryId)=>{
@@ -19,7 +20,7 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
  try{
  await intakeEvidenceProbe(uid,report,credentials,request,jar,{
   publicMedia,
-  ...(browserWorkflow ? {browser: context => importedIntakeBrowserProbe({...context,credentials,uid,report,out:browserOut,browserInventory,staffStock})} : {}),
+  ...(browserWorkflow ? {browser: context => importedIntakeBrowserProbe({...context,credentials,uid,report,out:browserOut,browserInventory,staffStock,browserListing})} : {}),
   before:async({client,cleanup,request,good,expect})=>{
    const values=Object.fromEntries(CATALOG_COLUMNS.map(k=>[k,'']))
    Object.assign(values,{template_version:'k2-catalog-v1',name:'Synthetic pantry '+randomUUID(),description:'Imported description to preserve',ingredients:'Synthetic label ingredients',country_of_origin:'Spain',primary_image_url:'https://example.invalid/imported-supplied.jpg',internal_notes:'Explicit synthetic CSV provenance'})
@@ -57,7 +58,13 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
     assert.equal(Number(reviewed.catalog_record_version),Number(baseline.catalog_record_version)+1)
     return String(reviewed.catalog_record_version)
    }
-   return {baseline,brand,category,readReviewedVersion,existingProduct:{productId:baseline.id,recordVersion:String(baseline.catalog_record_version)}}
+   const readProduct=async()=>good('rendered_current_product',await client.from('products').select('*').eq('id',baseline.id).single())
+   const advanceProduct=async()=>{
+    const current=await readProduct()
+    return command(expect,'product-master',{action:'update',payload:{sku,patch:{srp:120,is_human_reviewed:true},expectedUpdatedAt:current.updated_at,reason:'Explicit synthetic competing Admin decision'}})
+   }
+   const trackPublicMedia=objectPath=>{assert.ok(objectPath.startsWith(uid+'/product-media/'));assert.ok(!mediaPath);mediaPath=objectPath;mediaCleanup=cleanup.storage.from('product-images')}
+   return {baseline,brand,category,readReviewedVersion,readProduct,advanceProduct,trackPublicMedia,existingProduct:{productId:baseline.id,recordVersion:String(baseline.catalog_record_version)}}
   },
   after:async({client,cleanup,request,good,expect,target,sessionId,requestId})=>{
    const {baseline,brand,category}=target,sku=baseline.sku
@@ -75,7 +82,7 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
    assert.deepEqual(await command(expect,'product-intake/draft',body,key),reviewed)
    }
    const product=good('reviewed_product_read',await client.from('products').select('*').eq('id',baseline.id).single())
-   for(const field of ['id','sku','catalog_id','primary_image_url','ingredients','internal_notes'])assert.equal(product[field],baseline[field])
+   for(const field of ['id','sku','catalog_id',...(!browserListing?['primary_image_url']:[]),'ingredients','internal_notes'])assert.equal(product[field],baseline[field])
    assert.equal(product.description,'Staff accepted correction');assert.equal(product.brand_id,brand.id);assert.equal(product.category_id,category.id)
    if(browserInventory){
     assert.equal(Number(report.intakeBrowser.reviewRecordVersion),Number(baseline.catalog_record_version)+1)
@@ -84,7 +91,7 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
     report.importedProduct.recordVersionAfterStockAndPublication=String(product.catalog_record_version)
    }else assert.equal(Number(product.catalog_record_version),Number(baseline.catalog_record_version)+1)
    report.importedProduct.reviewedOriginalIdentity=true;report.importedProduct.rejectedIngredientsPreserved=true;report.importedProduct.reviewReplay=!browserWorkflow
-   if(publicMedia){
+   if(publicMedia&&!browserListing){
     mediaCleanup=cleanup.storage.from('product-images')
     const bytes=await sharp({create:{width:180,height:140,channels:3,background:{r:184,g:93,b:42}}}).png().toBuffer()
     const decoded=await decodeEvidenceImage(bytes,'image/png'),uploadKey=randomUUID()
@@ -119,16 +126,28 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
    if(staffStock)await adminStockReadProbe({client,request,good,expect,credentials,target,report,phase:'after',stockRoleTransport,cleanup,uid,jar})
    if(!browserInventory)await command(expect,'product-intake/publication',{sessionId,requestedStatus:'under_review',reason:'Explicit synthetic staff package review'})
    const current=good('publication_master',await client.from('products').select('*').eq('id',baseline.id).single())
-   await command(expect,'product-master',{action:'update',payload:{sku,patch:{srp:100,is_human_reviewed:true},expectedUpdatedAt:current.updated_at,reason:'Explicit synthetic Admin pricing and human review'}})
-   await command(expect,'product-intake/publication',{sessionId,requestedStatus:'live',reason:'Explicit synthetic final publication review'})
+   if(!browserListing){
+    if(productMasterRecoveryTransport)await productMasterRecoveryTransportProbe({uid,sku,client,cleanup,request,good,expect,report})
+    else await command(expect,'product-master',{action:'update',payload:{sku,patch:{srp:100,is_human_reviewed:true},expectedUpdatedAt:current.updated_at,reason:'Explicit synthetic Admin pricing and human review'}})
+    await command(expect,'product-intake/publication',{sessionId,requestedStatus:'live',reason:'Explicit synthetic final publication review'})
+   }
    const final=good('live_product',await client.from('products').select('*').eq('id',baseline.id).single())
    assert.equal(final.status,'Live')
-   const listingKey=randomUUID(),assignment={action:'website_listing_set',sku,assigned:true,expectedUpdatedAt:null,reason:'Explicit synthetic Website assignment'}
-   const listing=await command(expect,'channels',assignment,listingKey);assert.deepEqual(await command(expect,'channels',assignment,listingKey),listing)
+   if(!browserListing){
+    const listingKey=randomUUID(),assignment={action:'website_listing_set',sku,assigned:true,expectedUpdatedAt:null,reason:'Explicit synthetic Website assignment'}
+    const listing=await command(expect,'channels',assignment,listingKey);assert.deepEqual(await command(expect,'channels',assignment,listingKey),listing)
+   }
    const row=good('website_listing',await client.from('channel_listings').select('sku,status,channel_source').eq('sku',sku).eq('channel_source','website').single())
    assert.equal(row.status,'Active')
    report.importedProduct.liveOriginalIdentity=true;report.importedProduct.websiteListing=row;report.importedProduct.websiteReplay=true
    report.checks.push('genuine_bff_csv_review_original_identity_canonical_stock_publication_website_listing')
+   if(browserCustomer){
+    const {renderedCustomerBrowserProbe}=await import('./rendered-customer-browser-probe.inc.mjs')
+    const readOrder=async key=>good('customer_order_readback',await client.from('order_requests').select('id,public_reference,total_amount,idempotency_key').eq('idempotency_key',key))
+    const readOrderItems=async id=>good('customer_order_items_readback',await client.from('order_request_items').select('sku,quantity').eq('order_request_id',id))
+    const readStock=async()=>good('customer_stock_readback',await client.from('product_batches').select('quantity,reserved_quantity').eq('sku',sku))
+    await renderedCustomerBrowserProbe({sku,name:baseline.name,publicUrl:report.publicMedia.url,report,out:browserOut,readOrder,readOrderItems,readStock})
+   }
   }
  })
  }finally{

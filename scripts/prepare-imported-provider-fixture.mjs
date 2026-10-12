@@ -7,6 +7,8 @@ import { spawnSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
 import {assertReferenceCatalogDelta} from './reference-catalog-contract.mjs'
 import {assertAdminStockCatalogDelta} from './admin-stock-catalog-contract.mjs'
+import {assertStorefrontViewCatalogDelta} from './storefront-view-catalog-contract.mjs'
+import {storefrontViewSource} from './storefront-view-source.mjs'
 
 const root = 'D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const caseName = process.argv.find(a => a.startsWith('--case='))?.slice(7) || 'oci-imported01'
@@ -15,6 +17,8 @@ const customerTariffTransport = process.argv.includes('--customer-tariff-transpo
 const categoryPolicyTransport = process.argv.includes('--category-policy-transport')
 const references = process.argv.includes('--references')
 const staffStock = process.argv.includes('--staff-stock')
+const storefrontView = process.argv.includes('--storefront-view')
+if (storefrontView && !staffStock) throw Error('STOREFRONT_VIEW_REQUIRES_FULL_STOCK_UNION')
 if (categoryPolicyTransport && (!productMasterTransport || !customerTariffTransport)) throw Error('CATEGORY_TRANSPORT_REQUIRES_MASTER_TARIFF_UNION')
 if (references && !categoryPolicyTransport) throw Error('REFERENCE_INSTALL_REQUIRES_FULL_TRANSPORT_UNION')
 if (staffStock && !references) throw Error('STAFF_STOCK_REQUIRES_FULL_REFERENCE_UNION')
@@ -138,6 +142,11 @@ const stockContractPath='supabase/prepared/admin_stock_catalog_delta.json'
 const stockSourcePath='supabase/prepared/admin_product_stock_read.sql'
 const stockCatalogPath=path.join(root,'oci-imported53/execution01/calibrated-catalog.json')
 let stockContract=null,stockFragment=''
+const viewContractPath='supabase/prepared/storefront_view_catalog_delta.json'
+const viewSourcePath='supabase/migrations/20260929_channel_listing_slices.sql'
+const viewCatalogPath=path.join(root,'oci-imported73/execution01/calibrated-catalog.json')
+const viewReceiptPath='docs/acceptance/STOREFRONT_VIEW_CALIBRATION_20261012.json'
+let viewFragment=''
 if(references){
   const referenceContract=JSON.parse(fs.readFileSync(referenceContractPath))
   assert.equal(sha(fs.readFileSync(referenceCatalogPath)),'be85021470fc2976e36fbdeff750641d45810c8c30818f06155336a600866df7')
@@ -154,6 +163,17 @@ if(staffStock){
   stockFragment=fs.readFileSync(stockSourcePath,'utf8')
   referenceExpected=assertAdminStockCatalogDelta(referenceExpected,JSON.parse(fs.readFileSync(stockCatalogPath)),stockContract,stockFragment)
 }
+if(storefrontView){
+  const calibration=JSON.parse(fs.readFileSync(viewReceiptPath))
+  assert.equal(calibration.controllerExit,0);assert.equal(calibration.review.status,'verified')
+  assert.equal(calibration.review.terminalRecovery,'APPROVED')
+  for(const key of ['guestSuccess','moduleGucs','fullCatalogRollback','processStopped'])assert.equal(calibration.result[key],true)
+  assert.equal(sha(fs.readFileSync(viewContractPath)),calibration.contractPin.sha256)
+  assert.equal(sha(fs.readFileSync(viewCatalogPath)),calibration.result.catalogs.calibrated.sha256)
+  const viewMigration=fs.readFileSync(viewSourcePath,'utf8')
+  viewFragment=storefrontViewSource(viewMigration)
+  referenceExpected=assertStorefrontViewCatalogDelta(referenceExpected,JSON.parse(fs.readFileSync(viewCatalogPath)),JSON.parse(fs.readFileSync(viewContractPath)),viewMigration)
+}
 derived = derived.replace(afterAnchor, () => (references
   ? 'Object.assign(after,' + JSON.stringify(referenceExpected) + ');\n'
   : 'after.functions=' + JSON.stringify(expected.functions) + ';\n') + afterAnchor)
@@ -161,7 +181,7 @@ assert.equal(derived.split('fragments:fixed.fragments').length, 2)
 const fragmentStart = fragment.indexOf('\nbegin;')
 assert.ok(fragmentStart >= 0 && fragment.split('\nbegin;').length === 2 && /commit;\s*$/.test(fragment))
 const importedBody = fragment.slice(fragmentStart + 1).replace(/^begin;/, '').replace(/commit;\s*$/, '')
-derived = derived.replace('fragments:fixed.fragments', () => 'fragments:[...fixed.fragments,' + JSON.stringify(importedBody) + (productMasterTransport ? ',' + JSON.stringify(transport) : '') + (customerTariffTransport ? ',' + JSON.stringify(tariffTransport) : '') + (categoryPolicyTransport ? ',' + JSON.stringify(categoryTransport) : '') + referenceFragments.map(sql=>','+JSON.stringify(sql)).join('') + (staffStock?','+JSON.stringify(stockFragment):'') + ']')
+derived = derived.replace('fragments:fixed.fragments', () => 'fragments:[...fixed.fragments,' + JSON.stringify(importedBody) + (productMasterTransport ? ',' + JSON.stringify(transport) : '') + (customerTariffTransport ? ',' + JSON.stringify(tariffTransport) : '') + (categoryPolicyTransport ? ',' + JSON.stringify(categoryTransport) : '') + referenceFragments.map(sql=>','+JSON.stringify(sql)).join('') + (staffStock?','+JSON.stringify(stockFragment):'') + (storefrontView?','+JSON.stringify(viewFragment):'') + ']')
 const generated = path.join(root, 'prepare-' + caseName + '.mjs')
 assert.ok(!fs.existsSync(path.join(root, caseName)) && !fs.existsSync(generated))
 fs.writeFileSync(generated, derived, { flag: 'wx' })
@@ -179,10 +199,12 @@ const record = {
     ...(categoryPolicyTransport ? [categoryTransportPath] : [])]
     .concat(references?[referenceContractPath,referenceCatalogPath,...referencePaths,'scripts/reference-catalog-contract.mjs']:[])
     .concat(staffStock?[stockContractPath,stockSourcePath,stockCatalogPath,'scripts/admin-stock-catalog-contract.mjs','docs/acceptance/ADMIN_STOCK_INSTALLATION_CALIBRATION_20261011.json']:[])
+    .concat(storefrontView?[viewContractPath,viewSourcePath,viewCatalogPath,viewReceiptPath,'scripts/storefront-view-source.mjs','scripts/storefront-view-catalog-contract.mjs']:[])
     .map(file => ({ file, sha256: sha(fs.readFileSync(file)) })),
   transitions: transitions.map(([name, beforeMd5]) => ({ name, beforeMd5 })),
   helper: helper.identity, expectedAfterSha256: sha(JSON.stringify(expected)),
   stockReads:staffStock?{expectedCanonicalSha256:stockContract.afterCanonicalSha256,sourceSha256:stockContract.source.sha256,fragmentCount:13,nativeQualified:false}:null,
+  storefrontView:storefrontView?{contractPath:viewContractPath,expectedCanonicalSha256:JSON.parse(fs.readFileSync(viewContractPath)).afterCanonicalSha256,sourceSha256:sha(viewFragment),sourceBytes:Buffer.byteLength(viewFragment),fragmentCount:14,nativeQualified:false}:null,
   derivedSourceSha256: sha(derived),
   references: references?{contractPath:referenceContractPath,expectedCanonicalSha256:JSON.parse(fs.readFileSync(referenceContractPath)).afterCanonicalSha256,fragments:referencePaths,nativeQualified:false}:null,
 }

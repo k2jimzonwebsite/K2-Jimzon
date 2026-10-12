@@ -1,6 +1,7 @@
 import { fetchReadWithRetry, fetchWithTimeout, isRequestTimeoutError } from '../lib/fetchWithTimeout.js'
 import { referenceRecoveryKey, validateReferencePayloadText } from '../lib/referenceCommandRecovery.js'
 import { productMasterRecoveryKey, validateProductMasterPayloadText } from '../lib/productMasterCommandRecovery.js'
+import { websiteAssignmentRecovery, validateWebsiteAssignmentPayloadText } from '../lib/websiteAssignmentRecovery.js'
 
 export function adminBffEnabled() {
   return String(import.meta.env.VITE_ADMIN_BFF_ENABLED || '').toLowerCase() === 'true'
@@ -168,6 +169,10 @@ const ERROR_MESSAGES = {
   CHANNEL_READINESS_UNAVAILABLE: 'Channel evidence is temporarily unavailable.',
   CHANNEL_COMMAND_UNAVAILABLE: 'The channel verification could not be recorded safely. Try again.',
   CHANNEL_ADMIN_REQUIRED: 'Only an administrator can verify an internal channel event.',
+  CHANNEL_ACTOR_CHANGED: 'Return to the original account before retrying this saved Website decision.',
+  WEBSITE_LISTING_INVALID: 'Review the product, assignment, version and specific reason before saving.',
+  WEBSITE_LISTING_UNAVAILABLE: 'Current Website assignment is unavailable. Refresh before a new decision.',
+  WEBSITE_LISTING_STALE: 'Website assignment changed. Review its current details before a new decision.',
   CHANNEL_VERIFICATION_INVALID: 'Review the request reference and reconciliation reason.',
   CHANNEL_REFERENCE_NOT_FOUND: 'That public request reference was not found in the matching channel.',
   CHANNEL_NOT_FOUND: 'That internal channel record is not available.',
@@ -812,6 +817,17 @@ export function createSupplierBff(payload, idempotencyKey = crypto.randomUUID())
 
 export function getAdminChannelsBff(signal) {
   return adminRequest('/api/admin/channels', { signal })
+}
+
+export function getAdminWebsiteAssignmentBff(sku,signal) {
+  return adminRequest(`/api/admin/channels?sku=${encodeURIComponent(sku)}`,{signal})
+}
+export function sendSavedWebsiteAssignmentBff(payloadText,idempotencyKey,expectedActorId) {
+  try {
+    validateWebsiteAssignmentPayloadText(payloadText);websiteAssignmentRecovery.key(expectedActorId)
+    if(typeof idempotencyKey!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idempotencyKey))throw Error()
+  }catch {return Promise.resolve({ok:false,code:'WEBSITE_LISTING_INVALID',error:ERROR_MESSAGES.WEBSITE_LISTING_INVALID})}
+  return adminRequest('/api/admin/channels',{method:'POST',bodyText:payloadText,expectedActorId,csrf:true,idempotencyKey})
 }
 
 export function verifyInternalChannelBff(payload, idempotencyKey = crypto.randomUUID()) {

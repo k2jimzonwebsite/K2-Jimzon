@@ -10,22 +10,24 @@ const customerTariffTransport=process.argv.includes('--customer-tariff-transport
 const categoryPolicyTransport=process.argv.includes('--category-policy-transport')
 const references=process.argv.includes('--references')
 const staffStock=process.argv.includes('--staff-stock')
+const storefrontView=process.argv.includes('--storefront-view')
+if(storefrontView&&!staffStock)throw Error('STOREFRONT_VIEW_RECOVERY_REQUIRES_FULL_STOCK_UNION')
 if(staffStock&&!references)throw Error('STAFF_STOCK_RECOVERY_REQUIRES_FULL_REFERENCE_UNION')
 if(categoryPolicyTransport&&!customerTariffTransport)throw Error('CATEGORY_TRANSPORT_REQUIRES_MASTER_TARIFF_UNION')
 if(references&&!categoryPolicyTransport)throw Error('REFERENCE_RECOVERY_REQUIRES_FULL_TRANSPORT_UNION')
 assert.match(caseName,/^oci-imported\d{2}$/)
 const dir=path.join(root,caseName),sha=b=>createHash('sha256').update(b).digest('hex')
 assert.ok(!fs.existsSync(dir),'Fresh owned case required')
-const prep=spawnSync(process.execPath,['scripts/prepare-imported-provider-fixture.mjs','--case='+caseName,'--product-master-transport',...(customerTariffTransport?['--customer-tariff-transport']:[]),...(categoryPolicyTransport?['--category-policy-transport']:[]),...(references?['--references']:[]),...(staffStock?['--staff-stock']:[])],{windowsHide:true,encoding:'utf8',maxBuffer:1024*1024})
+const prep=spawnSync(process.execPath,['scripts/prepare-imported-provider-fixture.mjs','--case='+caseName,'--product-master-transport',...(customerTariffTransport?['--customer-tariff-transport']:[]),...(categoryPolicyTransport?['--category-policy-transport']:[]),...(references?['--references']:[]),...(staffStock?['--staff-stock']:[]),...(storefrontView?['--storefront-view']:[])],{windowsHide:true,encoding:'utf8',maxBuffer:1024*1024})
 assert.equal(prep.status,0,prep.stderr)
 assert.ok(!fs.existsSync(path.join(dir,'execution01')),'Cannot modify executed fixture')
 const stage=path.join(dir,'staging/k2'),pkg=JSON.parse(fs.readFileSync(path.join(dir,'guarded-package.json')))
-assert.equal(sha(pkg.sql),staffStock?'e6eda8085254f27f0dd30c01f77c3a53bfc4a1652c59ad472a68558079bab052':references?'e051cd65f6b9b070c70754b61ef521a772bc2bad46c211e918081e23b945457f':categoryPolicyTransport?'ea8e212e648615611f4bc09ed36c7610c875f1779c84510e5556c448ff3a01f4':customerTariffTransport?'98015aa9ae261ba1123c0e47190d19c4dcc6e158bf2df192654c50f6a64e234b':'d44df9c5a41ee8d31682038cc48147fa4593914997b98a075e1fccab4e667d45')
+assert.equal(sha(pkg.sql),storefrontView?'8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5dc99':staffStock?'e6eda8085254f27f0dd30c01f77c3a53bfc4a1652c59ad472a68558079bab052':references?'e051cd65f6b9b070c70754b61ef521a772bc2bad46c211e918081e23b945457f':categoryPolicyTransport?'ea8e212e648615611f4bc09ed36c7610c875f1779c84510e5556c448ff3a01f4':customerTariffTransport?'98015aa9ae261ba1123c0e47190d19c4dcc6e158bf2df192654c50f6a64e234b':'d44df9c5a41ee8d31682038cc48147fa4593914997b98a075e1fccab4e667d45')
 const initialBytes=fs.readFileSync(root+'/oci-imported03/execution01/before-catalog.json')
 assert.equal(sha(initialBytes),'87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963')
 const initial=JSON.parse(initialBytes)
-const installedBytes=fs.readFileSync(root+(staffStock?'/oci-imported56':references?'/oci-imported41':categoryPolicyTransport?'/oci-imported19':customerTariffTransport?'/oci-imported11':'/oci-imported03')+'/execution01/after-catalog.json')
-assert.equal(sha(installedBytes),staffStock?'f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b':references?'afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667':categoryPolicyTransport?'f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a':customerTariffTransport?'0183c08a7ab7a476959577a5403763ba7f24ff302f50f7df153844436920b72d':'2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6')
+const installedBytes=fs.readFileSync(root+(storefrontView?'/oci-imported76':staffStock?'/oci-imported56':references?'/oci-imported41':categoryPolicyTransport?'/oci-imported19':customerTariffTransport?'/oci-imported11':'/oci-imported03')+'/execution01/after-catalog.json')
+assert.equal(sha(installedBytes),storefrontView?'1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e':staffStock?'f29a086264ad7b166f7a098af8aefb619d70297e597b40956af48912729ca03b':references?'afa55d67f2a423a47a74c9a2afa3602f2a4a37e0499a888f58ac8ecf94297667':categoryPolicyTransport?'f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a':customerTariffTransport?'0183c08a7ab7a476959577a5403763ba7f24ff302f50f7df153844436920b72d':'2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6')
 const at=pkg.sql.indexOf('begin;'),body=pkg.sql.slice(at+6).replace(/\ncommit;\s*$/,'')
 assert.ok(at>0&&body.startsWith('set local')&&!body.endsWith('commit;'))
 const owned="do $owned_recovery$ begin if current_database()<>'postgres' or current_user not in ('postgres','supabase_admin') or current_setting('data_directory')<>'/tmp/k2-managed-data' or inet_server_addr() is not null then raise exception 'OWNED_RAM_RECOVERY_REQUIRED';end if;end $owned_recovery$;\n"
@@ -98,7 +100,7 @@ if(references&&!staffStock){
  assert.equal(verifier.definition.split("'reference_create',").length,2)
  cases.push(['reference-verifier-body-drift',verifier.definition.replace("'reference_create',",'').trimEnd()+';','','K2_PROVIDER_SCHEMA_DRIFT'])
 }
-if(staffStock){
+if(staffStock&&!storefrontView){
  const installed=JSON.parse(installedBytes),contract=JSON.parse(fs.readFileSync('supabase/prepared/admin_stock_catalog_delta.json'))
  for(const identity of Object.keys(contract.functions)){
   const f=installed.functions.find(f=>f.identity===identity);assert.ok(f,identity)
@@ -112,6 +114,18 @@ if(staffStock){
    [label+'-owner-drift','alter function '+target+' owner to authenticated;set local role postgres;','','K2_PROVIDER_SCHEMA_DRIFT'],
    [label+'-settings-drift','alter function '+target+' set search_path to public;','','K2_PROVIDER_SCHEMA_DRIFT'])
  }
+}
+if(storefrontView){
+ const view=JSON.parse(installedBytes).relations.find(r=>r.name==='public.v_storefront_visible_skus')
+ assert.ok(view&&view.kind==='v'&&view.owner==='postgres')
+ assert.equal(view.view.split('p.published IS TRUE').length,2)
+ cases.push(['website-body-drift','create or replace view public.v_storefront_visible_skus as '+view.view.replace('p.published IS TRUE','true'),'','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['website-owner-drift','alter view public.v_storefront_visible_skus owner to authenticated;set local role postgres;','','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['website-invoker-drift','alter view public.v_storefront_visible_skus set (security_invoker=true);','','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['website-barrier-drift','alter view public.v_storefront_visible_skus set (security_barrier=false);','','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['website-acl-drift','revoke select on public.v_storefront_visible_skus from anon;','','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['website-column-drift','alter view public.v_storefront_visible_skus rename column sku to sku_drift;','','K2_PROVIDER_SCHEMA_DRIFT'],
+  ['website-missing-drift','drop view public.v_storefront_visible_skus;','','K2_PROVIDER_SCHEMA_DRIFT'])
 }
 if(customerTariffTransport)fs.writeFileSync(path.join(stage,'revised-install-body.sql'),body,{flag:'wx'})
 for(const [name,mutation,fault] of cases)fs.writeFileSync(path.join(stage,'revised-'+name+'.sql'),'begin;\n'+owned+mutation+'\n'+(customerTariffTransport?'\\i /tmp/revised-install-body.sql':body)+'\n'+fault+'\ncommit;\n',{flag:'wx'})
@@ -197,6 +211,7 @@ fs.writeFileSync(runnerPath,runner)
 const record={owningMap:'MAP-018',idea:references?'IDEA-20261010-06':'IDEA-20261010-08',providerWrites:false,prepared:true,nativeVerified:false,populatedReferenceFixture:references,caseName,pkgSqlSha256:sha(pkg.sql),initialSchemaSha256:sha(initialBytes),installedSchemaSha256:sha(installedBytes),physicalSelection:physical,controls:cases.map(([name,mutation,fault,error])=>({name,error})),prefixSha256,overlaySha256:sha(fs.readFileSync(overlay)),sourceSha256:sha(fs.readFileSync('scripts/prepare-product-master-recovery-fixture.mjs')),files:Object.fromEntries([...added,'init.sh','image-probe.sh'].map(n=>[n,sha(fs.readFileSync(path.join(stage,n)))])),runnerSha256:sha(runner),limits:'Empty cold is original schema after guarded owned truncate/reset, committed full apply/replay, then original archive reconstruction. No provider, interruption mid-fragment, data-retaining deactivation or post-final-check authority qualification.'}
 record.stockReads=staffStock
 if(staffStock){record.idea='IDEA-20261011-01';record.scope='Exact accepted thirteen-fragment installer; ten stock-function drift controls plus transaction interruption and populated replay conservation; previously accepted reference-specific drift reused, not repeated.'}
+if(storefrontView){record.idea='IDEA-20261009-11';record.storefrontView=true;record.scope='Exact fourteen-fragment installer; seven Website-view drift controls plus transaction interruption and existing populated/physical/cold recovery. Accepted stock/reference drift evidence reused; native76 independent runtime review and this source review remain pending.'}
 fs.writeFileSync(path.join(dir,'revised-qualification.json'),JSON.stringify(record,null,2),{flag:'wx'})
 fs.copyFileSync('scripts/prepare-product-master-recovery-fixture.mjs',path.join(dir,'qualification-preparer-source.mjs'),fs.constants.COPYFILE_EXCL)
 console.log(JSON.stringify({prepared:true,caseName,pkgSqlSha256:record.pkgSqlSha256,nativeVerified:false}))

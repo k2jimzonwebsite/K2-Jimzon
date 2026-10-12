@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-11",
+  "providerWrites": false,
+  "scope": "Independently reviewed actual native one-view/composite/array metadata calibration with rollback and original cold recovery; complete guarded composition remains unqualified",
+  "beforeCanonicalSha256": "98b576aeec6521ecb7825420ab3579f1afdd9d5bd78787c710855c94f7365987",
+  "afterCanonicalSha256": "05a8027af732e99ce8b5851cb48549352c1b974744fc0ea3de3095ef37c751bb",
+  "source": {
+    "file": "supabase/migrations/20260929_channel_listing_slices.sql",
+    "sha256": "e53121367315cf371b3effc67b83b444d2ea16bf75335bce0b976f0694b856a6",
+    "bytes": 852
+  },
+  "relations": {
+    "public.v_storefront_visible_skus": "ef6a5846183572e8f12840fd3fbb39567687831547f401b487e40b5dae3a2122"
+  },
+  "types": {
+    "public._v_storefront_visible_skus": "97cd63c04e0092935d007ba9134a20aee61125a8a79c5e4c8e0fb169343e39aa",
+    "public.v_storefront_visible_skus": "592e5e43113d8e8374d3452b772681ecc7750efd17fabcb26165a51d7ea74408"
+  },
+  "nativeCase": "oci-imported73",
+  "nativeSerialSha256": "6d7b364904456956df2e2b53bfb96a83066b9531a0fda2010d533c2a97326155"
+}

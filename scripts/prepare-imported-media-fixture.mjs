@@ -10,13 +10,24 @@ import {extendAdminStockReadFixture} from './admin-stock-read-fixture.inc.mjs'
 const root='D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc'
 const name=process.argv.find(a=>a.startsWith('--case='))?.slice(7)
 const stockRoleTransport=process.argv.includes('--stock-role-transport')
+const productMasterRecoveryTransport=process.argv.includes('--product-master-recovery-transport')
+const browserCustomer=process.argv.includes('--browser-customer')
+const browserListing=browserCustomer||process.argv.includes('--browser-listing')
+const acceptedStaffInstallation=stockRoleTransport||productMasterRecoveryTransport||browserListing
 const staffStock=stockRoleTransport||process.argv.includes('--staff-stock')
-const browserInventory=(!stockRoleTransport&&staffStock)||process.argv.includes('--browser-inventory')
+const browserInventory=browserListing||(!stockRoleTransport&&staffStock)||process.argv.includes('--browser-inventory')
 const browserWorkflow=browserInventory||process.argv.includes('--browser-workflow')
-const currentInstallation=stockRoleTransport||browserWorkflow||process.argv.includes('--current-installation')
+const currentInstallation=acceptedStaffInstallation||browserWorkflow||process.argv.includes('--current-installation')
 const publicMedia=currentInstallation||process.argv.includes('--public-media')
 const productWorkflow=publicMedia||process.argv.includes('--product-workflow')
 const intakeEvidence=productWorkflow||process.argv.includes('--intake-evidence')
+let customerVisibilitySql=''
+if(browserCustomer){
+ const sql=fs.readFileSync('supabase/migrations/20260929_channel_listing_slices.sql','utf8')
+ const begin='create or replace view public.v_storefront_visible_skus',end='grant select on table public.v_storefront_visible_skus to anon, authenticated;'
+ assert.equal(sql.split(begin).length,2);assert.equal(sql.split(end).length,2)
+ customerVisibilitySql="DO $owned_view$ BEGIN IF to_regclass('public.v_storefront_visible_skus') IS NOT NULL THEN RAISE EXCEPTION 'OWNED_VIEW_BASELINE_NOT_ABSENT'; END IF; END $owned_view$;\n"+sql.slice(sql.indexOf(begin),sql.indexOf(end)+end.length)
+}
 assert.match(name||'',/^oci-imported-media\d{2}$/)
 assert.ok(!fs.existsSync(path.join(root,name)),'Fresh fixture required')
 const hash=b=>createHash('sha256').update(b).digest('hex')
@@ -30,16 +41,16 @@ const scope=publicMedia?'Genuine local BFF imported product flow with HTTPS prod
 const executionScope=browserInventory?'Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save/first-inventory/Under Review publication, joined to qualified backend public-media/Live/Website commands; offline recovery. No customer browser/hosted/provider acceptance':browserWorkflow?'Genuine local full accepted installer and rendered Admin password/MFA/imported Draft packaging/manual review/phone Save, joined to previously qualified stock/media/Website commands; offline recovery. No customer browser/hosted/provider acceptance':currentInstallation?'Genuine local complete accepted reference/category/tariff installer with protected reference creation and imported product/public-media/stock/Website commands; exact offline application restoration; no browser/provider acceptance':scope
 let installationPins
 if(currentInstallation){
- const installationReceipt=stockRoleTransport?'docs/acceptance/ADMIN_STOCK_GUARDED_INSTALLATION_20261011.json':'docs/acceptance/PROTECTED_REFERENCE_INSTALLATION_20261011.json'
+ const installationReceipt=acceptedStaffInstallation?'docs/acceptance/ADMIN_STOCK_GUARDED_INSTALLATION_20261011.json':'docs/acceptance/PROTECTED_REFERENCE_INSTALLATION_20261011.json'
  const installation=JSON.parse(fs.readFileSync(installationReceipt))
- if(stockRoleTransport){
+ if(acceptedStaffInstallation){
   assert.equal(installation.case,'oci-imported56')
   installation.package={sqlSha256:installation.sqlSha256}
   installation.target={canonicalSha256:installation.contract.afterCanonicalSha256}
   installation.stagedPins=installation.pins.filter(p=>p.file.includes(path.join('staging','k2')+path.sep)).map(p=>({file:path.basename(p.file),sha256:p.sha256}))
  }else assert.equal(installation.case,'oci-imported41')
  assert.equal(installation.controllerExit,0)
- assert.equal(installation.package.sqlSha256,stockRoleTransport?'e6eda8085254f27f0dd30c01f77c3a53bfc4a1652c59ad472a68558079bab052':'e051cd65f6b9b070c70754b61ef521a772bc2bad46c211e918081e23b945457f')
+ assert.equal(installation.package.sqlSha256,acceptedStaffInstallation?'e6eda8085254f27f0dd30c01f77c3a53bfc4a1652c59ad472a68558079bab052':'e051cd65f6b9b070c70754b61ef521a772bc2bad46c211e918081e23b945457f')
  const input=path.join(root,installation.case),inputs=installation.sourcePins.concat(installation.stagedPins.map(p=>({file:path.join(input,'staging/k2',p.file),sha256:p.sha256})))
  for(const p of inputs)assert.equal(hash(fs.readFileSync(p.file)),p.sha256,p.file)
  const expectedFile=path.join(input,'execution01/after-catalog.json'),expectedBytes=fs.readFileSync(expectedFile)
@@ -72,11 +83,36 @@ helper=once(helper,'if(!isAuth&&!isRest)','if(!isAuth&&!isRest&&!isStorage)')
 helper=once(helper,"calls[isAuth?'auth':'rest']++","calls[isAuth?'auth':isRest?'rest':'storage']++")
 helper=once(helper,"port:isAuth?54392:54394,method:req.method,path:req.url.slice(8)","port:isAuth?54392:isRest?54394:54397,method:req.method,path:req.url.slice(isStorage?11:8)")
 helper=once(helper,"const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>16384){res.writeHead(413);res.end();return}chunks.push(chunk)}req.body=Buffer.concat(chunks).toString('utf8');","try{req.body=await readFixtureAdminHttpBody(req)}catch(error){if(error.message!=='FIXTURE_BODY_TOO_LARGE')throw error;res.writeHead(413);res.end();return}req.query=Object.fromEntries(new URL(req.url,'http://127.0.0.1:54396').searchParams);")
+if(productMasterRecoveryTransport){
+ // Faults are confined to the generated owned loopback adapter, never BFF code.
+ const loss=`const loss=req.headers['x-k2-fixture-product-recovery-loss'];
+ if(req.url==='/api/admin/product-master'&&req.method==='POST'&&['before-dispatch','after-commit'].includes(loss)){
+  report.productRecoveryDroppedReplies ||= [];
+  if(loss==='before-dispatch'){report.productRecoveryDroppedReplies.push({point:loss,key:req.headers['x-k2-idempotency-key']});res.destroy();return}
+  const end=res.end.bind(res);res.end=chunk=>{const reply=JSON.parse(String(chunk));
+   if(res.statusCode===200&&reply.ok===true){report.productRecoveryDroppedReplies.push({point:loss,key:req.headers['x-k2-idempotency-key'],result:reply.result});res.destroy();return res}
+   return end(chunk)};
+ }
+ await entrypoint(req,res)`
+ helper=once(helper,'await entrypoint(req,res)',loss)
+ const witness=fs.readFileSync('tests/sql/product-master-recovery-transport-witness.sql','utf8')
+ const shell=`product_recovery_witness_status=0
+su postgres -s /bin/sh -c 'psql -X -q -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1' <<'PRODUCTRECOVERYWITNESS' || product_recovery_witness_status=$?
+${witness}
+PRODUCTRECOVERYWITNESS
+echo K2_PRODUCT_RECOVERY_WITNESS_EXIT_$product_recovery_witness_status
+`
+ const insert=`\nprobe=probe.replace("if grep -q '^K2_AUTH_DRIVER_OK$' /tmp/auth-driver-status;",()=>${JSON.stringify(shell)}+"if grep -q '^K2_AUTH_DRIVER_OK$' /tmp/auth-driver-status;");\n`
+ source=once(source,"fs.writeFileSync(path.join(k2,'image-probe.sh'),probe,{flag:'wx'})",insert+"\nfs.writeFileSync(path.join(k2,'image-probe.sh'),probe,{flag:'wx'})")
+ // A failed witness remains visible while original recovery still runs.
+ source=once(source,"stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&","stdout.includes('K2_PRODUCT_RECOVERY_RECEIPT_WITNESS_OK')&&stdout.includes('K2_PRODUCT_RECOVERY_WITNESS_EXIT_0')&&stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&")
+}
 // Keep HTTP BFF prerequisites, without repeating completed visible UI acceptance.
 const probeFile=productWorkflow?'scripts/imported-product-workflow-probe.inc.mjs':intakeEvidence?'scripts/imported-intake-evidence-probe.inc.mjs':'scripts/imported-media-transport-probe.inc.mjs'
 const probeName=productWorkflow?'importedProductProbe':intakeEvidence?'intakeEvidenceProbe':'mediaTransportProbe'
 helper=once(helper,'await browserProbe(credentials,report,uid);',intakeEvidence?`await ${probeName}(uid,report,credentials,request,jar);`:'await mediaTransportProbe(uid,report,credentials);')
-if(publicMedia)helper=once(helper,'await importedProductProbe(uid,report,credentials,request,jar);',`await importedProductProbe(uid,report,credentials,request,jar,{publicMedia:true,currentInstallation:${currentInstallation},browserWorkflow:${browserWorkflow},browserInventory:${browserInventory},staffStock:${staffStock},stockRoleTransport:${stockRoleTransport},browserOut:path.dirname(new URL(import.meta.url).pathname.replace(/^\\/([A-Za-z]:)/,'$1'))});`)
+if(publicMedia)helper=once(helper,'await importedProductProbe(uid,report,credentials,request,jar);',`await importedProductProbe(uid,report,credentials,request,jar,{publicMedia:true,currentInstallation:${currentInstallation},browserWorkflow:${browserWorkflow},browserInventory:${browserInventory},browserListing:${browserListing},staffStock:${staffStock},stockRoleTransport:${stockRoleTransport},productMasterRecoveryTransport:${productMasterRecoveryTransport},browserOut:path.dirname(new URL(import.meta.url).pathname.replace(/^\\/([A-Za-z]:)/,'$1'))});`)
+if(browserCustomer)helper=once(helper,'browserListing:true,','browserListing:true,browserCustomer:true,')
 helper+=`\nconst {${probeName}}=await import(pathToFileURL(path.join(process.cwd(),${JSON.stringify(probeFile)})).href)\n`
 if(browserWorkflow){
  // Those refusal/logout contracts are already qualified. Avoid exhausting the
@@ -90,7 +126,8 @@ if(intakeEvidence){
  helper=once(helper,'body:JSON.stringify(body)','body:Buffer.isBuffer(body)?body:JSON.stringify(body)')
 }
 driver=once(driver,'await taxonomy(verified.access_token,uid,report)',"report.checks.push('prior_taxonomy_diagnostic_not_repeated')")
-driver=driver.replace(/scope:'[^']*'/,()=> 'scope:'+JSON.stringify(executionScope))
+const listingScope='Genuine owned local captured PostgreSQL/Auth/Storage and rendered imported Draft intake, stock, primary photo, Product Master applied/non-applied recovery, Live and separate Website assignment/recovery. Full offline application restoration; synthetic facts; '+(browserCustomer?'separate local Storefront catalog/cart/pickup quote/order recovery; no provider/hosted/human/payment acceptance.':'no customer browser/provider/hosted acceptance.')
+driver=driver.replace(/scope:'[^']*'/,()=> 'scope:'+JSON.stringify(browserListing?listingScope:executionScope))
 if(productWorkflow){
  driver=once(driver,"good('admin_hard_delete_user',await admin.auth.admin.deleteUser(uid,false));uid=null","report.checks.push('auth_user_deletion_deferred_to_offline_fixture_recovery');uid=null")
  driver=once(driver,"if(uid){const cleanup=await admin.auth.admin.deleteUser(uid,false);report.failedPathUserCleanup=!cleanup.error}","if(uid)report.failedPathUserCleanup='deferred_to_offline_fixture_recovery'")
@@ -99,7 +136,7 @@ fs.writeFileSync('.tools/probe-local-imported-media.mjs',helper)
 fs.writeFileSync('.tools/drive-local-imported-media.mjs',driver)
 source=source.replaceAll('.tools/probe-local-browser-boundary.mjs','.tools/probe-local-imported-media.mjs').replaceAll('.tools/drive-local-browser-auth.mjs','.tools/drive-local-imported-media.mjs')
 source=once(source,"fs.copyFileSync(path.join(process.cwd(),'.tools/prepare-auth-bff-probe.mjs'),path.join(out,'executed-derivation.mjs'),fs.constants.COPYFILE_EXCL)","fs.copyFileSync(path.join(process.cwd(),'scripts/prepare-imported-media-fixture.mjs'),path.join(out,'executed-derivation.mjs'),fs.constants.COPYFILE_EXCL)")
-source=source.replace(/prep.scope='[^']*'/,()=> 'prep.scope='+JSON.stringify(executionScope))
+source=source.replace(/prep.scope='[^']*'/,()=> 'prep.scope='+JSON.stringify(browserListing?listingScope:executionScope))
 source=once(source,"postgres://authenticator@127.0.0.1:5432/postgres?sslmode=disable","postgres://authenticator@127.0.0.1:5432/postgres?sslmode=disable&options=-clock_timeout%3D2000%20-cstatement_timeout%3D10000")
 const startup=JSON.parse(fs.readFileSync('docs/acceptance/LOCAL_STORAGE_STARTUP_20261011.json'))
 const accepted=startup.cases.find(c=>c.name==='oci-storage-startup02')
@@ -151,12 +188,15 @@ echo K2_PRODUCT_FIXTURE_BASELINE_CAPTURED
  const prerequisites=`su postgres -s /bin/sh -c 'psql -X -q -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1' <<'PRODUCTPREREQUISITES'
 ${currentInstallation?'':"INSERT INTO public.brands(id,name) VALUES('b7000000-0000-4000-8000-000000000001','MAP018 Synthetic pantry brand');\nINSERT INTO public.categories(id,name) VALUES('b7000000-0000-4000-8000-000000000002','MAP018 Synthetic pantry category');"}
 INSERT INTO k2_private.category_policy_command_config(singleton,maximum_depth) VALUES(true,10) ON CONFLICT(singleton) DO NOTHING;
+${customerVisibilitySql}
+${browserCustomer?"INSERT INTO k2_private.guest_bff_secrets(singleton,request_secret,contact_secret) VALUES(true,decode(repeat('01',32),'hex'),decode(repeat('01',32),'hex')) ON CONFLICT(singleton) DO UPDATE SET request_secret=excluded.request_secret,contact_secret=excluded.contact_secret;":''}
 PRODUCTPREREQUISITES
 echo K2_SYNTHETIC_PRODUCT_PREREQUISITES_READY
 `
  const sequenceRecheck=baseline.slice(baseline.indexOf('DO $capture$ DECLARE r record; v bigint;'),baseline.indexOf('PRODUCTBASELINE\necho')).replace('CREATE TEMP TABLE product_fixture_sequences(statement text);','TRUNCATE product_fixture_sequences;').replace('/tmp/product-fixture-sequences.copy','/tmp/product-fixture-sequences-after.copy')
  const restore=`su postgres -s /bin/sh -c 'psql -X -q -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1' <<'PRODUCTRECOVERY'
 BEGIN;
+${browserCustomer?'DROP VIEW public.v_storefront_visible_skus;':''}
 CREATE TEMP TABLE product_fixture_tables(nspname name,relname name);
 COPY product_fixture_tables FROM '/tmp/product-fixture-tables.rows';
 SET LOCAL session_replication_role=replica;
@@ -179,7 +219,9 @@ sha256sum /tmp/product-fixture-sequences.copy /tmp/product-fixture-sequences-aft
 echo K2_PRODUCT_ALL_APPLICATION_SEQUENCES_RECOVERED
 echo K2_PRODUCT_ALL_APPLICATION_ROWS_RECOVERED
 `
- const productInject=`\nprobe=probe.replace("su postgres -s /bin/sh -c 'psql -X -q -t -A -P pager=off -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f /tmp/original-row-projection.sql' > /tmp/auth-rows-before.json",()=>${JSON.stringify(baseline)}+"su postgres -s /bin/sh -c 'psql -X -q -t -A -P pager=off -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f /tmp/original-row-projection.sql' > /tmp/auth-rows-before.json\\n"+${JSON.stringify(prerequisites)});\nprobe=probe.replace('echo K2_BFF_PRIVATE_RECOVERY_OK\\n',()=> 'echo K2_BFF_PRIVATE_RECOVERY_OK\\n'+${JSON.stringify(restore)});\n`
+ const schemaCapture="su postgres -s /bin/sh -c 'psql -X -q -t -A -P pager=off -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f /tmp/race-catalog.sql' > /tmp/auth-schema-before.json"
+ const customerPrerequisitesAfterSchemaCapture=browserCustomer?"\nprobe=probe.replace("+JSON.stringify(schemaCapture)+",()=>"+JSON.stringify(schemaCapture+'\n'+prerequisites)+");\n":''
+ const productInject=`\nprobe=probe.replace("su postgres -s /bin/sh -c 'psql -X -q -t -A -P pager=off -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f /tmp/original-row-projection.sql' > /tmp/auth-rows-before.json",()=>${JSON.stringify(baseline)}+"su postgres -s /bin/sh -c 'psql -X -q -t -A -P pager=off -h /tmp -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f /tmp/original-row-projection.sql' > /tmp/auth-rows-before.json\\n"+${JSON.stringify(browserCustomer?'':prerequisites)});${customerPrerequisitesAfterSchemaCapture}\nprobe=probe.replace('echo K2_BFF_PRIVATE_RECOVERY_OK\\n',()=> 'echo K2_BFF_PRIVATE_RECOVERY_OK\\n'+${JSON.stringify(restore)});\n`
  source=once(source,"fs.writeFileSync(path.join(k2,'image-probe.sh'),probe,{flag:'wx'})",productInject+"\nfs.writeFileSync(path.join(k2,'image-probe.sh'),probe,{flag:'wx'})")
 }
 source=once(source,"fs.writeFileSync(path.join(k2,'image-probe.sh'),probe,{flag:'wx'})",inject+"\nfs.writeFileSync(path.join(k2,'image-probe.sh'),probe,{flag:'wx'})")
@@ -198,8 +240,11 @@ source=once(source,"const run='/bin/busybox chroot /k2root /bin/sh /tmp/k2-image
 source=once(source, "\"args[args.indexOf('-m')+1]='4096';args", "\"args[args.indexOf('-m')+1]='7168';args").replace('hostfwd=tcp:127.0.0.1:54394-:9997','hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996')
 source=once(source,"stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&","stdout.includes('K2_STORAGE_INTEGRATED_HTTP_READY')&&stdout.includes('K2_STORAGE_INTEGRATED_STOPPED_EXIT_')&&stdout.includes('K2_BFF_PRIVATE_RECOVERY_OK')&&")
 const sources=['scripts/prepare-imported-media-fixture.mjs',probeFile,'scripts/fixture-admin-http-body.mjs','scripts/storage-runtime-layout.mjs',...(intakeEvidence?['server/admin-bff/product-intake.js']:[]),...(productWorkflow?['scripts/imported-intake-evidence-probe.inc.mjs','server/admin-bff/catalog-spreadsheet.js','server/admin-bff/product-master.js','server/admin-bff/channels.js']:[]),...(publicMedia?['server/admin-bff/product-media.js']:[]),...(currentInstallation?['server/admin-bff/references.js','scripts/reference-catalog-contract.mjs']:[])]
+if(productMasterRecoveryTransport)sources.push('scripts/product-master-recovery-transport-probe.inc.mjs','tests/sql/product-master-recovery-transport-witness.sql','src/lib/productMasterPatch.js','scripts/test-product-master-recovery-transport-mode.mjs')
 if(staffStock){if(!stockRoleTransport)source=extendAdminStockReadFixture(source,once);sources.push('scripts/admin-stock-read-fixture.inc.mjs','scripts/admin-stock-read-probe.inc.mjs','supabase/prepared/admin_product_stock_read.sql','server/admin-bff/product-stock.js','prepared-api/admin/products.js','server/admin-bff/lots.js')}
 if(browserWorkflow)sources.push('scripts/imported-intake-browser-probe.inc.mjs','src/views/admin/ProductIntakeSessionModal.jsx','src/views/admin/InventoryGrid.jsx','src/services/productIntakeService.js')
+if(browserListing)sources.push('scripts/rendered-listing-browser-probe.inc.mjs','scripts/test-rendered-listing-mode.mjs','src/hooks/useSavedAdminDecisionRecovery.js','src/hooks/useProductMasterRecovery.js','src/hooks/useWebsiteAssignmentRecovery.js','src/lib/savedAdminCommandRecovery.js','src/lib/productMasterCommandRecovery.js','src/lib/websiteAssignmentRecovery.js','src/views/admin/WebsiteAssignmentDialog.jsx','src/views/admin/ProductMasterRecovery.jsx','src/views/admin/PhotoManagerModal.jsx','src/components/ui/ImageUploadDropzone.jsx','src/services/adminBffService.js')
+if(browserCustomer)sources.push('supabase/migrations/20260929_channel_listing_slices.sql','scripts/storefront-fixture-worker.mjs','scripts/rendered-customer-browser-probe.inc.mjs','api/storefront/index.js','server/storefront-bff/router.js','server/storefront-bff/security.js','server/storefront-bff/supabase.js','prepared-api/storefront/order.js','prepared-api/storefront/order/status.js','prepared-api/storefront/delivery/quote.js','src/context/StoreContext.jsx','src/views/MasterProduct.jsx','src/views/Checkout.jsx','src/views/Confirmation.jsx','src/components/DeliveryEstimate.jsx','src/services/guestCommerceService.js','src/services/checkoutRecovery.js')
 const pins=Object.fromEntries(sources.map(f=>[f,hash(fs.readFileSync(f))]))
 if(productWorkflow)source=once(source,'const prep=JSON.parse',`const sourceInputs=${JSON.stringify(pins)};fs.mkdirSync(path.join(out,'source-inputs'));for(const [file,expected]of Object.entries(sourceInputs)){const bytes=fs.readFileSync(file);assert.equal(sha(bytes),expected,file);fs.writeFileSync(path.join(out,'source-inputs',file.replaceAll('/','--')),bytes,{flag:'wx'});}\nconst prep=JSON.parse`)
 source=once(source,'const prep=JSON.parse',`fs.writeFileSync(path.join(out,'media-source-pins.json'),${JSON.stringify(JSON.stringify(pins,null,2))},{flag:'wx'});\nconst prep=JSON.parse`)

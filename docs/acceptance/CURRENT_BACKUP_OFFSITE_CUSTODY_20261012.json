@@ -1,0 +1,300 @@
+{
+  "owningMap": "MAP-018",
+  "state": "UPLOADED_AND_INDEPENDENTLY_RETRIEVED_VERIFIED",
+  "verifiedAt": "2026-10-12T11:52:03.0747546Z",
+  "verified": [
+    {
+      "name": "provider-current-before-20261012-01.k2backup",
+      "id": "1uAX8-Si6RGlTAXXKT_P4B8gdKK1CLAEA",
+      "url": "https://drive.google.com/file/d/1uAX8-Si6RGlTAXXKT_P4B8gdKK1CLAEA/view?usp=drivesdk",
+      "bytes": 858743,
+      "sha256": "57da06c0cf9d61eab9b36c0be524d51943a293508901a9002976c398b16be05f",
+      "exactMatch": true,
+      "metadata": {
+        "id": "1uAX8-Si6RGlTAXXKT_P4B8gdKK1CLAEA",
+        "title": "provider-current-before-20261012-01.k2backup",
+        "mime_type": "application/octet-stream",
+        "size": "858743",
+        "url": null,
+        "file_or_folder": "file",
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": false,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": "k2jimzonwebsite@gmail.com",
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      }
+    },
+    {
+      "name": "provider-current-before-20261012-01.k2backup.manifest.json",
+      "id": "1k95hvNJ2IvcT4AE-zlE4eRxRQyRy_MoM",
+      "url": "https://drive.google.com/file/d/1k95hvNJ2IvcT4AE-zlE4eRxRQyRy_MoM/view?usp=drivesdk",
+      "bytes": 686,
+      "sha256": "e35f47bac6eaebe9f25b607ae47da5123e81bac2eb7d74458a43ca95b0025997",
+      "exactMatch": true,
+      "metadata": {
+        "id": "1k95hvNJ2IvcT4AE-zlE4eRxRQyRy_MoM",
+        "title": "provider-current-before-20261012-01.k2backup.manifest.json",
+        "mime_type": "application/json",
+        "size": "686",
+        "url": null,
+        "file_or_folder": "file",
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": false,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": "k2jimzonwebsite@gmail.com",
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      }
+    },
+    {
+      "name": "provider-current-before-20261012-01.k2backup.restore-verification.json",
+      "id": "1QbjhPW1FixEB9wmm-mkfLL3owpDUtVhm",
+      "url": "https://drive.google.com/file/d/1QbjhPW1FixEB9wmm-mkfLL3owpDUtVhm/view?usp=drivesdk",
+      "bytes": 395,
+      "sha256": "d2132f4a2479c9b2c6e288e485f67498cf821eccf3f6348320b9b0adb32c14a7",
+      "exactMatch": true,
+      "metadata": {
+        "id": "1QbjhPW1FixEB9wmm-mkfLL3owpDUtVhm",
+        "title": "provider-current-before-20261012-01.k2backup.restore-verification.json",
+        "mime_type": "application/json",
+        "size": "395",
+        "url": null,
+        "file_or_folder": "file",
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": false,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": "k2jimzonwebsite@gmail.com",
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      }
+    },
+    {
+      "name": "provider-current-before-20261012-01.k2backup.integrity-verification.json",
+      "id": "1Pqvd_8nE0XHiUxd9OJU70uHWpY_losJo",
+      "url": "https://drive.google.com/file/d/1Pqvd_8nE0XHiUxd9OJU70uHWpY_losJo/view?usp=drivesdk",
+      "bytes": 759,
+      "sha256": "f6ce33e7d720b4c1dc29dcd7133bfd665f31e291295d20903e0364adef9d8b38",
+      "exactMatch": true,
+      "metadata": {
+        "id": "1Pqvd_8nE0XHiUxd9OJU70uHWpY_losJo",
+        "title": "provider-current-before-20261012-01.k2backup.integrity-verification.json",
+        "mime_type": "application/json",
+        "size": "759",
+        "url": null,
+        "file_or_folder": "file",
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": false,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": "k2jimzonwebsite@gmail.com",
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      }
+    },
+    {
+      "name": "recovery-scope.json",
+      "id": "1xFHZIOHe1437p0_3mn-A_In7E71pgr51",
+      "url": "https://drive.google.com/file/d/1xFHZIOHe1437p0_3mn-A_In7E71pgr51/view?usp=drivesdk",
+      "bytes": 1761,
+      "sha256": "d34703f99d9400190daae16d284f6e3440db9dfc582d072ba60cf605cdcacbcd",
+      "exactMatch": true,
+      "metadata": {
+        "id": "1xFHZIOHe1437p0_3mn-A_In7E71pgr51",
+        "title": "recovery-scope.json",
+        "mime_type": "application/json",
+        "size": "1761",
+        "url": null,
+        "file_or_folder": "file",
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": false,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": "k2jimzonwebsite@gmail.com",
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      }
+    },
+    {
+      "name": "role-bootstrap.json",
+      "id": "17JhYluqcS2MWmO5JaPR1QOTYgFRUQCOb",
+      "url": "https://drive.google.com/file/d/17JhYluqcS2MWmO5JaPR1QOTYgFRUQCOb/view?usp=drivesdk",
+      "bytes": 1424,
+      "sha256": "3103fd3a86509e7fcb2084e1f59578c1e69973b4df8e488140bfe651daa40282",
+      "exactMatch": true,
+      "metadata": {
+        "id": "17JhYluqcS2MWmO5JaPR1QOTYgFRUQCOb",
+        "title": "role-bootstrap.json",
+        "mime_type": "application/json",
+        "size": "1424",
+        "url": null,
+        "file_or_folder": "file",
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": false,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": "k2jimzonwebsite@gmail.com",
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      }
+    },
+    {
+      "name": "README.md",
+      "id": "1oxmDeB42Ml_mXL1KwLPWXVtfPV-eJGSu",
+      "url": "https://drive.google.com/file/d/1oxmDeB42Ml_mXL1KwLPWXVtfPV-eJGSu/view?usp=drivesdk",
+      "bytes": 2082,
+      "sha256": "250a158bf87dd4eb3747d08774d4a54c8d0dcef5d7c97ad7490ff76f3652d3e7",
+      "exactMatch": true,
+      "metadata": {
+        "id": "1oxmDeB42Ml_mXL1KwLPWXVtfPV-eJGSu",
+        "title": "README.md",
+        "mime_type": "text/markdown",
+        "size": "2082",
+        "url": null,
+        "file_or_folder": "file",
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": false,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": "k2jimzonwebsite@gmail.com",
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      }
+    },
+    {
+      "name": "package-index.json",
+      "id": "10xXp63ClLpPXHcbQlqmmCzqtiMiF0d6S",
+      "url": "https://drive.google.com/file/d/10xXp63ClLpPXHcbQlqmmCzqtiMiF0d6S/view?usp=drivesdk",
+      "bytes": 1718,
+      "sha256": "76ff3164f5d1b1533bcf6cafe32c4cdce2da018dbcf051e73ad577480257ad06",
+      "exactMatch": true,
+      "metadata": {
+        "id": "10xXp63ClLpPXHcbQlqmmCzqtiMiF0d6S",
+        "title": "package-index.json",
+        "mime_type": "application/json",
+        "size": "1718",
+        "url": null,
+        "file_or_folder": "file",
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": false,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": "k2jimzonwebsite@gmail.com",
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      }
+    }
+  ],
+  "total": 8,
+  "allMatch": true,
+  "sharingChanged": false,
+  "providerDatabaseWrites": false,
+  "downloadMethod": "Drive raw-file references independently fetched with HttpClient; exact encrypted/companion bytes compared in memory and cleared. Node runtime fetch failed first, without verification claim."
+}

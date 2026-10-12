@@ -1,0 +1,134 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261009-08",
+  "recordedAt": "2026-10-12T12:35:49.749Z",
+  "state": "read-only-preconditions-observed-probe-write-approval-pending",
+  "projectRef": "pixplcjqivlfflickobf",
+  "preflight": {
+    "command": "npm run preflight:k2-project",
+    "tool": "1cb719",
+    "exitCode": 0,
+    "exactUrlEnforcedBy": "scripts/verify-k2-supabase-project.mjs"
+  },
+  "readiness": {
+    "command": "npm run readiness:k2-live -- live-readiness-20261012-transport-preconditions-01.json",
+    "tool": "9c2682",
+    "exitCode": 0,
+    "receipt": {
+      "file": ".tools/current-production-backups/live-readiness-20261012-transport-preconditions-01.json",
+      "bytes": 2657,
+      "sha256": "de71f5579ec1547bf5acd8bbff0cdf6537c206d01c6f5ac19eda4bfcaf2e905e"
+    },
+    "counts": {
+      "verified": 8,
+      "owner": 2,
+      "connector": 3,
+      "blocked": 0
+    },
+    "ledger": {
+      "entries": 10,
+      "latest": "20260928092634"
+    },
+    "gates": [
+      {
+        "id": "project-identity",
+        "owner": "none",
+        "state": "verified",
+        "detail": "K2 pixplcjqivlfflickobf"
+      },
+      {
+        "id": "migration-ledger",
+        "owner": "none",
+        "state": "verified",
+        "detail": "10 entries, latest 20260928092634"
+      },
+      {
+        "id": "intake-chain-unapplied",
+        "owner": "none",
+        "state": "verified",
+        "detail": "intake tables absent, prepared apply is a first apply"
+      },
+      {
+        "id": "channel-chain-unapplied",
+        "owner": "none",
+        "state": "verified",
+        "detail": "channel tables absent"
+      },
+      {
+        "id": "public-has-no-execute",
+        "owner": "none",
+        "state": "verified",
+        "detail": "no implicit PUBLIC execute in the public schema"
+      },
+      {
+        "id": "anon-execute-classified",
+        "owner": "owner",
+        "state": "owner",
+        "detail": "5 expected and live, 5 legacy transitional, 13 expected but not yet applied"
+      },
+      {
+        "id": "stock-facts",
+        "owner": "owner",
+        "state": "owner",
+        "detail": "30 products (22 live), 21 lots; physical count unproven"
+      },
+      {
+        "id": "backup-freshness",
+        "owner": "none",
+        "state": "verified",
+        "detail": "current-20260930-pre-guest-install.k2backup (20260930) vs ledger 20260928"
+      },
+      {
+        "id": "backup-restore-proof",
+        "owner": "owner",
+        "state": "verified",
+        "detail": "isolated restore receipt present locally"
+      },
+      {
+        "id": "vercel-preview",
+        "owner": "connector",
+        "state": "connector",
+        "detail": "no Vercel API token or CLI in this harness"
+      },
+      {
+        "id": "vercel-edge-gate",
+        "owner": "connector",
+        "state": "connector",
+        "detail": "Admin Vercel edge routing rule state not readable from this script"
+      },
+      {
+        "id": "provider-advisor",
+        "owner": "connector",
+        "state": "connector",
+        "detail": "Supabase advisor findings need a signed-in session"
+      },
+      {
+        "id": "release-branch",
+        "owner": "none",
+        "state": "verified",
+        "detail": "## codex/dummy-production-acceptance...origin/codex/dummy-production-acceptance [ahead 97]"
+      }
+    ]
+  },
+  "probeArtifacts": {
+    "checked": 18,
+    "allExact": true,
+    "manifestSha256": "18b8123f9691570e1a7eeaa2e175c64df8e3ec61402dfdd2d54a309cd3c3583b"
+  },
+  "providerReadOnly": true,
+  "providerWrites": false,
+  "probeDispatched": false,
+  "installedSupabaseConnectorReached": false,
+  "approvalPending": true,
+  "scope": "Actual SELECT readiness and K2 identity only. No migration, installation, backup creation, provider surface, release or full operational acceptance.",
+  "limits": [
+    "Zero failed readiness gates does not authorize writes.",
+    "Two OWNER gates and three CONNECTOR gates remain separate unresolved states.",
+    "Gate selected a September local envelope by its own mtime/ledger freshness rule; this is not the immediate verified fresh backup required before execution.",
+    "Previously qualified12October encrypted backup/restore/offsite receipts are retained; refresh immediately before an authorized write.",
+    "No exact probe or cleanup POST has been sent.",
+    "Current outcome classifier remains UNKNOWN/no automatic retry."
+  ],
+  "recovery": "No provider rollback required; preserve immutable frozen probes/native cases/current read-only receipt. No code or application change this continuation.",
+  "nextRequiredAction": "Await the already-present exact bounded owner probe/cleanup authorization. If authorized, refresh immediate backup/recovery and identity/readiness, capture exact same-target before-state, then execute only the qualified named packet. Otherwise preserve prepared state. Full MAP-018 remains open."
+}

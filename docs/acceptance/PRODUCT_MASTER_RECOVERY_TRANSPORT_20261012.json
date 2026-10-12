@@ -1,0 +1,257 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261012-01",
+  "case": "oci-imported-media40",
+  "privateCase": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-imported-media40",
+  "providerWrites": false,
+  "controllerSession": 16839,
+  "controllerExit": 0,
+  "result": {
+    "owningMap": "MAP-023/018",
+    "scope": "Genuine local complete accepted reference/category/tariff installer with protected reference creation and imported product/public-media/stock/Website commands; exact offline application restoration; no browser/provider acceptance",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "7168",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "user,model=virtio-net-pci,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:54392-:9999,hostfwd=tcp:127.0.0.1:54393-:9998,hostfwd=tcp:127.0.0.1:54394-:9997,hostfwd=tcp:127.0.0.1:54397-:9996",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 19444,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "processStopped": true,
+    "serialSha256": "af7e57b657468719edc25702ac23636191f37628204ff97a710fe7ebd83d70e2"
+  },
+  "sourcePins": [
+    {
+      "file": "scripts/prepare-imported-media-fixture.mjs",
+      "sha256": "932f35c9fd614b9e31889b8b9b18c9a18f90829cffc10bb1feedc3b2ff69cfc7"
+    },
+    {
+      "file": "scripts/imported-product-workflow-probe.inc.mjs",
+      "sha256": "c7aeb8d070c2ba79d1e6663564a6fb0daabeb1a52f4b349e4351700043fafbd6"
+    },
+    {
+      "file": "scripts/fixture-admin-http-body.mjs",
+      "sha256": "e178ac738b6a972ff02c61e2245f598af2bae57c09e2a636bb07e992858cdd0f"
+    },
+    {
+      "file": "scripts/storage-runtime-layout.mjs",
+      "sha256": "aa6e32651e9dec61b111ea4c7de1fe1e1ea765d0579e422dc0f6345a1108ddcd"
+    },
+    {
+      "file": "server/admin-bff/product-intake.js",
+      "sha256": "e9ee00b3594607be57eccd77c76a79d1a57aaa9a93dcafcb012a6f27e6817d37"
+    },
+    {
+      "file": "scripts/imported-intake-evidence-probe.inc.mjs",
+      "sha256": "4e84f4350f0722831909f4eaba5912c20269d14d39710a501f218f12f612ab9f"
+    },
+    {
+      "file": "server/admin-bff/catalog-spreadsheet.js",
+      "sha256": "48463a6d90b7af0d535034ff82182c08d728911a23bf6cae423ffa490c827d62"
+    },
+    {
+      "file": "server/admin-bff/product-master.js",
+      "sha256": "465c3e5d185f703c8451b6f3d53382c2dda99f2bf632aac43e7bff0cc19cb557"
+    },
+    {
+      "file": "server/admin-bff/channels.js",
+      "sha256": "36418ddff9378ebf2c40f4568a53b1f9c9136100640524cf0ba8ab5e32f72186"
+    },
+    {
+      "file": "server/admin-bff/product-media.js",
+      "sha256": "9eda473df524a8a06cc003873e88d4b0e4607f0c4d651844791fd4dbbbac7d72"
+    },
+    {
+      "file": "server/admin-bff/references.js",
+      "sha256": "fc402debb63588e533c08c8da21147e73109d58cc37673e86c6d2760df445684"
+    },
+    {
+      "file": "scripts/reference-catalog-contract.mjs",
+      "sha256": "8acf5671543000e966d0228e595ee5d22c898e2d92fda8d06e810d6e0e52631b"
+    },
+    {
+      "file": "scripts/product-master-recovery-transport-probe.inc.mjs",
+      "sha256": "a6406d7d8119a0e26b1074af1dc2b0856429fba4fa6c9e6794cd6d4b9f5b4246"
+    },
+    {
+      "file": "tests/sql/product-master-recovery-transport-witness.sql",
+      "sha256": "dba6ae626396a166c96a2ec27c69e52fe979afa0147c7e9e53515ae4498ec342"
+    },
+    {
+      "file": "src/lib/productMasterPatch.js",
+      "sha256": "c26df918baa9c750724ebe5ce03b69cd1949117bad044082327fdac974576376"
+    },
+    {
+      "file": "scripts/test-product-master-recovery-transport-mode.mjs",
+      "sha256": "8a6e26dcd24e320a263088f13fd6fa1b7939f317170731594d8c51c5e16c4e32"
+    }
+  ],
+  "artifactPins": [
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\executed-source.mjs",
+      "sha256": "5d2e8e6dc1787a384f20b59a2e91dc572678fbfb8a888361cb7c255e69bb8e9b"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\executed-derivation.mjs",
+      "sha256": "932f35c9fd614b9e31889b8b9b18c9a18f90829cffc10bb1feedc3b2ff69cfc7"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\bff-helper.mjs",
+      "sha256": "ec960a9d41440f1951d27a5cefb9303e9f1a450510d523b7b3afaf8dfcd690ac"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\host-driver.mjs",
+      "sha256": "3bfd602a3625c32ce7273343cfd5bc8582aa87c8632fce488ca8934679350b60"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\host-driver-result.json",
+      "sha256": "2edde3db02bccabe0a7237f3fc4512d22a17c83538e6e3b9dc52530a42937959"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\runner-source.mjs",
+      "sha256": "f03de9d2481cc88e5636659109093c7f34a0687c743b6d7272b3be3073082d9e"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\media-source-pins.json",
+      "sha256": "97c6a4632f6d09d13f515b17b12ac6f2dec4ec31d4d8c9e4bf6876c3b378f38d"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\full-installation-pins.json",
+      "sha256": "cd80b4f17a8185fae2f1e6c6f2b5efc245bfe424cbc55ae49f7277643faa7042"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\preparation.json",
+      "sha256": "b923ca9650832a8d87f9e356b4feff129eb4d83e6dd86f6f621edd201d3d7a92"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\execution01\\result.json",
+      "sha256": "cf301414894e2e7f2507578d9b2dca6f96efb70e8dd2d12f400efc4720c6a835"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\execution01\\serial.log",
+      "sha256": "af7e57b657468719edc25702ac23636191f37628204ff97a710fe7ebd83d70e2"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported-media40\\execution01\\stderr.log",
+      "sha256": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc"
+    }
+  ],
+  "observed": {
+    "scope": "Genuine local Auth-issued AAL2/current role, actual routed BFF and canonical receipt/version behavior; HTTP loss deliberately injected only in owned loopback fixture",
+    "checks": [
+      "actual_after_commit_socket_loss_canonical_review_saved",
+      "current_staff_refusal_then_admin_exact_historical_replay_without_reapplying",
+      "changed_literal_payload_same_key_refused_without_current_change",
+      "before_dispatch_loss_then_repeated_version_refusal_preserves_current_state"
+    ],
+    "keys": [
+      "a1200000-0000-4000-8000-000000000001",
+      "a1200000-0000-4000-8000-000000000002",
+      "a1200000-0000-4000-8000-000000000003",
+      "a1200000-0000-4000-8000-000000000004",
+      "a1200000-0000-4000-8000-000000000005"
+    ],
+    "sku": "K2-SKU-001001",
+    "actor": "76944e02-b094-453f-b2ed-5443f05d7c18",
+    "historicalReceipt": {
+      "sku": "K2-SKU-001001",
+      "status": "Under Review",
+      "updatedAt": "2026-10-12T03:57:42.168355+00:00"
+    },
+    "currentAfterReplay": {
+      "id": "36c45fe4-9f42-48ac-83f2-53c3010701be",
+      "sku": "K2-SKU-001001",
+      "status": "Under Review",
+      "published": false,
+      "srp": 110,
+      "is_human_reviewed": false,
+      "updated_at": "2026-10-12T03:57:42.217536+00:00"
+    },
+    "currentAfterVersionRefusal": {
+      "id": "36c45fe4-9f42-48ac-83f2-53c3010701be",
+      "sku": "K2-SKU-001001",
+      "status": "Under Review",
+      "published": false,
+      "srp": 120,
+      "is_human_reviewed": false,
+      "updated_at": "2026-10-12T03:57:42.38282+00:00"
+    },
+    "final": {
+      "id": "36c45fe4-9f42-48ac-83f2-53c3010701be",
+      "sku": "K2-SKU-001001",
+      "status": "Under Review",
+      "published": false,
+      "srp": 100,
+      "is_human_reviewed": true,
+      "updated_at": "2026-10-12T03:57:42.508138+00:00"
+    },
+    "privateReceiptEventWitness": "Guest must independently assert four completed receipts/events and no absent-key receipt/event before offline restoration",
+    "renderedBrowser": false,
+    "safeDiscardQualified": false,
+    "passed": true
+  },
+  "independentVerification": {
+    "sourceAndExecutedPinsEqual": true,
+    "serialHash": true,
+    "applicationTablePairs": 107,
+    "allTablePairsEqual": true,
+    "sequencesEqual": true,
+    "fullInstalledSchemaEqual": true,
+    "original88TableProjectionEqual": true,
+    "authorityWitnesses": 2,
+    "privateReceiptEventWitness": true,
+    "pid19444Absent": true,
+    "fiveLoopbackListenersAbsent": true,
+    "processCheckCommand": "Get-Process -Id 19444; Get-NetTCPConnection -State Listen filtered to 54392,54393,54394,54396,54397",
+    "processCheckExit": 0
+  },
+  "development": {
+    "initialCommand": "npm run verify:development",
+    "initialSession": 91768,
+    "initialExit": 1,
+    "initialResult": "41/42 Admin checks; loopback request blocked by sandbox before server observed any POST",
+    "focusedCommand": "node --test tests/admin-product-master-recovery-client.test.mjs",
+    "focusedSession": "596fe8",
+    "focusedExit": 0,
+    "focusedResult": "2/2 with permitted local loopback",
+    "remainingSession": 16832,
+    "remainingExit": 0,
+    "remainingResult": "Remaining unchanged prebuild steps passed; zero route-control gaps, zero unexpected PUBLIC/anon grants, secret scan and imports pass",
+    "wholeGateRerun": false
+  },
+  "limitations": [
+    "No rendered browser or safe-discard/replacement UI qualification",
+    "No provider transaction/transport or live deployment evidence",
+    "No real product facts, stock or human publication acceptance",
+    "No unrestricted privileged authority stability claim"
+  ],
+  "recovery": "Preserve immutable media40 and prior accepted cases; revert only new opt-in/transport probe/witness/test source together. No provider rollback needed. Preserve original pending actor/body/key.",
+  "nextActionOwner": "MASTER_ACTION_PLAN.md MAP-018"
+}
