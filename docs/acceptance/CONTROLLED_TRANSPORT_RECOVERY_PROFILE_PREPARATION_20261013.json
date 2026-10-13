@@ -1,0 +1,165 @@
+{
+  "owningMap": "MAP-018",
+  "ideas": [
+    "IDEA-20261010-08",
+    "IDEA-20261009-08"
+  ],
+  "classification": "Exact local full-profile constructor and frozen preparation; native qualification not executed",
+  "baseCommit": "5ddddee",
+  "providerReads": false,
+  "providerWrites": false,
+  "nativeExecuted": false,
+  "priorNativeObserved": false,
+  "productionDispatcher": false,
+  "review": {
+    "design": "APPROVED_LOCAL_ONLY",
+    "skeptic": "APPROVED",
+    "guardian": "APPROVED",
+    "advocate": "APPROVED",
+    "arbiter": "APPROVED",
+    "code": {
+      "status": "APPROVED",
+      "critical": 0,
+      "important": 0,
+      "minor": 0,
+      "reviewer": "/root/transport_code_review"
+    }
+  },
+  "evidence": {
+    "red": {
+      "tool": "bcd3b4",
+      "command": "node --test docs/evidence/20261010-retained-code-repair/repair-envelope.test.mjs",
+      "exitCode": 1,
+      "failed": 9,
+      "reason": "New exact full profile refused with RETAINED_REPAIR_SOURCE_PIN:catalogPair before implementation"
+    },
+    "green": {
+      "tool": "795259",
+      "command": "node --test docs/evidence/20261010-retained-code-repair/repair-envelope.test.mjs",
+      "exitCode": 0,
+      "passed": 46,
+      "failed": 0
+    },
+    "compatibility": {
+      "before": "147825",
+      "after": "795259",
+      "earlierProfiles": 2,
+      "faultBoundaries": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "identicalSqlHashes": 8
+    },
+    "preparation": {
+      "tool": "6fea73",
+      "immutableDirectory": ".tools/map018-retained-full-profile-20261013-01",
+      "syntheticPriorOnly": true,
+      "repairSqlFiles": 4
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "start": "c27c29",
+      "terminal": "8e50b3",
+      "exitCode": 0,
+      "adminTestsPassed": 53,
+      "routeControlGaps": 0,
+      "secretScannedFiles": 2291,
+      "initialRestricted": {
+        "start": "b18994",
+        "terminal": "e71992",
+        "exitCode": 1,
+        "adminTestsPassed": 52,
+        "failed": 1,
+        "actualHttpRequests": 0
+      },
+      "focusedLoopback": {
+        "tool": "31e301",
+        "command": "node --test tests/admin-product-master-recovery-client.test.mjs",
+        "exitCode": 0,
+        "passed": 2
+      }
+    }
+  },
+  "pins": [
+    {
+      "file": ".tools/map018-retained-full-profile-20261013-01/prior-catalog.json",
+      "bytes": 3348557,
+      "sha256": "a7e4c6d8ac12ebca39b37e9987edc871597af9df37583115c868cf70c6850925"
+    },
+    {
+      "file": ".tools/map018-retained-full-profile-20261013-01/corrected-catalog.json",
+      "bytes": 2437873,
+      "sha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e"
+    },
+    {
+      "file": ".tools/map018-retained-full-profile-20261013-01/guarded-package.json",
+      "bytes": 9232760,
+      "sha256": "ddf4def0eceb753480eb4e36c4d775e665b868b9ede62e49dbc74a7832904ac9"
+    },
+    {
+      "file": ".tools/map018-retained-full-profile-20261013-01/repair-0.sql",
+      "bytes": 2431371,
+      "sha256": "7eca098b621f199c1ca48ee9276d5bd00e88f0905b8f3f9a36f08629857374f7"
+    },
+    {
+      "file": ".tools/map018-retained-full-profile-20261013-01/repair-1.sql",
+      "bytes": 2431760,
+      "sha256": "88d4779d741323fb4f6e92ad83131f86c92d80ae4d51a79e5574e83b6020a40e"
+    },
+    {
+      "file": ".tools/map018-retained-full-profile-20261013-01/repair-2.sql",
+      "bytes": 2431760,
+      "sha256": "4bc6a6046578188242d78044e1455709333908d01c89297f838b644d68df2532"
+    },
+    {
+      "file": ".tools/map018-retained-full-profile-20261013-01/repair-3.sql",
+      "bytes": 2431760,
+      "sha256": "1be4b8cf60f3b0ac489b54ef1349258c39c66579d5fa894abcafacda831b8a87"
+    },
+    {
+      "file": ".tools/map018-retained-full-profile-20261013-01/compatibility-before.json",
+      "bytes": 538,
+      "sha256": "f8d55a50cfec29c6eb10f2c209ce8d6b240f5dad385e0896b9136732fe13e930"
+    },
+    {
+      "file": ".tools/map018-retained-full-profile-20261013-01/manifest.json",
+      "bytes": 1722,
+      "sha256": "3b14dbff65e242f32e380fefc2b2b73dfefccf252145ff44e5028e82e76adc95"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "bytes": 9583,
+      "sha256": "f01ae711a2469cfbd5ed27db9eac232c89d6cca654f31c932f0f312772682608"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.test.mjs",
+      "bytes": 11752,
+      "sha256": "be42859e935da8787381a1c781fafc4a43d2f6e49911a48dd2afaf785e1f0e09"
+    },
+    {
+      "file": "docs/acceptance/CONTROLLED_TRANSPORT_RECOVERY_PROFILE_AUDIT_20261013.json",
+      "bytes": 6011,
+      "sha256": "043a291f8b38bffc4407695df296139ba88c0d3e81ba3cf2583ab3c05d5381b2"
+    },
+    {
+      "file": ".tools/capture-repair-compatibility-20261013.mjs",
+      "bytes": 1327,
+      "sha256": "8fa3427d463830c25056d4433c61f43bc4e7ad0cb29b3c703b9dfcd9eba92497"
+    },
+    {
+      "file": ".tools/prepare-full-repair-profile-20261013.mjs",
+      "bytes": 2188,
+      "sha256": "78b40235b66879590422f81f0ff14ae0a1a4383101d18acdd5b83f6249abb30e"
+    }
+  ],
+  "limitations": [
+    "JavaScript preparation/classification does not prove native SQL retention, statement timing, interruption rollback or later canonical resumption.",
+    "Synthetic prior is not an observed native catalog.",
+    "Earlier genuine service evidence retains its original scope.",
+    "Historical audit source pin describes pre-change HEAD5ddddee; this receipt pins the new source independently."
+  ],
+  "remaining": "MAP-018: review and stage a fresh owned network-disabled native17.6 full-envelope fixture; conserve exact historical receipt and full populated physical state/catalog/authority through all eight states, repeats, actual correction interruptions, drift refusals and later canonical command resumption. Stop for separately calibrated/reviewed profile if prerequisites differ. TLS/current-host route/clock/original UNKNOWN disposition/exact write authorization/immediate backup/readiness and full operational/hosted/human/release acceptance remain.",
+  "recovery": "Unactivated local constructor/preparation only. Revert source changes if needed; preserve frozen full-profile01, earlier accepted/failed fixtures, source/envelope and backups. No provider rollback applies."
+}

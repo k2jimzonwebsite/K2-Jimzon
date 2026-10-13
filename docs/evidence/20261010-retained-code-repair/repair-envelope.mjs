@@ -4,14 +4,20 @@ import { isDeepStrictEqual } from 'node:util'
 
 const sha = value => createHash('sha256').update(value).digest('hex')
 const quote = value => "'" + value.replaceAll("'", "''") + "'"
-// Matched complete catalogs, never independently selectable before/after pins.
+// Matched complete catalogs and package bytes, never independently selectable.
 // The second prior is a derived fixture fault state; its corrected catalog is
 // native calibration01 evidence, including every exact request prerequisite.
 const catalogPairs = [
   ['e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460',
-    'f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a'],
+    'f15546967b026374dc2c93893cba51508ac549eb290a9904bfd1fbb49fea7a3a',
+    '05dadb37cbe01edc0a70172e12a3d047438559df5c3949edb82ec817f8505b84'],
   ['bb3983d843c41dfa94f490c03f3f2b6f73767d225e6061c591e975b28fab1b08',
-    'f02519a354fca1002298bb2b97e5cdc8eea4e2f20ebb496a3cb5deb7dcf3876d'],
+    'f02519a354fca1002298bb2b97e5cdc8eea4e2f20ebb496a3cb5deb7dcf3876d',
+    '05dadb37cbe01edc0a70172e12a3d047438559df5c3949edb82ec817f8505b84'],
+  // Complete controlled-installation profile; prior remains a synthetic fault.
+  ['a7e4c6d8ac12ebca39b37e9987edc871597af9df37583115c868cf70c6850925',
+    '1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e',
+    'ddf4def0eceb753480eb4e36c4d775e665b868b9ede62e49dbc74a7832904ac9'],
 ]
 const fragmentPins = [
   'ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476',
@@ -48,9 +54,10 @@ COMMIT;
 
 export function prepareRepairEnvelope(input) {
   const priorPin = sha(input.priorBytes), correctedPin = sha(input.correctedBytes)
-  if (!catalogPairs.some(([before, after]) => before === priorPin && after === correctedPin))
+  const profile = catalogPairs.find(([before, after]) => before === priorPin && after === correctedPin)
+  if (!profile)
     throw Error('RETAINED_REPAIR_SOURCE_PIN:catalogPair')
-  if (sha(input.packageBytes) !== '05dadb37cbe01edc0a70172e12a3d047438559df5c3949edb82ec817f8505b84')
+  if (sha(input.packageBytes) !== profile[2])
     throw Error('RETAINED_REPAIR_SOURCE_PIN:packageBytes')
   if (!Array.isArray(input.fragments) || input.fragments.length !== 3 ||
       input.fragments.some((f, i) => sha(f) !== fragmentPins[i])) throw Error('RETAINED_REPAIR_SOURCE_PIN:fragments')

@@ -74,7 +74,7 @@
     }
   ],
   "review": {
-    "design": "PENDING",
+    "design": "APPROVED_LOCAL_ONLY",
     "skeptic": {
       "status": "APPROVED",
       "interpretation": "Exact starting state conserved for faults/refusals; corrected catalog required only for success. Full-profile native qualification and precise existing service scopes remain."
@@ -82,6 +82,14 @@
     "guardian": {
       "status": "APPROVED",
       "reason": "Fixed matched profile/package, complete physical/history conservation, private evidence and unchanged authority/deadlines; prerequisites require separate calibration/review."
+    },
+    "advocate": {
+      "status": "APPROVED",
+      "reason": "Owner intent retained: saved rates/orders/receipts/agreed charges, available shopping, no emergency pause; earlier service evidence keeps scope."
+    },
+    "arbiter": {
+      "status": "APPROVED",
+      "reason": "All objections resolved; exact matched triple, source-only compatibility, complete full-profile conservation and precise resumption scope. Old-profile-only and cold reconstruction rejected as substitutes. Local construction/qualification only."
     }
   },
   "findings": [

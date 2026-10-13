@@ -1,0 +1,287 @@
+{
+  "owningMap": "MAP-018",
+  "ideas": [
+    "IDEA-20261010-08",
+    "IDEA-20261009-08"
+  ],
+  "case": "full-native04",
+  "classification": "Actual local complete envelope and nullable controls; population refused at strongest-entry guard; retention/resumption unexecuted",
+  "providerReads": false,
+  "providerWrites": false,
+  "nativeTerminal": {
+    "dispatch": "d7c5a7",
+    "terminal": "58336e",
+    "session": 81068,
+    "pid": 1368,
+    "exit": 0,
+    "timedOut": false,
+    "stopped": true,
+    "passed": false,
+    "independentAbsence": "79daf5"
+  },
+  "observed": {
+    "version": "PostgreSQL17.6",
+    "exactReceiptRoundtrip": true,
+    "globalManagedAuthority": true,
+    "completeCatalogGuardReached": true,
+    "correctedCatalogGuardSha256": "1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e",
+    "nativeValidMissingNullControls": true,
+    "populationCompleted": false,
+    "repairMatrixExecuted": false,
+    "driftMatrixExecuted": false,
+    "resumptionExecuted": false,
+    "installerReplayExecuted": false
+  },
+  "failure": {
+    "message": "K2_CATEGORY_POLICY_UPGRADE_REFUSED",
+    "file": "/tmp/full-population.sql",
+    "line": 57,
+    "scope": "Older synthetic setup acquired shared admission before full category-write trigger required exclusive mode. Current full guard correctly refuses lock upgrade. No canonical Admin/category/tariff/order commands reached.",
+    "populationRollbackReadback": "Not captured before guest shutdown; no full conservation claim from the failed population transaction."
+  },
+  "review": {
+    "preexecution": "APPROVED after two Important findings fixed",
+    "actualEvidence": "PENDING"
+  },
+  "sourceFidelity": "Executed preparer archive matches the original case04 generator pin; mutable generator now stages case05, so archive replaces that mutable path in runtime pins. Original manifest and preparation receipt are retained as historical records.",
+  "pins": [
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/image-probe.sh",
+      "bytes": 7617,
+      "sha256": "c604d83bae4c65c64cd1d296df5dfa7c69bfe014f26ce02c67704731be98792c"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/full-population.sql",
+      "bytes": 16196,
+      "sha256": "874186aef482968398af276ccff9d8fba855a23b8e4ea37c554bd1a8c342085e"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/full-resumption.sql",
+      "bytes": 13926,
+      "sha256": "372f3e6899f94c09994e894134f137148f56f433f2cc61e6a6b53ee7cf638f79"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/full-null-controls.sql",
+      "bytes": 5174,
+      "sha256": "153051eff4e23e22c3e2db687ed92663a381246dce607eb1d493d9e149f64b9a"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-matrix.sh",
+      "bytes": 25036,
+      "sha256": "9c76edb309d81847676821114bb70d555028cd136123650dc5c8d09995684f5c"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-drift.sh",
+      "bytes": 14670,
+      "sha256": "c785639a3e48e73e1e23c5072018f1377be8b6174e85597a27bc08f887e1dd24"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-repair.sql",
+      "bytes": 2431371,
+      "sha256": "5d07c6676a9b085b4f09524897ea1453ac4330994fb19fc963341ae7b7bc781d"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-snapshot.sql",
+      "bytes": 1664,
+      "sha256": "e207e988c77d1a5e37384fd7cbef854c8ce43d893af76bdbe1a002c078ce3a98"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-state-0.sql",
+      "bytes": 23800,
+      "sha256": "642f025fd338e26b9249c1277b165907b153e348bd465c82b1529848838163d0"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-state-1.sql",
+      "bytes": 23800,
+      "sha256": "4323aecd19aeffc6f14ade5ac9c341e6f184442cfe3f44fd4c887fb2b328b1f3"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-state-2.sql",
+      "bytes": 23800,
+      "sha256": "0ac750c437d132f05c0e9be04b7af87958d595ae43f7af963d14170700eb0baa"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-state-3.sql",
+      "bytes": 23800,
+      "sha256": "885ca290cda44e22c1db461159db5248cd76da6deda60bd7e8873e3787b66fc4"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-state-4.sql",
+      "bytes": 23800,
+      "sha256": "6c18f0989059af7a1397da71e3666e7d5d75e1aaa8494317daf31cb94570d39a"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-state-5.sql",
+      "bytes": 23800,
+      "sha256": "b8242140c9069dcce92de9b85f84f9445eb51a7f698280600b4d497152e31b9d"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-state-6.sql",
+      "bytes": 23800,
+      "sha256": "fdbc973ec0f10a5ee033556ddfa222d778719d6365f91cf4d2f7d5c05932c000"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-state-7.sql",
+      "bytes": 23800,
+      "sha256": "be9261b46f294394bef6a7ac3c08ea3813772d27127acc44f684c2078532f055"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-fault-1.sql",
+      "bytes": 2431760,
+      "sha256": "11df21b2d89e2505b99b3af969de857f20a2940f488532779b6a19ab7ee4cea1"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-fault-2.sql",
+      "bytes": 2431760,
+      "sha256": "b77371e314e493017507f49b10de004eef6b45be3ac5cf26d5868b57a058c0a6"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-fault-3.sql",
+      "bytes": 2431760,
+      "sha256": "09e0d3493aa63a01a315889d966fc02a01139b52b4776a1c3525981b744a9c55"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-drift-body-setup.sql",
+      "bytes": 15080,
+      "sha256": "29256cd578a52a6c552e1963be15e93e48605e5343b33eb303f9924a56992a83"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-drift-body-restore.sql",
+      "bytes": 15048,
+      "sha256": "70ecc52ef046a48f6d38df97d9a4725b1bb5ede6c62be7ce860b380b1a6019e6"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-drift-owner-setup.sql",
+      "bytes": 867,
+      "sha256": "b5bc5e3b03bc1806ef10d7696e7f7466b0dcc8548a0747df237a53f09e343981"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-drift-owner-restore.sql",
+      "bytes": 861,
+      "sha256": "bf2291229264f8b199a936c6528dfc4b122b04d12840fe0cd8769a663ed25d62"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-drift-acl-setup.sql",
+      "bytes": 862,
+      "sha256": "7eb842ad4151b6ab35b45f912f86d734e78a468a29d11cf9fcecd03f993e0a18"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-drift-acl-restore.sql",
+      "bytes": 865,
+      "sha256": "a3785b5321f46eb81e8d143083fcd375541eb8040385168ecaa2eee6b7f352c0"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-drift-search-path-setup.sql",
+      "bytes": 868,
+      "sha256": "aafa04268cfaa423b4381b24b6f566affc7c1702aa0bdf8c9dc2a8716effb74b"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-drift-search-path-restore.sql",
+      "bytes": 864,
+      "sha256": "dcb7aced1983b578aded3a69187445fafd01c7ef1709b8510a0b49fd77125768"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-drift-schema-setup.sql",
+      "bytes": 807,
+      "sha256": "1f76748c095c075988dcefb67f7b95ef4b2d9c175b45eb0593763a5576490002"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/retained-drift-schema-restore.sql",
+      "bytes": 793,
+      "sha256": "a4f2262b37d6c1f7d162ffd3fa141907019bf725a3a23f53cbf97bf48bf9e599"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/staging/k2/init.sh",
+      "bytes": 10819,
+      "sha256": "6de47cde733b680e34f8b533b78f3209b86a6d4eda49e3ed56a617b0e9821f1e"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/overlay.cpio",
+      "bytes": 10053496,
+      "sha256": "9423a21691983ceb9f98a3de3190653563dc1fc07443044aa35aa01409966024"
+    },
+    {
+      "file": ".tools/map018-controlled-native-20261012-02/initramfs.cpio",
+      "bytes": 471376220,
+      "sha256": "357bde14074c3f4f2a36397cd36cd239f997a527279052233bdb3eab684cfbe0"
+    },
+    {
+      "file": "D:/K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc/oci-tariff-order05/staging/k2/connected-fixture.sql",
+      "bytes": 10435,
+      "sha256": "d693fa687e904ab60ad4a8bf4dd42167534a42538373e3bb8f9db7a6a4233995"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/executed-preparer.mjs",
+      "bytes": 20239,
+      "sha256": "44d2474db421be196c7bde877b1c5c62382f78480580a1ca3daf2f00435cbc1a",
+      "originalMutableSource": ".tools/prepare-retained-full-native01.mjs"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/repair-envelope.mjs",
+      "bytes": 9583,
+      "sha256": "f01ae711a2469cfbd5ed27db9eac232c89d6cca654f31c932f0f312772682608"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/populated-matrix.mjs",
+      "bytes": 5192,
+      "sha256": "345f6cd7cf9431102ac3d828ed69c1d1f5dc7d56897413a314c623294ba5de5f"
+    },
+    {
+      "file": "docs/evidence/20261010-retained-code-repair/drift-probe.mjs",
+      "bytes": 5509,
+      "sha256": "d3827a1047d1039b5a48c00d4d4eae84ccc344505989357067970ffa8ea88b6e"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/result.json",
+      "bytes": 2751,
+      "sha256": "98caafbe5ff08432c803443269881f547f30a84e7300b0c8f15b933e78147714"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/serial.log",
+      "bytes": 116937,
+      "sha256": "e2a106f49375b8fbd5263456e2bb6439b4700ac4a9b04aa02349b6dc0678ec43"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/stderr.log",
+      "bytes": 369,
+      "sha256": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/launch.json",
+      "bytes": 677,
+      "sha256": "41101d56c4c60da42951fc48e7f6a9440ff24b2c674db3451122696bbf3d4de1"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/preparation.json",
+      "bytes": 8458,
+      "sha256": "2e0177b4eb1156ffd87aae71da24c1cc83097a22b7886cf8d6fb6349b1b3dfcd"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/initramfs.cpio",
+      "bytes": 481429716,
+      "sha256": "7613bc9a5bd67728237d720a2eba4e68a7fe71db5580f886ca28b5f9a0fbb4c9"
+    },
+    {
+      "file": ".tools/map018-retained-full-native-20261013-04/executed-runner.mjs",
+      "bytes": 4972,
+      "sha256": "9e6d1f0de98858c57751036eb5780a9ea3c9bc67c73a862e2fc320fd718f20b5"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\qemu-system-x86_64.exe",
+      "bytes": 25457048,
+      "sha256": "47d57a6072e0bb3bd98f87926eb129eb1736dfe818c67b3b81ef7ce4edd0b3cd"
+    },
+    {
+      "file": "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "bytes": 11813888,
+      "sha256": "6b58e5d779e44e57c9efa20232da18650415eceb9d4f544e5c165c1f392c5d51"
+    },
+    {
+      "file": "supabase/prepared/category_shelf_life_entry_lock.sql",
+      "bytes": 2659,
+      "sha256": "128a89a55541f09359bd486991a7058934e7892ca4194e1e1c8318a290059736"
+    }
+  ],
+  "next": "MAP-018: case05 independently reviewed APPROVED with zero findings for one fresh local attempt using unchanged lock_category_policy_v1(true) before setup writes. Launcher was not executed: automatic approval review could not complete because of its usage limit, not an unsafe-action determination. Resolve the review service through the same approval path; do not bypass. Then execute the one reviewed local attempt, capture complete populated retention and canonical resumption, and review actual evidence. All live transport/clock/original UNKNOWN/no-retry/exact authorization/immediate backup/readiness/full operational/hosted/human/release gates remain.",
+  "recovery": "Failure trap stopped local PostgreSQL; guest powered off, PID1368 independently absent. RAM database discarded, no persistent provider state changed. Preserve failed04/raw terminal, unexecuted01–03, current05 preparation, original source/envelope/backups and all earlier fixtures."
+}

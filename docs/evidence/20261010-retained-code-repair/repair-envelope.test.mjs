@@ -119,6 +119,68 @@ const fixturePrior = JSON.parse(fixtureInput.priorBytes)
 const fixtureCorrected = JSON.parse(fixtureInput.correctedBytes)
 const fixtureIndices = fixturePrior.functions.flatMap((f, i) => f.definition !== fixtureCorrected.functions[i].definition ? [i] : [])
 
+// Complete current composition, with only the three reviewed prior definitions
+// restored as a synthetic fault state. This is preparation, not native evidence.
+const fullCorrectedBytes = fs.readFileSync('.tools/map018-controlled-native-20261012-10/committed-catalog.json')
+const fullCorrected = JSON.parse(fullCorrectedBytes)
+const fullPrior = structuredClone(fullCorrected)
+const fullIndices = fixtureIndices.map(index => {
+  const before = fixturePrior.functions[index]
+  const fullIndex = fullPrior.functions.findIndex(f => f.identity === before.identity)
+  assert.ok(fullIndex >= 0)
+  fullPrior.functions[fullIndex].definition = before.definition
+  return fullIndex
+})
+const fullInput = {
+  ...input,
+  priorBytes: Buffer.from(JSON.stringify(fullPrior, null, 2) + '\n'),
+  correctedBytes: fullCorrectedBytes,
+  packageBytes: fs.readFileSync(root + '/oci-imported76/guarded-package.json'),
+}
+const fullPackage = JSON.parse(fullInput.packageBytes)
+
+for (let mask = 0; mask < 8; mask++) test('complete installation profile admits known combination ' + mask, () => {
+  const state = structuredClone(fullPrior)
+  fullIndices.forEach((index, bit) => {
+    if (mask & (1 << bit)) state.functions[index].definition = fullCorrected.functions[index].definition
+  })
+  const prepared = module.prepareRepairEnvelope(fullInput)
+  const result = prepared.classify(state, fullPackage.authority, fullPackage.managedAuthority)
+  assert.equal(result.corrections.length, 3 - mask.toString(2).replaceAll('0', '').length)
+  assert.equal(result.noOp, mask === 7)
+  assert.equal(prepared.runtimeExecuted, false)
+  assert.equal(prepared.providerWrites, false)
+})
+
+test('complete and earlier profiles refuse cross-profile package bytes', () => {
+  for (const changed of [
+    { ...fullInput, packageBytes: input.packageBytes },
+    { ...input, packageBytes: fullInput.packageBytes },
+    { ...fixtureInput, packageBytes: fullInput.packageBytes },
+    { ...fullInput, correctedBytes: fixtureInput.correctedBytes },
+    { ...fullInput, priorBytes: Buffer.concat([fullInput.priorBytes, Buffer.from(' ')]) },
+  ]) assert.throws(() => module.prepareRepairEnvelope(changed), /SOURCE_PIN/)
+})
+
+test('complete profile refuses body, metadata and authority drift', () => {
+  const prepared = module.prepareRepairEnvelope(fullInput)
+  for (const mutate of [
+    c => { c.functions[fullIndices[0]].definition += '\n-- unknown' },
+    c => { c.functions[fullIndices[0]].owner = 'authenticated' },
+    c => { c.functions[fullIndices[1]].catalog.proacl = null },
+    c => { c.functions[fullIndices[2]].catalog.proconfig = ['search_path=public'] },
+    c => { c.relations.pop() },
+  ]) {
+    const state = structuredClone(fullCorrected)
+    mutate(state)
+    assert.throws(() => prepared.classify(state, fullPackage.authority, fullPackage.managedAuthority), /SCHEMA_DRIFT/)
+  }
+  const authority = structuredClone(fullPackage.authority)
+  authority.roles.pop()
+  assert.throws(() => prepared.classify(fullCorrected, authority, fullPackage.managedAuthority), /AUTHORITY_DRIFT/)
+  assert.throws(() => prepared.classify(fullCorrected, fullPackage.authority, { ...fullPackage.managedAuthority, sessionPreloadLibraries: '' }), /MANAGED_AUTHORITY_DRIFT/)
+})
+
 for (let mask = 0; mask < 8; mask++) test('exact calibrated request fixture admits known combination ' + mask, () => {
   const state = structuredClone(fixturePrior)
   fixtureIndices.forEach((index, bit) => { if (mask & (1 << bit)) state.functions[index] = fixtureCorrected.functions[index] })
