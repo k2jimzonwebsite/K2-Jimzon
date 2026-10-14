@@ -117,8 +117,11 @@ export default function CategoryTiles() {
                 hidden: { opacity: 0, transform: 'translateY(8px)' },
                 visible: { opacity: 1, transform: 'translateY(0)', transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] } },
               }}
-              className="group relative flex min-h-[5.5rem] items-center justify-between rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left shadow-[var(--store-surface-shadow)] transition-all duration-200 hover:border-crimson/30 hover:shadow-md cursor-pointer sm:p-5"
+              className="group relative flex min-h-[5.5rem] items-center justify-between rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left shadow-[var(--store-surface-shadow)] transition-all duration-200 hover:border-crimson/30 hover:shadow-md active:scale-[0.98] cursor-pointer sm:p-5"
             >
+              {/* Subtle Italian apothecary corner tick-marks */}
+              <span className="pointer-events-none absolute top-2 right-2 h-1.5 w-1.5 border-t border-r border-crimson/40 opacity-0 transition-opacity duration-150 group-hover:opacity-100" aria-hidden="true" />
+              <span className="pointer-events-none absolute bottom-2 left-2 h-1.5 w-1.5 border-b border-l border-crimson/40 opacity-0 transition-opacity duration-150 group-hover:opacity-100" aria-hidden="true" />
               <div className="flex items-center gap-3.5 min-w-0 flex-1">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] text-crimson transition-colors duration-150 group-hover:border-crimson/25 group-hover:bg-crimson-wash">
                   <CategoryIcon size={20} />

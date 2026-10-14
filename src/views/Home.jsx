@@ -2,9 +2,7 @@ import { lazy, Suspense, useState, useEffect, useRef } from 'react'
 import Hero, { TrustRow } from '../components/home/Hero'
 import CategoryTiles from '../components/home/CategoryTiles'
 import NewArrivals from '../components/home/NewArrivals'
-import StorySection from '../components/home/StorySection'
 import { PasabuyBanner, WholesaleStrip } from '../components/home/Banners'
-import FaqSection from '../components/home/FaqSection'
 import ErrorBoundary from '../components/ui/ErrorBoundary'
 import { Kicker } from '../components/ui/bits'
 import { StarIcon } from '../components/ui/icons'
@@ -12,6 +10,8 @@ import { StarIcon } from '../components/ui/icons'
 import { Helmet } from 'react-helmet-async'
 
 const GlobeSection = lazy(() => import('../components/home/GlobeSection'))
+const StorySection = lazy(() => import('../components/home/StorySection'))
+const FaqSection = lazy(() => import('../components/home/FaqSection'))
 
 function GlobeSectionPlaceholder() {
   return (
@@ -29,7 +29,7 @@ function GlobeSectionPlaceholder() {
           </p>
         </div>
 
-        <div className="relative flex h-[62vh] min-h-[420px] w-full items-center justify-center overflow-hidden rounded-2xl border border-line bg-shell/45 sm:h-[500px] md:h-[560px]">
+        <div className="relative flex h-[66vh] min-h-[460px] w-full items-center justify-center overflow-hidden rounded-2xl border border-line bg-shell/45 sm:h-[500px] md:h-[560px]">
           <div className="text-center px-6" role="status">
             <span className="store-loading-mark mx-auto block" aria-hidden />
             <p className="mt-4 font-sans text-sm font-semibold text-navy-soft">
@@ -103,6 +103,41 @@ function DeferredGlobeSection() {
   )
 }
 
+function TransitDivider({ label = 'Sourcing Route', from = 'Milano', to = 'Manila', flip = false }) {
+  return (
+    <div className="relative py-2.5 px-4 overflow-hidden select-none border-y border-line/40 bg-shell/20" aria-hidden="true">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 text-navy-faint">
+        <div className="flex items-center gap-1.5 shrink-0 font-mono text-[9px] sm:text-[10px] uppercase tracking-wider text-navy-soft">
+          <span className="h-1.5 w-1.5 rounded-full bg-crimson" />
+          <span>{flip ? to : from}</span>
+        </div>
+
+        <div className="relative flex-1 flex items-center px-2">
+          <svg className="w-full h-3 text-line" viewBox="0 0 500 12" fill="none" preserveAspectRatio="none">
+            <line x1="0" y1="6" x2="500" y2="6" stroke="currentColor" strokeWidth="1" strokeDasharray="3 4" strokeOpacity="0.8" />
+            <path
+              d={flip ? "M 220 6 Q 250 1 280 6" : "M 220 6 Q 250 11 280 6"}
+              stroke="var(--color-crimson, #9E2A2B)"
+              strokeWidth="1.5"
+              strokeOpacity="0.5"
+            />
+          </svg>
+          {label && (
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-line/60 bg-[var(--store-canvas-bg,#fcfbf9)] px-2.5 py-0.5 font-mono text-[8.5px] sm:text-[9.5px] font-bold uppercase tracking-[0.2em] text-navy-faint">
+              {label}
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-1.5 shrink-0 font-mono text-[9px] sm:text-[10px] uppercase tracking-wider text-navy-soft">
+          <span>{flip ? from : to}</span>
+          <span className="h-1.5 w-1.5 rounded-full bg-forest" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Home() {
   return (
     <main className="pb-[calc(4rem+env(safe-area-inset-bottom,0px))] md:pb-10">
@@ -113,13 +148,22 @@ export default function Home() {
       </Helmet>
       <Hero />
       <TrustRow />
+      <TransitDivider label="Direct Sourcing" from="Milano · 45°N" to="Pantry Selection" />
       <CategoryTiles />
+      <TransitDivider label="Monthly Cargo Flights" from="MXP Flight" to="Manila Stock" flip />
       <NewArrivals />
+      <TransitDivider label="Verified Reviews" from="Shopee & Direct" to="3D Review Globe" />
       <DeferredGlobeSection />
-      <StorySection />
+      <TransitDivider label="Quality Journey" from="Shelf Inspection" to="Manila Warehouse" flip />
+      <Suspense fallback={null}>
+        <StorySection />
+      </Suspense>
       <PasabuyBanner />
       <WholesaleStrip />
-      <FaqSection />
+      <TransitDivider label="Honest Operations" from="FEFO Tracking" to="Direct Support" />
+      <Suspense fallback={null}>
+        <FaqSection />
+      </Suspense>
     </main>
   )
 }

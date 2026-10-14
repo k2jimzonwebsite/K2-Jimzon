@@ -30,8 +30,8 @@ export default function GlobeSection() {
           </p>
         </div>
 
-        {/* Globe stage — deliberately large on phones so it's usable */}
-        <div className="relative h-[62vh] min-h-[420px] w-full overflow-hidden rounded-2xl border border-line bg-shell/45 sm:h-[500px] md:h-[560px]">
+        {/* Globe stage — calibrated height for mobile and desktop */}
+        <div className="relative h-[66vh] min-h-[460px] w-full overflow-hidden rounded-2xl border border-line bg-shell/45 sm:h-[500px] md:h-[560px]">
           {/* Ambient ground shadow */}
           <div className="pointer-events-none absolute top-[82%] left-1/2 z-0 h-[50px] w-[70%] -translate-x-1/2 rounded-full bg-[#111111]/15 blur-2xl" />
 
@@ -51,11 +51,15 @@ export default function GlobeSection() {
             </div>
           )}
 
-          {/* Interaction hint */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-shell/80 to-transparent p-5 pt-16">
-            <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-navy-faint">
-              {hasProducts ? 'Drag to spin · Tap to read reviews' : 'Review experience status'}
-            </p>
+          {/* Interactive touch hint pill */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 flex justify-center px-4">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-line/80 bg-[var(--store-surface-bg)]/95 px-4 py-1.5 text-xs font-semibold text-navy shadow-sm backdrop-blur-md">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-crimson opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-crimson" />
+              </span>
+              <span>{hasProducts ? 'Drag to spin · Tap any item for verified reviews' : 'Review experience reconnecting'}</span>
+            </div>
           </div>
         </div>
         {!isLoading && (reviewsUnavailable || reviewCount === 0) && (

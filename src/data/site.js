@@ -81,27 +81,44 @@ export const REVIEWS = [
 
 export const FAQS = [
   {
-    q: 'Are your products really authentic?',
-    a: 'Yes, 100%. We buy directly from Italian grocery stores, pharmacies, and licensed suppliers in Italy. Every item is verified before leaving Europe, and we are happy to share batch details or photos upon request.',
+    cat: 'Ordering & Stock',
+    q: 'How does your Single Master Inventory work?',
+    a: 'Every product listed on our website is physically in our Manila warehouse and tied to a single master inventory count. When a product sells on Shopee, TikTok, or our website, the count reconciles across all channels in real time. You will never purchase ghost stock or arrive at checkout only to find out an item was already sold.',
   },
   {
-    q: 'How fast is delivery?',
-    a: 'Delivery timing and fees are confirmed by K2 staff after checking your items, destination, and courier availability. For Pasabuy, sourcing and arrival timing are included in the quote for your review. Submitting a request does not confirm a delivery date.',
+    cat: 'Ordering & Stock',
+    q: 'Why is there no instant online payment at checkout?',
+    a: 'We operate on a physical verification model: when you submit an order, our staff first visually inspect your exact items, check lot batches and expiration dates, and calculate accurate courier fees. Once confirmed, we send your official GCash or MariBank receiving QR code and order total. You only pay after a human confirms your order is 100% ready.',
   },
   {
-    q: 'What is Pasabuy and how does it work?',
-    a: 'Pasabuy is our personal shopping service. Send us the item name, link, or photo. We will check Italian stores, send you a total quote with shipping, and only purchase after you confirm.',
+    cat: 'Freshness & Dates',
+    q: 'Are your Italian grocery items really authentic and fresh?',
+    a: 'Yes, 100%. We buy directly from Italian supermarket chains (such as Esselunga, Conad, and Coop) and licensed regional distributors in Milan. We use strict FEFO (First-Expired, First-Out) lot tracking, and every product listing displays genuine batch numbers and Best-Before dates—no mystery dates or near-expiry surprises.',
   },
   {
-    q: 'How do I pay?',
-    a: 'No payment is collected when you submit a request. You can choose a GCash or MariBank receiving QR for manual transfer. Wait for K2 staff to confirm your stock, delivery charge, total, and approved receiving details before paying. Your payment must then be checked by staff.',
+    cat: 'Freshness & Dates',
+    q: 'Why do your Milano fragrances say "inspired scent"?',
+    a: 'Because honesty comes first. Our Milano line features European-crafted alternative perfumes formulated with premium French and Italian fragrance oils. We sell them transparently under their own name as high-quality inspired scents, never passing them off as counterfeit designer bottles.',
   },
   {
-    q: 'I run a café, restaurant, or store. Can I get wholesale prices?',
-    a: 'Yes. We supply coffee beans, pasta, sauces, and biscuits in case quantities to bakeries, cafés, and specialty delis across Metro Manila. Submit a wholesale inquiry and staff will quote your order — pricing is per order, never automatic.',
+    cat: 'Delivery & Pickup',
+    q: 'What are your delivery options and can I pick up in Manila?',
+    a: 'We offer three flexible options: (1) Same-day or next-day express courier (Grab, Lalamove, or Borzo) within Metro Manila; (2) Nationwide provincial shipping via J&T Express with protective 3-layer corrugated and bubble packaging; and (3) Direct warehouse pickup at our Manila hub once staff notify you that your order is packed.',
   },
   {
-    q: 'Why do your fragrances say "inspired scent"?',
-    a: 'Because honesty comes first. Our Milano line is European-made alternative perfume sold truthfully as an inspired scent, never passed off as a counterfeit designer bottle.',
+    cat: 'Delivery & Pickup',
+    q: 'How are delivery rates calculated?',
+    a: 'Metro Manila express rates match live courier rates based on your pin location and parcel volume. Provincial rates follow standard J&T weight brackets. Staff quote your exact delivery fee before you pay, so there are never unexpected add-on charges.',
+  },
+  {
+    cat: 'Pasabuy & Flights',
+    q: 'What is Pasabuy and how do scheduled flights work?',
+    a: 'Pasabuy is our personal shopping service for items not listed in our regular catalog. Send us a photo, product name, or link. Our buyers in Milan check Italian stores and provide an all-inclusive quote in Philippine Pesos covering the item cost and air freight. Items fly on our regular monthly cargo flights from Milan Malpensa to Manila.',
+  },
+  {
+    cat: 'Wholesale & B2B',
+    q: 'Can restaurants, cafés, or bakeries order at wholesale prices?',
+    a: 'Yes. We supply coffee beans (Lavazza, Kimbo), bronze-cut pasta, canned San Marzano tomatoes, and bakery ingredients in case and carton quantities to specialty cafés and restaurants across the Philippines. Submit an inquiry through our Wholesale portal or contact us directly for B2B price tiers.',
   },
 ]
+

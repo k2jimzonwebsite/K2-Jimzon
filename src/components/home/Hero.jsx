@@ -19,6 +19,12 @@ function Hero() {
       <div className="store-section grid min-h-[36rem] grid-cols-1 items-center gap-10 py-14 md:grid-cols-[1.05fr_0.95fr] md:py-20 lg:min-h-[42rem] lg:gap-16">
         <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.06 } } }} className="max-w-2xl">
           <motion.div variants={reveal}>
+            <div className="mb-3 flex items-center gap-2">
+              <span className="inline-flex items-center gap-2 rounded-full border border-line bg-shell/60 px-3 py-1 font-mono text-[10px] sm:text-[11px] font-semibold text-navy-soft">
+                <span className="h-1.5 w-1.5 rounded-full bg-crimson animate-pulse" />
+                MIL 45°28′ N ➔ MNL 14°35′ N · Scheduled Cargo
+              </span>
+            </div>
             <Kicker className="flex items-center gap-2">
               <PlaneIcon size={14} /> Direct Italian sourcing, fulfilled in Manila
             </Kicker>

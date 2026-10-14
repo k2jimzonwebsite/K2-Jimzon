@@ -3,7 +3,13 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import GlobeCore from './GlobeCore'
 
-const getCameraZ = () => typeof window !== 'undefined' && window.innerWidth < 768 ? 28.8 : 16.5
+const getCameraZ = () => {
+  if (typeof window === 'undefined') return 16.5
+  const w = window.innerWidth
+  if (w < 480) return 21.0 // Mobile phones: prominent, immersive presentation (~37% larger)
+  if (w < 768) return 22.8 // Phablets and portrait tablets
+  return 16.5              // Desktop
+}
 
 function CameraController({ targetZ }) {
   useFrame((state) => {
