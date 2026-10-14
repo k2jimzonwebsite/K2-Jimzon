@@ -524,6 +524,79 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
     }
   }
 
+  const fillManualTemplate = () => {
+    const rawName = (query || session?.scanned_identity || '').trim() || 'New Italian Product'
+    const barcodeVal = (query || session?.barcode || '').trim() || null
+    const template = {
+      schema_version: PRODUCT_RESEARCH_SCHEMA_VERSION,
+      product: {
+        barcode: barcodeVal,
+        name: rawName,
+        short_name: rawName.length > 25 ? rawName.slice(0, 25) : rawName,
+        brand_name: '',
+        variant: '',
+        net_weight: null,
+        package_type: 'Package',
+        category: categoryType === 'food' ? 'Food & Pantry' : categoryType === 'beauty' ? 'Fragrance & Beauty' : 'Household',
+        subcategory: '',
+        origin: 'Italy',
+        ingredients: [],
+        allergens: [],
+      },
+      copy: {
+        card_description: rawName,
+        full_description: `${rawName} imported directly from Italy. Verified authentic packaging and lot.`,
+        key_highlights: ['Direct Italian import', 'Verified physical lot'],
+        why_buy: 'Authentic Italian quality.',
+        why_rare: null,
+      },
+      seo: {
+        seo_title: `${rawName} | K2 Jimzon Philippines`,
+        meta_description: `Buy authentic ${rawName} in the Philippines. Direct import from Italy.`,
+        page_heading: rawName,
+        supporting_heading: 'Authentic Italian Imported Selection',
+        search_keywords: [rawName.toLowerCase()],
+      },
+      usage: {
+        summary: null,
+        use_cases: [],
+        instructions: [],
+        pairings: [],
+        storage: 'Store in a cool, dry place away from heat and light.',
+        warnings: [],
+      },
+      media: {
+        primary_alt_text: rawName,
+        primary_composition: 'Package on clean surface',
+        after_alt_text: '',
+        after_scene: '',
+        after_truth_constraints: [],
+      },
+      verification: {
+        sources: [
+          {
+            fields: ['product.name'],
+            source_type: 'package_image',
+            reference: 'upload:front',
+            confidence: 'high',
+          },
+        ],
+        unknown_fields: [],
+        review_notes: [],
+      },
+    }
+    const jsonStr = JSON.stringify(template, null, 2)
+    setJsonInput(jsonStr)
+    const res = parseProductResearchPaste(jsonStr)
+    setParsedPayload(importedTarget ? importedReviewCandidate(res) : res)
+    const initialAccepted = {}
+    if (res.product) {
+      Object.keys(res.product).forEach(k => { initialAccepted[k] = true })
+    }
+    setAcceptedFields(initialAccepted)
+    setParseError(null)
+  }
+
   const handleParseJson = () => {
     setParseError(null)
     setParsedPayload(null)
@@ -1109,21 +1182,33 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               </div>
 
               <div className="p-3 bg-black/40 border border-white/10 rounded-lg space-y-2">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="font-mono text-amber-400 text-xs">Contract: k2.product-content.v3</span>
-                  <button
-                    id="intake-copy-prompt"
-                    type="button"
-                    id="intake-copy-prompt"
-                    onClick={handleCopyPrompt}
-                    className="min-h-11 px-3 py-2 bg-amber-400 text-black font-semibold rounded text-xs flex items-center gap-1 hover:bg-amber-300"
-                  >
-                    <CopyIcon className="w-3.5 h-3.5" />
-                    {copiedPrompt ? 'Copied to Clipboard!' : 'Copy Prompt'}
-                  </button>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      id="intake-copy-prompt"
+                      type="button"
+                      onClick={handleCopyPrompt}
+                      className="min-h-11 px-3 py-2 bg-amber-400 text-black font-semibold rounded text-xs flex items-center gap-1 hover:bg-amber-300"
+                    >
+                      <CopyIcon className="w-3.5 h-3.5" />
+                      {copiedPrompt ? 'Copied to Clipboard!' : 'Copy Prompt'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        fillManualTemplate()
+                        setStep(4)
+                      }}
+                      className="min-h-11 px-3 py-2 border border-white/20 bg-white/10 text-white font-semibold rounded text-xs hover:bg-white/20 transition-colors"
+                      title="Skip ChatGPT and use standard manual template"
+                    >
+                      Manual entry (No AI) →
+                    </button>
+                  </div>
                 </div>
                 <p className="text-white/50 text-xs">
-                  Paste this prompt into ChatGPT along with the packaging photos. Neither ChatGPT nor browser staff can set SKU, price, stock, expiry, or publication state.
+                  Paste this prompt into ChatGPT with photos, or select manual entry to list without AI.
                 </p>
               </div>
             </div>
@@ -1135,7 +1220,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               <div>
                 <h4 className="text-base font-medium text-white">{importedTarget ? 'Step 4: Review imported details' : 'Step 4: Smart Paste & Field Review'}</h4>
                 <p className="text-white/60">
-                  {importedTarget ? 'Check the package against the imported details. Tick only the fields you approve. Unticked fields keep their imported values. Accept the product name to continue.' : 'Paste the JSON output returned by ChatGPT. The system validates schema, highlights evidence, and displays a field diff.'}
+                  {importedTarget ? 'Check the package against the imported details. Tick only the fields you approve. Unticked fields keep their imported values. Accept the product name to continue.' : 'Paste the JSON output returned by ChatGPT, or click Fill manual template to proceed directly.'}
                 </p>
               </div>
 
@@ -1151,13 +1236,23 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   placeholder="Paste PRODUCT_JSON object here..."
                   className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 font-mono text-xs text-amber-200 focus:outline-none focus:border-amber-400 placeholder-white/30"
                 />
-                <button
-                  type="button"
-                  onClick={handleParseJson}
-                  className="min-h-11 px-4 py-2 bg-amber-500 text-black font-semibold rounded-lg hover:bg-amber-400 transition-colors"
-                >
-                  Validate & Review Fields
-                </button>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={handleParseJson}
+                    className="min-h-11 px-4 py-2 bg-amber-500 text-black font-semibold rounded-lg hover:bg-amber-400 transition-colors"
+                  >
+                    Validate & Review Fields
+                  </button>
+                  <button
+                    type="button"
+                    onClick={fillManualTemplate}
+                    className="min-h-11 px-4 py-2 border border-white/20 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/15 transition-colors"
+                    title="Populate standard fields directly without needing ChatGPT"
+                  >
+                    Fill manual template (No AI)
+                  </button>
+                </div>
                 </div>
               </details>
 

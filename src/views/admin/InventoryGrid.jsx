@@ -144,8 +144,42 @@ function StatusDecisionDialog({ decision, busy, onCancel, onConfirm }) {
 const inp = 'w-full rounded-adm-sm border border-white/20 bg-adm-raised px-3.5 py-2.5 text-base text-white font-semibold focus:border-blue outline-none transition-colors shadow-sm'
 const ta  = `${inp} resize-none`
 
-function Label({ children, htmlFor }) {
-  return <label htmlFor={htmlFor} className="block text-sm font-extrabold uppercase tracking-wider text-white/70 mb-1.5">{children}</label>
+function Label({ children, htmlFor, tip }) {
+  return (
+    <div className="flex items-center justify-between mb-1.5">
+      <label htmlFor={htmlFor} className="block text-sm font-extrabold uppercase tracking-wider text-white/70">{children}</label>
+      {tip && (
+        <span
+          className="text-xs text-white/40 cursor-help hover:text-blue transition-colors px-1 font-mono select-none"
+          title={tip}
+          aria-label={tip}
+        >
+          (?)
+        </span>
+      )}
+    </div>
+  )
+}
+
+function calculateListingQuality(p) {
+  if (!p) return { score: 0, nextHint: 'Enter product details' }
+  const checks = [
+    { key: 'name', label: 'Add product name', weight: 15, valid: Boolean(p.name?.trim()) },
+    { key: 'sku', label: 'SKU identity', weight: 10, valid: Boolean(p.sku?.trim()) },
+    { key: 'barcode', label: 'Scan or add barcode', weight: 10, valid: Boolean(p.barcode?.trim()) },
+    { key: 'origin', label: 'Add origin (e.g. Parma, Italy)', weight: 10, valid: Boolean(p.origin?.trim() || p.country_of_origin?.trim()) },
+    { key: 'net_weight', label: 'Add net weight', weight: 10, valid: Number(p.net_weight) > 0 },
+    { key: 'pricing', label: 'Set cost & SRP price', weight: 15, valid: Number(p.srp) > 0 && Number(p.cost_price) > 0 },
+    { key: 'description', label: 'Add description', weight: 15, valid: Boolean(p.description?.trim()) },
+    { key: 'instructions', label: 'Add storage / usage guidelines', weight: 10, valid: Boolean(p.storage_instructions?.trim() || p.usage_instructions?.trim()) },
+    { key: 'photo', label: 'Assign primary photo', weight: 5, valid: Boolean(p.primary_image_url || p.image_url) },
+  ]
+  const score = checks.reduce((acc, c) => acc + (c.valid ? c.weight : 0), 0)
+  const firstMissing = checks.find(c => !c.valid)
+  return {
+    score,
+    nextHint: firstMissing ? `Next: ${firstMissing.label}` : 'Listing specifications complete!',
+  }
 }
 
 function Section({ color = 'blue', title, children }) {
@@ -172,9 +206,9 @@ function BreakdownRow({ label, data }) {
   return (
     <div className="flex items-center gap-1 flex-wrap">
       <span className="w-16 shrink-0 text-xs font-semibold uppercase tracking-wide text-white/35">{label}</span>
-      {entries.map(([label, qty]) => (
-        <span key={label} className="text-xs font-mono bg-white/5 border border-adm-line rounded px-1.5 py-0.5 text-neutral-200">
-          {label} <span className="font-bold text-white">{qty}</span>
+      {entries.map(([entryKey, qty]) => (
+        <span key={entryKey} className="text-xs font-mono bg-white/5 border border-adm-line rounded px-1.5 py-0.5 text-neutral-200" title={`${label} - ${entryKey}: ${qty} pcs`}>
+          {entryKey} <span className="font-bold text-white">{qty}</span>
         </span>
       ))}
     </div>
@@ -234,14 +268,19 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
 
   useEffect(() => {
     fetchProducts()
+    fetchBatches()
     if (secure) {
-      const refresh = () => { if (document.visibilityState === 'visible') fetchProducts() }
+      const refresh = () => {
+        if (document.visibilityState === 'visible') {
+          fetchProducts()
+          fetchBatches()
+        }
+      }
       const timer = window.setInterval(refresh, 30_000)
       document.addEventListener('visibilitychange', refresh)
       return () => { catalogRead.current++; batchRead.current++; window.clearInterval(timer); document.removeEventListener('visibilitychange', refresh) }
     }
     if (!supabase) return undefined
-    fetchBatches()
     const ch = supabase.channel('public:products:grid')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'product_batches' }, fetchBatches)
@@ -253,7 +292,6 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
     if (secure) {
       const read = ++catalogRead.current
       setLoading(true)
-      fetchBatches()
       const result = await getAdminProducts()
       if (read !== catalogRead.current) return
       if (!result.ok) flash(result.error || 'Product records could not be loaded.', true)
@@ -287,7 +325,6 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
       const read = ++batchRead.current
       setBatchReadStatus('loading')
       setBatchMap({})
-      setStockFilter(current => ['expiry', 'unresolved'].includes(current) ? 'all' : current)
       const result = await getAdminLots('')
       if (read !== batchRead.current) return
       try {
@@ -472,6 +509,18 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
     if (saving || editPending) return
     setEditError('')
     setEditingProduct(prev => ({ ...prev, [field]: val }))
+  }
+
+  const listingQuality = useMemo(() => calculateListingQuality(editingProduct), [editingProduct])
+
+  const generateSlug = () => {
+    if (!editingProduct?.name) return
+    const generated = editingProduct.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 80)
+    set('slug', generated)
   }
 
   // ── Status lifecycle ───────────────────────────────────────────────────────
@@ -696,127 +745,260 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
               <div key={p.sku} className={`group relative rounded-adm-sm border bg-adm-sunken overflow-hidden flex flex-col transition-colors ${
                 selected.has(p.sku) ? 'border-blue ring-1 ring-blue/40' : 'border-adm-line hover:border-blue/50'
               }`}>
-                <div className="aspect-square bg-white/5 flex items-center justify-center p-4 relative">
-                  {/* Selection checkbox — generous hit area, it sits over art */}
-                  <label className="absolute top-2 left-2 z-10 flex h-10 w-10 items-center justify-center rounded-adm-sm bg-adm-bg/80 backdrop-blur-sm border border-adm-line cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selected.has(p.sku)}
-                      onChange={() => toggleOne(p.sku)}
-                      aria-label={`Select ${p.name || p.sku}`}
-                      className="h-5 w-5 accent-blue cursor-pointer"
-                    />
-                  </label>
-                  <img src={p.primary_image_url || p.image_url || '/images/placeholder.svg'} alt={p.name} onError={applyImageFallback}
-                    className="max-h-full max-w-full object-contain drop-shadow-lg" />
-                  
-                  {/* FEFO uses the earliest real batch expiry. Attention pins never override it. */}
-                  {primaryExpiryDate && (
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setBatchProduct(p) }}
-                      className={`absolute bottom-2 left-2 text-sm font-bold px-2 py-0.5 rounded border transition-all ${
-                        expiryHealth.color === 'crimson' ? 'bg-crimson border-crimson text-white font-bold' :
-                        expiryHealth.color === 'amber' ? 'bg-gold border-gold text-navy font-extrabold' :
-                        'bg-blue border-blue text-white font-bold'
-                      }`}
-                    >
-                      {expiryHealth.text}{attentionCount > 0 ? ` · ${attentionCount} flagged` : ''}
-                    </button>
-                  )}
-                </div>
-                <div className="p-4 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <span className="text-sm font-mono text-neutral-300 font-semibold uppercase truncate">{p.sku}</span>
-                    <span className={`shrink-0 px-2 py-0.5 rounded text-xs font-extrabold uppercase tracking-wider border ${STATUS_TONE[p.status] || STATUS_TONE.Draft}`}>
-                      {STATUS_LABEL[p.status] || p.status || 'Draft'}
-                    </span>
+                {/* ── MOBILE COMPACT CARD (< sm) ── */}
+                <div className="flex sm:hidden flex-col p-3 space-y-2.5">
+                  <div className="flex items-start gap-3">
+                    {/* Thumbnail + select + expiry */}
+                    <div className="relative h-20 w-20 shrink-0 rounded-adm-sm bg-white/5 border border-adm-line flex items-center justify-center p-1.5">
+                      <label className="absolute top-1 left-1 z-10 flex h-6 w-6 items-center justify-center rounded bg-adm-bg/85 border border-adm-line cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selected.has(p.sku)}
+                          onChange={() => toggleOne(p.sku)}
+                          aria-label={`Select ${p.name || p.sku}`}
+                          className="h-3.5 w-3.5 accent-blue cursor-pointer"
+                        />
+                      </label>
+                      <img src={p.primary_image_url || p.image_url || '/images/placeholder.svg'} alt={p.name} onError={applyImageFallback}
+                        className="max-h-full max-w-full object-contain" />
+                      {primaryExpiryDate && (
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); setBatchProduct(p) }}
+                          className={`absolute bottom-1 left-1 text-[9px] font-bold px-1 rounded border leading-tight ${
+                            expiryHealth.color === 'crimson' ? 'bg-crimson border-crimson text-white' :
+                            expiryHealth.color === 'amber' ? 'bg-gold border-gold text-navy' :
+                            'bg-blue border-blue text-white'
+                          }`}
+                        >
+                          {expiryHealth.text}
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Meta info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-1 mb-1">
+                        <span className="text-xs font-mono text-neutral-300 font-semibold truncate">{p.sku}</span>
+                        <span className={`shrink-0 px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider border ${STATUS_TONE[p.status] || STATUS_TONE.Draft}`}>
+                          {STATUS_LABEL[p.status] || p.status || 'Draft'}
+                        </span>
+                      </div>
+                      <h3 className="text-sm font-semibold text-white line-clamp-2 leading-snug">{p.name}</h3>
+                      {p.origin && <p className="text-[11px] text-white/45 truncate mt-0.5">Origin: {p.origin}</p>}
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-white line-clamp-2 mb-1.5">{p.name}</h3>
-                  {p.origin && <p className="mb-2 text-xs font-medium text-white/45">Origin: {p.origin}</p>}
-                  
-                  <div className="mt-auto space-y-2.5">
-                    <div className="grid grid-cols-2 gap-2 text-base bg-white/5 p-2.5 rounded-adm-sm border border-adm-line">
-                      <div>
-                        <p className="text-white/60 uppercase text-sm font-bold tracking-wider mb-0.5">Stock</p>
-                        {(() => {
-                          const raw = p.stock_available
-                          const stock = raw === null || raw === undefined || raw === '' ? Number.NaN : Number(raw)
-                          if (!Number.isFinite(stock)) {
-                            return <p className="font-extrabold text-lg text-amber">Unknown</p>
-                          }
-                          return <p className={`font-extrabold text-lg ${stock <= 5 ? 'text-crimson' : 'text-white'}`}>{stock}</p>
-                        })()}
-                      </div>
-                      <div>
-                        <p className="text-white/60 uppercase text-sm font-bold tracking-wider mb-0.5">Retail SRP</p>
-                        <p className="font-extrabold text-lg text-white tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</p>
-                      </div>
+
+                  {/* Stock & SRP row */}
+                  <div className="grid grid-cols-2 gap-2 text-xs bg-white/5 p-2 rounded-adm-sm border border-adm-line">
+                    <div>
+                      <span className="text-white/50 uppercase text-[10px] font-bold tracking-wider block">Stock</span>
+                      {(() => {
+                        const raw = p.stock_available
+                        const stock = raw === null || raw === undefined || raw === '' ? Number.NaN : Number(raw)
+                        if (!Number.isFinite(stock)) {
+                          return <span className="font-extrabold text-sm text-amber">Unknown</span>
+                        }
+                        return <span className={`font-extrabold text-sm ${stock <= 5 ? 'text-crimson' : 'text-white'}`}>{stock} pcs</span>
+                      })()}
                     </div>
-
-                    {/* Where it is / which channel — live from the batch bank */}
-                    {batchMap[p.sku] && (
-                      <div className="space-y-1.5 bg-white/5 border border-adm-line rounded-adm-sm p-2">
-                        <div className="flex items-center justify-between">
-                          <p className="text-white/40 uppercase text-xs font-bold tracking-wider">
-                            {batchMap[p.sku].total} pcs in {batchMap[p.sku].count} lot{batchMap[p.sku].count !== 1 ? 's' : ''}
-                          </p>
-                          {batchMap[p.sku].requiresReconciliation ? (
-                            <span className="text-xs font-bold text-crimson bg-crimson/15 px-1.5 py-0.5 rounded border border-crimson/30">
-                              Owned: Unresolved
-                            </span>
-                          ) : batchMap[p.sku].owned != null ? (
-                            <span className="text-xs font-medium text-white/60">
-                              Owned: <strong className="text-white font-bold">{batchMap[p.sku].owned}</strong> pcs
-                            </span>
-                          ) : null}
-                        </div>
-                        <BreakdownRow label="Location" data={batchMap[p.sku].hub} />
-                        <BreakdownRow label="Channel" data={batchMap[p.sku].channel} />
-                        <BreakdownRow label="Holder" data={batchMap[p.sku].custodian} />
-                      </div>
-                    )}
-
-
-                    <div className="pt-1">
-                      <button
-                        onClick={() => setBatchProduct(p)}
-                        className="w-full min-h-11 text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-neutral-200 py-2 rounded-adm-sm border border-adm-line transition-colors text-center"
-                      >
-                        Batches ({batchesReady ? (batchMap[p.sku]?.count ?? (!secure ? p.batches?.length : 0) ?? 0) : 'Unknown'})
-                      </button>
+                    <div className="text-right">
+                      <span className="text-white/50 uppercase text-[10px] font-bold tracking-wider block">SRP</span>
+                      <span className="font-extrabold text-sm text-white tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</span>
                     </div>
+                  </div>
 
+                  {/* Batch breakdown row if any */}
+                  {batchMap[p.sku] && (
+                    <div className="space-y-1 bg-white/5 border border-adm-line rounded-adm-sm p-1.5 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="text-white/40 text-[10px] font-bold uppercase">
+                          {batchMap[p.sku].total} pcs in {batchMap[p.sku].count} lot{batchMap[p.sku].count !== 1 ? 's' : ''}
+                        </span>
+                        {batchMap[p.sku].requiresReconciliation ? (
+                          <span className="text-[10px] font-bold text-crimson bg-crimson/15 px-1 rounded border border-crimson/30">
+                            Unresolved
+                          </span>
+                        ) : batchMap[p.sku].owned != null ? (
+                          <span className="text-[10px] text-white/60">
+                            Owned: <strong className="text-white font-bold">{batchMap[p.sku].owned}</strong>
+                          </span>
+                        ) : null}
+                      </div>
+                      <BreakdownRow label="Channel" data={batchMap[p.sku].channel} />
+                    </div>
+                  )}
+
+                  {/* Mobile Actions Grid */}
+                  <div className="grid grid-cols-3 gap-1.5 pt-1">
+                    <button
+                      onClick={() => setPhotoProduct(p)}
+                      className="min-h-11 rounded-adm-sm border border-adm-line bg-adm-surface px-2 text-xs font-bold text-white hover:bg-white/10 active:scale-[0.98] transition-all text-center flex items-center justify-center"
+                    >
+                      Photos
+                    </button>
+                    <button
+                      onClick={() => openProductEditor(p)}
+                      disabled={secure && !canManageProducts}
+                      className="min-h-11 rounded-adm-sm bg-blue px-2 text-xs font-bold text-white hover:bg-blue/90 active:scale-[0.98] transition-all text-center flex items-center justify-center disabled:opacity-40"
+                    >
+                      Edit
+                    </button>
                     <button
                       onClick={() => setEnrichProduct(p)}
-                      className="w-full text-sm font-sans font-bold bg-blue/10 hover:bg-blue/20 text-blue py-2 rounded-adm-sm border border-blue/30 transition-colors text-center flex items-center justify-center gap-1.5"
+                      className="min-h-11 rounded-adm-sm border border-blue/40 bg-blue/10 px-2 text-xs font-bold text-blue hover:bg-blue/20 active:scale-[0.98] transition-all text-center flex items-center justify-center"
                     >
-                      Enrich product specs
+                      Specs
                     </button>
-
-                    {/* Lifecycle: three visible states, plus a destructive
-                        action kept deliberately separate from them. */}
-                    <div className="pt-1 space-y-1.5">
-                      {secure&&<button type="button" onClick={()=>setWebsiteSku(p.sku)} disabled={!canManageProducts||!!websiteRecovery.pending||websiteRecovery.storageBlocked} className={`${secondaryButton} w-full`}>Website assignment</button>}
-                      <StatusControl
-                        value={p.status}
-                        disabled={!!statusBusy || (secure && !canManageProducts)}
-                        onChange={(next) => changeStatus([p.sku], next)}
-                      />
-                      <button
-                        onClick={() => setDeleteTargets([p])}
-                        disabled={secure && !canManageProducts}
-                        title={secure && !canManageProducts ? 'Administrator permission is required' : 'Permanently delete this product'}
-                        className="w-full min-h-11 text-xs font-bold text-crimson/70 hover:text-crimson hover:bg-crimson/10 rounded-adm-sm border border-transparent hover:border-crimson/30 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
-                      >
-                        Delete product
-                      </button>
-                    </div>
                   </div>
+                  <div className="flex gap-1.5">
+                    <button
+                      onClick={() => setBatchProduct(p)}
+                      className="flex-1 min-h-11 text-xs font-bold bg-white/10 hover:bg-white/15 text-neutral-200 py-2 rounded-adm-sm border border-adm-line transition-colors text-center"
+                    >
+                      Batches ({batchesReady ? (batchMap[p.sku]?.count ?? (!secure ? p.batches?.length : 0) ?? 0) : 'Unknown'})
+                    </button>
+                    {secure && (
+                      <button
+                        type="button"
+                        onClick={() => setWebsiteSku(p.sku)}
+                        disabled={!canManageProducts || Boolean(websiteRecovery.pending) || websiteRecovery.storageBlocked}
+                        className="flex-1 min-h-11 text-xs font-bold border border-adm-line bg-adm-surface px-2 text-white/80 hover:text-white rounded-adm-sm"
+                      >
+                        Website
+                      </button>
+                    )}
+                  </div>
+                  <StatusControl
+                    value={p.status}
+                    disabled={Boolean(statusBusy) || (secure && !canManageProducts)}
+                    onChange={(next) => changeStatus([p.sku], next)}
+                  />
                 </div>
 
-                <div className="absolute right-2 top-2 flex gap-2">
-                  <button onClick={() => setPhotoProduct(p)} className="min-h-11 rounded-adm-sm border border-adm-line bg-adm-surface/95 px-3 text-sm font-bold text-white transition-[background-color,transform] duration-150 hover:bg-white/10 active:scale-[0.98]">Photos</button>
-                  <button onClick={() => openProductEditor(p)} disabled={secure && !canManageProducts} title={secure && !canManageProducts ? 'Administrator permission is required' : 'Edit product details'} className="min-h-11 rounded-adm-sm bg-blue px-3.5 text-sm font-extrabold text-white shadow-lg transition-[background-color,transform] duration-150 hover:bg-blue/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40">Edit</button>
+                {/* ── DESKTOP CARD (sm:flex) ── */}
+                <div className="hidden sm:flex sm:flex-col flex-1">
+                  <div className="aspect-square bg-white/5 flex items-center justify-center p-4 relative">
+                    {/* Selection checkbox — generous hit area, it sits over art */}
+                    <label className="absolute top-2 left-2 z-10 flex h-10 w-10 items-center justify-center rounded-adm-sm bg-adm-bg/80 backdrop-blur-sm border border-adm-line cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selected.has(p.sku)}
+                        onChange={() => toggleOne(p.sku)}
+                        aria-label={`Select ${p.name || p.sku}`}
+                        className="h-5 w-5 accent-blue cursor-pointer"
+                      />
+                    </label>
+                    <img src={p.primary_image_url || p.image_url || '/images/placeholder.svg'} alt={p.name} onError={applyImageFallback}
+                      className="max-h-full max-w-full object-contain drop-shadow-lg" />
+                    
+                    {/* FEFO uses the earliest real batch expiry. Attention pins never override it. */}
+                    {primaryExpiryDate && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setBatchProduct(p) }}
+                        className={`absolute bottom-2 left-2 text-sm font-bold px-2 py-0.5 rounded border transition-all ${
+                          expiryHealth.color === 'crimson' ? 'bg-crimson border-crimson text-white font-bold' :
+                          expiryHealth.color === 'amber' ? 'bg-gold border-gold text-navy font-extrabold' :
+                          'bg-blue border-blue text-white font-bold'
+                        }`}
+                      >
+                        {expiryHealth.text}{attentionCount > 0 ? ` · ${attentionCount} flagged` : ''}
+                      </button>
+                    )}
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <span className="text-sm font-mono text-neutral-300 font-semibold uppercase truncate">{p.sku}</span>
+                      <span className={`shrink-0 px-2 py-0.5 rounded text-xs font-extrabold uppercase tracking-wider border ${STATUS_TONE[p.status] || STATUS_TONE.Draft}`}>
+                        {STATUS_LABEL[p.status] || p.status || 'Draft'}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-white line-clamp-2 mb-1.5">{p.name}</h3>
+                    {p.origin && <p className="mb-2 text-xs font-medium text-white/45">Origin: {p.origin}</p>}
+                    
+                    <div className="mt-auto space-y-2.5">
+                      <div className="grid grid-cols-2 gap-2 text-base bg-white/5 p-2.5 rounded-adm-sm border border-adm-line">
+                        <div>
+                          <p className="text-white/60 uppercase text-sm font-bold tracking-wider mb-0.5">Stock</p>
+                          {(() => {
+                            const raw = p.stock_available
+                            const stock = raw === null || raw === undefined || raw === '' ? Number.NaN : Number(raw)
+                            if (!Number.isFinite(stock)) {
+                              return <p className="font-extrabold text-lg text-amber">Unknown</p>
+                            }
+                            return <p className={`font-extrabold text-lg ${stock <= 5 ? 'text-crimson' : 'text-white'}`}>{stock}</p>
+                          })()}
+                        </div>
+                        <div>
+                          <p className="text-white/60 uppercase text-sm font-bold tracking-wider mb-0.5">Retail SRP</p>
+                          <p className="font-extrabold text-lg text-white tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</p>
+                        </div>
+                      </div>
+
+                      {/* Where it is / which channel — live from the batch bank */}
+                      {batchMap[p.sku] && (
+                        <div className="space-y-1.5 bg-white/5 border border-adm-line rounded-adm-sm p-2">
+                          <div className="flex items-center justify-between">
+                            <p className="text-white/40 uppercase text-xs font-bold tracking-wider">
+                              {batchMap[p.sku].total} pcs in {batchMap[p.sku].count} lot{batchMap[p.sku].count !== 1 ? 's' : ''}
+                            </p>
+                            {batchMap[p.sku].requiresReconciliation ? (
+                              <span className="text-xs font-bold text-crimson bg-crimson/15 px-1.5 py-0.5 rounded border border-crimson/30">
+                                Owned: Unresolved
+                              </span>
+                            ) : batchMap[p.sku].owned != null ? (
+                              <span className="text-xs font-medium text-white/60">
+                                Owned: <strong className="text-white font-bold">{batchMap[p.sku].owned}</strong> pcs
+                              </span>
+                            ) : null}
+                          </div>
+                          <BreakdownRow label="Location" data={batchMap[p.sku].hub} />
+                          <BreakdownRow label="Channel" data={batchMap[p.sku].channel} />
+                          <BreakdownRow label="Holder" data={batchMap[p.sku].custodian} />
+                        </div>
+                      )}
+
+                      <div className="pt-1">
+                        <button
+                          onClick={() => setBatchProduct(p)}
+                          className="w-full min-h-11 text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-neutral-200 py-2 rounded-adm-sm border border-adm-line transition-colors text-center"
+                        >
+                          Batches ({batchesReady ? (batchMap[p.sku]?.count ?? (!secure ? p.batches?.length : 0) ?? 0) : 'Unknown'})
+                        </button>
+                      </div>
+
+                      <button
+                        onClick={() => setEnrichProduct(p)}
+                        className="w-full min-h-11 text-sm font-sans font-bold bg-blue/10 hover:bg-blue/20 text-blue py-2 rounded-adm-sm border border-blue/30 transition-colors text-center flex items-center justify-center gap-1.5"
+                      >
+                        Enrich product specs
+                      </button>
+
+                      {/* Lifecycle: three visible states, plus a destructive
+                          action kept deliberately separate from them. */}
+                      <div className="pt-1 space-y-1.5">
+                        {secure&&<button type="button" onClick={()=>setWebsiteSku(p.sku)} disabled={!canManageProducts||!!websiteRecovery.pending||websiteRecovery.storageBlocked} className={`${secondaryButton} w-full`}>Website assignment</button>}
+                        <StatusControl
+                          value={p.status}
+                          disabled={!!statusBusy || (secure && !canManageProducts)}
+                          onChange={(next) => changeStatus([p.sku], next)}
+                        />
+                        <button
+                          onClick={() => setDeleteTargets([p])}
+                          disabled={secure && !canManageProducts}
+                          title={secure && !canManageProducts ? 'Administrator permission is required' : 'Permanently delete this product'}
+                          className="w-full min-h-11 text-xs font-bold text-crimson/70 hover:text-crimson hover:bg-crimson/10 rounded-adm-sm border border-transparent hover:border-crimson/30 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          Delete product
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="absolute right-2 top-2 flex gap-2">
+                    <button onClick={() => setPhotoProduct(p)} className="min-h-11 rounded-adm-sm border border-adm-line bg-adm-surface/95 px-3 text-sm font-bold text-white transition-[background-color,transform] duration-150 hover:bg-white/10 active:scale-[0.98]">Photos</button>
+                    <button onClick={() => openProductEditor(p)} disabled={secure && !canManageProducts} title={secure && !canManageProducts ? 'Administrator permission is required' : 'Edit product details'} className="min-h-11 rounded-adm-sm bg-blue px-3.5 text-sm font-extrabold text-white shadow-lg transition-[background-color,transform] duration-150 hover:bg-blue/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40">Edit</button>
+                  </div>
                 </div>
               </div>
             )
@@ -894,9 +1076,13 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
 
       <ProductAiEnrichmentModal
         product={enrichProduct}
-        isOpen={!!enrichProduct}
+        isOpen={Boolean(enrichProduct)}
         onClose={() => setEnrichProduct(null)}
         onEnriched={() => fetchProducts()}
+        onOpenEditor={(p) => {
+          setEnrichProduct(null)
+          openProductEditor(p)
+        }}
       />
 
       {/* ── FULL EDIT MODAL ─────────────────────────────────────────────────── */}
@@ -921,6 +1107,22 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
             </div>
 
             <form onSubmit={handleSave} className="flex-1 flex flex-col overflow-hidden">
+              {/* Listing completeness progress bar */}
+              <div className="border-b border-adm-line bg-black/30 px-4 py-2.5 sm:px-6">
+                <div className="flex items-center justify-between text-xs mb-1.5">
+                  <span className="font-semibold text-white/80">
+                    Listing Quality: <strong className={listingQuality.score >= 80 ? 'text-forest font-bold' : listingQuality.score >= 50 ? 'text-gold font-bold' : 'text-crimson font-bold'}>{listingQuality.score}%</strong>
+                  </span>
+                  <span className="text-white/50 text-[11px] font-mono">{listingQuality.nextHint}</span>
+                </div>
+                <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full transition-all duration-300 ${listingQuality.score >= 80 ? 'bg-forest' : listingQuality.score >= 50 ? 'bg-gold' : 'bg-blue'}`}
+                    style={{ width: `${listingQuality.score}%` }}
+                  />
+                </div>
+              </div>
+
               {/* Section tabs — edit one focused part at a time */}
               <div className="flex gap-1 overflow-x-auto border-b border-adm-line px-3 sm:px-4 shrink-0 scrollbar-none">
                 {[['details', 'Details'], ['pricing', 'Pricing & stock']].map(([id, lbl]) => (
@@ -940,40 +1142,40 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
 
                   <Section color="blue" title="Product basics">
                     <div>
-                      <Label>Product name</Label>
+                      <Label tip="Official product name as shown to customers">Product name</Label>
                       <input type="text" value={editingProduct.name || ''} onChange={e => set('name', e.target.value)} className={inp} required />
                     </div>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
-                        <Label>Short name for product cards</Label>
+                        <Label tip="Short name (max 25 characters) for cards and mobile listings">Short name for product cards</Label>
                         <input type="text" value={editingProduct.short || ''} onChange={e => set('short', e.target.value)} className={inp} />
                       </div>
                       <div>
-                        <Label>Barcode / EAN</Label>
-                        <input type="text" value={editingProduct.barcode || ''} onChange={e => set('barcode', e.target.value)} className={`${inp} font-mono`} />
+                        <Label tip="Scanned 8-14 digit barcode (EAN-13, UPC) on packaging">Barcode / EAN</Label>
+                        <input type="text" inputMode="numeric" value={editingProduct.barcode || ''} onChange={e => set('barcode', e.target.value)} className={`${inp} font-mono`} />
                       </div>
                       <div>
-                        <Label>Category</Label>
+                        <Label tip="Subcategory classification, e.g. Pasta Sauces or Confectionery">Category</Label>
                         <input type="text" value={editingProduct.subcategory || ''} onChange={e => set('subcategory', e.target.value)} className={inp} placeholder="e.g. Pasta Sauces" />
                       </div>
                       <div>
-                        <Label>Origin</Label>
+                        <Label tip="Place of origin in Italy, e.g. Parma, Italy">Origin</Label>
                         <input type="text" value={editingProduct.country_of_origin || editingProduct.origin || ''} onChange={e => { set('country_of_origin', e.target.value); set('origin', e.target.value) }} className={inp} placeholder="e.g. Parma, Italy" />
                       </div>
                       <div>
-                        <Label>Net Weight</Label>
-                        <input type="number" min="0" max="100000" step="0.01" value={editingProduct.net_weight ?? ''} onChange={e => set('net_weight', e.target.value)} className={inp} placeholder="Weight in grams" />
+                        <Label tip="Net physical weight in grams without packaging">Net Weight</Label>
+                        <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={editingProduct.net_weight ?? ''} onChange={e => set('net_weight', e.target.value)} className={inp} placeholder="Weight in grams" />
                       </div>
                       <div>
-                        <Label>Package Type</Label>
+                        <Label tip="Packaging format: Glass Jar, Tin, Pouch, Box, Bottle">Package Type</Label>
                         <input type="text" value={editingProduct.package_type || ''} onChange={e => set('package_type', e.target.value)} className={inp} placeholder="e.g. Glass Jar" />
                       </div>
                       <div>
-                        <Label>Pack size</Label>
+                        <Label tip="Display pack size for shoppers, e.g. 400g jar or 500ml bottle">Pack size</Label>
                         <input type="text" value={editingProduct.size || ''} onChange={e => set('size', e.target.value)} className={inp} placeholder="e.g. 400g jar" />
                       </div>
                       <div>
-                        <Label htmlFor="product-expiry-date">Expiry Date</Label>
+                        <Label htmlFor="product-expiry-date" tip="Earliest batch expiration date">Expiry Date</Label>
                         <input id="product-expiry-date" type="date" value={editingProduct.expiry_date || ''} onChange={e => set('expiry_date', e.target.value)}
                           disabled={secure} aria-describedby={secure ? 'product-expiry-help' : undefined}
                           className={`${inp} text-neutral-300 disabled:cursor-not-allowed disabled:opacity-60`} />
@@ -989,7 +1191,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                           <p className="text-sm text-white/55">This unpublished Draft has no stock or inventory history. Assign existing canonical records before receiving begins. These IDs cannot be changed after assignment.</p>
                           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                             <div>
-                              <Label htmlFor="product-initial-brand">Brand</Label>
+                              <Label htmlFor="product-initial-brand" tip="Canonical brand attribution">Brand</Label>
                               <select id="product-initial-brand" value={editingProduct.brand_id || ''}
                                 onChange={event => set('brand_id', event.target.value)}
                                 disabled={saving || Boolean(productTaxonomyReview.originalBrandId)}
@@ -1000,7 +1202,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                               {!productTaxonomyReview.originalBrandId && actorId && <button type="button" disabled={saving || !canManageProducts} onClick={() => setReferenceKind('brand')} className={`${secondaryButton} mt-2`}>Create brand</button>}
                             </div>
                             <div>
-                              <Label htmlFor="product-initial-category">Canonical category</Label>
+                              <Label htmlFor="product-initial-category" tip="Canonical product category">Canonical category</Label>
                               <select id="product-initial-category" value={editingProduct.category_id || ''}
                                 onChange={event => set('category_id', event.target.value)}
                                 disabled={saving || Boolean(productTaxonomyReview.originalCategoryId)}
@@ -1023,44 +1225,44 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
 
                   <DetailBlock title="Product description">
                     <div>
-                      <Label>Description (3 sentences)</Label>
+                      <Label tip="Customer-facing description highlighting origin and taste">Description (3 sentences)</Label>
                       <textarea rows={3} value={editingProduct.description || ''} onChange={e => set('description', e.target.value)} className={ta} />
                     </div>
                     <div>
-                      <Label>Why buy this? (max 18 words)</Label>
+                      <Label tip="Short editorial hook for product discovery cards">Why buy this? (max 18 words)</Label>
                       <textarea rows={2} value={editingProduct.why_buy || ''} onChange={e => set('why_buy', e.target.value)} className={ta} />
                     </div>
                     <div>
-                      <Label>Why is it hard to find in the Philippines?</Label>
+                      <Label tip="Import rarity explanation, e.g. artisanal small-batch import">Why is it hard to find in the Philippines?</Label>
                       <textarea rows={2} value={editingProduct.why_rare || ''} onChange={e => set('why_rare', e.target.value)} className={ta} />
                     </div>
                   </DetailBlock>
 
                   <DetailBlock title="Use & ingredients">
                     <div>
-                      <Label>How to use</Label>
+                      <Label tip="Serving suggestions, heating or preparation guidelines">How to use</Label>
                       <textarea rows={2} value={editingProduct.usage_instructions || ''} onChange={e => set('usage_instructions', e.target.value)} className={ta} />
                     </div>
                     <div>
-                      <Label>How to store</Label>
+                      <Label tip="Storage instructions: cool dry place, refrigerate after opening, etc.">How to store</Label>
                       <textarea rows={2} value={editingProduct.storage_instructions || ''} onChange={e => set('storage_instructions', e.target.value)} className={ta} />
                     </div>
                     <div>
-                      <Label>Ingredients</Label>
+                      <Label tip="Full ingredient list as printed on packaging">Ingredients</Label>
                       <textarea rows={3} value={editingProduct.ingredients || ''} onChange={e => set('ingredients', e.target.value)} className={ta} />
                     </div>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
-                        <Label>Allergens</Label>
+                        <Label tip="Known allergens, e.g. Contains gluten, milk, tree nuts">Allergens</Label>
                         <input type="text" value={editingProduct.allergens || ''} onChange={e => set('allergens', e.target.value)} className={inp} />
                       </div>
                       <div>
-                        <Label>Prepared result</Label>
+                        <Label tip="Visual dish or prepared food outcome, e.g. Cooked pasta dish">Prepared result</Label>
                         <input type="text" value={editingProduct.finished_product_details || ''} onChange={e => set('finished_product_details', e.target.value)} className={inp} placeholder="e.g. Cooked pasta dish" />
                       </div>
                     </div>
                     <div>
-                      <Label>Pairings (comma-separated)</Label>
+                      <Label tip="Recommended Italian pairings, wine, bread, or coffee">Pairings (comma-separated)</Label>
                       <input type="text"
                         value={Array.isArray(editingProduct.pairings) ? editingProduct.pairings.join(', ') : (editingProduct.pairings || '')}
                         onChange={e => set('pairings', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
@@ -1074,22 +1276,51 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
 
                   <Section color="forest" title="Pricing">
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                      {[['Cost ₱', 'cost_price'], ['SRP ₱', 'srp'], ['Wholesale ₱', 'wholesale_price'], ['Dealer ₱', 'dealer_price']].map(([lbl, field]) => (
+                      {[
+                        ['Cost ₱', 'cost_price', 'Direct landed cost per unit in Philippine Pesos'],
+                        ['SRP ₱', 'srp', 'Suggested retail price in Philippine Pesos'],
+                        ['Wholesale ₱', 'wholesale_price', 'Wholesale / bulk price tier'],
+                        ['Dealer ₱', 'dealer_price', 'Distributor / reseller price tier'],
+                      ].map(([lbl, field, fieldTip]) => (
                         <div key={field}>
-                          <Label>{lbl}</Label>
-                          <input type="number" min="0" step="0.01"
+                          <Label tip={fieldTip}>{lbl}</Label>
+                          <input type="number" inputMode="decimal" min="0" step="0.01"
                             value={editingProduct[field] || 0}
                             onChange={e => set(field, Math.max(0, Number(e.target.value)))}
                             className={`${inp} tabular-nums`} />
                         </div>
                       ))}
                     </div>
+
+                    {/* Live Gross Margin & Unit Profit Calculation */}
+                    {Number(editingProduct.srp) > 0 && Number(editingProduct.cost_price) > 0 && (
+                      <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-adm-sm border border-adm-line bg-white/5 p-3 text-xs">
+                        <div>
+                          <span className="text-white/50 uppercase font-bold tracking-wider text-[10px] block">Gross Margin</span>
+                          <p className="text-base font-extrabold text-forest tabular-nums">
+                            {Math.round(((editingProduct.srp - editingProduct.cost_price) / editingProduct.srp) * 1000) / 10}%
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-white/50 uppercase font-bold tracking-wider text-[10px] block">Unit Profit</span>
+                          <p className="text-base font-extrabold text-white tabular-nums">
+                            ₱{(editingProduct.srp - editingProduct.cost_price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-white/50 uppercase font-bold tracking-wider text-[10px] block">Markup</span>
+                          <p className="text-base font-extrabold text-neutral-300 tabular-nums">
+                            {Math.round(((editingProduct.srp - editingProduct.cost_price) / editingProduct.cost_price) * 1000) / 10}%
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </Section>
 
                   <Section color="crimson" title="Inventory">
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
-                        <Label>Available Stock</Label>
+                        <Label tip="Total available units from active lots">Available Stock</Label>
                         <div className={`${inp} flex items-center tabular-nums text-white/70`}>
                           {(() => {
                             const raw = editingProduct.stock_available
@@ -1100,26 +1331,36 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                         <button type="button" onClick={() => setBatchProduct(editingProduct)} className="mt-2 min-h-11 w-full rounded-adm-sm border border-blue/35 bg-blue/10 px-3 text-xs font-semibold text-blue">Reconcile batches and stock</button>
                       </div>
                       <div>
-                        <Label>Reorder Level</Label>
-                        <input type="number" min="0" value={editingProduct.reorder_level || 0} onChange={e => set('reorder_level', Math.max(0, Number(e.target.value)))} className={`${inp} tabular-nums`} />
+                        <Label tip="Minimum stock threshold before low-stock alert triggers">Reorder Level</Label>
+                        <input type="number" inputMode="numeric" min="0" value={editingProduct.reorder_level || 0} onChange={e => set('reorder_level', Math.max(0, Number(e.target.value)))} className={`${inp} tabular-nums`} />
                       </div>
                     </div>
                   </Section>
 
                   <DetailBlock title="Website settings">
                     <div>
-                      <Label>Page address (slug)</Label>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <Label tip="Unique URL slug on storefront, e.g. mutti-polpa-400g">Page address (slug)</Label>
+                        <button
+                          type="button"
+                          onClick={generateSlug}
+                          className="text-xs font-semibold text-blue hover:text-blue/80 underline cursor-pointer select-none"
+                          title="Generate URL slug automatically from product name"
+                        >
+                          Auto-generate slug
+                        </button>
+                      </div>
                       <input type="text" value={editingProduct.slug || ''} onChange={e => set('slug', e.target.value)} className={`${inp} font-mono`} placeholder="e.g. mutti-polpa-400g" />
                     </div>
                     <div>
-                      <Label>Search keywords (separate with commas)</Label>
+                      <Label tip="Comma-separated search keywords for storefront discovery">Search keywords (separate with commas)</Label>
                       <input type="text"
                         value={Array.isArray(editingProduct.seo_keywords) ? editingProduct.seo_keywords.join(', ') : (editingProduct.seo_keywords || '')}
                         onChange={e => set('seo_keywords', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
                         className={inp} placeholder="italian tomatoes, polpa, mutti…" />
                     </div>
                     <div>
-                      <Label>Product video URL</Label>
+                      <Label tip="Demonstration video URL (YouTube, Vimeo)">Product video URL</Label>
                       <input type="url" value={editingProduct.product_video_url || ''} onChange={e => set('product_video_url', e.target.value)} className={inp} placeholder="https://…" />
                     </div>
                     <div className="flex items-center gap-6">
