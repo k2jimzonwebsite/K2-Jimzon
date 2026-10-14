@@ -18,6 +18,11 @@ const catalogPairs = [
   ['a7e4c6d8ac12ebca39b37e9987edc871597af9df37583115c868cf70c6850925',
     '1d7ff4a4339029a42786df660edf70a81c012132679219121ce350d0008aae2e',
     'ddf4def0eceb753480eb4e36c4d775e665b868b9ede62e49dbc74a7832904ac9'],
+  // Same three repairs on native-calibrated catalog PT409 successor. Catalog
+  // itself is fixed outside the repair targets; its historical body is drift.
+  ['b9956c3f27e1ff2f460f04bb8d18d6ff2d4b3582e3720a5f6c7b203fab312e82',
+    '712269c5ef7a9d9216f263f6b8e523f446a8c94bcb5f2ecb771aad7c622decf6',
+    'ec40b9a40102f63ccf4bc483fa52747551ee4abd61bf5134065d1757ed2ba967'],
 ]
 const fragmentPins = [
   'ef4442fe9d6ebba0bd557e9a53bf25e75c78585d91a1cd54f910b02fd78d8476',

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useStore } from '../context/StoreContext'
 import { Kicker, TuscanCard } from '../components/ui/bits'
-import { ArrowIcon, ChatIcon, InboxIcon } from '../components/ui/icons'
+import { ArrowIcon, ChatIcon, FacebookIcon, InboxIcon, InstagramIcon, MapIcon, PhoneIcon } from '../components/ui/icons'
 import { guestBffEnabled } from '../services/guestCommerceService'
 import { StartConversationForm } from './GuestMessages'
 
@@ -53,7 +53,7 @@ function EmailDraftForm() {
             <input id="contact-email" className="store-field mt-1.5 w-full px-4 py-3" type="email" value={form.email} onChange={update('email')} autoComplete="email" />
           </label>
           <label htmlFor="contact-phone" className="block text-sm font-semibold text-navy">Mobile number
-            <input id="contact-phone" className="store-field mt-1.5 w-full px-4 py-3" type="tel" value={form.phone} onChange={update('phone')} autoComplete="tel" />
+            <input id="contact-phone" className="store-field mt-1.5 w-full px-4 py-3" type="tel" value={form.phone} onChange={update('phone')} autoComplete="tel" placeholder="e.g. 0931 864 9654" />
           </label>
         </div>
         <p className="text-xs leading-relaxed text-navy-soft">Enter at least one contact method so we can reach you.</p>
@@ -129,11 +129,44 @@ export default function Contact() {
           <h2 className="font-serif text-2xl font-semibold text-navy">Contact channels</h2>
           <p className="mt-2 text-sm leading-6 text-navy-soft">Official contact details for K2 Jimzon.</p>
           <dl className="mt-5 border-b border-line">
-            <ContactRow label="Email"><a className="text-crimson underline decoration-crimson/30 underline-offset-4" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a></ContactRow>
-            <ContactRow label="Messenger">@k2jimzon</ContactRow>
-            <ContactRow label="Shopee">k2jimzononlineshop</ContactRow>
-            <ContactRow label="Business number">Not published yet</ContactRow>
-            <ContactRow label="Location">Manila, Philippines</ContactRow>
+            <ContactRow label="Phone / Mobile">
+              <a className="inline-flex items-center gap-1.5 text-crimson underline decoration-crimson/30 underline-offset-4 hover:decoration-crimson" href="tel:09318649654" aria-label="Call 0931 864 9654">
+                <PhoneIcon size={14} className="shrink-0" />
+                <span>0931 864 9654</span>
+              </a>
+            </ContactRow>
+            <ContactRow label="Email">
+              <a className="inline-flex items-center gap-1.5 text-crimson underline decoration-crimson/30 underline-offset-4 hover:decoration-crimson" href={`mailto:${SUPPORT_EMAIL}`}>
+                <InboxIcon size={14} className="shrink-0" />
+                <span>{SUPPORT_EMAIL}</span>
+              </a>
+            </ContactRow>
+            <ContactRow label="Facebook">
+              <a className="inline-flex items-center gap-1.5 text-crimson underline decoration-crimson/30 underline-offset-4 hover:decoration-crimson" href="https://www.facebook.com/FamilyPinItaly" target="_blank" rel="noreferrer">
+                <FacebookIcon size={14} className="shrink-0" />
+                <span>Family Pin Italy</span>
+                <ArrowIcon size={13} className="shrink-0 opacity-70" />
+              </a>
+            </ContactRow>
+            <ContactRow label="Instagram">
+              <a className="inline-flex items-center gap-1.5 text-crimson underline decoration-crimson/30 underline-offset-4 hover:decoration-crimson" href="https://www.instagram.com/kaikiko8/" target="_blank" rel="noreferrer">
+                <InstagramIcon size={14} className="shrink-0" />
+                <span>@kaikiko8</span>
+                <ArrowIcon size={13} className="shrink-0 opacity-70" />
+              </a>
+            </ContactRow>
+            <ContactRow label="Shopee">
+              <a className="inline-flex items-center gap-1.5 text-crimson underline decoration-crimson/30 underline-offset-4 hover:decoration-crimson" href="https://s.shopee.ph/9V1fXWQ0gK" target="_blank" rel="noreferrer">
+                <span>k2jimzononlineshop</span>
+                <ArrowIcon size={13} className="shrink-0 opacity-70" />
+              </a>
+            </ContactRow>
+            <ContactRow label="Location">
+              <span className="inline-flex items-center gap-1.5 text-navy">
+                <MapIcon size={14} className="shrink-0 text-navy-soft" />
+                <span>Manila, Philippines</span>
+              </span>
+            </ContactRow>
           </dl>
 
           <div className="mt-8 rounded-2xl bg-forest-wash p-5 text-forest">

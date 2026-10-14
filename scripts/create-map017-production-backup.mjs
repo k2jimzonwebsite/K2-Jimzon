@@ -99,14 +99,15 @@ select to_jsonb(t)::text
 from public.products_old t
 order by to_jsonb(t)::text;`
 
-function captureProductsOldArchive({ spawnImpl, psql, common }) {
+function captureProductsOldArchive({ spawnImpl, psql, common, enforceMap017ArchiveCount }) {
   const result = spawnImpl(psql, [
     '-X', '--no-psqlrc', '-At', '-v', 'ON_ERROR_STOP=1', '-c', productsOldArchiveRowsSql,
   ], { ...common, encoding: 'utf8' })
   if (result.error || result.status !== 0) {
     throw new Error('MAP017_PRODUCTION_BACKUP_REFUSAL: PRODUCTS_OLD_ARCHIVE_QUERY_FAILED')
   }
-  return validateProductsOldArchive(productsOldArchiveFingerprintFromRows(result.stdout))
+  const archive = productsOldArchiveFingerprintFromRows(result.stdout)
+  return enforceMap017ArchiveCount ? validateProductsOldArchive(archive) : archive
 }
 
 export async function dumpMap017ProductionDatabase({
@@ -114,6 +115,7 @@ export async function dumpMap017ProductionDatabase({
   psql,
   pgDump,
   spawnImpl = spawnSync,
+  enforceMap017ArchiveCount = true,
 }) {
   const target = validateMap017ProductionDatabaseUrl(databaseUrl)
   if (!target.valid) throw new Error(`MAP017_PRODUCTION_BACKUP_REFUSAL: ${target.reason}`)
@@ -139,12 +141,12 @@ export async function dumpMap017ProductionDatabase({
     throw new Error(`MAP017_PRODUCTION_BACKUP_REFUSAL: POSTGRES_CLIENT_SERVER_MAJOR_MISMATCH (${clientMajor || 'unknown'} != ${serverMajor})`)
   }
 
-  const productsOldArchiveBefore = captureProductsOldArchive({ spawnImpl, psql, common })
+  const productsOldArchiveBefore = captureProductsOldArchive({ spawnImpl, psql, common, enforceMap017ArchiveCount })
   const result = spawnImpl(pgDump, ['--format=custom', '--no-owner'], common)
   if (result.error || result.status !== 0) {
     throw new Error('MAP017_PRODUCTION_BACKUP_REFUSAL: PG_DUMP_FAILED')
   }
-  const productsOldArchiveAfter = captureProductsOldArchive({ spawnImpl, psql, common })
+  const productsOldArchiveAfter = captureProductsOldArchive({ spawnImpl, psql, common, enforceMap017ArchiveCount })
   if (
     productsOldArchiveBefore.rowCount !== productsOldArchiveAfter.rowCount
     || productsOldArchiveBefore.sha256 !== productsOldArchiveAfter.sha256

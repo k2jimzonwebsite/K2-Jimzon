@@ -908,6 +908,11 @@ test('admin product projection is session-gated and derives stock without exposi
     { data: [{ sku: 'SKU-1', stock_from_batches: 7 }], error: null },
   ]
   const client = {
+    async rpc(name, args) {
+      expect(name).toBe('read_admin_product_stock_v1')
+      expect(args).toEqual({ p_skus: ['SKU-1'] })
+      return queued.shift()
+    },
     from() {
       const result = queued.shift()
       const builder = {
@@ -928,6 +933,11 @@ test('admin products never turn missing or malformed stock projections into heal
     ...['', true, [], '0x10', '1e2', -1, 1.5].map(value => [{ sku: 'SKU-1', stock_from_batches: value }]),
     [{ sku: 'SKU-1', stock_from_batches: 3 }, { sku: 'SKU-1', stock_from_batches: 5 }]]) {
     const client = {
+      async rpc(name, args) {
+        expect(name).toBe('read_admin_product_stock_v1')
+        expect(args).toEqual({ p_skus: ['SKU-1'] })
+        return { data: rows, error: null }
+      },
       from(table) {
         const builder = {
           select() { return builder }, order() { return builder },
@@ -944,6 +954,11 @@ test('admin products never turn missing or malformed stock projections into heal
 
 test('admin products preserve canonical zero and numeric-string stock totals', async () => {
   const client = {
+    async rpc(name, args) {
+      expect(name).toBe('read_admin_product_stock_v1')
+      expect(args).toEqual({ p_skus: ['ZERO', 'POSITIVE'] })
+      return { data: [{ sku: 'ZERO', stock_from_batches: 0 }, { sku: 'POSITIVE', stock_from_batches: '12' }], error: null }
+    },
     from(table) {
       const builder = {
         select() { return builder }, order() { return builder },
@@ -1904,7 +1919,7 @@ test('product-master commands are exact, reasoned, idempotent, and Admin-only', 
     'K2_PUBLICATION_NOT_READY', 'delete_products_with_pin_v2',
     'revoke all on function public.delete_products_with_pin_v2(text[],text,text,uuid) from public,anon,authenticated',
   ]) expect(migration).toContain(required)
-  expect(inventory).toContain("commandAdminProductMasterBff('update'")
+  expect(inventory).toContain('await recovery.save(payload)')
   expect(inventory).toContain("commandAdminProductMasterBff('status'")
   expect(inventory).toContain('expectedUpdatedAt: editingProduct.updated_at')
   expect(taxonomyOverlay).toContain('07a353c7e9dcb09e41e784bdfb096dbc0a12fbfce98fc59f0ff6ef6602e0368a')

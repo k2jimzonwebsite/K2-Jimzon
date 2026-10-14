@@ -5,12 +5,25 @@ const sourceSha256='8ca8e22fedcae9fa63eaba682b897b2dcfaa0b817f3f1c7a010204314fa5
 const captureSha256='91a59a6933ff6f4f9697726c9a69621361fa24a866018a946ad9ef730171fd28';
 const querySha256='b61ba2884f68e98a332b24c102088aba30f7fd18c323b7f66039df64410e9375';
 const delimiter='$k2_map018_receipt_8ca8e22f$';
+const successorSha256='77c270d1e2a3eda501b2b513e362ed6ab4b362162ca0f3af2eea6a7580673f0d';
+const phasedSha256='587e481e549039dc31c1ee3cff9670a0a9bbf8a9cf9a95ee18a20711bf384c3d';
+export function composeControlledCatalogSuccessor(source,patch){
+  if(typeof source!=='string'||sha(source)!==sourceSha256)throw Error('SOURCE_PIN_REQUIRED');
+  if(typeof patch!=='string'||sha(patch)!=='1ad0595620838d7246ea13c7b9a4c56e80c2c58f7c8ac40cdddd2113217084c1')throw Error('PATCH_PIN_REQUIRED');
+  const addition=patch.slice(patch.indexOf('\nbegin;')+7,patch.lastIndexOf('\ncommit;'));
+  const combined=source.slice(0,-8)+'\n'+addition+'\ncommit;';
+  if(sha(combined)!==successorSha256)throw Error('SUCCESSOR_PIN_REQUIRED');
+  return combined;
+}
 export function receiptLiteral(value){
   if(typeof value!=='string'||!value.isWellFormed()||/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/.test(value)||value.includes(delimiter))throw Error('RECEIPT_LITERAL_REFUSED');
   return delimiter+value+delimiter;
 }
 export function prepareControlledMigration(source,captureText,captureSql){
-  if(typeof source!=='string'||sha(source)!==sourceSha256)throw Error('SOURCE_PIN_REQUIRED');
+  if(typeof source!=='string'||![sourceSha256,successorSha256,phasedSha256].includes(sha(source)))throw Error('SOURCE_PIN_REQUIRED');
+  const selectedSourceSha256=sha(source);
+  const successor=selectedSourceSha256===successorSha256;
+  const phased=selectedSourceSha256===phasedSha256;
   if(typeof captureText!=='string'||sha(captureText)!==captureSha256)throw Error('LEDGER_CAPTURE_PIN_REQUIRED');
   if(typeof captureSql!=='string'||sha(captureSql)!==querySha256)throw Error('LEDGER_QUERY_PIN_REQUIRED');
   const capture=JSON.parse(captureText);const observed=JSON.parse(capture.responseText)[0].ledger_capture;
@@ -19,9 +32,9 @@ export function prepareControlledMigration(source,captureText,captureSql){
   const suffix='\ncommit;';
   if(!source.startsWith(prefix)||!source.endsWith(suffix))throw Error('EXACT_OUTER_ENVELOPE_REQUIRED');
   const body=source.slice(prefix.length,-suffix.length);
-  const name='k2_category_operating_full_cutover_controlled_20261012';
-  const version='20261012140000';
-  const idempotencyKey='k2-controlled-v1:sha256:'+sourceSha256;
+  const name=phased?'k2_category_operating_full_catalog_phased_controlled_20261013':successor?'k2_category_operating_full_catalog_pt409_controlled_20261013':'k2_category_operating_full_cutover_controlled_20261012';
+  const version=phased?'20261013110000':successor?'20261013100000':'20261012140000';
+  const idempotencyKey='k2-controlled-v1:sha256:'+selectedSourceSha256;
   const tableExpression=captureSql.slice(captureSql.indexOf("'table',")+8,captureSql.indexOf(",\n 'eventTriggers'"));
   const schemaExpression=captureSql.slice(captureSql.indexOf("'schema',")+9,captureSql.indexOf(",\n 'table'"));
   const checks=`
@@ -42,7 +55,7 @@ BEGIN${checks}
   IF affected<>1 THEN RAISE EXCEPTION 'K2_CONTROLLED_RECEIPT_INSERT_REFUSED'; END IF;
 END $k2_controlled_receipt$;`;
   const envelope=`BEGIN;\nSET LOCAL lock_timeout='2s'; SET LOCAL statement_timeout='10s';\n${preconditionSql}\n${body}\n${receiptSql}\nCOMMIT;\n`;
-  return Object.freeze({projectRef:'pixplcjqivlfflickobf',name,version,idempotencyKey,sourceSha256,
+  return Object.freeze({projectRef:'pixplcjqivlfflickobf',name,version,idempotencyKey,sourceSha256:selectedSourceSha256,
     sourceBytes:Buffer.byteLength(source),body,bodySha256:sha(body),bodyBytes:Buffer.byteLength(body),
     preconditionSql,receiptSql,envelope,envelopeSha256:sha(envelope),envelopeBytes:Buffer.byteLength(envelope),
     ledgerCaptureSha256:captureSha256,ledgerQuerySha256:querySha256,

@@ -1,6 +1,6 @@
 import { useStore } from '../context/StoreContext'
 import { Wordmark } from './ui/bits'
-import { ArrowIcon } from './ui/icons'
+import { ArrowIcon, FacebookIcon, InboxIcon, InstagramIcon, MapIcon, PhoneIcon } from './ui/icons'
 
 const CATEGORY_LINKS = [
   ['Seasoning, Staple Foods & Baking Ingredients', 'Pantry & baking'],
@@ -60,10 +60,40 @@ export default function Footer() {
 
           <FooterColumn title="Contact">
             <FooterButton onClick={() => go('contact')}>Contact us</FooterButton>
-            <li><a className="footer-link" href="mailto:k2jimzonwebsite@gmail.com">Email K2 Jimzon <ArrowIcon size={13} /></a></li>
-            <li><span className="footer-copy">Messenger · @k2jimzon</span></li>
-            <li><span className="footer-copy">Shopee · k2jimzononlineshop</span></li>
-            <li><span className="footer-copy">Manila, Philippines</span></li>
+            <li>
+              <a className="footer-link" href="tel:09318649654" aria-label="Call 0931 864 9654">
+                <PhoneIcon size={14} className="shrink-0 text-navy-soft" />
+                <span>0931 864 9654</span>
+                <ArrowIcon size={13} className="shrink-0 opacity-70" />
+              </a>
+            </li>
+            <li>
+              <a className="footer-link" href="mailto:k2jimzonwebsite@gmail.com">
+                <InboxIcon size={14} className="shrink-0 text-navy-soft" />
+                <span>Email K2 Jimzon</span>
+                <ArrowIcon size={13} className="shrink-0 opacity-70" />
+              </a>
+            </li>
+            <li>
+              <a className="footer-link" href="https://www.facebook.com/FamilyPinItaly" target="_blank" rel="noreferrer">
+                <FacebookIcon size={14} className="shrink-0 text-navy-soft" />
+                <span>Facebook · Family Pin Italy</span>
+                <ArrowIcon size={13} className="shrink-0 opacity-70" />
+              </a>
+            </li>
+            <li>
+              <a className="footer-link" href="https://www.instagram.com/kaikiko8/" target="_blank" rel="noreferrer">
+                <InstagramIcon size={14} className="shrink-0 text-navy-soft" />
+                <span>Instagram · @kaikiko8</span>
+                <ArrowIcon size={13} className="shrink-0 opacity-70" />
+              </a>
+            </li>
+            <li>
+              <span className="footer-copy">
+                <MapIcon size={14} className="shrink-0 text-navy-soft" />
+                <span>Manila, Philippines</span>
+              </span>
+            </li>
           </FooterColumn>
         </div>
 

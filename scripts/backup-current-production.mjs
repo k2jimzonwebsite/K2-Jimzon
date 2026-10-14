@@ -28,6 +28,9 @@ export async function createCurrentProductionBackup({ databaseUrl, passphrase, d
   }
   const { dump, productsOldArchive } = await dumpMap017ProductionDatabase({
     databaseUrl,
+    // Current state may be empty after an owner-authorized dummy-data cleanup.
+    // Historical MAP-017 packages retain their fixed fourteen-row contract.
+    enforceMap017ArchiveCount: false,
     psql: process.env.K2_PSQL_BIN || path.join(postgresBin, 'psql.exe'),
     pgDump: process.env.K2_PG_DUMP_BIN || path.join(postgresBin, 'pg_dump.exe'),
   })

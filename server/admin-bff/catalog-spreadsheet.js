@@ -257,7 +257,13 @@ export async function buildCatalogCommitPayload(client, body) {
   const selectedRows = body.selectedRowNumbers.map((rowNumber) => {
     const row = rows[rowNumber - 2]
     const outcome = outcomeByNumber.get(rowNumber)
-    if (!row || !outcome || !['New', 'Changed'].includes(outcome.category)) {
+    // A successful update makes its original CSV stale. Preserve its payload so
+    // the canonical command can replay its receipt; a new command still checks
+    // the expected version and timestamp inside the database transaction.
+    const retryableExisting = outcome?.category === 'Stale/Conflict'
+      && UUID.test(row?.catalog_id || '') && validVersion(row?.record_version || '')
+      && Number.isFinite(Date.parse(row?.updated_at || ''))
+    if (!row || !outcome || (!['New', 'Changed'].includes(outcome.category) && !retryableExisting)) {
       throw new Error('CATALOG_SELECTION_INVALID')
     }
     if (outcome.category === 'New' && row.sku) throw new Error('CATALOG_NEW_SKU_MUST_BE_BLANK')

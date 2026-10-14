@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { safeUiError } from '../../lib/safeUiError'
 import { searchIdentityDuplicates } from '../../services/productIntakeService'
 import { Html5Qrcode } from 'html5-qrcode'
@@ -24,34 +24,48 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste, onExistingPro
   const [copyError, setCopyError]     = useState('')
   const [checking, setChecking]       = useState(false)
   const [checkError, setCheckError]   = useState('')
-  const scannerRef                    = useRef(null)
 
   // ── Start camera scanner ─────────────────────────────────────────────────
   useEffect(() => {
     if (step !== 'scan') return
+    let active = true
+    let decoded = false
+    let scanner, reader, started, stopping
+    const stopScanner = () => {
+      if (!scanner) return Promise.resolve()
+      if (!stopping) stopping = (async () => {
+        try { if (await started) await scanner.stop() } catch {}
+        finally {
+          try { if (document.getElementById('ai-qr-reader') === reader) scanner.clear() } catch {}
+        }
+      })()
+      return stopping
+    }
     const timer = setTimeout(() => {
-      if (!document.getElementById('ai-qr-reader')) return
-      const html5QrCode = new Html5Qrcode('ai-qr-reader')
-      scannerRef.current = html5QrCode
-      html5QrCode.start(
+      reader = document.getElementById('ai-qr-reader')
+      if (!reader) return
+      scanner = new Html5Qrcode('ai-qr-reader')
+      started = Promise.resolve().then(() => scanner.start(
         { facingMode: 'environment' },
         { fps: 10, qrbox: { width: 260, height: 140 }, aspectRatio: 1.0 },
         async (decodedText) => {
-          const scanner = scannerRef.current
-          scannerRef.current = null
-          try { if (scanner) { await scanner.stop(); scanner.clear() } } catch {}
+          if (!active || decoded) return
+          decoded = true
+          await stopScanner()
+          if (!active) return
           if (navigator.vibrate) navigator.vibrate(60)
           await handleBarcodeDetected(decodedText)
         },
         () => {}
-      ).catch(() => setCheckError('Camera access was denied or is unavailable. Use manual entry instead.'))
+      )).then(() => true, () => {
+        if (active) setCheckError('Camera access was denied or is unavailable. Use manual entry instead.')
+        return false
+      })
     }, 300)
     return () => {
+      active = false
       clearTimeout(timer)
-      if (scannerRef.current) {
-        scannerRef.current.stop().catch(() => {})
-        scannerRef.current = null
-      }
+      void stopScanner()
     }
   }, [step])
 

@@ -63,13 +63,16 @@ test('website browse and direct lookup require the published Website slice', asy
   expect(view).not.toContain("product.status === 'Unlisted') return product")
 })
 
-test('lot detail includes measured weight and can retry a failed read', async () => {
+test('lot detail keeps missing weight unknown and can retry a failed snapshot read', async () => {
   const [view, api] = await Promise.all([sheet(), lotsApi()])
 
-  // Weight belongs to the physical lot. A failed lazy read must remain
-  // recoverable without refreshing the entire Admin page.
-  expect(api).toContain('net_weight_g')
+  // The installed atomic snapshot does not expose the separately deferred
+  // lot-weight column. Keep its absence explicit rather than inventing weight.
+  // A failed lazy read remains recoverable without refreshing the Admin page.
+  expect(api).toContain("client.rpc('read_admin_lot_snapshot_v1'")
+  expect(view).toContain('getAdminLots(sku)')
   expect(view).toContain("net_weight_g")
+  expect(view).toContain('weight not recorded')
   expect(view).toContain('Retry lot details')
   expect(view).toContain('loadLotDetail')
 })

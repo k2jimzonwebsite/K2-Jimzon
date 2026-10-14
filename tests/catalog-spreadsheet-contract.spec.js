@@ -94,6 +94,30 @@ test('catalog commit payload rechecks the file and allows only explicit New or C
   })).rejects.toThrow('CATALOG_SELECTION_INVALID')
 })
 
+test('existing catalog command reconstructs the same payload after its successful update', async () => {
+  let current = { ...product }
+  const chain = {
+    select() { return chain }, order() { return chain },
+    limit() { return Promise.resolve({ data: [current], count: 1, error: null }) },
+  }
+  const client = { from() { return chain } }
+  const csvText = serializeCatalogCsv([{ ...product, internal_notes: 'Imported source provenance' }], { operationId, exportedAt })
+  const fileSha256 = (await import('node:crypto')).createHash('sha256').update(csvText).digest('hex')
+  const body = { csvText, fileSha256, selectedRowNumbers: [2], reason: 'Reviewed inventory provenance import.', operationId, chunkIndex: 0, finalChunk: true }
+  const original = await buildCatalogCommitPayload(client, body)
+  current = { ...product, internal_notes: 'Imported source provenance', catalog_record_version: 8, updated_at: '2026-08-22T10:01:00.000Z' }
+  expect(classifyCatalogRows(parseCatalogCsv(csvText), [current])[0].category).toBe('Stale/Conflict')
+  expect(await buildCatalogCommitPayload(client, body)).toEqual(original)
+  for (const invalid of [
+    { catalog_id: '' }, { catalog_id: 'not-a-uuid' }, { catalog_record_version: 0 },
+    { catalog_record_version: 'not-a-version' }, { updated_at: 'not-a-time' }, { sku: 'REMAPPED' },
+  ]) {
+    const invalidCsv = serializeCatalogCsv([{ ...product, ...invalid }], { operationId, exportedAt })
+    const invalidHash = (await import('node:crypto')).createHash('sha256').update(invalidCsv).digest('hex')
+    await expect(buildCatalogCommitPayload(client, { ...body, csvText: invalidCsv, fileSha256: invalidHash })).rejects.toThrow('CATALOG_SELECTION_INVALID')
+  }
+})
+
 test('prepared catalog commit is signed, atomic, receipt-backed, and revokes direct product writes', async () => {
   const migration = await readFile(new URL('../supabase/migrations/20260822_catalog_spreadsheet_commit.sql', import.meta.url), 'utf8')
   expect(migration).toContain('execute_admin_catalog_import_v1')

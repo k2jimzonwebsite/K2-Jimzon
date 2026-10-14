@@ -629,6 +629,37 @@ test('MAP-017 pg_dump keeps credentials out of arguments and enforces client/ser
   })).rejects.toThrow('PRODUCTS_OLD_CHANGED_DURING_DUMP')
 })
 
+test('current backups accept an empty legacy archive while historical MAP-017 backups keep their fixed count', async () => {
+  const module = await import('../scripts/create-map017-production-backup.mjs')
+  const options = {
+    databaseUrl: fixtureProductionDatabaseUrl(), psql: 'fixture-psql', pgDump: 'fixture-pg-dump',
+    spawnImpl: (executable, args) => {
+      if (args.includes('show server_version_num;')) return { status: 0, stdout: '170011\n' }
+      if (args.includes('--version')) return { status: 0, stdout: 'pg_dump (PostgreSQL) 17.11\n' }
+      if (executable === 'fixture-psql') return { status: 0, stdout: '' }
+      return { status: 0, stdout: Buffer.from('PGDMP\u0001empty-legacy-archive') }
+    },
+  }
+  const current = await module.dumpMap017ProductionDatabase({ ...options, enforceMap017ArchiveCount: false })
+  expect(current.productsOldArchive).toEqual(module.productsOldArchiveFingerprintFromRows(''))
+  await expect(module.dumpMap017ProductionDatabase(options)).rejects.toThrow('PRODUCTS_OLD_ARCHIVE_EXPECTED_14_ROWS')
+})
+
+test('current backups still refuse legacy archive changes during the dump', async () => {
+  const module = await import('../scripts/create-map017-production-backup.mjs')
+  let archiveReads = 0
+  await expect(module.dumpMap017ProductionDatabase({
+    databaseUrl: fixtureProductionDatabaseUrl(), psql: 'fixture-psql', pgDump: 'fixture-pg-dump',
+    enforceMap017ArchiveCount: false,
+    spawnImpl: (executable, args) => {
+      if (args.includes('show server_version_num;')) return { status: 0, stdout: '170011\n' }
+      if (args.includes('--version')) return { status: 0, stdout: 'pg_dump (PostgreSQL) 17.11\n' }
+      if (executable === 'fixture-psql') return { status: 0, stdout: ++archiveReads === 1 ? '' : '{"sku":"CONCURRENT"}\n' }
+      return { status: 0, stdout: Buffer.from('PGDMP\u0001changed-legacy-archive') }
+    },
+  })).rejects.toThrow('PRODUCTS_OLD_CHANGED_DURING_DUMP')
+})
+
 test('MAP-017 production backup never overwrites or deletes an existing destination', async () => {
   const module = await import('../scripts/create-map017-production-backup.mjs')
   const directory = await mkdtemp(path.join(tmpdir(), 'k2-map017-existing-backup-'))

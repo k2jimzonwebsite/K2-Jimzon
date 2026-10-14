@@ -177,7 +177,7 @@ test('inventory product editing routes every photo assignment through the dedica
   expect(source).toContain("document.visibilityState === 'visible'")
   expect(source).toContain('if (secure)')
   expect(source).not.toContain("supabase.from('products').insert")
-  expect(source).toContain("commandAdminProductMasterBff('update'")
+  expect(source).toContain('await recovery.save(payload)')
   expect(source).toContain("commandAdminProductMasterBff('status'")
   expect(source).toContain("value: 'Under Review'")
   expect(source).toContain("value: 'Discontinued'")

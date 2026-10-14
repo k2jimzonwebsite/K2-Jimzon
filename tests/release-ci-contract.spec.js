@@ -103,6 +103,27 @@ test('the shared Playwright server cannot be reused by a CI run', async () => {
   expect(config).toContain("'store-overlay-collision.spec.js'")
 })
 
+test('fixture Admin and Inbox journeys remain in the release gate on their dedicated servers', async () => {
+  const [base, packageSource, inbox] = await Promise.all([
+    read('playwright.config.js'), read('package.json'), read('playwright.inbox.config.js'),
+  ])
+  const { scripts } = JSON.parse(packageSource)
+  const productJourneys = [
+    'admin-product-master-ui.spec.js', 'admin-human-review-editor.spec.js',
+    'admin-initial-taxonomy-choice.spec.js', 'admin-inventory-batch-read-ui.spec.js',
+    'admin-reference-workflow.spec.js', 'admin-product-master-recovery.spec.js',
+  ]
+  for (const name of productJourneys) {
+    expect(base).toContain(`'${name}'`)
+    expect(scripts['test:admin-product-master-ui']).toContain(name)
+  }
+  expect(base).toContain("'admin-secure-sheet-reference.spec.js'")
+  expect(scripts['test:admin-product-master-ui']).toContain('playwright.sheet-reference.config.js tests/admin-secure-sheet-reference.spec.js')
+  expect(base).toContain("'inbox-categorization-viewport.spec.js'")
+  expect(inbox).toContain('inbox-(phase2|categorization-viewport)')
+  expect(scripts.test).toContain('npm run test:inbox-ui')
+})
+
 test('selling fixtures wait for the observed slow CSS transform before starting browser assertions', async () => {
   const { default: config } = await import('../playwright.selling.config.js')
   expect(config.webServer.url).toBe(`${config.use.baseURL}/src/index.css`)

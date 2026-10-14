@@ -9,7 +9,7 @@ import {importedIntakeBrowserProbe} from './imported-intake-browser-probe.inc.mj
 import {adminStockReadProbe} from './admin-stock-read-probe.inc.mjs'
 import {productMasterRecoveryTransportProbe} from './product-master-recovery-transport-probe.inc.mjs'
 
-export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false,browserWorkflow=false,browserInventory=false,browserListing=false,browserCustomer=false,staffStock=false,stockRoleTransport=false,productMasterRecoveryTransport=false,browserOut}={}){
+export async function importedProductProbe(uid,report,credentials,request,jar,{publicMedia=false,currentInstallation=false,browserWorkflow=false,browserInventory=false,browserListing=false,browserCustomer=false,staffStock=false,stockRoleTransport=false,productMasterRecoveryTransport=false,browserOut,additionalDraftProbe}={}){
  let mediaCleanup,mediaPath
  const command=async(expect,route,body,key=randomUUID())=>expect(route,await request(route,'POST',body,{headers:{'x-k2-idempotency-key':key}})).result
  const prepareStock=async({expect,cleanup,good},categoryId)=>{
@@ -22,6 +22,7 @@ export async function importedProductProbe(uid,report,credentials,request,jar,{p
   publicMedia,
   ...(browserWorkflow ? {browser: context => importedIntakeBrowserProbe({...context,credentials,uid,report,out:browserOut,browserInventory,staffStock,browserListing})} : {}),
   before:async({client,cleanup,request,good,expect})=>{
+   if(additionalDraftProbe)await additionalDraftProbe({client,request,good,expect,uid,report})
    const values=Object.fromEntries(CATALOG_COLUMNS.map(k=>[k,'']))
    Object.assign(values,{template_version:'k2-catalog-v1',name:'Synthetic pantry '+randomUUID(),description:'Imported description to preserve',ingredients:'Synthetic label ingredients',country_of_origin:'Spain',primary_image_url:'https://example.invalid/imported-supplied.jpg',internal_notes:'Explicit synthetic CSV provenance'})
    const csv=CATALOG_COLUMNS.join(',')+'\n'+CATALOG_COLUMNS.map(k=>values[k]).join(',')
