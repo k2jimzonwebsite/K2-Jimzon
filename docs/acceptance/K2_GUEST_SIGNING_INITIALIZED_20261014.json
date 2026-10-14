@@ -1,0 +1,14 @@
+{
+  "projectRef": "pixplcjqivlfflickobf",
+  "configuredAt": "2026-10-14 10:20:01.323837+00",
+  "requestBytes": 32,
+  "contactBytes": 32,
+  "matchingVercelRequestKeyPrepared": true,
+  "signedNullGrantDenial": {
+    "ok": false,
+    "error_code": "GUEST_ACCESS_EXPIRED"
+  },
+  "canonicalDataWritten": false,
+  "adminSignerChanged": false,
+  "secretValuesRecorded": false
+}

@@ -1,3 +1,5 @@
+14 October 2026 / IDEA-20261014-03 / MAP-020/023/025: source5c2356642a6abd2064121ada337ad7670a5997be is published to GitHub main and both separate K2 Vercel production apps are Ready. BFF server/browser flags true, only disabled-BFF404gates turned off, headers preserved. Owner-approved empty guest signer initialization and matching Storefront server key completed; Admin signer unchanged. Live12/12host/isolation/origin/grant/session checks pass; Contact/chat forms and secure Admin sign-in render. Release gate exits0with1450cases and both builds. No DNS change, inventory import/publication, customer message/order/proof or real payment performed. Supplied196draftgroups are preserved locally and require real imagery/facts/SEO/stock checks. Real staff/customer cycle remains unverified. Evidence/recovery: docs/acceptance/CUSTOMER_BFF_ACTIVATION_20261014.md.
+
 # K2 Jimzon Production Deployment and Domain Runbook
 
 **8 October order delivery release dependency:** Prepared order BFF now supports

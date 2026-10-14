@@ -1,0 +1,100 @@
+{
+  "checkedAt": "2026-10-14T10:22:39.106Z",
+  "sourceSha": "5c2356642a6abd2064121ada337ad7670a5997be",
+  "results": [
+    {
+      "name": "store-home",
+      "status": 200,
+      "expected": 200,
+      "ok": true,
+      "cache": "no-store"
+    },
+    {
+      "name": "store-catalog",
+      "status": 200,
+      "expected": 200,
+      "ok": true,
+      "cache": "no-store"
+    },
+    {
+      "name": "store-contact",
+      "status": 200,
+      "expected": 200,
+      "ok": true,
+      "cache": "no-store"
+    },
+    {
+      "name": "store-target",
+      "status": 200,
+      "expected": 200,
+      "ok": true,
+      "target": {
+        "target": "storefront"
+      },
+      "cache": "no-store"
+    },
+    {
+      "name": "store-admin-isolation",
+      "status": 404,
+      "expected": 404,
+      "ok": true,
+      "cache": "no-store"
+    },
+    {
+      "name": "admin-entry",
+      "status": 200,
+      "expected": 200,
+      "ok": true,
+      "cache": "private, no-store"
+    },
+    {
+      "name": "admin-target",
+      "status": 200,
+      "expected": 200,
+      "ok": true,
+      "target": {
+        "target": "admin"
+      },
+      "cache": "private, no-store"
+    },
+    {
+      "name": "admin-store-isolation",
+      "status": 404,
+      "expected": 404,
+      "ok": true,
+      "cache": "private, no-store"
+    },
+    {
+      "name": "admin-session",
+      "status": 401,
+      "expected": 401,
+      "ok": true,
+      "code": "SESSION_EXPIRED",
+      "cache": "no-store"
+    },
+    {
+      "name": "store-signed-grant-denial",
+      "status": 401,
+      "expected": 401,
+      "ok": true,
+      "code": "GUEST_ACCESS_EXPIRED",
+      "cache": "no-store"
+    },
+    {
+      "name": "store-wrong-origin",
+      "status": 403,
+      "expected": 403,
+      "ok": true,
+      "code": "ORIGIN_NOT_ALLOWED",
+      "cache": "no-store"
+    },
+    {
+      "name": "store-proof-grant-denial",
+      "status": 401,
+      "expected": 401,
+      "ok": true,
+      "code": "GUEST_ACCESS_REQUIRED",
+      "cache": "no-store"
+    }
+  ]
+}
