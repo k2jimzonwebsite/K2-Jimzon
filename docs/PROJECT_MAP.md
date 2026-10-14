@@ -1162,7 +1162,7 @@ recovery are under `docs/evidence/20260909-catalog-import-retry/` and
 target-host acceptance remain in I-002.
 
 - Prepared Admin routes: 103
-- IDEA-20261014-05 adds `auth/google/start` and `auth/google/complete` leaf adapters through `server/admin-bff/google-auth.js`, preserving the single production router. Local evidence and pending hosted acceptance: `docs/acceptance/ADMIN_AUTH_RECOVERY_20261014.md` / MAP-025.
+- IDEA-20261014-05 adds `auth/google/start` and `auth/google/complete` leaf adapters through `server/admin-bff/google-auth.js`, preserving the single production router. Both production artifacts on0bf7c2ac and their method/isolation/UI checks are verified; genuine owner account acceptance remains `docs/acceptance/ADMIN_AUTH_RECOVERY_20261014.md` / MAP-025.
 - Prepared Storefront routes: 21
 
 These are source registry counts, checked by

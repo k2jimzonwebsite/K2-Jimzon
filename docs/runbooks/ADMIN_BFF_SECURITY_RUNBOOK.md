@@ -393,6 +393,15 @@ failures and source/artifact recovery: `../acceptance/ADMIN_AUTH_RECOVERY_202610
 MAP-025 owns release and genuine Google/password/AAL2/challenge acceptance;
 local fixtures do not prove recovery of the reported production503.
 
+14October production receipt: the above Google routes and retry UI are now
+deployed in both existing artifacts on0bf7c2ac. New GET method guards405,
+cross-target404s/session401, visible Google and automatic Cloudflare Success
+are verified. Real owner credential/OAuth/AAL2 and server token acceptance
+remain MAP-025; no credential/CAPTCHA was submitted by the agent. Retain the
+previous79fd78e1 artifacts for scoped source/hosting recovery; no database or
+auth-mode rollback is needed. Durable artifact IDs/live capture and safe
+correlation-ID recovery procedure are in the same acceptance receipt.
+
 **Hobby deployment gate (14 August 2026; current inventory 1 September):** the
 prepared Admin and Storefront route handlers total 95 files, while each current
 Vercel Hobby deployment accepts at most 12 Serverless Functions. The leaf
