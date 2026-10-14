@@ -86,6 +86,11 @@ export const FAQS = [
     a: 'K2 staff manage products and stock in one master inventory. Only products assigned to Website and eligible for sale appear in our catalog. Marketplace connectors are not yet live, so staff reconcile those sales manually. Wait for K2 staff to confirm your stock and final total before paying.',
   },
   {
+    cat: 'Ordering & Stock',
+    q: 'How do payments work and why is confirmation not instant?',
+    a: 'Checkout submits an order request without charging you immediately. Once staff confirm your stock, package details, and final total, you can pay instantly via our verified GCash or MariBank QR codes. Confirmation is completed manually by staff rather than an automated gateway.',
+  },
+  {
     cat: 'Freshness & Dates',
     q: 'Are your Italian grocery items really authentic and fresh?',
     a: 'We source products in Italy and record batch and best-before details as stock is received. Eligible lots follow FEFO (First-Expired, First-Out) rules. Check the reviewed product information and ask staff for the current package dates before confirming your purchase.',
