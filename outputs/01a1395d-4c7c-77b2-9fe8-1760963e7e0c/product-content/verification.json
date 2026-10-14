@@ -1,0 +1,16 @@
+{
+  "state": "OFFLINE CONTENT DRAFTS; NOT IMPORTED OR PUBLISHED",
+  "owning_map": "MAP-023",
+  "idea": "IDEA-20261014-04",
+  "source_sha256": "42389089f4c1946fa3393d341a915965c5c518bf34e759244ee950296ab9119d",
+  "products": 196,
+  "stock_rows": 241,
+  "description_drafts": 155,
+  "manufacturer_reference_candidates": 40,
+  "identity_holds": 41,
+  "barcode_decision": "Owner defers entry until later SKU-by-SKU work",
+  "assets_generated": 0,
+  "source_quantities_changed": false,
+  "stock_balance_verified": false,
+  "provider_changes": false
+}

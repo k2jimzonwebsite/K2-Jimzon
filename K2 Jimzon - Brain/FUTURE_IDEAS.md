@@ -1,3 +1,9 @@
+## IDEA-20261014-04 — Prepare real inventory listing copy from owner facts and manufacturer research
+
+Owner request, 14 October 2026: complete the supplied real inventory's missing product details, SEO descriptions and image preparation using humanizer; research the web first. Owner confirms barcodes will be added later, SKU by SKU.
+Decision: MERGE into MAP-023's real-product prerequisite, with MAP-027 retaining product-knowledge acceptance. This is one content preparation batch, not MAP-018 continuation or a second catalog. Preserve all 196 provisional name groups and 241 source stock rows. Manufacturer matches support draft copy; they do not confirm the held packaging, stock, ingredients, country of origin or photo rights. No canonical import/publication or stock creation is included.
+Outcome: offline preparation verified: 196 original review IDs/groups and 241 stock records conserved, 155 natural description/SEO drafts, 40 manufacturer-reference candidates and 41 identity holds. CSV/JSON readback and final development verification pass. No images generated, stock imported or listings published. Source, per-product evidence, unresolved facts and recovery: docs/acceptance/REAL_PRODUCT_CONTENT_20261014.md. Barcodes are deferred by owner decision; held photos/packaging/price/physical-balance confirmation remains in MAP-023.
+
 ## IDEA-20261014-03 — Complete the connected customer order conversation and receipt handoff
 
 Owner request, 14 October 2026: check cart, staff chat, checkout/payment choice, the order's conversation, receipt upload and staff review end to end.
