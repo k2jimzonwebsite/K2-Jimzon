@@ -1384,8 +1384,8 @@ test('pending Admin MFA enrollment is exact, bounded, stale-factor-safe, and ret
 
   const calls = []
   const client = { auth: { mfa: {
-    listFactors: async () => ({ data: { totp: [
-      { id: '40000000-0000-4000-8000-000000000005', status: 'unverified' },
+    listFactors: async () => ({ data: { all: [
+      { id: '40000000-0000-4000-8000-000000000005', status: 'unverified', factor_type: 'totp' },
     ] }, error: null }),
     unenroll: async ({ factorId: staleId }) => { calls.push(['unenroll', staleId]); return { error: null } },
     enroll: async () => ({ data: {
@@ -1403,7 +1403,7 @@ test('pending Admin MFA enrollment is exact, bounded, stale-factor-safe, and ret
     expires_in: 3600, user: { id: '10000000-0000-4000-8000-000000000001' },
   }
   const verifyClient = { auth: { mfa: {
-    listFactors: async () => ({ data: { totp: [{ id: factorId, status: 'unverified' }] }, error: null }),
+    listFactors: async () => ({ data: { all: [{ id: factorId, status: 'unverified', factor_type: 'totp' }] }, error: null }),
     challenge: async ({ factorId: selected }) => ({ data: { id: selected === factorId ? 'challenge-id' : '' }, error: null }),
     verify: async (payload) => { calls.push(['verify', payload]); return { data: verified, error: null } },
   } } }

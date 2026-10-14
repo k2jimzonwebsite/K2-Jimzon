@@ -56,11 +56,18 @@ for (const code of ['MFA_REQUIRED', 'MFA_ENROLLMENT_REQUIRED', 'OAUTH_RETURN_INV
     })
     await page.route('**/api/admin/auth/mfa', async route => {
       enrollments++
-      await route.fulfill({ json: { ok: true, enrollment: { factorId: 'fixture-factor', secret: 'FIXTURESECRET', qr_code: '<svg></svg>' } } })
+      await route.fulfill({ json: { ok: true, enrollment: { factorId: 'fixture-factor', secret: 'FIXTURESECRET',
+        qr: 'data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="176" height="176"><rect width="176" height="176"/></svg>' } } })
     })
     await page.goto('/admin-portal-k2-secure?google=fixture-state&code=one-time-provider-code', { waitUntil: 'domcontentloaded' })
     if (code === 'MFA_REQUIRED') await expect(page.getByText('Two-factor required', { exact: true })).toBeVisible()
-    if (code === 'MFA_ENROLLMENT_REQUIRED') await expect(page.getByRole('heading', { name: 'Set up your authenticator' })).toBeVisible()
+    if (code === 'MFA_ENROLLMENT_REQUIRED') {
+      await expect(page.getByRole('heading', { name: 'Set up your authenticator' })).toBeVisible()
+      const qr = page.getByRole('img', { name: 'Authenticator setup QR code' })
+      await expect(qr).toBeVisible()
+      await expect.poll(() => qr.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true)
+      await expect(page.getByLabel('Six-digit verification code', { exact: true })).toBeVisible()
+    }
     if (code === 'OAUTH_RETURN_INVALID') await expect(page.getByRole('alert').filter({ hasText: 'Google sign-in' })).toContainText('Start Google sign-in again')
     expect(exchanges).toBe(1)
     expect(providerRequests).toBe(0)

@@ -1,5 +1,5 @@
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-const QR_DATA = /^data:image\/svg\+xml(?:;charset=utf-8)?(?:;base64)?,/i
+const QR_DATA = /^data:image\/svg\+xml(?:;utf-8|;charset=utf-8)?(?:;base64)?,/i
 const TOTP_SECRET = /^[A-Z2-7]{16,128}$/
 
 export function validatePendingMfaCommand(body) {
@@ -20,7 +20,7 @@ export function validatePendingMfaCommand(body) {
 export async function startPendingMfaEnrollment(client) {
   const { data: factors, error: factorsError } = await client.auth.mfa.listFactors()
   if (factorsError) throw new Error('MFA_ENROLLMENT_UNAVAILABLE')
-  const totp = Array.isArray(factors?.totp) ? factors.totp : []
+  const totp = Array.isArray(factors?.all) ? factors.all.filter((factor) => factor?.factor_type === 'totp') : []
   if (totp.some((factor) => factor?.status === 'verified')) throw new Error('MFA_ALREADY_ENROLLED')
   const stale = totp.filter((factor) => factor?.status === 'unverified' && UUID.test(String(factor?.id || '')))
   if (stale.length > 5) throw new Error('MFA_ENROLLMENT_UNAVAILABLE')
@@ -45,7 +45,8 @@ export async function startPendingMfaEnrollment(client) {
 
 export async function verifyPendingMfaEnrollment(client, factorId, code) {
   const { data: factors, error: factorsError } = await client.auth.mfa.listFactors()
-  const factor = factors?.totp?.find((item) => item?.id === factorId && item?.status === 'unverified')
+  const factor = factors?.all?.find((item) => item?.factor_type === 'totp'
+    && item?.id === factorId && item?.status === 'unverified')
   if (factorsError || !factor) throw new Error('MFA_ENROLLMENT_INVALID')
   const { data: challenge, error: challengeError } = await client.auth.mfa.challenge({ factorId })
   if (challengeError || !challenge?.id) throw new Error('MFA_ENROLLMENT_VERIFICATION_FAILED')
