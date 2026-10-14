@@ -1127,7 +1127,8 @@ existing callers retain the active-element fallback. No endpoint, schema or
 production artifact boundary changes. Local evidence is in
 `docs/evidence/20260908-coupon-retry/README.md` (MAP-028 I-002).
 
-- Prepared Admin routes: 101
+- Prepared Admin routes: 103
+- IDEA-20261014-05 Google auth is server PKCE under the existing Admin BFF: encrypted ten-minute verifier/state, same-origin start/exchange, bot/durable rate authority, current staff/email verification and existing MFA/session registry. The browser does not retain provider sessions in BFF mode. Locally compiled only; hosted acceptance stays MAP-025 and `docs/acceptance/ADMIN_AUTH_RECOVERY_20261014.md`.
 - Prepared Storefront routes: 21
 
 These are source registry counts, checked by

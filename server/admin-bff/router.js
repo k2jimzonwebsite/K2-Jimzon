@@ -1,4 +1,6 @@
 import login from '../../prepared-api/admin/auth/login.js'
+import startAdminGoogle from '../../prepared-api/admin/auth/google/start.js'
+import completeAdminGoogle from '../../prepared-api/admin/auth/google/complete.js'
 import logout from '../../prepared-api/admin/auth/logout.js'
 import mfa from '../../prepared-api/admin/auth/mfa.js'
 import passwordRecoveryRequest from '../../prepared-api/admin/auth/password-recovery/request.js'
@@ -105,12 +107,14 @@ import { ADMIN_AUTH_RATE_SHIELD, shieldKey } from '../rate-shield.js'
 // budgets, provider calls, or the database. Every other route already carries
 // a staff or recovery session, so the shield would only duplicate the
 // per-session durable limits.
-const SHIELDED_AUTH_ROUTES = new Set(['auth/login', 'auth/password-recovery/request'])
+const SHIELDED_AUTH_ROUTES = new Set(['auth/login', 'auth/google/start', 'auth/google/complete', 'auth/password-recovery/request'])
 import intakeAi from '../../prepared-api/admin/product-intake/ai.js'
 
 const ROUTES = new Map([
   ['product-intake/ai', intakeAi],
   ['auth/login', login],
+  ['auth/google/start', startAdminGoogle],
+  ['auth/google/complete', completeAdminGoogle],
   ['auth/logout', logout],
   ['auth/mfa', mfa],
   ['auth/password-recovery/request', passwordRecoveryRequest],
@@ -216,7 +220,7 @@ const ADMIN_POST_ROUTES = new Set([
   'references',
   'product-intake/ai',
   'product-intake/public-seo-draft',
-  'auth/login', 'auth/logout', 'auth/mfa',
+  'auth/login', 'auth/logout', 'auth/mfa', 'auth/google/start', 'auth/google/complete',
   'auth/password-recovery/request', 'auth/password-recovery/complete',
   'product-media', 'product-media/assign', 'product-media/orphans',
   'product-master',
@@ -248,7 +252,7 @@ const ADMIN_POST_ROUTES = new Set([
   'staff-access/mfa-replacement',
 ])
 const ADMIN_AUTH_ROUTES = new Set([
-  'auth/login', 'auth/logout', 'auth/mfa',
+  'auth/login', 'auth/logout', 'auth/mfa', 'auth/google/start', 'auth/google/complete',
   'auth/password-recovery/request', 'auth/password-recovery/verify', 'auth/password-recovery/complete',
 ])
 const ADMIN_IDEMPOTENT_COMMAND_ROUTES = new Set(
@@ -298,13 +302,15 @@ export const ADMIN_BFF_ROUTE_CONTROLS = Object.freeze(Object.fromEntries(
     return [route, Object.freeze({
     method: ADMIN_POST_ROUTES.has(route) ? 'POST' : 'GET',
     identity: route === 'auth/login' ? 'credentials'
+      : route === 'auth/google/start' ? 'bot-challenge'
+        : route === 'auth/google/complete' ? 'pkce-cookie'
       : route === 'auth/mfa' ? 'pending-session'
         : route === 'auth/logout' ? 'active-session' : 'active-aal2-session',
     origin: true,
-    csrf: ADMIN_POST_ROUTES.has(route) && !['auth/login', 'auth/mfa'].includes(route),
+    csrf: ADMIN_POST_ROUTES.has(route) && !['auth/login', 'auth/mfa', 'auth/google/start', 'auth/google/complete'].includes(route),
     idempotency: ADMIN_IDEMPOTENT_COMMAND_ROUTES.has(route),
     rateLimit: 'database',
-    ...(route === 'auth/login' ? { bot: true } : {}),
+    ...(['auth/login', 'auth/google/start'].includes(route) ? { bot: true } : {}),
     ...(additionalMethods || securityMethods || orphanMethods || globeMethods || procurementMethods || channelMethods || staffAccessMethods || productMasterMethods || ownerCloseMethods
       ? { additionalMethods: additionalMethods || securityMethods || orphanMethods || globeMethods || procurementMethods || channelMethods || staffAccessMethods || productMasterMethods || ownerCloseMethods } : {}),
   })]

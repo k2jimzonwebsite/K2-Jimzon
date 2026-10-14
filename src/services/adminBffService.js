@@ -54,6 +54,8 @@ const ERROR_MESSAGES = {
   PASSWORD_RECOVERY_REVOCATION_UNAVAILABLE: 'The password changed, but closing every prior session could not be confirmed. Contact the owner before signing in.',
   PASSWORD_RECOVERY_UNAVAILABLE: 'Secure staff password recovery is temporarily unavailable.',
   BOT_CHALLENGE_REQUIRED: 'Complete the security check and try again.',
+  OAUTH_REQUEST_INVALID: 'Google sign-in could not be started. Please try again.',
+  OAUTH_RETURN_INVALID: 'Google sign-in expired or could not be verified. Start Google sign-in again.',
   SESSION_EXPIRED: 'Your admin session expired. Sign in again.',
   SESSION_REVOKED: 'This admin session is no longer valid. Sign in again.',
   MFA_REQUIRED: 'Two-factor verification is required again.',
@@ -342,6 +344,14 @@ async function adminRequest(path, { method = 'GET', body, bodyText, expectedActo
 
 export function loginAdminBff(credentials) {
   return adminRequest('/api/admin/auth/login', { method: 'POST', body: credentials })
+}
+
+export function startAdminGoogleBff(botToken) {
+  return adminRequest('/api/admin/auth/google/start', { method: 'POST', body: { botToken } })
+}
+
+export function completeAdminGoogleBff(code, state) {
+  return adminRequest('/api/admin/auth/google/complete', { method: 'POST', body: { code, state } })
 }
 
 export function intakeAiBff(body, idempotencyKey) {

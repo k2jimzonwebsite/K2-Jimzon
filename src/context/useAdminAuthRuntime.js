@@ -10,6 +10,7 @@ import {
 } from '../lib/adminAuthRedirect'
 import {
   adminBffEnabled, challengeAdminMfaBff, getAdminSessionBff,
+  startAdminGoogleBff, completeAdminGoogleBff,
   inviteAdminStaffBff, loginAdminBff, logoutAdminBff,
   requestAdminPasswordRecoveryBff, completeAdminPasswordRecoveryBff,
   startAdminMfaEnrollmentBff, verifyAdminMfaEnrollmentBff,
@@ -24,8 +25,11 @@ export function useAdminAuthRuntime() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [authReady, setAuthReady] = useState(false)
   const [mfaRequired, setMfaRequired] = useState(false)
+  const [enrollmentRequired, setEnrollmentRequired] = useState(false)
   const [authError, setAuthError] = useState('')
   const inviteOperationRef = useRef({ fingerprint: '', key: '' })
+  const googleReturnRef = useRef(null)
+  const googleEnrollmentRef = useRef(null)
 
   const resolveRole = async (authUser) => {
     if (!supabase || !authUser) return null
@@ -39,6 +43,7 @@ export function useAdminAuthRuntime() {
       ? { ...authUser, id: authUser.userId }
       : authUser
     setMfaRequired(false)
+    setEnrollmentRequired(false)
     setAuthError('')
     setIsAdmin(true)
     setUser({ ...normalizedUser, role })
@@ -47,6 +52,27 @@ export function useAdminAuthRuntime() {
   const checkUser = async (authUser = null) => {
     if (adminBffEnabled()) {
       try {
+        const params = new URLSearchParams(window.location.search)
+        if (params.has('google')) {
+          // Reuse one exchange across StrictMode's repeated mount effects.
+          if (!googleReturnRef.current) {
+            const code = params.get('code') || ''
+            const state = params.get('google') || ''
+            window.history.replaceState(window.history.state, '', window.location.pathname)
+            googleReturnRef.current = completeAdminGoogleBff(code, state)
+          }
+        }
+        if (googleReturnRef.current) {
+          const result = await googleReturnRef.current
+          if (result.ok) applyAdminSession(result.user, result.user?.role)
+          else {
+            setIsAdmin(false); setUser(null)
+            setMfaRequired(Boolean(result.mfaRequired))
+            setEnrollmentRequired(Boolean(result.enrollmentRequired))
+            if (!result.mfaRequired && !result.enrollmentRequired) setAuthError(result.error || 'Google sign-in could not be completed. Try again.')
+          }
+          return
+        }
         const result = await getAdminSessionBff()
         if (result.ok && isStaffRole(result.user?.role)) applyAdminSession(result.user, result.user.role)
         else { setIsAdmin(false); setUser(null); setMfaRequired(Boolean(result.mfaRequired)) }
@@ -137,8 +163,12 @@ export function useAdminAuthRuntime() {
     }
   }, [])
 
-  const loginWithGoogle = async () => {
-    if (adminBffEnabled()) return { ok: false, error: 'Google sign-in is unavailable during the secure admin migration. Use your invited staff email and authenticator.' }
+  const loginWithGoogle = async (botToken = '') => {
+    if (adminBffEnabled()) {
+      const result = await startAdminGoogleBff(botToken)
+      if (result.ok) window.location.assign(result.url)
+      return result
+    }
     if (!supabase) return { ok: false, error: 'Backend not configured.' }
     setAuthError('')
     setMfaRequired(false)
@@ -213,7 +243,9 @@ export function useAdminAuthRuntime() {
 
   const enrollMfa = async () => {
     if (adminBffEnabled()) {
-      const result = await startAdminMfaEnrollmentBff()
+      const result = await (enrollmentRequired
+        ? (googleEnrollmentRef.current ||= startAdminMfaEnrollmentBff())
+        : startAdminMfaEnrollmentBff())
       return result.ok ? { ok: true, ...result.enrollment } : result
     }
     if (!supabase) return { ok: false, error: 'Backend not configured.' }
@@ -355,10 +387,10 @@ export function useAdminAuthRuntime() {
   }, [isAdmin, user?.id])
 
   return {
-    user, isAdmin, authReady, mfaRequired, authError,
+    user, isAdmin, authReady, mfaRequired, enrollmentRequired, authError,
     loginAdmin, loginWithGoogle, logoutAdmin, requestPasswordRecovery, completePasswordRecovery,
     challengeMfa, enrollMfa, verifyMfaEnroll, startMfaReplacement, completeMfaReplacement, inviteStaff,
-    adminOAuthAvailable: !adminBffEnabled(),
+    adminOAuthAvailable: true,
     adminBotChallengeRequired: adminBffEnabled(),
   }
 }

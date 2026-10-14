@@ -16,7 +16,7 @@ export function AdminAuthForm({ isOpen, onClose, runtime }) {
     enrollMfa, verifyMfaEnroll, adminOAuthAvailable,
     requestPasswordRecovery = async () => ({ ok: false, error: 'Secure password recovery is unavailable.' }),
     completePasswordRecovery = async () => ({ ok: false, error: 'Secure password recovery is unavailable.' }),
-    mfaRequired, authError, adminBotChallengeRequired = false,
+    mfaRequired, enrollmentRequired, authError, adminBotChallengeRequired = false,
   } = runtime
   const [step, setStep] = useState(() => new URLSearchParams(window.location.search).get('recovery') === 'ready' ? 6 : 1)
   const [email, setEmail] = useState('')
@@ -41,6 +41,19 @@ export function AdminAuthForm({ isOpen, onClose, runtime }) {
     setError('')
     setLoading(false)
   }, [mfaRequired])
+
+  useEffect(() => {
+    if (!enrollmentRequired) return undefined
+    let cancelled = false
+    setLoading(true)
+    enrollMfa().then(setup => {
+      if (cancelled) return
+      setLoading(false)
+      if (setup.ok) { setEnrollment(setup); setCode(''); setStep(3) }
+      else setError(setup.error || 'Authenticator setup could not be started.')
+    })
+    return () => { cancelled = true }
+  }, [enrollmentRequired])
 
   useEffect(() => {
     if (!authError) return
@@ -109,12 +122,14 @@ export function AdminAuthForm({ isOpen, onClose, runtime }) {
   }
 
   const submitGoogle = async () => {
+    if (adminBotChallengeRequired && !botToken) return setError('Complete the security check before signing in.')
     setError('')
     setLoading(true)
-    const res = await loginWithGoogle()
+    const res = await loginWithGoogle(botToken)
     if (!res?.ok) {
       setError(res?.error || 'Google sign-in failed.')
       setLoading(false)
+      if (adminBotChallengeRequired) resetChallenge()
     }
   }
 

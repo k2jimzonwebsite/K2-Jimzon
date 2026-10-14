@@ -380,8 +380,18 @@ the URL, and defers role/MFA verification outside the Supabase auth-state
 callback lock. The modern browser-safe publishable key is compiled as a reviewed
 fallback until the same value is present in the Admin Vercel environment; this
 does not authorize service-role access or activate the prepared BFF. Secure
-Admin mode rejects Google sign-in before a provider call and hides the OAuth
-option; provider credentials and a future server flow remain separately gated.
+The previously deployed secure Admin mode rejects Google and hides its option.
+IDEA-20261014-05 now locally prepares `/api/admin/auth/google/start` and
+`/api/admin/auth/google/complete` inside the same router. Same-origin bot/durable
+budgets precede server PKCE; a ten-minute encrypted HttpOnly/Lax verifier/state
+cookie binds the one-time return to this browser. The existing approved guarded
+Admin return URL is reused. Completion rechecks confirmed email/current staff,
+then uses existing enrollment/TOTP or active AAL2 registration. Browser provider
+session detection/storage/refresh is disabled in BFF mode. Failed Cloudflare
+loads can explicitly retry without losing input. Scope, evidence, retained
+failures and source/artifact recovery: `../acceptance/ADMIN_AUTH_RECOVERY_20261014.md`.
+MAP-025 owns release and genuine Google/password/AAL2/challenge acceptance;
+local fixtures do not prove recovery of the reported production503.
 
 **Hobby deployment gate (14 August 2026; current inventory 1 September):** the
 prepared Admin and Storefront route handlers total 95 files, while each current

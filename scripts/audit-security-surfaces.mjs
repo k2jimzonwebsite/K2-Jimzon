@@ -95,7 +95,13 @@ for (const route of ADMIN_BFF_ROUTES) {
     ])
     for (const [method, methodControl] of methodControls) {
       if (!['GET', 'POST'].includes(method)) routeControlGaps.push(`admin:${route}:unsupported-method-${method}`)
-      const preauthPost = ['auth/login', 'auth/mfa', 'auth/password-recovery/request'].includes(route)
+      const preauthPost = ['auth/login', 'auth/mfa', 'auth/password-recovery/request', 'auth/google/start', 'auth/google/complete'].includes(route)
+      if (route === 'auth/google/start' && (control.identity !== 'bot-challenge' || control.bot !== true || control.rateLimit !== 'database')) {
+        routeControlGaps.push(`admin:${route}:missing-oauth-start-boundary`)
+      }
+      if (route === 'auth/google/complete' && (control.identity !== 'pkce-cookie' || control.rateLimit !== 'database')) {
+        routeControlGaps.push(`admin:${route}:missing-pkce-cookie-boundary`)
+      }
       if (method === 'POST' && !preauthPost && !methodControl.csrf) {
         routeControlGaps.push(`admin:${route}:post-missing-csrf`)
       }

@@ -63,7 +63,7 @@ test('OAuth credentials are removed from the Admin callback URL', async () => {
     'utf8'
   )
   expect(clientSource).toContain("flowType: 'pkce'")
-  expect(clientSource).toContain('detectSessionInUrl: true')
+  expect(clientSource).toContain('detectSessionInUrl: !secureAdmin')
 })
 
 test.describe('admin access boundary', () => {

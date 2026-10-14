@@ -7,13 +7,13 @@ export function isAdminRole(role) {
   return role === 'Admin' || role === 'SuperAdmin'
 }
 
-export function createServerSupabase() {
+export function createServerSupabase(authOptions = {}) {
   const url = process.env.SUPABASE_URL || ''
   const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY || ''
   if (!url || !publishableKey) throw new Error('SUPABASE_SERVER_CONFIG_MISSING')
   const signal = currentAdminRequestSignal()
   return createClient(url, publishableKey, {
-    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, ...authOptions },
     ...(signal ? { global: { fetch: adminRequestFetch(signal) } } : {}),
   })
 }

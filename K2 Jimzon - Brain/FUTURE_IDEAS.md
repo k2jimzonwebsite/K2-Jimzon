@@ -1,3 +1,7 @@
+## IDEA-20261014-05 — Restore secure Admin Google sign-in and challenge recovery
+
+Owner reports broken Cloudflare check and missing Google sign-in after Antigravity work. Decision: ACCEPT into MAP-025 as a bounded auth regression correction. Current BFF activation is intentional; do not force direct Supabase mode or bypass staff/AAL2/registry controls. Prepare server PKCE with encrypted, browser-bound ten-minute verifier cookie, existing approved Admin return route, same-origin start/exchange, bot and durable rate checks, canonical role verification and existing MFA/enrollment. Add explicit challenge retry and failed-loader recovery. Verify failing-first security and rendered recovery cases, then development once. No provider/SQL/credential/main/deployment write is authorized by this source repair. Live widget automatically showed Success on inspection; server token acceptance and real staff Google/AAL2 remain unverified. Owning evidence/recovery: docs/acceptance/ADMIN_AUTH_RECOVERY_20261014.md; exact remaining work stays MAP-025.
+
 ## IDEA-20261014-04 — Prepare real inventory listing copy from owner facts and manufacturer research
 
 Owner request, 14 October 2026: complete the supplied real inventory's missing product details, SEO descriptions and image preparation using humanizer; research the web first. Owner confirms barcodes will be added later, SKU by SKU.

@@ -236,6 +236,27 @@ export function newCsrfToken() {
   return randomBytes(32).toString('base64url')
 }
 
+// Only a short-lived PKCE verifier is retained here; provider sessions never
+// enter browser JavaScript. Lax permits the external Google return navigation.
+export function setAdminOAuthCookie(res, value) {
+  res.setHeader('Set-Cookie', cookie('k2_admin_oauth', encrypt(value), { path: '/api/admin/auth/google', sameSite: 'Lax', maxAge: 600 }))
+}
+
+export function readAdminOAuthCookie(req) {
+  const value = decrypt(parseCookies(req).k2_admin_oauth)
+  if (!value || typeof value.state !== 'string' || !TOKEN_HASH.test(value.state)
+      || typeof value.verifier !== 'string' || value.verifier.length < 40 || value.verifier.length > 256
+      || !Number.isFinite(value.createdAt) || value.createdAt > Date.now()
+      || Date.now() - value.createdAt > 600000) return null
+  return value
+}
+
+export function clearAdminOAuthCookie(res) {
+  const previous = res.getHeader('Set-Cookie') || []
+  res.setHeader('Set-Cookie', [...(Array.isArray(previous) ? previous : [previous]),
+    cookie('k2_admin_oauth', '', { path: '/api/admin/auth/google', sameSite: 'Lax', maxAge: 0 })])
+}
+
 export function hashToken(value) {
   return createHash('sha256').update(String(value)).digest('base64url')
 }

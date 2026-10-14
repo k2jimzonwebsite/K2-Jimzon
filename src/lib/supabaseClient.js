@@ -5,6 +5,7 @@ export const supabasePublicKey = import.meta.env.VITE_SUPABASE_PUBLIC_KEY
   || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabasePublicKey)
+const secureAdmin = String(import.meta.env.VITE_ADMIN_BFF_ENABLED || '').toLowerCase() === 'true'
 
 if (!isSupabaseConfigured) {
   const missingMsg = `[K2 Security Guard] Missing required production configuration: ` +
@@ -24,9 +25,9 @@ export const supabase = isSupabaseConfigured
         // PKCE returns a one-time code instead of exposing access and refresh
         // tokens in the browser address bar during Google OAuth callbacks.
         flowType: 'pkce',
-        detectSessionInUrl: true,
-        persistSession: true,
-        autoRefreshToken: true,
+        detectSessionInUrl: !secureAdmin,
+        persistSession: !secureAdmin,
+        autoRefreshToken: !secureAdmin,
       },
     })
   : null

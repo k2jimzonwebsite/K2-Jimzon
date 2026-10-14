@@ -6,10 +6,17 @@ function loadTurnstile() {
   if (window.turnstile) return Promise.resolve(window.turnstile)
   if (scriptPromise) return scriptPromise
   scriptPromise = new Promise((resolve, reject) => {
+    const timeout = window.setTimeout(() => reject(new Error('TURNSTILE_LOAD_TIMEOUT')), 15000)
+    const loaded = () => {
+      window.clearTimeout(timeout)
+      if (window.turnstile) resolve(window.turnstile)
+      else reject(new Error('TURNSTILE_API_MISSING'))
+    }
+    const failed = () => { window.clearTimeout(timeout); reject(new Error('TURNSTILE_LOAD_FAILED')) }
     const existing = document.querySelector('script[data-k2-turnstile]')
     if (existing) {
-      existing.addEventListener('load', () => resolve(window.turnstile), { once: true })
-      existing.addEventListener('error', reject, { once: true })
+      existing.addEventListener('load', loaded, { once: true })
+      existing.addEventListener('error', failed, { once: true })
       return
     }
     const script = document.createElement('script')
@@ -17,9 +24,13 @@ function loadTurnstile() {
     script.async = true
     script.defer = true
     script.dataset.k2Turnstile = 'true'
-    script.onload = () => resolve(window.turnstile)
-    script.onerror = reject
+    script.onload = loaded
+    script.onerror = failed
     document.head.appendChild(script)
+  }).catch(error => {
+    scriptPromise = null
+    document.querySelector('script[data-k2-turnstile]')?.remove()
+    throw error
   })
   return scriptPromise
 }
@@ -35,12 +46,15 @@ export default function TurnstileChallenge({
   const widgetRef = useRef(null)
   const errorId = useId()
   const [error, setError] = useState('')
+  const [attempt, setAttempt] = useState(0)
   const enabled = enabledOverride ?? true
   const adminTone = tone === 'admin'
   const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
 
   useEffect(() => {
     if (!enabled) return undefined
+    setError('')
+    onTokenChange('')
     if (!siteKey) {
       setError('The security check is not configured. Please contact K2 Jimzon.')
       onTokenChange('')
@@ -53,9 +67,11 @@ export default function TurnstileChallenge({
         sitekey: siteKey,
         action,
         appearance: 'always',
-        callback: (token) => { setError(''); onTokenChange(token) },
-        'expired-callback': () => { setError('Security check expired. Please complete it again.'); onTokenChange('') },
-        'error-callback': () => { setError('Security check could not load. Please retry.'); onTokenChange(''); return true },
+        size: 'flexible',
+        callback: (token) => { if (!cancelled) { setError(''); onTokenChange(token) } },
+        'expired-callback': () => { if (!cancelled) { setError('Security check expired. Please complete it again.'); onTokenChange('') } },
+        'timeout-callback': () => { if (!cancelled) { setError('Security check timed out. Please retry.'); onTokenChange('') } },
+        'error-callback': () => { if (!cancelled) { setError('Security check could not load. Please retry.'); onTokenChange('') }; return true },
       })
     }).catch(() => {
       if (!cancelled) {
@@ -66,8 +82,9 @@ export default function TurnstileChallenge({
     return () => {
       cancelled = true
       if (widgetRef.current != null && window.turnstile) window.turnstile.remove(widgetRef.current)
+      widgetRef.current = null
     }
-  }, [action, enabled, onTokenChange, siteKey])
+  }, [action, enabled, onTokenChange, siteKey, attempt])
 
   if (!enabled) return null
   return (
@@ -79,6 +96,12 @@ export default function TurnstileChallenge({
       <p className={adminTone ? 'mt-1 text-sm leading-relaxed text-white/65' : 'mt-1 text-sm leading-relaxed text-navy-soft'}>{description}</p>
       <div ref={containerRef} className="mt-3 min-h-16" />
       {error && <p id={errorId} role="alert" className="mt-2 text-sm text-crimson">{error}</p>}
+      {error && siteKey && <button type="button" onClick={() => setAttempt(value => value + 1)}
+        className={adminTone
+          ? 'mt-2 min-h-11 rounded-adm-sm border border-white/25 px-3 text-sm font-bold text-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-blue motion-reduce:transition-none'
+          : 'mt-2 min-h-11 rounded-lg border border-[var(--store-surface-border)] px-3 text-sm font-semibold text-navy focus-visible:outline-2 focus-visible:outline-navy'}>
+        Retry security check
+      </button>}
     </section>
   )
 }
