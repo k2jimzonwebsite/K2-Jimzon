@@ -1,4 +1,6 @@
-# Admin login dependency repair — prepared, approval pending
+# Admin login dependency repair — installed, real login pending
+
+Production continuation: owner replied “proceed” to this exact linked packet. Applied once on K2 at 2026-10-14T14:28:49.485Z, HTTP201 acknowledgement. Independent read-only postflight returned K2_ADMIN_PREAUTH_RATE_POSTFLIGHT_OK at 2026-10-14T14:29:45.872Z; normal readiness has8verified/2owner/3connector/0failed, including exact installed pre-auth body/grants/private tables. Refreshed live form renders without the prior stale error; Cloudflare requires human completion. No credentials or CAPTCHA were submitted. Actual login/MFA remains MAP-025. Durable receipt: ADMIN_PREAUTH_DEPENDENCY_APPLIED_20261014.json. Earlier preparation statements below are historical and do not mean the packet is pending or may be replayed.
 
 Owner request: restore real staff login after the hosted Admin reports “The secure admin service is temporarily unavailable.” Owning work: MAP-025 / IDEA-20261014-06. This receipt supersedes any inference that the earlier restored button and Cloudflare rendering established successful login.
 

@@ -1,0 +1,99 @@
+{
+  "idea": "IDEA-20261014-06",
+  "map": "MAP-025",
+  "projectRef": "pixplcjqivlfflickobf",
+  "ownerAuthorization": "Owner replied proceed to exact linked payload on 2026-10-14",
+  "payload": "supabase/prepared/20261014_admin_preauth_dependency.sql",
+  "sha256": "921d8eeb9361f9eec16411cce313d5fed1d1fbef3126143418f476504bfb9457",
+  "acknowledgement": {
+    "status": 201,
+    "at": "2026-10-14T14:28:49.485Z"
+  },
+  "postflight": {
+    "status": 201,
+    "at": "2026-10-14T14:29:45.872Z",
+    "result": "K2_ADMIN_PREAUTH_RATE_POSTFLIGHT_OK"
+  },
+  "readiness": [
+    {
+      "id": "project-identity",
+      "owner": "none",
+      "state": "verified",
+      "detail": "K2 pixplcjqivlfflickobf"
+    },
+    {
+      "id": "migration-ledger",
+      "owner": "none",
+      "state": "verified",
+      "detail": "11 entries, latest 20261013110000"
+    },
+    {
+      "id": "canonical-installation",
+      "owner": "none",
+      "state": "verified",
+      "detail": "Exact phased complete-source receipt and canonical relations installed; installer must not be repeated"
+    },
+    {
+      "id": "installed-permission-catalog",
+      "owner": "none",
+      "state": "verified",
+      "detail": "Exact reviewed26 explicit anonymous grants and2 invoker trigger ACLs; hosted caller/legacy-route acceptance remains separate"
+    },
+    {
+      "id": "hosted-caller-acceptance",
+      "owner": "owner",
+      "state": "owner",
+      "detail": "Installed signatures match only; authenticated staff/customer and legacy-route acceptance remain unverified"
+    },
+    {
+      "id": "admin-preauth-dependency",
+      "owner": "owner",
+      "state": "verified",
+      "detail": "Exact signed Admin pre-auth function, limited execute and private forced-RLS rate tables verified; genuine hosted login remains separate"
+    },
+    {
+      "id": "stock-facts",
+      "owner": "owner",
+      "state": "owner",
+      "detail": "0 products (0 live), 0 lots; physical count unproven"
+    },
+    {
+      "id": "backup-freshness",
+      "owner": "none",
+      "state": "verified",
+      "detail": "admin-preauth-before-20261014.k2backup: Encrypted file hash/bytes, K2 backup identity and isolated restored current migration verified; managed provider recovery remains excluded"
+    },
+    {
+      "id": "backup-restore-proof",
+      "owner": "owner",
+      "state": "verified",
+      "detail": "Encrypted file hash/bytes, K2 backup identity and isolated restored current migration verified; managed provider recovery remains excluded"
+    },
+    {
+      "id": "vercel-preview",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "no Vercel API token or CLI in this harness"
+    },
+    {
+      "id": "vercel-edge-gate",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "Admin Vercel edge routing rule state not readable from this script"
+    },
+    {
+      "id": "provider-advisor",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "Supabase advisor findings need a signed-in session"
+    },
+    {
+      "id": "release-branch",
+      "owner": "none",
+      "state": "verified",
+      "detail": "## codex/admin-google-turnstile-recovery"
+    }
+  ],
+  "realLoginVerified": false,
+  "recovery": "Retain rate data/security gates; reconcile unknown outcomes read-only; no blind reapply. See ADMIN_PREAUTH_DEPENDENCY_20261014.md."
+}
