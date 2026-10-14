@@ -2,7 +2,7 @@
 
 Owner request, 14 October 2026: stop MAP-018 continuation, verify newer Admin/storefront commits and connected logic, fix concrete defects, publish to GitHub main and both existing K2 Vercel production projects.
 Decision: ACCEPT into MAP-025 as the current owner-authorized release batch. MAP-018 remains closed; speculative signer/rehearsal work is retired. No database migration, inventory import, credential change or unrelated connector activation is included.
-Status: in progress. Reproduce and fix listing-helper lifecycle/cache defects and misleading FAQ claims; run focused evidence, final development verification and one complete release gate; verify exact released commit and both production artifacts. Preserve existing untracked historical tooling/evidence. Remaining work and recovery live only in MAP-025.
+Outcome: source release completed and both production artifacts verified on ff41dc92bc3017303be6dd19164d3eea8a2d5d5b. Current Admin/storefront fixes,1449release-case coverage, build boundaries and9public-host checks are recorded in docs/acceptance/CURRENT_RELEASE_20261014.md. Existing signed-in Admin dashboard/inventory and new Storefront/contact content render. Flags, credentials and database data are unchanged; AI BFF remains inactive,0products/0lots.113historical untracked entries remain untouched. Later GitHub CI receipt and full real operational acceptance stay in MAP-025; no MAP-018 continuation or redundant deployment.
 
 ## IDEA-20261014-01 — 1-Click Product Listing Auto-Fill & Gemini API Call Optimization with Human Review
 
