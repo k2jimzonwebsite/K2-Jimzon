@@ -45,7 +45,7 @@ export default function OrderConversation({ access, chargeFinal = false, onPayme
       setLoadError(result.error)
     }
     if (!background) setLoading(false)
-  }, [access?.id, access?.accessKey, onPaymentStatus, onChargeRead])
+  }, [access?.id, access?.accessKey, access?.reference, onPaymentStatus, onChargeRead])
 
   useEffect(() => {
     active.current = true
@@ -98,7 +98,11 @@ export default function OrderConversation({ access, chargeFinal = false, onPayme
       <p className="mt-2 text-sm leading-6 text-navy-soft">Your order already started this conversation. Write to K2 here whenever you need to ask about the total, transfer, or delivery.</p>
       {loading && <p role="status" className="mt-4 text-sm text-navy-soft">Loading your order messages…</p>}
       {loadError && <p role="alert" className="mt-4 rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{loadError}</p>}
+      {loadError && <button type="button" onClick={() => load()} className="mt-3 min-h-11 rounded-lg border border-line px-4 text-sm font-semibold">Retry order conversation</button>}
       {conversation && <>
+        {access.paymentMethod !== 'cod' && !['verified', 'refunded'].includes(conversation.payment_status)
+          && (!chargeFinal || !chargeRead || conversation.payment_status === 'not_requested')
+          && <p role="status" className="mt-4 text-sm leading-6 text-navy-soft">Receipt upload will appear here after staff confirm the final total and payment instructions.</p>}
         <div aria-label="Messages about this order" aria-live="polite" className="mt-5 max-h-72 space-y-3 overflow-y-auto rounded-xl border border-line bg-shell p-3">
           {(conversation.messages || []).map((item, index) => <div key={item.id || index} className={`max-w-[92%] rounded-xl p-3 text-sm ${item.direction === 'inbound' ? 'ml-auto bg-crimson text-white' : 'border border-line bg-paper text-navy'}`}>
             <p className="whitespace-pre-wrap break-words">{item.content}</p>
@@ -107,7 +111,7 @@ export default function OrderConversation({ access, chargeFinal = false, onPayme
         </div>
         <form onSubmit={send} className="mt-5">
           <label htmlFor="order-message" className="block text-sm font-semibold">Message K2 about this order</label>
-          <textarea id="order-message" className="store-field mt-2 min-h-24 w-full resize-y px-4 py-3 text-base" value={message} onChange={event => { setMessage(event.target.value); messageKey.current = '' }} maxLength={2000} placeholder="Write your message to K2 staff" />
+          <textarea id="order-message" disabled={sending} className="store-field mt-2 min-h-24 w-full resize-y px-4 py-3 text-base" value={message} onChange={event => { setMessage(event.target.value); messageKey.current = '' }} maxLength={2000} placeholder="Write your message to K2 staff" />
           <button type="submit" disabled={sending || !message.trim()} className="mt-3 min-h-11 rounded-lg bg-crimson px-5 text-sm font-semibold text-white disabled:opacity-45">{sending ? 'Sending…' : 'Send order message'}</button>
           {messageNotice && <p role="status" className="mt-2 text-sm text-navy-soft">{messageNotice}</p>}
         </form>

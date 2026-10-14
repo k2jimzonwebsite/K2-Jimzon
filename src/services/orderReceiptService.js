@@ -1,4 +1,5 @@
 import { getSupabaseClient } from '../lib/lazySupabaseClient'
+import { guestBffEnabled, postGuestCommerce } from './guestCommerceService'
 
 const LAST_ORDER_KEY = 'k2-last-order-receipt-v1'
 const MAX_RECEIPT_BYTES = 3 * 1024 * 1024
@@ -17,6 +18,7 @@ export function readOrderReceiptAccess() {
 }
 
 export async function getOrderConversation(access) {
+  if (guestBffEnabled()) return postGuestCommerce('order/conversation', { operation: 'read', orderReference: access.reference })
   const client = await getSupabaseClient()
   if (!client || !access?.id || !access?.accessKey) return { ok: false, error: 'Order conversation unavailable.' }
   const { data, error } = await client.rpc('get_order_conversation_v1', {
@@ -27,6 +29,7 @@ export async function getOrderConversation(access) {
 }
 
 export async function sendOrderMessage(access, message, requestKey) {
+  if (guestBffEnabled()) return postGuestCommerce('order/conversation', { operation: 'message', orderReference: access.reference, message, idempotencyKey: requestKey })
   const client = await getSupabaseClient()
   if (!client || !access?.id || !access?.accessKey) return { ok: false, error: 'Order conversation unavailable.' }
   const { data, error } = await client.rpc('submit_order_message_v1', {
@@ -59,6 +62,12 @@ function fileAsBase64(file) {
 export async function submitOrderReceipt(access, file, reference, requestKey) {
   const validationError = validateReceipt(file, reference)
   if (validationError) return { ok: false, error: validationError }
+  if (guestBffEnabled()) {
+    try {
+      return await postGuestCommerce('order/conversation', { operation: 'receipt', orderReference: access.reference,
+        paymentReference: reference.trim(), mediaType: file.type, base64: await fileAsBase64(file), idempotencyKey: requestKey })
+    } catch { return { ok: false, error: 'Receipt could not be read. Choose the file again.' } }
+  }
   const client = await getSupabaseClient()
   if (!client || !access?.id || !access?.accessKey) return { ok: false, error: 'Order receipt upload unavailable.' }
   try {

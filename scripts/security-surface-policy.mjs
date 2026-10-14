@@ -6,6 +6,7 @@ export const EXPECTED_ANON_FUNCTIONS = Object.freeze([
   'public.append_guest_message_v1(bigint,uuid,text,text,text,text)',
   'public.list_guest_conversations_v1(bigint,uuid,text,text,text,text)',
   'public.read_guest_order_status_v1(bigint,uuid,text,text,text,text)',
+  'public.guest_order_conversation_v1(bigint,uuid,text,text,text,text,text)',
   'public.preview_guest_coupon_v1(bigint,uuid,text,text,text)',
   'public.quote_guest_delivery_v1(bigint,uuid,text,text,text)',
   'public.record_security_event_v1(bigint,uuid,uuid,text,text,text,text,uuid,text,text,text,text,text)',

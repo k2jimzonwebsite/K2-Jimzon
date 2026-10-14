@@ -1128,7 +1128,7 @@ production artifact boundary changes. Local evidence is in
 `docs/evidence/20260908-coupon-retry/README.md` (MAP-028 I-002).
 
 - Prepared Admin routes: 101
-- Prepared Storefront routes: 20
+- Prepared Storefront routes: 21
 
 These are source registry counts, checked by
 `tests/security-surface-inventory.spec.js` in the contract and CI suites.

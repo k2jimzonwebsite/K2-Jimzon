@@ -16,6 +16,7 @@ const GUEST_ENDPOINTS = Object.freeze({
   messages: '/api/storefront/messages',
   order: '/api/storefront/order',
   'order/status': '/api/storefront/order/status',
+  'order/conversation': '/api/storefront/order/conversation',
   'order/delivery-accept': '/api/storefront/order/delivery-accept',
   pasabuy: '/api/storefront/pasabuy',
   wholesale: '/api/storefront/wholesale',

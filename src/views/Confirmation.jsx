@@ -100,7 +100,9 @@ export default function Confirmation() {
     setChargeRead(saved.delivery_review_required === false ? saved.public_reference : null)
   }, [currentOrder?.id])
   const savedAccess = readOrderReceiptAccess()
-  const orderAccess = currentOrder?.orderId && currentOrder?.accessKey
+  const orderAccess = guestBffEnabled() && currentOrder?.id
+    ? { reference: currentOrder.id, paymentMethod }
+    : currentOrder?.orderId && currentOrder?.accessKey
     ? { id: currentOrder.orderId, accessKey: currentOrder.accessKey, paymentMethod }
     : savedAccess?.reference === currentOrder?.id ? savedAccess : null
 
@@ -182,7 +184,7 @@ export default function Confirmation() {
         </section>
       )}
 
-      {orderAccess && !guestBffEnabled() && <OrderConversation key={`${orderAccess.id}:${orderAccess.accessKey}`} access={orderAccess} chargeFinal={!pendingDelivery} onPaymentStatus={setRemotePaymentStatus} onChargeRead={readConversationCharge} />}
+      {orderAccess && <OrderConversation key={orderAccess.reference || orderAccess.id} access={orderAccess} chargeFinal={!pendingDelivery} onPaymentStatus={setRemotePaymentStatus} onChargeRead={readConversationCharge} />}
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
         {guestBffEnabled() ? (

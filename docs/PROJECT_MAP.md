@@ -1162,7 +1162,7 @@ recovery are under `docs/evidence/20260909-catalog-import-retry/` and
 target-host acceptance remain in I-002.
 
 - Prepared Admin routes: 101
-- Prepared Storefront routes: 20
+- Prepared Storefront routes: 21
 
 These are source registry counts, checked by
 `tests/security-surface-inventory.spec.js` in the contract and CI suites.

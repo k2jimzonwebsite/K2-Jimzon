@@ -45,11 +45,11 @@ test('legacy charge review withholds cached payment and survives failed or late 
   await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toHaveCount(0)
   mode = 'failed'
   await page.getByRole('button', { name: 'Refresh order status' }).click()
-  await expect(page.getByRole('alert')).toBeVisible()
+  await expect(page.getByRole('alert').filter({ hasText: 'The service could not be reached' })).toBeVisible()
   releaseOlder()
   expect(reads).toBeGreaterThanOrEqual(4)
   await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toHaveCount(0)
-  await expect(page.getByRole('alert')).toBeVisible()
+  await expect(page.getByRole('alert').filter({ hasText: 'The service could not be reached' })).toBeVisible()
   await expect(page.getByText(reference, { exact: true })).toBeVisible()
   mode = 'cancelled'
   await page.getByRole('button', { name: 'Refresh order status' }).click()

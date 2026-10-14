@@ -14,6 +14,7 @@ import message from '../../prepared-api/storefront/message.js'
 import messages from '../../prepared-api/storefront/messages.js'
 import order from '../../prepared-api/storefront/order.js'
 import orderStatus from '../../prepared-api/storefront/order/status.js'
+import orderConversation from '../../prepared-api/storefront/order/conversation.js'
 import guestDeliveryAccept from '../../prepared-api/storefront/order/delivery-accept.js'
 import accountDeliveryAccept from '../../prepared-api/storefront/account/delivery-accept.js'
 import pasabuy from '../../prepared-api/storefront/pasabuy.js'
@@ -39,6 +40,7 @@ const ROUTES = new Map([
   ['messages', messages],
   ['order', order],
   ['order/status', orderStatus],
+  ['order/conversation', orderConversation],
   ['order/delivery-accept', guestDeliveryAccept],
   ['account/delivery-accept', accountDeliveryAccept],
   ['pasabuy', pasabuy],
@@ -63,6 +65,7 @@ export const STOREFRONT_BFF_ROUTE_CONTROLS = Object.freeze({
   messages: Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'required', idempotency: false }),
   order: Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: true, guestGrant: 'issued', idempotency: true }),
   'order/status': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'required', idempotency: false }),
+  'order/conversation': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'required', idempotency: true }),
   'order/delivery-accept': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'required', idempotency: true }),
   'account/delivery-accept': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'none', accountAuth: 'required', idempotency: true }),
   pasabuy: Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: true, guestGrant: 'issued', idempotency: true }),

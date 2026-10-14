@@ -166,6 +166,19 @@ for (const method of [
 test(`recorded pickup instructions show the matching ${method.label} QR`, async ({ page }) => {
   let statusReads = 0
   let submittedNote = ''
+  let submittedReceipt
+  let sentMessage
+  await page.route('**/api/storefront/order/conversation', route => {
+    const body = route.request().postDataJSON()
+    expect(body.orderReference).toBe('WEB-0123456789ABCDEF')
+    if (body.operation === 'message') sentMessage = body
+    if (body.operation === 'receipt') submittedReceipt = body
+    return route.fulfill({ json: { ok: true, receipt: body.operation === 'read' ? {
+      public_reference: body.orderReference, order_status: 'submitted', payment_status: 'awaiting_instructions',
+      total_amount: 735, shipping_quote_status: 'customer_confirmed', delivery_review_required: false,
+      messages: [{ direction: 'outbound', content: 'Your stock and total are confirmed. Upload your receipt here after transferring.', created_at: '2026-10-14T01:00:00Z' }],
+    } : { received: true } } })
+  })
   await page.setViewportSize({ width: 375, height: 812 })
   await page.addInitScript(() => {
     window.turnstile = {
@@ -212,7 +225,8 @@ test(`recorded pickup instructions show the matching ${method.label} QR`, async 
     return route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({ ok: true, orders: [{
+      body: JSON.stringify({ ok: true, orders: [{ public_reference: 'WEB-FFFFFFFFFFFFFFFF', total_amount: 999,
+        status: 'submitted', payment_status: 'not_requested', shipping_quote_status: 'customer_confirmed', delivery_review_required: false }, {
         public_reference: 'WEB-0123456789ABCDEF',
         total_amount: 735,
         item_count: 1,
@@ -244,6 +258,17 @@ test(`recorded pickup instructions show the matching ${method.label} QR`, async 
 
   await expect(page.getByRole('heading', { name: 'Order request received' })).toBeVisible({ timeout: 60000 })
   expect(submittedNote).toContain(`[Payment: ${method.label} QR transfer]`)
+  await expect(page.getByRole('heading', { name: 'Your order conversation' })).toBeVisible()
+  await page.getByLabel('Message K2 about this order').fill('I will upload my transfer receipt here.')
+  await page.getByRole('button', { name: 'Send order message' }).click()
+  await expect.poll(() => sentMessage?.message).toBe('I will upload my transfer receipt here.')
+  await page.getByLabel('Payment reference').fill(`${method.key}-reference`)
+  await page.getByLabel('Upload e-receipt').setInputFiles({ name: 'receipt.png', mimeType: 'image/png', buffer: Buffer.from('89504e470d0a1a0a0000000000000000', 'hex') })
+  await page.getByRole('button', { name: 'Submit receipt for staff review' }).click()
+  await expect.poll(() => submittedReceipt?.paymentReference).toBe(`${method.key}-reference`)
+  expect(submittedReceipt.base64).toBe('iVBORw0KGgoAAAAAAAAAAA==')
+  await expect(page.getByText('Receipt received for staff review. Payment remains pending until staff verify the funds.')).toBeVisible()
+  await page.screenshot({ path: `docs/design-checkpoints/20261014-customer-order/${method.key}-375.png`, fullPage: true })
   const image = page.getByRole('img', { name: `${method.label} receiving QR code and account details` })
   await expect(image).toBeVisible()
   await expect(image).toHaveAttribute('src', `/payment/${method.key}-receive-crop.png`)

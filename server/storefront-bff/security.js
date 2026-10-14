@@ -74,18 +74,18 @@ export function authorizationBearer(req) {
   return match ? match[1] : null
 }
 
-export async function readJson(req) {
+export async function readJson(req, maxBytes = MAX_BODY_BYTES) {
   const declared = Number(req.headers['content-length'] || 0)
-  if (!Number.isFinite(declared) || declared > MAX_BODY_BYTES) throw new Error('BODY_TOO_LARGE')
+  if (!Number.isFinite(declared) || declared > maxBytes) throw new Error('BODY_TOO_LARGE')
   if (!String(req.headers['content-type'] || '').toLowerCase().startsWith('application/json')) {
     throw new Error('JSON_REQUIRED')
   }
   if (req.body && typeof req.body === 'object') {
-    if (Buffer.byteLength(JSON.stringify(req.body), 'utf8') > MAX_BODY_BYTES) throw new Error('BODY_TOO_LARGE')
+    if (Buffer.byteLength(JSON.stringify(req.body), 'utf8') > maxBytes) throw new Error('BODY_TOO_LARGE')
     return req.body
   }
   const raw = typeof req.body === 'string' ? req.body : ''
-  if (Buffer.byteLength(raw, 'utf8') > MAX_BODY_BYTES) throw new Error('BODY_TOO_LARGE')
+  if (Buffer.byteLength(raw, 'utf8') > maxBytes) throw new Error('BODY_TOO_LARGE')
   try { return JSON.parse(raw) } catch { throw new Error('INVALID_JSON') }
 }
 
