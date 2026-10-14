@@ -443,17 +443,20 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
     internal_notes:           p.internal_notes || null,
   })
 
-  const openProductEditor = async (product) => {
+  const openProductEditor = async (product, overrides = null) => {
     setReferenceNotice('')
     setEditTab('details')
-    setEditReason('')
+    setEditReason(overrides ? 'AI auto-fill optimization verified by staff' : '')
     setEditError('')
     setProductTaxonomyReview(null)
-    if (!secure) { setEditingProduct(product); return }
+    if (!secure) {
+      setEditingProduct(overrides ? { ...product, ...overrides } : product)
+      return
+    }
     if (!canManageProducts) { flash('Only an administrator can change product-master records.', true); return }
     const result = await getAdminProductMasterBff(product.sku)
     if (!result.ok) { flash(result.error || 'The product record could not be loaded.', true); return }
-    setEditingProduct(result.product)
+    setEditingProduct(overrides ? { ...result.product, ...overrides } : result.product)
     setProductTaxonomyReview(result.taxonomyReview || null)
   }
 
@@ -1079,9 +1082,9 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
         isOpen={Boolean(enrichProduct)}
         onClose={() => setEnrichProduct(null)}
         onEnriched={() => fetchProducts()}
-        onOpenEditor={(p) => {
+        onOpenEditor={(p, overrides) => {
           setEnrichProduct(null)
-          openProductEditor(p)
+          openProductEditor(p, overrides)
         }}
       />
 

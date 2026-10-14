@@ -18,7 +18,7 @@ export async function lookupBarcodeCatalog(value, { fetchImpl = fetch, timeoutMs
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
   try {
-    const url = `${BASE}/api/v2/product/${barcode}.json?fields=code,product_name,brands,quantity`
+    const url = `${BASE}/api/v2/product/${barcode}.json?fields=code,product_name,brands,quantity,image_front_url,image_url`
     const response = await fetchImpl(url, {
       method: 'GET', redirect: 'error', signal: controller.signal,
       headers: { Accept: 'application/json', 'User-Agent': USER_AGENT },
@@ -32,9 +32,11 @@ export async function lookupBarcodeCatalog(value, { fetchImpl = fetch, timeoutMs
     if (String(body.product.code || '') !== barcode) throw new Error('CATALOG_MISMATCH')
     const name = clean(body.product.product_name, 140)
     if (!name) return { status: 'not_found', barcode, source: 'Open Food Facts' }
+    const frontImage = clean(body.product.image_front_url || body.product.image_url, 500)
     return {
       status: 'found', barcode, name,
       brand: clean(body.product.brands, 80), quantity: clean(body.product.quantity, 80),
+      imageUrl: frontImage || null,
       source: 'Open Food Facts', sourceUrl: `${BASE}/product/${barcode}`,
       license: 'Open Database License (ODbL)', lookedUpAt: new Date().toISOString(),
     }

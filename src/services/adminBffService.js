@@ -103,6 +103,8 @@ const ERROR_MESSAGES = {
   GEMINI_UNAVAILABLE: 'The public SEO draft is unavailable. Continue manually.',
   GEMINI_OUTPUT_INVALID: 'The draft could not be checked. Continue manually.',
   PUBLIC_DRAFT_UNAVAILABLE: 'The public SEO draft is unavailable. Continue manually.',
+  PRODUCT_FACTS_REQUIRED: 'Enter a valid product name of at least 2 characters before generating suggestions.',
+  RATE_LIMITED: 'You have reached the temporary rate limit. Wait a minute before generating again.',
   PUBLICATION_NOT_READY: 'This product is missing required content, price, photo, or human-review evidence.',
   PUBLICATION_TRANSITION_INVALID: 'That publication change is not allowed from the product’s current state.',
   FULFILLMENT_UNAVAILABLE: 'Fulfillment records are temporarily unavailable.',
@@ -348,6 +350,33 @@ export function intakeAiBff(body, idempotencyKey) {
 
 export function publicSeoDraftBff(barcode) {
   return adminRequest('/api/admin/product-intake/public-seo-draft', { method: 'POST', body: { barcode }, csrf: true, timeoutMs: 30000 })
+}
+
+const productOptimizationCache = new Map()
+
+export function getCachedProductOptimization(key) {
+  return productOptimizationCache.get(key) || null
+}
+
+export function clearProductOptimizationCache() {
+  productOptimizationCache.clear()
+}
+
+export async function optimizeProductListingBff({ barcode, product }) {
+  const cacheKey = `${product?.sku || product?.id || barcode || ''}::${(product?.name || '').trim().toLowerCase()}`
+  if (productOptimizationCache.has(cacheKey)) {
+    return { ok: true, data: productOptimizationCache.get(cacheKey), fromCache: true }
+  }
+  const result = await adminRequest('/api/admin/product-intake/public-seo-draft', {
+    method: 'POST',
+    body: { barcode, product },
+    csrf: true,
+    timeoutMs: 30000,
+  })
+  if (result.ok && result.data) {
+    productOptimizationCache.set(cacheKey, result.data)
+  }
+  return result
 }
 
 export function challengeAdminMfaBff(code) {
