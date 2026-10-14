@@ -2,6 +2,12 @@
 
 Owner request: check the complete customer journey from adding a product and speaking to staff through checkout, payment selection, order-linked conversation, private receipt upload and staff review. Owning item: MAP-023; decision register: IDEA-20261014-03. MAP-018 stays closed.
 
+## Production adapter installed after explicit approval
+
+14 October 2026 / IDEA-20261014-03 / MAP-023: owner-approved order-chat/private-receipt adapter is permanently installed on K2 pixplcjqivlfflickobf. Exact approved SQL3562559e5b72bf0a8bd1dc69cedabf6e23a2dc574e2e01518031c16187a8658c and installed body match; postgres owner, SECURITY DEFINER, empty search_path, anon execute true, PUBLIC/authenticated execute false. Production rollback-only compile/null-grant denial passed. Metadata-only postflight reconciled after function-executing read-only request HTTP400; apply was not repeated. Orders/messages/proofs remain0. BFF flags and live catalog unchanged; real buyer/staff acceptance not claimed. Receipt: docs/acceptance/CUSTOMER_ORDER_CHAT_APPLIED_20261014.json. Next is reviewed BFF activation under MAP-020 and designated real product/customer/staff acceptance; MAP-018 stays closed.
+
+The code change remains on feature commit5bebe15 and is not a new production source promotion. The exact approved SQL was executed once; the new function is installed outside the historical installation ledger. Existing source snapshots expecting24anon grants must account for this approved25th function rather than reapply the installer. Latest pre-apply identity/readiness and backup/restore gates passed; no credentials or flags changed.
+
 ## Fix prepared and verified locally
 
 The owner subsequently requested implementation. Confirmation now embeds the existing OrderConversation for BFF orders using their public reference and HttpOnly guest grant. Its read/message/receipt operations use one scoped BFF route; no order key or private bytes are returned to the browser. Receipt upload remains gated by a fresh final charge and payment instructions. Staff use the existing private proof table and review/download RPCs. Choosing/uploading proof never marks funds verified. Failed conversation reads have an explicit retry action; pending instructions explain when upload becomes available.

@@ -1,0 +1,24 @@
+{
+  "projectRef": "pixplcjqivlfflickobf",
+  "verifiedAt": "2026-10-14T09:36:58.788Z",
+  "approvedSqlSha256": "3562559e5b72bf0a8bd1dc69cedabf6e23a2dc574e2e01518031c16187a8658c",
+  "installedBodySha256": "7fb3d9cec6803429b53d5de4ab8d41ffbe069aef5a952a5d5ef6855ea07b5613",
+  "identity": "guest_order_conversation_v1(bigint,uuid,text,text,text,text,text)",
+  "definer": true,
+  "owner": "postgres",
+  "config": [
+    "search_path=\"\""
+  ],
+  "publicExecute": false,
+  "anonExecute": true,
+  "authenticatedExecute": false,
+  "counts": {
+    "orders": 0,
+    "proofs": 0,
+    "messages": 0
+  },
+  "trial": "Exact production-schema compile/null-grant refusal completed and rolled back before permanent apply",
+  "postflight": "Function-executing read-only request HTTP400; metadata-only reconciliation confirms exact installed body and ACL. Permanent apply was not repeated.",
+  "bffActivation": false,
+  "liveBuyerStaffAcceptance": false
+}
