@@ -18,6 +18,7 @@ import { createHash } from 'node:crypto'
 import { verifyK2SupabaseProject, K2_SUPABASE_REF } from './verify-k2-supabase-project.mjs'
 import { EXPECTED_ANON_FUNCTIONS } from './security-surface-policy.mjs'
 import {classifyInstalledReadiness,classifyInstalledPermissions,classifyBackupProof,selectBackupEvidence} from './k2-installed-readiness.mjs'
+import { ADMIN_PREAUTH_PERMISSION, classifyAdminPreauthDependency } from './admin-preauth-readiness.mjs'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 
@@ -188,6 +189,7 @@ const publicFunctions = await queryRows(
 let installedPermissions = null
 if (installation.mode === 'installed') {
   const profile=JSON.parse(fs.readFileSync(path.join(root,'docs/evidence/20261014-installed-readiness-permissions.json'),'utf8'))
+  if (liveAnon.some(row => row.signature === ADMIN_PREAUTH_PERMISSION.signature)) profile.functions.push(ADMIN_PREAUTH_PERMISSION)
   installedPermissions=classifyInstalledPermissions(liveAnon,publicFunctions,profile.functions)
   gate('installed-permission-catalog','none',installedPermissions.state,installedPermissions.detail)
   gate('hosted-caller-acceptance','owner','owner','Installed signatures match only; authenticated staff/customer and legacy-route acceptance remain unverified')
@@ -197,6 +199,34 @@ if (installation.mode === 'installed') {
   for (const signature of transitional) console.log('           transitional: '+signature)
   for (const signature of notYetApplied) console.log('           pending classification: '+signature)
 }
+
+// Absence is a real login blocker. The narrowly named preparation mode only
+// recognizes complete absence before the owner-approved additive repair; it
+// never tolerates partial objects, altered bodies or wider grants.
+const preauthSnapshot = await query(`select jsonb_build_object(
+ 'routine',(select jsonb_build_object('signature',n.nspname||'.'||p.proname||'('||pg_get_function_identity_arguments(p.oid)||')',
+   'owner',pg_get_userbyid(p.proowner),'definer',p.prosecdef,'result',pg_get_function_result(p.oid),
+   'bodySha256',encode(extensions.digest(convert_to(replace(p.prosrc,chr(13),''),'UTF8'),'sha256'),'hex'),
+   'emptySearchPath','search_path=""'=any(coalesce(p.proconfig,array[]::text[])),
+   'anonExecute',has_function_privilege('anon',p.oid,'EXECUTE'),
+   'authenticatedExecute',has_function_privilege('authenticated',p.oid,'EXECUTE'),
+   'publicExecute',exists(select 1 from aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a where a.grantee=0 and a.privilege_type='EXECUTE'))
+   from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+   where p.oid=to_regprocedure('public.consume_admin_preauth_rate_v1(text,bigint,uuid,text,text,text)')),
+ 'nonces',(select jsonb_build_object('owner',pg_get_userbyid(c.relowner),'rls',c.relrowsecurity,'forceRls',c.relforcerowsecurity,
+   'anonAccess',exists(select 1 from aclexplode(acldefault('r',c.relowner)) a where has_table_privilege('anon',c.oid,a.privilege_type)),
+   'authenticatedAccess',exists(select 1 from aclexplode(acldefault('r',c.relowner)) a where has_table_privilege('authenticated',c.oid,a.privilege_type)))
+   from pg_class c where c.oid=to_regclass('k2_private.admin_preauth_rate_nonces')),
+ 'buckets',(select jsonb_build_object('owner',pg_get_userbyid(c.relowner),'rls',c.relrowsecurity,'forceRls',c.relforcerowsecurity,
+   'anonAccess',exists(select 1 from aclexplode(acldefault('r',c.relowner)) a where has_table_privilege('anon',c.oid,a.privilege_type)),
+   'authenticatedAccess',exists(select 1 from aclexplode(acldefault('r',c.relowner)) a where has_table_privilege('authenticated',c.oid,a.privilege_type)))
+   from pg_class c where c.oid=to_regclass('k2_private.admin_preauth_rate_buckets'))) as snapshot`)
+const preauthSource = fs.readFileSync(path.join(root,'supabase/migrations/20260825_admin_preauth_rate_boundary.sql'),'utf8').replaceAll('\r','')
+const preauthBody = /as \$\$([\s\S]*?)\$\$;/i.exec(preauthSource)?.[1] || ''
+if (!preauthBody) throw new Error('ADMIN_PREAUTH_SOURCE_BODY_MISSING')
+const preauthBodySha256 = createHash('sha256').update(preauthBody).digest('hex')
+const preauthReadiness = classifyAdminPreauthDependency(preauthSnapshot.snapshot,preauthBodySha256,{preparedAbsent:process.argv.includes('--prepare-admin-preauth')})
+gate('admin-preauth-dependency','owner',preauthReadiness.state,preauthReadiness.detail)
 
 // 5. Product and lot facts. Counts only. These are projections, never proof of
 //    physical stock, which is why the gate routes to the owner.
@@ -263,7 +293,7 @@ console.log('\nThis receipt proves preconditions only. It applies nothing, chang
 console.log('creates no deployment and writes no row. Production writes still require the')
 console.log('owner authorization named in MASTER_ACTION_PLAN.md.')
 
-const outFile = process.argv[2] || 'live-readiness.json'
+const outFile = process.argv.slice(2).find((arg) => !arg.startsWith('--')) || 'live-readiness.json'
 fs.writeFileSync(path.join(root, '.tools', 'current-production-backups', outFile), `${JSON.stringify({
   projectRef: identity.projectRef,
   ledger,

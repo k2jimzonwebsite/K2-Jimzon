@@ -27,7 +27,7 @@
     "security:env-source": "node scripts/verify-environment-source-boundary.mjs",
     "security:test-env-source": "node scripts/test-environment-source-boundary.mjs",
     "security:test-k2-project": "node --test tests/k2-supabase-project-identity.test.mjs",
-    "security:test-live-readiness": "node --test tests/k2-live-readiness-contract.test.mjs",
+    "security:test-live-readiness": "node --test tests/k2-live-readiness-contract.test.mjs tests/k2-installed-readiness.test.mjs tests/admin-preauth-dependency-readiness.test.mjs",
     "preflight:k2-project": "node --env-file=.env.local scripts/verify-k2-supabase-project.mjs",
     "readiness:k2-live": "node --env-file=.env.local scripts/k2-live-readiness.mjs",
     "security:dependency-policy": "node scripts/verify-dependency-policy.mjs",
