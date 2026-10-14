@@ -59,7 +59,7 @@ export default async function handler(req, res) {
         brand: catalog?.brand || brand || '',
         category: category || '',
         origin: origin || '',
-        quantity: catalog?.quantity || quantity || net_weight || '',
+        quantity: catalog?.quantity || quantity || (typeof net_weight === 'number' && Number.isFinite(net_weight) && net_weight > 0 ? `${net_weight} g` : ''),
         description: description || '',
       })
 

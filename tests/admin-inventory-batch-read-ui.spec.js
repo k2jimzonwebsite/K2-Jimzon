@@ -16,7 +16,7 @@ test('secure inventory loads complete batches, rejects failures and recovers on 
   })
   await page.goto('/tests/fixtures/admin-product-master-harness.html')
   await expect(page.getByRole('button', { name: 'Batches (1)', exact: true })).toBeVisible()
-  await expect(page.getByText('6 pcs in 1 lot', { exact: true })).toBeVisible()
+  await expect(page.getByText('6 pcs in 1 lot', { exact: true }).filter({ visible: true })).toBeVisible()
   for (const stateValue of ['error', 'partial']) {
     state = stateValue
     await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')))
@@ -56,7 +56,7 @@ test('older secure batch response cannot overwrite a later refresh', async ({ pa
   await page.goto('/tests/fixtures/admin-product-master-harness.html')
   await expect.poll(() => reads).toBe(1)
   await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')))
-  await expect(page.getByText('5 pcs in 1 lot', { exact: true })).toBeVisible()
+  await expect(page.getByText('5 pcs in 1 lot', { exact: true }).filter({ visible: true })).toBeVisible()
   release()
   await expect.poll(() => reads).toBe(2)
   await expect(page.getByText('6 pcs in 1 lot', { exact: true })).toHaveCount(0)

@@ -1,0 +1,192 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261013-07",
+  "catalogSha256": "712269c5ef7a9d9216f263f6b8e523f446a8c94bcb5f2ecb771aad7c622decf6",
+  "sourceReceipt": "docs/acceptance/PHASED_CATALOG_INSTALLATION_APPLIED_20261013.json",
+  "classificationOnly": true,
+  "hostedCallerAcceptance": false,
+  "functions": [
+    {
+      "signature": "public.accept_guest_express_delivery_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "jsonb",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.append_guest_message_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(ok boolean, error_code text, retry_after_seconds integer, message_status text, created_at timestamp with time zone)",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.consume_storefront_customer_auth_rate_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_ip_hash text, p_subject_hash text, p_signature text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "jsonb",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.get_order_conversation_v1(p_order_id uuid, p_order_key text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "jsonb",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.get_public_product_stock()",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(sku text, stock_from_batches bigint)",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.get_storefront_chat_v1(p_conversation_id uuid)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "jsonb",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.list_guest_conversations_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(ok boolean, error_code text, retry_after_seconds integer, conversations jsonb)",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.preview_guest_coupon_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(ok boolean, error_code text, retry_after_seconds integer, valid boolean, normalized_code text, discount_amount numeric, message_code text)",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.quote_customer_delivery_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "jsonb",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.quote_guest_delivery_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(ok boolean, error_code text, retry_after_seconds integer, outcome text, fee_minor integer, currency text, customer_visible boolean, message_code text)",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.read_delivery_locations_v1(p_parent_code text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "jsonb",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.read_delivery_pilot_localities_v1()",
+      "owner": "postgres",
+      "definer": true,
+      "result": "jsonb",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.read_guest_order_status_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(ok boolean, error_code text, retry_after_seconds integer, orders jsonb)",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.start_guest_conversation_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(ok boolean, error_code text, retry_after_seconds integer, conversation_reference text, status text, created_at timestamp with time zone, guest_grant_token text)",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.submit_guest_order_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(ok boolean, error_code text, retry_after_seconds integer, public_reference text, status text, subtotal numeric, discount_amount numeric, total_amount numeric, shipping_quote_status text, delivery_status text, created_at timestamp with time zone, guest_grant_token text)",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.submit_guest_pasabuy_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(ok boolean, error_code text, retry_after_seconds integer, public_reference text, status text, created_at timestamp with time zone, guest_grant_token text)",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.submit_order_message_v1(p_order_id uuid, p_order_key text, p_message text, p_request_key uuid)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "jsonb",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.submit_order_payment_receipt_v1(p_order_id uuid, p_order_key text, p_payment_reference text, p_media_type text, p_base64 text, p_request_key uuid)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "jsonb",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.submit_order_request(p_customer_name text, p_customer_email text, p_customer_phone text, p_delivery_address text, p_fulfillment_method text, p_customer_note text, p_items jsonb, p_idempotency_key text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "public.order_requests",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.submit_order_request_v2(p_customer_name text, p_customer_email text, p_customer_phone text, p_delivery_address text, p_fulfillment_method text, p_customer_note text, p_items jsonb, p_idempotency_key text, p_coupon_code text, p_shipping_amount numeric, p_shipping_quote_status text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "public.order_requests",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.submit_pasabuy_request(p_customer_name text, p_customer_email text, p_customer_phone text, p_item_title text, p_reference_url text, p_quantity integer, p_target_budget_php numeric, p_shipping_preference text, p_alternatives_allowed boolean, p_customer_notes text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(id uuid, public_reference text, status text, created_at timestamp with time zone)",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.submit_storefront_chat_v1(p_customer_name text, p_customer_contact text, p_message text, p_conversation_id uuid, p_origin text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "jsonb",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.submit_wholesale_inquiry_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(ok boolean, error_code text, retry_after_seconds integer, public_reference text, conversation_reference text, status text, created_at timestamp with time zone, guest_grant_token text)",
+      "publicExecute": false
+    },
+    {
+      "signature": "public.sync_product_publication_status()",
+      "owner": "postgres",
+      "definer": false,
+      "result": "trigger",
+      "publicExecute": true
+    },
+    {
+      "signature": "public.touch_product_intake_session()",
+      "owner": "postgres",
+      "definer": false,
+      "result": "trigger",
+      "publicExecute": true
+    },
+    {
+      "signature": "public.validate_coupon(p_code text, p_subtotal numeric)",
+      "owner": "postgres",
+      "definer": true,
+      "result": "TABLE(coupon_id uuid, normalized_code text, discount_type text, discount_value numeric, discount_amount numeric, message text)",
+      "publicExecute": false
+    }
+  ]
+}

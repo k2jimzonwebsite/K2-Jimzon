@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   buildProductJsonPrompt,
   K2_PRODUCT_JSON_PROJECT_INSTRUCTIONS,
@@ -8,6 +8,8 @@ import { AdminDialog } from '../../components/ui/AdminDialog'
 import {
   optimizeProductListingBff,
   getCachedProductOptimization,
+  productOptimizationCacheKey,
+  adminBffEnabled,
 } from '../../services/adminBffService.js'
 
 export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onOpenEditor }) {
@@ -20,19 +22,19 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
   const [optimizationError, setOptimizationError] = useState('')
   const [generatedData, setGeneratedData] = useState(null)
   const [selectedFields, setSelectedFields] = useState(
-    new Set(['description', 'seo_keywords', 'storage_instructions', 'usage_instructions', 'image_url'])
+    new Set(['description', 'seo_keywords', 'storage_instructions', 'usage_instructions'])
   )
-
-  const cacheKey = useMemo(() => {
-    if (!product) return ''
-    return `${product.sku || product.id || product.barcode || ''}::${(product.name || product.title || '').trim().toLowerCase()}`
-  }, [product])
+  const requestGeneration = useRef(0)
+  const cacheKey = productOptimizationCacheKey(product)
 
   // Check cache on open
   useEffect(() => {
+    requestGeneration.current++
+    setGeneratedData(null)
+    setOptimizationError('')
+    setIsOptimizing(false)
+    setSelectedFields(new Set())
     if (!isOpen || !product) {
-      setGeneratedData(null)
-      setOptimizationError('')
       return
     }
     const cached = getCachedProductOptimization(cacheKey)
@@ -43,10 +45,10 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
       if (cached.draft?.search_keywords?.length) fields.add('seo_keywords')
       if (cached.draft?.storage_instructions) fields.add('storage_instructions')
       if (cached.draft?.usage_instructions) fields.add('usage_instructions')
-      if (cached.catalog?.imageUrl) fields.add('image_url')
       setSelectedFields(fields)
     }
-  }, [isOpen, product, cacheKey])
+    return () => { requestGeneration.current++ }
+  }, [isOpen, cacheKey])
 
   if (!isOpen || !product) return null
 
@@ -56,7 +58,7 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
   const margin = srp > 0 && cost > 0 ? (((srp - cost) / srp) * 100).toFixed(1) : null
   const profit = srp > 0 && cost > 0 ? (srp - cost).toFixed(2) : null
 
-  const cleanSlug = useMemo(() => {
+  const cleanSlug = (() => {
     const name = product.name || product.title || ''
     if (!name) return ''
     return name
@@ -65,7 +67,7 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
       .trim()
       .replace(/[\s_-]+/g, '-')
       .replace(/^-+|-+$/g, '')
-  }, [product.name, product.title])
+  })()
 
   const missingSpecs = []
   if (!product.origin || product.origin === 'Manual' || product.origin.includes('Shopee')) {
@@ -111,22 +113,28 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
   }
 
   const handleAutoFill = async () => {
+    const generation = requestGeneration.current
     setIsOptimizing(true)
     setOptimizationError('')
     try {
       const result = await optimizeProductListingBff({
         barcode: product.barcode,
         product: {
+          sku: product.sku,
+          id: product.id,
           name: product.name || product.title,
           brand: product.brand_name || product.brand,
-          category: product.category || product.subcategory,
+          category: product.category_name || product.subcategory,
+          category_name: product.category_name,
+          subcategory: product.subcategory,
           origin: product.origin || product.country_of_origin,
           quantity: product.size || product.quantity,
           net_weight: product.net_weight,
-          description: product.description,
+          description: product.description?.slice(0, 500),
           barcode: product.barcode,
         },
       })
+      if (generation !== requestGeneration.current) return
       if (!result.ok) {
         setOptimizationError(result.error || 'Optimization request could not be completed.')
       } else {
@@ -136,13 +144,12 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
         if (result.data?.draft?.search_keywords?.length) fields.add('seo_keywords')
         if (result.data?.draft?.storage_instructions) fields.add('storage_instructions')
         if (result.data?.draft?.usage_instructions) fields.add('usage_instructions')
-        if (result.data?.catalog?.imageUrl) fields.add('image_url')
         setSelectedFields(fields)
       }
     } catch {
-      setOptimizationError('Network error connecting to optimization service.')
+      if (generation === requestGeneration.current) setOptimizationError('Network error connecting to optimization service.')
     } finally {
-      setIsOptimizing(false)
+      if (generation === requestGeneration.current) setIsOptimizing(false)
     }
   }
 
@@ -161,7 +168,6 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
     if (generatedData?.data?.draft?.search_keywords?.length) fields.add('seo_keywords')
     if (generatedData?.data?.draft?.storage_instructions) fields.add('storage_instructions')
     if (generatedData?.data?.draft?.usage_instructions) fields.add('usage_instructions')
-    if (generatedData?.data?.catalog?.imageUrl) fields.add('image_url')
     setSelectedFields(fields)
   }
 
@@ -172,7 +178,6 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
   const applyAcceptedChanges = () => {
     if (!generatedData?.data?.draft) return
     const draft = generatedData.data.draft
-    const catalog = generatedData.data.catalog
     const overrides = {}
     if (selectedFields.has('description') && draft.card_description) {
       overrides.description = draft.card_description
@@ -185,9 +190,6 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
     }
     if (selectedFields.has('usage_instructions') && draft.usage_instructions) {
       overrides.usage_instructions = draft.usage_instructions
-    }
-    if (selectedFields.has('image_url') && catalog?.imageUrl) {
-      overrides.image_url = catalog.imageUrl
     }
     if (onOpenEditor) {
       onOpenEditor(product, overrides)
@@ -272,7 +274,7 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
           </div>
 
           {/* Mode Switcher Tabs */}
-          <div className="flex gap-1 border-b border-adm-line pb-1 text-sm font-semibold">
+          <div className="flex flex-wrap gap-1 border-b border-adm-line pb-1 text-sm font-semibold">
             <button
               type="button"
               onClick={() => setActiveTab('optimize')}
@@ -315,12 +317,12 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                   <h3 className="text-base font-bold text-white">1-Click AI Auto-Fill & Optimization</h3>
                   <p className="text-xs text-white/60 max-w-md mx-auto leading-relaxed">
                     Uses Gemini 3.5 Flash-lite to draft concise descriptions, search keywords, and storage guidelines.
-                    If barcode exists, checks Open Food Facts for official packaging photos.
+                    If a barcode exists, checks Open Food Facts for a packaging reference photo.
                   </p>
                   <div className="pt-2">
                     <button
                       type="button"
-                      disabled={isOptimizing || !product.name}
+                      disabled={isOptimizing || !adminBffEnabled() || !(product.name || product.title)}
                       onClick={handleAutoFill}
                       className="min-h-11 px-6 py-2.5 rounded-adm-sm bg-blue font-bold text-sm text-white shadow-lg hover:bg-blue/90 active:scale-[0.98] transition-transform disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-2"
                     >
@@ -342,8 +344,9 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                       )}
                     </button>
                   </div>
-                  <p className="text-[11px] text-white/40">
-                    FinOps Shield: 600 max tokens · In-memory session cache · Rate-limited (max 5/min)
+                  {!adminBffEnabled() && <p role="status" className="text-sm text-amber">AI suggestions are unavailable on this host. Use Audit & Templates or Edit in Master to continue manually.</p>}
+                  <p className="text-xs text-white/40">
+                    Suggestions are drafts. Check every accepted field against the package before saving.
                   </p>
                 </div>
               ) : (
@@ -353,11 +356,11 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-white">Review Suggestions vs Current:</span>
                       {generatedData.fromCache ? (
-                        <span className="rounded bg-white/10 px-2 py-0.5 text-white/70 font-mono text-[11px]">
+                        <span className="rounded bg-white/10 px-2 py-0.5 text-white/70 font-mono text-xs">
                           Cached (0 tokens)
                         </span>
                       ) : (
-                        <span className="rounded bg-forest/20 text-forest border border-forest/30 px-2 py-0.5 text-[11px] font-bold">
+                        <span className="rounded bg-forest/20 text-forest border border-forest/30 px-2 py-0.5 text-xs font-bold">
                           Fresh Gemini Draft
                         </span>
                       )}
@@ -377,7 +380,7 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                         disabled={isOptimizing}
                         className="text-amber hover:underline font-semibold"
                       >
-                        {isOptimizing ? 'Refreshing...' : 'Regenerate'}
+                        {isOptimizing ? 'Loading...' : 'Use cached suggestions'}
                       </button>
                     </div>
                   </div>
@@ -399,12 +402,12 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                             />
                             <span>Card Description</span>
                           </label>
-                          <span className="text-white/40 text-[10px]">
+                          <span className="text-white/40 text-xs">
                             {generatedData.data.draft.card_description.length} chars
                           </span>
                         </div>
                         <div className="mt-2 space-y-1 pl-6">
-                          <div className="text-white/50 text-[11px]">
+                          <div className="text-white/50 text-xs">
                             <span className="font-semibold text-white/40">Current: </span>
                             {product.description ? product.description : <span className="italic text-amber">Empty</span>}
                           </div>
@@ -431,12 +434,12 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                             />
                             <span>Search Keywords</span>
                           </label>
-                          <span className="text-white/40 text-[10px]">
+                          <span className="text-white/40 text-xs">
                             {generatedData.data.draft.search_keywords.length} tags
                           </span>
                         </div>
                         <div className="mt-2 space-y-1 pl-6">
-                          <div className="text-white/50 text-[11px]">
+                          <div className="text-white/50 text-xs">
                             <span className="font-semibold text-white/40">Current: </span>
                             {Array.isArray(product.seo_keywords) && product.seo_keywords.length > 0
                               ? product.seo_keywords.join(', ')
@@ -446,7 +449,7 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                           </div>
                           <div className="flex flex-wrap gap-1.5 pt-1">
                             {generatedData.data.draft.search_keywords.map((kw, idx) => (
-                              <span key={idx} className="rounded bg-blue/20 border border-blue/30 px-2 py-0.5 text-blue text-[11px]">
+                              <span key={idx} className="rounded bg-blue/20 border border-blue/30 px-2 py-0.5 text-blue text-xs">
                                 {kw}
                               </span>
                             ))}
@@ -470,10 +473,10 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                             />
                             <span>Storage Instructions</span>
                           </label>
-                          <span className="text-white/40 text-[10px]">Italian Grocery Standard</span>
+                          <span className="text-white/60 text-xs">Check package label</span>
                         </div>
                         <div className="mt-2 space-y-1 pl-6">
-                          <div className="text-white/50 text-[11px]">
+                          <div className="text-white/50 text-xs">
                             <span className="font-semibold text-white/40">Current: </span>
                             {product.storage_instructions ? product.storage_instructions : <span className="italic text-amber">Empty</span>}
                           </div>
@@ -500,10 +503,10 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                             />
                             <span>How to Use / Serve</span>
                           </label>
-                          <span className="text-white/40 text-[10px]">Serving & Pairings</span>
+                          <span className="text-white/40 text-xs">Serving & Pairings</span>
                         </div>
                         <div className="mt-2 space-y-1 pl-6">
-                          <div className="text-white/50 text-[11px]">
+                          <div className="text-white/50 text-xs">
                             <span className="font-semibold text-white/40">Current: </span>
                             {product.usage_instructions ? product.usage_instructions : <span className="italic text-amber">Empty</span>}
                           </div>
@@ -517,20 +520,9 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
 
                     {/* 5. Public Packaging Photo (from Open Food Facts if found) */}
                     {generatedData.data?.catalog?.imageUrl && (
-                      <div className={`rounded-adm-sm border p-3 transition-colors ${
-                        selectedFields.has('image_url') ? 'border-blue/60 bg-blue/10' : 'border-adm-line bg-adm-sunken'
-                      }`}>
+                      <div className="rounded-adm-sm border border-adm-line bg-adm-sunken p-3">
                         <div className="flex items-center justify-between gap-2">
-                          <label className="flex items-center gap-2 cursor-pointer font-bold text-white">
-                            <input
-                              type="checkbox"
-                              checked={selectedFields.has('image_url')}
-                              onChange={() => toggleField('image_url')}
-                              className="w-4 h-4 rounded border-adm-line bg-adm-surface text-blue"
-                            />
-                            <span>Verified Public Packaging Photo (Open Food Facts)</span>
-                          </label>
-                          <span className="text-forest text-[10px] font-bold">ODbL License</span>
+                          <span className="font-bold text-white">Packaging reference (Open Food Facts)</span>
                         </div>
                         <div className="mt-2 flex items-center gap-3 pl-6">
                           <img
@@ -538,10 +530,10 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                             alt="Public packaging"
                             className="h-16 w-16 object-contain rounded border border-adm-line bg-black/40"
                           />
-                          <div className="text-[11px] text-white/60 space-y-0.5">
+                          <div className="text-xs text-white/60 space-y-0.5">
                             <p className="font-semibold text-white">Public Packaging Front Image</p>
                             <p>Source: Open Food Facts ({generatedData.data.catalog.barcode})</p>
-                            <p className="text-amber/80">Staff must verify against physical package in custody.</p>
+                            <p className="text-amber/80">Check the package and photo reuse rights. Assign approved photos through the product’s Photos control; this reference is not saved here.</p>
                           </div>
                         </div>
                       </div>
@@ -559,8 +551,8 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                       <span>Apply {selectedFields.size} Accepted Field{selectedFields.size === 1 ? '' : 's'} to Master Editor</span>
                       <span>→</span>
                     </button>
-                    <p className="mt-1.5 text-center text-[11px] text-white/45">
-                      Transfers accepted fields into Product Master. Staff must confirm and provide change reason before database save.
+                    <p className="mt-1.5 text-center text-xs text-white/45">
+                      Manual handoff only. Transfers accepted fields into Product Master. Staff must confirm and provide change reason before database save.
                     </p>
                   </div>
                 </div>
@@ -599,14 +591,14 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   <div className="rounded-adm-sm border border-adm-line bg-adm-sunken p-3 flex flex-col justify-between">
                     <div>
-                      <span className="font-bold text-white block">Standard Italian Storage Advice</span>
-                      <p className="mt-1 text-white/60 text-[11px] leading-relaxed italic">
-                        "Store in a cool, dry place away from heat and direct sunlight. Once opened, keep refrigerated and consume within 3-4 days."
+                      <span className="font-bold text-white block">Package Storage Template</span>
+                      <p className="mt-1 text-white/60 text-xs leading-relaxed italic">
+                        "Storage: [copy package instructions]. After opening: [copy package storage and consume-by guidance]."
                       </p>
                     </div>
                     <button
                       type="button"
-                      onClick={() => copyText('Store in a cool, dry place away from heat and direct sunlight. Once opened, keep refrigerated and consume within 3-4 days.', 'storage_tpl')}
+                      onClick={() => copyText('Storage: [copy package instructions]. After opening: [copy package storage and consume-by guidance].', 'storage_tpl')}
                       className="mt-2 min-h-11 rounded-adm-sm border border-white/20 bg-white/5 px-3 py-1 font-semibold text-white hover:bg-white/10"
                     >
                       {copiedItem === 'storage_tpl' ? 'Copied Storage Text' : 'Copy Storage Text'}
@@ -616,7 +608,7 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                   <div className="rounded-adm-sm border border-adm-line bg-adm-sunken p-3 flex flex-col justify-between">
                     <div>
                       <span className="font-bold text-white block">Serving & Espresso Pairings</span>
-                      <p className="mt-1 text-white/60 text-[11px] leading-relaxed italic">
+                      <p className="mt-1 text-white/60 text-xs leading-relaxed italic">
                         "Serve at room temperature. Perfect pairing with Italian espresso, artisan cheeses, cured meats, or crusty bread."
                       </p>
                     </div>
@@ -633,7 +625,7 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onO
                 {cleanSlug && (
                   <div className="rounded-adm-sm border border-adm-line bg-adm-sunken p-3 flex items-center justify-between gap-2 text-xs">
                     <div className="min-w-0">
-                      <span className="text-white/45 block text-[11px]">Recommended URL Slug:</span>
+                      <span className="text-white/45 block text-xs">Recommended URL Slug:</span>
                       <span className="font-mono text-white font-bold truncate block">{cleanSlug}</span>
                     </div>
                     <button

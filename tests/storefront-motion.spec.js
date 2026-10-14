@@ -22,7 +22,7 @@ test.describe('storefront interaction language', () => {
       .getByRole('button', { name: /Dolci & Biscotti/i })
     await categoryTile.scrollIntoViewIfNeeded()
     await expect(categoryTile).toBeVisible()
-    const categoryIcon = categoryTile.locator('span').first()
+    const categoryIcon = categoryTile.locator('span').filter({ has: page.locator('svg') })
     const idleBackground = await categoryIcon.evaluate(element => getComputedStyle(element).backgroundColor)
     await categoryTile.hover()
     await expect.poll(() => categoryIcon.evaluate(element => getComputedStyle(element).backgroundColor))

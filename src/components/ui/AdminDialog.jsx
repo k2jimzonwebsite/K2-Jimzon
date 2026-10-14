@@ -102,6 +102,13 @@ export function AdminDialog({
       window.cancelAnimationFrame(frame)
       document.removeEventListener('keydown', onKeyDown, true)
       previousFocusRef.current?.focus({ preventScroll: true })
+      const previous = previousFocusRef.current
+      const focusKey = previous?.getAttribute('data-admin-focus-key')
+      if (focusKey && previous.getClientRects().length === 0) {
+        const replacement = visibleFocusableElements(document)
+          .find(element => element.getAttribute('data-admin-focus-key') === focusKey)
+        replacement?.focus({ preventScroll: true })
+      }
     }
   }, [initialFocusRef, returnFocusRef])
 

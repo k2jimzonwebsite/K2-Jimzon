@@ -40,6 +40,7 @@ test('generateProductOptimization sends allowlisted facts and returns structured
     category: 'Pasta',
     origin: 'Parma, Italy',
     quantity: '500g',
+    description: 'Reviewed package preparation advice.',
     secretStaffNote: 'high margin item',
     costPrice: 45,
   }
@@ -53,6 +54,8 @@ test('generateProductOptimization sends allowlisted facts and returns structured
       expect(body.generationConfig.maxOutputTokens).toBe(600)
       expect(body.generationConfig.responseFormat.text.mimeType).toBe('APPLICATION_JSON')
       expect(options.body).toContain('Barilla Spaghetti No. 5')
+      expect(options.body).toContain('Reviewed package preparation advice.')
+      expect(options.body).toContain('do not invent cooking times')
       for (const forbidden of ['secretStaffNote', 'high margin item', 'costPrice', '45']) {
         expect(options.body).not.toContain(forbidden)
       }

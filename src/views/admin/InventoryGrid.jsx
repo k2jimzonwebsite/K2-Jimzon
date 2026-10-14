@@ -783,19 +783,19 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1 mb-1">
                         <span className="text-xs font-mono text-neutral-300 font-semibold truncate">{p.sku}</span>
-                        <span className={`shrink-0 px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider border ${STATUS_TONE[p.status] || STATUS_TONE.Draft}`}>
+                        <span className={`shrink-0 px-1.5 py-0.5 rounded text-xs font-extrabold uppercase tracking-wider border ${STATUS_TONE[p.status] || STATUS_TONE.Draft}`}>
                           {STATUS_LABEL[p.status] || p.status || 'Draft'}
                         </span>
                       </div>
                       <h3 className="text-sm font-semibold text-white line-clamp-2 leading-snug">{p.name}</h3>
-                      {p.origin && <p className="text-[11px] text-white/45 truncate mt-0.5">Origin: {p.origin}</p>}
+                      {p.origin && <p className="text-xs text-white/45 truncate mt-0.5">Origin: {p.origin}</p>}
                     </div>
                   </div>
 
                   {/* Stock & SRP row */}
                   <div className="grid grid-cols-2 gap-2 text-xs bg-white/5 p-2 rounded-adm-sm border border-adm-line">
                     <div>
-                      <span className="text-white/50 uppercase text-[10px] font-bold tracking-wider block">Stock</span>
+                      <span className="text-white/50 uppercase text-xs font-bold tracking-wider block">Stock</span>
                       {(() => {
                         const raw = p.stock_available
                         const stock = raw === null || raw === undefined || raw === '' ? Number.NaN : Number(raw)
@@ -806,7 +806,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                       })()}
                     </div>
                     <div className="text-right">
-                      <span className="text-white/50 uppercase text-[10px] font-bold tracking-wider block">SRP</span>
+                      <span className="text-white/50 uppercase text-xs font-bold tracking-wider block">SRP</span>
                       <span className="font-extrabold text-sm text-white tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</span>
                     </div>
                   </div>
@@ -815,15 +815,15 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                   {batchMap[p.sku] && (
                     <div className="space-y-1 bg-white/5 border border-adm-line rounded-adm-sm p-1.5 text-xs">
                       <div className="flex items-center justify-between">
-                        <span className="text-white/40 text-[10px] font-bold uppercase">
+                        <span className="text-white/40 text-xs font-bold uppercase">
                           {batchMap[p.sku].total} pcs in {batchMap[p.sku].count} lot{batchMap[p.sku].count !== 1 ? 's' : ''}
                         </span>
                         {batchMap[p.sku].requiresReconciliation ? (
-                          <span className="text-[10px] font-bold text-crimson bg-crimson/15 px-1 rounded border border-crimson/30">
+                          <span className="text-xs font-bold text-crimson bg-crimson/15 px-1 rounded border border-crimson/30">
                             Unresolved
                           </span>
                         ) : batchMap[p.sku].owned != null ? (
-                          <span className="text-[10px] text-white/60">
+                          <span className="text-xs text-white/60">
                             Owned: <strong className="text-white font-bold">{batchMap[p.sku].owned}</strong>
                           </span>
                         ) : null}
@@ -865,6 +865,8 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                       <button
                         type="button"
                         onClick={() => setWebsiteSku(p.sku)}
+                        aria-label="Website assignment"
+                        data-admin-focus-key={`website-assignment:${p.sku}`}
                         disabled={!canManageProducts || Boolean(websiteRecovery.pending) || websiteRecovery.storageBlocked}
                         className="flex-1 min-h-11 text-xs font-bold border border-adm-line bg-adm-surface px-2 text-white/80 hover:text-white rounded-adm-sm"
                       >
@@ -980,7 +982,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                       {/* Lifecycle: three visible states, plus a destructive
                           action kept deliberately separate from them. */}
                       <div className="pt-1 space-y-1.5">
-                        {secure&&<button type="button" onClick={()=>setWebsiteSku(p.sku)} disabled={!canManageProducts||!!websiteRecovery.pending||websiteRecovery.storageBlocked} className={`${secondaryButton} w-full`}>Website assignment</button>}
+                        {secure&&<button type="button" data-admin-focus-key={`website-assignment:${p.sku}`} onClick={()=>setWebsiteSku(p.sku)} disabled={!canManageProducts||!!websiteRecovery.pending||websiteRecovery.storageBlocked} className={`${secondaryButton} w-full`}>Website assignment</button>}
                         <StatusControl
                           value={p.status}
                           disabled={!!statusBusy || (secure && !canManageProducts)}
@@ -1116,7 +1118,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                   <span className="font-semibold text-white/80">
                     Listing Quality: <strong className={listingQuality.score >= 80 ? 'text-forest font-bold' : listingQuality.score >= 50 ? 'text-gold font-bold' : 'text-crimson font-bold'}>{listingQuality.score}%</strong>
                   </span>
-                  <span className="text-white/50 text-[11px] font-mono">{listingQuality.nextHint}</span>
+                  <span className="text-white/50 text-xs font-mono">{listingQuality.nextHint}</span>
                 </div>
                 <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
                   <div
@@ -1299,19 +1301,19 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                     {Number(editingProduct.srp) > 0 && Number(editingProduct.cost_price) > 0 && (
                       <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-adm-sm border border-adm-line bg-white/5 p-3 text-xs">
                         <div>
-                          <span className="text-white/50 uppercase font-bold tracking-wider text-[10px] block">Gross Margin</span>
+                          <span className="text-white/50 uppercase font-bold tracking-wider text-xs block">Gross Margin</span>
                           <p className="text-base font-extrabold text-forest tabular-nums">
                             {Math.round(((editingProduct.srp - editingProduct.cost_price) / editingProduct.srp) * 1000) / 10}%
                           </p>
                         </div>
                         <div>
-                          <span className="text-white/50 uppercase font-bold tracking-wider text-[10px] block">Unit Profit</span>
+                          <span className="text-white/50 uppercase font-bold tracking-wider text-xs block">Unit Profit</span>
                           <p className="text-base font-extrabold text-white tabular-nums">
                             ₱{(editingProduct.srp - editingProduct.cost_price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                           </p>
                         </div>
                         <div className="text-right">
-                          <span className="text-white/50 uppercase font-bold tracking-wider text-[10px] block">Markup</span>
+                          <span className="text-white/50 uppercase font-bold tracking-wider text-xs block">Markup</span>
                           <p className="text-base font-extrabold text-neutral-300 tabular-nums">
                             {Math.round(((editingProduct.srp - editingProduct.cost_price) / editingProduct.cost_price) * 1000) / 10}%
                           </p>

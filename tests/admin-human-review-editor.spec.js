@@ -1,5 +1,52 @@
 import { expect, test } from '@playwright/test'
 
+test('listing suggestions open safely, preserve field choices and reuse the matching product cache', async ({ page }, testInfo) => {
+  test.setTimeout(30000)
+  const product = { sku: 'synthetic-optimizer', name: 'Synthetic pasta', brand_name: 'Test brand',
+    status: 'Under Review', published: false, is_human_reviewed: false, stock_available: 0,
+    net_weight: 500, description: 'Original package description. '.repeat(20), updated_at: '2026-10-14T00:00:00Z' }
+  let calls = 0
+  await page.route('https://fixture.supabase.co/**', route => route.abort())
+  await page.context().addCookies([{ name: 'k2_admin_csrf', value: 'synthetic-optimizer-csrf', url: 'http://localhost:5181' }])
+  await page.route('**/api/admin/session', route => route.fulfill({ json: { ok: true, user: { userId: '11111111-1111-4111-8111-111111111111', role: 'Admin' } } }))
+  await page.route('**/api/admin/products', route => route.fulfill({ json: { ok: true, products: [product] } }))
+  await page.route('**/api/admin/lots*', route => route.fulfill({ json: { ok: true, data: { lots: [], derivedStock: {}, complete: true } } }))
+  await page.route('**/api/admin/product-master*', route => route.fulfill({ json: { ok: true, product, taxonomyReview: { status: 'assigned' } } }))
+  await page.route('**/api/admin/product-intake/public-seo-draft', route => {
+    calls++
+    return route.fulfill({ json: { ok: true, data: { draft: {
+      card_description: 'Reviewed pasta description', search_keywords: ['pasta', 'grocery', 'pantry'],
+      storage_instructions: 'Follow the package storage label.', usage_instructions: 'Follow the package preparation label.',
+    }, catalog: null } } })
+  })
+  await page.goto('/tests/fixtures/admin-product-master-harness.html')
+  await page.getByRole('button', { name: 'Specs', exact: true }).click()
+  const helper = page.getByRole('dialog', { name: 'Listing Optimizer & Specs' })
+  await expect(helper).toBeVisible()
+  await helper.getByRole('button', { name: 'Generate Suggestions with Gemini' }).click()
+  await expect(helper.getByText('Reviewed pasta description')).toBeVisible()
+  for (const width of [375, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    expect(await helper.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await page.screenshot({ path: testInfo.outputPath(`listing-optimizer-${width}.png`), fullPage: false })
+  }
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.keyboard.press('Escape')
+  await page.getByRole('button', { name: 'Specs', exact: true }).click()
+  await expect(helper.getByText('Reviewed pasta description')).toBeVisible()
+  expect(calls).toBe(1)
+  await helper.getByRole('checkbox', { name: 'Storage Instructions', exact: true }).uncheck()
+  await helper.getByRole('button', { name: 'Apply 3 Accepted Fields to Master Editor' }).click()
+  const editor = page.getByRole('dialog', { name: 'Edit Product' })
+  await expect(editor).toBeVisible()
+  await editor.getByRole('button', { name: 'Product description' }).click()
+  await expect(editor.locator('textarea').first()).toHaveValue('Reviewed pasta description')
+  await editor.getByRole('button', { name: 'Use & ingredients' }).click()
+  await expect(editor.locator('textarea').nth(3)).toHaveValue('Follow the package preparation label.')
+  await expect(editor.locator('textarea').nth(4)).toHaveValue('')
+})
+
 async function setup(page, write, reviewed = false) {
   const product = { sku: 'synthetic-review', name: 'Synthetic reviewed product', status: 'Under Review', published: false,
     is_human_reviewed: reviewed, stock_available: 6, updated_at: '2026-10-12T00:00:00Z' }

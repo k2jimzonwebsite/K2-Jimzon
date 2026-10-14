@@ -83,42 +83,42 @@ export const FAQS = [
   {
     cat: 'Ordering & Stock',
     q: 'How does your Single Master Inventory work?',
-    a: 'Every product listed on our website is physically in our Manila warehouse and tied to a single master inventory count. When a product sells on Shopee, TikTok, or our website, the count reconciles across all channels in real time. You will never purchase ghost stock or arrive at checkout only to find out an item was already sold.',
+    a: 'K2 staff manage products and stock in one master inventory. Only products assigned to Website and eligible for sale appear in our catalog. Marketplace connectors are not yet live, so staff reconcile those sales manually. Wait for K2 staff to confirm your stock and final total before paying.',
   },
   {
     cat: 'Ordering & Stock',
     q: 'Why is there no instant online payment at checkout?',
-    a: 'We operate on a physical verification model: when you submit an order, our staff first visually inspect your exact items, check lot batches and expiration dates, and calculate accurate courier fees. Once confirmed, we send your official GCash or MariBank receiving QR code and order total. You only pay after a human confirms your order is 100% ready.',
+    a: 'Checkout submits an order request without charging you. Staff check stock, package details and the final total before providing the approved GCash or MariBank QR for your selected payment method. Pay only after staff confirm your order and payment instructions.',
   },
   {
     cat: 'Freshness & Dates',
     q: 'Are your Italian grocery items really authentic and fresh?',
-    a: 'Yes, 100%. We buy directly from Italian supermarket chains (such as Esselunga, Conad, and Coop) and licensed regional distributors in Milan. We use strict FEFO (First-Expired, First-Out) lot tracking, and every product listing displays genuine batch numbers and Best-Before dates—no mystery dates or near-expiry surprises.',
+    a: 'We source products in Italy and record batch and best-before details as stock is received. Eligible lots follow FEFO (First-Expired, First-Out) rules. Check the reviewed product information and ask staff for the current package dates before confirming your purchase.',
   },
   {
     cat: 'Freshness & Dates',
     q: 'Why do your Milano fragrances say "inspired scent"?',
-    a: 'Because honesty comes first. Our Milano line features European-crafted alternative perfumes formulated with premium French and Italian fragrance oils. We sell them transparently under their own name as high-quality inspired scents, never passing them off as counterfeit designer bottles.',
+    a: 'Inspired scents are sold under their own product names. They are not presented as designer-brand originals. Check each listing and package for the reviewed maker, origin and fragrance details.',
   },
   {
     cat: 'Delivery & Pickup',
     q: 'What are your delivery options and can I pick up in Manila?',
-    a: 'We offer three flexible options: (1) Same-day or next-day express courier (Grab, Lalamove, or Borzo) within Metro Manila; (2) Nationwide provincial shipping via J&T Express with protective 3-layer corrugated and bubble packaging; and (3) Direct warehouse pickup at our Manila hub once staff notify you that your order is packed.',
+    a: 'You can request Metro Manila express delivery, provincial shipping, or pickup at our Manila hub. Staff confirm the courier, fee, packing and handover arrangements for your order. Submitting a request does not confirm a delivery date. For pickup, wait until staff tell you the order is ready.',
   },
   {
     cat: 'Delivery & Pickup',
     q: 'How are delivery rates calculated?',
-    a: 'Metro Manila express rates match live courier rates based on your pin location and parcel volume. Provincial rates follow standard J&T weight brackets. Staff quote your exact delivery fee before you pay, so there are never unexpected add-on charges.',
+    a: 'Standard delivery uses K2’s published regional and package-weight rates. Express delivery requires a staff quote for your actual route and parcel. Staff confirm any pending fee and your final total before payment; a courier estimate is not a confirmed delivery booking.',
   },
   {
     cat: 'Pasabuy & Flights',
     q: 'What is Pasabuy and how do scheduled flights work?',
-    a: 'Pasabuy is our personal shopping service for items not listed in our regular catalog. Send us a photo, product name, or link. Our buyers in Milan check Italian stores and provide an all-inclusive quote in Philippine Pesos covering the item cost and air freight. Items fly on our regular monthly cargo flights from Milan Malpensa to Manila.',
+    a: 'Pasabuy lets you request an item from Italy that is not in our regular catalog. Send a photo, product name, or link. Staff check sourcing, price, freight and the available flight schedule before confirming a quote. The request itself does not reserve stock or guarantee an arrival date.',
   },
   {
     cat: 'Wholesale & B2B',
     q: 'Can restaurants, cafés, or bakeries order at wholesale prices?',
-    a: 'Yes. We supply coffee beans (Lavazza, Kimbo), bronze-cut pasta, canned San Marzano tomatoes, and bakery ingredients in case and carton quantities to specialty cafés and restaurants across the Philippines. Submit an inquiry through our Wholesale portal or contact us directly for B2B price tiers.',
+    a: 'Restaurants, cafés and bakeries can submit an inquiry through our Wholesale portal or contact us directly. Staff confirm available products, quantities and applicable case or carton pricing. An inquiry does not reserve stock or confirm a wholesale order.',
   },
 ]
 

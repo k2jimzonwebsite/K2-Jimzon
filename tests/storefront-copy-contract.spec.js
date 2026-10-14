@@ -24,7 +24,7 @@ test('contact makes one consistent reviewed-hours statement', async () => {
 test('storefront promises reconcile with manual launch facts without false SLAs or unapproved payment methods', async () => {
   const site = await readFile(new URL('../src/data/site.js', import.meta.url), 'utf8')
   // No unsupported payment methods in customer-facing FAQ
-  expect(site).not.toMatch(/Maya|COD|Cash on delivery|bank transfer/i)
+  expect(site).not.toMatch(/\b(?:Maya|COD)\b|Cash on delivery|bank transfer/i)
   // No false delivery SLA promises
   expect(site).not.toMatch(/1–2 business-day|2–3 week|guaranteed delivery/i)
   // Explicit manual check requirement before payment

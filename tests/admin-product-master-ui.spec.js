@@ -517,8 +517,8 @@ test('keeps secure Product Master edit, lifecycle, and delete decisions usable a
   await page.setViewportSize({ width: 375, height: 812 })
   expect(await editor.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(1)
   await page.screenshot({ path: testInfo.outputPath('product-master-edit-mobile.png'), fullPage: true })
-  await editor.getByLabel('Brand').selectOption('f8c1e338-e2a4-4d09-858a-1cf223400001')
-  await editor.getByLabel('Canonical category').selectOption('f8c1e338-e2a4-4d09-858a-1cf223400002')
+  await editor.getByLabel('Brand', { exact: true }).selectOption('f8c1e338-e2a4-4d09-858a-1cf223400001')
+  await editor.getByLabel('Canonical category', { exact: true }).selectOption('f8c1e338-e2a4-4d09-858a-1cf223400002')
   await editor.getByLabel('Reason for this change').fill('Assign reviewed canonical taxonomy.')
   await editor.getByRole('button', { name: 'Save Changes' }).click()
   await expect.poll(() => updatePayload).toMatchObject({
@@ -540,7 +540,8 @@ test('keeps secure Product Master edit, lifecycle, and delete decisions usable a
   await page.screenshot({ path: testInfo.outputPath('product-master-status-mobile.png'), fullPage: true })
   await statusDialog.getByRole('button', { name: 'Close status decision' }).click()
 
-  await page.getByRole('button', { name: 'Delete product' }).click()
+  await page.getByRole('checkbox', { name: `Select ${product.name}`, exact: true }).check()
+  await page.getByRole('button', { name: 'Delete 1', exact: true }).click()
   const deleteDialog = page.getByRole('dialog', { name: 'Delete 1 product?' })
   await expect(deleteDialog).toBeVisible()
   await expect(deleteDialog.getByLabel('Your 4-digit delete PIN')).toBeFocused()
@@ -577,7 +578,8 @@ test('an unconfirmed deletion freezes the form and retries the same identity', a
 
   await page.goto('/tests/fixtures/admin-product-master-harness.html', { waitUntil: 'domcontentloaded' })
 
-  await page.getByRole('button', { name: 'Delete product' }).click()
+  await page.getByRole('checkbox', { name: `Select ${product.name}`, exact: true }).check()
+  await page.getByRole('button', { name: 'Delete 1', exact: true }).click()
   const deleteDialog = page.getByRole('dialog', { name: 'Delete 1 product?' })
   await expect(deleteDialog).toBeVisible()
   await deleteDialog.getByLabel('Reason for permanent deletion').fill('Duplicate setup record with history review.')

@@ -32,7 +32,12 @@ export async function lookupBarcodeCatalog(value, { fetchImpl = fetch, timeoutMs
     if (String(body.product.code || '') !== barcode) throw new Error('CATALOG_MISMATCH')
     const name = clean(body.product.product_name, 140)
     if (!name) return { status: 'not_found', barcode, source: 'Open Food Facts' }
-    const frontImage = clean(body.product.image_front_url || body.product.image_url, 500)
+    const candidateImage = clean(body.product.image_front_url || body.product.image_url, 500)
+    let frontImage = null
+    try {
+      const image = new URL(candidateImage)
+      if (image.protocol === 'https:' && image.hostname === 'images.openfoodfacts.org' && !image.username && !image.password) frontImage = image.href
+    } catch { /* An absent or untrusted photo does not invalidate catalog facts. */ }
     return {
       status: 'found', barcode, name,
       brand: clean(body.product.brands, 80), quantity: clean(body.product.quantity, 80),

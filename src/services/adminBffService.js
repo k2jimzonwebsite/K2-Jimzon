@@ -354,6 +354,13 @@ export function publicSeoDraftBff(barcode) {
 
 const productOptimizationCache = new Map()
 
+export function productOptimizationCacheKey(product, barcode = product?.barcode) {
+  return JSON.stringify([product?.sku || product?.id || '', barcode || '',
+    product?.name || product?.title || '', product?.brand_name || product?.brand || '',
+    product?.category_name || product?.subcategory || '', product?.origin || product?.country_of_origin || '',
+    product?.size || product?.quantity || '', product?.net_weight ?? '', (product?.description || '').slice(0, 500)])
+}
+
 export function getCachedProductOptimization(key) {
   return productOptimizationCache.get(key) || null
 }
@@ -363,7 +370,7 @@ export function clearProductOptimizationCache() {
 }
 
 export async function optimizeProductListingBff({ barcode, product }) {
-  const cacheKey = `${product?.sku || product?.id || barcode || ''}::${(product?.name || '').trim().toLowerCase()}`
+  const cacheKey = productOptimizationCacheKey(product, barcode)
   if (productOptimizationCache.has(cacheKey)) {
     return { ok: true, data: productOptimizationCache.get(cacheKey), fromCache: true }
   }

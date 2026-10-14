@@ -95,19 +95,18 @@ export default function FaqSection() {
 
         <div>
           {/* Category Filter Pills */}
-          <div className="mb-6 flex flex-wrap items-center gap-1.5" role="tablist" aria-label="FAQ categories">
+          <div className="mb-6 flex flex-wrap items-center gap-1.5" role="group" aria-label="FAQ categories">
             {CATEGORIES.map((cat) => {
               const isActive = activeCategory === cat
               return (
                 <button
                   key={cat}
-                  role="tab"
-                  aria-selected={isActive}
+                  aria-pressed={isActive}
                   onClick={() => {
                     setActiveCategory(cat)
                     setOpen(-1)
                   }}
-                  className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all active:scale-[0.98] ${
+                  className={`min-h-11 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors active:scale-[0.98] ${
                     isActive
                       ? 'bg-navy text-white shadow-sm'
                       : 'border border-line bg-[var(--store-surface-bg)] text-navy-soft hover:text-navy hover:border-navy/30'
@@ -127,6 +126,7 @@ export default function FaqSection() {
                 return (
                   <div key={faq.q} data-open={isOpen || undefined} className="faq-item">
                     <button
+                      id={`faq-trigger-${index}`}
                       onClick={() => setOpen(isOpen ? -1 : index)}
                       aria-expanded={isOpen}
                       aria-controls={`faq-answer-${index}`}
@@ -155,7 +155,8 @@ export default function FaqSection() {
                       id={`faq-answer-${index}`}
                       role="region"
                       aria-labelledby={`faq-trigger-${index}`}
-                      className={`grid transition-[grid-template-rows,opacity] duration-250 ease-out ${
+                      aria-hidden={!isOpen}
+                      className={`grid transition-[grid-template-rows,opacity] duration-250 ease-out motion-reduce:transition-none ${
                         isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                       }`}
                     >

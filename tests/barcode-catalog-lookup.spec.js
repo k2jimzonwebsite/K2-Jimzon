@@ -4,7 +4,7 @@ import { lookupBarcodeCatalog } from '../server/admin-bff/barcode-catalog.js'
 const barcode = '3017620422003'
 const reply = (body, status = 200) => new Response(JSON.stringify(body), { status })
 
-test('looks up an exact package barcode and returns bounded suggestions without images', async () => {
+test('looks up an exact package barcode and refuses an untrusted image origin', async () => {
   let requested = ''
   const result = await lookupBarcodeCatalog(barcode, {
     fetchImpl: async (url, options) => {
@@ -17,6 +17,15 @@ test('looks up an exact package barcode and returns bounded suggestions without 
   expect(result).toMatchObject({ status: 'found', barcode, name: 'Hazelnut spread', brand: 'Ferrero', quantity: '400 g', source: 'Open Food Facts' })
   expect(result).not.toHaveProperty('image_front_url')
   expect(JSON.stringify(result)).not.toContain('example.test/image.jpg')
+})
+
+test('returns only HTTPS Open Food Facts reference photos', async () => {
+  for (const image of ['https://images.openfoodfacts.org/images/products/301/762/042/2003/front.jpg',
+    'http://images.openfoodfacts.org/photo.jpg', 'https://images.openfoodfacts.org.attacker.test/photo.jpg']) {
+    const result = await lookupBarcodeCatalog(barcode, { fetchImpl: async () => reply({ status: 1,
+      product: { code: barcode, product_name: 'Hazelnut spread', image_front_url: image } }) })
+    expect(result.imageUrl).toBe(image.startsWith('https://images.openfoodfacts.org/') ? image : null)
+  }
 })
 
 test('rejects non-barcode input before any public API call', async () => {

@@ -1,14 +1,20 @@
+## IDEA-20261014-02 — Verify and release the current Admin and storefront
+
+Owner request, 14 October 2026: stop MAP-018 continuation, verify newer Admin/storefront commits and connected logic, fix concrete defects, publish to GitHub main and both existing K2 Vercel production projects.
+Decision: ACCEPT into MAP-025 as the current owner-authorized release batch. MAP-018 remains closed; speculative signer/rehearsal work is retired. No database migration, inventory import, credential change or unrelated connector activation is included.
+Status: in progress. Reproduce and fix listing-helper lifecycle/cache defects and misleading FAQ claims; run focused evidence, final development verification and one complete release gate; verify exact released commit and both production artifacts. Preserve existing untracked historical tooling/evidence. Remaining work and recovery live only in MAP-025.
+
 ## IDEA-20261014-01 — 1-Click Product Listing Auto-Fill & Gemini API Call Optimization with Human Review
 
 14 October 2026 — Product Listing & AI Optimization: Owner requested a 1-click capability in Admin product inventory listing to auto-fill missing cells, descriptions, SEO metadata, and storage instructions, or optimize existing listings. If packaging photos or barcodes are missing, the system fetches public packaging data/photos via Open Food Facts and calls Gemini 3.5 Flash-lite to draft concise product descriptions, SEO titles, meta descriptions, search keywords, and storage/serving advice. All suggestions are presented in a side-by-side Human Review Diff (Current vs. Generated) with per-field acceptance checkboxes. Suggestions are untrusted drafts and never commit directly to the database without staff approval; accepted fields flow into the canonical Product Master editor for signed audit-logged saving.
 API Call Optimization & FinOps Controls:
 1. Model: Strictly use `gemini-3.5-flash-lite` for low latency and minimal token spend.
 2. Token Bounds: `maxOutputTokens: 600` with strict JSON schema enforcement; prompt includes only allowlisted product facts (`name`, `brand`, `category`, `origin`, `quantity`, `description`); never forward customer data, secrets, or internal keys.
-3. Server Rate Shield: Enforced via `createRateShield` on `/api/admin/product-intake/public-seo-draft` (60s sliding window) to prevent quota exhaustion or burst abuse.
+3. Server Rate Shield: Enforced via `createRateShield` on `/api/admin/product-intake/public-seo-draft` (60s fixed window per server process) to prevent quota exhaustion or burst abuse.
 4. Client-side Session Cache: Cached in-memory by SKU/barcode/name hash so repeated modal opens or reviews do not trigger redundant API calls or duplicate token billing.
 5. Non-AI Manual Intake Fallback: Staff can bypass AI completely using manual templates and direct typing.
 Decision: ACCEPT into active MASTER_ACTION_PLAN.md in dependency order under Single Master Inventory and Admin BOS governance.
-Outcome: COMPLETED and VERIFIED. Implemented bounded Gemini 3.5 Flash-lite optimization endpoint, Open Food Facts packaging photo lookup, client-side session cache, server rate shielding, and interactive side-by-side Human Review Diff in ProductAiEnrichmentModal.jsx. Staff verify suggestions before applying to Product Master editor; database saves remain signed and audit-logged. Tests (5 unit tests, 53 business contract tests) and development verification passed with 0 errors.
+Outcome: local implementation and synthetic verification complete; production AI activation is absent while Admin BFF flags remain false (observed14October). Implemented bounded Gemini 3.5 Flash-lite optimization endpoint, Open Food Facts packaging photo lookup, client-side session cache, server rate shielding, and interactive side-by-side Human Review Diff in ProductAiEnrichmentModal.jsx. Staff verify suggestions before applying to Product Master editor; database saves remain signed and audit-logged. Tests (5 unit tests, 53 business contract tests) and development verification passed with 0 errors.
 
 ## IDEA-20261013-12 — Minimal first guest signer configuration
 
