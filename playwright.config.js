@@ -17,6 +17,7 @@ export default defineConfig({
     'store-overlay-collision.spec.js',
     'admin.spec.js',
     'admin-dashboard-redesign.spec.js',
+    'admin-auth-recovery.spec.js',
     'payment-recovery-ui.spec.js',
     'coupon-recovery-ui.spec.js',
     'wholesale-recovery-ui.spec.js',
