@@ -14,7 +14,8 @@ export function classifyInstalledReadiness(receipts,relations){
 }
 const stable=v=>Array.isArray(v)?v.map(stable):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,stable(v[k])])):v;
 export function classifyInstalledPermissions(live,publicFunctions,expected){
- if(!Array.isArray(live)||!Array.isArray(publicFunctions)||!Array.isArray(expected)||expected.length!==26)return blocked('Incomplete installed permission evidence');
+ if(!Array.isArray(live)||!Array.isArray(publicFunctions)||!Array.isArray(expected)||![26,27].includes(expected.length))return blocked('Incomplete installed permission evidence');
+ if(expected.length===27){const adapter=expected.find(r=>r.signature==='public.guest_order_conversation_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text, p_base64 text)');if(!adapter||adapter.owner!=='postgres'||adapter.definer!==true||adapter.result!=='jsonb'||adapter.publicExecute!==false)return blocked('Approved order-chat adapter authority differs');}
  const keys=['signature','owner','definer','result','publicExecute'];
  const valid=a=>a.every(r=>r&&typeof r.signature==='string'&&typeof r.owner==='string'&&typeof r.definer==='boolean'&&typeof r.result==='string'&&typeof r.publicExecute==='boolean'&&Object.keys(r).sort().join(',')===keys.slice().sort().join(','))&&new Set(a.map(r=>r.signature)).size===a.length;
  if(!valid(live)||!valid(expected)||!valid(publicFunctions))return blocked('Malformed, partial or duplicate installed permission records');
@@ -23,7 +24,7 @@ export function classifyInstalledPermissions(live,publicFunctions,expected){
  if(!same(live,expected))return blocked('Anonymous overload signature or authority differs from reviewed installed catalog');
  const triggers=expected.filter(r=>r.publicExecute);
  if(triggers.map(r=>r.signature).sort().join('|')!=='public.sync_product_publication_status()|public.touch_product_intake_session()'||!triggers.every(r=>r.owner==='postgres'&&!r.definer&&r.result==='trigger')||!same(publicFunctions,triggers))return blocked('PUBLIC execute exceeds the two reviewed invoker trigger functions');
- return {state:'verified',mode:'installed',reapplyAllowed:false,detail:'Exact reviewed24 explicit anonymous grants and2 invoker trigger ACLs; hosted caller/legacy-route acceptance remains separate'};
+ return {state:'verified',mode:'installed',reapplyAllowed:false,detail:`Exact reviewed${expected.length-2} explicit anonymous grants and2 invoker trigger ACLs; hosted caller/legacy-route acceptance remains separate`};
 }
 export function classifyBackupProof(manifest,proof,actual){
  if(!manifest||!proof||!actual||manifest.projectRef!=='pixplcjqivlfflickobf'||typeof manifest.backupId!=='string'||!manifest.backupId||proof.backupId!==manifest.backupId||proof.restoreVerified!==true)return blocked('Backup and isolated restore identity are not bound');

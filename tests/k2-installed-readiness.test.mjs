@@ -15,6 +15,14 @@ test('extra PUBLIC execute and trigger SECURITY DEFINER drift refuse',()=>{asser
 test('two arbitrary triggers do not inherit the named PUBLIC exception',()=>{const altered=expected.map(r=>r.publicExecute?{...r,signature:r.signature+'changed'}:r);assert.equal(classifyInstalledPermissions(altered,altered.filter(r=>r.publicExecute),altered).state,'blocked')});
 test('same-named private trigger cannot replace PUBLIC schema exception',()=>{const privateTriggers=triggers.map(r=>({...r,signature:r.signature.replace('public.','k2_private.')}));assert.equal(classifyInstalledPermissions(expected,privateTriggers,expected).state,'blocked')});
 const now=Date.parse('2026-10-13T12:00:00Z'),hash='a'.repeat(64);
+test('approved order-chat adapter extends the exact installed catalog without admitting other grants',()=>{
+ const adapter={signature:'public.guest_order_conversation_v1(p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text, p_signature text, p_guest_grant_hash text, p_base64 text)',owner:'postgres',definer:true,result:'jsonb',publicExecute:false};
+ const current=[...expected,adapter];
+ assert.equal(classifyInstalledPermissions(current,triggers,current).state,'verified');
+ for(const drift of [{signature:adapter.signature+'changed'},{owner:'anon'},{definer:false},{result:'text'},{publicExecute:true}]){
+  const changed=[...expected,{...adapter,...drift}];assert.equal(classifyInstalledPermissions(changed,triggers,changed).state,'blocked');
+ }
+});
 const manifest={projectRef:'pixplcjqivlfflickobf',backupId:'current-k2-bound',createdAt:'2026-10-13T11:30:00Z',encryptedSha256:hash,encryptedBytes:128};
 const proof={backupId:manifest.backupId,restoreVerified:true,verifiedAt:'2026-10-13T11:31:00Z',latestMigrationVersion:'20261013110000'};
 const actual={sha256:hash,bytes:128,latest:'20261013110000',now};

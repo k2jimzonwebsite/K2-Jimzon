@@ -187,7 +187,7 @@ const publicFunctions = await queryRows(
 )
 let installedPermissions = null
 if (installation.mode === 'installed') {
-  const profile=JSON.parse(fs.readFileSync(path.join(root,'docs/evidence/20261013-installed-readiness-permissions.json'),'utf8'))
+  const profile=JSON.parse(fs.readFileSync(path.join(root,'docs/evidence/20261014-installed-readiness-permissions.json'),'utf8'))
   installedPermissions=classifyInstalledPermissions(liveAnon,publicFunctions,profile.functions)
   gate('installed-permission-catalog','none',installedPermissions.state,installedPermissions.detail)
   gate('hosted-caller-acceptance','owner','owner','Installed signatures match only; authenticated staff/customer and legacy-route acceptance remain unverified')
