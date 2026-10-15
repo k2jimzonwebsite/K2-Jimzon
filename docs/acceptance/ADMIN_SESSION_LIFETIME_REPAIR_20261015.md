@@ -1,4 +1,6 @@
-# Existing-authenticator session registration — prepared, approval pending
+# Existing-authenticator session registration — installed, real login pending
+
+Applied continuation: owner replied “approve” to this exact linked packet. One dispatch was acknowledged HTTP201 at 2026-10-15T01:09:55.799Z. Independent read-only postflight 2026-10-15T01:10:08.349Z confirms exact after hash and unchanged owner/definer/searchpath/authenticated-only grants. Fresh normal readiness has8verified/2owner/3connector/0failed. Owner is asked to submit a fresh existing-authenticator code privately; dashboard/login remains unverified. Durable receipt ADMIN_SESSION_LIFETIME_APPLIED_20261015.json. Preparation statements below are historical and never permission to replay.
 
 Owner reports “The secure admin service is temporarily unavailable” and asks the agent to inspect the browser. MAP-025 / IDEA-20261015-01 owns this repair. Browser inspection confirms the existing-authenticator challenge screen with the service error after verification. Do not infer that authenticator enrollment is needed. Never copy, retain or replay the displayed one-time code.
 

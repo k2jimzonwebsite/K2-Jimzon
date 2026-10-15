@@ -1,0 +1,108 @@
+{
+  "idea": "IDEA-20261015-01",
+  "map": "MAP-025",
+  "authorization": "Owner approve reply to exact linked session repair",
+  "payload": "supabase/prepared/20261015_admin_session_lifetime.sql",
+  "sha256": "e7620fa2b6a8db2fecb906eb995fdba28e14667e50312a3a6903531e4aed1dd6",
+  "acknowledgement": {
+    "status": 201,
+    "at": "2026-10-15T01:09:55.799Z"
+  },
+  "postflight": {
+    "at": "2026-10-15T01:10:08.349Z",
+    "projectRef": "pixplcjqivlfflickobf",
+    "sha256": "cbe4a555286a52597925315072ac5738916ce36167e2148d412404cbb7bee5d6",
+    "authority": {
+      "owner": "postgres",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "public_execute": false
+    },
+    "passed": true
+  },
+  "readiness": [
+    {
+      "id": "project-identity",
+      "owner": "none",
+      "state": "verified",
+      "detail": "K2 pixplcjqivlfflickobf"
+    },
+    {
+      "id": "migration-ledger",
+      "owner": "none",
+      "state": "verified",
+      "detail": "11 entries, latest 20261013110000"
+    },
+    {
+      "id": "canonical-installation",
+      "owner": "none",
+      "state": "verified",
+      "detail": "Exact phased complete-source receipt and canonical relations installed; installer must not be repeated"
+    },
+    {
+      "id": "installed-permission-catalog",
+      "owner": "none",
+      "state": "verified",
+      "detail": "Exact reviewed26 explicit anonymous grants and2 invoker trigger ACLs; hosted caller/legacy-route acceptance remains separate"
+    },
+    {
+      "id": "hosted-caller-acceptance",
+      "owner": "owner",
+      "state": "owner",
+      "detail": "Installed signatures match only; authenticated staff/customer and legacy-route acceptance remain unverified"
+    },
+    {
+      "id": "admin-preauth-dependency",
+      "owner": "owner",
+      "state": "verified",
+      "detail": "Exact signed Admin pre-auth function, limited execute and private forced-RLS rate tables verified; genuine hosted login remains separate"
+    },
+    {
+      "id": "stock-facts",
+      "owner": "owner",
+      "state": "owner",
+      "detail": "0 products (0 live), 0 lots; physical count unproven"
+    },
+    {
+      "id": "backup-freshness",
+      "owner": "none",
+      "state": "verified",
+      "detail": "admin-session-before-20261015.k2backup: Encrypted file hash/bytes, K2 backup identity and isolated restored current migration verified; managed provider recovery remains excluded"
+    },
+    {
+      "id": "backup-restore-proof",
+      "owner": "owner",
+      "state": "verified",
+      "detail": "Encrypted file hash/bytes, K2 backup identity and isolated restored current migration verified; managed provider recovery remains excluded"
+    },
+    {
+      "id": "vercel-preview",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "no Vercel API token or CLI in this harness"
+    },
+    {
+      "id": "vercel-edge-gate",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "Admin Vercel edge routing rule state not readable from this script"
+    },
+    {
+      "id": "provider-advisor",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "Supabase advisor findings need a signed-in session"
+    },
+    {
+      "id": "release-branch",
+      "owner": "none",
+      "state": "verified",
+      "detail": "## codex/admin-google-turnstile-recovery"
+    }
+  ],
+  "realLoginVerified": false
+}
