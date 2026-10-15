@@ -1,0 +1,11 @@
+# Staff intake custody correction — 15 October 2026
+
+Owner explicitly approved this scoped live release under MAP-023 / IDEA-20261015-09. Production base: d06017fad5a86b0777bb2b8544ab108752f044d9. An isolated checkout excludes unrelated unfinished primary-worktree changes.
+
+The shared intake/browser and BFF registry now offers Warehouse A, Bulacan and Jenna Mae Guerra. Preserve HUB-MNL-CENTRAL as the existing internal eligibility key; it does not assert a Manila address. Removed fixture locations and people are rejected. Name/ID normalization recognizes only registered entries. No accounts, roles, stock, database functions, settings or 195 Draft rows are changed.
+
+Changed source: src/data/canonicalIdentities.js. Regression evidence: tests/production-intake-custody.test.mjs, tests/admin-bff-contract.spec.js and tests/admin-dashboard-redesign.spec.js. The primary-worktree failing-first custody proof passes 2/2 after correction; focused BFF contract passes 1/1; verify:development passes. Two earlier phone attempts timed out before reaching the application, so neither proves form acceptance.
+
+Release validation: npm run verify:release exited 0 on this exact production-based source, with 1,455 Playwright cases, Vercel packaging and both target builds passing. The 375px actual-component intake fixture confirms both exact choices and no horizontal overflow; screenshot is synthetic fixture evidence, not a genuine Staff session. K2 read-only preflight confirms pixplcjqivlfflickobf; readiness reports 9 verified / 2 owner / 3 connector / 0 blocked. The existing K2_ACCEPTANCE_NO_WATCH=true workstation setting avoids file-watcher startup stalls. Full log, screenshot and preflight/readiness logs: docs/evidence/20261015-staff-custody-release/. Source review finds no remaining scoped defect. Publication and deployed-host verification are next; no live release is claimed yet.
+
+Recovery: revert only this scoped source change or restore the previous separate production deployments. No database rollback or stock reversal applies. MAP-023 owns remaining genuine staff-session listing acceptance and bulk fact/media review; do not restart closed MAP-018 or treat staff-reader administration as a prerequisite to this correction.

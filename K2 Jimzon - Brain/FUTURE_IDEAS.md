@@ -1,3 +1,7 @@
+## IDEA-20261015-09 — Use confirmed custody in production staff intake
+
+Decision: MERGE into MAP-023 product-listing acceptance. Owner confirms Warehouse A, Bulacan managed by Jenna Mae Guerra and explicitly approves the scoped live source release. Reuse the existing shared registry; remove invented fixture choices without adding permission mechanisms. Local regression/development proof passes; release/deployed proof pending. No bulk import, stock or access change. Exact evidence and recovery: docs/acceptance/STAFF_INTAKE_CUSTODY_RELEASE_20261015.md.
+
 14 October2026 / IDEA-20261014-07 / accepted into existing MAP-025 real-auth repair: owner reports authenticator enrollment failure after pre-auth installation. Installed Supabase SDK emits data:image/svg+xml;utf-8, but pending-enrollment validator rejects it and cancels the factor. Prior base64-only fixture missed the boundary. Reproduce through actual installed SDK, narrowly correct pending-enrollment format validation, retain limits/MFA/session safeguards, qualify release and actual hosted enrollment before completion claims. Source deployment and genuine account/MFA verification are distinct; no Auth provider/account change is approved.
 
 14 October2026 / IDEA-20261014-06 decision continuation: owner explicitly approved the exact guarded repair; installation acknowledged once and independently verified by read-only postflight/normal readiness. Real owner login/MFA remains MAP-025. Permanent receipt: docs/acceptance/ADMIN_PREAUTH_DEPENDENCY_APPLIED_20261014.json.

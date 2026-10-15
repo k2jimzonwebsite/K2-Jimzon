@@ -1325,11 +1325,11 @@ test('product-intake BFF is session/idempotency gated and rejects loose operatio
     inventory: {
       quantity: 1, boxCode: 'BOX-001', batchCode: 'LOT-001', expiryDate: '2027-08-26',
       isNonExpiry: false, unitCost: 100, ownerCode: 'K2', hubLocation: 'HUB-MNL-CENTRAL',
-      custodian: 'CUST-STAFF-ELENA', reason: 'Verified opening count from the physical stock ledger.',
+      custodian: 'CUST-JENNA-MAE-GUERRA', reason: 'Verified opening count from the physical stock ledger.',
     },
   }
   expect(validateProductIntakeCommand('intake_inventory', openingBalance).inventory).toMatchObject({
-    hubLocation: 'HUB-MNL-CENTRAL', custodian: 'CUST-STAFF-ELENA',
+    hubLocation: 'HUB-MNL-CENTRAL', custodian: 'CUST-JENNA-MAE-GUERRA',
   })
   expect(() => validateProductIntakeCommand('intake_inventory', {
     ...openingBalance,
