@@ -1,6 +1,9 @@
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const QR_DATA = /^data:image\/svg\+xml(?:;utf-8|;charset=utf-8)?(?:;base64)?,/i
 const TOTP_SECRET = /^[A-Z2-7]{16,128}$/
+// Supabase's QR renderer emits a rectangle per module; normal TOTP SVGs
+// exceed 32 KiB. Keep a finite bound that accommodates the provider format.
+const MAX_QR_LENGTH = 1024 * 1024
 
 export function validatePendingMfaCommand(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) throw new Error('MFA_REQUEST_INVALID')
@@ -35,7 +38,7 @@ export async function startPendingMfaEnrollment(client) {
   const factorId = String(data?.id || '')
   const qr = String(data?.totp?.qr_code || '')
   const secret = String(data?.totp?.secret || '')
-  if (error || !UUID.test(factorId) || qr.length > 32 * 1024 || !QR_DATA.test(qr)
+  if (error || !UUID.test(factorId) || qr.length > MAX_QR_LENGTH || !QR_DATA.test(qr)
       || !TOTP_SECRET.test(secret)) {
     if (UUID.test(factorId)) await client.auth.mfa.unenroll({ factorId }).catch(() => undefined)
     throw new Error('MFA_ENROLLMENT_UNAVAILABLE')

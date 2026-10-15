@@ -1,0 +1,23 @@
+# Google first-time authenticator QR repair — 16 October 2026
+
+MAP-025 / IDEA-20261015-10. Owner requests Google sign-in repair and live GitHub/Vercel release, explicitly authorizes logout in the in-app browser, and identifies jerzelguerra26@gmail.com as the affected first-enrollment account. Existing-owner logout -> Google chooser -> existing authenticator code prompt was genuinely observed for the K2 owner account. No code was entered and that authenticator was not reset.
+
+Supabase Auth's enrollTOTPFactor uses goqrsvg with one rectangle for every black/white QR module. K2's pending-enrollment helper imposed a 32 KiB limit, rejecting realistic provider SVGs and cancelling the new unverified factor. Prior SDK regression used a tiny single-path SVG, so passing it did not prove realistic payload acceptance. The installed-SDK regression now uses a synthetic 57x57 per-module SVG with the provider's rectangle shape. RED: MFA_ENROLLMENT_UNAVAILABLE; GREEN: unchanged SVG accepted without cancellation. This fixture tests payload shape/size, not QR decoding or genuine authentication.
+
+Application change: server/admin-bff/mfa-enrollment.js only; bounded QR allowance becomes 1 MiB. SVG data prefix, factor UUID, secret shape, pending-session/staff/AAL2 checks and verified-factor protection remain. Tests/admin-mfa-sdk-qr.test.mjs covers realistic SDK payload, oversize/non-SVG cleanup, verified-factor preservation and existing SDK enrollment/challenge/AAL2 protocol. Focused node --test tests/admin-mfa-sdk-qr.test.mjs tests/admin-google-bff.test.mjs passes 20/20. No dependency or provider configuration change.
+
+During the second genuine account attempt, existing pre-auth rate control returned the visible too-many-operations message; this is distinct from the owner's earlier setup error. Preserve that limit and wait for its normal expiry. Genuine Jerzel setup rendering and private owner enrollment/code entry remain unverified until after deployment. Never log/save the real QR, TOTP secret, transient OAuth URL, access/refresh token or code.
+
+Isolated release checkout: codex/google-signin-live-20261016, based on production custody dc5c9a1a plus its receipt. Prior session-lifetime records/SQL are merged as historical source only; packet e7620fa2 was already installed and must not be replayed. Keep all unrelated primary-checkout work excluded. Development/release verification and publication still pending at this checkpoint.
+
+Recovery: revert only this QR-length change/tests or restore the prior separate Admin/Storefront artifacts. Preserve installed session/pre-auth SQL, existing verified authenticators, canonical stock and business records. Exact remaining action lives in MAP-025.
+
+Provider implementation references: https://github.com/supabase/auth/blob/master/internal/api/mfa.go and https://github.com/aaronarduino/goqrsvg/blob/master/goqrsvg.go .
+
+Final development gate passes exit0 on the isolated release checkout; secret scan2350files/import and security checks pass. Fresh exact-K2 preflight passes; readiness9verified/2owner/3connector/0blocked. Complete release gate is next. Logs: .tools/google-mfa-development-20261016.log, google-mfa-preflight-20261016.log and google-mfa-readiness-20261016.log.
+
+Browser acceptance boundary: after normal rate-limit expiry, the Google chooser loaded again. Automatic approval review rejected selecting Jerzel because the app automatically creates a pending authenticator factor and the owner had authorized sign-in testing without explicitly authorizing that security-factor creation. No rejected click was retried or bypassed. Complete source release first, then obtain exact pending-setup authorization or hand the private enrollment to the owner. Real QR/code/dashboard acceptance remains pending in MAP-025.
+
+At the owner's fresh pre-release Jerzel attempt, read-only DOM inspection genuinely observed the exact Authenticator setup is temporarily unavailable error and qrPresent=false on the canonical Admin callback route. No credential/QR/key/code was read. Production was still dc5c9a1a; this is pre-fix hosted failure evidence, not failure of the unpublished correction.
+
+Complete release gate npm run verify:release exits0 on16October:1,455Playwright cases across21reported suites pass, Vercel packaging passes, both isolated production builds pass. Admin222.72/300.00kB minified. No code edits followed the gate. Full local log: .tools/google-mfa-release-20261016.log. Rollback baselines on custody dc5c9a1a: Admin dpl_62RANuobR4KmavJyHq6jA45raCe8 and Storefront dpl_2ufLd6P61DAA3qY1H9QeGSEH1TGW. Scoped source promotion is next; genuine affected-account acceptance still requires the documented pending-factor authorization/private human completion.

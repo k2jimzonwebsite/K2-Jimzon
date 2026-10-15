@@ -3,9 +3,18 @@ import assert from 'node:assert/strict'
 import { createClient } from '@supabase/supabase-js'
 import { startPendingMfaEnrollment, verifyPendingMfaEnrollment } from '../server/admin-bff/mfa-enrollment.js'
 
+// Supabase Auth uses goqrsvg: one SVG rectangle for every black/white module,
+// rather than a compact path. Synthetic modules preserve that wire-size shape.
+function providerQrSvg(width = 57) {
+  const rectangles = Array.from({ length: width * width }, (_, index) =>
+    `<rect x="${12 + index % width * 3}" y="${12 + Math.floor(index / width) * 3}" width="3" height="3" style="fill:${index % 2 ? 'black' : 'white'};stroke:none"/>`).join('\n')
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width * 3 + 24}" height="${width * 3 + 24}">${rectangles}</svg>`
+}
+
 test('pending enrollment accepts the installed Supabase SDK QR format without cancelling the factor', async () => {
   const factorId = '40000000-0000-4000-8000-000000000004'
-  const svg = '<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0"/></svg>'
+  const svg = providerQrSvg()
+  assert.ok(svg.length > 32 * 1024, 'provider-style QR must exercise the real payload size')
   const sdk = createClient('https://fixture.supabase.co', 'fixture-publishable-key', {
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
     global: { fetch: async (url, options) => {
@@ -28,6 +37,27 @@ test('pending enrollment accepts the installed Supabase SDK QR format without ca
     assert.equal(result.factorId, factorId)
     assert.equal(cancellations, 0)
   } finally { sdk.auth.stopAutoRefresh() }
+})
+
+test('pending enrollment bounds oversized SVG data and cancels only the new unverified factor', async () => {
+  let cancellations = 0
+  const client = { auth: { mfa: {
+    listFactors: async () => ({ data: { all: [] }, error: null }),
+    enroll: async () => ({ data: { id: '40000000-0000-4000-8000-000000000004',
+      totp: { qr_code: 'data:image/svg+xml;utf-8,' + ' '.repeat(1024 * 1024), secret: 'JBSWY3DPEHPK3PXP' } }, error: null }),
+    unenroll: async () => { cancellations++; return { error: null } },
+  } } }
+  await assert.rejects(startPendingMfaEnrollment(client), /MFA_ENROLLMENT_UNAVAILABLE/)
+  assert.equal(cancellations, 1)
+})
+
+test('pending enrollment preserves an already verified authenticator without creating or deleting factors', async () => {
+  const client = { auth: { mfa: {
+    listFactors: async () => ({ data: { all: [{ factor_type: 'totp', status: 'verified' }] }, error: null }),
+    enroll: async () => { assert.fail('must not create a replacement') },
+    unenroll: async () => { assert.fail('must not remove the existing factor') },
+  } } }
+  await assert.rejects(startPendingMfaEnrollment(client), /MFA_ALREADY_ENROLLED/)
 })
 
 test('pending enrollment still rejects a non-SVG QR response and cancels its unverified factor', async () => {
