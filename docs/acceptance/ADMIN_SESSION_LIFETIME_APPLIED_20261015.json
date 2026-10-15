@@ -104,5 +104,12 @@
       "detail": "## codex/admin-google-turnstile-recovery"
     }
   ],
-  "realLoginVerified": false
+  "realLoginVerified": true,
+  "realLoginEvidence": {
+    "date": "2026-10-15",
+    "ownerReport": "done im log in now with k2jimzon account",
+    "agentObservation": "Live protected Operations command center and navigation render after existing authenticator verification",
+    "screenshot": "docs/design-checkpoints/20261014-admin-auth-recovery/owner-dashboard-20261015.jpg",
+    "limits": "Only this owner sign-in/dashboard path. Individual Google/password variants, first enrollment, elapsed seven-day retention and full operational acceptance not established."
+  }
 }
