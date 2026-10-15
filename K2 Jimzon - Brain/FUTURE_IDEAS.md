@@ -1,3 +1,5 @@
+15 October / IDEA-20261015-09 outcome: owner-approved custody release dc5c9a1a is deployed and verified in both production artifacts. Actual phone fixture now passes; genuine Staff-role journey remains MAP-023. Receipt: docs/acceptance/STAFF_INTAKE_CUSTODY_RELEASE_20261015.md.
+
 ## IDEA-20261015-09 — Use confirmed custody in production staff intake
 
 Decision: MERGE into MAP-023 product-listing acceptance. Owner confirms Warehouse A, Bulacan managed by Jenna Mae Guerra and explicitly approves the scoped live source release. Reuse the existing shared registry; remove invented fixture choices without adding permission mechanisms. Local regression/development proof passes; release/deployed proof pending. No bulk import, stock or access change. Exact evidence and recovery: docs/acceptance/STAFF_INTAKE_CUSTODY_RELEASE_20261015.md.

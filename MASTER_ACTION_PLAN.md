@@ -166,7 +166,9 @@ or treat missing support guidance as permission to alter internal-role defaults.
 
 ### MAP-023: Finish real order, payment and fulfillment cycles
 
-**15 October scoped listing continuation (IDEA-20261015-09):** Owner explicitly approves releasing only the shared intake custody correction (Warehouse A, Bulacan / Jenna Mae Guerra). Isolated source based on current production; release gate and deployed acceptance pending. Next: finish the required gate, publish only this slice, verify both production artifacts and actual intake choices. Do not import the prepared 195 Draft rows or alter accounts, roles or stock. Genuine staff-session listing acceptance remains unverified. Evidence/recovery: docs/acceptance/STAFF_INTAKE_CUSTODY_RELEASE_20261015.md.
+**Current listing acceptance / IDEA-20261015-09:** Verify the existing deployed intake with a genuine Staff role under current role policy; do not fabricate packaging evidence or duplicate the first product. Custody source publication is archived in STAFF_INTAKE_CUSTODY_RELEASE_20261015.md. Remaining bulk identities/facts/media and buyer/payment/fulfillment acceptance stay in this item. No 195-row import or new permission mechanism is authorized by the scoped source release.
+
+
 
 
 **Current execution, 14 October / IDEA-20261014-04:** Offline content batch verified: 196 original review IDs/groups and 241 stock rows conserved; 155 description/SEO drafts, 40 manufacturer-reference candidates and 41 identity holds. CSV/JSON readback and final development gate pass. Completed drafting action is removed from execution; evidence/recovery and per-row remaining facts: docs/acceptance/REAL_PRODUCT_CONTENT_20261014.md. Owner defers barcodes until later SKU-by-SKU work. Exact next: locate/map actual raw photos (none embedded in the supplied workbook or identified in the bounded local scan), resolve the 41 identity holds and held-label/pack/price/physical-balance checks, then canonical Admin review/save and designated real product/buyer/staff acceptance. No canonical import, generated packaging substitute or stock publication. Do not resume MAP-018 or repeat qualified release checks.
