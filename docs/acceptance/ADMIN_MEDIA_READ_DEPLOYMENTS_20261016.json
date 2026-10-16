@@ -1,0 +1,44 @@
+{
+  "owningMap": "MAP-023",
+  "idea": "IDEA-20261016-01",
+  "state": "BOTH_PRODUCTION_ARTIFACTS_READY_EXACT_SOURCE",
+  "observedAt": "2026-10-16T07:46:11.734Z",
+  "sourceSha": "9f0c5daf22cb77842ae10b9c9b85c5559fda9568",
+  "deployments": [
+    {
+      "id": "dpl_4mnahxRwYBe2zwkTL9xmESwJa1CT",
+      "name": "k2-jimzon-admin",
+      "projectId": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "url": "k2-jimzon-admin-g1oe3u718-k2-jimzon.vercel.app",
+      "sourceSha": "9f0c5daf22cb77842ae10b9c9b85c5559fda9568",
+      "state": "READY",
+      "target": "production",
+      "aliases": [
+        "admin.k2jimzon.com",
+        "k2-jimzon-admin-seven.vercel.app",
+        "k2-jimzon-admin-k2-jimzon.vercel.app",
+        "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+      ],
+      "readyAt": "2026-10-16T07:42:43.051Z"
+    },
+    {
+      "id": "dpl_2K1bLm4Ek7AkdC2hBvcoUguBsVn3",
+      "name": "k2-jimzon",
+      "projectId": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "url": "k2-jimzon-k4sbsowuf-k2-jimzon.vercel.app",
+      "sourceSha": "9f0c5daf22cb77842ae10b9c9b85c5559fda9568",
+      "state": "READY",
+      "target": "production",
+      "aliases": [
+        "www.k2jimzon.com",
+        "k2-jimzon-vert.vercel.app",
+        "k2jimzon.com",
+        "k2-jimzon-k2-jimzon.vercel.app",
+        "k2-jimzon-git-main-k2-jimzon.vercel.app"
+      ],
+      "readyAt": "2026-10-16T07:43:33.707Z"
+    }
+  ],
+  "liveAcceptance": "docs/evidence/20261016-draft-enrichment-resumed/media-read-after.json",
+  "hostReceipt": "docs/acceptance/ADMIN_MEDIA_READ_LIVE_HOSTS_20261016.json"
+}

@@ -1,0 +1,79 @@
+{
+  "owningMap": "MAP-023",
+  "idea": "IDEA-20261016-01",
+  "sourceSha": "9f0c5daf22cb77842ae10b9c9b85c5559fda9568",
+  "observedAt": "2026-10-16T07:44:57.759Z",
+  "results": [
+    {
+      "url": "https://admin.k2jimzon.com/",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "entries": [
+        {
+          "path": "/assets/index-BiH1Ym2h.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "url": "https://admin.k2jimzon.com/k2-build-target.json",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "marker": {
+        "target": "admin"
+      }
+    },
+    {
+      "url": "https://admin.k2jimzon.com/api/storefront/auth/google/start",
+      "status": 404,
+      "expected": 404,
+      "passed": true
+    },
+    {
+      "url": "https://www.k2jimzon.com/",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "entries": [
+        {
+          "path": "/assets/index-DAALSlIl.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "url": "https://www.k2jimzon.com/k2-build-target.json",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "marker": {
+        "target": "storefront"
+      }
+    },
+    {
+      "url": "https://www.k2jimzon.com/api/admin/products",
+      "status": 404,
+      "expected": 404,
+      "passed": true
+    },
+    {
+      "url": "https://admin.k2jimzon.com/api/admin/products",
+      "requestOrigin": null,
+      "status": 403,
+      "code": "ORIGIN_DENIED",
+      "expected": 403,
+      "passed": true
+    },
+    {
+      "url": "https://admin.k2jimzon.com/api/admin/products",
+      "requestOrigin": "https://admin.k2jimzon.com",
+      "status": 401,
+      "code": "SESSION_EXPIRED",
+      "expected": 401,
+      "passed": true
+    }
+  ],
+  "initialProbeCorrection": "Initial no-Origin probe expected401 but correctly received403ORIGIN_DENIED; matching-Origin unauthenticated probe independently verifies401. No application correction."
+}

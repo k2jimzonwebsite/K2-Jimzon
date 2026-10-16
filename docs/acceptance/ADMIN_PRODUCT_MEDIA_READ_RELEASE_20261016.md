@@ -17,3 +17,20 @@ One aggregate verify:release run84a784/session53420 ended004844exit1 after1219br
 Storefront46modules/149.03kBJSgzip/29.98kBCSSgzip pass unchanged150.50/30.00budgets; Admin46modules/222.72kBapplication pass300.00budget. Secret/import/environment/route-boundary checks pass. Fresh owner-env read-only K2 identity/readinessfca693exit0:9verified/2owner/3script-unreachedconnector/0blocked. Vercel baseline itself was directly observed through correct-team connector; preserve the script's separate unreached labels.
 
 Runtime/test bytes exactly match focused-qualified primary files. Evidence/pins:ADMIN_MEDIA_READ_RELEASE_GATE_20261016.json, baseline:ADMIN_MEDIA_READ_BASELINE_20261016.json. Raw logs:docs/evidence/20261016-admin-media-read-release/. Scope remains two existing code/testfiles plus narrow authoritative records. Commit/main promotion/exact-SHAdeployments/actualPhotosreopen still pending at this checkpoint.
+
+## Verified live release
+
+Owner-approved source commit `9f0c5daf22cb77842ae10b9c9b85c5559fda9568` was fast-forward pushed to production-linked `main` (1a9578). Both existing separate Vercel projects are READY on that exact SHA, with canonical aliases attached and no alias error:
+
+- Admin: `dpl_4mnahxRwYBe2zwkTL9xmESwJa1CT`, project `prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x`, alias `admin.k2jimzon.com`.
+- Storefront: `dpl_2K1bLm4Ek7AkdC2hBvcoUguBsVn3`, project `prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL`, aliases `www.k2jimzon.com` / `k2jimzon.com`.
+
+Both canonical roots, correct target markers and referenced entry scripts return 200; foreign-target API paths return 404. No-Origin Admin GET correctly returns 403 ORIGIN_DENIED; matching-Origin unauthenticated GET returns 401 SESSION_EXPIRED. The first probe incorrectly expected 401 without Origin; its failed expectation is preserved and corrected without application changes. Current host receipt has eight passing host/API checks plus both entry assets.
+
+Actual existing signed-in Admin was freshly reloaded after deployment. Reopening SKU K2-SKU-001125 Photos shows PRIMARY and AFTER, both fully decoded at 996x1245 and 1120x1400. Both URLs exactly equal the pre-release canonical saved URLs. The prior UI showed only PRIMARY. Save remains disabled with no unsaved changes; no upload, assignment or other product write was submitted during postflight. Supporting slots are currently empty; populated supporting preservation is covered by regression tests, not claimed as a populated live witness. The product remains Draft, zero price/stock and unpublished; earlier canonical reconciliation separately records review=false and unknown physical facts.
+
+Evidence: `ADMIN_MEDIA_READ_DEPLOYMENTS_20261016.json`, `ADMIN_MEDIA_READ_LIVE_HOSTS_20261016.json`, `ADMIN_MEDIA_READ_RELEASE_GATE_20261016.json`, and `docs/evidence/20261016-draft-enrichment-resumed/media-read-before.json`, `media-read-after.json`, `media-read-before.jpg`, `media-read-after.jpg`. The live before/after URL/decode/no-unsaved-decision comparison passes (0c8eb0).
+
+The narrow release and required live saved-slot verification are complete. This result was reported immediately after both artifacts and live behavior were verified. Final receipt-only records are local follow-up work; no new application gate or redundant deployment is required. Broader remaining Draft enrichment and operational acceptance stay in MAP-023.
+
+Recovery remains source-only: review reverting the narrow commit or promoting the prior separate deployments recorded in the baseline receipt. Preserve canonical saved media and product records; do not restore the database, reupload images or replay an assignment. Unrelated dirty primary work remains untouched.

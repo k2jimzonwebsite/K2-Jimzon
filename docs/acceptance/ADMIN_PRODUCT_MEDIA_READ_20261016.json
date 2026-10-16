@@ -1,7 +1,7 @@
 {
   "owningMap": "MAP-023",
   "idea": "IDEA-20261016-01",
-  "state": "LOCAL_READ_FIX_VERIFIED_OWNER_AUTHORIZED_RELEASE_GATE_QUALIFIED",
+  "state": "VERIFIED_LIVE_READ_FIX",
   "runtimeChanged": [
     "prepared-api/admin/products.js"
   ],
@@ -40,8 +40,9 @@
     "remainingDevelopmentConstituents": "exit0",
     "diffCheck": "exit0"
   },
-  "deployed": false,
+  "deployed": true,
   "liveProductEnriched": "K2-SKU-001125",
   "remainingScope": "MASTER_ACTION_PLAN.md MAP-023",
-  "releaseReceipt": "docs/acceptance/ADMIN_PRODUCT_MEDIA_READ_RELEASE_20261016.md"
+  "releaseReceipt": "docs/acceptance/ADMIN_PRODUCT_MEDIA_READ_RELEASE_20261016.md",
+  "sourceSha": "9f0c5daf22cb77842ae10b9c9b85c5559fda9568"
 }
