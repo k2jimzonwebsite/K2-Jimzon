@@ -1,0 +1,51 @@
+{
+  "owningMap": "MAP-023",
+  "idea": "IDEA-20261016-01",
+  "state": "OBSERVED_PRE_RELEASE_PRODUCTION_BASELINE",
+  "observedAt": "2026-10-16T07:24:46.760Z",
+  "sourceSha": "6dfbc114bb1dd0954647495d3d62385a8780aef8",
+  "deployments": [
+    {
+      "id": "dpl_FafCR582RsTk2naiJcCuDAY7bck1",
+      "name": "k2-jimzon-admin",
+      "url": "k2-jimzon-admin-luy248g4e-k2-jimzon.vercel.app",
+      "created": 1792083565087,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+        "username": "k2jimzonwebsite"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "6dfbc114bb1dd0954647495d3d62385a8780aef8",
+        "githubCommitMessage": "fix(auth): accept provider-sized authenticator setup QR",
+        "githubRepo": "K2-Jimzon",
+        "githubOrg": "k2jimzonwebsite"
+      },
+      "inspectorUrl": "https://vercel.com/k2-jimzon/k2-jimzon-admin/FafCR582RsTk2naiJcCuDAY7bck1",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_Fn9Ku2gTTu7EG54FfaTqbD9YVeGf",
+      "name": "k2-jimzon",
+      "url": "k2-jimzon-22qiapezy-k2-jimzon.vercel.app",
+      "created": 1792083565193,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+        "username": "k2jimzonwebsite"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "6dfbc114bb1dd0954647495d3d62385a8780aef8",
+        "githubCommitMessage": "fix(auth): accept provider-sized authenticator setup QR",
+        "githubRepo": "K2-Jimzon",
+        "githubOrg": "k2jimzonwebsite"
+      },
+      "inspectorUrl": "https://vercel.com/k2-jimzon/k2-jimzon/Fn9Ku2gTTu7EG54FfaTqbD9YVeGf",
+      "isRollbackCandidate": false
+    }
+  ]
+}

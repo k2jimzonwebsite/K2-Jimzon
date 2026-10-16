@@ -1,0 +1,62 @@
+{
+  "owningMap": "MAP-023",
+  "idea": "IDEA-20261016-01",
+  "state": "ALL_RELEASE_CONSTITUENTS_QUALIFIED_OWNER_PROMOTION_AUTHORIZED",
+  "baselineSha": "6dfbc114bb1dd0954647495d3d62385a8780aef8",
+  "initialAggregate": {
+    "exitCode": 1,
+    "passingBrowserCases": 1219,
+    "failure": "one localhost5180 ERR_CONNECTION_REFUSED at Globe375 page.goto before DOM"
+  },
+  "focusedRetry": {
+    "exitCode": 0,
+    "passingBrowserCases": 1,
+    "sourceChanged": false
+  },
+  "unexecutedConstituentsResumed": {
+    "exitCode": 0,
+    "passingBrowserCases": 235,
+    "packagingTests": 3,
+    "storefrontBoundary": "46manifest modules",
+    "storefrontJsGzipKB": 149.03,
+    "storefrontCssGzipKB": 29.98,
+    "adminBoundary": "46manifest modules",
+    "adminApplicationMinifiedKB": 222.72
+  },
+  "totalPassingBrowserCases": 1455,
+  "fullAggregateExitZeroClaimed": false,
+  "freshReadOnlyK2": {
+    "preflight": "pixplcjqivlfflickobf",
+    "verified": 9,
+    "owner": 2,
+    "connectorUnreachedByScript": 3,
+    "blocked": 0
+  },
+  "pins": [
+    {
+      "file": "prepared-api/admin/products.js",
+      "bytes": 2383,
+      "sha256": "a3cb9ae9680af5f0f98bcdd6f8c0633de431afdfcb7792b07a02691994026f6c"
+    },
+    {
+      "file": "tests/admin-product-read-taxonomy.test.mjs",
+      "bytes": 3769,
+      "sha256": "9b6cbf4942610b2ec9a237b0b2cee31e319e02ca21d3c9bcdfb8377118ed9fcf"
+    },
+    {
+      "file": "docs/evidence/20261016-admin-media-read-release/verify-release.log",
+      "bytes": 240315,
+      "sha256": "079b4012428fea4d9d0dd7f79240e05f1e5e0a601428de74fadc584e55e43b20"
+    },
+    {
+      "file": "docs/evidence/20261016-admin-media-read-release/focused-globe-navigation.log",
+      "bytes": 783,
+      "sha256": "ea5d1d6709e48c4960cb04422081152f7cdd5cd4ea75a3c30c1f12c0a3366cca"
+    },
+    {
+      "file": "docs/evidence/20261016-admin-media-read-release/remaining-release.log",
+      "bytes": 104498,
+      "sha256": "a3c29b65a486b4098a222a6fdb9e9b5a76f21ef5a7b127b9580136dee46f934a"
+    }
+  ]
+}

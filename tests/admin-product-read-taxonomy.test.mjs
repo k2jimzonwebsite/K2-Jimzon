@@ -6,6 +6,9 @@ const assigned = {
   sku: 'synthetic-assigned', name: 'Synthetic assigned product', status: 'Draft',
   brand_id: '11111111-1111-4111-8111-111111111111',
   category_id: '22222222-2222-4222-8222-222222222222',
+  primary_image_url: 'https://media.example/primary.png',
+  lifestyle_images: ['https://media.example/after.png'],
+  secondary_images: ['https://media.example/side.png', 'https://media.example/back.png'],
 }
 const unassigned = { sku: 'synthetic-unassigned', name: 'Synthetic unassigned product', status: 'Draft', brand_id: null, category_id: null }
 
@@ -45,4 +48,21 @@ test('stock failure preserves canonical taxonomy while reporting unknown stock',
   assert.equal(result.products[1].category_id, null)
   assert.ok(result.products.every(row => row.stock_available === null))
   assert.deepEqual(result.unavailable, [{ key: 'stock', code: 'QUERY_UNAVAILABLE' }])
+})
+
+test('protected catalog retains every saved photo slot for reopening the photo manager', async () => {
+  const { products } = await readAdminProducts(client())
+  assert.equal(products[0].primary_image_url, assigned.primary_image_url)
+  assert.deepEqual(products[0].lifestyle_images, assigned.lifestyle_images)
+  assert.deepEqual(products[0].secondary_images, assigned.secondary_images)
+  assert.equal(products[1].primary_image_url, null)
+  assert.deepEqual(products[1].lifestyle_images, [])
+  assert.deepEqual(products[1].secondary_images, [])
+})
+
+test('stock failure does not hide saved after-use or supporting photos', async () => {
+  const { products, unavailable } = await readAdminProducts(client({ code: 'synthetic-unavailable' }))
+  assert.deepEqual(products[0].lifestyle_images, assigned.lifestyle_images)
+  assert.deepEqual(products[0].secondary_images, assigned.secondary_images)
+  assert.deepEqual(unavailable, [{ key: 'stock', code: 'QUERY_UNAVAILABLE' }])
 })

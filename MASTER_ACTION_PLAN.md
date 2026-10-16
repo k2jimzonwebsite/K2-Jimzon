@@ -166,6 +166,9 @@ or treat missing support guidance as permission to alter internal-role defaults.
 
 ### MAP-023: Finish real order, payment and fulfillment cycles
 
+**Executing narrow media-read release /16October /IDEA-20261016-01:** Owner explicitly approved scoped protected product-list lifestyle_images/secondary_images correction, tests/records, both separate production artifacts and realMcKennedy001125reopen after verify:release. Isolatedcodex/admin-media-read-release from6dfbc114; preserve all unrelated primary work. Focused red2fail/green4pass and development constituents qualified. Exact next: complete one release gate, commit/push only the scoped change to production-linkedmain, verify both exact-SHAdeployments/hosts and actualPRIMARY+AFTERonreopen without resaving. Then record verified behavior in SystemBrain/runbook/acceptance and remove this completed execution paragraph; broaderMAP-023remains. Recovery: source revert/prior per-projectdeployments, no data restore/reupload/SQL. Receipt: docs/acceptance/ADMIN_PRODUCT_MEDIA_READ_RELEASE_20261016.md.
+
+
 **Current listing acceptance / IDEA-20261015-09:** Verify the existing deployed intake with a genuine Staff role under current role policy; do not fabricate packaging evidence or duplicate the first product. Custody source publication is archived in STAFF_INTAKE_CUSTODY_RELEASE_20261015.md. Remaining bulk identities/facts/media and buyer/payment/fulfillment acceptance stay in this item. No 195-row import or new permission mechanism is authorized by the scoped source release.
 
 

@@ -1,0 +1,47 @@
+{
+  "owningMap": "MAP-023",
+  "idea": "IDEA-20261016-01",
+  "state": "LOCAL_READ_FIX_VERIFIED_OWNER_AUTHORIZED_RELEASE_GATE_QUALIFIED",
+  "runtimeChanged": [
+    "prepared-api/admin/products.js"
+  ],
+  "sourcePins": [
+    {
+      "file": "prepared-api/admin/products.js",
+      "bytes": 2383,
+      "sha256": "a3cb9ae9680af5f0f98bcdd6f8c0633de431afdfcb7792b07a02691994026f6c"
+    },
+    {
+      "file": "tests/admin-product-read-taxonomy.test.mjs",
+      "bytes": 3769,
+      "sha256": "9b6cbf4942610b2ec9a237b0b2cee31e319e02ca21d3c9bcdfb8377118ed9fcf"
+    },
+    {
+      "file": "outputs/listing-handoff-20261015/mckennedy-media-readback-resumed-20261016.json",
+      "bytes": 1088,
+      "sha256": "bdc5391af156236efb3bed2d3f5e4fb6da9425ac2db741291319b73e044ac6fd"
+    },
+    {
+      "file": "outputs/listing-handoff-20261015/mckennedy-enrichment-readback-resumed-20261016.json",
+      "bytes": 2880,
+      "sha256": "90e9ddd659ba4a8b080c15c2c3b01c78f607e71c2e33ed5acc9fe13bc7de3159"
+    },
+    {
+      "file": "docs/evidence/20261016-draft-enrichment-resumed/mckennedy-saved-draft.jpg",
+      "bytes": 93678,
+      "sha256": "35afb7714354bf012b1402b32630499f54989ad633c9e8a2f7a32297e17d883d"
+    }
+  ],
+  "tests": {
+    "focusedRed": "2 new failures / 2 existing passes",
+    "focusedGreen": "4/4 pass",
+    "developmentInitial": "75/76; one sandbox loopback failure",
+    "failedFilePermittedRetry": "2/2 pass",
+    "remainingDevelopmentConstituents": "exit0",
+    "diffCheck": "exit0"
+  },
+  "deployed": false,
+  "liveProductEnriched": "K2-SKU-001125",
+  "remainingScope": "MASTER_ACTION_PLAN.md MAP-023",
+  "releaseReceipt": "docs/acceptance/ADMIN_PRODUCT_MEDIA_READ_RELEASE_20261016.md"
+}
