@@ -1247,7 +1247,7 @@ c:\Users\jerze\K2 JImzon\
 ├── vercel.ts                   # Provider-supported project-ID-bound selector for separate Vercel artifact configs
 ├── .agent/                      # AI Agent workspace configuration and agent instruction rules
 ├── .agents/                     # Specialized skill definitions and execution runbooks
-├── .tools/                      # Local isolated PostgreSQL 17.11 runtime for offline rehearsals
+├── .tools/                      # Ignored local runtimes, rehearsal data/evidence, backups and older worktree; see tooling audit
 ├── api/                         # Consolidated Vercel Serverless Function entrypoints
 │   ├── admin/index.js           # Admin BFF consolidated router (92 prepared routes)
 │   └── storefront/index.js      # Storefront BFF consolidated router (15 prepared routes)
@@ -1357,6 +1357,10 @@ The view never receives provider credentials or writes canonical lots directly.
 ---
 
 ## 🛡️ Folder Responsibilities & Placement Rules
+
+16 October tooling continuation: retired merged boot images have been removed from `.tools` case directories after exact recursive reconstruction checks. Preserve their overlays, preparation/results, original recovery base and the recipes in `docs/acceptance/20261016-tooling-cleanup/`. Historical image paths in older receipts are intentionally absent; reconstruct through those manifests only for a separately scoped forensic need. No historical rehearsal becomes active work through reconstruction.
+
+Local tooling inventory and recovery guidance: `docs/acceptance/20261016-tooling-cleanup/README.md` (IDEA-20261016-01, MAP-021). `.tools/` is not application runtime or a disposable cache: historical receipts reference its backup, database and evidence files. `.tools/hero-release` is a registered dirty Git worktree. `.agents/` is a junction to shared installed skills outside this repository. Root `dist/` and Vite caches are generated; dependencies are reconstructed using the lockfile in their own checkout. Keep source/tests/package scripts, separate deployment configurations, recovery inputs and evidence unless a scoped dependency/recovery audit proves retirement safe.
 
 | Directory | What Belongs Here | What MUST NOT Be Placed Here |
 | :--- | :--- | :--- |
@@ -1677,3 +1681,5 @@ remaining work and authorization are owned exclusively by MAP-018.
 
 
 MAP-018 offline controlled envelope tooling: `scripts/prepare-controlled-migration.mjs` and its contract test preserve the pinned complete installer body and prepare a distinct guarded16,565,984-byte envelope. They have no credentials/network/dispatch. Constructor receipt: `docs/acceptance/CONTROLLED_TRANSPORT_CONSTRUCTOR_20261012.json`; design: `docs/specs/CONTROLLED_MIGRATION_TRANSPORT.md`. SQL execution/recovery and live adoption remain unqualified and owned only by MAP-018.
+
+17 October MAP-023 / IDEA-20261017-01: src/lib/photoCsvBatch.js owns bounded mapping/recovery; src/views/admin/BulkPhotoCsv.jsx is reached from existing BulkCsvImportModal. Reuses adminBffService and server/admin-bff/product-media.js;no new API,SQL or importer. Local evidence/hosted limits: docs/acceptance/PHOTO_CSV_BATCH_20261017.json.

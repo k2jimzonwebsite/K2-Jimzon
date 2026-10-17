@@ -121,22 +121,22 @@ export default function AdminToolsWidget({ onOpenGuide, onNavigate, onOpenSearch
             role="dialog"
             aria-modal="true"
             aria-label="Staff Tools and Margin Planner"
-            className="admin-quick-tools fixed inset-x-2 bottom-20 max-h-[calc(100dvh-6rem)] sm:absolute sm:inset-x-auto sm:bottom-auto sm:max-h-none sm:w-[min(28rem,calc(100vw-1rem))] overflow-y-auto rounded-2xl border border-white/15 bg-adm-surface shadow-2xl flex flex-col"
-            style={isMobile ? undefined : {
+            className="admin-quick-tools fixed inset-x-2 bottom-20 sm:absolute sm:inset-x-auto sm:bottom-auto sm:w-[min(28rem,calc(100vw-1rem))] overflow-hidden rounded-2xl border border-white/15 bg-adm-surface shadow-2xl flex flex-col"
+            style={isMobile ? { maxHeight: 'calc(100dvh - 5.5rem)' } : {
               [openUp ? 'bottom' : 'top']: 60,
               [openLeft ? 'right' : 'left']: 0,
               maxHeight: openUp ? Math.max(260, pos.y - 70) : Math.max(260, window.innerHeight - pos.y - 70),
             }}
           >
-            {/* Header with Title and Close Button */}
-            <div className="flex items-center justify-between border-b border-adm-line bg-[#0d131f] px-4 py-3">
+            {/* Header with Title and Close Button (Pinned at top so keypad never scrolls header away) */}
+            <div className="flex shrink-0 items-center justify-between border-b border-adm-line bg-[#0d131f] px-4 py-3">
               <div className="flex items-center gap-2.5">
                 <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue/15 text-blue border border-blue/30">
                   <SettingsIcon size={16} />
                 </span>
                 <div>
                   <h3 className="text-sm font-bold text-white leading-none">Staff Quick Tools</h3>
-                  <p className="mt-1 text-sm text-white/70">Shortcuts and planning calculators</p>
+                  <p className="mt-1 text-xs text-white/70">Fast phone calculators and shift helpers</p>
                 </div>
               </div>
               <button
@@ -149,67 +149,72 @@ export default function AdminToolsWidget({ onOpenGuide, onNavigate, onOpenSearch
               </button>
             </div>
 
-            {/* Dashboard guide (moved here from a separate floating button) */}
-            {onOpenGuide && (
-              <button
-                onClick={() => { onOpenGuide(); setOpen(false) }}
-                className="w-full flex min-h-11 items-center gap-2 border-b border-adm-line bg-blue/15 px-3.5 py-2.5 text-sm font-semibold text-blue hover:bg-blue/25 transition-colors cursor-pointer"
-              >
-                <MapIcon size={16} />
-                <span>Help with this screen</span>
-              </button>
-            )}
-
-            {/* Pinned strip: clocks + rate */}
-            <ClockRate />
-
-            {/* Tool picker */}
-            <div className="grid grid-cols-3 shrink-0 gap-1.5 border-b border-adm-line bg-black/20 px-3 py-2" aria-label="Choose a staff tool">
-              {TOOLS.map((t) => {
-                const IconComponent = t.icon
-                return (
-                  <button
-                    key={t.id}
-                    onClick={() => setTool(t.id)}
-                    title={t.label}
-                    aria-label={t.label}
-                    aria-pressed={tool === t.id}
-                    className={'flex min-h-11 items-center justify-center gap-1.5 rounded-adm-sm px-1 text-xs transition-colors cursor-pointer ' +
-                      (tool === t.id ? 'bg-blue text-white shadow-sm' : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white')}
-                  >
-                    <IconComponent size={18} />
-                    <span>{t.label}</span>
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Active tool with custom scrollbar */}
-            <div className="p-3.5 shrink-0">
-              {tool === 'shortcuts' && (
-                <div className="space-y-2">
-                  <p className="text-sm text-white/70">Open a workspace. Review and save changes there.</p>
-                  {[
-                    ['Find a product or page', onOpenSearch],
-                    ['Scan a barcode', onOpenScan],
-                    ['Products and stock', onNavigate && (() => onNavigate('inventory'))],
-                    ['Orders and packing', onNavigate && (() => onNavigate('omni_hub'))],
-                    ['Customer messages', onNavigate && (() => onNavigate('inbox'))],
-                    ['Workflow map', onNavigate && (() => onNavigate('workflow_graph'))],
-                    ['Keyboard shortcuts', onOpenShortcuts],
-                  ].filter(([, action]) => action).map(([label, action]) => (
-                    <button key={label} type="button" onClick={() => { setOpen(false); action() }} className="min-h-11 w-full rounded-adm-sm border border-adm-line px-3 py-2 text-left text-sm font-semibold text-white hover:bg-white/10">{label}</button>
-                  ))}
-                </div>
+            {/* Dedicated internal scroll frame so button clicks never jump the outer dialog */}
+            <div data-tools-scroll-body className="admin-quick-tools-body flex-1 min-h-0 overflow-y-auto overscroll-contain flex flex-col">
+              {/* Dashboard guide (moved here from a separate floating button) */}
+              {onOpenGuide && (
+                <button
+                  type="button"
+                  onClick={() => { onOpenGuide(); setOpen(false) }}
+                  className="w-full shrink-0 flex min-h-11 items-center gap-2 border-b border-adm-line bg-blue/15 px-3.5 py-2.5 text-sm font-semibold text-blue hover:bg-blue/25 transition-colors cursor-pointer"
+                >
+                  <MapIcon size={16} />
+                  <span>Help with this screen</span>
+                </button>
               )}
-              {tool === 'sales' && <SalesPlanner />}
-              {tool === 'calc' && <Calculator />}
-              {tool === 'margin' && <Margin />}
-              {tool === 'cargo' && <Cargo />}
-              {tool === 'unit' && <Units />}
-              {tool === 'vat' && <Vat />}
-              {tool === 'expiry' && <Expiry />}
-              {tool === 'notes' && <Scratchpad />}
+
+              {/* Pinned strip: clocks + rate */}
+              <ClockRate />
+
+              {/* Tool picker */}
+              <div className="grid grid-cols-3 shrink-0 gap-1.5 border-b border-adm-line bg-black/20 px-3 py-2" aria-label="Choose a staff tool">
+                {TOOLS.map((t) => {
+                  const IconComponent = t.icon
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => setTool(t.id)}
+                      title={t.label}
+                      aria-label={t.label}
+                      aria-pressed={tool === t.id}
+                      className={'flex min-h-11 items-center justify-center gap-1.5 rounded-adm-sm px-1 text-xs transition-colors cursor-pointer select-none touch-manipulation ' +
+                        (tool === t.id ? 'bg-blue text-white shadow-sm' : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white')}
+                    >
+                      <IconComponent size={18} />
+                      <span>{t.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Active tool panel */}
+              <div className="p-3.5 shrink-0">
+                {tool === 'shortcuts' && (
+                  <div className="space-y-2">
+                    <p className="text-sm text-white/70">Jump straight to an Admin screen. Any real edits still happen on that page.</p>
+                    {[
+                      ['Find a product or page', onOpenSearch],
+                      ['Scan a barcode', onOpenScan],
+                      ['Products and stock', onNavigate && (() => onNavigate('inventory'))],
+                      ['Orders and packing', onNavigate && (() => onNavigate('omni_hub'))],
+                      ['Customer messages', onNavigate && (() => onNavigate('inbox'))],
+                      ['Workflow map', onNavigate && (() => onNavigate('workflow_graph'))],
+                      ['Keyboard shortcuts', onOpenShortcuts],
+                    ].filter(([, action]) => action).map(([label, action]) => (
+                      <button key={label} type="button" onClick={() => { setOpen(false); action() }} className="min-h-11 w-full rounded-adm-sm border border-adm-line px-3 py-2 text-left text-sm font-semibold text-white hover:bg-white/10">{label}</button>
+                    ))}
+                  </div>
+                )}
+                {tool === 'sales' && <SalesPlanner />}
+                {tool === 'calc' && <Calculator />}
+                {tool === 'margin' && <Margin />}
+                {tool === 'cargo' && <Cargo />}
+                {tool === 'unit' && <Units />}
+                {tool === 'vat' && <Vat />}
+                {tool === 'expiry' && <Expiry />}
+                {tool === 'notes' && <Scratchpad />}
+              </div>
             </div>
           </div>
           </AdminDialog>
@@ -246,7 +251,7 @@ function ClockRate() {
   const php = eur !== '' ? (parseFloat(eur) * r) : null
 
   return (
-    <div className="border-b border-adm-line bg-black/20 px-3.5 py-2.5 space-y-2">
+    <div className="shrink-0 border-b border-adm-line bg-black/20 px-3.5 py-2.5 space-y-2">
       <div className="flex items-center justify-between text-sm">
         <span className="flex items-center text-white/80"><span className="mr-1.5 rounded bg-white/10 px-1 py-0.5 text-xs font-bold text-white/70">IT</span> Milan <strong className="text-white tabular-nums ml-1.5">{time('Europe/Rome')}</strong></span>
         <span className="flex items-center text-white/80"><strong className="text-white tabular-nums mr-1.5">{time('Asia/Manila')}</strong> Manila <span className="ml-1.5 rounded bg-white/10 px-1 py-0.5 text-xs font-bold text-white/70">PH</span></span>
@@ -264,6 +269,21 @@ function ClockRate() {
 }
 
 /* ------------------------------- Calculator ------------------------------ */
+function CalcButton({ children, onClick, cls = '' }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={
+        'min-h-11 rounded-adm-sm text-sm font-semibold transition-colors duration-100 active:scale-95 select-none touch-manipulation cursor-pointer ' +
+        (cls || 'bg-white/5 text-white hover:bg-white/10')
+      }
+    >
+      {children}
+    </button>
+  )
+}
+
 function Calculator() {
   const [display, setDisplay] = useState('0')
   const [prev, setPrev] = useState(null)
@@ -283,32 +303,46 @@ function Calculator() {
   const equals = () => { if (op == null || prev == null) return; const r = compute(prev, parseFloat(display), op); setDisplay(String(+r.toFixed(6))); setPrev(null); setOp(null); setOverwrite(true) }
   const pct = () => { setDisplay((s) => String(parseFloat(s) / 100)); setOverwrite(true) }
 
-  const Btn = ({ children, onClick, cls = '' }) => (
-    <button onClick={onClick} className={'h-11 rounded-adm-sm text-sm font-semibold transition-colors ' + (cls || 'bg-white/5 text-white hover:bg-white/10')}>{children}</button>
-  )
   return (
-    <div className="space-y-2">
-      <div className="rounded-adm-sm bg-black/40 px-3 py-3 text-right text-2xl font-semibold text-white tabular-nums truncate">{display}</div>
+    <div className="space-y-2.5 text-white">
+      <p className="text-xs leading-relaxed text-white/60">
+        Everyday scratchpad for quick math. Tapping numbers keeps this keypad steady on your phone and never changes any store record.
+      </p>
+      <div className="rounded-adm-sm border border-adm-line bg-black/40 px-3 py-2.5 text-right" aria-live="polite">
+        <div className="min-h-4 text-xs font-mono text-white/45 tabular-nums truncate">
+          {prev != null && op ? `${prev} ${op}` : 'Ready'}
+        </div>
+        <div data-calc-display className="text-2xl font-semibold text-white tabular-nums truncate">
+          {display}
+        </div>
+      </div>
       <div className="grid grid-cols-4 gap-1.5">
-        <Btn onClick={clear} cls="bg-crimson/20 text-crimson hover:bg-crimson/30">C</Btn>
-        <Btn onClick={pct}>%</Btn>
-        <Btn onClick={() => setDisplay((s) => (s.startsWith('-') ? s.slice(1) : s === '0' ? s : '-' + s))}>±</Btn>
-        <Btn onClick={() => applyOp('÷')} cls="bg-blue/20 text-blue hover:bg-blue/30">÷</Btn>
-        {['7', '8', '9'].map((d) => <Btn key={d} onClick={() => digit(d)}>{d}</Btn>)}
-        <Btn onClick={() => applyOp('×')} cls="bg-blue/20 text-blue hover:bg-blue/30">×</Btn>
-        {['4', '5', '6'].map((d) => <Btn key={d} onClick={() => digit(d)}>{d}</Btn>)}
-        <Btn onClick={() => applyOp('−')} cls="bg-blue/20 text-blue hover:bg-blue/30">−</Btn>
-        {['1', '2', '3'].map((d) => <Btn key={d} onClick={() => digit(d)}>{d}</Btn>)}
-        <Btn onClick={() => applyOp('+')} cls="bg-blue/20 text-blue hover:bg-blue/30">+</Btn>
-        <Btn onClick={() => digit('0')} cls="col-span-2 bg-white/5 text-white hover:bg-white/10">0</Btn>
-        <Btn onClick={dot}>.</Btn>
-        <Btn onClick={equals} cls="bg-gold text-navy hover:bg-gold-deep">=</Btn>
+        <CalcButton onClick={clear} cls="bg-crimson/20 text-crimson hover:bg-crimson/30">C</CalcButton>
+        <CalcButton onClick={pct}>%</CalcButton>
+        <CalcButton onClick={() => setDisplay((s) => (s.startsWith('-') ? s.slice(1) : s === '0' ? s : '-' + s))}>±</CalcButton>
+        <CalcButton onClick={() => applyOp('÷')} cls="bg-blue/20 text-blue hover:bg-blue/30">÷</CalcButton>
+        {['7', '8', '9'].map((d) => <CalcButton key={d} onClick={() => digit(d)}>{d}</CalcButton>)}
+        <CalcButton onClick={() => applyOp('×')} cls="bg-blue/20 text-blue hover:bg-blue/30">×</CalcButton>
+        {['4', '5', '6'].map((d) => <CalcButton key={d} onClick={() => digit(d)}>{d}</CalcButton>)}
+        <CalcButton onClick={() => applyOp('−')} cls="bg-blue/20 text-blue hover:bg-blue/30">−</CalcButton>
+        {['1', '2', '3'].map((d) => <CalcButton key={d} onClick={() => digit(d)}>{d}</CalcButton>)}
+        <CalcButton onClick={() => applyOp('+')} cls="bg-blue/20 text-blue hover:bg-blue/30">+</CalcButton>
+        <CalcButton onClick={() => digit('0')} cls="col-span-2 bg-white/5 text-white hover:bg-white/10">0</CalcButton>
+        <CalcButton onClick={dot}>.</CalcButton>
+        <CalcButton onClick={equals} cls="bg-gold text-navy hover:bg-gold-deep">=</CalcButton>
       </div>
     </div>
   )
 }
 
 /* ----------------------------- Sales planner ----------------------------- */
+const SALES_MODE_EXPLAINERS = {
+  check: 'In plain words: enter a selling price and your costs to see how much money you actually keep after fees.',
+  target: 'In plain words: enter the profit you want to keep and this finds the selling price you need to charge.',
+  discount: 'In plain words: see the biggest promo discount you can give before your profit drops below your goal.',
+  quantity: 'In plain words: see how many items you need to sell to reach a peso profit target.',
+}
+
 function SalesPlanner() {
   const [mode, setMode] = useState('check')
 
@@ -336,6 +370,9 @@ function SalesPlanner() {
           </button>
         ))}
       </div>
+      <p className="rounded-adm-sm border border-adm-line bg-black/25 px-3 py-2 text-xs leading-relaxed text-white/70">
+        {SALES_MODE_EXPLAINERS[mode]}
+      </p>
       {mode === 'check' && <ForwardSalesPlanner />}
       {mode === 'target' && <TargetPricePlanner />}
       {mode === 'discount' && <MaximumDiscountPlanner />}
@@ -545,6 +582,9 @@ function Margin() {
   const markup = c ? (profit / c) * 100 : 0
   return (
     <div className="space-y-3 text-white">
+      <p className="text-xs leading-relaxed text-white/60">
+        In plain words: compare your total item cost against your selling price. Gross margin is the share of the selling price you keep; markup is your profit compared to what you paid.
+      </p>
       <div><label htmlFor="tools-cost" className={lbl}>Cost (₱)</label><input id="tools-cost" className={field} inputMode="decimal" value={cost} onChange={(e) => setCost(e.target.value)} placeholder="0" /></div>
       <div><label htmlFor="tools-price" className={lbl}>Selling price (₱)</label><input id="tools-price" className={field} inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="0" /></div>
       <div className="grid grid-cols-3 gap-2 pt-1">
@@ -564,6 +604,9 @@ function Cargo() {
   const chargeable = Math.max(parseFloat(actual) || 0, vol)
   return (
     <div className="space-y-3 text-white">
+      <p className="text-xs leading-relaxed text-white/60">
+        In plain words: couriers and airlines bill by whichever is heavier, the actual scale weight or the box space weight (Length × Width × Height ÷ 5,000).
+      </p>
       <p className={lbl}>Box size (cm)</p>
       <div className="grid grid-cols-3 gap-2">
         <input aria-label="Box length in centimetres" className={field} inputMode="decimal" value={l} onChange={(e) => setL(e.target.value)} placeholder="Length" />
@@ -595,15 +638,18 @@ function Units() {
   const base = (parseFloat(val) || 0) * units[from]
   return (
     <div className="space-y-3 text-white">
+      <p className="text-xs leading-relaxed text-white/60">
+        In plain words: convert Italian package weights or bottle sizes when checking labels and shipping boxes.
+      </p>
       <div className="flex gap-1">
         {Object.keys(CATS).map((c) => (
-          <button key={c} onClick={() => { setCat(c); setFrom(Object.keys(CATS[c])[1] || Object.keys(CATS[c])[0]) }}
-            className={'flex-1 rounded-adm-sm py-1.5 text-sm font-medium ' + (cat === c ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>{c}</button>
+          <button key={c} type="button" onClick={() => { setCat(c); setFrom(Object.keys(CATS[c])[1] || Object.keys(CATS[c])[0]) }}
+            className={'min-h-11 flex-1 rounded-adm-sm py-1.5 text-sm font-medium cursor-pointer ' + (cat === c ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>{c}</button>
         ))}
       </div>
       <div className="flex gap-2">
         <input aria-label="Amount to convert" className={field + ' flex-1'} inputMode="decimal" value={val} onChange={(e) => setVal(e.target.value)} />
-        <select aria-label="Convert from unit" value={from} onChange={(e) => setFrom(e.target.value)} className="rounded-adm-sm border border-adm-line bg-black/40 px-2 text-sm text-white outline-none">
+        <select aria-label="Convert from unit" value={from} onChange={(e) => setFrom(e.target.value)} className="min-h-11 rounded-adm-sm border border-adm-line bg-black/40 px-2 text-sm text-white outline-none">
           {Object.keys(units).map((u) => <option key={u} value={u}>{u}</option>)}
         </select>
       </div>
@@ -629,9 +675,12 @@ function Vat() {
   const vat = gross - net
   return (
     <div className="space-y-3 text-white">
+      <p className="text-xs leading-relaxed text-white/60">
+        In plain words: choose Add VAT to put 12% on top of a pre-tax price, or Remove VAT to split out the 12% already inside a final price.
+      </p>
       <div className="flex gap-1">
-        <button onClick={() => setMode('add')} className={'flex-1 rounded-adm-sm py-1.5 text-sm font-medium ' + (mode === 'add' ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>Add VAT</button>
-        <button onClick={() => setMode('remove')} className={'flex-1 rounded-adm-sm py-1.5 text-sm font-medium ' + (mode === 'remove' ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>Remove VAT</button>
+        <button type="button" onClick={() => setMode('add')} className={'min-h-11 flex-1 rounded-adm-sm py-1.5 text-sm font-medium cursor-pointer ' + (mode === 'add' ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>Add VAT</button>
+        <button type="button" onClick={() => setMode('remove')} className={'min-h-11 flex-1 rounded-adm-sm py-1.5 text-sm font-medium cursor-pointer ' + (mode === 'remove' ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>Remove VAT</button>
       </div>
       <div><label htmlFor="tools-vat-amount" className={lbl}>{mode === 'add' ? 'Net amount (₱)' : 'Gross amount (₱)'}</label><input id="tools-vat-amount" className={field} inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" /></div>
       <p className="text-sm text-white/70">12% arithmetic only. Confirm the applicable tax treatment before using this in an invoice.</p>
@@ -657,6 +706,9 @@ function Expiry() {
   }
   return (
     <div className="space-y-3 text-white">
+      <p className="text-xs leading-relaxed text-white/60">
+        In plain words: pick the package best-before date to see how many days remain. Items arriving with under 90 days left need staff quarantine review.
+      </p>
       <div><label htmlFor="tools-expiry-date" className={lbl}>Expiry date</label><input id="tools-expiry-date" type="date" className={field + ' [color-scheme:dark]'} value={date} onChange={(e) => setDate(e.target.value)} /></div>
       <p className="text-sm text-white/70">Date estimate only. This does not release stock from quarantine or change its sellable status.</p>
       {days != null && (

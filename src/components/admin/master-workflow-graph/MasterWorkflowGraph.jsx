@@ -196,17 +196,17 @@ export default function MasterWorkflowGraph({
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3 min-w-0">
             {/* Role Filter Selector */}
-            <div className="flex min-h-11 min-w-0 max-w-full items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5">
-              <label htmlFor="staff-role-filter" className="text-xs font-semibold text-white/60 whitespace-nowrap">
+            <div className="flex min-h-11 w-full sm:w-auto min-w-0 max-w-full items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5">
+              <label htmlFor="staff-role-filter" className="text-xs font-semibold text-white/60 whitespace-nowrap shrink-0">
                 Staff Role:
               </label>
               <select
                 id="staff-role-filter"
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
-                className="min-w-0 flex-1 bg-transparent text-xs font-semibold text-sky-300 focus:outline-none cursor-pointer"
+                className="min-w-0 flex-1 truncate bg-transparent text-xs font-semibold text-sky-300 focus:outline-none cursor-pointer"
               >
                 {availableRoles.map((role) => (
                   <option key={role} value={role} className="bg-slate-900 text-white">
@@ -239,7 +239,7 @@ export default function MasterWorkflowGraph({
             </div>
 
             {/* Search Input */}
-            <div className="relative min-w-[240px]">
+            <div className="relative w-full sm:w-auto sm:min-w-[240px]">
               <SearchIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
               <input
                 type="text"
@@ -384,7 +384,7 @@ export default function MasterWorkflowGraph({
             <button
               type="button"
               onClick={handleResetProgress}
-              className="text-xs text-white/40 hover:text-rose-400 transition-colors ml-2"
+              className="min-h-11 px-2 text-xs text-white/50 hover:text-rose-400 transition-colors ml-1"
               title="Reset guide rehearsal checkmarks"
             >
               Reset
@@ -513,7 +513,7 @@ export default function MasterWorkflowGraph({
           <button
             type="button"
             onClick={() => setSearchQuery('')}
-            className="text-xs underline text-sky-400 hover:text-white"
+            className="min-h-11 px-2 text-xs underline text-sky-400 hover:text-white"
           >
             Show All Steps
           </button>
@@ -555,8 +555,8 @@ export default function MasterWorkflowGraph({
           <div className="mt-4 rounded-xl border border-sky-500/20 bg-sky-500/5 p-3" role="status">
             {tracedPath.length ? (
               <div className="flex flex-wrap items-center gap-2 text-xs">
-                <button type="button" onClick={() => handleSelectNode(traceFromId)} className="min-h-9 rounded-lg border border-white/10 bg-white/5 px-3 font-semibold text-white/80">{getNode(traceFromId)?.title}</button>
-                {tracedPath.map((edge) => <React.Fragment key={`${edge.from}->${edge.to}`}><span className="text-sky-300">→</span><button type="button" onClick={() => handleSelectNode(edge.to)} className="min-h-9 rounded-lg border border-white/10 bg-white/5 px-3 font-semibold text-white/80">{getNode(edge.to)?.title}</button></React.Fragment>)}
+                <button type="button" onClick={() => handleSelectNode(traceFromId)} className="min-h-11 rounded-lg border border-white/10 bg-white/5 px-3 font-semibold text-white/80">{getNode(traceFromId)?.title}</button>
+                {tracedPath.map((edge) => <React.Fragment key={`${edge.from}->${edge.to}`}><span className="text-sky-300">→</span><button type="button" onClick={() => handleSelectNode(edge.to)} className="min-h-11 rounded-lg border border-white/10 bg-white/5 px-3 font-semibold text-white/80">{getNode(edge.to)?.title}</button></React.Fragment>)}
                 {tracedPaths.length > 1 && <span className="ml-2 text-white/45">Showing one of {tracedPaths.length} valid paths</span>}
               </div>
             ) : <p className="text-xs text-amber-300">No route connects these steps. Choose a different start or finish.</p>}

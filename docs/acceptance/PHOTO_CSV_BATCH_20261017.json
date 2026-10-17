@@ -1,0 +1,76 @@
+{
+  "owningMap": "MAP-023",
+  "idea": "IDEA-20261017-01",
+  "at": "2026-10-17T02:59:36.913Z",
+  "state": "LOCALLY_IMPLEMENTED_TESTED_AND_ADMIN_COMPILED_NOT_DEPLOYED",
+  "providerWrites": 0,
+  "liveUploads": 0,
+  "commitsPushesReleases": 0,
+  "verification": [
+    [
+      "node --test tests/photo-csv-batch.test.mjs tests/admin-photo-batch-actor.test.mjs",
+      "11pass/0fail"
+    ],
+    [
+      "npx playwright test --config playwright.payment.config.js tests/photo-csv-ui.spec.js",
+      "21697/5pass/10.0s"
+    ],
+    [
+      "existing media and catalog recovery browser regressions",
+      "7032/8pass; old4photo cases superseded by final5"
+    ],
+    [
+      "npx playwright test --config playwright.api.config.js tests/product-media-ownership.spec.js tests/catalog-spreadsheet-contract.spec.js",
+      "931b47/15pass/4.7s"
+    ],
+    [
+      "npm run verify:development",
+      "28596/exit0/allprebuildchecks/zero route gaps"
+    ],
+    [
+      "npm --ignore-scripts run build:admin",
+      "4e1747/exit0/boundary46modules/Admin222.72of300KiB/secret88files;prebuild not repeated"
+    ]
+  ],
+  "review": {
+    "agent": "/root/review_photo_csv",
+    "finding": "Persisted-command retry skipped freshness check. New test failed writes1!==0,then original-or-expected current-media/Draft check before every dispatch fixed it.",
+    "final": "No Critical/Important source findings;requested competing-tab rendered test added and passed."
+  },
+  "visual": {
+    "captures": [
+      "docs/design-checkpoints/20261017-photo-csv/review-375.png",
+      "docs/design-checkpoints/20261017-photo-csv/review-1440.png"
+    ],
+    "result": "Inspected375/1440;44px controls,reduced motion,overflow checks pass; synthetic PNG is not product imagery"
+  },
+  "failureHistory": [
+    "Initial missing/stub module red tests,then green.",
+    "Upload actor test initially used incorrect JSON content type; corrected fixture to PNG.",
+    "Photo-file input accessible name included helper text; explicit label corrected initial browser timeout.",
+    "Restricted loopback runs stopped;permitted synthetic localhost suite passed.",
+    "Independent stale-retry regression failed-first then passed."
+  ],
+  "limits": [
+    "Synthetic API/browser evidence and local compilation are not hosted Auth/Storage/deployment evidence.",
+    "Existing media RPC lacks atomic expected-version/CAS across other devices/manual writers. Pre-send checks narrow drift exposure;avoid concurrent editing.",
+    "All54primary/123AFTER accepted prepared files already assigned;41other local AFTER files held;zero accepted-ready missing-slot inputs.",
+    "No live release requested;complete release gate not run."
+  ],
+  "assetReview": "outputs/photo-csv-20261017/READINESS.json",
+  "recovery": "Retain k2-photo-csv-v1 and result JSON;never erase unknown/corrupt requests. Revert only new module/component,wiring,actor guards and test registrations as one slice;preserve dirty files and all prior receipts. No provider rollback.",
+  "next": "Explicit owner release decision,then release gate once and hosted feature verification;continue supported missing-source/media work in MAP-023.",
+  "pins": {
+    "src/lib/photoCsvBatch.js": "d9b0fe5c5ba7c443f7f24ebd8df714e79579821aaa7ce75acd1285f92ba0f115",
+    "src/views/admin/BulkPhotoCsv.jsx": "17969e976150ef9d65b591b37d8cf7099dd3abfb52dd4bde2f634f6fb9eb70a5",
+    "src/views/admin/BulkCsvImportModal.jsx": "e617c838a34cca10f309559954a54eb1425d03afc271e438b0963c77ef65e23e",
+    "src/services/adminBffService.js": "e095e87703f8c71fc5ca54f4584244ee5d41103b45c0d6c49f35beae269fa428",
+    "server/admin-bff/product-media.js": "0e40d7faf22fb2627e8d5378b160ee1bb6c637ae241935d47ec382ee587137ff",
+    "tests/photo-csv-batch.test.mjs": "86f64efe48cae04e6dd4218542ffea4c60aae206858ef82e95d4c2415383c285",
+    "tests/admin-photo-batch-actor.test.mjs": "3ceff593c74ab64ed768b572033a7b129a07e0982c32c09613e9602d1005e1e5",
+    "tests/photo-csv-ui.spec.js": "d5d3daca1dc923229e8862a7cd79bbd7c8c8c8b8bff9f6bc40fdeee865357fa2",
+    "playwright.config.js": "21c967876dab26220a730e2e9adb41d14a3e59e6a7f6e10ddf5bf57e5e34e2e0",
+    "playwright.payment.config.js": "c3f0f3241a46d4ff68cb3dcac4d461c355d74530438ce122d473e80ab975de09",
+    "package.json": "9108815a21de88fd202b58555017221b398f268d29077f09c982a90e3d727808"
+  }
+}

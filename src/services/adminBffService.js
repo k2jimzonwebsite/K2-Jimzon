@@ -781,13 +781,14 @@ export function retryProductEvidenceCleanupBff(cleanupId, idempotencyKey = crypt
   })
 }
 
-export async function uploadProductMediaBff(file, idempotencyKey = crypto.randomUUID()) {
+export async function uploadProductMediaBff(file, idempotencyKey = crypto.randomUUID(), expectedActorId) {
   const headers = {
     Accept: 'application/json',
     'Content-Type': file.type,
     'X-K2-CSRF': csrfToken(),
     'X-K2-Idempotency-Key': idempotencyKey,
   }
+  if (expectedActorId !== undefined) headers['X-K2-Actor-Id'] = expectedActorId
   try {
     const response = await fetchWithTimeout('/api/admin/product-media', {
       method: 'POST', credentials: 'include', headers, body: file,
@@ -804,9 +805,9 @@ export async function uploadProductMediaBff(file, idempotencyKey = crypto.random
   }
 }
 
-export function assignProductMediaBff(payload, idempotencyKey = crypto.randomUUID()) {
+export function assignProductMediaBff(payload, idempotencyKey = crypto.randomUUID(), expectedActorId) {
   return adminRequest('/api/admin/product-media/assign', {
-    method: 'POST', body: payload, csrf: true, idempotency: false, idempotencyKey,
+    method: 'POST', body: payload, csrf: true, idempotency: false, idempotencyKey, expectedActorId,
   })
 }
 

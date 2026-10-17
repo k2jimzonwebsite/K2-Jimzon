@@ -114,6 +114,9 @@ export async function handleProductMediaUpload(req, res) {
   }
   const authorized = await authorizeAdminRequest(req, res, { csrf: true })
   if (!authorized) return undefined
+  if (req.headers['x-k2-actor-id'] !== undefined && req.headers['x-k2-actor-id'] !== authorized.identity.userId) {
+    return safeJson(res, 403, { error: { code: 'STAFF_ACCESS_REQUIRED' } })
+  }
 
   try {
     const decoded = await decodeEvidenceImage(await readImageBody(req), declaredType)
@@ -179,6 +182,9 @@ export async function handleProductMediaAssignment(req, res) {
   }
   const authorized = await authorizeAdminRequest(req, res, { csrf: true })
   if (!authorized) return undefined
+  if (req.headers['x-k2-actor-id'] !== undefined && req.headers['x-k2-actor-id'] !== authorized.identity.userId) {
+    return safeJson(res, 403, { error: { code: 'STAFF_ACCESS_REQUIRED' } })
+  }
   try {
     const payload = validateProductMediaAssignment(await readJson(req))
     validateOwnedObjectUrls(authorized.client, authorized.identity.userId, payload)

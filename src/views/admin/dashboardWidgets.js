@@ -12,8 +12,9 @@ export const DASHBOARD_WIDGETS = Object.freeze([
 // Only non-obvious calculation or source rules warrant a Help control.
 // Straightforward views keep their short definitions visible instead.
 export const DASHBOARD_WIDGET_HELP = Object.freeze({
-  metrics: { read: 'Compare recorded order values and request counts. Saved connection status does not prove a working external feed.', next: 'Use Sales & records to inspect requests, or Manage to review channel readiness.' },
-  sales: { read: 'Requests, verified payments and fulfilled orders are different facts. The four reconciliation groups divide requests without double-counting.', next: 'Review matching records before exporting. CSV is an operational extract, not accounting or settlement.' },
-  revenue: { read: 'Payment-verified request values are grouped by order creation date in Asia/Manila, not payment receipt date.', next: 'Change the period, then inspect the underlying requests in Sales & records.' },
-  priority: { read: 'Rows are sorted by count, not risk. Inventory flags combine SKU and batch issues and can overlap.', next: 'Open the workspace and review the exact record before acting.' },
+  metrics: { read: 'In plain words: compare saved order totals and request counts across your shops. A saved connection label does not mean a live external feed is active.', next: 'Open Sales & records to check individual orders, or Manage to review channel setup.' },
+  sales: { read: 'In plain words: order requests, verified payments, and packed orders are tracked separately. The four groups split every request cleanly without double-counting.', next: 'Check the matching orders below before downloading the CSV list.' },
+  revenue: { read: 'In plain words: shows the value of verified-paid orders grouped by when the order was placed in Manila time, not payment receipt date.', next: 'Pick a date range, then check the matching orders in Sales & records.' },
+  priority: { read: 'In plain words: lists open tasks by how many items are waiting, not by urgency. Stock alerts combine product and batch warnings and can overlap.', next: 'Tap a row to open that workspace and check the exact record before acting.' },
 })
+

@@ -22,6 +22,7 @@ export default defineConfig({
     'coupon-recovery-ui.spec.js',
     'wholesale-recovery-ui.spec.js',
     'media-recovery-ui.spec.js',
+    'photo-csv-ui.spec.js',
     'catalog-import-recovery-ui.spec.js',
     'admin-product-master-ui.spec.js',
     'admin-human-review-editor.spec.js',

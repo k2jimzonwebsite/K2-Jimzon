@@ -153,3 +153,33 @@ test('workflow entry points use one plain name', async () => {
   expect(text).not.toContain('SVG Map')
   expect(text).toContain('Workflow map')
 })
+
+test('quick tools calculator hoists button component and isolates mobile scroll container', async () => {
+  const src = await read('../src/views/admin/AdminToolsWidget.jsx')
+  expect(src).not.toMatch(/function Calculator\([\s\S]*?const Btn =/)
+  expect(src).toContain('function CalcButton(')
+  expect(src).toContain('data-tools-scroll-body')
+  expect(src).toContain('overscroll-contain')
+  expect(src).toContain('Everyday scratchpad for quick math')
+  expect(src).toContain('In plain words: enter a selling price and your costs to see how much money you actually keep after fees.')
+})
+
+test('help tooltip coordinates single-active mobile tap-to-toggle and Escape dismissal', async () => {
+  const src = await read('../src/views/admin/HelpTip.jsx')
+  expect(src).toContain('const activeTipSetters = new Set()')
+  expect(src).toContain('aria-expanded={open}')
+  expect(src).toContain("event.key === 'Escape'")
+  expect(src).toContain('Tap ? to close')
+})
+
+test('workflow map and consignment header wrap safely on 375px mobile viewports with 44px touch targets', async () => {
+  const [graphSrc, consignmentSrc] = await Promise.all([
+    read('../src/components/admin/master-workflow-graph/MasterWorkflowGraph.jsx'),
+    read('../src/views/admin/ConsignmentManager.jsx'),
+  ])
+  expect(graphSrc).toContain('w-full sm:w-auto sm:min-w-[240px]')
+  expect(graphSrc).not.toContain('min-h-9')
+  expect(consignmentSrc).toContain('flex flex-wrap items-center justify-between gap-2')
+  expect(consignmentSrc).toContain('Supplier buying prices stay on the purchase order.')
+})
+

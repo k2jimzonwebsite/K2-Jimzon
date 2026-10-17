@@ -9,9 +9,11 @@ import {
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { useReferenceOptions } from './useReferenceOptions'
 import ReferenceSelectCell from './ReferenceSelectCell'
+import BulkPhotoCsv from './BulkPhotoCsv'
 
 export default function BulkCsvImportModal({ onClose, onImportComplete, onReviewImported }) {
   const secureCatalog = adminBffEnabled()
+  const [photoMode, setPhotoMode] = useState(false)
   const [file, setFile] = useState(null)
   const [parsedData, setParsedData] = useState([])
   const [importing, setImporting] = useState(false)
@@ -270,6 +272,8 @@ export default function BulkCsvImportModal({ onClose, onImportComplete, onReview
     if (result.status.status === 'completed' && activeRef.current && onImportComplete) onImportComplete()
   }
 
+  if (photoMode) return <BulkPhotoCsv onBack={() => setPhotoMode(false)} onClose={onClose} onSaved={onImportComplete} />
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
       <AdminDialog onClose={handleClose} closeDisabled={importing || commitUnresolved} labelledBy="catalog-csv-title">
@@ -278,6 +282,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete, onReview
         <div className="flex items-center justify-between px-6 py-4 border-b border-adm-line bg-black/40">
           <div>
             <h2 id="catalog-csv-title" className="font-sans text-xl font-semibold text-white">{secureCatalog ? 'Catalog CSV review' : 'Bulk CSV Import'}</h2>
+            {secureCatalog && <button type="button" disabled={importing || commitUnresolved} onClick={() => setPhotoMode(true)} className="mt-3 min-h-11 rounded-adm-sm border border-adm-line px-4 py-2 text-sm font-semibold text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue disabled:opacity-50">Upload photo files by CSV</button>}
             <p className="text-sm text-white/60 mt-1">{secureCatalog ? 'Review every change before a future commit. This step never writes product or stock data.' : 'Stage product metadata as drafts; reconcile physical stock by batch afterward.'}</p>
           </div>
           <button type="button" onClick={handleClose} disabled={importing || commitUnresolved} aria-label="Close catalog CSV review" className="flex min-h-11 min-w-11 items-center justify-center rounded-full bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-40">

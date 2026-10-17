@@ -223,9 +223,10 @@ export default function ConsignmentManager() {
 
   return <div className="mx-auto max-w-7xl space-y-5 text-white">
     <div className="rounded-adm border border-adm-line bg-adm-surface p-5">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-[13px] font-semibold uppercase tracking-wider text-white/60">Italy to Philippines custody</p>
         <button
+          type="button"
           onClick={() => setShowGuide((v) => !v)}
           className="flex min-h-11 items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.04] px-3 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white"
         >
@@ -236,9 +237,9 @@ export default function ConsignmentManager() {
       <div className="mt-2 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <h2 className="font-sans text-2xl font-bold">Consignment receiving</h2>
-          <p className="mt-1 max-w-[65ch] text-[15px] leading-relaxed text-white/75">Movement only: every flight, box, lot, and unit scan stays identifiable from Milan packing through Manila recount. Buying terms stay on the purchase order.</p>
+          <p className="mt-1 max-w-[65ch] text-[15px] leading-relaxed text-white/75">Track every flight, box, batch, and unit scan from Milan packing through Manila arrival recount. Supplier buying prices stay on the purchase order.</p>
         </div>
-        <button onClick={() => setShowCreate(true)} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create manifest</button>
+        <button type="button" onClick={() => setShowCreate(true)} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create manifest</button>
       </div>
       {manifests.length > 0 && <label className="mt-4 block max-w-md text-xs font-semibold text-white/55">Current manifest<select className={`${input} mt-1.5`} value={selectedManifestId} onChange={event => { const id = event.target.value; setSelectedManifestId(id); setManifest(manifests.find(item => item.id === id) || null) }}>{manifests.map(item => <option key={item.id} value={item.id}>{item.manifest_code} · {item.status.replaceAll('_', ' ')}</option>)}</select></label>}
     </div>

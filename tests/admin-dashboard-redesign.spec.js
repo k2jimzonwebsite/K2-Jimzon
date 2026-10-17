@@ -226,6 +226,104 @@ test.describe('admin command center redesign', () => {
     expect(tooltipBounds.left).toBeGreaterThanOrEqual(0)
     expect(tooltipBounds.right).toBeLessThanOrEqual(375)
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
+
+    // Second tap on the same button closes the tooltip on mobile instead of trapping focus open
+    await trigger.click()
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    await expect(page.getByRole('tooltip')).toBeHidden()
+
+    // Reopen and dismiss with Escape
+    await trigger.click()
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    await expect(page.getByRole('tooltip')).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    await expect(page.getByRole('tooltip')).toBeHidden()
+  })
+
+  test('quick tools calculator preserves button DOM identity, scroll position, and 44px touch targets on a 375px phone', async ({ page }) => {
+    await page.route('https://**/*', route => route.abort())
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto('/robots.txt', { waitUntil: 'domcontentloaded' })
+    await page.addStyleTag({ url: '/src/index.css' })
+    await page.evaluate(async () => {
+      const { injectIntoGlobalHook } = await import('/@react-refresh')
+      injectIntoGlobalHook(window)
+      window.$RefreshReg$ = () => {}
+      window.$RefreshSig$ = () => type => type
+      const [reactModule, reactDomClientModule, toolsModule] = await Promise.all([
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime,
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime,
+        import('/src/views/admin/AdminToolsWidget.jsx'),
+      ])
+      const React = reactModule.default || reactModule
+      const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
+      const app = document.getElementById('root')
+      if (app) app.style.display = 'none'
+      const fixture = document.createElement('div')
+      document.body.appendChild(fixture)
+      createRoot(fixture).render(React.createElement(toolsModule.default))
+    })
+
+    await page.getByRole('button', { name: 'Open Admin tools' }).click()
+    const dialog = page.getByRole('dialog', { name: 'Staff Tools and Margin Planner' })
+    await expect(dialog).toBeVisible()
+
+    await dialog.getByRole('button', { name: 'Calculator', exact: true }).click()
+    const scrollBody = dialog.locator('[data-tools-scroll-body]')
+    await expect(scrollBody).toBeVisible()
+
+    const sevenBtn = dialog.getByRole('button', { name: '7', exact: true })
+    const btnBox = await sevenBtn.boundingBox()
+    expect(btnBox.height).toBeGreaterThanOrEqual(44)
+
+    await scrollBody.evaluate(el => {
+      el.style.maxHeight = '380px'
+    })
+    await dialog.getByRole('button', { name: '=', exact: true }).scrollIntoViewIfNeeded()
+    const beforeScrollTop = await scrollBody.evaluate(el => el.scrollTop)
+    expect(beforeScrollTop).toBeGreaterThan(100)
+
+    await sevenBtn.evaluate(el => {
+      el.__k2StableNode = 'preserved'
+    })
+
+    await sevenBtn.click({ noWaitAfter: true })
+    await dialog.getByRole('button', { name: '5', exact: true }).click()
+    await dialog.getByRole('button', { name: '+', exact: true }).click()
+    await dialog.getByRole('button', { name: '8', exact: true }).click()
+    await dialog.getByRole('button', { name: '=', exact: true }).click()
+
+    await expect(dialog.locator('[data-calc-display]')).toHaveText('83')
+    const nodePreserved = await sevenBtn.evaluate(el => el.__k2StableNode === 'preserved')
+    expect(nodePreserved).toBe(true)
+
+    const afterScrollTop = await scrollBody.evaluate(el => el.scrollTop)
+    expect(afterScrollTop).toBe(beforeScrollTop)
+
+    // Verify Sales planner, Margin, Units, VAT 12%, and Expiry layman explainers and 44px controls at 375px
+    await dialog.getByRole('button', { name: 'Sales planner', exact: true }).click()
+    await expect(dialog.getByText(/In plain words: enter a selling price and your costs/)).toBeVisible()
+
+    await dialog.getByRole('button', { name: 'Units', exact: true }).click()
+    await expect(dialog.getByText(/In plain words: convert Italian package weights/)).toBeVisible()
+    const weightBtnBox = await dialog.getByRole('button', { name: 'Weight', exact: true }).boundingBox()
+    expect(weightBtnBox.height).toBeGreaterThanOrEqual(44)
+    const unitSelectBox = await dialog.getByLabel('Convert from unit').boundingBox()
+    expect(unitSelectBox.height).toBeGreaterThanOrEqual(44)
+
+    await dialog.getByRole('button', { name: 'VAT 12%', exact: true }).click()
+    await expect(dialog.getByText(/In plain words: choose Add VAT to put 12% on top/)).toBeVisible()
+    const vatModeBox = await dialog.getByRole('button', { name: 'Add VAT', exact: true }).boundingBox()
+    expect(vatModeBox.height).toBeGreaterThanOrEqual(44)
+
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
+
+    // Verify desktop 1440x900 layout also renders without horizontal overflow
+    await page.setViewportSize({ width: 1440, height: 900 })
+    await expect(dialog).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
   })
 
   test.beforeEach(async ({ page }) => {

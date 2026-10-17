@@ -31,6 +31,7 @@ export default defineConfig({
     env: {
       // The Admin visual fixtures intercept every request to this fabricated
       // browser-public project origin. Never inherit a real local provider.
+      K2_ACCEPTANCE_NO_WATCH: 'true',
       VITE_SUPABASE_URL: 'https://fixture.supabase.co',
       VITE_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
     },
