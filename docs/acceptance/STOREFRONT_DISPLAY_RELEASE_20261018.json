@@ -1,0 +1,139 @@
+{
+  "state": "FULL_RELEASE_GATE_PASSED_NOT_YET_PUSHED",
+  "baseCommit": "44d793a34b7d871f4577e291bcda3f407b920aa8",
+  "approvedPatchSha256": "5d9815f3fd2d7e6a17fcdbc81930039a5f5aae9563fdf30e721b2e98f9820365",
+  "ownerAuthorization": "Release the verified display fixes",
+  "initialCompletedPlaywright": [
+    1105,
+    4,
+    12,
+    32
+  ],
+  "totalCompletedPlaywright": 1464,
+  "interruption": "Original process absent after27/29recoverycases; resumed entire interrupted recovery suite and all remaining stages, preserving passed earlier suites",
+  "allRemainingStages": [
+    {
+      "completedAt": "2026-10-18T08:11:37.2694887Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-storefront-recovery.log",
+      "exitCode": 0,
+      "stage": "test:storefront-recovery",
+      "logSha256": "a9e722febfc171f31dc61dced000c94a3f532daa787ed3c1fc8850563c6fc17a"
+    },
+    {
+      "completedAt": "2026-10-18T08:13:28.1359759Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-admin-ui.log",
+      "exitCode": 0,
+      "stage": "test:admin-ui",
+      "logSha256": "6205b64365fa053cea0418a8da3493844e87fe1e58000e168f37b8bd733d8d06"
+    },
+    {
+      "completedAt": "2026-10-18T08:14:27.6527995Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-payment-ui.log",
+      "exitCode": 0,
+      "stage": "test:payment-ui",
+      "logSha256": "0da977d529ee58c890cbd3011d6fc24cbb15afa836430dd6db02c81e1f465bdd"
+    },
+    {
+      "completedAt": "2026-10-18T08:14:58.5354636Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-inbox-ui.log",
+      "exitCode": 0,
+      "stage": "test:inbox-ui",
+      "logSha256": "7ef6590afa4c44fa11788092cce9f6e2e62ac1cf6d09194d25c325a2941cbcae"
+    },
+    {
+      "completedAt": "2026-10-18T08:16:41.0360280Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-admin-product-master-ui.log",
+      "exitCode": 0,
+      "stage": "test:admin-product-master-ui",
+      "logSha256": "462bac71b854fc748773358da0f2a0ef7091cc4361c0684d8e1792756d0ee56e"
+    },
+    {
+      "completedAt": "2026-10-18T08:17:07.3887241Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-admin-website-assignment-ui.log",
+      "exitCode": 0,
+      "stage": "test:admin-website-assignment-ui",
+      "logSha256": "6dd6f77ca6a19b231931ec3dcb243205656a5bd108e3cfe9e4fdf33c31b5a9ad"
+    },
+    {
+      "completedAt": "2026-10-18T08:17:16.3958650Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-owner-count-close-ui.log",
+      "exitCode": 0,
+      "stage": "test:owner-count-close-ui",
+      "logSha256": "55233e0225536a1cfcc02886e8fd08510877b85d1f6837497fc5d69e82cc1d28"
+    },
+    {
+      "completedAt": "2026-10-18T08:17:32.3024884Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-customer-account-ui.log",
+      "exitCode": 0,
+      "stage": "test:customer-account-ui",
+      "logSha256": "aa8be84b73ace982a5bb4bafb0ed9b7546db1a3334fed161b9238cabdd12cdcf"
+    },
+    {
+      "completedAt": "2026-10-18T08:18:40.2173719Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-selling-surfaces.log",
+      "exitCode": 0,
+      "stage": "test:selling-surfaces",
+      "logSha256": "227cb444e10782c716a5915a88a90594cedd0ae2ecb435051c2031386c7ea38d"
+    },
+    {
+      "completedAt": "2026-10-18T08:18:57.3938564Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-order-receipt-direct.log",
+      "exitCode": 0,
+      "stage": "test:order-receipt-direct",
+      "logSha256": "90284cf5b384bd1dab585b0c40909e81d684378220621b50b12f86cd052a4322"
+    },
+    {
+      "completedAt": "2026-10-18T08:19:20.7844517Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-workflow-api.log",
+      "exitCode": 0,
+      "stage": "test:workflow-api",
+      "logSha256": "408a09440704ab8e42a70f644cdb4cf920be4ef6d82ecb7876527a7d522bfd92"
+    },
+    {
+      "completedAt": "2026-10-18T08:19:47.9078011Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-intake-ai-ui.log",
+      "exitCode": 0,
+      "stage": "test:intake-ai-ui",
+      "logSha256": "8999cd512e495f513b2d80402c1d3f3a5639277b63ed658049a6116e4f41f77c"
+    },
+    {
+      "completedAt": "2026-10-18T08:19:50.8860397Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-test-vercel-output.log",
+      "exitCode": 0,
+      "stage": "test:vercel-output",
+      "logSha256": "7ac2dd714ad1c5b80b86915c92a3740784d41923e0cbffd234679ed27008b995"
+    },
+    {
+      "completedAt": "2026-10-18T08:20:19.0324034Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-build-storefront.log",
+      "exitCode": 0,
+      "stage": "build:storefront",
+      "logSha256": "e177b02b8207c01891f811eed14f560affe511e97e7326e47c64d5e3b77f87de"
+    },
+    {
+      "completedAt": "2026-10-18T08:20:44.5000510Z",
+      "log": "C:/Users/jerze/K2 JImzon/outputs/inventory-production-readiness-20261018/release-build-admin.log",
+      "exitCode": 0,
+      "stage": "build:admin",
+      "logSha256": "0434f39aab81cb100a2e40eb4cdf6d8e3bcd8bbdc5e3543fdfc162cb1601bfc0"
+    }
+  ],
+  "initialLogSha256": "adbaf2059e19f37d986514f7b1ee67371f63a8db03a15ee75c3ecbb3f033264a",
+  "sourceFiles": {
+    "src/components/BeforeAfterSlider.jsx": "732d3540f9b1b8afaa9253e3fcfdb467117174d1559e9061193325cbec54135d",
+    "src/components/InteractiveReveal.jsx": "ba7d1ce5c7dad89d962f4cdac83d76a50ac8a83e2d136f609ed46f8c19d78060",
+    "src/components/ProductVisual.jsx": "2823a9fbd82a917a9c7fd55583dd3a3f7e628d703c59bf0d2e8c4f6c7f4e55de",
+    "src/components/ProductPassport.jsx": "74250d60a8df19a47a7c6fdb862add4999f2d8a3c61502feadce44f809002232",
+    "src/views/MasterProduct.jsx": "c5e53a567509ccafe1e978cc33950c2514839be4a7a9a87253ec3c0375482be9",
+    "src/lib/productStructuredData.js": "15f321fe561e414653577beae7a321d7dc86a6605a097a707cffd0e96408f882",
+    "src/lib/productNetWeight.js": "3b9a4299a097a0c4f477d62ae55a42b8637bebf25addbb198c528c797da57a2b",
+    "tests/product-net-weight.test.mjs": "83905087b3099d7b7b5c75c0ecd4c1d213f9147bbdc5d667451094d97e53b139"
+  },
+  "normalizedSourceMatches": true,
+  "restoredTestGeneratedScreenshots": 85,
+  "storefrontBudget": "JS147.40/150.50kBgzip;CSS29.92/30.00kBgzip",
+  "adminBudget": "226.68/300.00kBminified",
+  "bothArtifactBoundariesAndSecretChecks": true,
+  "productionPromoted": false,
+  "providerStateChanged": false
+}

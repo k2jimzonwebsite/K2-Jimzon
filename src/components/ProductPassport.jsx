@@ -1,4 +1,5 @@
 import { ShieldCheckIcon, CheckIcon } from './ui/icons'
+import { formatNetWeight } from '../lib/productNetWeight'
 
 /**
  * ProductPassport
@@ -12,7 +13,8 @@ export default function ProductPassport({ product, stock = null }) {
   const batch = product.batch_number || product.lot_number || null
   const bestBefore = product.expiry_date || product.best_before || null
   const storage = product.storage_instructions || null
-  const netWeight = product.net_weight ? `${product.net_weight}${product.package_type ? ` (${product.package_type})` : ''}` : null
+  const weight = formatNetWeight(product.net_weight)
+  const netWeight = weight ? `${weight}${product.package_type ? ` (${product.package_type})` : ''}` : null
 
   return (
     <div className="rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-5 shadow-sm">
