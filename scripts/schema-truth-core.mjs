@@ -60,6 +60,54 @@ export function redactObject(obj) {
  * Defines the canonical baseline of tables, views, grants, RLS, functions, storage, and realtime.
  */
 export function buildExpectedRepositorySchema() {
+  const customerAccountFunction = {
+    owner: 'postgres', securityDefiner: true, searchPathSafe: true,
+    searchPathConfig: 'search_path=""', anonCallable: false, authenticatedCallable: true,
+    exactExecuteGrants: ['authenticated:EXECUTE'], requiredLiveSignals: ['references_auth_uid'],
+    aal2Required: false,
+  }
+  const signedCustomerAccountFunction = {
+    ...customerAccountFunction,
+    // Reads consume signed nonces/rate buckets; notification read also marks read_at.
+    stateMutation: true, idempotency: 'signed_nonce_replay_refused',
+    disposition: 'retain_behind_storefront_bff',
+    dependencies: [
+      ['k2_private.verify_guest_bff_request(text,bigint,uuid,text,text,text)','affed1d622083d4a6257c9f6647ef366'],
+      ['k2_private.consume_guest_rate(text,text,bytea,integer,integer)','1a6f1e251dea5aee30659c5edb88a521'],
+    ].map(([signature,definitionMd5])=>({signature,definitionMd5,owner:'postgres',securityDefiner:true,
+      searchPathConfig:'search_path=""',exactExecuteGrants:[]})),
+  }
+  const staffReader = {
+    owner: 'postgres', securityDefiner: true, searchPathSafe: true,
+    anonCallable: false, authenticatedCallable: true, aal2Required: true,
+    stateMutation: false, requiredLiveSignals: ['references_auth_uid'],
+    exactExecuteGrants: ['authenticated:EXECUTE'],
+  }
+  const staffHelperDependency = {
+    signature: 'public.is_staff()', owner: 'postgres', securityDefiner: true,
+    definitionMd5: '567f18ba63aaa2dfdbd8df9c31edc440',
+  }
+  const staffHelperExactDependency={...staffHelperDependency,searchPathConfig:'search_path=public',exactExecuteGrants:['authenticated:EXECUTE']}
+  const staffSigningDependencies=[staffHelperExactDependency,
+    {signature:'k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)',owner:'postgres',securityDefiner:true,
+      definitionMd5:'3db63773c8baf8d1fcfb3ca2ab2ed2a8',searchPathConfig:'search_path=""',exactExecuteGrants:[]},
+  ]
+  const reservationDependencies = [
+    staffHelperExactDependency,
+    ...[
+      ['k2_private.start_category_lot_context_v1(integer)','1b9a366d33fc9668c730b02ebcead715'],
+      ['k2_private.current_category_lot_context_v1()','74aea70d24e22b917553f03bd4ddb505'],
+      ['k2_private.clear_category_lot_context_v1()','70fb5acf38c2cf776d13847f032aa9c1'],
+      ['k2_private.lock_category_policy_v1(boolean)','71ebbbf82bda84882f51888d3a8fc5bc'],
+    ].map(([signature,definitionMd5])=>({signature,definitionMd5,owner:'postgres',securityDefiner:true,
+      searchPathConfig:'search_path=""',exactExecuteGrants:[]})),
+  ]
+  const reservationMutation = {
+    ...staffReader,stateMutation:true,authorizationGuard:'is_staff',dependencies:reservationDependencies,searchPathConfig:'search_path=""',
+    aal2Dependencies:['k2_private.start_category_lot_context_v1(integer)','k2_private.current_category_lot_context_v1()'],
+    ownershipScope:'canonical_staff_reservation_operations',idempotency:'not_guaranteed_by_direct_rpc',
+    safeFailure:'transaction_atomic_exception',disposition:'retain_until_reviewed_signed_reservation_cutover',
+  }
   const staffMutation = {
     securityDefiner: true,
     anonCallable: false,
@@ -107,6 +155,18 @@ export function buildExpectedRepositorySchema() {
       products_with_margins: { securityInvoker: true, anonAccess: false },
       v_product_stock_from_batches: { securityInvoker: true, anonAccess: true },
     },
+    // Optional authorization surface, like functionAuthorizationContracts below.
+    // Presence is enforced by the installed-catalog readiness gate. This audit
+    // refuses metadata drift; it does not qualify populated or hosted behavior.
+    viewAuthorizationContracts: {
+      v_storefront_visible_skus: {
+        owner: 'postgres',
+        options: ['security_barrier=true', 'security_invoker=false'],
+        definitionMd5: 'b0fe2d0d57800904dd82d192f1ebd0d4',
+        columns: [{ name: 'sku', type: 'character varying' }],
+        clientGrants: ['anon:SELECT', 'authenticated:SELECT'],
+      },
+    },
     functions: {
       'public.is_staff()': { securityDefiner: true, returns: 'boolean', anonCallable: false, searchPathSafe: true },
       'public.is_admin()': { securityDefiner: true, returns: 'boolean', anonCallable: false, searchPathSafe: true },
@@ -118,6 +178,202 @@ export function buildExpectedRepositorySchema() {
     // requirements. Most are transitional direct staff mutations that MAP-019/
     // MAP-020 will replace with Admin BFF commands and may then revoke.
     functionAuthorizationContracts: {
+      'public.execute_admin_catalog_import_v1(text,bigint,uuid,uuid,text,text)': {
+        ...staffReader,stateMutation:true,definitionMd5:'c8d44c7db85a7b967e6a97035af8153e',searchPathConfig:'search_path=""',
+        authorizationGuard:'is_staff',requiredLiveSignals:['references_auth_uid','references_is_staff','references_aal2'],
+        // Exact current source and local serial/atomic scope; PUBLIC trigger stays open.
+        dependencies:[
+          {"signature":"public.is_staff()","definitionMd5":"567f18ba63aaa2dfdbd8df9c31edc440","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=public","exactExecuteGrants":["authenticated:EXECUTE"]},
+          {"signature":"public.generate_k2_sku_internal()","definitionMd5":"891a6f09de32d0b9ec2c5297c14cd28b","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"public.sync_product_compat_columns()","definitionMd5":"a0ab7247ad756bf63fe01a8810c756ca","owner":"postgres","securityDefiner":false,"searchPathConfig":"search_path=public","exactExecuteGrants":[]},
+          {"signature":"public.sync_product_publication_status()","definitionMd5":"84459ca828cd715f0fd9096c26ffa59a","owner":"postgres","securityDefiner":false,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":["public:EXECUTE"]},
+          {"signature":"k2_private.lock_category_policy_v1(boolean)","definitionMd5":"71ebbbf82bda84882f51888d3a8fc5bc","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"public.bump_product_catalog_record_version()","definitionMd5":"29a4eea4f3759abd4f6b5ee0ebc77891","owner":"postgres","securityDefiner":false,"searchPathConfig":"search_path=public, pg_temp","exactExecuteGrants":[]},
+          {"signature":"k2_private.verify_admin_bff_request(text, bigint, uuid, uuid, text, text)","definitionMd5":"3db63773c8baf8d1fcfb3ca2ab2ed2a8","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+        ],
+        ownershipScope:'current_staff_actor_import_operation_and_row_events',
+        idempotency:'actor_action_payload_receipt_serial_retry_qualified',disposition:'retain_behind_admin_bff',
+      },
+
+      'public.execute_admin_product_intake_command_v1(text,bigint,uuid,uuid,text,text)': {
+        ...staffReader,stateMutation:true,definitionMd5:'1d141d2a1596f5865e1f51335e42e2a5',searchPathConfig:'search_path=""',
+        requiredLiveSignals:['references_auth_uid','references_is_admin'],
+        // Ownership permits Staff's own intake; Admin-only reconciliation stays distinct.
+        // Observed PUBLIC trigger dependencies retain their independent critical findings.
+        dependencies:[
+          {"signature":"public.create_product_first_inventory_server(uuid, uuid, text, jsonb)","definitionMd5":"293fa18dd24fb02e54e2215c2fb45659","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"public.reconcile_product_batches(text, jsonb, text)","definitionMd5":"985e6a0dd92a0765376c9769dea6b0b6","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=public","exactExecuteGrants":[]},
+          {"signature":"k2_private.verify_admin_bff_request(text, bigint, uuid, uuid, text, text)","definitionMd5":"3db63773c8baf8d1fcfb3ca2ab2ed2a8","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"public.is_staff()","definitionMd5":"567f18ba63aaa2dfdbd8df9c31edc440","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=public","exactExecuteGrants":["authenticated:EXECUTE"]},
+          {"signature":"public.is_admin()","definitionMd5":"56650c71db4ecc0a5f1d2972f90f4621","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=public","exactExecuteGrants":["authenticated:EXECUTE"]},
+          {"signature":"k2_private.lock_category_policy_v1(boolean)","definitionMd5":"71ebbbf82bda84882f51888d3a8fc5bc","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"k2_private.start_category_lot_context_v1(integer)","definitionMd5":"1b9a366d33fc9668c730b02ebcead715","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"k2_private.current_category_lot_context_v1()","definitionMd5":"74aea70d24e22b917553f03bd4ddb505","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"k2_private.clear_category_lot_context_v1()","definitionMd5":"70fb5acf38c2cf776d13847f032aa9c1","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"k2_private.effective_category_minimum_v1(uuid, integer)","definitionMd5":"26ce6255f014a870f8a358f3de2638a8","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"k2_private.lot_is_eligible_for_category_v1(product_batches, integer, timestamp with time zone)","definitionMd5":"fc25c1c47a1eae3d055d6a1305546a1b","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"public.sync_product_batch_compat_columns()","definitionMd5":"eb58f63d32d6dffbebc6c2021feba7a0","owner":"postgres","securityDefiner":false,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"public.sync_product_compat_columns()","definitionMd5":"a0ab7247ad756bf63fe01a8810c756ca","owner":"postgres","securityDefiner":false,"searchPathConfig":"search_path=public","exactExecuteGrants":[]},
+          {"signature":"public.sync_product_publication_status()","definitionMd5":"84459ca828cd715f0fd9096c26ffa59a","owner":"postgres","securityDefiner":false,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":["public:EXECUTE"]},
+          {"signature":"public.touch_product_intake_session()","definitionMd5":"c41ca093a8b48923cc4a3aae52306eeb","owner":"postgres","securityDefiner":false,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":["public:EXECUTE"]},
+          {"signature":"public.bump_product_catalog_record_version()","definitionMd5":"29a4eea4f3759abd4f6b5ee0ebc77891","owner":"postgres","securityDefiner":false,"searchPathConfig":"search_path=public, pg_temp","exactExecuteGrants":[]},
+          {"signature":"k2_private.guard_category_context_clear_v1()","definitionMd5":"8c94278b93fc6a0419ae5a6ae1852cd4","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"public.add_consignment_item_v2(uuid, text, text, text, date, integer)","definitionMd5":"5345fe455c46cc0883cdd8484354e14f","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=public","exactExecuteGrants":[]},
+          {"signature":"public.transition_product_publication_server(uuid, text)","definitionMd5":"4baa42c09f80621d8762959ee282db2a","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"public.create_product_draft_server(uuid, uuid, jsonb, jsonb)","definitionMd5":"85ae776e5b1e1a2a2646b1ba1a86ac70","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"public.generate_k2_sku_internal()","definitionMd5":"891a6f09de32d0b9ec2c5297c14cd28b","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+          {"signature":"k2_private.assert_imported_draft_target_v1(uuid, bigint)","definitionMd5":"27191dde9eb7a650d5b3c70abfff816a","owner":"postgres","securityDefiner":true,"searchPathConfig":"search_path=\"\"","exactExecuteGrants":[]},
+        ],
+        aal2Dependencies:['k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)'],
+        ownershipScope:'staff_owned_or_admin_intake_admin_reconciliation_staff_owned_publication',
+        idempotency:'actor_action_payload_receipt_serial_retry_qualified',disposition:'retain_behind_admin_bff',
+      },
+      'public.execute_admin_product_master_command_v1(text,bigint,uuid,uuid,text,text)': {
+        ...staffReader,stateMutation:true,definitionMd5:'482c054570091631e9950423a13d4788',searchPathConfig:'search_path=""',
+        authorizationGuard:'is_admin',requiredLiveSignals:['references_auth_uid','references_is_admin','references_aal2'],
+        dependencies:[...staffSigningDependencies,
+          {signature:'public.is_admin()',owner:'postgres',securityDefiner:true,
+            definitionMd5:'56650c71db4ecc0a5f1d2972f90f4621',searchPathConfig:'search_path=public',exactExecuteGrants:['authenticated:EXECUTE']},
+          ...[
+            ['public.delete_products_with_pin_v2(text[],text,text,uuid)','8f9dc4a52f0111ceff5f99cf48475715'],
+            ['k2_private.execute_category_policy_payload_v1(text,jsonb)','3a84360fc370c288c6c23f6912377898'],
+            ['k2_private.mutate_category_policy_v1(uuid,text,integer,bigint,text,integer)','c8383112e02776908d90da06025d2f2d'],
+            ['k2_private.effective_category_minimum_v1(uuid,integer)','26ce6255f014a870f8a358f3de2638a8'],
+            ['k2_private.lock_category_policy_v1(boolean)','71ebbbf82bda84882f51888d3a8fc5bc'],
+          ].map(([signature,definitionMd5])=>({signature,definitionMd5,owner:'postgres',securityDefiner:true,
+            searchPathConfig:'search_path=""',exactExecuteGrants:[]})),
+          ...[
+            ['public.sync_product_compat_columns()','a0ab7247ad756bf63fe01a8810c756ca','search_path=public',[]],
+            // Observed dependency only: its separate PUBLIC trigger finding remains open.
+            ['public.sync_product_publication_status()','84459ca828cd715f0fd9096c26ffa59a','search_path=""',['public:EXECUTE']],
+            ['public.bump_product_catalog_record_version()','29a4eea4f3759abd4f6b5ee0ebc77891','search_path=public, pg_temp',[]],
+          ].map(([signature,definitionMd5,searchPathConfig,exactExecuteGrants])=>({signature,definitionMd5,owner:'postgres',
+            securityDefiner:false,searchPathConfig,exactExecuteGrants})),
+        ],
+        ownershipScope:'admin_superadmin_canonical_master_category_policy_literal_admin_pin_deletion',
+        idempotency:'actor_action_payload_receipt_serial_retry_qualified',disposition:'retain_behind_admin_bff',
+      },
+      'public.execute_admin_wholesale_inquiry_command_v1(text,bigint,uuid,uuid,text,text)': {
+        ...staffReader,stateMutation:true,definitionMd5:'0957e21f4f0658dcfa8e1f23032652c9',searchPathConfig:'search_path=""',
+        dependencies:staffSigningDependencies,
+        aal2Dependencies:['k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)'],
+        ownershipScope:'signed_staff_inquiry_status_only_admin_superadmin_bff_signing',
+        idempotency:'actor_action_payload_receipt_serial_retry_qualified',disposition:'retain_behind_admin_bff',
+      },
+      'public.execute_admin_ai_spend_controls_command_v1(text,bigint,uuid,uuid,text,text)': {
+        ...staffReader,stateMutation:true,definitionMd5:'a74380ea8da4138b5a781c4e44201531',searchPathConfig:'search_path=""',
+        requiredLiveSignals:['references_auth_uid','references_aal2'],dependencies:staffSigningDependencies,
+        aal2Dependencies:['k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)'],
+        ownershipScope:'superadmin_versioned_confirmed_ai_limits_without_provider_invocation',
+        idempotency:'actor_action_payload_receipt_serial_retry_qualified',disposition:'retain_behind_admin_bff',
+      },
+      'public.execute_admin_session_command_v1(text,bigint,uuid,uuid,text,text)': {
+        ...staffReader,stateMutation:true,definitionMd5:'f8eb2b3a2e95817da2031cb17bcd3b50',searchPathConfig:'search_path=""',
+        dependencies:[staffHelperExactDependency,
+          {signature:'k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)',owner:'postgres',securityDefiner:true,
+            definitionMd5:'3db63773c8baf8d1fcfb3ca2ab2ed2a8',searchPathConfig:'search_path=""',exactExecuteGrants:[]},
+        ],
+        aal2Dependencies:['k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)'],
+        ownershipScope:'current_staff_uid_sessions_provider_checks_on_register_validate_list',
+        idempotency:'serial_revocation_receipt_registration_audit_repeats',disposition:'retain_behind_admin_bff',
+      },
+      'public.execute_admin_channel_command_v1(text,bigint,uuid,uuid,text,text)': {
+        ...staffReader,stateMutation:true,definitionMd5:'3a0619c2e1efae619525141e906e17a6',
+        searchPathConfig:'search_path=""',authorizationGuard:'is_admin',
+        requiredLiveSignals:['references_auth_uid','references_aal2'],
+        dependencies:[staffHelperExactDependency,
+          {signature:'public.is_admin()',owner:'postgres',securityDefiner:true,
+            definitionMd5:'56650c71db4ecc0a5f1d2972f90f4621',searchPathConfig:'search_path=public',exactExecuteGrants:['authenticated:EXECUTE']},
+          {signature:'k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)',owner:'postgres',securityDefiner:true,
+            definitionMd5:'3db63773c8baf8d1fcfb3ca2ab2ed2a8',searchPathConfig:'search_path=""',exactExecuteGrants:[]},
+        ],
+        aal2Dependencies:['k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)'],
+        ownershipScope:'admin_superadmin_existing_website_or_pasabuy_reference_verification',
+        idempotency:'actor_action_payload_receipt_serial_retry_qualified',disposition:'retain_behind_admin_bff',
+      },
+      'public.save_customer_account_settings_v1(bigint,uuid,text,text,text)': {
+        ...signedCustomerAccountFunction,definitionMd5:'e4e2081fe8fa1dfde461a6efff4e9e5a',
+        ownershipScope:'current_uid_settings_save_without_client_selected_user',
+      },
+      'public.claim_guest_customer_account_v1(bigint,uuid,text,text,text,text)': {
+        ...signedCustomerAccountFunction,definitionMd5:'f6ac88fa4880ab4dc0d8b111ac2305c2',
+        ownershipScope:'verified_auth_contact_matches_guest_grant_customer_before_link',
+        idempotency:'actor_and_payload_claim_receipt_serial_retry_qualified',
+      },
+      'public.append_customer_account_message_v1(bigint,uuid,text,text,text)': {
+        ...signedCustomerAccountFunction,definitionMd5:'e8410c3a530d1121710e00551745507e',
+        ownershipScope:'active_link_customer_conversation_reply',
+        idempotency:'actor_and_conversation_message_key_serial_retry_qualified',
+      },
+      'public.customer_record_owned_by_current_user(uuid)': {
+        ...customerAccountFunction,definitionMd5:'ce5c912ccd24bc2db8b2823cc6fa4a33',stateMutation:false,
+        ownershipScope:'current_uid_active_customer_account_link',disposition:'retain_scoped_ownership_helper',
+      },
+      'public.list_customer_account_history_v1(bigint,uuid,text,text,text)': {
+        ...signedCustomerAccountFunction,definitionMd5:'dc5058cc5a754a08a688e89502d48764',
+        requiredLiveSignals:['references_auth_uid','filters_internal_messages'],
+        ownershipScope:'active_link_customer_history_without_internal_staff_notes',
+      },
+      'public.read_customer_account_settings_v1(bigint,uuid,text,text,text)': {
+        ...signedCustomerAccountFunction,definitionMd5:'6d04a8c318596b4d7cd95225b09be64f',
+        ownershipScope:'current_uid_settings_and_latest_30_notification_projection',
+      },
+      'public.read_customer_account_notification_v1(bigint,uuid,text,text,text)': {
+        ...signedCustomerAccountFunction,definitionMd5:'ec1b8dc6335a568b4bbaa6ce542464c4',
+        ownershipScope:'current_uid_notification_mark_read_preserving_existing_time',
+      },
+      'public.read_admin_catalog_import_status_v1(uuid)': {
+        ...staffReader,definitionMd5:'87bb7dfe2c546f46f2930567eb5e2f42',searchPathConfig:'search_path=""',
+        authorizationGuard:'is_staff',dependencies:[staffHelperExactDependency],
+        ownershipScope:'current_actor_catalog_import_operation_and_events',disposition:'retain_behind_admin_bff',
+      },
+      'public.read_admin_product_media_orphans_v1(integer)': {
+        ...staffReader,definitionMd5:'51124d7e7e59eabf06f61edb1f421417',searchPathConfig:'search_path=""',
+        authorizationGuard:'is_admin',requiredLiveSignals:[],
+        dependencies:[{signature:'public.is_admin()',owner:'postgres',securityDefiner:true,
+          definitionMd5:'56650c71db4ecc0a5f1d2972f90f4621',searchPathConfig:'search_path=public',exactExecuteGrants:['authenticated:EXECUTE']}],
+        ownershipScope:'admin_confirmed_upload_aged_unreferenced_media_candidates',disposition:'retain_behind_admin_bff',
+      },
+      'public.read_staff_express_delivery_v1(uuid)': {
+        ...staffReader,definitionMd5:'97aced1c37357cd529d38ddddd8827f9',searchPathConfig:'search_path=""',
+        dependencies:[{signature:'k2_private.project_express_quote_v1(uuid)',owner:'postgres',securityDefiner:true,
+          definitionMd5:'65c0d84bc9b52cfb8b473285e6cf4a44',searchPathConfig:'search_path=""',exactExecuteGrants:[]}],
+        ownershipScope:'admin_staff_canonical_website_express_order_projection',disposition:'retain_behind_admin_bff',
+      },
+      'public.read_admin_ai_spend_controls_v1()': {
+        ...staffReader,definitionMd5:'e57ce6663819fbc39d56596f08c072d4',searchPathConfig:'search_path=""',
+        ownershipScope:'admin_superadmin_ai_spend_configuration_projection',disposition:'retain_behind_admin_bff',
+      },
+      'public.read_admin_channel_readiness_v1()': {
+        ...staffReader,definitionMd5:'c7cda4c4aa18b11f83a2df9f1d4c5882',searchPathConfig:'search_path=""',
+        authorizationGuard:'is_staff',requiredLiveSignals:[],dependencies:[staffHelperExactDependency],
+        ownershipScope:'staff_channel_counts_without_connector_secrets',disposition:'retain_behind_admin_bff',
+      },
+      'public.list_admin_wholesale_inquiries_v1()': {
+        ...staffReader,definitionMd5:'dcaa9516948c0f65a1bdab1120714a17',searchPathConfig:'search_path=""',
+        authorizationGuard:'is_staff',dependencies:[staffHelperExactDependency],
+        ownershipScope:'staff_latest_200_wholesale_contacts',disposition:'retain_behind_admin_bff',
+      },
+      'public.extend_reservation_v1(uuid,integer,text)': {
+        ...reservationMutation,definitionMd5:'ef6f6e7a139e0b39f7e65d053c838962',
+      },
+      'public.release_expired_reservations_v1(integer)': {
+        ...reservationMutation,definitionMd5:'60356edaabb79966e4098cafd2c4b8ea',
+      },
+      'public.read_admin_product_stock_v1(text[])': {
+        ...staffReader, authorizationGuard: 'is_staff',
+        definitionMd5: '14da2b50760f942a3b554899410bed5d', dependency: staffHelperDependency,
+        ownershipScope: 'canonical_staff_eligible_stock', disposition: 'retain_behind_admin_bff',
+      },
+      'public.read_admin_lot_snapshot_v1(text)': {
+        ...staffReader, authorizationGuard: 'is_staff',
+        definitionMd5: '94fc2851e10fe8e5b1e4ce8983bdd47f', dependency: staffHelperDependency,
+        ownershipScope: 'canonical_staff_lot_snapshot', disposition: 'retain_behind_admin_bff',
+      },
+      'public.read_customer_delivery_rates_v1()': {
+        ...staffReader, definitionMd5: '0610b1dc22afa3a3c2d4984f24027eef',
+        ownershipScope: 'admin_staff_customer_tariff_versions', disposition: 'retain_behind_admin_bff',
+      },
       'public.list_order_payment_receipts_v1(uuid)': {
         securityDefiner: true, anonCallable: false, searchPathSafe: true,
         authorizationGuard: 'is_staff', aal2Required: true,
@@ -466,7 +722,9 @@ export function auditExposedAuthorization(liveExport, expectedSchema = buildExpe
   const liveGrants = normalizeGrants(liveExport.grants)
   const livePolicies = normalizePolicies(liveExport.policies)
   const reviewedTables = new Set(Object.keys(expectedSchema.tables).map((name) => name.replace(/^public\./, '')))
-  const reviewedViews = new Set(Object.keys(expectedSchema.views).map((name) => name.replace(/^public\./, '')))
+  const reviewedViews = new Set([
+    ...Object.keys(expectedSchema.views), ...Object.keys(expectedSchema.viewAuthorizationContracts || {}),
+  ].map((name) => name.replace(/^public\./, '')))
   const reviewedFunctions = new Map([
     ...Object.entries(expectedSchema.functions || {}),
     ...Object.entries(expectedSchema.functionAuthorizationContracts || {}),
@@ -528,6 +786,26 @@ export function auditExposedAuthorization(liveExport, expectedSchema = buildExpe
   for (const [key, view] of publicViews) {
     const viewName = recordName(key, view, ['view_name'])
     const grants = liveGrants.filter((grant) => matchesPublicRelation(grant, viewName))
+    const contract = expectedSchema.viewAuthorizationContracts?.[viewName]
+    if (contract) {
+      const options = String(view.options || '').split(',').filter(Boolean).sort()
+      const clientGrantRows = grants.filter(grant =>
+        ['public', 'anon', 'authenticated'].includes(String(grant.grantee || '').toLowerCase()),
+      )
+      const clientGrants = clientGrantRows.map(grant => `${String(grant.grantee).toLowerCase()}:${String(grant.privilege).toUpperCase()}`).sort()
+      if (view.owner !== contract.owner || view.security_invoker !== false
+        || JSON.stringify(options) !== JSON.stringify(contract.options)
+        || view.definition_md5 !== contract.definitionMd5
+        || JSON.stringify(view.projected_columns) !== JSON.stringify(contract.columns)
+        || clientGrantRows.some(grant => grant.is_grantable !== false)
+        || JSON.stringify(clientGrants) !== JSON.stringify(contract.clientGrants)) {
+        issues.push({
+          type: 'PUBLIC_VIEW_CONTRACT_DRIFT', severity: SEVERITY.HIGH,
+          target: `public.${viewName}`,
+          message: `Public view public.${viewName} lacks the exact reviewed definition, owner, options, projection or client grants.`,
+        })
+      }
+    }
     const clientWrites = grants.filter((grant) =>
       ['public', 'anon', 'authenticated'].includes(String(grant.grantee || '').toLowerCase())
       && WRITE_PRIVILEGES.has(String(grant.privilege || '').toUpperCase()),
@@ -565,6 +843,31 @@ export function auditExposedAuthorization(liveExport, expectedSchema = buildExpe
     const signature = fn.signature || (String(key).startsWith('public.') ? String(key) : `public.${key}`)
     const contract = reviewedFunctions.get(normalizedSignature(signature))
     const grants = Array.isArray(fn.grants) ? fn.grants : []
+    if (contract?.definitionMd5) {
+      const executeGrants = grants.map(grant => `${String(grant.grantee || '').toLowerCase()}:${String(grant.privilege || '').toUpperCase()}`).sort()
+      if (fn.definition_md5 !== contract.definitionMd5 || fn.owner !== contract.owner
+        || (contract.searchPathConfig && fn.search_path_config !== contract.searchPathConfig)
+        || grants.some(grant => grant.is_grantable !== false)
+        || JSON.stringify(executeGrants) !== JSON.stringify(contract.exactExecuteGrants)) {
+        issues.push({ type: 'FUNCTION_EXACT_CONTRACT_DRIFT', severity: SEVERITY.HIGH,
+          target: signature, message: `Function ${signature} lacks its exact reviewed body, owner or nondelegable execute grants.` })
+      }
+      for (const dependency of contract.dependencies || (contract.dependency ? [contract.dependency] : [])) {
+        const match = functionDetails(liveExport.functions || {}, dependency.signature)
+        const dependencyGrants = match?.[1].grants
+        const grantKeys = Array.isArray(dependencyGrants) ? dependencyGrants.map(g=>`${String(g.grantee||'').toLowerCase()}:${String(g.privilege||'').toUpperCase()}`).sort() : null
+        if (!match || match[1].definition_md5 !== dependency.definitionMd5
+          || match[1].owner !== dependency.owner
+          || readFlag(match[1], 'securityDefiner', 'security_definer') !== dependency.securityDefiner
+          || (dependency.searchPathConfig && match[1].search_path_config !== dependency.searchPathConfig)
+          || (dependency.exactExecuteGrants && (!Array.isArray(dependencyGrants)
+            || dependencyGrants.some(g=>g.is_grantable!==false)
+            || JSON.stringify(grantKeys)!==JSON.stringify(dependency.exactExecuteGrants)))) {
+          issues.push({ type: 'FUNCTION_DEPENDENCY_CONTRACT_DRIFT', severity: SEVERITY.HIGH,
+            target: signature, message: `Function ${signature} lacks its exact reviewed ${dependency.signature} dependency.` })
+        }
+      }
+    }
     const publicExecute = grants.some((grant) =>
       String(grant.grantee || '').toLowerCase() === 'public'
       && ['EXECUTE', 'ALL'].includes(String(grant.privilege || '').toUpperCase()),
@@ -670,13 +973,16 @@ export function auditExposedAuthorization(liveExport, expectedSchema = buildExpe
       }
     }
     if (contract?.aal2Required && authenticatedExecute) {
-      if (typeof fn.references_aal2 !== 'boolean') {
+      const aal2Signals = contract.aal2Dependencies?.length
+        ? contract.aal2Dependencies.map(dep=>functionDetails(liveExport.functions || {}, dep)?.[1].references_aal2)
+        : [fn.references_aal2]
+      if (aal2Signals.some(signal=>typeof signal !== 'boolean')) {
         issues.push({
           type: 'FUNCTION_AAL2_EVIDENCE_MISSING', severity: SEVERITY.HIGH,
           target: signature,
           message: `Function ${signature} requires AAL2, but the metadata export lacks its non-sensitive live AAL2 signal.`,
         })
-      } else if (!fn.references_aal2) {
+      } else if (aal2Signals.some(signal=>!signal)) {
         issues.push({
           type: 'FUNCTION_AAL2_GUARD_MISSING', severity: SEVERITY.CRITICAL,
           target: signature,

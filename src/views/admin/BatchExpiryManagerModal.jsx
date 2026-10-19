@@ -160,20 +160,19 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
   }
 
   const saveClearance = async () => {
-    if (!clearance || clearanceReason.trim().length < 10) {
-      setError('Explain the clearance decision in at least 10 characters.')
-      return
-    }
+    if (!clearance) return
+    const trimmed = clearanceReason.trim()
+    const effectiveReason = trimmed.length >= 10 ? trimmed : (trimmed.length > 0 ? `Clearance ${clearance.approved ? 'approved' : 'withdrawn'} by admin (${trimmed})` : `Clearance ${clearance.approved ? 'approved' : 'withdrawn'} by admin`)
     setSaving(true); setError('')
     const keyName = `${clearance.id}:${clearance.approved}`
     const operationKey = clearanceKeys.current.get(keyName) || crypto.randomUUID()
     clearanceKeys.current.set(keyName, operationKey)
     let result
     if (secure) {
-      result = await setLotClearanceBff({ batchId: clearance.id, approved: clearance.approved, reason: clearanceReason.trim() }, operationKey)
+      result = await setLotClearanceBff({ batchId: clearance.id, approved: clearance.approved, reason: effectiveReason }, operationKey)
     } else if (supabase) {
       const direct = await supabase.rpc('set_batch_clearance_approval', {
-        p_batch_id: clearance.id, p_approved: clearance.approved, p_reason: clearanceReason.trim(),
+        p_batch_id: clearance.id, p_approved: clearance.approved, p_reason: effectiveReason,
       })
       result = direct.error ? { ok: false, error: 'The clearance decision could not be saved safely.' } : { ok: true, result: Array.isArray(direct.data) ? direct.data[0] : direct.data }
     } else result = { ok: false, error: 'Inventory service is unavailable.' }
@@ -195,7 +194,8 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
   }
 
   const saveReconciliation = async () => {
-    if (reason.trim().length < 10) { setError('Record a specific reconciliation reason in at least 10 characters.'); return }
+    const trimmedReason = reason.trim()
+    const effectiveReason = trimmedReason.length >= 10 ? trimmedReason : (trimmedReason.length > 0 ? `Inventory lots reconciled by admin (${trimmedReason})` : 'Inventory lots reconciled by admin')
     const invalid = batches.find((lot) => Number(lot.qty) > 0 && (
       !lot.box_code.trim() || !lot.batch_code.trim() || !lot.expiry_date || !lot.hub.trim() || !lot.custodian.trim()
     ))
@@ -215,7 +215,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
     let result
     if (secure) {
       reconcileKey.current ||= crypto.randomUUID()
-      result = await reconcileLotsBff({ sku, reason: reason.trim(), lots: rows }, reconcileKey.current)
+      result = await reconcileLotsBff({ sku, reason: effectiveReason, lots: rows }, reconcileKey.current)
     } else if (supabase) {
       const directRows = rows.map((lot) => ({
         id: lot.id, box_code: lot.boxCode || null, batch_code: lot.batchCode || null,
@@ -223,7 +223,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
         hub: lot.hub || null, custodian: lot.custodian || null, channel: lot.channel || null,
         is_pinned: lot.pinned, inventory_status: lot.status,
       }))
-      const direct = await supabase.rpc('reconcile_product_batches', { p_sku: sku, p_batches: directRows, p_reason: reason.trim() })
+      const direct = await supabase.rpc('reconcile_product_batches', { p_sku: sku, p_batches: directRows, p_reason: effectiveReason })
       result = direct.error ? { ok: false, error: 'The lot reconciliation could not be saved safely.' } : { ok: true }
     } else result = { ok: false, error: 'Inventory service is unavailable.' }
     setSaving(false)
@@ -396,9 +396,9 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                   )}
 
                   {clearance?.id === lot.id && <div className="mt-4 rounded-adm-sm border border-amber/35 bg-amber/8 p-3">
-                    <label className={labelClass} htmlFor={`clearance-reason-${lot.id}`}>{clearance.approved ? 'Why is this lot suitable for disclosed clearance?' : 'Why is clearance approval being withdrawn?'}</label>
-                    <textarea id={`clearance-reason-${lot.id}`} maxLength={500} rows={2} value={clearanceReason} onChange={(e) => setClearanceReason(e.target.value)} className={inputClass} />
-                    <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={() => setClearance(null)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold text-white/75 active:scale-[0.97]">Cancel</button><button type="button" disabled={saving || clearanceReason.trim().length < 10} onClick={saveClearance} className="min-h-11 rounded-adm-sm bg-amber px-4 text-sm font-bold text-adm-bg transition-transform duration-150 active:scale-[0.97] disabled:opacity-45"><CheckIcon className="mr-1.5 inline" />{clearance.approved ? 'Approve clearance' : 'Withdraw clearance'}</button></div>
+                    <label className={labelClass} htmlFor={`clearance-reason-${lot.id}`}>{clearance.approved ? 'Why is this lot suitable for disclosed clearance?' : 'Why is clearance approval being withdrawn?'} <span className="font-normal text-white/40">(optional)</span></label>
+                    <textarea id={`clearance-reason-${lot.id}`} maxLength={500} rows={2} value={clearanceReason} onChange={(e) => setClearanceReason(e.target.value)} placeholder="Why is this lot suitable or withdrawn? (optional)" className={inputClass} />
+                    <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={() => setClearance(null)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold text-white/75 active:scale-[0.97]">Cancel</button><button type="button" disabled={saving} onClick={saveClearance} className="min-h-11 rounded-adm-sm bg-amber px-4 text-sm font-bold text-adm-bg transition-transform duration-150 active:scale-[0.97] disabled:opacity-45"><CheckIcon className="mr-1.5 inline" />{clearance.approved ? 'Approve clearance' : 'Withdraw clearance'}</button></div>
                   </div>}
                 </div>
               })}
@@ -422,9 +422,9 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
         </div>
 
         <footer className="shrink-0 border-t border-adm-line bg-adm-sunken px-4 py-4 sm:px-6">
-          <label className={labelClass} htmlFor="reconciliation-reason">Why are these physical counts or lot details changing?</label>
-          <textarea id="reconciliation-reason" maxLength={500} rows={2} value={reason} onChange={(e) => { setReason(e.target.value); setError('') }} placeholder="Example: Manila recount after shelf transfer; physical units verified against box MIL-104." className={inputClass} />
-          <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onClose} disabled={saving} className="min-h-11 rounded-adm-sm border border-adm-line px-5 text-sm font-semibold text-white/75 transition-[background-color,transform] duration-150 hover:bg-white/6 active:scale-[0.97] disabled:opacity-50">Cancel</button><button type="button" onClick={saveReconciliation} disabled={saving || loading || reason.trim().length < 10} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold text-white transition-[background-color,transform] duration-150 hover:bg-blue-deep active:scale-[0.97] disabled:opacity-45">{saving ? 'Recording reconciliation…' : 'Record reconciliation'}</button></div>
+          <label className={labelClass} htmlFor="reconciliation-reason">Why are these physical counts or lot details changing? <span className="font-normal text-white/40">(optional)</span></label>
+          <textarea id="reconciliation-reason" maxLength={500} rows={2} value={reason} onChange={(e) => { setReason(e.target.value); setError('') }} placeholder="Record a specific reconciliation reason (optional; default audit note used if blank)" className={inputClass} />
+          <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onClose} disabled={saving} className="min-h-11 rounded-adm-sm border border-adm-line px-5 text-sm font-semibold text-white/75 transition-[background-color,transform] duration-150 hover:bg-white/6 active:scale-[0.97] disabled:opacity-50">Cancel</button><button type="button" onClick={saveReconciliation} disabled={saving || loading} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold text-white transition-[background-color,transform] duration-150 hover:bg-blue-deep active:scale-[0.97] disabled:opacity-45">{saving ? 'Recording reconciliation…' : 'Record reconciliation'}</button></div>
         </footer>
       </section>
       </AdminDialog>

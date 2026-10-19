@@ -318,7 +318,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         // primary-photo requirement. Honouring it here is what keeps unpublished
         // and mock catalog rows off the public storefront; status alone is not a
         // publication decision.
-        supabase.from('products').select('*').in('status', ['Live', 'Active', 'Unlisted']).eq('published', true).order('created_at', { ascending: false }),
+        supabase.from('products').select('*, categories(id, name)').in('status', ['Live', 'Active', 'Unlisted']).eq('published', true).order('created_at', { ascending: false }),
         supabase.from('v_product_stock_from_batches').select('sku, stock_from_batches'),
         // Website membership is channel-specific. The view also carries
         // Website-assigned Unlisted SKUs so existing direct links can work;
@@ -401,7 +401,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       return {
         ...dbP,
         created_at: dbP.created_at || null,
-        category: dbP.subcategory || (dbP.origin?.startsWith('Shopee|') ? dbP.origin.split('|')[1] : (dbP.origin === 'Shopee' ? 'Shopee Imports' : 'Uncategorised')),
+        category: dbP.categories?.name || dbP.subcategory || (dbP.origin?.startsWith('Shopee|') ? dbP.origin.split('|')[1] : (dbP.origin === 'Shopee' ? 'Shopee Imports' : 'Uncategorised')),
         sku: dbP.sku,
         id: dbP.sku,
         name: dbP.name,

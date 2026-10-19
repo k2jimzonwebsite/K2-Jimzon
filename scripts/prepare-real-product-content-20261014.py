@@ -28,6 +28,8 @@ refs = {
  'baresa': 'https://www.lidl.it/p/baresa-pesto/p10050002',
  'gimoka': 'https://b2b.gimoka.com/prodotto/10-tubi-con-10-capsule-tubo-forte-x10-gimoka-capsule-compatibili-con-sistema-nespresso/',
  'poppies': 'https://www.poppiesbakeries.com/sites/default/files/ckeditor-files/RETAIL%20CATALOOG%2010-2025%20-%20LRES_0.pdf',
+ 'lasuissa': 'https://www.lasuissa.it/wp-content/uploads/2025/09/2025-LA-SUISSA-CATALOGO-2025_EN-low.pdf',
+ 'mckennedy': 'https://www.lidl.bg/p/mcennedy-biskviten-krem/p10064387',
 }
 
 def title(name):
@@ -50,7 +52,21 @@ def title(name):
 
 def content(n, t):
     u=n.upper(); category='Unidentified'; desc=''; use=''; reference=''; note='Exact product type and manufacturer needed.'
-    if 'VINO ROSSO' in u:
+    if any(x in u for x in ['LOTION','CONDITION','CREAM SOAP','CIEN OIL']):
+        category='Personal care'; desc=f'{t} for your personal care shelf.'
+        note='Confirm exact product type, volume, ingredients and manufacturer directions. No skin, hair-repair or treatment claims inferred.'
+        if 'CIEN OIL' in u: desc=''
+    elif 'MCKENNEDY' in u.replace(' ', '') and 'COOKIE CR' in u:
+        category='Sweet spreads'; reference=refs['mckennedy']
+        variant='Duo Cookie' if 'DUO' in u else 'Choco Cookie'
+        desc=f'McKennedy {variant} biscuit spread for toast or dessert.'
+        use='Serving idea: spread a little on toast or use in a dessert.'
+        note='Lidl lists separate400g Choco Cookie and Duo Cookie jar candidates. Confirm held recipe, size, market and allergens; do not describe these as loose biscuits.'
+    elif 'LA SUISSA' in u and 'CHOCOLATE' in u:
+        category='Chocolate'; reference=refs['lasuissa']
+        desc='La Suissa Tre Strati Caffè chocolates combine layers of dark chocolate, gianduia and coffee-flavoured chocolate.'
+        note='Manufacturer2025catalog page4 identifies the150g candidate. Confirm held packaging, ingredients and allergens; this is chocolate, not a drink preparation.'
+    elif 'VINO ROSSO' in u:
         category='Wine'; desc='Astratto red wine in a 750 ml bottle, listed at 10% alcohol by volume.'
         note='Confirm producer spelling, label ABV, origin and bottle volume. Alcohol sale/delivery rules require separate operational review.'
     elif any(x in u for x in ['TUNA','TONNO','RIO MARE','NOSTROMO','MARE BLU','MARUZELLA']):
@@ -142,10 +158,6 @@ def content(n, t):
         note='Confirm brand spelling, floral origin, net weight and label. MILLEFIONI/MILLEFIORI are possible duplicates, not automatically merged.'
     elif 'CORNED BEEF' in u:
         category='Tinned meat'; desc=f'{t} for sandwiches or a cooked meal.'; note='Confirm can weight, ingredients and preparation/storage instructions.'
-    elif any(x in u for x in ['LOTION','CONDITION','CREAM SOAP','CIEN OIL']):
-        category='Personal care'; desc=f'{t} for your personal care shelf.'
-        note='Confirm exact product type, volume, ingredients and manufacturer directions. No skin, hair-repair or treatment claims inferred.'
-        if 'CIEN OIL' in u: desc=''
     elif any(x in u for x in ['PERFUME','FRAGRANCE','XBOLT','HOMME','JOLIE','CHALOU','LACURA']):
         category='Fragrance candidate'; note='Confirm brand, fragrance name, concentration, volume and whether single bottle or set. No scent notes, longevity or gender invented.'
         if 'PERFUME' in u or 'FRAGRANCE' in u: desc=f'{t} for your fragrance selection.'
@@ -194,13 +206,13 @@ for i,r in enumerate(rows,1):
     if not desc: gaps.append('Resolve product identity before customer copy')
     products.append({'review_id':group,'source_rows':json.dumps(notes['sourceRows']), 'source_name':original,
       'proposed_public_name':t,'category_draft':cat,'description_draft':desc,'usage_draft':use,
-      'seo_title_draft':(t+' | K2 Jimzon') if desc else '',
+      'seo_title_draft':((t+' | K2 Jimzon') if len(t+' | K2 Jimzon')<=60 else t) if desc else '',
       'meta_description_draft':desc,'search_terms_draft':', '.join(dict.fromkeys([t,cat,'K2 Jimzon'])) if desc else '',
       'suggested_slug':re.sub(r'[^a-z0-9]+','-',t.lower()).strip('-'),
       'image_alt_draft':t+' packaging' if cat not in ['Clothing and footwear','Jewellery and storage','Storage accessories'] else t,
       'image_file_stem':group.lower()+'-'+re.sub(r'[^a-z0-9]+','-',t.lower()).strip('-'),
       'manufacturer_reference_url':url,'reference_status':'Candidate; held label not matched' if url else 'Owner name only; no exact manufacturer match established',
-      'research_date':'2026-10-14' if url else '', 'staff_check':note,
+      'research_date':('2026-10-16' if url in [refs['lasuissa'],refs['mckennedy']] else '2026-10-14') if url else '', 'staff_check':note,
       'photo_capture_needed':'Front pack; back ingredients/allergens/directions; net content; batch and expiry; multipack contents or garment measurements as applicable. Preserve original files.',
       'remaining_fields':'; '.join(gaps), 'barcode':'', 'sku':'', 'ingredients':'','allergens':'','storage_instructions':'',
       'country_of_origin':'','primary_image_url':'', 'publication_status':'DRAFT REVIEW ONLY',

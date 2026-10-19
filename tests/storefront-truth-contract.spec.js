@@ -130,3 +130,54 @@ test('catalog grid supports 2-column mobile scanning on phones 370px and above',
   const grid = await readFile(new URL('../src/components/CatalogGrid.jsx', import.meta.url), 'utf8')
   expect(grid).toContain('min-[370px]:grid-cols-2')
 })
+
+test('before and after comparison sliders enforce solid background, touch isolation, and layman labels', async () => {
+  const slider = await readFile(new URL('../src/components/BeforeAfterSlider.jsx', import.meta.url), 'utf8')
+  expect(slider).toContain('touch-none')
+  expect(slider).toContain('onPointerCancel')
+  expect(slider).toContain('Base product')
+  expect(slider).toContain('After use')
+  expect(slider).toContain('className="absolute inset-0 bg-shell overflow-hidden"')
+  expect(slider).toContain('e.preventDefault()')
+
+  const reveal = await readFile(new URL('../src/components/InteractiveReveal.jsx', import.meta.url), 'utf8')
+  expect(reveal).toContain('touch-none')
+  expect(reveal).toContain('Base product')
+  expect(reveal).toContain('After use')
+  expect(reveal).toContain('className="absolute inset-0 z-10 bg-shell overflow-hidden"')
+
+  const card = await readFile(new URL('../src/components/ProductCard.jsx', import.meta.url), 'utf8')
+  expect(card).toContain('product.afterImage')
+  expect(card).toContain('group-hover:opacity-100')
+})
+
+test('catalog grid provides Shopee/Lazada search relevance partitioning, recommendation discovery feed, and progressive scroll sentinel', async () => {
+  const grid = await readFile(new URL('../src/components/CatalogGrid.jsx', import.meta.url), 'utf8')
+  expect(grid).toContain('partitionCatalogSearch')
+  expect(grid).toContain('loadMoreSentinelRef')
+  expect(grid).toContain('IntersectionObserver')
+  expect(grid).toContain('recommendedMatches')
+  expect(grid).toContain('More relevant Italian provisions you may like')
+  expect(grid).toContain('Load more products')
+
+  const searchLib = await readFile(new URL('../src/lib/catalogSearch.js', import.meta.url), 'utf8')
+  expect(searchLib).toContain('tokenizeQuery')
+  expect(searchLib).toContain('partitionCatalogSearch')
+})
+
+test('catalog grid provides dynamic category resolution, clothing support, and admin category search', async () => {
+  const grid = await readFile(new URL('../src/components/CatalogGrid.jsx', import.meta.url), 'utf8')
+  expect(grid).toContain('availableCategories')
+  expect(grid).toContain('{availableCategories.map((item) => {')
+
+  const context = await readFile(new URL('../src/context/StoreContext.jsx', import.meta.url), 'utf8')
+  expect(context).toContain('categories(id, name)')
+  expect(context).toContain('dbP.categories?.name')
+
+  const adminGrid = await readFile(new URL('../src/views/admin/InventoryGrid.jsx', import.meta.url), 'utf8')
+  expect(adminGrid).toContain('product.category')
+  expect(adminGrid).toContain('product.subcategory')
+  expect(adminGrid).toContain('product.category_name')
+  expect(adminGrid).toContain('Search SKU, product, category, barcode, or origin')
+})
+

@@ -222,10 +222,10 @@ function CarrierCostControl() {
     if (!priceEdit) return
     const amountMinor = pesoInputToMinor(priceEdit.amount)
     if (!amountMinor) { setError('Enter a delivery cost greater than zero.'); return }
-    if (priceEdit.reason.trim().length < 10) {
-      setError('Record why this rate changed, in at least ten characters.')
-      return
-    }
+    const trimmedReason = (priceEdit.reason || '').trim()
+    const effectiveReason = (priceEdit.reason ? priceEdit.reason.trim().length < 10 : true)
+      ? (trimmedReason.length > 0 ? `Rate updated by admin (${trimmedReason})` : 'Rate updated by admin')
+      : trimmedReason
     setWorking(true); setError(''); setNotice(''); setUncertain('')
     const result = await commands.current.run({
       kind: 'publish-cost',
@@ -240,8 +240,8 @@ function CarrierCostControl() {
         amountMinor,
         approvedByOwner: true,
         effectiveFrom: priceEdit.effectiveFrom,
-        notes: priceEdit.reason.trim(),
-        reason: priceEdit.reason.trim(),
+        notes: effectiveReason,
+        reason: effectiveReason,
       },
     })
     if (!result.ok) await reportCommandResult(result, load)
@@ -534,9 +534,9 @@ function CarrierCostControl() {
                 </label>
               </div>
               <label className="block">
-                <span className="adm-label">Why this changed</span>
+                <span className="adm-label">Why this changed <span className="font-normal text-white/40">(optional)</span></span>
                 <input
-                  className="adm-input" placeholder="J&amp;T raised the Cebu ordinary rate, confirmed by quick inquiry."
+                  className="adm-input" placeholder="J&amp;T raised the Cebu ordinary rate (optional)"
                   value={priceEdit.reason}
                   onChange={(e) => setPriceEdit({ ...priceEdit, reason: e.target.value })}
                 />

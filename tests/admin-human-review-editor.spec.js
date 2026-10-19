@@ -1,5 +1,95 @@
 import { expect, test } from '@playwright/test'
 
+async function setupStatusSaving(page, write) {
+  const product = { sku: 'synthetic-status', name: 'Synthetic status product', status: 'Under Review',
+    published: false, is_human_reviewed: false, stock_available: 0, updated_at: '2026-10-18T00:00:00Z' }
+  await page.route('https://fixture.supabase.co/**', route => route.abort())
+  await page.context().addCookies([{ name: 'k2_admin_csrf', value: 'synthetic-status-csrf', url: 'http://localhost:5181' }])
+  await page.route('**/api/admin/session', route => route.fulfill({ json: { ok: true, user: { userId: '11111111-1111-4111-8111-111111111111', role: 'Admin' } } }))
+  await page.route('**/api/admin/products', route => route.fulfill({ json: { ok: true, products: [product] } }))
+  await page.route('**/api/admin/lots*', route => route.fulfill({ json: { ok: true, data: { lots: [], derivedStock: {}, complete: true } } }))
+  await page.route('**/api/admin/product-master', route => write(route, product))
+  await page.goto('/tests/fixtures/admin-product-master-harness.html')
+  return page.getByRole('group', { name: 'Product status', exact: true }).filter({ visible: true })
+}
+
+test('status saving defaults to immediate execution with an audit note and no dialog', async ({ page }, testInfo) => {
+  const writes = []
+  const statuses = await setupStatusSaving(page, async (route, product) => {
+    const body = route.request().postDataJSON(); writes.push(body)
+    product.status = body.payload.status
+    await route.fulfill({ json: { ok: true, result: { changed: 1 } } })
+  })
+  const mode = page.getByLabel('Status saving', { exact: true })
+  await expect(mode).toHaveValue('immediate')
+  for (const width of [375, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    expect(await mode.evaluate(el => el.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await page.screenshot({ path: testInfo.outputPath(`status-saving-${width}.png`), fullPage: true })
+  }
+  await statuses.getByRole('button', { name: 'Draft', exact: true }).click()
+  await expect.poll(() => writes.length).toBe(1)
+  expect(writes[0]).toEqual({ action: 'status', payload: { skus: ['synthetic-status'], status: 'Draft', reason: 'Admin set status to Draft' } })
+  await expect(page.getByRole('dialog')).toHaveCount(0)
+  await expect(statuses.getByRole('button', { name: 'Draft', exact: true })).toHaveAttribute('aria-pressed', 'true')
+})
+
+test('optional status notes wait for explicit save and preserve the entered note', async ({ page }) => {
+  const writes = []
+  const statuses = await setupStatusSaving(page, async route => {
+    writes.push(route.request().postDataJSON())
+    await route.fulfill({ json: { ok: true, result: { changed: 1 } } })
+  })
+  await page.getByLabel('Status saving', { exact: true }).selectOption('note')
+  await statuses.getByRole('button', { name: 'Draft', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: 'Set Draft', exact: true })
+  await expect(dialog).toBeVisible()
+  expect(writes).toHaveLength(0)
+  await dialog.getByLabel(/Reason for the status change/).fill('Awaiting the updated packaging photo')
+  await dialog.getByRole('button', { name: 'Set Draft', exact: true }).click()
+  await expect(dialog).toHaveCount(0)
+  expect(writes[0].payload.reason).toBe('Awaiting the updated packaging photo')
+})
+
+test('immediate status refusal preserves current status and explicitly retries the identical command', async ({ page }) => {
+  const writes = []
+  const statuses = await setupStatusSaving(page, async route => {
+    writes.push({ body: route.request().postDataJSON(), key: route.request().headers()['idempotency-key'] })
+    await route.fulfill(writes.length === 1
+      ? { status: 409, json: { error: { code: 'PRODUCT_PUBLICATION_REVIEW_REQUIRED' } } }
+      : { json: { ok: true, result: { changed: 1 } } })
+  })
+  await statuses.getByRole('button', { name: 'Live', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: 'Set Live', exact: true })
+  await expect(dialog.getByRole('alert')).toBeVisible()
+  await expect(dialog.getByLabel(/Reason for the status change/)).toHaveAttribute('readonly', '')
+  await expect(statuses.getByRole('button', { name: 'Review', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  expect(writes).toHaveLength(1)
+  await dialog.getByRole('button', { name: 'Retry same change', exact: true }).click()
+  await expect(dialog).toHaveCount(0)
+  expect(writes).toHaveLength(2)
+  expect(writes[1]).toEqual(writes[0])
+})
+
+test('status saving locks all status controls while one command is in flight', async ({ page }) => {
+  let finish
+  let calls = 0
+  const response = new Promise(resolve => { finish = resolve })
+  const statuses = await setupStatusSaving(page, async route => {
+    calls++
+    await response
+    await route.fulfill({ json: { ok: true, result: { changed: 1 } } })
+  })
+  await statuses.getByRole('button', { name: 'Draft', exact: true }).click()
+  await expect.poll(() => calls).toBe(1)
+  await expect(statuses.getByRole('button', { name: 'Live', exact: true })).toBeDisabled()
+  await expect(page.getByLabel('Status saving', { exact: true })).toBeDisabled()
+  finish()
+  await expect(statuses.getByRole('button', { name: 'Live', exact: true })).toBeEnabled()
+  expect(calls).toBe(1)
+})
+
 test('listing suggestions open safely, preserve field choices and reuse the matching product cache', async ({ page }, testInfo) => {
   test.setTimeout(30000)
   const product = { sku: 'synthetic-optimizer', name: 'Synthetic pasta', brand_name: 'Test brand',
@@ -75,7 +165,7 @@ test('human review is explicit, reasoned, saved and reversible independently of 
   await expect(review).not.toBeChecked()
   await review.focus(); await page.keyboard.press('Space')
   await expect(review).toBeChecked()
-  await expect(editor.getByRole('button', { name: 'Save Changes' })).toBeDisabled()
+  await expect(editor.getByRole('button', { name: 'Save Changes' })).toBeEnabled()
   await editor.getByLabel('Reason for this change').fill('Synthetic product details and pricing reviewed')
   for (const width of [375, 1440]) {
     await page.setViewportSize({ width, height: 900 })
@@ -84,7 +174,7 @@ test('human review is explicit, reasoned, saved and reversible independently of 
     expect(await editor.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true)
     expect(await review.evaluate(el => {
       const scroll = el.closest('fieldset').parentElement.getBoundingClientRect()
-      const footer = document.querySelector('textarea[required][maxlength="500"]').closest('label').parentElement.getBoundingClientRect()
+      const footer = document.querySelector('textarea[maxlength="500"]').closest('label').parentElement.getBoundingClientRect()
       const label = el.parentElement.getBoundingClientRect()
       return scroll.bottom <= footer.top + 1 && label.top >= scroll.top && label.bottom <= scroll.bottom
     })).toBe(true)

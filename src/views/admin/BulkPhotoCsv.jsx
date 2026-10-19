@@ -74,7 +74,9 @@ export default function BulkPhotoCsv({ onBack, onClose, onSaved }) {
       if (!navigator.locks?.request) throw Error('Use a browser with Web Locks to protect photo-batch recovery.')
       await navigator.locks.request('k2-photo-csv-writer', { ifAvailable: true }, async lock => {
         if (!lock) throw Error('Another tab is uploading a photo batch. Continue in that tab or wait for it to stop.')
-        const next = saved ? readPhotoBatch(localStorage) : { ...batch, reason: reason.trim() }
+        const trimmed = reason.trim()
+        const effectiveReason = trimmed.length >= 10 ? trimmed : (trimmed.length > 0 ? `Photo batch processed by admin (${trimmed})` : 'Photo batch processed by admin')
+        const next = saved ? readPhotoBatch(localStorage) : { ...batch, reason: effectiveReason }
         if (!next || next.id !== batch.id) throw Error('The saved batch changed in another tab. Close and reopen to reconcile it.')
         await runPhotoBatch(next, files, {
           actor: async () => { if (!active.current) throw Error('Review closed. Reopen the saved batch to continue.'); return getActor() },
@@ -135,14 +137,14 @@ export default function BulkPhotoCsv({ onBack, onClose, onSaved }) {
                 <div className="mt-3 flex flex-wrap gap-4">{Object.entries(row.files).map(([slot, file]) => <div key={slot} className="flex min-w-0 max-w-full items-center gap-3"><Thumbnail file={files.find(item => item.name === file.name)} label={slot === 'primary' ? 'Primary' : 'AFTER'} /><div className="min-w-0 text-sm"><p className="font-semibold">{slot === 'primary' ? 'Primary' : 'AFTER'} · empty → photo</p><p className="break-all text-white/75">{file.name}</p></div></div>)}</div>
               </li>)}
             </ol>
-            <label className="block text-sm font-semibold">Photo batch reason<textarea value={reason} onChange={event => setReason(event.target.value)} disabled={busy || saved} maxLength={500} rows={3} className="adm-input mt-2 w-full text-base" /></label>
+            <label className="block text-sm font-semibold">Photo batch reason<textarea aria-label="Photo batch reason" value={reason} onChange={event => setReason(event.target.value)} disabled={busy || saved} maxLength={500} rows={3} placeholder="Describe the photo batch source (optional)" className="adm-input mt-2 w-full text-base" /></label>
             {!saved && <label className="flex min-h-11 items-start gap-3 text-sm leading-6"><input type="checkbox" checked={approved} disabled={busy} onChange={event => setApproved(event.target.checked)} className="mt-1 h-5 w-5 shrink-0" />I reviewed every SKU, photo and slot. These files are approved for the selected Draft listings.</label>}
           </>}
           {batch && saved && <button type="button" className={button} onClick={() => download('k2-photo-batch-result.json', JSON.stringify(batch, null, 2), 'application/json')}>Download photo batch result</button>}
         </div>
         <footer className="flex flex-wrap justify-end gap-3 border-t border-adm-line p-4 sm:p-5">
           <button type="button" className={button} disabled={busy} onClick={onBack}>Back to catalog CSV</button>
-          {finished ? <button type="button" className={button} disabled={busy} onClick={acknowledge}>Acknowledge completed batch</button> : <button type="button" className={button + ' bg-blue/20'} disabled={busy || corrupt || !batch || (!saved && (!approved || reason.trim().length < 10))} onClick={run}>{busy ? 'Uploading and verifying…' : saved ? 'Continue saved photo batch' : `Upload and assign ${batch?.rows.length || 0} product${batch?.rows.length === 1 ? '' : 's'}`}</button>}
+          {finished ? <button type="button" className={button} disabled={busy} onClick={acknowledge}>Acknowledge completed batch</button> : <button type="button" className={button + ' bg-blue/20'} disabled={busy || corrupt || !batch || (!saved && !approved)} onClick={run}>{busy ? 'Uploading and verifying…' : saved ? 'Continue saved photo batch' : `Upload and assign ${batch?.rows.length || 0} product${batch?.rows.length === 1 ? '' : 's'}`}</button>}
         </footer>
       </div>
     </AdminDialog>

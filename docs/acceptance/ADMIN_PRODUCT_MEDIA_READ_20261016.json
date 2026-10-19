@@ -43,6 +43,6 @@
   "deployed": true,
   "liveProductEnriched": "K2-SKU-001125",
   "remainingScope": "MASTER_ACTION_PLAN.md MAP-023",
-  "releaseReceipt": "docs/acceptance/ADMIN_PRODUCT_MEDIA_READ_RELEASE_20261016.md",
-  "sourceSha": "9f0c5daf22cb77842ae10b9c9b85c5559fda9568"
+  "sourceSha": "9f0c5daf22cb77842ae10b9c9b85c5559fda9568",
+  "releaseReceipt": "docs/acceptance/ADMIN_PRODUCT_MEDIA_READ_RELEASE_20261016.md"
 }

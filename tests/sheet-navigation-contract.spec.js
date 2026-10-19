@@ -91,3 +91,16 @@ test.describe('sheet keyboard navigation', () => {
     expect(handler).not.toContain('document.querySelector')
   })
 })
+
+test.describe('sheet media representation', () => {
+  test('primary and lifestyle media columns render visual chips instead of raw URL text inputs', () => {
+    expect(sheet).toContain("field === 'primary_image_url'")
+    expect(sheet).toContain("field === 'lifestyle_images'")
+    expect(sheet).toContain('setPhotoProduct(r)')
+    expect(sheet).toContain('<PhotoManagerModal')
+    expect(sheet).toContain('Primary photo')
+    expect(sheet).toContain('+ Add photo')
+    expect(sheet).toContain('after-use')
+  })
+})
+

@@ -2,17 +2,18 @@ import { useContext } from 'react'
 import { useStore } from '../context/StoreContext'
 import { CustomerAccountContext } from '../context/customerAccountContextValue'
 import { Wordmark } from './ui/bits'
-import { BagIcon, SearchIcon, MoonIcon, SunIcon, UserIcon } from './ui/icons'
+import { BagIcon, SearchIcon, MoonIcon, SunIcon, UserIcon, XIcon } from './ui/icons'
 import { customerAccountEnabled } from '../services/customerAccountService'
 
 function SearchBox({ className = '' }) {
   const { query, setQuery, go, view } = useStore()
 
   return (
-    <label className={'relative block ' + className}>
-      <span className="sr-only">Search the catalog</span>
+    <div className={'relative block ' + className}>
+      <label htmlFor="store-header-search" className="sr-only">Search the catalog</label>
       <SearchIcon size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-navy-faint" />
       <input
+        id="store-header-search"
         type="search"
         value={query}
         onChange={(event) => {
@@ -21,9 +22,19 @@ function SearchBox({ className = '' }) {
           if (value.trim() && view !== 'catalog') go('catalog')
         }}
         placeholder="Search products"
-        className="store-field h-11 w-full pl-10 pr-4"
+        className="store-field h-11 w-full pl-10 pr-9"
       />
-    </label>
+      {query && (
+        <button
+          type="button"
+          onClick={() => setQuery('')}
+          aria-label="Clear search"
+          className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded text-navy-faint transition-colors hover:text-navy active:scale-95 cursor-pointer"
+        >
+          <XIcon size={14} />
+        </button>
+      )}
+    </div>
   )
 }
 

@@ -193,8 +193,9 @@ export default function BulkCsvImportModal({ onClose, onImportComplete, onReview
 
   const handleCommit = async () => {
     const cleanReason = reason.trim()
+    const effectiveReason = cleanReason.length >= 10 ? cleanReason : (cleanReason.length > 0 ? `Catalog import committed by admin (${cleanReason})` : 'Catalog import committed by admin')
     if (!['idle', 'rejected', 'uncertain'].includes(commitState.status)
-      || !preview || selectedRows.length === 0 || cleanReason.length < 10 || !approved) return
+      || !preview || selectedRows.length === 0 || !approved) return
     const operation = operationRef.current
     if (!operation.operationId) operation.operationId = crypto.randomUUID()
     const chunks = []
@@ -207,7 +208,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete, onReview
       operation.keys.set(chunkIndex, key)
       const result = await commitCatalogCsvBff({
         csvText, fileSha256: preview.fileSha256, selectedRowNumbers: chunks[chunkIndex],
-        reason: cleanReason, operationId: operation.operationId, chunkIndex,
+        reason: effectiveReason, operationId: operation.operationId, chunkIndex,
         finalChunk: chunkIndex === chunks.length - 1,
       }, key)
       if (!activeRef.current) return
@@ -445,7 +446,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete, onReview
               </div>
               <div className="rounded-adm-sm border border-adm-line bg-adm-raised p-4 space-y-4">
                 <div>
-                  <label htmlFor="catalog-import-reason" className="block text-sm font-bold text-white">Reason for this catalog change</label>
+                  <label htmlFor="catalog-import-reason" className="block text-sm font-bold text-white">Reason for this catalog change <span className="font-normal text-white/40">(optional)</span></label>
                   <textarea
                     id="catalog-import-reason"
                     value={reason}
@@ -454,16 +455,16 @@ export default function BulkCsvImportModal({ onClose, onImportComplete, onReview
                     rows={3}
                     maxLength={500}
                     className="mt-2 min-h-24 w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue disabled:opacity-60"
-                    placeholder="Describe the source and why these exact metadata changes are approved."
+                    placeholder="Describe the source and why these exact metadata changes are approved (optional)."
                   />
-                  <p className="mt-1 text-sm text-white/60">10–500 characters. This reason is written to every immutable row event.</p>
+                  <p className="mt-1 text-sm text-white/60">Optional note. A default audit note is recorded if left blank.</p>
                 </div>
                 <label className="flex min-h-11 items-start gap-3 text-sm text-white/80">
                   <input
                     type="checkbox"
                     checked={approved}
                     onChange={event => setApproved(event.target.checked)}
-                    disabled={selectedRows.length === 0 || reason.trim().length < 10 || !reviewEditable}
+                    disabled={selectedRows.length === 0 || !reviewEditable}
                     className="mt-1 h-5 w-5 shrink-0 accent-forest"
                   />
                   <span>I reviewed the selected before/after values. New rows become unpublished Drafts, existing rows update metadata only, and no stock is created.</span>
@@ -471,7 +472,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete, onReview
                 <button
                   type="button"
                   onClick={handleCommit}
-                  disabled={!approved || selectedRows.length === 0 || reason.trim().length < 10 || ['committing', 'checking', 'completed'].includes(commitState.status)}
+                  disabled={!approved || selectedRows.length === 0 || ['committing', 'checking', 'completed'].includes(commitState.status)}
                   className="flex min-h-11 w-full items-center justify-center rounded-adm-sm bg-forest px-4 py-2 text-base font-bold text-navy transition-colors hover:bg-forest/90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {commitState.status === 'committing'

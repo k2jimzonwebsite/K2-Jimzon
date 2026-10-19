@@ -71,7 +71,7 @@
     "split:encrypted-backup": "node scripts/split-encrypted-backup.mjs split",
     "verify:encrypted-backup-parts": "node scripts/split-encrypted-backup.mjs verify",
     "test:map017-local-db": "node scripts/run-local-database-authorization-suite.mjs",
-    "test:schema-truth-fixture": "node scripts/schema-truth-audit.mjs --fixture=fabricated-clean-sample",
+    "test:schema-truth-fixture": "node scripts/schema-truth-audit.mjs --fixture=fabricated-clean-sample && node tests/schema-truth-storefront-view.checks.mjs && node tests/schema-truth-staff-readers.checks.mjs && node tests/schema-truth-reservation-context.checks.mjs && node tests/schema-truth-operational-readers.checks.mjs && node tests/schema-truth-record-readers.checks.mjs && node tests/schema-truth-customer-account.checks.mjs && node tests/schema-truth-staff-commands.checks.mjs && node tests/schema-truth-session-command.checks.mjs && node tests/schema-truth-operational-commands.checks.mjs && node tests/schema-truth-product-master.checks.mjs && node tests/schema-truth-intake-command.checks.mjs && node tests/schema-truth-catalog-command.checks.mjs",
     "verify:map017-artifacts": "node scripts/verify-map017-public-boundary.mjs && node scripts/verify-map017-rollback.mjs && node scripts/apply-map017-migration.mjs --dry-run && node scripts/schema-truth-audit.mjs --fixture=fabricated-clean-sample",
     "verify:map017": "npm run verify:map017-artifacts && npm run rehearse:map017-local && npm run test:map017-local-db",
     "verify:map017-portable": "npm run verify:map017-artifacts && node scripts/rehearse-map017-portable.mjs",

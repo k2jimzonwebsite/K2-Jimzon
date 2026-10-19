@@ -84,6 +84,7 @@ export default function Sheet({ canManageProducts = false }) {
   const [showBarcode, setShowBarcode] = useState(null)
   const [batchProduct, setBatchProduct] = useState(null)
   const [enrichProduct, setEnrichProduct] = useState(null)
+  const [photoProduct, setPhotoProduct] = useState(null)
   const [operationError, setOperationError] = useState('')
   const [exporting, setExporting] = useState(false)
   const [lensQuery, setLensQuery] = useState('')
@@ -654,6 +655,78 @@ export default function Sheet({ canManageProducts = false }) {
                         return <Cell key={colIdx} className="min-w-[120px] p-0"><button type="button" onClick={() => setBatchProduct(r)} className="min-h-11 w-full px-2.5 text-left font-mono text-sm font-bold text-blue" title="Stock changes use batch reconciliation">{displayVal || 0} · batches</button></Cell>
                       }
 
+                      if (field === 'primary_image_url') {
+                        const hasImage = Boolean(val && typeof val === 'string' && val.trim())
+                        return (
+                          <Cell
+                            key={colIdx}
+                            onSelect={() => setSelected({ row: i, col: colIdx })}
+                            selected={selected.row === i && selected.col === colIdx}
+                            className="p-1 min-w-[150px]"
+                          >
+                            <button
+                              type="button"
+                              onClick={() => setPhotoProduct(r)}
+                              title={hasImage ? `View and edit primary photo for ${r.sku}` : `Add primary photo for ${r.sku}`}
+                              aria-label={`Primary photo for ${r.sku}: ${hasImage ? 'Configured' : 'Empty'}`}
+                              className="group flex min-h-10 w-full items-center gap-2 rounded-adm-sm border border-white/10 bg-black/20 px-2 py-1 text-left transition-colors hover:border-blue/50 hover:bg-blue/10"
+                            >
+                              {hasImage ? (
+                                <>
+                                  <img
+                                    src={val}
+                                    alt=""
+                                    className="h-7 w-7 shrink-0 rounded object-cover border border-white/20 bg-white/5"
+                                    onError={(e) => { e.currentTarget.style.display = 'none' }}
+                                  />
+                                  <span className="truncate text-xs font-semibold text-white/90 group-hover:text-blue">
+                                    Primary photo
+                                  </span>
+                                </>
+                              ) : (
+                                <span className="text-xs text-white/40 group-hover:text-blue">
+                                  + Add photo
+                                </span>
+                              )}
+                            </button>
+                          </Cell>
+                        )
+                      }
+
+                      if (field === 'lifestyle_images') {
+                        const count = Array.isArray(val) ? val.filter(Boolean).length : (val ? 1 : 0)
+                        return (
+                          <Cell
+                            key={colIdx}
+                            onSelect={() => setSelected({ row: i, col: colIdx })}
+                            selected={selected.row === i && selected.col === colIdx}
+                            className="p-1 min-w-[150px]"
+                          >
+                            <button
+                              type="button"
+                              onClick={() => setPhotoProduct(r)}
+                              title={count > 0 ? `Manage ${count} after-use photo(s) for ${r.sku}` : `Add after-use photos for ${r.sku}`}
+                              aria-label={`Lifestyle images for ${r.sku}: ${count} configured`}
+                              className="group flex min-h-10 w-full items-center justify-between gap-1.5 rounded-adm-sm border border-white/10 bg-black/20 px-2.5 py-1 text-left transition-colors hover:border-amber/50 hover:bg-amber/10"
+                            >
+                              <span className="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-amber">
+                                {count > 0 ? (
+                                  <>
+                                    <SparkleIcon size={13} className="shrink-0 text-amber" />
+                                    <span>{count} after-use</span>
+                                  </>
+                                ) : (
+                                  <span>+ Add lifestyle</span>
+                                )}
+                              </span>
+                              <span className="text-xs uppercase font-bold tracking-wider text-white/40 group-hover:text-amber">
+                                Photos
+                              </span>
+                            </button>
+                          </Cell>
+                        )
+                      }
+
                       return (
                         <Cell
                           key={colIdx}
@@ -844,6 +917,14 @@ export default function Sheet({ canManageProducts = false }) {
         onClose={() => setEnrichProduct(null)}
         onEnriched={() => fetchProducts({ background: true })}
       />
+
+      {photoProduct && (
+        <PhotoManagerModal
+          product={photoProduct}
+          onClose={() => setPhotoProduct(null)}
+          onSave={() => fetchProducts({ background: true })}
+        />
+      )}
     </div>
   )
 }

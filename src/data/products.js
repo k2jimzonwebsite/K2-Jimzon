@@ -626,6 +626,50 @@ export const products = [
     whyBuy: 'The famous European paprika seasoning: savory, aromatic, and distinctly richer than Asian formulas.',
     whyRare: 'Not carried by major local supermarkets; sourced specially for European snack fans.',
     pairings: ['Movie night snacks', 'Game day treats', 'Pairs with cold drinks'],
+  },
+  {
+    id: 'k2-milano-oversized-tee',
+    name: 'K2 Milano Boutique Oversized Cotton T-Shirt',
+    short: 'K2 Milano Oversized T-Shirt',
+    size: 'Unisex Relaxed Fit',
+    origin: 'Milano, Italy',
+    category: 'Clothing',
+    subcategory: 'T-shirt',
+    retail: 1290,
+    wholesale: 950,
+    stock: 12,
+    tag: '✨ New Arrival',
+    hue: 215,
+    img: null,
+    collections: ['trending'],
+    inside: 'Heavyweight 240 GSM combed organic cotton crafted in Northern Italy',
+    package_type: 'Cotton Garment Bag',
+    storage_instructions: 'Machine wash cold inside out, hang dry.',
+    whyBuy: 'Boutique Italian oversized fit with breathable Mediterranean organic cotton.',
+    whyRare: 'Limited edition capsule drop imported alongside seasonal Milanese shipments.',
+    pairings: ['Casual summer linen', 'Leather loafers', 'Everyday errands'],
+  },
+  {
+    id: 'k2-florence-leather-slippers',
+    name: 'K2 Firenze Artisan Leather Slippers & Shoes',
+    short: 'Firenze Leather Slippers',
+    size: 'EU 41-43 / Unisex',
+    origin: 'Firenze, Italy',
+    category: 'Clothing',
+    subcategory: 'Shoes',
+    retail: 2490,
+    wholesale: 1950,
+    stock: 8,
+    tag: 'Bestseller',
+    hue: 35,
+    img: null,
+    collections: ['hiddenGems'],
+    inside: 'Supple Tuscan full-grain calfskin leather slippers with cushioned insole',
+    package_type: 'Artisan Shoe Box',
+    storage_instructions: 'Keep away from direct water, treat with natural leather balm.',
+    whyBuy: 'Traditional Florentine leather craftsmanship offering unmatched indoor and outdoor comfort.',
+    whyRare: 'Handcrafted in Florence workshops in small artisanal batches.',
+    pairings: ['Loungewear', 'Tailored trousers', 'Espresso mornings'],
   }
 ]
 
@@ -642,6 +686,7 @@ export const CATEGORIES = [
   'Snack & Sweets',
   'Beverages',
   'Breakfast Food',
+  'Clothing',
   'Bath & Body',
   'Fragrances',
   'Hair Care',
@@ -654,3 +699,4 @@ export const byCollection = (id) => products.filter((p) => p.collections.include
 
 export const peso = (n) =>
   '₱' + (Number(n) || 0).toLocaleString('en-PH', { maximumFractionDigits: 0 })
+

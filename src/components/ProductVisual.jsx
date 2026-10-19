@@ -20,7 +20,7 @@ export default function ProductVisual({ product, className = '', pad = 'p-4' }) 
         alt={product.name}
         loading="lazy"
         onError={() => setImageFailed(true)}
-        className={'h-full w-full object-contain mix-blend-multiply ' + pad}
+        className={'h-full w-full object-contain ' + pad}
       />
     </div>
   )

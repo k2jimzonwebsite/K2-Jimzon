@@ -1,7 +1,61 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {classifyInstalledReadiness,classifyInstalledPermissions,classifyBackupProof,selectBackupEvidence,PHASED_RECEIPT} from '../scripts/k2-installed-readiness.mjs';
+import * as installed from '../scripts/k2-installed-readiness.mjs';
 const present={intake_sessions:1,sku_seq:1,channels:1,channel_shops:1};
+const activation={relation:{owner:'postgres',rls:true,publicAccess:false,anonAccess:false,authenticatedAccess:false,serviceAccess:false},rows:[{singleton:true,maximumDepth:6}]};
+const packetHash='69e80b1ac8a1e7c255abfbcb8d16c1c9ce5582ff3cf4be651129bf1f6d0051de';
+const preparedHelper=hash=>({owner:'postgres',definer:true,emptySearchPath:true,ownerOnlyExecute:true,bodySha256:hash});
+const activationTarget={categoryRows:0,policyRows:0,eventRows:0,contextRows:0,configOwnerOnly:true,
+ payload:preparedHelper('91eba694981253dc8bd8233727c2f2b38cb8686507acc9097999f60abf408d36'),
+ start:preparedHelper('23e82f11900727d669d7c41bd6eab31c42a4f5870fae9ceb9d6d736a460ae65c'),
+ current:preparedHelper('3f7afcb349d034b121d1fc57d9da514a667e3b491b809bd6d43e5255ae938b25')};
+test('only the exact absent activation target and exact packet can be owner-pending, never verified or authorized',()=>{
+ assert.equal(typeof installed.classifyCategoryActivationPreparation,'function');
+ const r=installed.classifyCategoryActivationPreparation({...activation,rows:[]},'installed',packetHash,packetHash,activationTarget);
+ assert.equal(r.state,'owner');assert.equal(r.writeAuthorized,false);assert.equal(r.reapplyAllowed,false);
+ assert.equal(installed.classifyCategoryPolicyActivation({...activation,rows:[]},'installed').state,'blocked');
+});
+test('preparation refuses changed bytes/request, installed config, unsafe relation and incomplete target',()=>{
+ const classify=(s,m,h,b,t)=>installed.classifyCategoryActivationPreparation(s,m,h,b,t);
+ const empty={...activation,rows:[]};
+ for(const [s,m,h,b,t] of [[empty,'installed','other',packetHash,activationTarget],[empty,'installed',packetHash,'other',activationTarget],
+  [activation,'installed',packetHash,packetHash,activationTarget],[empty,'first-apply',packetHash,packetHash,activationTarget],
+  [empty,'installed',packetHash,packetHash,null],[{...empty,relation:{...empty.relation,anonAccess:true}},'installed',packetHash,packetHash,activationTarget]])
+  assert.equal(classify(s,m,h,b,t).state,'blocked');
+ for(const field of ['categoryRows','policyRows','eventRows','contextRows'])for(const value of [1,null,'0',undefined])
+  assert.equal(classify(empty,'installed',packetHash,packetHash,{...activationTarget,[field]:value}).state,'blocked');
+ assert.equal(classify(empty,'installed',packetHash,packetHash,{...activationTarget,configOwnerOnly:false}).state,'blocked');
+});
+test('preparation refuses altered or missing private payload/context dependency evidence',()=>{
+ for(const key of ['payload','start','current']){
+  for(const drift of [null,{...activationTarget[key],owner:'other'},{...activationTarget[key],definer:false},
+   {...activationTarget[key],emptySearchPath:false},{...activationTarget[key],ownerOnlyExecute:false},
+   {...activationTarget[key],bodySha256:'0'.repeat(64)}])
+   assert.equal(installed.classifyCategoryActivationPreparation({...activation,rows:[]},'installed',packetHash,packetHash,{...activationTarget,[key]:drift}).state,'blocked');
+ }
+});
+test('installed readiness refuses the observed missing category activation instead of a zero-failed receipt',()=>{
+ assert.equal(typeof installed.classifyCategoryPolicyActivation,'function');
+ const result=installed.classifyCategoryPolicyActivation({...activation,rows:[]},'installed');
+ assert.equal(result.state,'blocked');assert.match(result.detail,/not configured/i);assert.equal(result.reapplyAllowed,false);
+});
+test('category activation accepts only an observed private singleton with a PostgreSQL integer depth',()=>{
+ assert.equal(installed.classifyCategoryPolicyActivation(activation,'installed').state,'verified');
+ for(const row of [{singleton:false,maximumDepth:6},{singleton:true,maximumDepth:0},{singleton:true,maximumDepth:-1},{singleton:true,maximumDepth:null},{singleton:true,maximumDepth:'6'},{singleton:true,maximumDepth:1.5},{singleton:true,maximumDepth:2147483648}])
+  assert.equal(installed.classifyCategoryPolicyActivation({...activation,rows:[row]},'installed').state,'blocked');
+ assert.equal(installed.classifyCategoryPolicyActivation({...activation,rows:[activation.rows[0],activation.rows[0]]},'installed').state,'blocked');
+});
+test('category activation never verifies missing evidence, unsafe ownership, missing RLS or client access',()=>{
+ for(const value of [null,{}, {...activation,relation:null},{...activation,rows:null}])assert.equal(installed.classifyCategoryPolicyActivation(value,'installed').state,'blocked');
+ for(const drift of [{owner:'other'},{rls:false},{publicAccess:true},{anonAccess:true},{authenticatedAccess:true},{serviceAccess:true},{serviceAccess:undefined}])
+  assert.equal(installed.classifyCategoryPolicyActivation({...activation,relation:{...activation.relation,...drift}},'installed').state,'blocked');
+ assert.equal(installed.classifyCategoryPolicyActivation(activation,'unknown').state,'blocked');
+});
+test('first-apply category activation stays an explicit owner prerequisite, never a verified operation',()=>{
+ const r=installed.classifyCategoryPolicyActivation({relation:null,rows:[]},'first-apply');assert.equal(r.state,'owner');assert.equal(r.reapplyAllowed,false);
+ assert.equal(installed.classifyCategoryPolicyActivation(activation,'first-apply').state,'blocked');
+});
 const receipt={...PHASED_RECEIPT,statementCount:1,statementBytes:10588727};
 test('exact installed source receipt and all required relations classify installed, never permission to reapply',()=>{const r=classifyInstalledReadiness([receipt],present);assert.equal(r.state,'verified');assert.equal(r.mode,'installed');assert.equal(r.reapplyAllowed,false)});
 test('empty legacy baseline is first apply only when every chain relation is absent',()=>{assert.equal(classifyInstalledReadiness([],{intake_sessions:0,sku_seq:0,channels:0,channel_shops:0}).mode,'first-apply');assert.equal(classifyInstalledReadiness([],present).state,'blocked')});

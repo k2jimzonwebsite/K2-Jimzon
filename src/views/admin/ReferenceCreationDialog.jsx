@@ -79,8 +79,12 @@ export default function ReferenceCreationDialog({ actorId, kind, canCreate, onCl
         await currentActor(actorId)
         if (!mounted.current) return
         if (!record) {
-          const payloadText = JSON.stringify({ kind: targetKind, name, parentId: targetKind === 'category' && parentId ? parentId : null, reason })
-          try { validateReferencePayloadText(payloadText) } catch { throw Error('Enter a printable name up to 120 characters and a creation reason of 8 to 500 characters. Review the category parent.') }
+          const trimmedReason = reason.trim()
+          const effectiveReason = trimmedReason.length >= 8
+            ? trimmedReason
+            : (trimmedReason.length > 0 ? `Canonical ${targetKind} reference created by admin (${trimmedReason})` : `Canonical ${targetKind} reference created by admin`)
+          const payloadText = JSON.stringify({ kind: targetKind, name, parentId: targetKind === 'category' && parentId ? parentId : null, reason: effectiveReason })
+          try { validateReferencePayloadText(payloadText) } catch { throw Error('Enter a printable name up to 120 characters and review the category parent.') }
           record = holdPendingReference(actorId, crypto.randomUUID(), payloadText); changed()
         }
         setPending(record)
@@ -144,7 +148,7 @@ export default function ReferenceCreationDialog({ actorId, kind, canCreate, onCl
         <fieldset disabled={loading || working || Boolean(pending) || Boolean(outcome) || !canCreate} className="space-y-3 disabled:opacity-60">
           <label className="block text-sm text-white/90">{targetKind === 'brand' ? 'Brand name' : 'Category name'}<input required value={name} onChange={event => setName(event.target.value)} className="adm-input mt-1 min-h-11 w-full text-base" /></label>
           {targetKind === 'category' && <label className="block text-sm text-white/90">Category parent<select value={parentId} onChange={event => setParentId(event.target.value)} className="adm-input mt-1 min-h-11 w-full text-base"><option value="">Root category</option>{options?.categories.map(row => <option key={row.id} value={row.id}>{row.name} · {row.parent_id ? options.categories.find(parent => parent.id === row.parent_id)?.name || 'Parent unavailable' : 'Root'}</option>)}</select></label>}
-          <label className="block text-sm text-white/90">Creation reason<textarea required value={reason} onChange={event => setReason(event.target.value)} className="adm-input mt-1 min-h-[88px] w-full text-base" /></label>
+          <label className="block text-sm text-white/90">Creation reason <span className="font-normal text-white/50">(optional)</span><textarea value={reason} placeholder={`Default: Canonical ${targetKind} reference created by admin`} onChange={event => setReason(event.target.value)} className="adm-input mt-1 min-h-[88px] w-full text-base" /></label>
         </fieldset>
         {error && <p role="alert" className="break-words text-base text-crimson">{error}</p>}
         {pending && !outcome && <p className="text-base text-white/80">The exact request is saved. Closing or reloading keeps it; retry uses the same request.</p>}

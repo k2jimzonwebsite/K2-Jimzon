@@ -14,6 +14,7 @@
  */
 
 import { displayBrand } from './productIdentity.js'
+import { netWeightGrams } from './productNetWeight.js'
 
 /** Schema.org will reject a key with an undefined value, so they are stripped. */
 function compact(record) {
@@ -51,6 +52,7 @@ export function buildProductStructuredData({ product, description, image, url })
   const price = Number(product.srp ?? product.retail)
   const sku = product.sku || product.id
   const brandName = displayBrand(product)
+  const grams = netWeightGrams(product.net_weight)
 
   return compact({
     '@context': 'https://schema.org',
@@ -67,8 +69,8 @@ export function buildProductStructuredData({ product, description, image, url })
     // `gtin13` is only emitted for a barcode that is actually thirteen digits.
     // A malformed GTIN invalidates the whole offer in Search Console.
     gtin13: /^\d{13}$/.test(String(product.barcode || '')) ? String(product.barcode) : undefined,
-    weight: product.net_weight
-      ? { '@type': 'QuantitativeValue', name: String(product.net_weight) }
+    weight: grams !== null
+      ? { '@type': 'QuantitativeValue', value: grams, unitCode: 'GRM' }
       : undefined,
     offers: compact({
       '@type': 'Offer',

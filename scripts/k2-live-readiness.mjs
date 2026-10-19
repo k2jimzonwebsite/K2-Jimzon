@@ -17,7 +17,7 @@ import { createHash } from 'node:crypto'
 
 import { verifyK2SupabaseProject, K2_SUPABASE_REF } from './verify-k2-supabase-project.mjs'
 import { EXPECTED_ANON_FUNCTIONS } from './security-surface-policy.mjs'
-import {classifyInstalledReadiness,classifyInstalledPermissions,classifyBackupProof,selectBackupEvidence} from './k2-installed-readiness.mjs'
+import {classifyInstalledReadiness,classifyInstalledPermissions,classifyBackupProof,selectBackupEvidence,classifyCategoryPolicyActivation,classifyCategoryActivationPreparation,CATEGORY_ACTIVATION_PACKET} from './k2-installed-readiness.mjs'
 import { ADMIN_PREAUTH_PERMISSION, classifyAdminPreauthDependency } from './admin-preauth-readiness.mjs'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
@@ -128,6 +128,58 @@ const controlledReceipts = await queryRows(
 )
 const installation = classifyInstalledReadiness(controlledReceipts, absent)
 gate('canonical-installation', 'none', installation.state, installation.detail)
+
+// Presence of the canonical schema is not activation. Observe metadata first
+// so first-apply/missing relations do not cause an unclassified SQL error.
+let categoryActivationSnapshot={relation:null,rows:[]}
+let categoryActivation
+let categoryActivationNormal
+let categoryPreparationTarget=null
+const categoryPreparationArgs=process.argv.slice(2).filter(arg=>arg.startsWith('--prepare-category-activation'))
+const categoryPreparationRequested=categoryPreparationArgs.length>0
+try {
+ const relation=await query(`select jsonb_build_object(
+  'owner',pg_get_userbyid(c.relowner),'rls',c.relrowsecurity,
+  'publicAccess',exists(select 1 from aclexplode(coalesce(c.relacl,acldefault('r',c.relowner))) a where a.grantee=0),
+  'anonAccess',exists(select 1 from aclexplode(acldefault('r',c.relowner)) a where has_table_privilege('anon',c.oid,a.privilege_type)),
+  'authenticatedAccess',exists(select 1 from aclexplode(acldefault('r',c.relowner)) a where has_table_privilege('authenticated',c.oid,a.privilege_type)),
+  'serviceAccess',exists(select 1 from aclexplode(acldefault('r',c.relowner)) a where has_table_privilege('service_role',c.oid,a.privilege_type))) as relation
+  from pg_class c where c.oid=to_regclass('k2_private.category_policy_command_config') and c.relkind='r'`)
+ categoryActivationSnapshot.relation=relation?.relation??null
+ if(categoryActivationSnapshot.relation){
+  categoryActivationSnapshot.rows=await queryRows(`select singleton,maximum_depth as "maximumDepth"
+   from k2_private.category_policy_command_config order by singleton`)
+ }
+ categoryActivationNormal=classifyCategoryPolicyActivation(categoryActivationSnapshot,installation.mode)
+ categoryActivation=categoryActivationNormal
+ if(categoryPreparationRequested){
+  const request=categoryPreparationArgs.length===1&&categoryPreparationArgs[0].startsWith('--prepare-category-activation=')
+   ?categoryPreparationArgs[0].slice('--prepare-category-activation='.length):''
+  const packetHash=createHash('sha256').update(fs.readFileSync(path.join(root,CATEGORY_ACTIVATION_PACKET.path))).digest('hex')
+  const target=await query(`select
+   (select count(*)::int from public.categories) as "categoryRows",
+   (select count(*)::int from k2_private.category_shelf_life_policy) as "policyRows",
+   (select count(*)::int from k2_private.category_shelf_life_events) as "eventRows",
+   (select count(*)::int from k2_private.category_lot_command_context) as "contextRows",
+   (select not exists(select 1 from aclexplode(coalesce(c.relacl,acldefault('r',c.relowner))) a where a.grantee<>c.relowner or a.is_grantable)
+    from pg_class c where c.oid=to_regclass('k2_private.category_policy_command_config')) as "configOwnerOnly",
+   (select jsonb_object_agg(e.key,jsonb_build_object('owner',pg_get_userbyid(p.proowner),'definer',p.prosecdef,
+     'emptySearchPath','search_path=""'=any(coalesce(p.proconfig,array[]::text[])),
+     'ownerOnlyExecute',not exists(select 1 from aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a where a.grantee<>p.proowner or a.is_grantable),
+     'bodySha256',encode(extensions.digest(convert_to(p.prosrc,'UTF8'),'sha256'),'hex')))
+    from (values ('payload','k2_private.execute_category_policy_payload_v1(text,jsonb)'),
+     ('start','k2_private.start_category_lot_context_v1(integer)'),
+     ('current','k2_private.current_category_lot_context_v1()')) e(key,signature)
+    join pg_proc p on p.oid=to_regprocedure(e.signature)) as helpers`)
+  categoryPreparationTarget={...target,...target.helpers}
+  delete categoryPreparationTarget.helpers
+  categoryActivation=classifyCategoryActivationPreparation(categoryActivationSnapshot,installation.mode,request,packetHash,categoryPreparationTarget)
+ }
+} catch {
+ categoryActivation={state:'blocked',mode:'unknown',reapplyAllowed:false,writeAuthorized:false,detail:'Category activation read-only evidence could not be obtained'}
+ categoryActivationNormal??=categoryActivation
+}
+gate('category-policy-activation','owner',categoryActivation.state,categoryActivation.detail)
 
 // 4. Anonymous execute surface, classified rather than merely counted.
 //
@@ -299,6 +351,11 @@ fs.writeFileSync(path.join(root, '.tools', 'current-production-backups', outFile
   ledger,
   absent,
   installation,
+  categoryActivationSnapshot,
+  categoryActivation,
+  categoryActivationNormal,
+  categoryPreparationRequested,
+  categoryPreparationTarget,
   controlledReceipts,
   installedPermissions,
   grants,

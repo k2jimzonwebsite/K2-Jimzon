@@ -735,7 +735,8 @@ function CreateTransferModal({ products, shops, onClose, onCreated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!sku || !reason.trim() || quantity <= 0) return
+    if (!sku || quantity <= 0) return
+    const effectiveReason = reason.trim() || 'Admin requested inventory transfer'
 
     setBusy(true)
     setError('')
@@ -744,7 +745,7 @@ function CreateTransferModal({ products, shops, onClose, onCreated }) {
         const { data, error: err } = await supabase.rpc('request_inventory_transfer', {
           p_sku: sku,
           p_quantity: quantity,
-          p_reason: reason.trim(),
+          p_reason: effectiveReason,
           p_source_hub: sourceHub,
           p_destination_hub: destinationHub,
           p_target_shop_id: targetShopId || null,
@@ -829,12 +830,11 @@ function CreateTransferModal({ products, shops, onClose, onCreated }) {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-white/60 mb-1">Reason for transfer</label>
+          <label className="block text-xs font-semibold text-white/60 mb-1">Reason for transfer <span className="font-normal text-white/40">(optional)</span></label>
           <textarea
             value={reason}
             onChange={e => setReason(e.target.value)}
-            placeholder="Why does this stock need to move?"
-            required
+            placeholder="Optional: Why does this stock need to move? (default: Admin requested inventory transfer)"
             className={`${inputClass} min-h-20`}
           />
         </div>
@@ -845,7 +845,7 @@ function CreateTransferModal({ products, shops, onClose, onCreated }) {
           <button type="button" onClick={onClose} disabled={busy} className={`${secondaryButton} flex-1 min-h-11`}>
             Cancel
           </button>
-          <button type="submit" disabled={busy || !reason.trim()} className={`${primaryButton} flex-1 min-h-11 bg-blue font-bold`}>
+          <button type="submit" disabled={busy || !sku || quantity <= 0} className={`${primaryButton} flex-1 min-h-11 bg-blue font-bold`}>
             {busy ? 'Submitting...' : 'Request transfer'}
           </button>
         </div>

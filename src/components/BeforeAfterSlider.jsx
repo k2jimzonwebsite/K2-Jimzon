@@ -3,8 +3,8 @@ import ProductArt from './ProductArt'
 import ProductVisual from './ProductVisual'
 import { applyImageFallback } from '../lib/imageFallback'
 
-// Drag/swipe reveal: sealed export packaging on the left of the handle,
-// "what's inside" on the right. Pointer events only — no media, no libs.
+// Drag/swipe reveal: base packaging on the left of the handle,
+// after-use view on the right. Pointer events only — no media, no libs.
 export default function BeforeAfterSlider({ product }) {
   const [pos, setPos] = useState(58)
   const trackRef = useRef(null)
@@ -20,45 +20,71 @@ export default function BeforeAfterSlider({ product }) {
   const onPointerDown = (e) => {
     e.stopPropagation()
     dragging.current = true
-    e.currentTarget.setPointerCapture(e.pointerId)
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId)
+    } catch {
+      // ignore
+    }
     moveTo(e.clientX)
   }
   const onPointerMove = (e) => {
     if (dragging.current) moveTo(e.clientX)
   }
-  const onPointerUp = () => {
+  const onPointerUp = (e) => {
     dragging.current = false
+    try {
+      if (e?.currentTarget?.hasPointerCapture?.(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId)
+      }
+    } catch {
+      // ignore
+    }
   }
   const onKeyDown = (e) => {
-    if (e.key === 'ArrowLeft') setPos((p) => Math.max(4, p - 6))
-    if (e.key === 'ArrowRight') setPos((p) => Math.min(96, p + 6))
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault()
+      setPos((p) => Math.max(4, p - 6))
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault()
+      setPos((p) => Math.min(96, p + 6))
+    }
   }
 
   return (
     <div
       ref={trackRef}
-      className="relative aspect-square w-full cursor-ew-resize touch-none select-none overflow-hidden rounded-lg border border-line shadow-card"
+      className="relative aspect-square w-full cursor-ew-resize touch-none select-none overflow-hidden rounded-2xl border border-line bg-shell shadow-card"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
       role="slider"
-      aria-label="Drag to reveal what's inside the packaging"
+      aria-label="Drag to compare base product and after use"
       aria-valuenow={Math.round(pos)}
       aria-valuemin={0}
       aria-valuemax={100}
       tabIndex={0}
       onKeyDown={onKeyDown}
     >
-      {/* After layer (base): opened */}
-      {product.afterImage ? (
-        <img src={product.afterImage} alt="What's inside" onError={applyImageFallback} className="absolute inset-0 h-full w-full object-cover" />
-      ) : (
-        <ProductArt product={product} mode="open" className="absolute inset-0" />
-      )}
+      {/* After layer (base): opened / after use */}
+      <div className="absolute inset-0 bg-shell">
+        {product.afterImage ? (
+          <img
+            src={product.afterImage}
+            alt="After use"
+            onError={applyImageFallback}
+            className="h-full w-full object-cover"
+            draggable={false}
+          />
+        ) : (
+          <ProductArt product={product} mode="open" className="absolute inset-0" />
+        )}
+      </div>
 
-      {/* Before layer (clipped): the real sealed packaging when we have a photo */}
+      {/* Before layer (clipped): the real sealed packaging with solid backing */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 bg-shell overflow-hidden"
         style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
       >
         {product.img ? (
@@ -70,25 +96,41 @@ export default function BeforeAfterSlider({ product }) {
 
       {/* Handle */}
       <div
-        className="absolute inset-y-0 z-10 w-[2px] bg-navy"
-        style={{ left: `${pos}%` }}
+        className="absolute inset-y-0 z-20 w-[2px] bg-paper shadow-[0_0_10px_rgba(0,0,0,0.35)]"
+        style={{ left: `${pos}%`, transform: 'translateX(-50%)' }}
         aria-hidden="true"
       >
-        <div className="absolute left-[50%] top-[50%] flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-navy text-cream shadow-card transition-transform duration-150 active:scale-[0.97]">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 18l6-6-6-6" />
-            <path d="M9 18l-6-6 6-6" />
+        <div className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-paper text-navy shadow-card transition-transform duration-150 active:scale-[0.95]">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M8 7l-5 5 5 5M16 7l5 5-5 5" />
           </svg>
         </div>
       </div>
 
       {/* Captions */}
-      <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-navy/85 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-cream">
-        Sealed for export
-      </span>
-      <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-paper/90 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-navy ring-1 ring-navy/10">
-        What's inside
-      </span>
+      <div
+        className="pointer-events-none absolute left-3 top-3 z-30 transition-opacity duration-200"
+        style={{ opacity: pos > 20 ? 1 : 0 }}
+      >
+        <span className="rounded-full bg-navy/85 backdrop-blur-md px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-cream shadow-sm">
+          Base product
+        </span>
+      </div>
+      <div
+        className="pointer-events-none absolute right-3 top-3 z-30 transition-opacity duration-200"
+        style={{ opacity: pos < 80 ? 1 : 0 }}
+      >
+        <span className="rounded-full bg-paper/90 backdrop-blur-md px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-navy ring-1 ring-navy/10 shadow-sm">
+          After use
+        </span>
+      </div>
+
+      {/* Helper hint */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-3 z-30 flex justify-center opacity-70 transition-opacity duration-200">
+        <span className="rounded-full bg-navy/75 backdrop-blur-md px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-cream shadow-sm">
+          Drag left / right
+        </span>
+      </div>
     </div>
   )
 }

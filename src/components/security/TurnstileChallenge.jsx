@@ -66,7 +66,7 @@ export default function TurnstileChallenge({
       widgetRef.current = turnstile.render(containerRef.current, {
         sitekey: siteKey,
         action,
-        appearance: 'always',
+        appearance: 'interaction-only',
         size: 'flexible',
         callback: (token) => { if (!cancelled) { setError(''); onTokenChange(token) } },
         'expired-callback': () => { if (!cancelled) { setError('Security check expired. Please complete it again.'); onTokenChange('') } },

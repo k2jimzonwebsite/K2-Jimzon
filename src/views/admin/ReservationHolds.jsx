@@ -145,17 +145,15 @@ export default function ReservationHolds() {
     if (!extend) return
     const refusal = extensionRefusalReason(extend.minutes)
     if (refusal) { setError(refusal); return }
-    if (extend.reason.trim().length < 10) {
-      setError('Record why this hold is being extended, in at least ten characters.')
-      return
-    }
+    const trimmedReason = (extend.reason || '').trim()
+    const effectiveReason = trimmedReason.length >= 10 ? trimmedReason : (trimmedReason.length > 0 ? `Hold extended by admin (${trimmedReason})` : 'Hold extended by admin')
     setWorking(true); setError(''); setNotice(''); setUncertain('')
     const result = await commands.current.run({
       kind: 'extend',
       body: {
         reservationId: extend.id,
         minutes: extend.minutes,
-        reason: extend.reason.trim(),
+        reason: effectiveReason,
       },
     })
     if (!result.ok) await reportCommandResult(result)
@@ -229,10 +227,10 @@ export default function ReservationHolds() {
             ))}
           </div>
           <label className="block">
-            <span className="adm-label">Why this hold is being extended</span>
+            <span className="adm-label">Why this hold is being extended <span className="font-normal text-white/40">(optional)</span></span>
             <input
               className="adm-input"
-              placeholder="Customer confirmed payment is being sent this afternoon."
+              placeholder="Customer confirmed payment (optional)"
               value={extend.reason}
               onChange={(e) => setExtend({ ...extend, reason: e.target.value })}
             />

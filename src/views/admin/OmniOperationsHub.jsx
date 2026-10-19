@@ -823,11 +823,11 @@ export function FulfillmentActionDialog({ action, onClose, onSave, returnFocusRe
   const { run, busy, uncertain, locked, error } = useRetainedFulfillmentCommand(onSave)
   const [reason, setReason] = useState(action.payload.reason || '')
   useEffect(() => { setReason(action.payload.reason || '') }, [action])
-  const reasonOk = reason.trim().length >= 10
   const save = async event => {
     event.preventDefault()
-    if (!reasonOk) return
-    const result = await run({ ...action.payload, reason: reason.trim() })
+    const trimmed = reason.trim()
+    const effectiveReason = reason.trim().length >= 10 ? trimmed : (trimmed.length > 0 ? `Custody updated by admin (${trimmed})` : 'Custody updated by admin')
+    const result = await run({ ...action.payload, reason: effectiveReason })
     if (result?.ok) onClose()
   }
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md">
@@ -839,12 +839,12 @@ export function FulfillmentActionDialog({ action, onClose, onSave, returnFocusRe
         <p id="fulfillment-action-impact" className="text-sm text-white/70">{action.impact}</p>
         {action.from && <p className="text-sm text-white/70">Current holder: <span className="font-semibold text-white">{action.from}</span></p>}
         <label className="block text-xs font-semibold text-white/80">Reason (audit record)
-          <textarea value={reason} onChange={event => setReason(event.target.value)} disabled={locked} required minLength={10} maxLength={500} rows={2} className="adm-input mt-1.5 min-h-16 resize-y text-base" placeholder="Why is this custody or state changing?" />
+          <textarea value={reason} onChange={event => setReason(event.target.value)} disabled={locked} maxLength={500} rows={2} className="adm-input mt-1.5 min-h-16 resize-y text-base" placeholder="Why is this custody or state changing?" />
         </label>
         {error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}
         <div className="flex flex-col-reverse gap-2 sm:flex-row">
           <button type="button" disabled={locked} onClick={onClose} className={`${secondaryButton} flex-1`}>Cancel</button>
-          <button type="submit" disabled={busy || !reasonOk} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? 'Retry same command' : 'Confirm command'}</button>
+          <button type="submit" disabled={busy || reason.trim().length < 10} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? 'Retry same command' : 'Confirm command'}</button>
         </div>
       </form>
     </AdminDialog>
@@ -866,8 +866,8 @@ export function HandoverDialog({ order, onClose, onSave, retrySafe, returnFocusR
   const save = async event => {
     event.preventDefault()
     const handoverNote = note.trim()
-    if (handoverNote.length < 3) return
-    const result = await run(handoverNote)
+    const effectiveNote = handoverNote.length >= 3 ? handoverNote : (handoverNote.length > 0 ? `Courier dispatched (${handoverNote})` : 'Courier dispatched by admin')
+    const result = await run(effectiveNote)
     if (result?.ok) onClose()
   }
 
@@ -879,12 +879,12 @@ export function HandoverDialog({ order, onClose, onSave, retrySafe, returnFocusR
           <h2 id="handover-title" className="mt-1 text-xl font-semibold">Record courier handover</h2>
           <p id="handover-description" className="mt-1 text-sm text-white/50">Record the actual courier receipt or dispatch reference. This deducts the exact reserved lots; it does not book a courier.</p>
         </div>
-        <label htmlFor="handover-note" className="block text-xs font-semibold text-white/60">Courier handover or dispatch reference</label>
-        <textarea ref={noteRef} id="handover-note" disabled={locked} required minLength={3} maxLength={500} value={note} onChange={event => setNote(event.target.value.slice(0, 500))} className="adm-input min-h-24 resize-y text-base" />
+        <label htmlFor="handover-note" className="block text-xs font-semibold text-white/60">Courier handover or dispatch reference <span className="font-normal text-white/40">(optional)</span></label>
+        <textarea ref={noteRef} id="handover-note" disabled={locked} maxLength={500} value={note} onChange={event => setNote(event.target.value.slice(0, 500))} placeholder="Courier receipt or dispatch reference (optional)" className="adm-input min-h-24 resize-y text-base" />
         {error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}
         <div className="flex flex-col-reverse gap-2 sm:flex-row">
           <button type="button" onClick={onClose} disabled={busy || (uncertain && isRetrySafe)} className={`${secondaryButton} flex-1`}>Cancel</button>
-          <button type="submit" disabled={busy || (uncertain && !isRetrySafe) || note.trim().length < 3} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? isRetrySafe ? 'Retry same command' : 'Reconcile order first' : 'Confirm handover'}</button>
+          <button type="submit" disabled={busy || (uncertain && !isRetrySafe)} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? isRetrySafe ? 'Retry same command' : 'Reconcile order first' : 'Confirm handover'}</button>
         </div>
       </form>
     </AdminDialog>

@@ -30,7 +30,15 @@ raw_views as (
     n.nspname as schema_name,
     pg_get_userbyid(c.relowner) as owner,
     coalesce(array_to_string(c.reloptions, ','), '') as options,
-    (coalesce(array_to_string(c.reloptions, ','), '') like '%security_invoker=true%') as security_invoker
+    (coalesce(array_to_string(c.reloptions, ','), '') like '%security_invoker=true%') as security_invoker,
+    -- Fingerprint only: no view body or business rows are exported.
+    md5(pg_get_viewdef(c.oid, true)) as definition_md5,
+    (select coalesce(jsonb_agg(jsonb_build_object(
+      'name', a.attname, 'type', a.atttypid::regtype::text
+    ) order by a.attnum), '[]'::jsonb)
+     from pg_attribute a
+     where a.attrelid = c.oid and a.attnum > 0 and not a.attisdropped
+    ) as projected_columns
   from pg_class c
   join pg_namespace n on n.oid = c.relnamespace
   where n.nspname in (select nspname from non_system_schemas)
@@ -58,6 +66,7 @@ raw_functions as (
     -- "public.set_user_role(uuid,text)".
     format('%I.%I(%s)', n.nspname, p.proname, oidvectortypes(p.proargtypes)) as signature,
     p.prosecdef as security_definer,
+    md5(pg_get_functiondef(p.oid)) as definition_md5,
     pg_get_userbyid(p.proowner) as owner,
     coalesce(array_to_string(p.proconfig, ','), '') as search_path_config,
     -- Authorization evidence is exported as booleans only. Function bodies may
@@ -98,7 +107,8 @@ raw_functions as (
     coalesce((
       select jsonb_agg(jsonb_build_object(
         'grantee', coalesce(grantee_role.rolname, 'public'),
-        'privilege', function_acl.privilege_type
+        'privilege', function_acl.privilege_type,
+        'is_grantable', function_acl.is_grantable
       ) order by coalesce(grantee_role.rolname, 'public'))
       from aclexplode(coalesce(p.proacl, acldefault('f', p.proowner))) function_acl
       left join pg_roles grantee_role on grantee_role.oid = function_acl.grantee
@@ -218,7 +228,8 @@ raw_grants as (
     coalesce(r.rolname, 'public') as grantee,
     n.nspname as schema_name,
     c.relname as table_name,
-    a.privilege_type as privilege
+    a.privilege_type as privilege,
+    a.is_grantable
   from pg_class c
   join pg_namespace n on n.oid = c.relnamespace
   cross join lateral aclexplode(coalesce(c.relacl, acldefault('r', c.relowner))) a

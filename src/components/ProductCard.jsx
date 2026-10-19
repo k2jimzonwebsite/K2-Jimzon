@@ -78,6 +78,15 @@ export default function ProductCard({ product, compact = false, featured = false
     <article data-testid="product-card" className="product-card group flex h-full w-full flex-col overflow-hidden rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-[var(--store-surface-shadow)]">
       <button onClick={() => openProduct(product.sku)} aria-label={`View ${product.name}`} data-testid="product-image-btn" className="product-img-surface relative aspect-[4/5] overflow-hidden text-left cursor-pointer">
         <ProductVisual product={product} className="product-card-visual h-full w-full object-contain drop-shadow-lg" pad="p-4 sm:p-6" />
+        {product.afterImage && (
+          <img
+            src={product.afterImage}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          />
+        )}
         {product.tag && <span className="absolute left-2.5 top-2.5 rounded-md bg-navy/90 px-2 py-1 text-xs font-bold uppercase tracking-[0.1em] text-cream">{product.tag}</span>}
       </button>
 

@@ -754,14 +754,16 @@ function InboxWorkspace({ store, database }) {
   }
   const submitModeration = async (event) => {
     event.preventDefault()
-    if (!moderationDialog || moderationReason.trim().length < 3 || moderating) return
+    if (!moderationDialog || moderating) return
     setModerating(true)
     const { kind, target } = moderationDialog
+    const trimmed = moderationReason.trim()
+    const effectiveReason = trimmed.length >= 3 ? trimmed : (trimmed.length > 0 ? `Anonymous chat ${kind}ed by admin (${trimmed})` : `Anonymous chat ${kind}ed by admin`)
     const result = kind === 'delete'
-      ? await deleteAnonymousConversation(target, moderationReason.trim())
+      ? await deleteAnonymousConversation(target, effectiveReason)
       : kind === 'block'
-        ? await blockAnonymousChat(target, moderationReason.trim())
-        : await unblockAnonymousChat(target, moderationReason.trim())
+        ? await blockAnonymousChat(target, effectiveReason)
+        : await unblockAnonymousChat(target, effectiveReason)
     setModerating(false)
     if (!result?.ok) { setSaveError(result?.error || 'The moderation action could not be completed.'); return }
     setModerationDialog(null)
@@ -1650,12 +1652,12 @@ WHERE conversation_id = '${chat.id}'
               <h2 id="chat-moderation-title" className="text-xl font-bold text-white">{moderationDialog.kind === 'delete' ? 'Delete anonymous conversation' : moderationDialog.kind === 'block' ? 'Block anonymous chat' : 'Unblock anonymous chat'}</h2>
               <p className="mt-2 text-sm leading-6 text-white/60">{moderationDialog.kind === 'delete' ? 'This permanently removes the anonymous thread for staff and the guest. Account-linked threads are protected.' : 'This changes chat access only. Store browsing and checkout are not blocked.'}</p>
               <form className="mt-5 space-y-4" onSubmit={submitModeration}>
-                <label className="block text-sm font-semibold text-white" htmlFor="chat-moderation-reason">Reason
-                  <textarea id="chat-moderation-reason" required minLength={3} maxLength={500} rows={4} value={moderationReason} onChange={event => setModerationReason(event.target.value)} disabled={moderating} className="adm-input mt-2 w-full resize-y text-base sm:text-sm" placeholder="Record the abuse, scam, or reason for this action" />
+                <label className="block text-sm font-semibold text-white" htmlFor="chat-moderation-reason">Reason <span className="font-normal text-white/40">(optional)</span>
+                  <textarea id="chat-moderation-reason" maxLength={500} rows={4} value={moderationReason} onChange={event => setModerationReason(event.target.value)} disabled={moderating} className="adm-input mt-2 w-full resize-y text-base sm:text-sm" placeholder="Record the abuse, scam, or reason for this action (optional)" />
                 </label>
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                   <button type="button" onClick={() => setModerationDialog(null)} disabled={moderating} className="adm-btn min-h-11 border border-adm-line px-4 text-white">Cancel</button>
-                  <button type="submit" disabled={moderating || moderationReason.trim().length < 3} className="adm-btn min-h-11 bg-blue px-4 font-semibold text-white disabled:opacity-45">{moderating ? 'Recording…' : 'Confirm action'}</button>
+                  <button type="submit" disabled={moderating} className="adm-btn min-h-11 bg-blue px-4 font-semibold text-white disabled:opacity-45">{moderating ? 'Recording…' : 'Confirm action'}</button>
                 </div>
               </form>
             </section>

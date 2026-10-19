@@ -3,6 +3,35 @@ export const PHASED_RECEIPT=Object.freeze({version:'20261013110000',name:'k2_cat
 const relationKeys=['intake_sessions','sku_seq','channels','channel_shops'];
 const blocked=detail=>({state:'blocked',mode:'unknown',reapplyAllowed:false,detail});
 const utcTimestamp=value=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z$/.test(value)&&Number.isFinite(Date.parse(value))&&new Date(value).toISOString().slice(0,19)===value.slice(0,19);
+export const CATEGORY_ACTIVATION_PACKET=Object.freeze({path:'supabase/prepared/20261015_category_policy_activation.sql',sha256:'69e80b1ac8a1e7c255abfbcb8d16c1c9ce5582ff3cf4be651129bf1f6d0051de',proposedDepth:10});
+const privateActivationRelation=r=>r?.owner==='postgres'&&r.rls===true&&['publicAccess','anonAccess','authenticatedAccess','serviceAccess'].every(k=>r[k]===false);
+export function classifyCategoryActivationPreparation(snapshot,installationMode,requestedHash,actualPacketHash,target){
+ const refuse=detail=>({...blocked(detail),writeAuthorized:false});
+ if(requestedHash!==CATEGORY_ACTIVATION_PACKET.sha256||actualPacketHash!==requestedHash)return refuse('Exact category activation preparation packet/request hash differs');
+ if(installationMode!=='installed'||!privateActivationRelation(snapshot?.relation)||!Array.isArray(snapshot?.rows)||snapshot.rows.length!==0)return refuse('Preparation requires the exact private installed, unactivated target');
+ if(!target||['categoryRows','policyRows','eventRows','contextRows'].some(k=>target[k]!==0)||target.configOwnerOnly!==true)return refuse('Category activation empty target or owner-only configuration differs');
+ const hashes={payload:'91eba694981253dc8bd8233727c2f2b38cb8686507acc9097999f60abf408d36',start:'23e82f11900727d669d7c41bd6eab31c42a4f5870fae9ceb9d6d736a460ae65c',current:'3f7afcb349d034b121d1fc57d9da514a667e3b491b809bd6d43e5255ae938b25'};
+ for(const [key,hash] of Object.entries(hashes)){
+  const h=target[key];
+  if(!h||h.owner!=='postgres'||h.definer!==true||h.emptySearchPath!==true||h.ownerOnlyExecute!==true||h.bodySha256!==hash)return refuse('Category activation private '+key+' dependency differs');
+ }
+ return {state:'owner',mode:'exact-activation-preparation',reapplyAllowed:false,writeAuthorized:false,packetSha256:requestedHash,proposedDepth:10,detail:'Exact packet69e80b1a and empty private target match; proposed depth10 and activation await fresh owner authorization. Normal readiness remains blocked until applied and verified'};
+}
+// Activation presence is an operational precondition, not value approval,
+// function/hosted acceptance, an installer replay or authorization to write.
+export function classifyCategoryPolicyActivation(snapshot,installationMode){
+ if(installationMode==='first-apply'){
+  if(snapshot?.relation===null&&Array.isArray(snapshot.rows)&&snapshot.rows.length===0)return {state:'owner',mode:'first-apply',reapplyAllowed:false,detail:'Category activation must be approved and verified after canonical installation, before operations'};
+  return blocked('Unexpected category activation on first-apply baseline');
+ }
+ if(installationMode!=='installed'||!snapshot?.relation||!Array.isArray(snapshot.rows))return blocked('Missing installed category activation evidence');
+ const r=snapshot.relation;
+ if(!privateActivationRelation(r))return blocked('Category activation relation ownership, RLS or private access differs');
+ if(snapshot.rows.length===0)return blocked('Category policy is not configured: singleton activation row is absent');
+ const c=snapshot.rows[0];
+ if(snapshot.rows.length!==1||c?.singleton!==true||!Number.isInteger(c.maximumDepth)||c.maximumDepth<1||c.maximumDepth>2147483647)return blocked('Category activation must be one true singleton with a positive PostgreSQL integer depth');
+ return {state:'verified',mode:'installed',reapplyAllowed:false,detail:`Private category activation present, maximum depth ${c.maximumDepth}; exact value approval/recovery and operational acceptance remain separate`};
+}
 export function classifyInstalledReadiness(receipts,relations){
  if(!Array.isArray(receipts)||!relations||relationKeys.some(k=>!Number.isInteger(relations[k])))return blocked('Missing complete schema/receipt evidence');
  if(receipts.length===0&&relationKeys.every(k=>relations[k]===0))return {state:'verified',mode:'first-apply',reapplyAllowed:false,detail:'No controlled receipt and all canonical chains absent; exact first-apply authorization still required'};

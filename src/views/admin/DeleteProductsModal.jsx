@@ -82,7 +82,10 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
 
   const handleDelete = async () => {
     if (pin.length !== 4) return setError('Enter your 4-digit PIN.')
-    if (reason.trim().length < 8) return setError('Enter a specific reason of at least 8 characters.')
+    const trimmed = reason.trim()
+    const effectiveReason = trimmed.length >= 8
+      ? trimmed
+      : (trimmed.length > 0 ? `Admin deleted product records (${trimmed})` : 'Admin deleted product records')
     setBusy(true)
     setError('')
     setUncertain(false)
@@ -94,13 +97,13 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
       // A changed deletion payload after a submit is a new command with a new
       // identity; an unchanged retry keeps the key so a lost response resolves
       // the original receipt instead of conflicting with it.
-      const fingerprint = JSON.stringify({ skus, reason: reason.trim() })
+      const fingerprint = JSON.stringify({ skus, reason: effectiveReason })
       if (lastSubmitRef.current && lastSubmitRef.current !== fingerprint) {
         requestIdRef.current = crypto.randomUUID()
       }
       lastSubmitRef.current = fingerprint
       const response = await commandAdminProductMasterBff('delete', {
-        skus, pin, reason: reason.trim(),
+        skus, pin, reason: effectiveReason,
       }, requestIdRef.current)
       setBusy(false)
       if (!response.ok) {
@@ -231,7 +234,7 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
           {pinState === 'ready' && (
             <div className="space-y-3">
               <div>
-                <label htmlFor="delete-reason" className="adm-label">Reason for permanent deletion</label>
+                <label htmlFor="delete-reason" className="adm-label">Reason for permanent deletion <span className="font-normal text-white/40">(optional)</span></label>
                 <textarea
                   id="delete-reason"
                   value={reason}
@@ -239,10 +242,10 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
                   rows={3}
                   maxLength={500}
                   disabled={busy || uncertain}
-                  placeholder="Example: Duplicate draft created during catalog setup"
+                  placeholder="Optional note (default: Admin deleted product records)"
                   className="w-full resize-y rounded-adm-sm border border-adm-line bg-adm-raised px-3 py-2.5 text-base text-white placeholder:text-white/35 outline-none focus:border-crimson"
                 />
-                <p className="mt-1 text-xs text-white/40">Required for the deletion audit record.</p>
+                <p className="mt-1 text-xs text-white/40">Optional audit note. Default will be recorded if left blank.</p>
               </div>
               <div>
               <label htmlFor="delete-pin" className="adm-label">Your 4-digit delete PIN</label>
@@ -291,7 +294,7 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
           <button
             type="button"
             onClick={handleDelete}
-            disabled={busy || blocked || (uncertain ? false : (pin.length !== 4 || reason.trim().length < 8))}
+            disabled={busy || blocked || (uncertain ? false : pin.length !== 4)}
             className="flex-1 min-h-[44px] rounded-adm-sm bg-crimson hover:bg-crimson-deep text-sm font-bold text-white transition-colors disabled:opacity-40"
           >
             {busy ? 'Deleting…' : uncertain ? 'Retry same deletion' : `Delete ${count} product${count !== 1 ? 's' : ''}`}

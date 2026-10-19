@@ -1,6 +1,6 @@
 16 October final state: the owner-approved narrow fix is now live and actual saved PRIMARY/AFTER reopen is verified. Current exact source/deployment/verification/recovery receipt: ADMIN_PRODUCT_MEDIA_READ_RELEASE_20261016.md. Earlier prepared/pending wording below is historical.
 
-Release authorization update16October: owner explicitly approved the narrow live release after the initial preparation below. Current execution/evidence: ADMIN_PRODUCT_MEDIA_READ_RELEASE_20261016.md. Earlier pending-approval wording is historical.
+16October release authorization update: owner explicitly answered "Approve narrow live release" in this chat. Isolated execution is now under codex/admin-media-read-release; the complete release gate runs once before main promotion. Earlier pending-approval wording below is historical. Current release receipt: ADMIN_PRODUCT_MEDIA_READ_RELEASE_20261016.md.
 
 # Admin saved-photo read correction — 16 October 2026
 

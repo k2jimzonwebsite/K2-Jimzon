@@ -12,6 +12,7 @@ import { peso } from '../data/products'
 import { productStock } from '../lib/cartInventory'
 import { displayBrand, displayCategory } from '../lib/productIdentity'
 import { applyImageFallback } from '../lib/imageFallback'
+import { formatNetWeight } from '../lib/productNetWeight'
 
 export default function MasterProduct() {
   const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, go, requestPasabuyItem, askStaffAboutProduct, loading } = useStore()
@@ -63,6 +64,7 @@ export default function MasterProduct() {
   // name or render nothing, so a UUID can never reach the customer.
   const brandLabel = displayBrand(product)
   const categoryLabel = displayCategory(product)
+  const netWeight = formatNetWeight(product.net_weight)
 
   // Construct image gallery
   const gallery = (() => {
@@ -145,14 +147,14 @@ export default function MasterProduct() {
                       src={gallery[activeSlide].src} 
                       controls 
                       preload="metadata"
-                      className="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal"
+                      className="w-full h-full object-cover"
                     />
                   ) : (
                     <img 
                       src={gallery[activeSlide].src} 
                       alt={`${product.name} - View ${activeSlide + 1}`} 
                       onError={applyImageFallback}
-                      className="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal" 
+                      className="w-full h-full object-contain"
                     />
                   )}
                 </motion.div>
@@ -284,8 +286,8 @@ export default function MasterProduct() {
               {product.allergens && (
                 <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Allergens</span><span className="w-2/3 font-medium text-amber-600">{product.allergens}</span></div>
               )}
-              {product.net_weight && (
-                <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Net Weight</span><span className="w-2/3">{product.net_weight} {product.package_type ? `(${product.package_type})` : ''}</span></div>
+              {netWeight && (
+                <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Net Weight</span><span className="w-2/3">{netWeight} {product.package_type ? `(${product.package_type})` : ''}</span></div>
               )}
               {product.storage_instructions && (
                 <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Storage</span><span className="w-2/3">{product.storage_instructions}</span></div>
@@ -296,7 +298,7 @@ export default function MasterProduct() {
               {product.barcode && (
                 <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Barcode</span><span className="w-2/3">{product.barcode}</span></div>
               )}
-              {!product.ingredients && !product.net_weight && !brandLabel && (
+              {!product.ingredients && !netWeight && !brandLabel && (
                 <div className="p-3.5 text-center text-navy-faint italic">Product specifications are not available yet.</div>
               )}
             </div>

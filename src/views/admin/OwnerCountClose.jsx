@@ -120,8 +120,8 @@ function SourceSetup({ shops, session, selectedShopIds, setSelectedShopIds, peri
             <Field label="Period start"><input className={fieldClass} type="date" value={periodStart} onChange={(event) => setPeriodStart(event.target.value)} disabled={busy || Boolean(session)} /></Field>
             <Field label="Period end"><input className={fieldClass} type="date" value={periodEnd} onChange={(event) => setPeriodEnd(event.target.value)} disabled={busy || Boolean(session)} /></Field>
           </div>
-          <Field label="Save reason" hint="10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} disabled={busy} placeholder="Why are these shops and dates being closed together?" /></Field>
-          <button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || selectedShopIds.length === 0 || reason.trim().length < 10}>
+          <Field label="Save reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} disabled={busy} placeholder="Why are these shops and dates being closed together? (optional)" /></Field>
+          <button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || selectedShopIds.length === 0}>
             {busy ? 'Saving close session…' : session ? 'Save current progress' : 'Save sources & continue'}
           </button>
           {session && <p className="break-all text-xs text-white/45">Recovery ID: <code>{session.sessionId}</code></p>}
@@ -160,12 +160,16 @@ function SnapshotImport({ shops, session, importStatus, onStage, onResumeImport,
       <StateBanner tone="info">Reported quantity is observation evidence. This import does not change physical inventory, lots, custody, reservations, or marketplace availability.</StateBanner>
       {!importStatus ? (
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
-          <form className="grid gap-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:grid-cols-2 sm:p-4" onSubmit={(event) => { event.preventDefault(); onStage({ shopId, file, sourceIdentity, reason }) }}>
+          <form className="grid gap-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:grid-cols-2 sm:p-4" onSubmit={(event) => {
+            event.preventDefault()
+            const effectiveReason = reason.trim().length >= 10 ? reason.trim() : (reason.trim() ? `${reason.trim()} (shop snapshot staged)` : 'Stage this exact shop export for month close.')
+            onStage({ shopId, file, sourceIdentity, reason: effectiveReason })
+          }}>
             <Field label="Exact shop"><select className={fieldClass} value={shopId} onChange={(event) => setShopId(event.target.value)} disabled={busy}>{selectedShops.map((shop) => <option key={shop.id} value={shop.id}>{shop.displayName} · {shop.shopCode}</option>)}</select></Field>
             <Field label="Marketplace CSV" hint="512 KB maximum" error={fileError}><input className={`${fieldClass} file:mr-3 file:border-0 file:bg-transparent file:text-sm file:font-semibold file:text-blue`} type="file" accept=".csv,text/csv" onChange={chooseFile} disabled={busy} /></Field>
             <Field label="Source identity" hint="stable across retries"><input className={fieldClass} value={sourceIdentity} onChange={(event) => setSourceIdentity(event.target.value)} maxLength={200} disabled={busy} /></Field>
-            <Field label="Import reason" hint="10–500 characters"><input className={fieldClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} disabled={busy} placeholder="Stage this exact shop export for month close." /></Field>
-            <button className={`${primaryButton} sm:col-span-2`} type="submit" disabled={busy || offline || !file || !shopId || !sourceIdentity.trim() || reason.trim().length < 10}>
+            <Field label="Import reason" hint="(optional) · 10–500 characters"><input className={fieldClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} disabled={busy} placeholder="Stage this exact shop export for month close. (optional)" /></Field>
+            <button className={`${primaryButton} sm:col-span-2`} type="submit" disabled={busy || offline || !file || !shopId || !sourceIdentity.trim()}>
               <UploadIcon size={16} /> {busy ? 'Validating and staging…' : 'Validate & stage snapshot'}
             </button>
           </form>
@@ -229,12 +233,16 @@ function OrderImport({ shops, session, status, onStage, onResume, onAdvance, bus
       <StateBanner tone="info">Order facts are reconciliation evidence only. Staging them does not reserve, deduct, create, or reconcile canonical inventory.</StateBanner>
       {!status ? (
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
-          <form className="grid gap-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:grid-cols-2 sm:p-4" onSubmit={(event) => { event.preventDefault(); onStage({ shopId, file, sourceIdentity, reason }) }}>
+          <form className="grid gap-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:grid-cols-2 sm:p-4" onSubmit={(event) => {
+            event.preventDefault()
+            const effectiveReason = reason.trim().length >= 10 ? reason.trim() : (reason.trim() ? `${reason.trim()} (order facts staged)` : 'Stage marketplace orders for month-end close')
+            onStage({ shopId, file, sourceIdentity, reason: effectiveReason })
+          }}>
             <Field label="Exact order shop"><select className={fieldClass} value={shopId} onChange={(event) => setShopId(event.target.value)} disabled={busy}>{selectedShops.map((shop) => <option key={shop.id} value={shop.id}>{shop.displayName} · {shop.shopCode}</option>)}</select></Field>
             <Field label="Marketplace order CSV" hint="customer-free · 512 KB maximum" error={fileError}><input className={`${fieldClass} file:mr-3 file:border-0 file:bg-transparent file:text-sm file:font-semibold file:text-blue`} type="file" accept=".csv,text/csv" onChange={chooseFile} disabled={busy} /></Field>
             <Field label="Order source identity" hint="stable across retries"><input className={fieldClass} value={sourceIdentity} onChange={(event) => setSourceIdentity(event.target.value)} maxLength={200} disabled={busy} /></Field>
-            <Field label="Order import reason" hint="10–500 characters"><input className={fieldClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} disabled={busy} placeholder="Why is this exact shop order export part of the close?" /></Field>
-            <button className={`${primaryButton} sm:col-span-2`} type="submit" disabled={busy || offline || !file || !shopId || !sourceIdentity.trim() || reason.trim().length < 10}><UploadIcon size={16} /> {busy ? 'Validating order facts…' : 'Validate & stage order facts'}</button>
+            <Field label="Order import reason" hint="(optional) · 10–500 characters"><input className={fieldClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} disabled={busy} placeholder="Why is this exact shop order export part of the close? (optional)" /></Field>
+            <button className={`${primaryButton} sm:col-span-2`} type="submit" disabled={busy || offline || !file || !shopId || !sourceIdentity.trim()}><UploadIcon size={16} /> {busy ? 'Validating order facts…' : 'Validate & stage order facts'}</button>
           </form>
           <form className="rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); onResume(resumeId) }}>
             <p className="text-sm font-semibold text-white">Resume order evidence</p>
@@ -257,9 +265,13 @@ function OrderImport({ shops, session, status, onStage, onResume, onAdvance, bus
             <p className="mt-2 font-semibold text-forest">Canonical inventory changed: No</p>
           </div>
           {blocked ? <StateBanner tone="warning">Resolve {status.conflicts || 0} changed-payload conflict{Number(status.conflicts) === 1 ? '' : 's'} and {unresolved} unknown product link{unresolved === 1 ? '' : 's'} before saving sales progress.</StateBanner> : (
-            <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); onAdvance(checkpointReason) }}>
-              <Field label="Sales reconciliation reason" hint="10–500 characters"><textarea className={textareaClass} value={checkpointReason} onChange={(event) => setCheckpointReason(event.target.value)} maxLength={500} placeholder="What duplicate, conflict, product-link, period, and exact-shop evidence was reviewed?" /></Field>
-              <button type="submit" className={`${primaryButton} w-full`} disabled={busy || offline || checkpointReason.trim().length < 10}>Save sales progress</button>
+            <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => {
+              event.preventDefault()
+              const effectiveReason = checkpointReason.trim().length >= 10 ? checkpointReason.trim() : (checkpointReason.trim() ? `${checkpointReason.trim()} (sales reconciliation saved)` : 'Sales reconciliation progress saved by admin')
+              onAdvance(effectiveReason)
+            }}>
+              <Field label="Sales reconciliation reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={checkpointReason} onChange={(event) => setCheckpointReason(event.target.value)} maxLength={500} placeholder="What duplicate, conflict, product-link, period, and exact-shop evidence was reviewed? (optional)" /></Field>
+              <button type="submit" className={`${primaryButton} w-full`} disabled={busy || offline}>Save sales progress</button>
             </form>
           )}
         </div>
@@ -311,12 +323,13 @@ function FeeEstimate({ session, fees, onSave, onAdvance, busy, offline }) {
   const money = (minor) => `₱${(Number(minor || 0) / 100).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   const submit = () => {
     if (!preview) return
+    const effectiveReason = reason.trim().length >= 10 ? reason.trim() : (reason.trim() ? `${reason.trim()} (fee estimate recorded)` : 'Marketplace fee estimate recorded by admin')
     onSave({
       sessionId: session.sessionId, shopId, policyVersion: policyVersion.trim(), currency: 'PHP',
       commissionBasisPoints: preview.commissionBasisPoints,
       paymentBasisPoints: preview.paymentBasisPoints,
       withholdingBasisPoints: preview.withholdingBasisPoints,
-      fixedFeeMinorPerOrder: preview.fixedFeeMinorPerOrder, reason: reason.trim(),
+      fixedFeeMinorPerOrder: preview.fixedFeeMinorPerOrder, reason: effectiveReason,
     })
   }
   return (
@@ -331,8 +344,8 @@ function FeeEstimate({ session, fees, onSave, onAdvance, busy, offline }) {
           <Field label="Payment fee rate" hint="percent"><input className={fieldClass} inputMode="decimal" value={paymentPercent} onChange={(event) => setPaymentPercent(event.target.value)} disabled={busy} /></Field>
           <Field label="Withholding estimate" hint="percent"><input className={fieldClass} inputMode="decimal" value={withholdingPercent} onChange={(event) => setWithholdingPercent(event.target.value)} disabled={busy} /></Field>
           <Field label="Fixed fee per order" hint="PHP"><input className={fieldClass} inputMode="decimal" value={fixedFeePesos} onChange={(event) => setFixedFeePesos(event.target.value)} disabled={busy} /></Field>
-          <Field label="Estimate reason" hint="10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder="Name the fee source and review performed." /></Field>
-          <button className={`${primaryButton} self-end`} type="submit" disabled={busy || offline || !preview || shopImports.length === 0 || blockedFacts > 0 || reason.trim().length < 10}>{selectedLatest ? 'Save new estimate version' : 'Save estimate version 1'}</button>
+          <Field label="Estimate reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder="Name the fee source and review performed. (optional)" /></Field>
+          <button className={`${primaryButton} self-end`} type="submit" disabled={busy || offline || !preview || shopImports.length === 0 || blockedFacts > 0}>{selectedLatest ? 'Save new estimate version' : 'Save estimate version 1'}</button>
         </form>
         <div className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4">
           <p className="text-sm font-semibold text-white">Derived preview</p>
@@ -349,7 +362,16 @@ function FeeEstimate({ session, fees, onSave, onAdvance, busy, offline }) {
       <div className="divide-y divide-adm-line overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
         {exactShops.map((shop) => { const estimate = latestByShop.get(shop.id); return <div key={shop.id} className="flex min-h-[56px] items-center justify-between gap-3 px-3 py-2.5 sm:px-4"><div><p className="text-sm font-semibold text-white/75">{shop.displayName}</p><p className="mt-0.5 text-xs text-white/40">{estimate ? `${estimate.policyVersion} · version ${estimate.estimateVersion} · ${money(estimate.estimatedFeeMinor)}` : 'No saved estimate'}</p></div><StatusPill tone={estimate ? 'success' : 'warning'}>{estimate ? 'Estimated' : 'Required'}</StatusPill></div> })}
       </div>
-      {allEstimated && <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); onAdvance(checkpointReason) }}><Field label="Fee checkpoint reason" hint="10–500 characters"><textarea className={textareaClass} value={checkpointReason} onChange={(event) => setCheckpointReason(event.target.value)} maxLength={500} placeholder="Confirm every exact shop has a reviewed estimate version." /></Field><button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || checkpointReason.trim().length < 10}>Save fee progress</button></form>}
+      {allEstimated && (
+        <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => {
+          event.preventDefault()
+          const effectiveReason = checkpointReason.trim().length >= 10 ? checkpointReason.trim() : (checkpointReason.trim() ? `${checkpointReason.trim()} (fee checkpoint recorded)` : 'Fee estimate checkpoint approved by admin')
+          onAdvance(effectiveReason)
+        }}>
+          <Field label="Fee checkpoint reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={checkpointReason} onChange={(event) => setCheckpointReason(event.target.value)} maxLength={500} placeholder="Confirm every exact shop has a reviewed estimate version. (optional)" /></Field>
+          <button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline}>Save fee progress</button>
+        </form>
+      )}
     </section>
   )
 }
@@ -376,13 +398,14 @@ function StockCount({ session, stock, onReview, onAdvance, busy, offline }) {
   const submitReview = async () => {
     if (!item) return
     try {
+      const effectiveReason = reason.trim().length >= 10 ? reason.trim() : (reason.trim() ? `${reason.trim()} (stock count review)` : (discrepancy === 0 ? 'Matching physical count verified by admin' : 'Exact lot count discrepancy reconciled by admin'))
       const reviewPayload = {
         sessionId: session.sessionId, productId: item.productId,
         expectedCanonicalBefore: item.canonicalPhysical, physicalCount,
-        reason: reason.trim(),
+        reason: effectiveReason,
       }
       const reconciliationPayload = discrepancy === 0 ? null : buildLotReconciliationPayload({
-        sku: item.sku, lots: item.lots, physicalCounts: counts, reason: reason.trim(),
+        sku: item.sku, lots: item.lots, physicalCounts: counts, reason: effectiveReason,
       })
       await onReview({ reviewPayload, reconciliationPayload })
     } catch (error) {
@@ -412,10 +435,24 @@ function StockCount({ session, stock, onReview, onAdvance, busy, offline }) {
           { label: 'Before reconciliation', value: item.canonicalPhysical },
           { label: 'Discrepancy', value: discrepancy > 0 ? `+${discrepancy}` : discrepancy, tone: discrepancy ? 'text-amber' : 'text-forest' },
         ]} />
-        {savedByProduct.has(item.productId) ? <StateBanner tone="success">Count review saved · {savedByProduct.get(item.productId).outcome} · version {savedByProduct.get(item.productId).version}</StateBanner> : <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); submitReview() }}><Field label="Count and discrepancy reason" hint="10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder={discrepancy ? 'What exact lot evidence explains this change?' : 'How and where was this matching physical count verified?'} /></Field><button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || reason.trim().length < 10}>{discrepancy ? 'Reconcile exact lots & record review' : 'Record matching physical count'}</button></form>}
+        {savedByProduct.has(item.productId) ? <StateBanner tone="success">Count review saved · {savedByProduct.get(item.productId).outcome} · version {savedByProduct.get(item.productId).version}</StateBanner> : (
+          <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); submitReview() }}>
+            <Field label="Count and discrepancy reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder={discrepancy ? 'What exact lot evidence explains this change? (optional)' : 'How and where was this matching physical count verified? (optional)'} /></Field>
+            <button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline}>{discrepancy ? 'Reconcile exact lots & record review' : 'Record matching physical count'}</button>
+          </form>
+        )}
       </>}
       <div className="divide-y divide-adm-line overflow-hidden rounded-adm border border-adm-line bg-adm-surface">{items.map((entry) => { const review = savedByProduct.get(entry.productId); return <div key={entry.productId} className="flex min-h-[56px] items-center justify-between gap-3 px-3 py-2.5 sm:px-4"><div><p className="text-sm font-semibold text-white/75">{entry.sku} · {entry.name}</p><p className="mt-0.5 text-xs text-white/40">{review ? `${review.outcome} · discrepancy ${review.discrepancy}` : 'Physical count review required'}</p></div><StatusPill tone={review ? 'success' : 'warning'}>{review ? 'Reviewed' : 'Required'}</StatusPill></div> })}</div>
-      {allReviewed && <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); onAdvance(checkpointReason) }}><Field label="Stock checkpoint reason" hint="10–500 characters"><textarea className={textareaClass} value={checkpointReason} onChange={(event) => setCheckpointReason(event.target.value)} maxLength={500} placeholder="Confirm every linked product has a durable physical count review." /></Field><button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || checkpointReason.trim().length < 10}>Save count progress</button></form>}
+      {allReviewed && (
+        <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => {
+          event.preventDefault()
+          const effectiveReason = checkpointReason.trim().length >= 10 ? checkpointReason.trim() : (checkpointReason.trim() ? `${checkpointReason.trim()} (stock checkpoint approved)` : 'Stock count review checkpoint approved by admin')
+          onAdvance(effectiveReason)
+        }}>
+          <Field label="Stock checkpoint reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={checkpointReason} onChange={(event) => setCheckpointReason(event.target.value)} maxLength={500} placeholder="Confirm every linked product has a durable physical count review. (optional)" /></Field>
+          <button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline}>Save count progress</button>
+        </form>
+      )}
     </section>
   )
 }
@@ -439,10 +476,13 @@ function CoverageReview({ session, coverage, onOverride, onAdvance, busy, offlin
   const tones = { covered: 'success', thin: 'warning', skipped: 'neutral', out: 'danger', needs_review: 'warning' }
   const labels = { covered: 'Covered', thin: 'Thin', skipped: 'Skipped', out: 'Out', needs_review: 'Needs review' }
   const alerts = coverage?.alerts || {}
-  const submit = () => onOverride({
-    sessionId: session.sessionId, productId: selected.productId, shopId: selected.shopId,
-    action, priority: priority ? Number(priority) : null, reason: reason.trim(),
-  })
+  const submit = () => {
+    const effectiveReason = reason.trim().length >= 10 ? reason.trim() : (reason.trim() ? `${reason.trim()} (coverage override saved)` : `Shop coverage override action ${action} recorded by admin`)
+    onOverride({
+      sessionId: session.sessionId, productId: selected.productId, shopId: selected.shopId,
+      action, priority: priority ? Number(priority) : null, reason: effectiveReason,
+    })
+  }
   return (
     <section className="space-y-4">
       <SectionHeading title="8. Check stock by shop" description={`Aim for ${coverage?.targetPerShop || 2} sellable units per shop. When short, best-selling shops come first unless the owner picks a priority, thin, or skip decision with a reason.`} />
@@ -459,9 +499,24 @@ function CoverageReview({ session, coverage, onOverride, onAdvance, busy, offlin
         <div className="divide-y divide-adm-line overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
           {rows.map((row) => <button type="button" key={`${row.productId}:${row.shopId}`} onClick={() => setSelectedKey(`${row.productId}:${row.shopId}`)} className={`flex min-h-[68px] w-full items-center justify-between gap-3 px-3 py-3 text-left sm:px-4 ${selectedKey === `${row.productId}:${row.shopId}` ? 'bg-blue/10' : 'hover:bg-white/[0.025]'}`}><div className="min-w-0"><p className="truncate text-sm font-semibold text-white">{row.sku} · {row.shopName}</p><p className="mt-1 text-xs text-white/45">Reported {row.reportedQuantity ?? 'unavailable'} · proposed {row.proposedAvailability} · verified sales {row.verifiedRecentSales} · canonical eligible {row.canonicalEligibleQuantity}</p></div><StatusPill tone={tones[row.status]}>{labels[row.status]}</StatusPill></button>)}
         </div>
-        {selected && <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); submit() }}><p className="text-sm font-semibold text-white">Owner override · {selected.shopName}</p><fieldset className="space-y-2"><legend className="text-xs font-semibold text-white/60">Decision</legend>{[['include', 'Include / prioritize'], ['thin', 'Thin to one'], ['skip', 'Skip this shop']].map(([value, label]) => <label key={value} className="flex min-h-[52px] items-center gap-2 rounded-adm-sm border border-adm-line px-2"><input className="h-11 w-11 shrink-0 accent-blue" type="radio" name="coverage-action" value={value} checked={action === value} onChange={() => setAction(value)} /><span className="text-sm text-white/75">{label}</span></label>)}</fieldset><Field label="Priority" hint="optional · 1 first, 50 last"><input className={fieldClass} type="number" inputMode="numeric" min="1" max="50" value={priority} onChange={(event) => setPriority(event.target.value)} /></Field><Field label="Override reason" hint="10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder="Why should this exact shop be prioritized, thinned, or skipped?" /></Field><button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || reason.trim().length < 10 || (priority && (Number(priority) < 1 || Number(priority) > 50))}>Save coverage override</button></form>}
+        {selected && (
+          <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); submit() }}>
+            <p className="text-sm font-semibold text-white">Owner override · {selected.shopName}</p>
+            <fieldset className="space-y-2"><legend className="text-xs font-semibold text-white/60">Decision</legend>{[['include', 'Include / prioritize'], ['thin', 'Thin to one'], ['skip', 'Skip this shop']].map(([value, label]) => <label key={value} className="flex min-h-[52px] items-center gap-2 rounded-adm-sm border border-adm-line px-2"><input className="h-11 w-11 shrink-0 accent-blue" type="radio" name="coverage-action" value={value} checked={action === value} onChange={() => setAction(value)} /><span className="text-sm text-white/75">{label}</span></label>)}</fieldset>
+            <Field label="Priority" hint="optional · 1 first, 50 last"><input className={fieldClass} type="number" inputMode="numeric" min="1" max="50" value={priority} onChange={(event) => setPriority(event.target.value)} /></Field>
+            <Field label="Override reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder="Why should this exact shop be prioritized, thinned, or skipped? (optional)" /></Field>
+            <button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || (priority && (Number(priority) < 1 || Number(priority) > 50))}>Save coverage override</button>
+          </form>
+        )}
       </div>
-      <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); onAdvance(checkpointReason) }}><Field label="Coverage checkpoint reason" hint="10–500 characters"><textarea className={textareaClass} value={checkpointReason} onChange={(event) => setCheckpointReason(event.target.value)} maxLength={500} placeholder="Confirm exact-shop states, target shortfalls, critical zeros, and owner overrides were reviewed." /></Field><button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || checkpointReason.trim().length < 10}>Save coverage progress</button></form>
+      <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => {
+        event.preventDefault()
+        const effectiveReason = checkpointReason.trim().length >= 10 ? checkpointReason.trim() : (checkpointReason.trim() ? `${checkpointReason.trim()} (coverage checkpoint saved)` : 'Coverage review checkpoint saved by admin')
+        onAdvance(effectiveReason)
+      }}>
+        <Field label="Coverage checkpoint reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={checkpointReason} onChange={(event) => setCheckpointReason(event.target.value)} maxLength={500} placeholder="Confirm exact-shop states, target shortfalls, critical zeros, and owner overrides were reviewed. (optional)" /></Field>
+        <button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline}>Save coverage progress</button>
+      </form>
     </section>
   )
 }
@@ -494,10 +549,30 @@ function PasabuyBoxing({ session, pasabuy, onReview, onAdvance, busy, offline })
           <div className="divide-y divide-adm-line overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
             {requests.map((request) => { const review = reviews.get(request.id); return <button type="button" key={request.id} onClick={() => setRequestId(request.id)} className={`flex min-h-[68px] w-full items-center justify-between gap-3 px-3 py-3 text-left sm:px-4 ${requestId === request.id ? 'bg-blue/10' : 'hover:bg-white/[0.025]'}`}><div className="min-w-0"><p className="truncate text-sm font-semibold text-white">{request.publicReference} · {request.itemTitle}</p><p className="mt-1 text-xs text-white/45">Quantity {request.quantity} · canonical state {String(request.status).replaceAll('_', ' ')}</p></div><StatusPill tone={review ? tones[review.readiness] : 'warning'}>{review ? labels[review.readiness] : 'Review'}</StatusPill></button> })}
           </div>
-          {selected && <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); onReview({ sessionId: session.sessionId, requestId: selected.id, readiness, reason: reason.trim() }) }}><p className="text-sm font-semibold text-white">Boxing check · {selected.publicReference}</p><fieldset className="space-y-2"><legend className="text-xs font-semibold text-white/60">Readiness</legend>{[['ready', 'Ready to box'], ['not_ready', 'Not ready'], ['not_applicable', 'Not applicable']].map(([value, label]) => <label key={value} className="flex min-h-[52px] items-center gap-2 rounded-adm-sm border border-adm-line px-2"><input className="h-11 w-11 shrink-0 accent-blue" type="radio" name="pasabuy-readiness" value={value} checked={readiness === value} onChange={() => setReadiness(value)} /><span className="text-sm text-white/75">{label}</span></label>)}</fieldset><Field label="Boxing readiness reason" hint="10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder="What physical or workflow evidence supports this readiness?" /></Field><button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || reason.trim().length < 10}>Save readiness review</button></form>}
+          {selected && (
+            <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => {
+              event.preventDefault()
+              const effectiveReason = reason.trim().length >= 10 ? reason.trim() : (reason.trim() ? `${reason.trim()} (pasabuy readiness)` : `Pasabuy boxing readiness marked ${readiness} by admin`)
+              onReview({ sessionId: session.sessionId, requestId: selected.id, readiness, reason: effectiveReason })
+            }}>
+              <p className="text-sm font-semibold text-white">Boxing check · {selected.publicReference}</p>
+              <fieldset className="space-y-2"><legend className="text-xs font-semibold text-white/60">Readiness</legend>{[['ready', 'Ready to box'], ['not_ready', 'Not ready'], ['not_applicable', 'Not applicable']].map(([value, label]) => <label key={value} className="flex min-h-[52px] items-center gap-2 rounded-adm-sm border border-adm-line px-2"><input className="h-11 w-11 shrink-0 accent-blue" type="radio" name="pasabuy-readiness" value={value} checked={readiness === value} onChange={() => setReadiness(value)} /><span className="text-sm text-white/75">{label}</span></label>)}</fieldset>
+              <Field label="Boxing readiness reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder="What physical or workflow evidence supports this readiness? (optional)" /></Field>
+              <button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline}>Save readiness review</button>
+            </form>
+          )}
         </div>
       )}
-      {allReviewed && <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); onAdvance(checkpointReason) }}><Field label="Pasabuy checkpoint reason" hint="10–500 characters"><textarea className={textareaClass} value={checkpointReason} onChange={(event) => setCheckpointReason(event.target.value)} maxLength={500} placeholder="Confirm every open request was reviewed, or that the server returned none." /></Field><button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || checkpointReason.trim().length < 10}>Save Pasabuy progress</button></form>}
+      {allReviewed && (
+        <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => {
+          event.preventDefault()
+          const effectiveReason = checkpointReason.trim().length >= 10 ? checkpointReason.trim() : (checkpointReason.trim() ? `${checkpointReason.trim()} (pasabuy checkpoint)` : 'Pasabuy boxing checkpoint approved by admin')
+          onAdvance(effectiveReason)
+        }}>
+          <Field label="Pasabuy checkpoint reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={checkpointReason} onChange={(event) => setCheckpointReason(event.target.value)} maxLength={500} placeholder="Confirm every open request was reviewed, or that the server returned none. (optional)" /></Field>
+          <button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline}>Save Pasabuy progress</button>
+        </form>
+      )}
     </section>
   )
 }
@@ -539,7 +614,16 @@ function BookkeepingHandoff({ session, handoff, onComplete, busy, offline }) {
       </div>
       <div className="divide-y divide-adm-line overflow-hidden rounded-adm border border-adm-line bg-adm-surface">{shops.map((shop) => <div key={shop.shopId} className="px-3 py-3 sm:px-4"><div className="flex items-center justify-between gap-3"><p className="text-sm font-semibold text-white">{shop.displayName}</p><StatusPill tone={shop.conflictLines || shop.unresolvedLines ? 'danger' : 'success'}>{shop.conflictLines || shop.unresolvedLines ? 'Blocked' : 'Reviewed'}</StatusPill></div><p className="mt-1 text-xs text-white/45">Accepted {shop.acceptedLines} · duplicates {shop.duplicateLines} · conflicts {shop.conflictLines} · unresolved {shop.unresolvedLines} · fee policy {shop.feePolicyVersion}</p></div>)}</div>
       <button type="button" className={`${secondaryButton} w-full`} onClick={downloadCsv} disabled={!handoff?.customerMinimized}>Download customer-free CSV</button>
-      {completed ? <StateBanner tone="success">Close completed with durable handoff evidence{handoff?.handoff?.artifactId ? ` · artifact ${handoff.handoff.artifactId}` : ''}.</StateBanner> : handoff?.readyToClose ? <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); onComplete({ sessionId: session.sessionId, expectedSessionVersion: session.version, reason: reason.trim() }) }}><Field label="Completion reason" hint="10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder="Confirm the customer-free extract and every prerequisite were reviewed." /></Field><button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || reason.trim().length < 10}>Complete close & seal handoff</button></form> : null}
+      {completed ? <StateBanner tone="success">Close completed with durable handoff evidence{handoff?.handoff?.artifactId ? ` · artifact ${handoff.handoff.artifactId}` : ''}.</StateBanner> : handoff?.readyToClose ? (
+        <form className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => {
+          event.preventDefault()
+          const effectiveReason = reason.trim().length >= 10 ? reason.trim() : (reason.trim() ? `${reason.trim()} (bookkeeping close sealed)` : 'Owner count close completed and sealed by admin')
+          onComplete({ sessionId: session.sessionId, expectedSessionVersion: session.version, reason: effectiveReason })
+        }}>
+          <Field label="Completion reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder="Confirm the customer-free extract and every prerequisite were reviewed. (optional)" /></Field>
+          <button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline}>Complete close & seal handoff</button>
+        </form>
+      ) : null}
     </section>
   )
 }
@@ -555,7 +639,7 @@ function ProductDecision({ row, busy, offline, onDecide }) {
   }, [row?.id])
   if (!row) return null
   const updateDraft = (key, value) => setDraft((current) => ({ ...current, [key]: value }))
-  const canSubmit = reason.trim().length >= 10 && (
+  const canSubmit = (
     (decision === 'link_existing' && productId)
     || (decision === 'create_new_draft' && draft.name.trim())
     || decision === 'leave_unresolved'
@@ -577,7 +661,11 @@ function ProductDecision({ row, busy, offline, onDecide }) {
           </dl>
           <p className="mt-4 rounded-adm-sm border border-amber/25 bg-amber/10 p-3 text-xs leading-relaxed text-amber">A match changes product identity only after approval. It never turns the reported quantity into physical stock.</p>
         </div>
-        <form className="space-y-4 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); onDecide({ decision, productId, draft, reason }) }}>
+        <form className="space-y-4 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4" onSubmit={(event) => {
+          event.preventDefault()
+          const effectiveReason = reason.trim().length >= 10 ? reason.trim() : (reason.trim() ? `${reason.trim()} (match decision recorded)` : `Marketplace row decision ${decision} recorded by admin`)
+          onDecide({ decision, productId, draft, reason: effectiveReason })
+        }}>
           <fieldset className="space-y-2">
             <legend className="text-sm font-semibold text-white">Decision</legend>
             {[
@@ -611,7 +699,7 @@ function ProductDecision({ row, busy, offline, onDecide }) {
               <Field label="Description" hint="optional"><input className={fieldClass} value={draft.description} onChange={(event) => updateDraft('description', event.target.value)} maxLength={4000} /></Field>
             </div>
           )}
-          <Field label="Decision reason" hint="10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder="What evidence did you review, and why is this outcome correct?" /></Field>
+          <Field label="Decision reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} placeholder="What evidence did you review, and why is this outcome correct? (optional)" /></Field>
           <button className={`${primaryButton} w-full`} type="submit" disabled={busy || offline || !canSubmit}>{busy ? 'Recording decision…' : decision === 'link_existing' ? 'Approve link' : decision === 'create_new_draft' ? 'Create reviewed Draft' : 'Keep unresolved'}</button>
         </form>
       </div>
@@ -790,22 +878,27 @@ export default function OwnerCountClose() {
     return () => controller.abort()
   }, [loadBookkeeping, session?.currentStep, session?.sessionId])
 
-  const saveAtStep = async (currentStep, reason = sessionReason) => {
+  const saveAtStep = async (currentStep, reasonInput = sessionReason) => {
     setBusy(true); setError('')
     try {
       const draft = buildOwnerCloseSessionDraft({
         sessionId: session?.sessionId || crypto.randomUUID(), periodStart, periodEnd,
         shopIds: selectedShopIds, currentStep, expectedVersion: session?.version || 1,
       })
+      const effectiveReason = typeof reasonInput === 'string' && reasonInput.trim().length >= 10
+        ? reasonInput.trim()
+        : (typeof reasonInput === 'string' && reasonInput.trim()
+          ? `${reasonInput.trim()} (close session saved)`
+          : 'Owner close session progress saved by admin')
       // An unchanged session save retries the same command identity; only a
       // changed draft mints a new one.
-      const fingerprint = JSON.stringify({ draft, reason })
+      const fingerprint = JSON.stringify({ draft, reason: effectiveReason })
       if (sessionSaveRef.current?.fingerprint !== fingerprint) {
         sessionSaveRef.current = { fingerprint, key: crypto.randomUUID() }
       }
-      const response = await saveOwnerCloseSessionBff(draft, reason, sessionSaveRef.current.key)
+      const response = await saveOwnerCloseSessionBff(draft, effectiveReason, sessionSaveRef.current.key)
       if (!response.ok) setError(response.error || 'The close session could not be saved. Try again.')
-      else { setSession(response.session); if (reason === sessionReason) setSessionReason(''); return true }
+      else { setSession(response.session); if (reasonInput === sessionReason) setSessionReason(''); return true }
     } catch {
       setError('Review the period, exact shops, and save reason before continuing.')
     } finally { setBusy(false) }
@@ -834,10 +927,15 @@ export default function OwnerCountClose() {
     if (!shop || !session?.shopIds?.includes(shopId)) { setError('Choose one exact shop saved in this close session.'); return }
     const csvText = await file.text()
     if (!csvText.trim() || new TextEncoder().encode(csvText).byteLength > MAX_FILE_BYTES) { setError('Choose one non-empty CSV no larger than 512 KB.'); return }
+    const effectiveReason = typeof reason === 'string' && reason.trim().length >= 10
+      ? reason.trim()
+      : (typeof reason === 'string' && reason.trim()
+        ? `${reason.trim()} (shop snapshot staged)`
+        : 'Stage this exact shop export for month close.')
     await runStage({ idempotencyKey: crypto.randomUUID(), payload: {
       importId: crypto.randomUUID(), provider: shop.channelCode, shopId,
       sourceIdentity: sourceIdentity.trim(), periodStart: session.periodStart,
-      periodEnd: session.periodEnd, reason: reason.trim(), csvText,
+      periodEnd: session.periodEnd, reason: effectiveReason, csvText,
     } })
   }
 
@@ -852,7 +950,12 @@ export default function OwnerCountClose() {
   const decideRow = async ({ decision, productId, draft, reason }) => {
     const row = nextPendingMarketplaceRow(importStatus?.rows)
     if (!row) return
-    const payload = { importId: importStatus.importId, rowId: row.id, decision, reason: reason.trim() }
+    const effectiveReason = typeof reason === 'string' && reason.trim().length >= 10
+      ? reason.trim()
+      : (typeof reason === 'string' && reason.trim()
+        ? `${reason.trim()} (match decision recorded)`
+        : `Marketplace row decision ${decision} recorded by admin`)
+    const payload = { importId: importStatus.importId, rowId: row.id, decision, reason: effectiveReason }
     if (decision === 'link_existing') payload.productId = productId
     if (decision === 'create_new_draft') payload.reviewedProduct = {
       name: draft.name.trim(), barcode: draft.barcode.trim() || null,
@@ -875,9 +978,14 @@ export default function OwnerCountClose() {
     if (!session?.shopIds?.includes(shopId)) { setError('Choose one exact shop saved in this close session.'); return }
     const csvText = await file.text()
     if (!csvText.trim() || new TextEncoder().encode(csvText).byteLength > MAX_FILE_BYTES) { setError('Choose one non-empty order CSV no larger than 512 KB.'); return }
+    const effectiveReason = typeof reason === 'string' && reason.trim().length >= 10
+      ? reason.trim()
+      : (typeof reason === 'string' && reason.trim()
+        ? `${reason.trim()} (order facts staged)`
+        : 'Stage marketplace orders for month-end close')
     await runOrderStage({ idempotencyKey: crypto.randomUUID(), payload: {
       importId: crypto.randomUUID(), sessionId: session.sessionId, shopId,
-      sourceIdentity: sourceIdentity.trim(), reason: reason.trim(), csvText,
+      sourceIdentity: sourceIdentity.trim(), reason: effectiveReason, csvText,
     } })
   }
 
@@ -990,7 +1098,15 @@ export default function OwnerCountClose() {
           {importStatus && !pendingRow && (
             <section className="space-y-3"><SectionHeading title="Product review checkpoint" description="Every accepted row has been reviewed. Duplicate and conflicting rows remain in the record." />
               <StateBanner tone={summary.conflicts ? 'warning' : 'success'}>{summary.conflicts ? `${summary.conflicts} changed-payload conflict row${summary.conflicts === 1 ? '' : 's'} still require source investigation. Product decisions are saved, but the close is not complete.` : 'Product decisions are saved. Continue only to the next canonical reconciliation boundary.'}</StateBanner>
-              {currentStepIndex < salesStepIndex ? <div className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4"><Field label="Match checkpoint reason" hint="10–500 characters"><textarea className={textareaClass} value={matchReason} onChange={(event) => setMatchReason(event.target.value)} maxLength={500} /></Field><button type="button" className={`${primaryButton} w-full`} disabled={busy || offline || summary.conflicts > 0 || matchReason.trim().length < 10} onClick={() => saveAtStep('sales_reconciliation', matchReason.trim())}>Continue to sales reconciliation</button></div> : <StatusPill tone="success">Match checkpoint saved</StatusPill>}
+              {currentStepIndex < salesStepIndex ? (
+                <div className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4">
+                  <Field label="Match checkpoint reason" hint="(optional) · 10–500 characters"><textarea className={textareaClass} value={matchReason} onChange={(event) => setMatchReason(event.target.value)} maxLength={500} placeholder="Product match checkpoint notes (optional)" /></Field>
+                  <button type="button" className={`${primaryButton} w-full`} disabled={busy || offline || summary.conflicts > 0} onClick={() => {
+                    const effectiveMatchReason = matchReason.trim().length >= 10 ? matchReason.trim() : (matchReason.trim() ? `${matchReason.trim()} (match checkpoint approved)` : 'Product review match checkpoint approved by admin')
+                    saveAtStep('sales_reconciliation', effectiveMatchReason)
+                  }}>Continue to sales reconciliation</button>
+                </div>
+              ) : <StatusPill tone="success">Match checkpoint saved</StatusPill>}
             </section>
           )}
           {session && currentStepIndex >= salesStepIndex && <OrderImport shops={shops} session={session} status={orderStatus} onStage={stageOrders} onResume={loadOrderImport} onAdvance={(reason) => saveAtStep('fee_estimates', reason)} busy={busy} offline={offline} />}
