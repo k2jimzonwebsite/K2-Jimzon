@@ -1,5 +1,9 @@
 # Real product content preparation, 14 October 2026
 
+## 20 October loader release preparation
+
+The owner explicitly authorized releasing the local Store Assets loader fix. Named authorizer: **Jerzel Von Guerrra, Developer/Admin**. **Jenna Mae Guerra** is the supplied listing attribution where that field applies. The isolated candidate commit `50dca0a8` changes only the loader adapter and its regression test. Focused tests pass 2/2; `npm run verify:development` passes exit 0. Fresh exact-K2 preflight passed; `readiness:k2-live` reports 9 verified, 2 owner, 3 connector, 0 failed and 0 blocked. These are release preconditions, not deployment evidence. The code is not yet in production, and none of the 11 Store Assets drafts is loaded. Next: run the full release gate once, promote the Admin code, verify the hosted Admin artifact, then load the 11 records as unpublished Drafts for human field review. Do not change the existing prices, photo pairs, status or stock. MAP-027 publication remains a separate acceptance.
+
 Owning action: MAP-023, IDEA-20261014-04. MAP-027 retains product-knowledge acceptance. MAP-018 is closed.
 
 The owner requested completion of real inventory details, natural descriptions, SEO and image preparation, and instructed us to research the web first. Barcodes will be entered later, SKU by SKU. The audience and purpose follow the existing K2 Storefront: customers choosing named products, checking the exact pack and adding the intended item to their cart. The primary action remains Add to cart; staff chat supports questions about an item.

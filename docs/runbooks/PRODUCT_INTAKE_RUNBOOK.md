@@ -381,6 +381,10 @@ priced scope and current cap, obtain explicit confirmation, validate the exact
 review, and only then request image candidates. Every call must be idempotent,
 audited, recoverable, and fail closed to the manual path.
 
+### Existing-product Store Assets knowledge drafts
+
+For an already-listed SKU whose existing Product details panel needs customer copy, use the existing Store Assets `k2.product-content.v3` path. Its normalized parser result (`product`, `meta`, `warnings`) must map to the existing Product Knowledge draft fields; the legacy raw `copy`, `usage`, `seo` envelope remains supported. Review the proposed values and their provenance before saving. This path creates unpublished Product Knowledge drafts only: it does not create or update the canonical product, price, photo slots, stock, catalog status, Website assignment or publication. Keep unsupported package and label facts blank. A focused regression covers both input shapes; do not claim the production path is fixed until the Admin deployment and Store Assets readback are verified under MAP-023.
+
 ### Key-later configuration and activation
 
 Local preparation exposes Automatic API alongside Manual ChatGPT Projects.

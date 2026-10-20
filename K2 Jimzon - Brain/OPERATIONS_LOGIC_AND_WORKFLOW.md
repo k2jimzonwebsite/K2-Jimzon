@@ -2127,6 +2127,10 @@ state feedback, not decorative motion.
   with the physical package, compares AFTER with the approved use case, confirms
   image rights, and uploads each file to its correct slot.
 
+### Existing-product Store Assets Product Knowledge
+
+The existing Store Assets flow may add researched customer-detail knowledge to an already canonical product only as unpublished Product Knowledge drafts. `k2.product-content.v3` responses parsed into normalized `product` / `meta` / `warnings` must map into the same draft fields as the supported raw `copy` / `usage` / `seo` envelope. The adapter must preserve provenance and unknowns; it must not change product-master identity, price, photo slots, physical stock, catalog status, Website assignment or publication. Human field review and the separate publication decision remain mandatory.
+
 ### Optional Interactive Shop truth and fallback contract
 
 - The Interactive Shop is an optional presentation of the same published
