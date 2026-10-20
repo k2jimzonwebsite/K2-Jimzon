@@ -258,11 +258,33 @@ function valueForAsset(key, research) {
  * rather than a naming convention.
  */
 export function draftFromResearch(research, { generatedAt = new Date().toISOString(), model = '' } = {}) {
+  // Product research parses to the normalized `product` shape, while local
+  // drafts can also pass the original envelope. Accept both at this boundary.
+  const product = research?.product || {}
+  const content = research?.copy || research?.usage || research?.seo
+    ? research
+    : {
+        copy: {
+          card_description: product.card_description,
+          full_description: product.description,
+        },
+        usage: {
+          summary: product.usage_summary,
+          use_cases: product.use_cases,
+          instructions: product.instruction_sets,
+          pairings: product.pairings,
+          storage: product.storage_instructions,
+        },
+        seo: {
+          seo_title: product.seo_title,
+          meta_description: product.meta_description,
+        },
+      }
   const fields = {}
 
   for (const asset of STORE_ASSETS) {
     if (asset.key === 'faqs') continue
-    const value = valueForAsset(asset.key, research)
+    const value = valueForAsset(asset.key, content)
     if (!value) continue
     fields[asset.key] = {
       status: KNOWLEDGE_STATUS.DRAFT,
@@ -271,7 +293,7 @@ export function draftFromResearch(research, { generatedAt = new Date().toISOStri
     }
   }
 
-  const useCases = Array.isArray(research?.usage?.use_cases) ? research.usage.use_cases : []
+  const useCases = Array.isArray(content?.usage?.use_cases) ? content.usage.use_cases : []
   const faqs = useCases
     .filter((entry) => text(entry?.title) && text(entry?.best_for))
     .map((entry) => ({
