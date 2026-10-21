@@ -1,0 +1,64 @@
+{
+  "observedAt": "2026-10-21T04:00:46.648Z",
+  "adminCommit": "a68d8857aa8170c79dd75862fbb74d48502f2e26",
+  "adminDeployment": "dpl_DkYRCkswquC9JfLR1PNSWHB8LpyM",
+  "readOnly": true,
+  "routes": [
+    {
+      "name": "admin",
+      "url": "https://admin.k2jimzon.com/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "noindex": true,
+      "adminEntry": true,
+      "anonymousRefused": false
+    },
+    {
+      "name": "admin-session-anonymous",
+      "url": "https://admin.k2jimzon.com/api/admin/session",
+      "status": 401,
+      "contentType": "application/json; charset=utf-8",
+      "noindex": true,
+      "adminEntry": false,
+      "anonymousRefused": true
+    },
+    {
+      "name": "storefront",
+      "url": "https://www.k2jimzon.com/catalog",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "noindex": false,
+      "adminEntry": false,
+      "anonymousRefused": false
+    }
+  ],
+  "persistentProductKnowledgeSave": "not exercised; owner manual draft loading and human acceptance remain",
+  "inventoryWrite": false,
+  "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+  "ready": true,
+  "alias": "admin.k2jimzon.com",
+  "alias_error": null,
+  "source_branch": "codex/product-knowledge-publish-fix",
+  "draft_pr": "https://github.com/k2jimzonwebsite/K2-Jimzon/pull/20",
+  "previous_admin_deployment": "dpl_D5q63DTZxBE32sW2dDaFbn5p5Qjk",
+  "storefront_deployment_unchanged": "dpl_Cwy8Ap55XVYvsdya5GnnFGaaS9td",
+  "main_and_storefront_commit": "5f700020f313d481407a4bc76a7e3d3e2f613781",
+  "verification": {
+    "development_exit": 0,
+    "release_exit": 0,
+    "release_browser_cases_passed": 1464,
+    "focused_node_passed": 2,
+    "focused_playwright_passed": 86,
+    "initial_release_timeout": "One Admin phone-navigation heading timeout; isolated retry passed unchanged before full green retry"
+  },
+  "owner_blank_box_decision": "Keep all products listed in inventory; leave unknown box details blank and separate staff follow-up. Missing box alone is not a product-listing blocker.",
+  "remaining_owner": "MAP-023; MAP-027 human copy acceptance",
+  "inventory_import": false,
+  "provider_write": false,
+  "remaining_limits": [
+    "Normal saved Product Knowledge/public readback not exercised",
+    "196 Admin products are distinct from 93 published Website listings",
+    "No new physical lot receipt or source quantity overwrite",
+    "Staff source-specific price, date, pack, package identity facts remain"
+  ]
+}
