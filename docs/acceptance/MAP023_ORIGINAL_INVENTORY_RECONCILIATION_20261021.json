@@ -1,0 +1,176 @@
+{
+  "source_file": "C:\\Users\\jerze\\Downloads\\10_13_2026_JINJIN-INVENTORY-2026 (1).xlsx",
+  "source_sha256": "c880ebb85869f010b40e7929000d6d45e671000c5e7c0a705f95e7a3c6f8b0f9",
+  "source_sheet": "OCT_13_2026",
+  "source_snapshot_date": "2026-10-13",
+  "assessment_date": "2026-10-21",
+  "provider_read_only": true,
+  "canonical_products": 196,
+  "canonical_live_products": 93,
+  "mapped_review_products": 196,
+  "source_rows": 241,
+  "source_totals_separate_unit_kinds": {
+    "rows": 241,
+    "numeric_workbook_units": 1212,
+    "explicit_full_packs": 79,
+    "explicit_pieces": 26,
+    "quantity_kinds": {
+      "numeric_workbook_units": 222,
+      "explicit_pieces": 5,
+      "mixed_packs_and_pieces": 5,
+      "explicit_packs": 8,
+      "missing": 1
+    },
+    "date_states": {
+      "later_than_90_days": 158,
+      "no_exact_expiry": 56,
+      "within_90_days": 20,
+      "expired": 5,
+      "implausible_historical_date": 2
+    }
+  },
+  "canonical_lots": 49,
+  "canonical_lot_quantity": 273,
+  "canonical_reserved_quantity": 0,
+  "canonical_sku_availability_total": 273.0,
+  "source_matched_existing_lots": 49,
+  "existing_lot_differences": [],
+  "missing_source_lots": {
+    "rows": 192,
+    "numeric_workbook_units": 944,
+    "explicit_full_packs": 74,
+    "explicit_pieces": 26,
+    "quantity_kinds": {
+      "numeric_workbook_units": 176,
+      "explicit_pieces": 5,
+      "mixed_packs_and_pieces": 5,
+      "explicit_packs": 5,
+      "missing": 1
+    },
+    "date_states": {
+      "later_than_90_days": 109,
+      "no_exact_expiry": 56,
+      "within_90_days": 20,
+      "expired": 5,
+      "implausible_historical_date": 2
+    }
+  },
+  "source_price_missing_rows": 66,
+  "current_zero_srp_products_without_own_source_price": 33,
+  "missing_source_rows_with_zero_quantity": 10,
+  "by_date_state_separate_unit_kinds": {
+    "expired": {
+      "rows": 5,
+      "numeric_workbook_units": 14,
+      "explicit_full_packs": 0,
+      "explicit_pieces": 0,
+      "quantity_kinds": {
+        "numeric_workbook_units": 5
+      },
+      "date_states": {
+        "expired": 5
+      }
+    },
+    "implausible_historical_date": {
+      "rows": 2,
+      "numeric_workbook_units": 9,
+      "explicit_full_packs": 0,
+      "explicit_pieces": 0,
+      "quantity_kinds": {
+        "numeric_workbook_units": 2
+      },
+      "date_states": {
+        "implausible_historical_date": 2
+      }
+    },
+    "later_than_90_days": {
+      "rows": 158,
+      "numeric_workbook_units": 800,
+      "explicit_full_packs": 45,
+      "explicit_pieces": 16,
+      "quantity_kinds": {
+        "numeric_workbook_units": 144,
+        "mixed_packs_and_pieces": 3,
+        "explicit_packs": 8,
+        "explicit_pieces": 3
+      },
+      "date_states": {
+        "later_than_90_days": 158
+      }
+    },
+    "no_exact_expiry": {
+      "rows": 56,
+      "numeric_workbook_units": 344,
+      "explicit_full_packs": 34,
+      "explicit_pieces": 10,
+      "quantity_kinds": {
+        "numeric_workbook_units": 52,
+        "explicit_pieces": 2,
+        "mixed_packs_and_pieces": 2
+      },
+      "date_states": {
+        "no_exact_expiry": 56
+      }
+    },
+    "within_90_days": {
+      "rows": 20,
+      "numeric_workbook_units": 45,
+      "explicit_full_packs": 0,
+      "explicit_pieces": 0,
+      "quantity_kinds": {
+        "numeric_workbook_units": 19,
+        "missing": 1
+      },
+      "date_states": {
+        "within_90_days": 20
+      }
+    }
+  },
+  "missing_lots_by_product_status": {
+    "Draft": {
+      "rows": 126,
+      "numeric_workbook_units": 737,
+      "explicit_full_packs": 40,
+      "explicit_pieces": 10,
+      "quantity_kinds": {
+        "numeric_workbook_units": 120,
+        "mixed_packs_and_pieces": 3,
+        "missing": 1,
+        "explicit_pieces": 2
+      },
+      "date_states": {
+        "no_exact_expiry": 44,
+        "within_90_days": 5,
+        "later_than_90_days": 74,
+        "expired": 1,
+        "implausible_historical_date": 2
+      }
+    },
+    "Live": {
+      "rows": 66,
+      "numeric_workbook_units": 207,
+      "explicit_full_packs": 34,
+      "explicit_pieces": 16,
+      "quantity_kinds": {
+        "numeric_workbook_units": 56,
+        "explicit_pieces": 3,
+        "mixed_packs_and_pieces": 2,
+        "explicit_packs": 5
+      },
+      "date_states": {
+        "later_than_90_days": 35,
+        "no_exact_expiry": 12,
+        "expired": 4,
+        "within_90_days": 15
+      }
+    }
+  },
+  "interpretation": [
+    "All 196 products map to the original 241 source rows; 195 have exact stored source ID and workbook hash, Combino has three exact dated opening lots.",
+    "All 49 existing lots match the original row quantity and exact expiry; no existing lot mismatch is found.",
+    "Numeric workbook units, explicitly marked full packs and pieces remain separate. The numeric total is not a full sellable-unit total.",
+    "Missing source lots are missing canonical records, not proof of physical loss, new receipt, stock availability or permission to replace current balances.",
+    "No sale-sheet subtraction, physical recount, current price confirmation, batch-note-to-expiry conversion, import, database write or public stock change was performed.",
+    "Prior owner confirmation of 220 source rows and Warehouse A/Bulacan/Jenna custody is retained; do not ask for the same confirmation again. Mixed rows 34/36/123/125/135, implausible-date rows 142/200 and blank quantity row 137 remain explicitly staff-deferred."
+  ]
+}
