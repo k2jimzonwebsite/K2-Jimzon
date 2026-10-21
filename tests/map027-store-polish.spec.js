@@ -217,7 +217,7 @@ test('the asset queue is derived from inventory and ranks what customers can see
   const withPhotos = catalog.map((entry) => ({ ...entry, img: '/images/mock/pack.jpg' }))
   const complete = planStoreAssets(withPhotos, () => selectPublicKnowledge({
     fields: Object.fromEntries(
-      ['description', 'uses', 'pairings', 'preparation', 'storage', 'seoTitle', 'metaDescription']
+      ['description', 'uses', 'pairings', 'preparation', 'storage', 'seo_title', 'meta_description']
         .map(key => [key, { status: KNOWLEDGE_STATUS.APPROVED, value: 'written' }]),
     ),
     faqs: [{ status: KNOWLEDGE_STATUS.APPROVED, question: 'Q', answer: 'A' }],
