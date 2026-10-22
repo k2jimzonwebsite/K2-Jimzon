@@ -5,6 +5,7 @@ import { readAdminProductStock } from '../../server/admin-bff/product-stock.js'
 const PRODUCT_FIELDS = [
   'sku', 'name', 'barcode', 'status', 'srp', 'wholesale_price', 'subcategory',
   'primary_image_url', 'lifestyle_images', 'secondary_images', 'created_at', 'brand_id', 'category_id',
+  'categories(name)',
 ].join(',')
 
 export async function readAdminProducts(client) {
@@ -23,6 +24,7 @@ export async function readAdminProducts(client) {
       subcategory: product.subcategory || null,
       brand_id: product.brand_id ?? null,
       category_id: product.category_id ?? null,
+      category_name: product.categories?.name || null,
       primary_image_url: product.primary_image_url || null,
       lifestyle_images: Array.isArray(product.lifestyle_images) ? product.lifestyle_images : [],
       secondary_images: Array.isArray(product.secondary_images) ? product.secondary_images : [],

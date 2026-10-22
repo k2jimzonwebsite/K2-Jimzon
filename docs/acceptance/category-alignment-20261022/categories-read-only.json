@@ -1,0 +1,80 @@
+[
+  {
+    "id": "abef4cb2-b446-4a57-af73-3734c2f24fbe",
+    "name": "Biscuits and wafers",
+    "parent_id": null,
+    "assigned_products": 10
+  },
+  {
+    "id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+    "name": "Chocolate",
+    "parent_id": null,
+    "assigned_products": 12
+  },
+  {
+    "id": "105a82d9-c015-495e-8aec-8ba1b04f680a",
+    "name": "Clothing",
+    "parent_id": null,
+    "assigned_products": 2
+  },
+  {
+    "id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+    "name": "Coffee and drink preparations",
+    "parent_id": null,
+    "assigned_products": 23
+  },
+  {
+    "id": "dd81087b-77dc-4ecd-a2c3-7c6a6245d752",
+    "name": "Cooking oils",
+    "parent_id": null,
+    "assigned_products": 3
+  },
+  {
+    "id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+    "name": "Pasta",
+    "parent_id": null,
+    "assigned_products": 25
+  },
+  {
+    "id": "11c13976-2aa9-42b0-bf07-12b9d462c05e",
+    "name": "Pasta sauces",
+    "parent_id": null,
+    "assigned_products": 6
+  },
+  {
+    "id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+    "name": "Personal care",
+    "parent_id": null,
+    "assigned_products": 27
+  },
+  {
+    "id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+    "name": "Pesto and sauces",
+    "parent_id": null,
+    "assigned_products": 18
+  },
+  {
+    "id": "f5c00587-1e77-4b3a-8308-5f1109b0290a",
+    "name": "Sweet spreads",
+    "parent_id": null,
+    "assigned_products": 6
+  },
+  {
+    "id": "3cb6a37c-fdf4-4cb2-8a44-0d8adbb6d509",
+    "name": "Sweets",
+    "parent_id": null,
+    "assigned_products": 10
+  },
+  {
+    "id": "8e586d75-128c-4900-bab6-d5683d18c128",
+    "name": "Tinned fish",
+    "parent_id": null,
+    "assigned_products": 19
+  },
+  {
+    "id": "10b2e5f2-2322-452b-bc02-19412f2e6c88",
+    "name": "Tinned meat",
+    "parent_id": null,
+    "assigned_products": 1
+  }
+]

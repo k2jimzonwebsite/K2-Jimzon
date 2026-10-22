@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useStore } from '../context/StoreContext'
-import { CATEGORIES } from '../data/products'
 import ProductCard from './ProductCard'
 import { SearchIcon, XIcon } from './ui/icons'
 
@@ -10,15 +9,17 @@ import { compareCatalogProducts } from '../lib/catalogSort'
 export { compareCatalogProducts }
 
 export default function CatalogGrid() {
-  const { query, setQuery, category, setCategory, sortBy: storeSortBy, setSortBy: setStoreSortBy, listedProducts: products, requestPasabuyItem, loading, catalogStale, catalogFailed, refreshCatalog } = useStore()
+  const { query, setQuery, category, setCategory, sortBy: storeSortBy, setSortBy: setStoreSortBy, listedProducts: products, storeCategories = [], requestPasabuyItem, loading, catalogStale, catalogFailed, refreshCatalog } = useStore()
   const [localSortBy, setLocalSortBy] = useState('popular')
   const sortBy = storeSortBy ?? localSortBy
   const setSortBy = setStoreSortBy ?? setLocalSortBy
   const reducedMotion = useReducedMotion()
 
+  const availableCategories = useMemo(() => ['All', ...storeCategories.map(entry => entry.name)], [storeCategories])
+
   const filteredProducts = useMemo(() => {
     let result = products || []
-    if (category !== 'All') result = result.filter((product) => product.category === category || (category === 'Snacks' && product.category?.includes('Biscuits')))
+    if (category !== 'All') result = result.filter((product) => product.category === category)
     if (query.trim()) {
       const needle = query.trim().toLowerCase()
       result = result.filter((product) => [product.name, product.short, product.tag, product.category].some((value) => value?.toLowerCase().includes(needle)))
@@ -38,7 +39,7 @@ export default function CatalogGrid() {
         <aside className="min-w-0 lg:border-r lg:border-[var(--store-surface-border)] lg:pr-7">
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-navy-faint">Shop by category</p>
           <div className="flex gap-1 overflow-x-auto pb-2 lg:block lg:space-y-0.5 lg:overflow-visible lg:pb-0">
-            {CATEGORIES.map((item) => {
+            {availableCategories.map((item) => {
               const selected = category === item
               return (
                 <button key={item} onClick={() => setCategory(item)} aria-pressed={selected} className={`min-h-11 min-w-11 shrink-0 border-b-2 px-3 text-left text-sm transition-colors duration-150 cursor-pointer lg:flex lg:w-full lg:items-center lg:justify-between lg:border-b-0 lg:border-l-2 lg:px-3 ${selected ? 'border-crimson font-bold text-crimson' : 'border-transparent text-navy-soft hover:text-navy'}`}>

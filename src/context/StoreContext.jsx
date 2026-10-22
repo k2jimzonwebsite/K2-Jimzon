@@ -9,6 +9,7 @@ import { saveOrderReceiptAccess } from '../services/orderReceiptService'
 import { CHECKOUT_RECOVERY_KEY, readCheckoutRecovery, writeCheckoutRecovery, pendingCheckoutRecord, resolvedCheckoutRecord, withCheckoutLock } from '../services/checkoutRecovery'
 import { addCartItems, productStock, validateCartForSubmission } from '../lib/cartInventory'
 import { STOREFRONT_PATH_TO_VIEW, STOREFRONT_VIEW_TO_PATH } from '../lib/storefrontRoutes'
+import { getStoreCategory, storeCategoryEntries } from '../lib/storeCategories'
 
 const StoreContext = createContext(null)
 const CATALOG_REFRESH_INTERVAL_MS = 60_000
@@ -318,7 +319,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         // primary-photo requirement. Honouring it here is what keeps unpublished
         // and mock catalog rows off the public storefront; status alone is not a
         // publication decision.
-        supabase.from('products').select('*').in('status', ['Live', 'Active', 'Unlisted']).eq('published', true).order('created_at', { ascending: false }),
+        supabase.from('products').select('*, categories(id, name)').in('status', ['Live', 'Active', 'Unlisted']).eq('published', true).order('created_at', { ascending: false }),
         supabase.from('v_product_stock_from_batches').select('sku, stock_from_batches'),
         // Website membership is channel-specific. The view also carries
         // Website-assigned Unlisted SKUs so existing direct links can work;
@@ -386,6 +387,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   const products = useMemo(() => {
     if (dbProducts.length === 0) {
       if (!import.meta.env.DEV) return []
+      if (isSupabaseConfigured) return []
       return localProducts.map(lp => ({
         ...lp,
         sku: lp.id,
@@ -401,7 +403,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       return {
         ...dbP,
         created_at: dbP.created_at || null,
-        category: dbP.subcategory || (dbP.origin?.startsWith('Shopee|') ? dbP.origin.split('|')[1] : (dbP.origin === 'Shopee' ? 'Shopee Imports' : 'Uncategorised')),
+        category: getStoreCategory(dbP),
         sku: dbP.sku,
         id: dbP.sku,
         name: dbP.name,
@@ -443,13 +445,20 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     })
   }, [dbProducts])
 
-  const localCatalog = dbProducts.length === 0 && import.meta.env.DEV
+  const localCatalog = !isSupabaseConfigured && import.meta.env.DEV
   const listedProducts = useMemo(
     () => localCatalog
       ? products.filter(p => p.status !== 'Unlisted')
       : products.filter(p => p.status !== 'Unlisted' && websiteVisibleSkus?.has(p.sku)),
     [products, localCatalog, websiteVisibleSkus]
   )
+
+  const storeCategories = useMemo(() => storeCategoryEntries(listedProducts), [listedProducts])
+  useEffect(() => {
+    // Only a successful current catalog can retire an obsolete URL filter.
+    if (!loading && !catalogFailed && !catalogStale && category !== 'All'
+      && !storeCategories.some(entry => entry.name === category)) setCategory('All')
+  }, [loading, catalogFailed, catalogStale, category, storeCategories])
 
   const getProduct = (id) => {
     const product = products.find(p => p.id === id || p.sku === id)
@@ -968,6 +977,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     updateConversationWorkflow,
     products,
     listedProducts,
+    storeCategories,
     loading,
     catalogStale,
     catalogFailed,
@@ -996,7 +1006,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     closeChat: closeStoreChat,
     ...totals,
     lines: checkoutLines || totals.lines,
-  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, authReady, user, order, query, category, sortBy, requests, conversations, inboxState, products, listedProducts, loading, catalogStale, catalogFailed, totals, isDark, appliedCoupon, claimedVouchers, pasabuyPrefill, productQuestionPrefill, pendingCheckout, checkoutLines, chatOpen, chatSeed])
+  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, authReady, user, order, query, category, sortBy, requests, conversations, inboxState, products, listedProducts, storeCategories, loading, catalogStale, catalogFailed, totals, isDark, appliedCoupon, claimedVouchers, pasabuyPrefill, productQuestionPrefill, pendingCheckout, checkoutLines, chatOpen, chatSeed])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

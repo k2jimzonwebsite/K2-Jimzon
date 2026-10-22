@@ -1,0 +1,1967 @@
+{
+  "observedAt": "2026-10-22T04:55:08.367Z",
+  "project": "pixplcjqivlfflickobf",
+  "readOnly": true,
+  "products": [
+    {
+      "sku": "K2-SKU-001001",
+      "name": "Combino Spaghetti No. 5 1kg",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Spaghetti",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001002",
+      "name": "Amalfi Lotion Argan",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Personal care",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001003",
+      "name": "Amalfi Lotion Coco",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Personal care",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001004",
+      "name": "ASTRATTO VINO ROSSO 10%VOL. WINE BOTTLE 750ML",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001005",
+      "name": "Baiocchi Pistacchio",
+      "status": "Draft",
+      "published": false,
+      "category_id": "abef4cb2-b446-4a57-af73-3734c2f24fbe",
+      "canonical_category": "Biscuits and wafers",
+      "display_category": "Biscuits",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001006",
+      "name": "Baresa Pesto Calabrese",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001007",
+      "name": "Baresa Pesto Genovese 290 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001008",
+      "name": "Baresa Pesto Plain",
+      "status": "Draft",
+      "published": false,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001009",
+      "name": "Baresa Pesto Ricotta E Noci",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001010",
+      "name": "Baresa Pesto Without Garlic",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001011",
+      "name": "Barilla Ragu Bolognese",
+      "status": "Live",
+      "published": true,
+      "category_id": "11c13976-2aa9-42b0-bf07-12b9d462c05e",
+      "canonical_category": "Pasta sauces",
+      "display_category": "Pasta sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001012",
+      "name": "Barissimo Orzo Barley",
+      "status": "Draft",
+      "published": false,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001013",
+      "name": "Bellarum Orzo",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Beverages",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001014",
+      "name": "Bench Body Undergarments Medium",
+      "status": "Draft",
+      "published": false,
+      "category_id": "105a82d9-c015-495e-8aec-8ba1b04f680a",
+      "canonical_category": "Clothing",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001015",
+      "name": "Bench Body Undergarments Small",
+      "status": "Draft",
+      "published": false,
+      "category_id": "105a82d9-c015-495e-8aec-8ba1b04f680a",
+      "canonical_category": "Clothing",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001016",
+      "name": "Borella Carne",
+      "status": "Draft",
+      "published": false,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Filled pasta",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001017",
+      "name": "Borella Carne",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001018",
+      "name": "Borella Carne",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001019",
+      "name": "Borella Prosciutto",
+      "status": "Draft",
+      "published": false,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001020",
+      "name": "Borella Prosciutto",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001021",
+      "name": "Borella Prosciutto",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001022",
+      "name": "Caffé Poli Nespresso Gold 10S",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001023",
+      "name": "Caffe Solubile Crastan 100 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001024",
+      "name": "Chalou",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Fragrances",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001025",
+      "name": "Chalou",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Fragrances",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001026",
+      "name": "Cien Cream Soap Honey And Milk 2-Pack",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Personal care",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001027",
+      "name": "Cien Cream Soap Honey And Milk 2-Pack",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Personal care",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001028",
+      "name": "Cien Cream Soap Olive 2-Pack",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Personal care",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001029",
+      "name": "Cien Cream Soap Olive 2-Pack",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Personal care",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001030",
+      "name": "Cien Keratin Conditioner",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Personal care",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001031",
+      "name": "Cien Macadamia Conditioner",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Personal care",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001032",
+      "name": "Cien Argan Hair Oil",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Personal care",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001033",
+      "name": "CLOSE KIDS SLIPPER",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001034",
+      "name": "Combino Farfalle 500 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001035",
+      "name": "Combino Spaghetti Bio Di Semola Di Grano 500 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001036",
+      "name": "Combino Spaghetti No. 5 500 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001037",
+      "name": "Combino Spaghetti Integralli 500 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001038",
+      "name": "Dante Extra Virgin Olive 1 Liter",
+      "status": "Live",
+      "published": true,
+      "category_id": "dd81087b-77dc-4ecd-a2c3-7c6a6245d752",
+      "canonical_category": "Cooking oils",
+      "display_category": "Cooking oils",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001039",
+      "name": "Dante Extra Virgin Olive Oil 750 ml",
+      "status": "Live",
+      "published": true,
+      "category_id": "dd81087b-77dc-4ecd-a2c3-7c6a6245d752",
+      "canonical_category": "Cooking oils",
+      "display_category": "Cooking oils",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001040",
+      "name": "DELIZIA PISTACCHIO 45% 600ML",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001041",
+      "name": "DELUXE LIDL PISTACHIO",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001042",
+      "name": "DELUXE PISTACCHIO",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001043",
+      "name": "Delverde Lasagne Pasta 500 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001044",
+      "name": "Disano Pistacchio Spread 320 g 20% Pistacchio",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f5c00587-1e77-4b3a-8308-5f1109b0290a",
+      "canonical_category": "Sweet spreads",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001045",
+      "name": "Divella Spaghetti Pasta 1 kg",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001046",
+      "name": "Donna Chiara Fusilli 1 kg",
+      "status": "Draft",
+      "published": false,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001047",
+      "name": "DRESS",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001048",
+      "name": "DULCIAR  PISTACHIO",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001049",
+      "name": "DULCIAR ARANCIA",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001050",
+      "name": "Dulciar Bar Dark",
+      "status": "Draft",
+      "published": false,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001051",
+      "name": "Dulciar Bar Fragola",
+      "status": "Live",
+      "published": true,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001052",
+      "name": "Dulciar Bar Gianduia",
+      "status": "Live",
+      "published": true,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001053",
+      "name": "Dulciar Bar Pistacchio",
+      "status": "Live",
+      "published": true,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001054",
+      "name": "DULCIAR PISTACCHIO",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001055",
+      "name": "Eccelenze Di Prix Pistacchio Cream",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f5c00587-1e77-4b3a-8308-5f1109b0290a",
+      "canonical_category": "Sweet spreads",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001056",
+      "name": "ETRE FLORISSANT PERFUME SET",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001057",
+      "name": "FARBO 100G",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001058",
+      "name": "Fin Carré 50%",
+      "status": "Live",
+      "published": true,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001059",
+      "name": "Fin Carré Milk Choc",
+      "status": "Live",
+      "published": true,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001060",
+      "name": "Fin Carré White Chocolate",
+      "status": "Live",
+      "published": true,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001061",
+      "name": "Fini Fried Egg 90 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "3cb6a37c-fdf4-4cb2-8a44-0d8adbb6d509",
+      "canonical_category": "Sweets",
+      "display_category": "Sweets",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001062",
+      "name": "Fini Smile 90 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "3cb6a37c-fdf4-4cb2-8a44-0d8adbb6d509",
+      "canonical_category": "Sweets",
+      "display_category": "Sweets",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001063",
+      "name": "Galatine Blue",
+      "status": "Live",
+      "published": true,
+      "category_id": "3cb6a37c-fdf4-4cb2-8a44-0d8adbb6d509",
+      "canonical_category": "Sweets",
+      "display_category": null,
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001064",
+      "name": "Galatine Blue 125 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "3cb6a37c-fdf4-4cb2-8a44-0d8adbb6d509",
+      "canonical_category": "Sweets",
+      "display_category": "Sweets and confectionery",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001065",
+      "name": "Galatine Blue 150 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "3cb6a37c-fdf4-4cb2-8a44-0d8adbb6d509",
+      "canonical_category": "Sweets",
+      "display_category": "Sweets and confectionery",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001066",
+      "name": "Giglio Lasagne Pasta 500 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001067",
+      "name": "Gimoka Nespresso Aluminum Forte",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001068",
+      "name": "Gimoka Nespresso Aluminum Gran Crema Ciocolatto",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001069",
+      "name": "GUCCI MICKEY SLIPPER",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001070",
+      "name": "Gullon Savoiardi Lady Finger 300",
+      "status": "Live",
+      "published": true,
+      "category_id": "abef4cb2-b446-4a57-af73-3734c2f24fbe",
+      "canonical_category": "Biscuits and wafers",
+      "display_category": "Biscuits and wafers",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001071",
+      "name": "GUSTO ELMA PISTACCHIO SPREAD 20% 600G",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001072",
+      "name": "Homme Paris",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001073",
+      "name": "Homme Paris",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001074",
+      "name": "Homme Sport",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001075",
+      "name": "Homme Sport",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001076",
+      "name": "Homme Sport",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001077",
+      "name": "Italiamo 500 g Di Gragnano Linguine",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001078",
+      "name": "Italiamo 500 g Di Gragnano Spaghetti",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001079",
+      "name": "Italiamo Bottle 400 g Amatriciana",
+      "status": "Live",
+      "published": true,
+      "category_id": "11c13976-2aa9-42b0-bf07-12b9d462c05e",
+      "canonical_category": "Pasta sauces",
+      "display_category": "Pasta sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001080",
+      "name": "Italiamo Bottle 400 g Ricotta",
+      "status": "Live",
+      "published": true,
+      "category_id": "11c13976-2aa9-42b0-bf07-12b9d462c05e",
+      "canonical_category": "Pasta sauces",
+      "display_category": "Pasta sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001081",
+      "name": "Italiamo In Can 2 x 180 g Ragu",
+      "status": "Live",
+      "published": true,
+      "category_id": "11c13976-2aa9-42b0-bf07-12b9d462c05e",
+      "canonical_category": "Pasta sauces",
+      "display_category": "Pasta sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001082",
+      "name": "Italiamo In Can 2 x 180 g Ragu Con Salsicia",
+      "status": "Draft",
+      "published": false,
+      "category_id": "11c13976-2aa9-42b0-bf07-12b9d462c05e",
+      "canonical_category": "Pasta sauces",
+      "display_category": "Pasta sauces",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001083",
+      "name": "Italiamo Pesto Lemon",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001084",
+      "name": "Italiamo Salsiccia Sauce",
+      "status": "Draft",
+      "published": false,
+      "category_id": "11c13976-2aa9-42b0-bf07-12b9d462c05e",
+      "canonical_category": "Pasta sauces",
+      "display_category": "Pasta sauces",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001085",
+      "name": "Italian Coffee Nespresso Aluminio Ristretto Torino",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001086",
+      "name": "Italian Coffee Nespresso Aluminio Venezia Arabica",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001087",
+      "name": "Italian Coffee Nespresso Ginseng",
+      "status": "Draft",
+      "published": false,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001088",
+      "name": "Italian Coffee Nespresso Orzo Bio",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001089",
+      "name": "Italian Nespresso Padova",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001090",
+      "name": "Italian Nespresso Torino",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001091",
+      "name": "JEWELRY BOX BIG EMPTY",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001092",
+      "name": "JEWELRY BOX BILOG SET",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001093",
+      "name": "JEWELRY BOX BLUE RIBBON EMPTY",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001094",
+      "name": "JEWELRY BOX RED BILOG EMPTY",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001095",
+      "name": "JEWELRY BOX SMALL BLUE SET",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001096",
+      "name": "JEWELRY BOXX BLACK BILOG EMPTY",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001097",
+      "name": "JOGGING PANTS",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001098",
+      "name": "JOLIE",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001099",
+      "name": "Jolie Perfume",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Fragrances",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001100",
+      "name": "Eccellenza Ligure Pesto",
+      "status": "Draft",
+      "published": false,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001101",
+      "name": "La Suissa Tre Strati Caffe Chocolate 150 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001102",
+      "name": "LACURA ACQUA 100ML",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001103",
+      "name": "LADY SLIPPER",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001104",
+      "name": "Laica Bar Di Latte",
+      "status": "Live",
+      "published": true,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001105",
+      "name": "Laica Bar Nocciola",
+      "status": "Live",
+      "published": true,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001106",
+      "name": "Lavazza Crema Gusto 3 x 250 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001107",
+      "name": "Lavazza Crema Gusto 6 x 250 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001108",
+      "name": "Lavazza Crema Gusto Forte 4 x 250 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001109",
+      "name": "Lavazza Dek 250Gx2",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001110",
+      "name": "Lavazza Oro 3 x 250 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001111",
+      "name": "Lavazza Rossa 1 kg",
+      "status": "Draft",
+      "published": false,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001112",
+      "name": "Lavazza Rossa 4 x 250 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001113",
+      "name": "Lavazza Rossa 6 x 250 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001114",
+      "name": "Lavazza Suerte 4 x 250 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001115",
+      "name": "Loacker Blueberry Wafer",
+      "status": "Draft",
+      "published": false,
+      "category_id": "abef4cb2-b446-4a57-af73-3734c2f24fbe",
+      "canonical_category": "Biscuits and wafers",
+      "display_category": "Biscuits and wafers",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001116",
+      "name": "Loacker Raspberry Wafer",
+      "status": "Draft",
+      "published": false,
+      "category_id": "abef4cb2-b446-4a57-af73-3734c2f24fbe",
+      "canonical_category": "Biscuits and wafers",
+      "display_category": "Biscuits and wafers",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001117",
+      "name": "LUXURY PERFUME CHARM",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001118",
+      "name": "Madame Perfume",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Fragrances",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001119",
+      "name": "Mareblu 12 x 60 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001120",
+      "name": "Maruzella 3 x 80 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001121",
+      "name": "Maruzella 6 x 60 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001122",
+      "name": "Marysol Tuna",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001123",
+      "name": "Marysol Tuna 3 x 70 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001124",
+      "name": "Mckennedy Cookie Crème Choco Cookie",
+      "status": "Live",
+      "published": true,
+      "category_id": "f5c00587-1e77-4b3a-8308-5f1109b0290a",
+      "canonical_category": "Sweet spreads",
+      "display_category": "Sweet spreads",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001125",
+      "name": "McKennedy Cookie Creme Duo Cookie",
+      "status": "Live",
+      "published": true,
+      "category_id": "f5c00587-1e77-4b3a-8308-5f1109b0290a",
+      "canonical_category": "Sweet spreads",
+      "display_category": "Sweet spreads",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001126",
+      "name": "MILLEFIONI HONEY 1Kg",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001127",
+      "name": "MILLEFIORI HONEY 1Kg",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001128",
+      "name": "Montana Corned Beef",
+      "status": "Draft",
+      "published": false,
+      "category_id": "10b2e5f2-2322-452b-bc02-19412f2e6c88",
+      "canonical_category": "Tinned meat",
+      "display_category": "Tinned meat",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001129",
+      "name": "Montegrappa Carne",
+      "status": "Draft",
+      "published": false,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001130",
+      "name": "Montegrappa Prosciutto",
+      "status": "Draft",
+      "published": false,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Filled pasta",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001131",
+      "name": "Montegrappa Tortellini Carne",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001132",
+      "name": "Montegrappa Tortellini Prosciutto",
+      "status": "Live",
+      "published": true,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001133",
+      "name": "NIKE SHORT",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001134",
+      "name": "Nixe Tonno 12 x 70 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001135",
+      "name": "Nixe Tuna 3 x 70 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001136",
+      "name": "Nixe Tuna Solo Can 160 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001137",
+      "name": "Nixe Tuna With Olive Oil 4 x 70 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001138",
+      "name": "Nostromo 12 x 60 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001139",
+      "name": "Nostromo 8 x 60 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001140",
+      "name": "Nostromo Tuna 6 x 70 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001141",
+      "name": "Novi Caramel",
+      "status": "Draft",
+      "published": false,
+      "category_id": "3cb6a37c-fdf4-4cb2-8a44-0d8adbb6d509",
+      "canonical_category": "Sweets",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001142",
+      "name": "Novi Mirtillo",
+      "status": "Draft",
+      "published": false,
+      "category_id": "3cb6a37c-fdf4-4cb2-8a44-0d8adbb6d509",
+      "canonical_category": "Sweets",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001143",
+      "name": "Novi Pistacchio",
+      "status": "Draft",
+      "published": false,
+      "category_id": "3cb6a37c-fdf4-4cb2-8a44-0d8adbb6d509",
+      "canonical_category": "Sweets",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001144",
+      "name": "Nutella Biscuit",
+      "status": "Live",
+      "published": true,
+      "category_id": "abef4cb2-b446-4a57-af73-3734c2f24fbe",
+      "canonical_category": "Biscuits and wafers",
+      "display_category": "Biscuits and wafers",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001145",
+      "name": "One Fragrance",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001146",
+      "name": "One Fragrance",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001147",
+      "name": "One Fragrance",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001148",
+      "name": "One Fragrance",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001149",
+      "name": "Pagani Formaggi",
+      "status": "Draft",
+      "published": false,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": "Pasta",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001150",
+      "name": "Pagani Prosciutto",
+      "status": "Draft",
+      "published": false,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001151",
+      "name": "Pagani Prosciutto",
+      "status": "Draft",
+      "published": false,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001152",
+      "name": "Pagani Prosciutto",
+      "status": "Draft",
+      "published": false,
+      "category_id": "0d19f200-efcd-4316-93c1-eaf5c78b7c3a",
+      "canonical_category": "Pasta",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001153",
+      "name": "Pellini Ground Coffee 4 x 250 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001154",
+      "name": "Perfume Rebile",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Fragrances",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001155",
+      "name": "Pernigotti Chocolate 80 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001156",
+      "name": "PILL BOX",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001157",
+      "name": "Poppies Caramel Biscuit",
+      "status": "Live",
+      "published": true,
+      "category_id": "abef4cb2-b446-4a57-af73-3734c2f24fbe",
+      "canonical_category": "Biscuits and wafers",
+      "display_category": "Biscuits and wafers",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001158",
+      "name": "Laica Praline Assortite 150 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "bb6fd8bb-bcc8-4143-b4f0-4f85a887b6c1",
+      "canonical_category": "Chocolate",
+      "display_category": "Chocolate",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001159",
+      "name": "Preferiti Extra Virgin Olive Oil",
+      "status": "Draft",
+      "published": false,
+      "category_id": "dd81087b-77dc-4ecd-a2c3-7c6a6245d752",
+      "canonical_category": "Cooking oils",
+      "display_category": "Cooking oils",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001160",
+      "name": "Ribeira Tuna 12 x 70 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001161",
+      "name": "Rio Mare 14 x 80 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001162",
+      "name": "Rio Mare 6 x 120 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001163",
+      "name": "Rio Mare 6 x 80 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001164",
+      "name": "Rio Mare 7 x 80 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001165",
+      "name": "Rio Mare 8 x 80 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": "Tinned fish",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001166",
+      "name": "Suddenly Fragrances Rosa Eau de Parfum 75 ml",
+      "status": "Live",
+      "published": true,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": "Fragrances",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001167",
+      "name": "Sacla Pesto 190 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001168",
+      "name": "SAFARI KIDS SLIPPER",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001169",
+      "name": "Segafredo 250Gx4",
+      "status": "Draft",
+      "published": false,
+      "category_id": "6db1f650-7c1e-42a4-9351-0b2dec51fe97",
+      "canonical_category": "Coffee and drink preparations",
+      "display_category": "Coffee and drink preparations",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001170",
+      "name": "Selex Savoiardi Ladyfinger Biscuits",
+      "status": "Draft",
+      "published": false,
+      "category_id": "abef4cb2-b446-4a57-af73-3734c2f24fbe",
+      "canonical_category": "Biscuits and wafers",
+      "display_category": "Biscuits and wafers",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001171",
+      "name": "SETS JEWELRY RED BIG BOX",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001172",
+      "name": "Siciliani Pistacchio Crema 200 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "f5c00587-1e77-4b3a-8308-5f1109b0290a",
+      "canonical_category": "Sweet spreads",
+      "display_category": "Sweet spreads",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001173",
+      "name": "Siciliani Pistacchio Crunchy 200 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "f5c00587-1e77-4b3a-8308-5f1109b0290a",
+      "canonical_category": "Sweet spreads",
+      "display_category": null,
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001174",
+      "name": "Sondey Lady Finger",
+      "status": "Draft",
+      "published": false,
+      "category_id": "abef4cb2-b446-4a57-af73-3734c2f24fbe",
+      "canonical_category": "Biscuits and wafers",
+      "display_category": "Biscuits and wafers",
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001175",
+      "name": "Sondey Savoiardi Lady Finger 400 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "abef4cb2-b446-4a57-af73-3734c2f24fbe",
+      "canonical_category": "Biscuits and wafers",
+      "display_category": "Biscuits and wafers",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001176",
+      "name": "STRAWBERRY SLIPPER",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001177",
+      "name": "Tigullio Carciofi E Noci",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001178",
+      "name": "Tigullio Genovese Plain",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001179",
+      "name": "Tigullio Olive E Capperi",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001180",
+      "name": "Tigullio Peperoni E Noci",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001181",
+      "name": "Tigullio Pesto Plain",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001182",
+      "name": "Tigullio Pomodori Secchi Pistacchio",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001183",
+      "name": "Tigullio Radicchio e Speck",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001184",
+      "name": "Tigullio Ricotta e Noci",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001185",
+      "name": "Tigullio Zafferano",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001186",
+      "name": "Tigullio Gran Pesto Cremoso",
+      "status": "Live",
+      "published": true,
+      "category_id": "d5c29040-90b6-4aa5-a2ed-68972c814039",
+      "canonical_category": "Pesto and sauces",
+      "display_category": "Pesto and sauces",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001187",
+      "name": "Tortina White",
+      "status": "Live",
+      "published": true,
+      "category_id": "abef4cb2-b446-4a57-af73-3734c2f24fbe",
+      "canonical_category": "Biscuits and wafers",
+      "display_category": "Biscuits and wafers",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001188",
+      "name": "TSHIRT OVERSIZED",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001189",
+      "name": "Tuna Francesco Moretti 3 x 80 g",
+      "status": "Draft",
+      "published": false,
+      "category_id": "8e586d75-128c-4900-bab6-d5683d18c128",
+      "canonical_category": "Tinned fish",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001190",
+      "name": "UNA TIRA L ALTRA BERRIES GUMMY",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001191",
+      "name": "Vidal Jelly Teeth 90 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "3cb6a37c-fdf4-4cb2-8a44-0d8adbb6d509",
+      "canonical_category": "Sweets",
+      "display_category": "Sweets",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001192",
+      "name": "Vidal Unicorns 90 g",
+      "status": "Live",
+      "published": true,
+      "category_id": "3cb6a37c-fdf4-4cb2-8a44-0d8adbb6d509",
+      "canonical_category": "Sweets",
+      "display_category": "Sweets",
+      "website_visible": true
+    },
+    {
+      "sku": "K2-SKU-001193",
+      "name": "X Bolt Perfume",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001194",
+      "name": "Xbolt",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001195",
+      "name": "Xbolt",
+      "status": "Draft",
+      "published": false,
+      "category_id": "f045ed2d-0516-4e2c-9c01-597f0d73ae21",
+      "canonical_category": "Personal care",
+      "display_category": null,
+      "website_visible": false
+    },
+    {
+      "sku": "K2-SKU-001196",
+      "name": "ZODIAC SIGN",
+      "status": "Draft",
+      "published": false,
+      "category_id": null,
+      "canonical_category": null,
+      "display_category": null,
+      "website_visible": false
+    }
+  ]
+}

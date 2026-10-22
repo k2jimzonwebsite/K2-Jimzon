@@ -1,0 +1,126 @@
+{
+  "observedAt": "2026-10-22T04:55:08.367Z",
+  "readOnly": true,
+  "project": "pixplcjqivlfflickobf",
+  "productCount": 196,
+  "listedCount": 93,
+  "displayPolicy": "Explicit store label first; canonical category name fallback; sold-out listings remain browsable",
+  "publicCategories": [
+    {
+      "name": "Beverages",
+      "count": 1
+    },
+    {
+      "name": "Biscuits and wafers",
+      "count": 5
+    },
+    {
+      "name": "Chocolate",
+      "count": 10
+    },
+    {
+      "name": "Coffee and drink preparations",
+      "count": 15
+    },
+    {
+      "name": "Cooking oils",
+      "count": 2
+    },
+    {
+      "name": "Fragrances",
+      "count": 6
+    },
+    {
+      "name": "Pasta",
+      "count": 13
+    },
+    {
+      "name": "Pasta sauces",
+      "count": 4
+    },
+    {
+      "name": "Personal care",
+      "count": 6
+    },
+    {
+      "name": "Pesto and sauces",
+      "count": 15
+    },
+    {
+      "name": "Spaghetti",
+      "count": 1
+    },
+    {
+      "name": "Sweet spreads",
+      "count": 4
+    },
+    {
+      "name": "Sweets",
+      "count": 5
+    },
+    {
+      "name": "Sweets and confectionery",
+      "count": 2
+    },
+    {
+      "name": "Tinned fish",
+      "count": 4
+    }
+  ],
+  "unassignedCanonicalDraftSkus": [
+    "K2-SKU-001004",
+    "K2-SKU-001033",
+    "K2-SKU-001040",
+    "K2-SKU-001041",
+    "K2-SKU-001042",
+    "K2-SKU-001047",
+    "K2-SKU-001048",
+    "K2-SKU-001049",
+    "K2-SKU-001054",
+    "K2-SKU-001056",
+    "K2-SKU-001057",
+    "K2-SKU-001069",
+    "K2-SKU-001071",
+    "K2-SKU-001091",
+    "K2-SKU-001092",
+    "K2-SKU-001093",
+    "K2-SKU-001094",
+    "K2-SKU-001095",
+    "K2-SKU-001096",
+    "K2-SKU-001097",
+    "K2-SKU-001098",
+    "K2-SKU-001102",
+    "K2-SKU-001103",
+    "K2-SKU-001117",
+    "K2-SKU-001126",
+    "K2-SKU-001127",
+    "K2-SKU-001133",
+    "K2-SKU-001156",
+    "K2-SKU-001168",
+    "K2-SKU-001171",
+    "K2-SKU-001176",
+    "K2-SKU-001188",
+    "K2-SKU-001190",
+    "K2-SKU-001196"
+  ],
+  "canonicalAndDisplayRemainIndependent": true,
+  "noProductionMutation": true,
+  "localVerification": {
+    "categoryLogicChecks": 4,
+    "renderedChromiumJourneys": 11,
+    "protectedProductReadChecks": 12,
+    "existingRegressionChecks": 140,
+    "regressionLoopbackRerun": 5,
+    "developmentGate": "passed",
+    "developmentExitCode": 0,
+    "impeccableDetectorFindings": 0,
+    "viewports": [
+      375,
+      1440
+    ],
+    "sourceOnly": true,
+    "deployed": false,
+    "productionAssignments": false,
+    "rawEvidence": "docs/acceptance/category-alignment-20261022"
+  }
+}

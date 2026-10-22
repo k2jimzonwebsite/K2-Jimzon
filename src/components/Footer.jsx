@@ -2,14 +2,6 @@ import { useStore } from '../context/StoreContext'
 import { Wordmark } from './ui/bits'
 import { ArrowIcon, FacebookIcon, InboxIcon, InstagramIcon, MapIcon, PhoneIcon } from './ui/icons'
 
-const CATEGORY_LINKS = [
-  ['Seasoning, Staple Foods & Baking Ingredients', 'Pantry & baking'],
-  ['Snack & Sweets', 'Snacks & sweets'],
-  ['Beverages', 'Coffee & beverages'],
-  ['Bath & Body', 'Bath & body'],
-  ['Skin Care', 'Skin care'],
-]
-
 const MARKETPLACE_SHOPS = [
   {
     name: 'Pasabuy Italy by K2',
@@ -30,7 +22,7 @@ const MARKETPLACE_SHOPS = [
 ]
 
 export default function Footer() {
-  const { go, setCategory, setQuery } = useStore()
+  const { go, setCategory, setQuery, storeCategories = [] } = useStore()
   const jump = (category) => {
     setQuery('')
     setCategory(category)
@@ -48,7 +40,7 @@ export default function Footer() {
           </div>
 
           <FooterColumn title="Shop">
-            {CATEGORY_LINKS.map(([category, label]) => <FooterButton key={category} onClick={() => jump(category)}>{label}</FooterButton>)}
+            {storeCategories.map(({ name }) => <FooterButton key={name} onClick={() => jump(name)}>{name}</FooterButton>)}
           </FooterColumn>
 
           <FooterColumn title="Services">

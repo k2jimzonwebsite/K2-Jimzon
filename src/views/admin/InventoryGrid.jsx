@@ -19,6 +19,8 @@ import ReferenceCreationDialog, { PendingReferenceCreation } from './ReferenceCr
 import { applyImageFallback } from '../../lib/imageFallback'
 import useProductMasterRecovery from '../../hooks/useProductMasterRecovery'
 import ProductMasterRecovery, { PendingProductDecision } from './ProductMasterRecovery'
+import BulkStoreCategoryDialog from './BulkStoreCategoryDialog'
+import { getStoreCategory, storeCategoryEntries } from '../../lib/storeCategories'
 import useWebsiteAssignmentRecovery from '../../hooks/useWebsiteAssignmentRecovery'
 import WebsiteAssignmentDialog,{PendingWebsiteDecision} from './WebsiteAssignmentDialog'
 import {
@@ -246,6 +248,8 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   }, [launchTool, onLaunchToolHandled, secure])
   const [enrichProduct, setEnrichProduct] = useState(null)
   const [selected, setSelected] = useState(() => new Set())
+  const [showStoreCategories, setShowStoreCategories] = useState(false)
+  const [categoryFilter, setCategoryFilter] = useState('All')
   const [deleteTargets, setDeleteTargets] = useState(null)
   const [statusBusy, setStatusBusy] = useState(null)
   const [statusDecision, setStatusDecision] = useState(null)
@@ -261,7 +265,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   const [showProductRecovery, setShowProductRecovery] = useState(false)
   const editIdentity = useRef(null)
   if (editIdentity.current?.actorId !== actorId || editIdentity.current?.canManageProducts !== canManageProducts) editIdentity.current = { actorId, canManageProducts }
-  useEffect(() => { setEditingProduct(null); setShowProductRecovery(false);setWebsiteSku(null); setSaving(false); setEditError('') }, [actorId, canManageProducts])
+  useEffect(() => { setEditingProduct(null); setShowProductRecovery(false);setWebsiteSku(null); setSaving(false); setEditError(''); setShowStoreCategories(false) }, [actorId, canManageProducts])
   const [notice, setNotice] = useState(null)
   const [search, setSearch] = useState('')
   const [stockFilter, setStockFilter] = useState('all')
@@ -571,13 +575,16 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   const clearSelection = () => setSelected(new Set())
 
   const selectedProducts = products.filter(p => selected.has(p.sku))
+  const inventoryCategories = useMemo(() => storeCategoryEntries(products), [products])
 
   const inventoryMetrics = useMemo(() => computeInventoryMetrics(secure ? products.map(p => ({ ...p, expiry_date: null })) : products, batchMap), [batchMap, products, secure])
 
   const visibleProducts = useMemo(() => {
     const term = search.trim().toLowerCase()
     return products.filter(product => {
-      const matchesSearch = !term || [product.sku, product.name, product.barcode, product.origin, product.country_of_origin]
+      if (categoryFilter !== 'All' && (categoryFilter === 'Unassigned'
+        ? !!product.subcategory?.trim() : getStoreCategory(product) !== categoryFilter)) return false
+      const matchesSearch = !term || [product.sku, product.name, product.barcode, product.origin, product.country_of_origin, product.category, product.subcategory, product.category_name]
         .some(value => String(value || '').toLowerCase().includes(term))
       if (!matchesSearch) return false
       const raw = product?.stock_available
@@ -592,7 +599,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
       if (stockFilter === 'drafts') return !['Live', 'Active'].includes(product.status)
       return true
     })
-  }, [batchMap, products, search, stockFilter])
+  }, [batchMap, products, search, stockFilter, categoryFilter])
   const allSelected = visibleProducts.length > 0 && visibleProducts.every(product => selected.has(product.sku))
   const toggleAll = () => setSelected(previous => {
     const next = new Set(previous)
@@ -693,6 +700,14 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
       </section>
 
 
+        <label className="block space-y-2 text-sm text-white/80"><span>Store category filter</span>
+          <select className="adm-input min-h-11 w-full text-base sm:w-auto sm:text-sm" value={categoryFilter} onChange={event => setCategoryFilter(event.target.value)}>
+            <option value="All">All categories</option><option value="Unassigned">No custom store category</option>
+            {inventoryCategories.map(({ name, count }) => <option key={name} value={name}>{name} ({count})</option>)}
+          </select>
+        </label>
+
+      {secure && showStoreCategories && <BulkStoreCategoryDialog key={actorId} products={selectedProducts} allProducts={products} recovery={recovery} actorId={actorId} canManageProducts={canManageProducts} onClose={() => setShowStoreCategories(false)} onSaved={() => { void fetchProducts() }} />}
       {/* Select-all row */}
       {secure && actorId && <PendingReferenceCreation actorId={actorId} onReview={setReferenceKind} />}
       {secure && <PendingProductDecision recovery={recovery} onReview={() => setShowProductRecovery(true)} />}
@@ -723,9 +738,12 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
             </span>
           </label>
           {selected.size > 0 && (
+            <>
+            {secure && canManageProducts && <button type="button" className={secondaryButton} disabled={recovery.working || !!recovery.pending || recovery.storageBlocked} onClick={() => setShowStoreCategories(true)}>Set store category</button>}
             <button onClick={clearSelection} className="ml-auto text-xs font-semibold text-white/50 hover:text-white transition-colors min-h-11 px-2">
               Clear
             </button>
+            </>
           )}
         </div>
       )}
@@ -1160,7 +1178,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                         <input type="text" inputMode="numeric" value={editingProduct.barcode || ''} onChange={e => set('barcode', e.target.value)} className={`${inp} font-mono`} />
                       </div>
                       <div>
-                        <Label tip="Subcategory classification, e.g. Pasta Sauces or Confectionery">Category</Label>
+                        <Label tip="Customer-facing shelf. Bulk assign it with Select visible → Set store category. Operational taxonomy is separate.">Store category</Label>
                         <input type="text" value={editingProduct.subcategory || ''} onChange={e => set('subcategory', e.target.value)} className={inp} placeholder="e.g. Pasta Sauces" />
                       </div>
                       <div>

@@ -6,6 +6,7 @@ const assigned = {
   sku: 'synthetic-assigned', name: 'Synthetic assigned product', status: 'Draft',
   brand_id: '11111111-1111-4111-8111-111111111111',
   category_id: '22222222-2222-4222-8222-222222222222',
+  categories: { name: 'Pasta' },
   primary_image_url: 'https://media.example/primary.png',
   lifestyle_images: ['https://media.example/after.png'],
   secondary_images: ['https://media.example/side.png', 'https://media.example/back.png'],
@@ -21,7 +22,7 @@ function client(stockError = null) {
   }, from(table) {
     let fields
     const query = {
-      select(value) { fields = value.split(','); return query },
+      select(value) { fields = value.split(',').map(field => field === 'categories(name)' ? 'categories' : field); return query },
       order() { return query },
       async limit() {
         if (table === 'products') return { data: [assigned, unassigned].map(row => Object.fromEntries(fields.map(field => [field, row[field]]))), error: null }
@@ -38,6 +39,12 @@ test('protected catalog preserves canonical assigned and nullable unassigned tax
   assert.deepEqual(result.products.map(row => ({ sku: row.sku, brand_id: row.brand_id, category_id: row.category_id })), [assigned, unassigned].map(({ sku, brand_id, category_id }) => ({ sku, brand_id, category_id })))
   assert.deepEqual(result.products.map(row => row.stock_available), [4, 0])
   assert.deepEqual(result.unavailable, [])
+})
+
+test('category filters can use the canonical name when no store label is assigned', async () => {
+  const { products } = await readAdminProducts(client())
+  assert.equal(products[0].category_name, 'Pasta')
+  assert.equal(products[1].category_name, null)
 })
 
 test('stock failure preserves canonical taxonomy while reporting unknown stock', async () => {
