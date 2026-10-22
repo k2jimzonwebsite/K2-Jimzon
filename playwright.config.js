@@ -10,6 +10,7 @@ export default defineConfig({
   // with the shared combined server. `npm test` runs each one through its
   // dedicated config after this base suite completes.
   testIgnore: [
+    'store-categories-ui.spec.js',
     'storefront-recovery-ui.spec.js',
     'store-orientation-ui.spec.js',
     'store-readability-ui.spec.js',

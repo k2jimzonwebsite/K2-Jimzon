@@ -1,0 +1,19 @@
+
+> k2-jimzon-prototype@0.1.0 test:customer-account-ui
+> node scripts/test-customer-account-ui.mjs
+
+
+Running 8 tests using 1 worker
+
+(node:3020) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\customer-account-ui.spec.js:56:1 › legacy account history keeps recorded payment and messages without final bill or approval (888ms)
+  ok 2 tests\customer-account-ui.spec.js:74:1 › authenticated express approval recovers an already accepted lost reply after reload (1.3s)
+  ok 3 tests\customer-account-ui.spec.js:104:1 › authenticated express late receipt stays with the original account and accepts an explicit zero fee (823ms)
+  ok 4 tests\customer-account-ui.spec.js:146:1 › account switch discards a late previous-customer history response (804ms)
+  ok 5 tests\customer-account-ui.spec.js:194:1 › a verified new customer can save profile settings and read a scoped notification before ordering (839ms)
+  ok 6 tests\customer-account-ui.spec.js:236:1 › customer account entry is phone-safe, passwordless, recoverable, and keeps primary mobile navigation at five (2.6s)
+  ok 7 tests\customer-account-ui.spec.js:273:1 › verified account claims once, loads only customer-visible history, and sends an authenticated bounded reply (957ms)
+  ok 8 tests\wholesale-inquiry-ui.spec.js:3:1 › secure wholesale inquiry returns only a server receipt and no commercial authority (1.8s)
+
+  8 passed (11.1s)

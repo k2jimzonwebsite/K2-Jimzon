@@ -1,0 +1,107 @@
+[
+  {
+    "stage": "test:storefront-recovery",
+    "startedAt": "2026-10-22T07:27:05.9681375Z",
+    "finishedAt": "2026-10-22T07:28:43.4360648Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-storefront-recovery.log"
+  },
+  {
+    "stage": "test:admin-ui",
+    "startedAt": "2026-10-22T07:28:43.4543288Z",
+    "finishedAt": "2026-10-22T07:30:20.8282619Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-admin-ui.log"
+  },
+  {
+    "stage": "test:payment-ui",
+    "startedAt": "2026-10-22T07:30:20.8323828Z",
+    "finishedAt": "2026-10-22T07:31:08.4277174Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-payment-ui.log"
+  },
+  {
+    "stage": "test:inbox-ui",
+    "startedAt": "2026-10-22T07:31:08.4303520Z",
+    "finishedAt": "2026-10-22T07:31:40.3014231Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-inbox-ui.log"
+  },
+  {
+    "stage": "test:admin-product-master-ui",
+    "startedAt": "2026-10-22T07:31:40.3038230Z",
+    "finishedAt": "2026-10-22T07:33:07.4991615Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-admin-product-master-ui.log"
+  },
+  {
+    "stage": "test:admin-website-assignment-ui",
+    "startedAt": "2026-10-22T07:33:07.5075859Z",
+    "finishedAt": "2026-10-22T07:33:28.9416921Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-admin-website-assignment-ui.log"
+  },
+  {
+    "stage": "test:owner-count-close-ui",
+    "startedAt": "2026-10-22T07:33:28.9441348Z",
+    "finishedAt": "2026-10-22T07:33:40.2602789Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-owner-count-close-ui.log"
+  },
+  {
+    "stage": "test:customer-account-ui",
+    "startedAt": "2026-10-22T07:33:40.2625872Z",
+    "finishedAt": "2026-10-22T07:33:53.5240397Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-customer-account-ui.log"
+  },
+  {
+    "stage": "test:selling-surfaces",
+    "startedAt": "2026-10-22T07:33:53.5260723Z",
+    "finishedAt": "2026-10-22T07:34:50.0001847Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-selling-surfaces.log"
+  },
+  {
+    "stage": "test:order-receipt-direct",
+    "startedAt": "2026-10-22T07:34:50.0026542Z",
+    "finishedAt": "2026-10-22T07:35:05.0402075Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-order-receipt-direct.log"
+  },
+  {
+    "stage": "test:workflow-api",
+    "startedAt": "2026-10-22T07:35:05.0423916Z",
+    "finishedAt": "2026-10-22T07:35:28.5414435Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-workflow-api.log"
+  },
+  {
+    "stage": "test:intake-ai-ui",
+    "startedAt": "2026-10-22T07:35:28.5457965Z",
+    "finishedAt": "2026-10-22T07:35:54.2866075Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-intake-ai-ui.log"
+  },
+  {
+    "stage": "test:vercel-output",
+    "startedAt": "2026-10-22T07:35:54.2888941Z",
+    "finishedAt": "2026-10-22T07:35:56.5823647Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-vercel-output.log"
+  },
+  {
+    "stage": "build:storefront",
+    "startedAt": "2026-10-22T07:35:56.6558803Z",
+    "finishedAt": "2026-10-22T07:36:20.6183745Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/build-storefront.log"
+  },
+  {
+    "stage": "build:admin",
+    "startedAt": "2026-10-22T07:36:20.6815509Z",
+    "finishedAt": "2026-10-22T07:36:43.9742839Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/build-admin.log"
+  }
+]

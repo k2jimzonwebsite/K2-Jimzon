@@ -1,0 +1,23 @@
+[
+  {
+    "stage": "test:mobile-moderation",
+    "startedAt": "2026-10-22T07:18:26.6557886Z",
+    "finishedAt": "2026-10-22T07:18:28.3840810Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-mobile-moderation.log"
+  },
+  {
+    "stage": "test:store-orientation",
+    "startedAt": "2026-10-22T07:18:28.4106124Z",
+    "finishedAt": "2026-10-22T07:19:43.4406731Z",
+    "exitCode": 0,
+    "log": "docs/acceptance/category-production-20261022/test-store-orientation.log"
+  },
+  {
+    "stage": "test:storefront-ui",
+    "startedAt": "2026-10-22T07:19:43.4450002Z",
+    "finishedAt": "2026-10-22T07:24:07.3882794Z",
+    "exitCode": 1,
+    "log": "docs/acceptance/category-production-20261022/test-storefront-ui.log"
+  }
+]

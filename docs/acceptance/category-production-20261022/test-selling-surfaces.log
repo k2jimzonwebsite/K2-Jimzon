@@ -1,0 +1,45 @@
+
+> k2-jimzon-prototype@0.1.0 test:selling-surfaces
+> playwright test --config=playwright.selling.config.js tests/storefront-selling-surfaces.spec.js tests/hero-enhancement.spec.js tests/storefront-readiness-ui.spec.js
+
+[WebServer] (node:1352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:25984) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 14 tests using 1 worker
+
+(node:22040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 3:34:01 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\hero-enhancement.spec.js:21:1 › additive hero preserves the original content and supports keyboard shopping (5.0s)
+[WebServer] 3:34:06 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\hero-enhancement.spec.js:67:1 › unavailable product images fall back without losing the product link (1.3s)
+[WebServer] 3:34:07 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 3:34:08 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\hero-enhancement.spec.js:78:1 › loading and empty collection keep both original shopping routes available (1.8s)
+[WebServer] 3:34:09 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 3:34:10 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 3:34:10 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 390px light (5.9s)
+[WebServer] 3:34:15 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 3:34:15 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 3:34:16 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 390px dark (4.7s)
+[WebServer] 3:34:20 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 3:34:21 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 3:34:22 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 1440px light (9.3s)
+[WebServer] 3:34:29 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 3:34:30 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 3:34:30 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 1440px dark (5.4s)
+  ok  8 tests\storefront-readiness-ui.spec.js:62:1 › checkout offers the two approved QR methods after staff confirmation (1.7s)
+  ok  9 tests\storefront-selling-surfaces.spec.js:30:1 › product detail renders canonical price and stock, then enforces the cart limit (1.3s)
+  ok 10 tests\storefront-selling-surfaces.spec.js:82:1 › guest message start and reply paths preserve scoped behavioral receipts (956ms)
+  ok 11 tests\storefront-selling-surfaces.spec.js:166:1 › recorded pickup instructions show the matching MariBank QR (4.5s)
+  ok 12 tests\storefront-selling-surfaces.spec.js:166:1 › recorded pickup instructions show the matching GCash QR (5.0s)
+  ok 13 tests\storefront-selling-surfaces.spec.js:295:1 › cold confirmation handles an expired guest grant with a useful recovery state (689ms)
+  ok 14 tests\storefront-selling-surfaces.spec.js:311:1 › unknown storefront and product URLs render explicit recovery pages (1.1s)
+
+  14 passed (55.4s)

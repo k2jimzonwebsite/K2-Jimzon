@@ -1,0 +1,15 @@
+
+> k2-jimzon-prototype@0.1.0 test:vercel-output
+> node --test tests/vercel-build-output.test.mjs
+
+✔ the Storefront sitemap dependency imports in Node ESM (4.999ms)
+✔ Build Output candidate isolates each API and preserves static/security routes (1687.7231ms)
+✔ Build Output refuses to replace its own static source (1.1686ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1788.4436

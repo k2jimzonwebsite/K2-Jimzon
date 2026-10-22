@@ -1,0 +1,212 @@
+{
+  "owningMap": "MAP-023",
+  "idea": "IDEA-20261022-01",
+  "qualifiedAt": "2026-10-22T07:40:16.673Z",
+  "productionBase": "5f700020f313d481407a4bc76a7e3d3e2f613781",
+  "categoryCommit": "aaecac6ea9e9f86c6dbd4f139544a847d72e04f8",
+  "applicationCodeCommit": "8056c74b72ad9412dcf1a6d1a19605fda0893a80",
+  "preservedAdmin": "a68d8857aa8170c79dd75862fbb74d48502f2e26",
+  "review": {
+    "critical": 0,
+    "important": 0,
+    "nonblocking": "Unassigned literal category filter sentinel collision; retained in MAP-023"
+  },
+  "gate": {
+    "qualified": true,
+    "originalInvocationExit": 1,
+    "qualificationMethod": "Original complete gate plus bounded corrections and continuation; no unrun required stages",
+    "corrections": [
+      "Dedicated category fixture excluded from shared runner; four pure and11rendered checks pass",
+      "Two obsolete fixed-category motion locators now use actual Beverages fixture; all original interaction assertions preserved"
+    ],
+    "base": {
+      "previouslyPassed": 1035,
+      "resumedPassed": 70,
+      "total": 1105
+    },
+    "storefrontUi": {
+      "previouslyPassed": 30,
+      "focusedCorrected": 2,
+      "total": 32
+    },
+    "initialPassedStages": [
+      {
+        "stage": "test:mobile-moderation",
+        "startedAt": "2026-10-22T07:18:26.6557886Z",
+        "finishedAt": "2026-10-22T07:18:28.3840810Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-mobile-moderation.log"
+      },
+      {
+        "stage": "test:store-orientation",
+        "startedAt": "2026-10-22T07:18:28.4106124Z",
+        "finishedAt": "2026-10-22T07:19:43.4406731Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-store-orientation.log"
+      }
+    ],
+    "remainingPassedStages": [
+      {
+        "stage": "test:storefront-recovery",
+        "startedAt": "2026-10-22T07:27:05.9681375Z",
+        "finishedAt": "2026-10-22T07:28:43.4360648Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-storefront-recovery.log"
+      },
+      {
+        "stage": "test:admin-ui",
+        "startedAt": "2026-10-22T07:28:43.4543288Z",
+        "finishedAt": "2026-10-22T07:30:20.8282619Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-admin-ui.log"
+      },
+      {
+        "stage": "test:payment-ui",
+        "startedAt": "2026-10-22T07:30:20.8323828Z",
+        "finishedAt": "2026-10-22T07:31:08.4277174Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-payment-ui.log"
+      },
+      {
+        "stage": "test:inbox-ui",
+        "startedAt": "2026-10-22T07:31:08.4303520Z",
+        "finishedAt": "2026-10-22T07:31:40.3014231Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-inbox-ui.log"
+      },
+      {
+        "stage": "test:admin-product-master-ui",
+        "startedAt": "2026-10-22T07:31:40.3038230Z",
+        "finishedAt": "2026-10-22T07:33:07.4991615Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-admin-product-master-ui.log"
+      },
+      {
+        "stage": "test:admin-website-assignment-ui",
+        "startedAt": "2026-10-22T07:33:07.5075859Z",
+        "finishedAt": "2026-10-22T07:33:28.9416921Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-admin-website-assignment-ui.log"
+      },
+      {
+        "stage": "test:owner-count-close-ui",
+        "startedAt": "2026-10-22T07:33:28.9441348Z",
+        "finishedAt": "2026-10-22T07:33:40.2602789Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-owner-count-close-ui.log"
+      },
+      {
+        "stage": "test:customer-account-ui",
+        "startedAt": "2026-10-22T07:33:40.2625872Z",
+        "finishedAt": "2026-10-22T07:33:53.5240397Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-customer-account-ui.log"
+      },
+      {
+        "stage": "test:selling-surfaces",
+        "startedAt": "2026-10-22T07:33:53.5260723Z",
+        "finishedAt": "2026-10-22T07:34:50.0001847Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-selling-surfaces.log"
+      },
+      {
+        "stage": "test:order-receipt-direct",
+        "startedAt": "2026-10-22T07:34:50.0026542Z",
+        "finishedAt": "2026-10-22T07:35:05.0402075Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-order-receipt-direct.log"
+      },
+      {
+        "stage": "test:workflow-api",
+        "startedAt": "2026-10-22T07:35:05.0423916Z",
+        "finishedAt": "2026-10-22T07:35:28.5414435Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-workflow-api.log"
+      },
+      {
+        "stage": "test:intake-ai-ui",
+        "startedAt": "2026-10-22T07:35:28.5457965Z",
+        "finishedAt": "2026-10-22T07:35:54.2866075Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-intake-ai-ui.log"
+      },
+      {
+        "stage": "test:vercel-output",
+        "startedAt": "2026-10-22T07:35:54.2888941Z",
+        "finishedAt": "2026-10-22T07:35:56.5823647Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/test-vercel-output.log"
+      },
+      {
+        "stage": "build:storefront",
+        "startedAt": "2026-10-22T07:35:56.6558803Z",
+        "finishedAt": "2026-10-22T07:36:20.6183745Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/build-storefront.log"
+      },
+      {
+        "stage": "build:admin",
+        "startedAt": "2026-10-22T07:36:20.6815509Z",
+        "finishedAt": "2026-10-22T07:36:43.9742839Z",
+        "exitCode": 0,
+        "log": "docs/acceptance/category-production-20261022/build-admin.log"
+      }
+    ],
+    "development": "development-final.log and both target prebuilds passed"
+  },
+  "budgets": {
+    "storefrontJsGzipKb": 148.7,
+    "storefrontCssGzipKb": 29.94,
+    "adminMinifiedKb": 226.68
+  },
+  "sourcePins": [
+    {
+      "path": "package.json",
+      "sha256": "576cd013e9b40c682b6d726c4a516d6d8c9286f5e9d0d39d7495b0890f9806c8"
+    },
+    {
+      "path": "prepared-api/admin/products.js",
+      "sha256": "b8ac2675c60e32b7ac5b15a21d982080bd1e2d00d735ff0edcda04cd8058d5a6"
+    },
+    {
+      "path": "server/admin-bff/product-knowledge.js",
+      "sha256": "f3d019f1e567b6842755d78687a981992f9dd68535227515c6587889aa77f7d2"
+    },
+    {
+      "path": "src/components/CatalogGrid.jsx",
+      "sha256": "f85b8b070661ed48b438606cdb2bcdf0fd747101100e4d004b49ed8bd2d6de17"
+    },
+    {
+      "path": "src/components/Footer.jsx",
+      "sha256": "614b61027f0423d93990a1a7fa3ac9feaf2677c4904bf8653915119545a5dba4"
+    },
+    {
+      "path": "src/components/home/CategoryTiles.jsx",
+      "sha256": "15011b3f33cbcbf88fb80b7853d89848784175be2c0baa48fbac40a8d96ed2f1"
+    },
+    {
+      "path": "src/context/StoreContext.jsx",
+      "sha256": "2b90ec60198f27fff26f1446ba909f99ed7e3d94a06ceeb7b94b45d58c57fb27"
+    },
+    {
+      "path": "src/lib/storeAssetPlan.js",
+      "sha256": "961c14fe36b7872f29cbd44b9f26dde58ebc44d860a5dbfbeb43fda76fe68818"
+    },
+    {
+      "path": "src/lib/storeCategories.js",
+      "sha256": "fd99ca63a8a77ef024828fa9eb8c46485c88fa582135f152846cabdd6a0dc3a8"
+    },
+    {
+      "path": "src/views/admin/BulkStoreCategoryDialog.jsx",
+      "sha256": "8e73ae2e4025b849986561b95f0adc7f501d90f070050c101e2e71d9e002404e"
+    },
+    {
+      "path": "src/views/admin/InventoryGrid.jsx",
+      "sha256": "21fecfd7f48be8e80ab51e10f53301fc2a3d29935edf0312c780e63f09b680a4"
+    }
+  ],
+  "discardedOnlyRegeneratedTrackedTestCaptures": 93,
+  "providerSettingsChanged": false,
+  "productDataChanged": false,
+  "deployed": false
+}

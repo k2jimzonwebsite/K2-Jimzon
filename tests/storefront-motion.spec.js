@@ -19,7 +19,7 @@ test.describe('storefront interaction language', () => {
     await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
 
     const categoryTile = page.getByRole('region', { name: 'The Italian Cabinet' })
-      .getByRole('button', { name: /Dolci & Biscotti/i })
+      .getByRole('button', { name: /Beverages/i })
     await categoryTile.scrollIntoViewIfNeeded()
     await expect(categoryTile).toBeVisible()
     const categoryIcon = categoryTile.locator('span').filter({ has: page.locator('svg') })
@@ -53,7 +53,7 @@ test.describe('storefront interaction language', () => {
     await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
 
     const categoryTile = page.getByRole('region', { name: 'The Italian Cabinet' })
-      .getByRole('button', { name: /Dolci & Biscotti/i })
+      .getByRole('button', { name: /Beverages/i })
     await categoryTile.scrollIntoViewIfNeeded()
     await expect(categoryTile).toBeVisible()
     await expect(categoryTile).toHaveCSS('opacity', '1')

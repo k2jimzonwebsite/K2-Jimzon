@@ -1,0 +1,45 @@
+
+> k2-jimzon-prototype@0.1.0 test:workflow-api
+> playwright test --config=playwright.workflow.config.js && npm run test:workflow-map
+
+[WebServer] (node:27092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24664) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:20752) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\workflow-api-ui.spec.js:5:1 › workflow step requests real API records only on staff action (3.2s)
+  ok 2 tests\workflow-api-ui.spec.js:26:1 › partial data stays explicit and a refresh replaces the previous batch (618ms)
+  ok 3 tests\workflow-api-ui.spec.js:43:1 › denied and malformed replies do not masquerade as empty success (634ms)
+  ok 4 tests\workflow-api-ui.spec.js:54:1 › switching steps drops old responses and loads the new allowed route (651ms)
+
+  4 passed (8.9s)
+
+> k2-jimzon-prototype@0.1.0 test:workflow-map
+> playwright test --config=playwright.workflow-map.config.js
+
+[WebServer] (node:3104) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:14380) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 11 tests using 1 worker
+
+(node:268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\workflow-map-ui.spec.js:8:1 › map opens at reading scale with a focused workflow (1.7s)
+  ok  2 tests\workflow-map-ui.spec.js:16:1 › filters show readable matches instead of dimming words (617ms)
+  ok  3 tests\workflow-map-ui.spec.js:24:1 › search results select and bring a distant step into the viewport (646ms)
+  ok  4 tests\workflow-map-ui.spec.js:38:1 › full map scrolls, keyboard pans and reset restores reading size (764ms)
+  ok  5 tests\workflow-map-ui.spec.js:50:1 › keyboard search selection keeps focus on the selected map step (622ms)
+  ok  6 tests\workflow-map-ui.spec.js:58:1 › background drag pans without selecting a step (702ms)
+  ok  7 tests\workflow-map-ui.spec.js:72:1 › search focus stays in its own guide when two maps are mounted (1.0s)
+  ok  8 tests\workflow-map-ui.spec.js:82:1 › empty search recovers and selected details retain the full text (841ms)
+  ok  9 tests\workflow-map-ui.spec.js:94:1 › phone exploration has readable details and no document overflow (662ms)
+  ok 10 tests\workflow-map-ui.spec.js:102:1 › phone role filter fits wider native control text and remains usable (601ms)
+  ok 11 tests\workflow-map-ui.spec.js:111:1 › enlarged text retains full instructions and landscape stays contained (1.3s)
+
+  11 passed (12.5s)

@@ -1,0 +1,81 @@
+{
+  "recordedAt": "2026-10-22 07:38:56 UTC",
+  "storefront": {
+    "id": "dpl_Cwy8Ap55XVYvsdya5GnnFGaaS9td",
+    "name": "k2-jimzon",
+    "url": "k2-jimzon-bzqa87msn-k2-jimzon.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1792463656601,
+    "creator": {
+      "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+      "username": "k2jimzonwebsite"
+    },
+    "project": {
+      "id": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "name": "k2-jimzon",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "main",
+      "githubCommitSha": "5f700020f313d481407a4bc76a7e3d3e2f613781",
+      "githubCommitMessage": "docs(map023): record approved Store Assets loader release",
+      "githubRepo": "K2-Jimzon",
+      "githubOrg": "k2jimzonwebsite"
+    },
+    "alias": [
+      "www.k2jimzon.com",
+      "k2-jimzon-vert.vercel.app",
+      "k2jimzon.com",
+      "k2-jimzon-k2-jimzon.vercel.app",
+      "k2-jimzon-git-main-k2-jimzon.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1792463657769,
+    "ready": 1792463702800,
+    "readyState": "READY",
+    "source": "git",
+    "aliasError": null
+  },
+  "admin": {
+    "id": "dpl_DkYRCkswquC9JfLR1PNSWHB8LpyM",
+    "name": "k2-jimzon-admin",
+    "url": "k2-jimzon-admin-mtyu61odz-k2-jimzon.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1792555095086,
+    "creator": {
+      "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+      "username": "k2jimzonwebsite"
+    },
+    "project": {
+      "id": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "name": "k2-jimzon-admin",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "a68d8857aa8170c79dd75862fbb74d48502f2e26",
+      "githubCommitSha": "a68d8857aa8170c79dd75862fbb74d48502f2e26",
+      "githubCommitMessage": "fix(map023): accept generated product knowledge drafts",
+      "githubRepo": "K2-Jimzon",
+      "githubOrg": "k2jimzonwebsite"
+    },
+    "alias": [
+      "admin.k2jimzon.com",
+      "k2-jimzon-admin-seven.vercel.app",
+      "k2-jimzon-admin-k2-jimzon.vercel.app",
+      "k2-jimzon-admin-git-a68d8857aa8170c79dd75862fb-55085d-k2-jimzon.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1792555135716,
+    "ready": 1792555176090,
+    "readyState": "READY",
+    "aliasError": null
+  }
+}

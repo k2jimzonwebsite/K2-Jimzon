@@ -1,0 +1,15 @@
+
+> k2-jimzon-prototype@0.1.0 test:mobile-moderation
+> playwright test --config=playwright.api.config.js tests/mobile-store-moderation-pwa-contract.spec.js
+
+
+Running 4 tests using 1 worker
+
+(node:27828) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\mobile-store-moderation-pwa-contract.spec.js:6:1 › mobile store minimizes the Shopkeeper behind sheets and supports bottom product popup (11ms)
+  ok 2 tests\mobile-store-moderation-pwa-contract.spec.js:18:1 › footer exposes the six owner-approved marketplace destinations as real links (8ms)
+  ok 3 tests\mobile-store-moderation-pwa-contract.spec.js:33:1 › Admin is installable without caching authenticated operational data (5ms)
+  ok 4 tests\mobile-store-moderation-pwa-contract.spec.js:48:1 › anonymous chat moderation is hash-only, role-gated, auditable and separate (12ms)
+
+  4 passed (684ms)
