@@ -40,9 +40,9 @@ function status(value) {
  */
 function provenance(value) {
   if (value === undefined || value === null) return {}
-  exactObject(value, ['source', 'model', 'generatedAt', 'approvedBy', 'approvedAt'])
+  exactObject(value, ['source', 'model', 'generatedAt', 'contract', 'approvedBy', 'approvedAt'])
   const out = {}
-  for (const key of ['source', 'model', 'generatedAt', 'approvedBy', 'approvedAt']) {
+  for (const key of ['source', 'model', 'generatedAt', 'contract', 'approvedBy', 'approvedAt']) {
     const text = boundedText(value[key], { max: 200 })
     if (text) out[key] = text
   }

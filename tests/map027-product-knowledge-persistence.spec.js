@@ -68,11 +68,11 @@ test('priming replaces the snapshot so unapproved copy actually disappears', () 
 test('the save command accepts an exact record and rejects everything else', () => {
   const valid = validateProductKnowledgeCommand('product_knowledge_save', {
     sku: 'caffe-milano-gold',
-    fields: [{ key: 'uses', status: 'approved', value: 'Espresso.', provenance: { source: 'generated-edited' } }],
+    fields: [{ key: 'uses', status: 'approved', value: 'Espresso.', provenance: { source: 'generated-edited', contract: 'k2.product-content.v3' } }],
     faqs: [{ question: 'Ground?', answer: 'No.', status: 'approved', provenance: {} }],
   })
   expect(valid.fields[0]).toEqual({
-    key: 'uses', status: 'approved', value: 'Espresso.', provenance: { source: 'generated-edited' },
+    key: 'uses', status: 'approved', value: 'Espresso.', provenance: { source: 'generated-edited', contract: 'k2.product-content.v3' },
   })
 
   const reject = body => expect(() => validateProductKnowledgeCommand('product_knowledge_save', body)).toThrow('REQUEST_INVALID')
@@ -93,6 +93,8 @@ test('the save command accepts an exact record and rejects everything else', () 
     faqs: [],
   })
   reject({ sku: 'a', fields: [], faqs: [{ question: 'q', answer: '', status: 'approved', provenance: {} }] })
+  reject({ sku: 'a', fields: [{ key: 'uses', status: 'draft', value: 'x', provenance: { extra: 'not allowed' } }], faqs: [] })
+  reject({ sku: 'a', fields: [{ key: 'uses', status: 'draft', value: 'x', provenance: { contract: 'x'.repeat(201) } }], faqs: [] })
   reject({
     sku: 'a',
     fields: Array.from({ length: 21 }, (_, index) => ({

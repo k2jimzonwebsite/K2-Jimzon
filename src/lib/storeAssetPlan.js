@@ -54,8 +54,8 @@ export const STORE_ASSETS = Object.freeze([
   { key: 'pairings', label: 'Goes well with', required: false, source: 'usage.pairings' },
   { key: 'preparation', label: 'How to prepare it', required: false, source: 'usage.instructions' },
   { key: 'storage', label: 'Storage', required: false, source: 'usage.storage' },
-  { key: 'seoTitle', label: 'SEO title', required: false, source: 'seo.seo_title' },
-  { key: 'metaDescription', label: 'Meta description', required: false, source: 'seo.meta_description' },
+  { key: 'seo_title', label: 'SEO title', required: false, source: 'seo.seo_title' },
+  { key: 'meta_description', label: 'Meta description', required: false, source: 'seo.meta_description' },
   { key: 'faqs', label: 'Customer questions', required: false, source: 'usage.use_cases' },
 ])
 
@@ -236,9 +236,9 @@ function valueForAsset(key, research) {
     }
     case 'storage':
       return text(usage.storage)
-    case 'seoTitle':
+    case 'seo_title':
       return text(seo.seo_title)
-    case 'metaDescription':
+    case 'meta_description':
       return text(seo.meta_description)
     default:
       return ''

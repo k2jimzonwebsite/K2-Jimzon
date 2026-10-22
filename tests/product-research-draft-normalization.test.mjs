@@ -6,6 +6,7 @@ import {
   PRODUCT_RESEARCH_TEMPLATE, parseProductResearchPaste,
 } from '../src/views/admin/productResearchContract.js'
 import { KNOWLEDGE_STATUS } from '../src/lib/productKnowledge.js'
+import { validateProductKnowledgeCommand } from '../server/admin-bff/product-knowledge.js'
 
 test('parsed v3 product research becomes store asset drafts', () => {
   const response = structuredClone(PRODUCT_RESEARCH_TEMPLATE)
@@ -54,13 +55,26 @@ test('parsed v3 product research becomes store asset drafts', () => {
   const parsed = parseProductResearchPaste(JSON.stringify(response))
   const drafted = draftFromResearch(parsed, { model: 'test' })
 
+  const commandError = (() => {
+    try {
+      validateProductKnowledgeCommand('product_knowledge_save', {
+        sku: 'k2-sku-001180',
+        fields: Object.entries(drafted.fields).map(([key, field]) => ({ key, ...field })),
+        faqs: drafted.faqs,
+      })
+      return undefined
+    } catch (error) {
+      return error.message
+    }
+  })()
+  assert.equal(commandError, undefined)
   assert.equal(drafted.fields.description.status, KNOWLEDGE_STATUS.DRAFT)
   assert.equal(drafted.fields.description.value, 'A pepper and walnut pesto for pasta.')
   assert.match(drafted.fields.description.provenance.contract, /k2\.product-content\.v3/)
   assert.equal(drafted.fields.uses.value, 'Use this pepper and walnut pesto with pasta.')
   assert.equal(drafted.fields.preparation.value, 'Salt the pasta water lightly. Mix the pesto through cooked pasta.')
-  assert.equal(drafted.fields.seoTitle.value, 'Tigullio Peperoni e Noci Pesto | K2 Jimzon')
-  assert.equal(drafted.fields.metaDescription.value, 'A pepper and walnut pesto for pasta from Tigullio.')
+  assert.equal(drafted.fields.seo_title?.value, 'Tigullio Peperoni e Noci Pesto | K2 Jimzon')
+  assert.equal(drafted.fields.meta_description?.value, 'A pepper and walnut pesto for pasta from Tigullio.')
   assert.equal(drafted.faqs.length, 0)
 })
 
@@ -73,5 +87,5 @@ test('existing raw research envelopes still become drafts', () => {
 
   assert.equal(drafted.fields.description.value, 'A factual product description.')
   assert.equal(drafted.fields.uses.value, 'Use with pasta.')
-  assert.equal(drafted.fields.seoTitle.value, 'Product | K2 Jimzon')
+  assert.equal(drafted.fields.seo_title?.value, 'Product | K2 Jimzon')
 })

@@ -9,3 +9,11 @@ Focused evidence on the current-main integration: node --test tests/store-catego
 Fresh exact-K2 identity passed. Browser inventory reports local browser use disabled in Work settings; owner access request is pending. Do not substitute local synthetic rendering or provider metadata for real hosted staff/browser acceptance. No production promotion or product mutation has occurred at this checkpoint.
 
 Remaining action: independent source review, final development and single complete release gate, scoped commit/main push, both existing Vercel artifacts and public category checks, then independently eligible listing work under existing product-specific holds. Preserve original dirty checkout. Source recovery is a reviewed revert of this category slice or restoration of the previous verified production deployment; no database restore or replay of business decisions. Keep all pending original actor/body/key records.
+
+## Integration review and preserved live Admin behavior
+
+Independent review of5f70002..aaecac6 found no Critical/Important issue. Public K2 product GET with categories(id,name) and Website membership GET both returned200, confirming93listed products and15populated shelves. One nonblocking filter-sentinel collision for a category literally named Unassigned remains recorded in MAP-023.
+
+The currently deployed Admin is a68d8857, separately ahead of main. To preserve that already-live behavior, this candidate also includes only its exact two application files and three associated test-file deltas: Product Knowledge provenance accepts the bounded contract field, and Store Assets uses canonical seo_title/meta_description keys. No prior data/SQL/apply records are replayed. Focused normalization tests pass2/2. Full release qualification applies to this combined category plus existing-Admin-behavior candidate.
+
+After the owner restarted ChatGPT, the exact existing Inventory tab became accessible and showed196SKUs loaded. Earlier browser-disabled entries are historical; actual post-release browser checks can now proceed. No new sign-in or credential change.
