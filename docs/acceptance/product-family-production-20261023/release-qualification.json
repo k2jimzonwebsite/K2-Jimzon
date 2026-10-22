@@ -1,0 +1,92 @@
+{
+  "owner": "MAP-023",
+  "ideaIds": [
+    "IDEA-20261021-03",
+    "IDEA-20261022-03"
+  ],
+  "head": "dcca20ac441b903a41ff514b12a430d101e90571",
+  "merge": "8d5d4e3cc00d44ca334f2abd6d3913361f143036",
+  "qualification": "complete manifest union passes; original full invocation remains exit1",
+  "independentReview": "approved; zero Critical/Important verification gaps",
+  "requiredCi": {
+    "run": 39811392474,
+    "conclusion": "SUCCESS",
+    "jobs": [
+      "build-and-smoke",
+      "critical-sql-behavior"
+    ]
+  },
+  "rawEvidenceArchive": ".tools/product-family-release-20261023",
+  "files": [
+    {
+      "file": "ci-ea85-failed.log",
+      "bytes": 1833100,
+      "sha256": "83b51928cad4c08394fb7f7015c70d889ffda06a7ee75bcff34e3ceb144d9897"
+    },
+    {
+      "file": "customer-rates-focused.log",
+      "bytes": 7415,
+      "sha256": "cd98bf736f7a9481afb0bac62dc114755241eb0d5e2c8457eddfba93b126bc55"
+    },
+    {
+      "file": "post-product-master-results.json",
+      "bytes": 2983,
+      "sha256": "0aaf830d9f7f7964ac5e258fcf815855fa6994e7b2ed1a6ad9eb39269181388c"
+    },
+    {
+      "file": "post-product-master.log",
+      "bytes": 78678,
+      "sha256": "e8b2ff5cacfbeebf587f9ec1d57e1859666a05240a8e65b022b151277edbd543"
+    },
+    {
+      "file": "remaining-release-results.json",
+      "bytes": 1117,
+      "sha256": "74742053cf7de8445daee518b32958c0044d21497139809e8a0a5eb2973ebccb"
+    },
+    {
+      "file": "remaining-release.log",
+      "bytes": 40080,
+      "sha256": "9ab369ad3c0a3674c72f74cbbbc47cca28c171e4cb9ea6bb3adc4427b0f8e645"
+    },
+    {
+      "file": "resume-post-product-master.mjs",
+      "bytes": 1874,
+      "sha256": "f0125f0ea0d9adda5fbcad45da84006db2b6d60dfacd49ff414ca2535b32efdf"
+    },
+    {
+      "file": "resume-remaining.mjs",
+      "bytes": 1902,
+      "sha256": "7a7c9e494f5b54c0de73543f9494dea95a8f402d1b298fc918b78ea7d53be052"
+    },
+    {
+      "file": "resumed-release.exit",
+      "bytes": 3,
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    {
+      "file": "resumed-release.log",
+      "bytes": 49822,
+      "sha256": "86a9ba63be8676420711856c0cd342cb0b881cf24ddd5411f1218dbebbc63d80"
+    },
+    {
+      "file": "route-doc-focused.log",
+      "bytes": 965,
+      "sha256": "b3f86b4b38afa22b89bde8693030b99e55847ccab3f28dfee0ae311f37013efb"
+    },
+    {
+      "file": "shop-stock-focused.log",
+      "bytes": 728,
+      "sha256": "602353f9ea908a391001e576b98e156b6ad1d5b9d88190d0f9aa0094b0e5d22d"
+    },
+    {
+      "file": "verify-release.exit",
+      "bytes": 3,
+      "sha256": "f1b2f662800122bed0ff255693df89c4487fbdcf453d3524a42d4ec20c3d9c04"
+    },
+    {
+      "file": "verify-release.log",
+      "bytes": 586244,
+      "sha256": "514bdddab1907ffb548e42e1b649e5828efc26945c6be79eb741e9dc854ebae0"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+
+Running 4 tests using 1 worker
+
+(node:5696) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\security-surface-inventory.spec.js:14:1 › architecture documentation matches the prepared route registries (11ms)
+  ok 2 tests\security-surface-inventory.spec.js:22:1 › security-surface inventory finds literal and dynamic Supabase/API operations with locations (16ms)
+  ok 3 tests\security-surface-inventory.spec.js:47:1 › security-surface inventory classifies SQL functions, grants, jobs, publications, and Storage policies (7ms)
+(node:28412) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 tests\security-surface-inventory.spec.js:97:1 › production security audit rejects wildcard CORS templates (799ms)
+
+  4 passed (2.3s)

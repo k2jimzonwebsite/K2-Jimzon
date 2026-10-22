@@ -1,0 +1,43 @@
+{
+  "result": {
+    "deployment": {
+      "id": "dpl_AZWP7K74vpyXWoQi3v9MxUYHno35",
+      "name": "k2-jimzon-admin",
+      "url": "k2-jimzon-admin-1shgq8nwv-k2-jimzon.vercel.app",
+      "type": "LAMBDAS",
+      "state": "READY",
+      "createdAt": 1792686446277,
+      "creator": {
+        "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+        "username": "k2jimzonwebsite"
+      },
+      "project": {
+        "id": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+        "name": "k2-jimzon-admin",
+        "framework": null
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "8d5d4e3cc00d44ca334f2abd6d3913361f143036",
+        "githubCommitMessage": "Merge pull request #21 from k2jimzonwebsite/codex/inventory-variations\n\nfeat(catalog): Link existing SKUs through product families",
+        "githubRepo": "K2-Jimzon",
+        "githubOrg": "k2jimzonwebsite"
+      },
+      "alias": [
+        "admin.k2jimzon.com",
+        "k2-jimzon-admin-seven.vercel.app",
+        "k2-jimzon-admin-k2-jimzon.vercel.app",
+        "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+      ],
+      "target": "production",
+      "regions": [
+        "iad1"
+      ],
+      "buildingAt": 1792686447552,
+      "ready": 1792686491813,
+      "readyState": "READY",
+      "source": "git",
+      "aliasError": null
+    }
+  }
+}

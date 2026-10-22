@@ -1,3 +1,5 @@
+23 October decision outcomes — IDEA-20261021-03 and IDEA-20261022-03: ACCEPT/MERGE source is now live through merged PR21 at 8d5d4e3c after explicit owner approval, required CI, reconciled release qualification and both production-host checks. Compatible Vite 8.2.4 retains all transitive versions and audit 0. No real membership, product/publication/stock mutation or schema replay. This supersedes the earlier pending-CI/no-production source outcomes below. Evidence: docs/acceptance/PRODUCT_FAMILY_PRODUCTION_RELEASE_20261023.md. All remaining operational work stays solely in MAP-023.
+
 22 October IDEA-20261022-03 local outcome: ACCEPT/MERGE under MAP-023. Vite8.2.4 patch retains every transitive version; audit0, policy, family18Node/23browser, final development and both builds pass. Initial failed CI is retained, patched-source CI remains pending. No production change. docs/acceptance/PRODUCT_FAMILY_DEPENDENCY_GATE_20261022.md.
 
 ## IDEA-20261022-03 — Restore the required dependency gate for the family candidate

@@ -1,0 +1,25 @@
+Product variations
+Close
+
+Group related SKUs for customers. Each keeps its own price, stock and product details. Only variation types with different values appear in the storefront.
+
+Mother product name
+Variation type
+Add type
+
+Montegrappa Tortellini Carne
+
+K2-SKU-001131
+
+Live · Website Assigned · ready
+
+Remove
+
+Montegrappa Tortellini Prosciutto
+
+K2-SKU-001132
+
+Live · Website Assigned · ready
+
+Remove
+Save variations

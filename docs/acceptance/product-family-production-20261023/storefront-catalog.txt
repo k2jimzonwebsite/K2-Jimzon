@@ -1,0 +1,1035 @@
+- banner:
+  - generic: Italy-sourced goods, fulfilled in Manila · Final stock and delivery are confirmed by K2 staff
+  - button "K2 Jimzon home":
+    - text: K2 Jimzon
+    - generic: Direct Italian imports
+  - navigation "Storefront":
+    - button "Home": Home
+    - button "Inventory & Catalog": Shop
+    - button "Pasabuy": Pasabuy
+    - button "Wholesale": Wholesale
+    - button "Contact us": Contact us
+  - generic: Search the catalog
+  - searchbox "Search the catalog"
+  - button "Open cart, 0 items":
+  - button "Switch to light mode":
+- main:
+  - paragraph: Current Manila catalog
+  - heading "Explore the Italian cabinet." [level=1]
+  - paragraph: Search current published products and send your cart as an order request. Availability is verified before payment instructions are provided.
+  - button "Enter the store"
+  - complementary:
+    - paragraph: Shop by category
+    - button "All" [pressed]:
+      - generic: All
+    - button "Beverages":
+      - generic: Beverages
+    - button "Biscuits and wafers":
+      - generic: Biscuits and wafers
+    - button "Chocolate":
+      - generic: Chocolate
+    - button "Coffee and drink preparations":
+      - generic: Coffee and drink preparations
+    - button "Cooking oils":
+      - generic: Cooking oils
+    - button "Fragrances":
+      - generic: Fragrances
+    - button "Pasta":
+      - generic: Pasta
+    - button "Pasta sauces":
+      - generic: Pasta sauces
+    - button "Personal care":
+      - generic: Personal care
+    - button "Pesto and sauces":
+      - generic: Pesto and sauces
+    - button "Spaghetti":
+      - generic: Spaghetti
+    - button "Sweet spreads":
+      - generic: Sweet spreads
+    - button "Sweets":
+      - generic: Sweets
+    - button "Sweets and confectionery":
+      - generic: Sweets and confectionery
+    - button "Tinned fish":
+      - generic: Tinned fish
+  - generic: Search products
+  - searchbox "Search products"
+  - paragraph: 93 products
+  - generic: Sort
+  - combobox "Sort":
+    - option "Featured first" [selected]
+    - option "Newest arrivals"
+    - 'option "Price: low to high"'
+    - 'option "Price: high to low"'
+  - article:
+    - button "View Perfume Rebile":
+      - img "Perfume Rebile"
+    - paragraph: Fragrances
+    - button "Perfume Rebile":
+      - heading "Perfume Rebile" [level=3]
+    - paragraph: Perfume Rebile
+    - generic "Sold out": Sold out
+    - paragraph: ₱604
+    - button "Request Perfume Rebile on Pasabuy": Request
+  - article:
+    - button "View Poppies Caramel Biscuit":
+      - img "Poppies Caramel Biscuit"
+    - paragraph: Biscuits and wafers
+    - button "Poppies Caramel Biscuit":
+      - heading "Poppies Caramel Biscuit" [level=3]
+    - paragraph: Poppies Caramel Biscuit
+    - generic "4 units available": Only 4 available
+    - paragraph: ₱299
+    - button "Add Poppies Caramel Biscuit to cart":
+  - article:
+    - button "View Laica Praline Assortite 150 g":
+      - img "Laica Praline Assortite 150 g"
+    - paragraph: Chocolate
+    - button "Laica Praline Assortite 150 g":
+      - heading "Laica Praline Assortite 150 g" [level=3]
+    - generic "4 units available": Only 4 available
+    - paragraph: ₱399
+    - button "Add Laica Praline Assortite 150 g to cart":
+  - article:
+    - button "View Rio Mare 6 x 120 g":
+      - img "Rio Mare 6 x 120 g"
+    - paragraph: Tinned fish
+    - button "Rio Mare 6 x 120 g":
+      - heading "Rio Mare 6 x 120 g" [level=3]
+    - paragraph: Rio Mare 6 x 120 g
+    - generic "20 units available": 20 available
+    - paragraph: ₱1,700
+    - button "Add Rio Mare 6 x 120 g to cart":
+  - article:
+    - button "View Rio Mare 6 x 80 g":
+      - img "Rio Mare 6 x 80 g"
+    - paragraph: Tinned fish
+    - button "Rio Mare 6 x 80 g":
+      - heading "Rio Mare 6 x 80 g" [level=3]
+    - paragraph: Rio Mare 6 x 80 g
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱1,439
+    - button "Add Rio Mare 6 x 80 g to cart":
+  - article:
+    - button "View Rio Mare 7 x 80 g":
+      - img "Rio Mare 7 x 80 g"
+    - paragraph: Tinned fish
+    - button "Rio Mare 7 x 80 g":
+      - heading "Rio Mare 7 x 80 g" [level=3]
+    - paragraph: Rio Mare 7 x 80 g
+    - generic "14 units available": 14 available
+    - paragraph: ₱1,550
+    - button "Add Rio Mare 7 x 80 g to cart":
+  - article:
+    - button "View Rio Mare 8 x 80 g":
+      - img "Rio Mare 8 x 80 g"
+    - paragraph: Tinned fish
+    - button "Rio Mare 8 x 80 g":
+      - heading "Rio Mare 8 x 80 g" [level=3]
+    - paragraph: Rio Mare 8 x 80 g
+    - generic "Sold out": Sold out
+    - paragraph: ₱1,650
+    - button "Request Rio Mare 8 x 80 g on Pasabuy": Request
+  - article:
+    - button "View Suddenly Fragrances Rosa Eau de Parfum 75 ml":
+      - img "Suddenly Fragrances Rosa Eau de Parfum 75 ml"
+    - paragraph: Fragrances
+    - button "Suddenly Fragrances Rosa Eau de Parfum 75 ml":
+      - heading "Suddenly Fragrances Rosa Eau de Parfum 75 ml" [level=3]
+    - paragraph: Suddenly Rosa 75 ml
+    - generic "Sold out": Sold out
+    - paragraph: ₱599
+    - button "Request Suddenly Fragrances Rosa Eau de Parfum 75 ml on Pasabuy": Request
+  - article:
+    - button "View Siciliani Pistacchio Crema 200 g":
+      - img "Siciliani Pistacchio Crema 200 g"
+    - paragraph: Sweet spreads
+    - button "Siciliani Pistacchio Crema 200 g":
+      - heading "Siciliani Pistacchio Crema 200 g" [level=3]
+    - paragraph: Siciliani Pistacchio
+    - generic "Sold out": Sold out
+    - paragraph: ₱499
+    - button "Request Siciliani Pistacchio Crema 200 g on Pasabuy": Request
+  - article:
+    - button "View Siciliani Pistacchio Crunchy 200 g":
+      - img "Siciliani Pistacchio Crunchy 200 g"
+    - paragraph: Sweet spreads
+    - button "Siciliani Pistacchio Crunchy 200 g":
+      - heading "Siciliani Pistacchio Crunchy 200 g" [level=3]
+    - paragraph: Siciliani Crunchy
+    - generic "7 units available": 7 available
+    - paragraph: ₱499
+    - button "Add Siciliani Pistacchio Crunchy 200 g to cart":
+  - article:
+    - button "View Sondey Savoiardi Lady Finger 400 g":
+      - img "Sondey Savoiardi Lady Finger 400 g"
+    - paragraph: Biscuits and wafers
+    - button "Sondey Savoiardi Lady Finger 400 g":
+      - heading "Sondey Savoiardi Lady Finger 400 g" [level=3]
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱409
+    - button "Add Sondey Savoiardi Lady Finger 400 g to cart":
+  - article:
+    - button "View Tigullio Carciofi E Noci":
+      - img "Tigullio Carciofi E Noci"
+    - paragraph: Pesto and sauces
+    - button "Tigullio Carciofi E Noci":
+      - heading "Tigullio Carciofi E Noci" [level=3]
+    - paragraph: Tigullio Carciofi E Noci
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱297
+    - button "Add Tigullio Carciofi E Noci to cart":
+  - article:
+    - button "View Tigullio Genovese Plain":
+      - img "Tigullio Genovese Plain"
+    - paragraph: Pesto and sauces
+    - button "Tigullio Genovese Plain":
+      - heading "Tigullio Genovese Plain" [level=3]
+    - paragraph: Tigullio Genovese Plain
+    - generic "4 units available": Only 4 available
+    - paragraph: ₱297
+    - button "Add Tigullio Genovese Plain to cart":
+  - article:
+    - button "View Tigullio Olive E Capperi":
+      - img "Tigullio Olive E Capperi"
+    - paragraph: Pesto and sauces
+    - button "Tigullio Olive E Capperi":
+      - heading "Tigullio Olive E Capperi" [level=3]
+    - paragraph: Tigullio Olive E Capperi
+    - generic "Sold out": Sold out
+    - paragraph: ₱297
+    - button "Request Tigullio Olive E Capperi on Pasabuy": Request
+  - article:
+    - button "View Tigullio Peperoni E Noci":
+      - img "Tigullio Peperoni E Noci"
+    - paragraph: Pesto and sauces
+    - button "Tigullio Peperoni E Noci":
+      - heading "Tigullio Peperoni E Noci" [level=3]
+    - paragraph: Tigullio Peperoni E Noci
+    - generic "9 units available": 9 available
+    - paragraph: ₱297
+    - button "Add Tigullio Peperoni E Noci to cart":
+  - article:
+    - button "View Tigullio Pesto Plain":
+      - img "Tigullio Pesto Plain"
+    - paragraph: Pesto and sauces
+    - button "Tigullio Pesto Plain":
+      - heading "Tigullio Pesto Plain" [level=3]
+    - paragraph: Tigullio Pesto Plain
+    - generic "4 units available": Only 4 available
+    - paragraph: ₱297
+    - button "Add Tigullio Pesto Plain to cart":
+  - article:
+    - button "View Tigullio Pomodori Secchi Pistacchio":
+      - img "Tigullio Pomodori Secchi Pistacchio"
+    - paragraph: Pesto and sauces
+    - button "Tigullio Pomodori Secchi Pistacchio":
+      - heading "Tigullio Pomodori Secchi Pistacchio" [level=3]
+    - generic "4 units available": Only 4 available
+    - paragraph: ₱297
+    - button "Add Tigullio Pomodori Secchi Pistacchio to cart":
+  - article:
+    - button "View Tigullio Radicchio e Speck":
+      - img "Tigullio Radicchio e Speck"
+    - paragraph: Pesto and sauces
+    - button "Tigullio Radicchio e Speck":
+      - heading "Tigullio Radicchio e Speck" [level=3]
+    - generic "4 units available": Only 4 available
+    - paragraph: ₱297
+    - button "Add Tigullio Radicchio e Speck to cart":
+  - article:
+    - button "View Tigullio Ricotta e Noci":
+      - img "Tigullio Ricotta e Noci"
+    - paragraph: Pesto and sauces
+    - button "Tigullio Ricotta e Noci":
+      - heading "Tigullio Ricotta e Noci" [level=3]
+    - paragraph: Tigullio Ricotta e Noci
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱297
+    - button "Add Tigullio Ricotta e Noci to cart":
+  - article:
+    - button "View Tigullio Zafferano":
+      - img "Tigullio Zafferano"
+    - paragraph: Pesto and sauces
+    - button "Tigullio Zafferano":
+      - heading "Tigullio Zafferano" [level=3]
+    - paragraph: Tigullio Zafferano
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱297
+    - button "Add Tigullio Zafferano to cart":
+  - article:
+    - button "View Tigullio Gran Pesto Cremoso":
+      - img "Tigullio Gran Pesto Cremoso"
+    - paragraph: Pesto and sauces
+    - button "Tigullio Gran Pesto Cremoso":
+      - heading "Tigullio Gran Pesto Cremoso" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱297
+    - button "Request Tigullio Gran Pesto Cremoso on Pasabuy": Request
+  - article:
+    - button "View Tortina White":
+      - img "Tortina White"
+    - paragraph: Biscuits and wafers
+    - button "Tortina White":
+      - heading "Tortina White" [level=3]
+    - paragraph: Tortina White
+    - generic "Sold out": Sold out
+    - paragraph: ₱429
+    - button "Request Tortina White on Pasabuy": Request
+  - article:
+    - button "View Vidal Jelly Teeth 90 g":
+      - img "Vidal Jelly Teeth 90 g"
+    - paragraph: Sweets
+    - button "Vidal Jelly Teeth 90 g":
+      - heading "Vidal Jelly Teeth 90 g" [level=3]
+    - paragraph: Vidal Jelly Teeth 90 g
+    - generic "Sold out": Sold out
+    - paragraph: ₱175
+    - button "Request Vidal Jelly Teeth 90 g on Pasabuy": Request
+  - article:
+    - button "View Vidal Unicorns 90 g":
+      - img "Vidal Unicorns 90 g"
+    - paragraph: Sweets
+    - button "Vidal Unicorns 90 g":
+      - heading "Vidal Unicorns 90 g" [level=3]
+    - paragraph: Vidal Unicorns 90 g
+    - generic "Sold out": Sold out
+    - paragraph: ₱175
+    - button "Request Vidal Unicorns 90 g on Pasabuy": Request
+  - article:
+    - button "View Laica Bar Di Latte":
+      - img "Laica Bar Di Latte"
+    - paragraph: Chocolate
+    - button "Laica Bar Di Latte":
+      - heading "Laica Bar Di Latte" [level=3]
+    - paragraph: Laica Bar Di Latte
+    - generic "Sold out": Sold out
+    - paragraph: ₱175
+    - button "Request Laica Bar Di Latte on Pasabuy": Request
+  - article:
+    - button "View Laica Bar Nocciola":
+      - img "Laica Bar Nocciola"
+    - paragraph: Chocolate
+    - button "Laica Bar Nocciola":
+      - heading "Laica Bar Nocciola" [level=3]
+    - paragraph: Laica Bar Nocciola
+    - generic "Sold out": Sold out
+    - paragraph: ₱175
+    - button "Request Laica Bar Nocciola on Pasabuy": Request
+  - article:
+    - button "View Lavazza Crema Gusto 3 x 250 g":
+      - img "Lavazza Crema Gusto 3 x 250 g"
+    - paragraph: Coffee and drink preparations
+    - button "Lavazza Crema Gusto 3 x 250 g":
+      - heading "Lavazza Crema Gusto 3 x 250 g" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱549
+    - button "Request Lavazza Crema Gusto 3 x 250 g on Pasabuy": Request
+  - article:
+    - button "View Lavazza Crema Gusto 6 x 250 g":
+      - img "Lavazza Crema Gusto 6 x 250 g"
+    - paragraph: Coffee and drink preparations
+    - button "Lavazza Crema Gusto 6 x 250 g":
+      - heading "Lavazza Crema Gusto 6 x 250 g" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱549
+    - button "Request Lavazza Crema Gusto 6 x 250 g on Pasabuy": Request
+  - article:
+    - button "View Lavazza Crema Gusto Forte 4 x 250 g":
+      - img "Lavazza Crema Gusto Forte 4 x 250 g"
+    - paragraph: Coffee and drink preparations
+    - button "Lavazza Crema Gusto Forte 4 x 250 g":
+      - heading "Lavazza Crema Gusto Forte 4 x 250 g" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱559
+    - button "Request Lavazza Crema Gusto Forte 4 x 250 g on Pasabuy": Request
+  - article:
+    - button "View Lavazza Dek 250Gx2":
+      - img "Lavazza Dek 250Gx2"
+    - paragraph: Coffee and drink preparations
+    - button "Lavazza Dek 250Gx2":
+      - heading "Lavazza Dek 250Gx2" [level=3]
+    - paragraph: Lavazza Dek 250Gx2
+    - generic "1 units available": Only 1 available
+    - paragraph: ₱585
+    - button "Add Lavazza Dek 250Gx2 to cart":
+  - article:
+    - button "View Lavazza Oro 3 x 250 g":
+      - img "Lavazza Oro 3 x 250 g"
+    - paragraph: Coffee and drink preparations
+    - button "Lavazza Oro 3 x 250 g":
+      - heading "Lavazza Oro 3 x 250 g" [level=3]
+    - paragraph: Lavazza Oro 3 x 250 g
+    - generic "Sold out": Sold out
+    - paragraph: ₱789
+    - button "Request Lavazza Oro 3 x 250 g on Pasabuy": Request
+  - article:
+    - button "View Lavazza Rossa 4 x 250 g":
+      - img "Lavazza Rossa 4 x 250 g"
+    - paragraph: Coffee and drink preparations
+    - button "Lavazza Rossa 4 x 250 g":
+      - heading "Lavazza Rossa 4 x 250 g" [level=3]
+    - paragraph: Lavazza Rossa 4 x 250 g
+    - generic "1 units available": Only 1 available
+    - paragraph: ₱579
+    - button "Add Lavazza Rossa 4 x 250 g to cart":
+  - article:
+    - button "View Lavazza Suerte 4 x 250 g":
+      - img "Lavazza Suerte 4 x 250 g"
+    - paragraph: Coffee and drink preparations
+    - button "Lavazza Suerte 4 x 250 g":
+      - heading "Lavazza Suerte 4 x 250 g" [level=3]
+    - paragraph: Lavazza Suerte 4 x 250 g
+    - generic "3 units available": Only 3 available
+    - paragraph: ₱549
+    - button "Add Lavazza Suerte 4 x 250 g to cart":
+  - article:
+    - button "View Madame Perfume":
+      - img "Madame Perfume"
+    - paragraph: Fragrances
+    - button "Madame Perfume":
+      - heading "Madame Perfume" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱599
+    - button "Request Madame Perfume on Pasabuy": Request
+  - article:
+    - button "View Mckennedy Cookie Crème Choco Cookie":
+      - img "Mckennedy Cookie Crème Choco Cookie"
+    - paragraph: Sweet spreads
+    - button "Mckennedy Cookie Crème Choco Cookie":
+      - heading "Mckennedy Cookie Crème Choco Cookie" [level=3]
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱399
+    - button "Add Mckennedy Cookie Crème Choco Cookie to cart":
+  - article:
+    - button "View McKennedy Cookie Creme Duo Cookie":
+      - img "McKennedy Cookie Creme Duo Cookie"
+    - paragraph: Sweet spreads
+    - button "McKennedy Cookie Creme Duo Cookie":
+      - heading "McKennedy Cookie Creme Duo Cookie" [level=3]
+    - paragraph: McKennedy Duo Cookie
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱399
+    - button "Add McKennedy Cookie Creme Duo Cookie to cart":
+  - article:
+    - button "View Montegrappa Tortellini Carne":
+      - img "Montegrappa Tortellini Carne"
+    - paragraph: Pasta
+    - button "Montegrappa Tortellini Carne":
+      - heading "Montegrappa Tortellini Carne" [level=3]
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱274
+    - button "Add Montegrappa Tortellini Carne to cart":
+  - article:
+    - button "View Montegrappa Tortellini Prosciutto":
+      - img "Montegrappa Tortellini Prosciutto"
+    - paragraph: Pasta
+    - button "Montegrappa Tortellini Prosciutto":
+      - heading "Montegrappa Tortellini Prosciutto" [level=3]
+    - generic "3 units available": Only 3 available
+    - paragraph: ₱274
+    - button "Add Montegrappa Tortellini Prosciutto to cart":
+  - article:
+    - button "View Nutella Biscuit":
+      - img "Nutella Biscuit"
+    - paragraph: Biscuits and wafers
+    - button "Nutella Biscuit":
+      - heading "Nutella Biscuit" [level=3]
+    - paragraph: Nutella Biscuit
+    - generic "Sold out": Sold out
+    - paragraph: ₱399
+    - button "Request Nutella Biscuit on Pasabuy": Request
+  - article:
+    - button "View Dulciar Bar Gianduia":
+      - img "Dulciar Bar Gianduia"
+    - paragraph: Chocolate
+    - button "Dulciar Bar Gianduia":
+      - heading "Dulciar Bar Gianduia" [level=3]
+    - paragraph: Dulciar Bar Gianduia
+    - generic "5 units available": Only 5 available
+    - paragraph: ₱199
+    - button "Add Dulciar Bar Gianduia to cart":
+  - article:
+    - button "View Dulciar Bar Pistacchio":
+      - img "Dulciar Bar Pistacchio"
+    - paragraph: Chocolate
+    - button "Dulciar Bar Pistacchio":
+      - heading "Dulciar Bar Pistacchio" [level=3]
+    - paragraph: Dulciar Bar Pistacchio
+    - generic "8 units available": 8 available
+    - paragraph: ₱199
+    - button "Add Dulciar Bar Pistacchio to cart":
+  - article:
+    - button "View Fin Carré 50%":
+      - img "Fin Carré 50%"
+    - paragraph: Chocolate
+    - button "Fin Carré 50%":
+      - heading "Fin Carré 50%" [level=3]
+    - paragraph: Fin Carré 50%
+    - generic "3 units available": Only 3 available
+    - paragraph: ₱199
+    - button "Add Fin Carré 50% to cart":
+  - article:
+    - button "View Fin Carré Milk Choc":
+      - img "Fin Carré Milk Choc"
+    - paragraph: Chocolate
+    - button "Fin Carré Milk Choc":
+      - heading "Fin Carré Milk Choc" [level=3]
+    - paragraph: Fin Carré Milk Choc
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱199
+    - button "Add Fin Carré Milk Choc to cart":
+  - article:
+    - button "View Fin Carré White Chocolate":
+      - img "Fin Carré White Chocolate"
+    - paragraph: Chocolate
+    - button "Fin Carré White Chocolate":
+      - heading "Fin Carré White Chocolate" [level=3]
+    - paragraph: Fin Carré White Chocolate
+    - generic "4 units available": Only 4 available
+    - paragraph: ₱199
+    - button "Add Fin Carré White Chocolate to cart":
+  - article:
+    - button "View Fini Fried Egg 90 g":
+      - img "Fini Fried Egg 90 g"
+    - paragraph: Sweets
+    - button "Fini Fried Egg 90 g":
+      - heading "Fini Fried Egg 90 g" [level=3]
+    - paragraph: Fini Fried Egg 90 g
+    - generic "Sold out": Sold out
+    - paragraph: ₱135
+    - button "Request Fini Fried Egg 90 g on Pasabuy": Request
+  - article:
+    - button "View Fini Smile 90 g":
+      - img "Fini Smile 90 g"
+    - paragraph: Sweets
+    - button "Fini Smile 90 g":
+      - heading "Fini Smile 90 g" [level=3]
+    - paragraph: Fini Smile 90 g
+    - generic "Sold out": Sold out
+    - paragraph: ₱135
+    - button "Request Fini Smile 90 g on Pasabuy": Request
+  - article:
+    - button "View Galatine Blue":
+      - img "Galatine Blue"
+    - paragraph: Sweets and confectionery
+    - button "Galatine Blue":
+      - heading "Galatine Blue" [level=3]
+    - paragraph: Galatine Blue
+    - generic "Sold out": Sold out
+    - paragraph: ₱439
+    - button "Request Galatine Blue on Pasabuy": Request
+  - article:
+    - button "View Galatine Blue 125 g":
+      - img "Galatine Blue 125 g"
+    - paragraph: Sweets and confectionery
+    - button "Galatine Blue 125 g":
+      - heading "Galatine Blue 125 g" [level=3]
+    - paragraph: Galatine Blue 125 g
+    - generic "1 units available": Only 1 available
+    - paragraph: ₱439
+    - button "Add Galatine Blue 125 g to cart":
+  - article:
+    - button "View Galatine Blue 150 g":
+      - img "Galatine Blue 150 g"
+    - paragraph: Sweets and confectionery
+    - button "Galatine Blue 150 g":
+      - heading "Galatine Blue 150 g" [level=3]
+    - paragraph: Galatine Blue 150 g
+    - generic "1 units available": Only 1 available
+    - paragraph: ₱469
+    - button "Add Galatine Blue 150 g to cart":
+  - article:
+    - button "View Giglio Lasagne Pasta 500 g":
+      - img "Giglio Lasagne Pasta 500 g"
+    - paragraph: Pasta
+    - button "Giglio Lasagne Pasta 500 g":
+      - heading "Giglio Lasagne Pasta 500 g" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱349
+    - button "Request Giglio Lasagne Pasta 500 g on Pasabuy": Request
+  - article:
+    - button "View Gimoka Nespresso Aluminum Forte":
+      - img "Gimoka Nespresso Aluminum Forte"
+    - paragraph: Coffee and drink preparations
+    - button "Gimoka Nespresso Aluminum Forte":
+      - heading "Gimoka Nespresso Aluminum Forte" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱374
+    - button "Request Gimoka Nespresso Aluminum Forte on Pasabuy": Request
+  - article:
+    - button "View Gimoka Nespresso Aluminum Gran Crema Ciocolatto":
+      - img "Gimoka Nespresso Aluminum Gran Crema Ciocolatto"
+    - paragraph: Coffee and drink preparations
+    - button "Gimoka Nespresso Aluminum Gran Crema Ciocolatto":
+      - heading "Gimoka Nespresso Aluminum Gran Crema Ciocolatto" [level=3]
+    - paragraph: Gimoka Gran Crema
+    - generic "Sold out": Sold out
+    - paragraph: ₱374
+    - button "Request Gimoka Nespresso Aluminum Gran Crema Ciocolatto on Pasabuy": Request
+  - article:
+    - button "View Gullon Savoiardi Lady Finger 300":
+      - img "Gullon Savoiardi Lady Finger 300"
+    - paragraph: Biscuits and wafers
+    - button "Gullon Savoiardi Lady Finger 300":
+      - heading "Gullon Savoiardi Lady Finger 300" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱297
+    - button "Request Gullon Savoiardi Lady Finger 300 on Pasabuy": Request
+  - article:
+    - button "View Italiamo 500 g Di Gragnano Linguine":
+      - img "Italiamo 500 g Di Gragnano Linguine"
+    - paragraph: Pasta
+    - button "Italiamo 500 g Di Gragnano Linguine":
+      - heading "Italiamo 500 g Di Gragnano Linguine" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱249
+    - button "Request Italiamo 500 g Di Gragnano Linguine on Pasabuy": Request
+  - article:
+    - button "View Italiamo 500 g Di Gragnano Spaghetti":
+      - img "Italiamo 500 g Di Gragnano Spaghetti"
+    - paragraph: Pasta
+    - button "Italiamo 500 g Di Gragnano Spaghetti":
+      - heading "Italiamo 500 g Di Gragnano Spaghetti" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱249
+    - button "Request Italiamo 500 g Di Gragnano Spaghetti on Pasabuy": Request
+  - article:
+    - button "View Italiamo Bottle 400 g Amatriciana":
+      - img "Italiamo Bottle 400 g Amatriciana"
+    - paragraph: Pasta sauces
+    - button "Italiamo Bottle 400 g Amatriciana":
+      - heading "Italiamo Bottle 400 g Amatriciana" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱349
+    - button "Request Italiamo Bottle 400 g Amatriciana on Pasabuy": Request
+  - article:
+    - button "View Italiamo Bottle 400 g Ricotta":
+      - img "Italiamo Bottle 400 g Ricotta"
+    - paragraph: Pasta sauces
+    - button "Italiamo Bottle 400 g Ricotta":
+      - heading "Italiamo Bottle 400 g Ricotta" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱349
+    - button "Request Italiamo Bottle 400 g Ricotta on Pasabuy": Request
+  - article:
+    - button "View Italiamo In Can 2 x 180 g Ragu":
+      - img "Italiamo In Can 2 x 180 g Ragu"
+    - paragraph: Pasta sauces
+    - button "Italiamo In Can 2 x 180 g Ragu":
+      - heading "Italiamo In Can 2 x 180 g Ragu" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱345
+    - button "Request Italiamo In Can 2 x 180 g Ragu on Pasabuy": Request
+  - article:
+    - button "View Italiamo Pesto Lemon":
+      - img "Italiamo Pesto Lemon"
+    - paragraph: Pesto and sauces
+    - button "Italiamo Pesto Lemon":
+      - heading "Italiamo Pesto Lemon" [level=3]
+    - paragraph: Italiamo Pesto Lemon
+    - generic "1 units available": Only 1 available
+    - paragraph: ₱259
+    - button "Add Italiamo Pesto Lemon to cart":
+  - article:
+    - button "View Italian Coffee Nespresso Aluminio Ristretto Torino":
+      - img "Italian Coffee Nespresso Aluminio Ristretto Torino"
+    - paragraph: Coffee and drink preparations
+    - button "Italian Coffee Nespresso Aluminio Ristretto Torino":
+      - heading "Italian Coffee Nespresso Aluminio Ristretto Torino" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱349
+    - button "Request Italian Coffee Nespresso Aluminio Ristretto Torino on Pasabuy": Request
+  - article:
+    - button "View Italian Coffee Nespresso Aluminio Venezia Arabica":
+      - img "Italian Coffee Nespresso Aluminio Venezia Arabica"
+    - paragraph: Coffee and drink preparations
+    - button "Italian Coffee Nespresso Aluminio Venezia Arabica":
+      - heading "Italian Coffee Nespresso Aluminio Venezia Arabica" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱349
+    - button "Request Italian Coffee Nespresso Aluminio Venezia Arabica on Pasabuy": Request
+  - article:
+    - button "View Italian Coffee Nespresso Orzo Bio":
+      - img "Italian Coffee Nespresso Orzo Bio"
+    - paragraph: Coffee and drink preparations
+    - button "Italian Coffee Nespresso Orzo Bio":
+      - heading "Italian Coffee Nespresso Orzo Bio" [level=3]
+    - generic "1 units available": Only 1 available
+    - paragraph: ₱249
+    - button "Add Italian Coffee Nespresso Orzo Bio to cart":
+  - article:
+    - button "View Italian Nespresso Padova":
+      - img "Italian Nespresso Padova"
+    - paragraph: Coffee and drink preparations
+    - button "Italian Nespresso Padova":
+      - heading "Italian Nespresso Padova" [level=3]
+    - paragraph: Italian Nespresso Padova
+    - generic "Sold out": Sold out
+    - paragraph: ₱349
+    - button "Request Italian Nespresso Padova on Pasabuy": Request
+  - article:
+    - button "View Italian Nespresso Torino":
+      - img "Italian Nespresso Torino"
+    - paragraph: Coffee and drink preparations
+    - button "Italian Nespresso Torino":
+      - heading "Italian Nespresso Torino" [level=3]
+    - paragraph: Italian Nespresso Torino
+    - generic "Sold out": Sold out
+    - paragraph: ₱349
+    - button "Request Italian Nespresso Torino on Pasabuy": Request
+  - article:
+    - button "View Jolie Perfume":
+      - img "Jolie Perfume"
+    - paragraph: Fragrances
+    - button "Jolie Perfume":
+      - heading "Jolie Perfume" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱689
+    - button "Request Jolie Perfume on Pasabuy": Request
+  - article:
+    - button "View La Suissa Tre Strati Caffe Chocolate 150 g":
+      - img "La Suissa Tre Strati Caffe Chocolate 150 g"
+    - paragraph: Chocolate
+    - button "La Suissa Tre Strati Caffe Chocolate 150 g":
+      - heading "La Suissa Tre Strati Caffe Chocolate 150 g" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱249
+    - button "Request La Suissa Tre Strati Caffe Chocolate 150 g on Pasabuy": Request
+  - article:
+    - button "View Amalfi Lotion Argan":
+      - img "Amalfi Lotion Argan"
+    - paragraph: Personal care
+    - button "Amalfi Lotion Argan":
+      - heading "Amalfi Lotion Argan" [level=3]
+    - paragraph: Amalfi Argan Lotion
+    - generic "Sold out": Sold out
+    - paragraph: ₱404
+    - button "Request Amalfi Lotion Argan on Pasabuy": Request
+  - article:
+    - button "View Amalfi Lotion Coco":
+      - img "Amalfi Lotion Coco"
+    - paragraph: Personal care
+    - button "Amalfi Lotion Coco":
+      - heading "Amalfi Lotion Coco" [level=3]
+    - paragraph: Amalfi Coco Lotion
+    - generic "Sold out": Sold out
+    - paragraph: ₱404
+    - button "Request Amalfi Lotion Coco on Pasabuy": Request
+  - article:
+    - button "View Baresa Pesto Calabrese":
+      - img "Baresa Pesto Calabrese"
+    - paragraph: Pesto and sauces
+    - button "Baresa Pesto Calabrese":
+      - heading "Baresa Pesto Calabrese" [level=3]
+    - paragraph: Baresa Pesto Calabrese
+    - generic "1 units available": Only 1 available
+    - paragraph: ₱249
+    - button "Add Baresa Pesto Calabrese to cart":
+  - article:
+    - button "View Baresa Pesto Genovese 290 g":
+      - img "Baresa Pesto Genovese 290 g"
+    - paragraph: Pesto and sauces
+    - button "Baresa Pesto Genovese 290 g":
+      - heading "Baresa Pesto Genovese 290 g" [level=3]
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱289
+    - button "Add Baresa Pesto Genovese 290 g to cart":
+  - article:
+    - button "View Baresa Pesto Ricotta E Noci":
+      - img "Baresa Pesto Ricotta E Noci"
+    - paragraph: Pesto and sauces
+    - button "Baresa Pesto Ricotta E Noci":
+      - heading "Baresa Pesto Ricotta E Noci" [level=3]
+    - generic "1 units available": Only 1 available
+    - paragraph: ₱249
+    - button "Add Baresa Pesto Ricotta E Noci to cart":
+  - article:
+    - button "View Baresa Pesto Without Garlic":
+      - img "Baresa Pesto Without Garlic"
+    - paragraph: Pesto and sauces
+    - button "Baresa Pesto Without Garlic":
+      - heading "Baresa Pesto Without Garlic" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱255
+    - button "Request Baresa Pesto Without Garlic on Pasabuy": Request
+  - article:
+    - button "View Barilla Ragu Bolognese":
+      - img "Barilla Ragu Bolognese"
+    - paragraph: Pasta sauces
+    - button "Barilla Ragu Bolognese":
+      - heading "Barilla Ragu Bolognese" [level=3]
+    - paragraph: Barilla Ragu Bolognese
+    - generic "4 units available": Only 4 available
+    - paragraph: ₱379
+    - button "Add Barilla Ragu Bolognese to cart":
+  - article:
+    - button "View Bellarum Orzo":
+      - img "Bellarum Orzo"
+    - paragraph: Beverages
+    - button "Bellarum Orzo":
+      - heading "Bellarum Orzo" [level=3]
+    - paragraph: Bellarum Orzo
+    - generic "8 units available": 8 available
+    - paragraph: ₱499
+    - button "Add Bellarum Orzo to cart":
+  - article:
+    - button "View Borella Carne":
+      - img "Borella Carne"
+    - paragraph: Pasta
+    - button "Borella Carne":
+      - heading "Borella Carne" [level=3]
+    - paragraph: Borella Carne
+    - generic "45 units available": 45 available
+    - paragraph: ₱259
+    - button "Add Borella Carne to cart":
+  - article:
+    - button "View Borella Carne":
+      - img "Borella Carne"
+    - paragraph: Pasta
+    - button "Borella Carne":
+      - heading "Borella Carne" [level=3]
+    - paragraph: Borella Carne
+    - generic "Sold out": Sold out
+    - paragraph: ₱259
+    - button "Request Borella Carne on Pasabuy": Request
+  - article:
+    - button "View Borella Prosciutto":
+      - img "Borella Prosciutto"
+    - paragraph: Pasta
+    - button "Borella Prosciutto":
+      - heading "Borella Prosciutto" [level=3]
+    - paragraph: Borella Prosciutto
+    - generic "42 units available": 42 available
+    - paragraph: ₱259
+    - button "Add Borella Prosciutto to cart":
+  - article:
+    - button "View Borella Prosciutto":
+      - img "Borella Prosciutto"
+    - paragraph: Pasta
+    - button "Borella Prosciutto":
+      - heading "Borella Prosciutto" [level=3]
+    - paragraph: Borella Prosciutto
+    - generic "22 units available": 22 available
+    - paragraph: ₱259
+    - button "Add Borella Prosciutto to cart":
+  - article:
+    - button "View Caffé Poli Nespresso Gold 10S":
+      - img "Caffé Poli Nespresso Gold 10S"
+    - paragraph: Coffee and drink preparations
+    - button "Caffé Poli Nespresso Gold 10S":
+      - heading "Caffé Poli Nespresso Gold 10S" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱299
+    - button "Request Caffé Poli Nespresso Gold 10S on Pasabuy": Request
+  - article:
+    - button "View Chalou":
+      - img "Chalou"
+    - paragraph: Fragrances
+    - button "Chalou":
+      - heading "Chalou" [level=3]
+    - paragraph: Chalou
+    - generic "Sold out": Sold out
+    - paragraph: ₱649
+    - button "Request Chalou on Pasabuy": Request
+  - article:
+    - button "View Chalou":
+      - img "Chalou"
+    - paragraph: Fragrances
+    - button "Chalou":
+      - heading "Chalou" [level=3]
+    - paragraph: Chalou
+    - generic "Sold out": Sold out
+    - paragraph: ₱649
+    - button "Request Chalou on Pasabuy": Request
+  - article:
+    - button "View Cien Cream Soap Honey And Milk 2-Pack":
+      - img "Cien Cream Soap Honey And Milk 2-Pack"
+    - paragraph: Personal care
+    - button "Cien Cream Soap Honey And Milk 2-Pack":
+      - heading "Cien Cream Soap Honey And Milk 2-Pack" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱105
+    - button "Request Cien Cream Soap Honey And Milk 2-Pack on Pasabuy": Request
+  - article:
+    - button "View Cien Cream Soap Olive 2-Pack":
+      - img "Cien Cream Soap Olive 2-Pack"
+    - paragraph: Personal care
+    - button "Cien Cream Soap Olive 2-Pack":
+      - heading "Cien Cream Soap Olive 2-Pack" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱100
+    - button "Request Cien Cream Soap Olive 2-Pack on Pasabuy": Request
+  - article:
+    - button "View Cien Keratin Conditioner":
+      - img "Cien Keratin Conditioner"
+    - paragraph: Personal care
+    - button "Cien Keratin Conditioner":
+      - heading "Cien Keratin Conditioner" [level=3]
+    - paragraph: Cien Keratin Conditioner
+    - generic "Sold out": Sold out
+    - paragraph: ₱599
+    - button "Request Cien Keratin Conditioner on Pasabuy": Request
+  - article:
+    - button "View Cien Argan Hair Oil":
+      - img "Cien Argan Hair Oil"
+    - paragraph: Personal care
+    - button "Cien Argan Hair Oil":
+      - heading "Cien Argan Hair Oil" [level=3]
+    - paragraph: Cien Argan Hair Oil
+    - generic "Sold out": Sold out
+    - paragraph: ₱404
+    - button "Request Cien Argan Hair Oil on Pasabuy": Request
+  - article:
+    - button "View Combino Farfalle 500 g":
+      - img "Combino Farfalle 500 g"
+    - paragraph: Pasta
+    - button "Combino Farfalle 500 g":
+      - heading "Combino Farfalle 500 g" [level=3]
+    - paragraph: Combino Farfalle 500 g
+    - generic "6 units available": 6 available
+    - paragraph: ₱199
+    - button "Add Combino Farfalle 500 g to cart":
+  - article:
+    - button "View Combino Spaghetti Bio Di Semola Di Grano 500 g":
+      - img "Combino Spaghetti Bio Di Semola Di Grano 500 g"
+    - paragraph: Pasta
+    - button "Combino Spaghetti Bio Di Semola Di Grano 500 g":
+      - heading "Combino Spaghetti Bio Di Semola Di Grano 500 g" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱249
+    - button "Request Combino Spaghetti Bio Di Semola Di Grano 500 g on Pasabuy": Request
+  - article:
+    - button "View Combino Spaghetti No. 5 500 g":
+      - img "Combino Spaghetti No. 5 500 g"
+    - paragraph: Pasta
+    - button "Combino Spaghetti No. 5 500 g":
+      - heading "Combino Spaghetti No. 5 500 g" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱199
+    - button "Request Combino Spaghetti No. 5 500 g on Pasabuy": Request
+  - article:
+    - button "View Dante Extra Virgin Olive 1 Liter":
+      - img "Dante Extra Virgin Olive 1 Liter"
+    - paragraph: Cooking oils
+    - button "Dante Extra Virgin Olive 1 Liter":
+      - heading "Dante Extra Virgin Olive 1 Liter" [level=3]
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱1,199
+    - button "Add Dante Extra Virgin Olive 1 Liter to cart":
+  - article:
+    - button "View Dante Extra Virgin Olive Oil 750 ml":
+      - img "Dante Extra Virgin Olive Oil 750 ml"
+    - paragraph: Cooking oils
+    - button "Dante Extra Virgin Olive Oil 750 ml":
+      - heading "Dante Extra Virgin Olive Oil 750 ml" [level=3]
+    - generic "2 units available": Only 2 available
+    - paragraph: ₱949
+    - button "Add Dante Extra Virgin Olive Oil 750 ml to cart":
+  - article:
+    - button "View Divella Spaghetti Pasta 1 kg":
+      - img "Divella Spaghetti Pasta 1 kg"
+    - paragraph: Pasta
+    - button "Divella Spaghetti Pasta 1 kg":
+      - heading "Divella Spaghetti Pasta 1 kg" [level=3]
+    - generic "Sold out": Sold out
+    - paragraph: ₱299
+    - button "Request Divella Spaghetti Pasta 1 kg on Pasabuy": Request
+  - article:
+    - button "View Dulciar Bar Fragola":
+      - img "Dulciar Bar Fragola"
+    - paragraph: Chocolate
+    - button "Dulciar Bar Fragola":
+      - heading "Dulciar Bar Fragola" [level=3]
+    - paragraph: Dulciar Bar Fragola
+    - generic "4 units available": Only 4 available
+    - paragraph: ₱199
+    - button "Add Dulciar Bar Fragola to cart":
+  - article:
+    - button "View Combino Spaghetti No. 5 1kg":
+      - img "Combino Spaghetti No. 5 1kg"
+    - paragraph: Spaghetti
+    - button "Combino Spaghetti No. 5 1kg":
+      - heading "Combino Spaghetti No. 5 1kg" [level=3]
+    - paragraph: Combino Spaghetti 1kg
+    - generic "10 units available": 10 available
+    - paragraph: ₱349
+    - button "Add Combino Spaghetti No. 5 1kg to cart":
+- complementary "Store concierge chat":
+  - button "Chat with K2 staff":
+    - generic: Chat with K2
+- contentinfo:
+  - button "K2 Jimzon Direct Italian imports":
+    - text: K2 Jimzon
+    - generic: Direct Italian imports
+  - paragraph: Italian goods for homes and businesses in the Philippines. Shop what is in stock or ask us to source something from Italy.
+  - paragraph: Website · Shopee · TikTok Shop · Lazada · Pasabuy
+  - heading "Shop" [level=3]
+  - list:
+    - button "Beverages"
+    - button "Biscuits and wafers"
+    - button "Chocolate"
+    - button "Coffee and drink preparations"
+    - button "Cooking oils"
+    - button "Fragrances"
+    - button "Pasta"
+    - button "Pasta sauces"
+    - button "Personal care"
+    - button "Pesto and sauces"
+    - button "Spaghetti"
+    - button "Sweet spreads"
+    - button "Sweets"
+    - button "Sweets and confectionery"
+    - button "Tinned fish"
+  - heading "Services" [level=3]
+  - list:
+    - button "Request from Italy"
+    - button "Wholesale orders"
+    - button "Browse products"
+    - button "Review your basket"
+  - heading "Contact" [level=3]
+  - list:
+    - button "Contact us"
+    - link "Call 0931 864 9654":
+      - /url: tel:09318649654
+      - generic: 0931 864 9654
+    - link "Email K2 Jimzon":
+      - /url: mailto:k2jimzonwebsite@gmail.com
+      - generic: Email K2 Jimzon
+    - link "Facebook · Family Pin Italy":
+      - /url: https://www.facebook.com/FamilyPinItaly
+      - generic: Facebook · Family Pin Italy
+    - link "Instagram · @kaikiko8":
+      - /url: https://www.instagram.com/kaikiko8/
+      - generic: Instagram · @kaikiko8
+    - generic: Manila, Philippines
+  - region "Find our shops":
+    - heading "Find our shops" [level=3]
+    - paragraph: These links open our marketplace shops. Stock and messages there stay in each marketplace until a connector is approved.
+    - paragraph: Pasabuy Italy by K2
+    - list:
+      - link "Lazada":
+        - /url: https://s.lazada.com.ph/s.Z777zD?c=x
+        - text: Lazada
+      - link "Shopee":
+        - /url: https://s.shopee.ph/9V1fXWQ0gK
+        - text: Shopee
+      - link "TikTok":
+        - /url: https://vt.tiktok.com/ZS9Afhgs231Wm-Zj3hN/
+        - text: TikTok
+    - paragraph: Jworldbasket
+    - list:
+      - link "Lazada":
+        - /url: https://s.lazada.com.ph/s.Z77ieU?c=x
+        - text: Lazada
+      - link "Shopee":
+        - /url: https://s.shopee.ph/5fowyVvX1R
+        - text: Shopee
+      - link "TikTok":
+        - /url: https://vt.tiktok.com/ZS9AfhVYjAJUb-HhBEF/
+        - text: TikTok
+  - button "Privacy & Data"
+  - button "Terms of Service"
+  - button "Returns & Replacements"
+  - paragraph: Submitting a Website or Pasabuy request does not collect payment. K2 staff confirms availability, delivery, and payment instructions directly.
+  - paragraph: © 2026 K2 Jimzon · Direct Italian imports

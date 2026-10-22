@@ -1,0 +1,49 @@
+{
+  "sourceMerge": "8d5d4e3cc00d44ca334f2abd6d3913361f143036",
+  "testedHead": "dcca20ac441b903a41ff514b12a430d101e90571",
+  "surfaces": [
+    {
+      "project": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "deployment": "dpl_3QsTqaJEu7h5xUzz5pjkkHkWycQ4",
+      "state": "READY",
+      "host": "www.k2jimzon.com"
+    },
+    {
+      "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "deployment": "dpl_AZWP7K74vpyXWoQi3v9MxUYHno35",
+      "state": "READY",
+      "host": "admin.k2jimzon.com"
+    }
+  ],
+  "observed": {
+    "admin": {
+      "products": 196,
+      "active": 93,
+      "drafts": 103,
+      "projectedUnits": 273,
+      "selectedPreview": [
+        "K2-SKU-001131",
+        "K2-SKU-001132"
+      ],
+      "protectedRead": "succeeded",
+      "saveSubmitted": false,
+      "selectionCleared": true
+    },
+    "storefront": {
+      "catalogListings": 93,
+      "checkedSku": "K2-SKU-001178",
+      "pricePhp": 297,
+      "available": 4,
+      "decodedMainAndRelatedImages": 6,
+      "selectors": 0,
+      "orderSubmitted": false
+    }
+  },
+  "notVerified": [
+    "real family assignment/save/recovery",
+    "exact-variant customer order/reservation/FEFO",
+    "physical device/staff acceptance",
+    "held inventory facts"
+  ],
+  "rollbackSource": "a9e369a7a6b7f586f05efaee5ea8d109f64b688b"
+}
