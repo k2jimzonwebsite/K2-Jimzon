@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-10-22T07:45:14.103Z",
+  "commit": "297b0ef1de43e0b2fc7e6bf8b63b75f79688caa7",
+  "checks": [
+    {
+      "target": "storefront",
+      "origin": "https://www.k2jimzon.com",
+      "markerStatus": 200,
+      "marker": {
+        "target": "storefront"
+      },
+      "htmlStatus": 200,
+      "htmlSha256": "954b873c781edbf52bf4809bfa15ef205f22f5274b23b352ea67495f0d02724d",
+      "scriptUrls": [
+        "/theme-init.js",
+        "/assets/index-D5MXA0cF.js"
+      ]
+    },
+    {
+      "target": "admin",
+      "origin": "https://admin.k2jimzon.com",
+      "markerStatus": 200,
+      "marker": {
+        "target": "admin"
+      },
+      "htmlStatus": 200,
+      "htmlSha256": "8027bd763fd62e3f1b6335329d957485d4bfbfa6b9c06471711a95cff5c376bd",
+      "scriptUrls": [
+        "/theme-init.js",
+        "/assets/index-jmSi8MRw.js"
+      ]
+    }
+  ],
+  "unauthenticatedAdminProductsStatus": 403
+}

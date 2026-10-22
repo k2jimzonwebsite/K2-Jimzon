@@ -1,0 +1,53 @@
+{
+  "verifiedCommit": "297b0ef1de43e0b2fc7e6bf8b63b75f79688caa7",
+  "storefront": {
+    "id": "dpl_3BUCWELXQY43kJFg7k2dL132mMrD",
+    "project": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+    "url": "https://k2-jimzon-fnzvbuwwv-k2-jimzon.vercel.app",
+    "state": "READY",
+    "target": "production",
+    "commit": "297b0ef1de43e0b2fc7e6bf8b63b75f79688caa7",
+    "aliases": [
+      "www.k2jimzon.com",
+      "k2-jimzon-vert.vercel.app",
+      "k2jimzon.com",
+      "k2-jimzon-k2-jimzon.vercel.app",
+      "k2-jimzon-git-main-k2-jimzon.vercel.app"
+    ],
+    "readyAt": "2026-10-22T07:44:23.789Z",
+    "aliasError": null
+  },
+  "admin": {
+    "id": "dpl_ENof5Edy3cL9gaNWxkoFKoTs5BCg",
+    "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+    "url": "https://k2-jimzon-admin-fdys58pry-k2-jimzon.vercel.app",
+    "state": "READY",
+    "target": "production",
+    "commit": "297b0ef1de43e0b2fc7e6bf8b63b75f79688caa7",
+    "aliases": [
+      "admin.k2jimzon.com",
+      "k2-jimzon-admin-seven.vercel.app",
+      "k2-jimzon-admin-k2-jimzon.vercel.app",
+      "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+    ],
+    "readyAt": "2026-10-22T07:43:39.007Z",
+    "aliasError": null
+  },
+  "rollback": {
+    "storefront": "dpl_Cwy8Ap55XVYvsdya5GnnFGaaS9td",
+    "admin": "dpl_DkYRCkswquC9JfLR1PNSWHB8LpyM"
+  },
+  "providerSettingWrites": false,
+  "businessWrites": false,
+  "evidence": [
+    "artifact-http-checks.json",
+    "live-ui-checks.json",
+    "store-after.png",
+    "admin-bulk-preview.png"
+  ],
+  "limits": [
+    "No production category assignment was submitted; live check ended at the enabled 22-product preview and cleared selection.",
+    "Production lost-reply/partial-save recovery was not exercised; maintained local browser journeys cover it.",
+    "Inventory remains 196 products, 93 Website listings and 103 Drafts; missing facts and media holds are not waived."
+  ]
+}

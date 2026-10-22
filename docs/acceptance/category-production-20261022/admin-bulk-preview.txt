@@ -1,0 +1,780 @@
+Browser tab: 3, Title: "K2 Jimzon Admin", URL: "https://admin.k2jimzon.com/?section=inventory".
+0 AXWebArea K2 Jimzon Admin, URL: admin.k2jimzon.com/?section=inventory
+	1 container root
+		2 container
+			3 text K2 K2 Jimzon BOS BUSINESS OPERATIONS
+			4 button Description: Search dashboard, Help: Search (Ctrl+K)
+			5 container Dashboard widgets
+				6 text Dashboard widgets
+				7 button Shop & channel metrics
+				8 button Sales & records
+				9 button Revenue trend
+				10 button Priority work
+				11 button Inbox metrics
+				12 button Pasabuy metrics
+				13 button Stock metrics
+			14 button Command center
+			15 button Count & Close
+			16 button Workflow map
+			17 text BUYING & SHIPMENTS
+			18 button Purchasing
+			19 button Flight Consignments
+			20 button Pasabuy Quotes
+			21 button Suppliers
+			22 text PRODUCTS & CUSTOMER WORK
+			23 button Inventory
+				24 text Inventory
+				25 text 196
+			26 button Store Assets
+			27 button Fulfillment Hub
+			28 button Stock Holds
+			29 button Messages
+			30 button Customers
+			31 button Coupons
+			32 text CHANNELS & ACCESS
+			33 button Delivery Rates
+			34 button Staff & Roles
+			35 button Channel Readiness
+			36 button Globe Display
+			37 text J jerzelguerra26 Admin
+			38 button DevOps & System, Help: DevOps & System Architecture
+			39 button Lock / Exit Admin
+		40 container
+			41 heading Product Catalog & Stock, Value: 1
+				42 text Product Catalog & Stock
+			43 button (collapsed) Description: About: Product Catalog & Stock, Secondary Actions: Expand
+			44 container
+				45 button Scan Alt S, Help: Open scan center (Alt+S)
+					46 text Scan
+					47 text Alt S
+				48 button Workflow Map, Help: View visual workflow maps for all shifts
+				49 button Guided Tours, Help: Launch interactive guided walkthrough tour (Manual vs Auto Intake)
+				50 button Start here, Help: How to use this dashboard: start here
+				51 button Alerts, Help: Expiry alerts
+				52 button Operations guide, Help: Open the grounded operations guide (Alt+G)
+				53 button Search Ctrl K
+					54 text Search
+					55 text Ctrl K
+				56 button Add inventory, Help: Add Inventory (Automatic Barcode Scan vs Manual ChatGPT Intake)
+				57 button Upload CSV
+				58 text Sheet mode
+				59 switch Description: Sheet mode, Value: 0
+			60 container
+				61 text CATALOG AND STOCK CONTROL
+				62 heading Inventory & stock checks, Value: 2
+					63 text Inventory & stock checks
+				64 button (collapsed) Description: About: Inventory & stock checks, Secondary Actions: Expand
+				65 text 196 SKUs loaded
+				66 button Add inventory
+				67 button Scan box
+				68 button Unused uploads
+				69 button Add product
+			70 definition list
+				71 container ACTIVE SKUS
+					72 text ACTIVE SKUS
+				73 text 93
+				74 text 196 total product records
+				75 container AVAILABLE UNITS
+					76 text AVAILABLE UNITS
+				77 text 273
+				78 text Product master available stock
+				79 container OUT OF STOCK
+					80 text OUT OF STOCK
+				81 text 152
+				82 text Immediate replenishment review
+				83 container LOW STOCK
+					84 text LOW STOCK
+				85 text 33
+				86 text At or below reorder level
+				87 container EXPIRY RISK
+					88 text EXPIRY RISK
+				89 text 0
+				90 text Expired or within 90 days
+			91 container
+				92 heading Products, Value: 3
+					93 text Products
+				94 text 22
+				95 button (collapsed) Description: About: Products, Secondary Actions: Expand
+				96 text Search inventory
+				97 search text field (settable) Search inventory
+				98 container Filter inventory exceptions
+					99 checkbox All 196, Value: 1
+						100 text All
+						101 text 196
+					102 checkbox Out 152, Value: 0
+						103 text Out
+						104 text 152
+					105 checkbox Low 33, Value: 0
+						106 text Low
+						107 text 33
+					108 checkbox Expiry 0, Value: 0
+						109 text Expiry
+						110 text 0
+					111 checkbox Drafts 103, Value: 0
+						112 text Drafts
+						113 text 103
+			114 container
+				115 text Store category filter
+				116 pop up button (collapsed, settable) Store category filter, Value: Pasta (22), Secondary Actions: Expand
+					117 menu
+						118 All categories
+						119 No custom store category
+						120 Beverages (1)
+						121 Biscuits (1)
+						122 Biscuits and wafers (9)
+						123 Chocolate (12)
+						124 Clothing (2)
+						125 Coffee and drink preparations (22)
+						126 Cooking oils (3)
+						127 Filled pasta (2)
+						128 Fragrances (6)
+						129 (selected) Pasta (22)
+						130 Pasta sauces (6)
+						131 Personal care (21)
+						132 Pesto and sauces (18)
+						133 Spaghetti (1)
+						134 Sweet spreads (6)
+						135 Sweets (8)
+						136 Sweets and confectionery (2)
+						137 Tinned fish (19)
+						138 Tinned meat (1)
+			4918 container Set store category
+				4919 heading Set store category, Value: 2, ID: bulk-store-category-title
+					4920 text Set store category
+				4921 button Close
+				4922 container
+					4923 text Choose an existing shelf or type a new name for  22  selected products. It appears in the storefront when an assigned product is listed there, including sold-out listings for Pasabuy.
+				4924 container
+					4925 text Store category
+					4926 combo box (settable) Store category, Value: Pasta
+				4927 text Stock, prices and publication stay as they are. Each product saves separately; if one cannot be confirmed, the batch stops.
+				4928 container Selected category assignments
+					4929 text Pagani Prosciutto
+					4930 container
+						4931 text K2-SKU-001152  ·  Pasta  →  Pasta
+					4932 text Montegrappa Tortellini Prosciutto
+					4933 container
+						4934 text K2-SKU-001132  ·  Pasta  →  Pasta
+					4935 text Pagani Formaggi
+					4936 container
+						4937 text K2-SKU-001149  ·  Pasta  →  Pasta
+					4938 text Pagani Prosciutto
+					4939 container
+						4940 text K2-SKU-001150  ·  Pasta  →  Pasta
+					4941 text Pagani Prosciutto
+					4942 container
+						4943 text K2-SKU-001151  ·  Pasta  →  Pasta
+					4944 text Montegrappa Tortellini Carne
+					4945 container
+						4946 text K2-SKU-001131  ·  Pasta  →  Pasta
+					4947 text Montegrappa Carne
+					4948 container
+						4949 text K2-SKU-001129  ·  Pasta  →  Pasta
+					4950 text Giglio Lasagne Pasta 500 g
+					4951 container
+						4952 text K2-SKU-001066  ·  Pasta  →  Pasta
+					4953 text Italiamo 500 g Di Gragnano Linguine
+					4954 container
+						4955 text K2-SKU-001077  ·  Pasta  →  Pasta
+					4956 text Italiamo 500 g Di Gragnano Spaghetti
+					4957 container
+						4958 text K2-SKU-001078  ·  Pasta  →  Pasta
+					4959 text Combino Spaghetti Integralli 500 g
+					4960 container
+						4961 text K2-SKU-001037  ·  Pasta  →  Pasta
+					4962 text Divella Spaghetti Pasta 1 kg
+					4963 container
+						4964 text K2-SKU-001045  ·  Pasta  →  Pasta
+					4965 text Borella Prosciutto
+					4966 container
+						4967 text K2-SKU-001020  ·  Pasta  →  Pasta
+					4968 text Borella Prosciutto
+					4969 container
+						4970 text K2-SKU-001019  ·  Pasta  →  Pasta
+					4971 text Delverde Lasagne Pasta 500 g
+					4972 container
+						4973 text K2-SKU-001043  ·  Pasta  →  Pasta
+					4974 text Combino Spaghetti Bio Di Semola Di Grano 500 g
+					4975 container
+						4976 text K2-SKU-001035  ·  Pasta  →  Pasta
+					4977 text Combino Spaghetti No. 5 500 g
+					4978 container
+						4979 text K2-SKU-001036  ·  Pasta  →  Pasta
+					4980 text Borella Prosciutto
+					4981 container
+						4982 text K2-SKU-001021  ·  Pasta  →  Pasta
+					4983 text Combino Farfalle 500 g
+					4984 container
+						4985 text K2-SKU-001034  ·  Pasta  →  Pasta
+					4986 text Borella Carne
+					4987 container
+						4988 text K2-SKU-001017  ·  Pasta  →  Pasta
+					4989 text Borella Carne
+					4990 container
+						4991 text K2-SKU-001018  ·  Pasta  →  Pasta
+					4992 text Donna Chiara Fusilli 1 kg
+					4993 container
+						4994 text K2-SKU-001046  ·  Pasta  →  Pasta
+				4995 container
+					4996 text 0  saved ·  0  already assigned ·  22  remaining
+				4997 button Apply to 22 products
+					4998 text Apply to
+					4999 text 22
+					5000 text products
+			139 container
+				140 checkbox (settable, integer) Description: 22 selected, Value: 1
+				141 text 22 selected
+			4905 button Set store category
+			4906 button Clear
+			367 container
+				368 checkbox (settable, integer) Description: Select Pagani Prosciutto, Value: 1
+				369 image Pagani Prosciutto
+				370 text K2-SKU-001152 DRAFT
+				371 heading Pagani Prosciutto, Value: 3
+					372 text Pagani Prosciutto
+				373 text STOCK 0 RETAIL SRP ₱ 274
+				374 button Batches (0)
+					375 text Batches (
+					376 text 0
+					377 text )
+				378 button Enrich product specs
+				379 button Website assignment
+				380 container Product status
+					381 checkbox Draft, Help: Invisible to customers, Value: 1
+					382 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					383 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 0
+					384 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					385 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				386 button Delete product, Help: Permanently delete this product
+				387 button Photos
+				388 button Edit, Help: Edit product details
+			1518 container
+				1519 checkbox (settable, integer) Description: Select Montegrappa Tortellini Prosciutto, Value: 1
+				1520 image Montegrappa Tortellini Prosciutto
+				5001 button 200d left
+				1522 text K2-SKU-001132 LIVE
+				1523 heading Montegrappa Tortellini Prosciutto, Value: 3
+					1524 text Montegrappa Tortellini Prosciutto
+				1525 text STOCK 3 RETAIL SRP ₱ 274 3  PCS IN  1  LOT Owned:  3  pcs LOCATION
+				5002 container Location - HUB-MNL-CENTRAL: 3 pcs
+					5003 text HUB-MNL-CENTRAL 3
+				5004 text CHANNEL
+				5005 container Channel - Unassigned: 3 pcs
+					5006 text Unassigned 3
+				5007 text HOLDER
+				5008 container Holder - CUST-JENNA-MAE-GUERRA: 3 pcs
+					5009 text CUST-JENNA-MAE-GUERRA 3
+				1534 button Batches (1)
+					1535 text Batches (
+					1536 text 1
+					1537 text )
+				1538 button Enrich product specs
+				1539 button Website assignment
+				1540 container Product status
+					1541 checkbox Draft, Help: Invisible to customers, Value: 0
+					1542 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					1543 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					1544 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					1545 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				1546 button Delete product, Help: Permanently delete this product
+				1547 button Photos
+				1548 button Edit, Help: Edit product details
+			1712 container
+				1713 checkbox (settable, integer) Description: Select Pagani Formaggi, Value: 1
+				1714 image Pagani Formaggi
+				1715 text K2-SKU-001149 DRAFT
+				1716 heading Pagani Formaggi, Value: 3
+					1717 text Pagani Formaggi
+				1718 text STOCK 0 RETAIL SRP ₱ 274
+				1719 button Batches (0)
+					1720 text Batches (
+					1721 text 0
+					1722 text )
+				1723 button Enrich product specs
+				1724 button Website assignment
+				1725 container Product status
+					1726 checkbox Draft, Help: Invisible to customers, Value: 1
+					1727 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					1728 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 0
+					1729 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					1730 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				1731 button Delete product, Help: Permanently delete this product
+				1732 button Photos
+				1733 button Edit, Help: Edit product details
+			1963 container
+				1964 checkbox (settable, integer) Description: Select Pagani Prosciutto, Value: 1
+				1965 image Pagani Prosciutto
+				1966 text K2-SKU-001150 DRAFT
+				1967 heading Pagani Prosciutto, Value: 3
+					1968 text Pagani Prosciutto
+				1969 text STOCK 0 RETAIL SRP ₱ 274
+				1970 button Batches (0)
+					1971 text Batches (
+					1972 text 0
+					1973 text )
+				1974 button Enrich product specs
+				1975 button Website assignment
+				1976 container Product status
+					1977 checkbox Draft, Help: Invisible to customers, Value: 1
+					1978 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					1979 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 0
+					1980 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					1981 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				1982 button Delete product, Help: Permanently delete this product
+				1983 button Photos
+				1984 button Edit, Help: Edit product details
+			1985 container
+				1986 checkbox (settable, integer) Description: Select Pagani Prosciutto, Value: 1
+				1987 image Pagani Prosciutto
+				1988 text K2-SKU-001151 DRAFT
+				1989 heading Pagani Prosciutto, Value: 3
+					1990 text Pagani Prosciutto
+				1991 text STOCK 0 RETAIL SRP ₱ 274
+				1992 button Batches (0)
+					1993 text Batches (
+					1994 text 0
+					1995 text )
+				1996 button Enrich product specs
+				1997 button Website assignment
+				1998 container Product status
+					1999 checkbox Draft, Help: Invisible to customers, Value: 1
+					2000 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					2001 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 0
+					2002 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					2003 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				2004 button Delete product, Help: Permanently delete this product
+				2005 button Photos
+				2006 button Edit, Help: Edit product details
+			2311 container
+				2312 checkbox (settable, integer) Description: Select Montegrappa Tortellini Carne, Value: 1
+				2313 image Montegrappa Tortellini Carne
+				5010 button 214d left
+				2315 text K2-SKU-001131 LIVE
+				2316 heading Montegrappa Tortellini Carne, Value: 3
+					2317 text Montegrappa Tortellini Carne
+				2318 text STOCK 2 RETAIL SRP ₱ 274 2  PCS IN  1  LOT Owned:  2  pcs LOCATION
+				5011 container Location - HUB-MNL-CENTRAL: 2 pcs
+					5012 text HUB-MNL-CENTRAL 2
+				5013 text CHANNEL
+				5014 container Channel - Unassigned: 2 pcs
+					5015 text Unassigned 2
+				5016 text HOLDER
+				5017 container Holder - CUST-JENNA-MAE-GUERRA: 2 pcs
+					5018 text CUST-JENNA-MAE-GUERRA 2
+				2327 button Batches (1)
+					2328 text Batches (
+					2329 text 1
+					2330 text )
+				2331 button Enrich product specs
+				2332 button Website assignment
+				2333 container Product status
+					2334 checkbox Draft, Help: Invisible to customers, Value: 0
+					2335 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					2336 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					2337 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					2338 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				2339 button Delete product, Help: Permanently delete this product
+				2340 button Photos
+				2341 button Edit, Help: Edit product details
+			2408 container
+				2409 checkbox (settable, integer) Description: Select Montegrappa Carne, Value: 1
+				2410 image Montegrappa Carne
+				2411 text K2-SKU-001129 DRAFT
+				2412 heading Montegrappa Carne, Value: 3
+					2413 text Montegrappa Carne
+				2414 text STOCK 0 RETAIL SRP ₱ 0
+				2415 button Batches (0)
+					2416 text Batches (
+					2417 text 0
+					2418 text )
+				2419 button Enrich product specs
+				2420 button Website assignment
+				2421 container Product status
+					2422 checkbox Draft, Help: Invisible to customers, Value: 1
+					2423 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					2424 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 0
+					2425 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					2426 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				2427 button Delete product, Help: Permanently delete this product
+				2428 button Photos
+				2429 button Edit, Help: Edit product details
+			2712 container
+				2713 checkbox (settable, integer) Description: Select Giglio Lasagne Pasta 500 g, Value: 1
+				2714 image Giglio Lasagne Pasta 500 g
+				2715 text K2-SKU-001066 LIVE
+				2716 heading Giglio Lasagne Pasta 500 g, Value: 3
+					2717 text Giglio Lasagne Pasta 500 g
+				2718 text STOCK 0 RETAIL SRP ₱ 349
+				2719 button Batches (0)
+					2720 text Batches (
+					2721 text 0
+					2722 text )
+				2723 button Enrich product specs
+				2724 button Website assignment
+				2725 container Product status
+					2726 checkbox Draft, Help: Invisible to customers, Value: 0
+					2727 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					2728 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					2729 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					2730 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				2731 button Delete product, Help: Permanently delete this product
+				2732 button Photos
+				2733 button Edit, Help: Edit product details
+			2734 container
+				2735 checkbox (settable, integer) Description: Select Italiamo 500 g Di Gragnano Linguine, Value: 1
+				2736 image Italiamo 500 g Di Gragnano Linguine
+				2737 text K2-SKU-001077 LIVE
+				2738 heading Italiamo 500 g Di Gragnano Linguine, Value: 3
+					2739 text Italiamo 500 g Di Gragnano Linguine
+				2740 text STOCK 0 RETAIL SRP ₱ 249
+				2741 button Batches (0)
+					2742 text Batches (
+					2743 text 0
+					2744 text )
+				2745 button Enrich product specs
+				2746 button Website assignment
+				2747 container Product status
+					2748 checkbox Draft, Help: Invisible to customers, Value: 0
+					2749 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					2750 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					2751 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					2752 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				2753 button Delete product, Help: Permanently delete this product
+				2754 button Photos
+				2755 button Edit, Help: Edit product details
+			3188 container
+				3189 checkbox (settable, integer) Description: Select Italiamo 500 g Di Gragnano Spaghetti, Value: 1
+				3190 image Italiamo 500 g Di Gragnano Spaghetti
+				3191 text K2-SKU-001078 LIVE
+				3192 heading Italiamo 500 g Di Gragnano Spaghetti, Value: 3
+					3193 text Italiamo 500 g Di Gragnano Spaghetti
+				3194 text STOCK 0 RETAIL SRP ₱ 249
+				3195 button Batches (0)
+					3196 text Batches (
+					3197 text 0
+					3198 text )
+				3199 button Enrich product specs
+				3200 button Website assignment
+				3201 container Product status
+					3202 checkbox Draft, Help: Invisible to customers, Value: 0
+					3203 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					3204 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					3205 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					3206 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				3207 button Delete product, Help: Permanently delete this product
+				3208 button Photos
+				3209 button Edit, Help: Edit product details
+			3699 container
+				3700 checkbox (settable, integer) Description: Select Combino Spaghetti Integralli 500 g, Value: 1
+				3701 image Combino Spaghetti Integralli 500 g
+				3702 text K2-SKU-001037 DRAFT
+				3703 heading Combino Spaghetti Integralli 500 g, Value: 3
+					3704 text Combino Spaghetti Integralli 500 g
+				3705 text STOCK 0 RETAIL SRP ₱ 0
+				3706 button Batches (0)
+					3707 text Batches (
+					3708 text 0
+					3709 text )
+				3710 button Enrich product specs
+				3711 button Website assignment
+				3712 container Product status
+					3713 checkbox Draft, Help: Invisible to customers, Value: 1
+					3714 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					3715 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 0
+					3716 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					3717 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				3718 button Delete product, Help: Permanently delete this product
+				3719 button Photos
+				3720 button Edit, Help: Edit product details
+			3743 container
+				3744 checkbox (settable, integer) Description: Select Divella Spaghetti Pasta 1 kg, Value: 1
+				3745 image Divella Spaghetti Pasta 1 kg
+				3746 text K2-SKU-001045 LIVE
+				3747 heading Divella Spaghetti Pasta 1 kg, Value: 3
+					3748 text Divella Spaghetti Pasta 1 kg
+				3749 text STOCK 0 RETAIL SRP ₱ 299
+				3750 button Batches (0)
+					3751 text Batches (
+					3752 text 0
+					3753 text )
+				3754 button Enrich product specs
+				3755 button Website assignment
+				3756 container Product status
+					3757 checkbox Draft, Help: Invisible to customers, Value: 0
+					3758 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					3759 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					3760 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					3761 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				3762 button Delete product, Help: Permanently delete this product
+				3763 button Photos
+				3764 button Edit, Help: Edit product details
+			3787 container
+				3788 checkbox (settable, integer) Description: Select Borella Prosciutto, Value: 1
+				3789 image Borella Prosciutto
+				5019 button 104d left
+				3791 text K2-SKU-001020 LIVE
+				3792 heading Borella Prosciutto, Value: 3
+					3793 text Borella Prosciutto
+				3794 text STOCK 42 RETAIL SRP ₱ 259 42  PCS IN  1  LOT Owned:  42  pcs LOCATION
+				5020 container Location - HUB-MNL-CENTRAL: 42 pcs
+					5021 text HUB-MNL-CENTRAL 42
+				5022 text CHANNEL
+				5023 container Channel - Unassigned: 42 pcs
+					5024 text Unassigned 42
+				5025 text HOLDER
+				5026 container Holder - CUST-JENNA-MAE-GUERRA: 42 pcs
+					5027 text CUST-JENNA-MAE-GUERRA 42
+				3803 button Batches (1)
+					3804 text Batches (
+					3805 text 1
+					3806 text )
+				3807 button Enrich product specs
+				3808 button Website assignment
+				3809 container Product status
+					3810 checkbox Draft, Help: Invisible to customers, Value: 0
+					3811 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					3812 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					3813 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					3814 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				3815 button Delete product, Help: Permanently delete this product
+				3816 button Photos
+				3817 button Edit, Help: Edit product details
+			3849 container
+				3850 checkbox (settable, integer) Description: Select Borella Prosciutto, Value: 1
+				3851 image Borella Prosciutto
+				3852 text K2-SKU-001019 DRAFT
+				3853 heading Borella Prosciutto, Value: 3
+					3854 text Borella Prosciutto
+				3855 text STOCK 0 RETAIL SRP ₱ 259
+				3856 button Batches (0)
+					3857 text Batches (
+					3858 text 0
+					3859 text )
+				3860 button Enrich product specs
+				3861 button Website assignment
+				3862 container Product status
+					3863 checkbox Draft, Help: Invisible to customers, Value: 1
+					3864 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					3865 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 0
+					3866 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					3867 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				3868 button Delete product, Help: Permanently delete this product
+				3869 button Photos
+				3870 button Edit, Help: Edit product details
+			3981 container
+				3982 checkbox (settable, integer) Description: Select Delverde Lasagne Pasta 500 g, Value: 1
+				3983 image Delverde Lasagne Pasta 500 g
+				3984 text K2-SKU-001043 DRAFT
+				3985 heading Delverde Lasagne Pasta 500 g, Value: 3
+					3986 text Delverde Lasagne Pasta 500 g
+				3987 text STOCK 0 RETAIL SRP ₱ 345
+				3988 button Batches (0)
+					3989 text Batches (
+					3990 text 0
+					3991 text )
+				3992 button Enrich product specs
+				3993 button Website assignment
+				3994 container Product status
+					3995 checkbox Draft, Help: Invisible to customers, Value: 1
+					3996 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					3997 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 0
+					3998 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					3999 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				4000 button Delete product, Help: Permanently delete this product
+				4001 button Photos
+				4002 button Edit, Help: Edit product details
+			4047 container
+				4048 checkbox (settable, integer) Description: Select Combino Spaghetti Bio Di Semola Di Grano 500 g, Value: 1
+				4049 image Combino Spaghetti Bio Di Semola Di Grano 500 g
+				4050 text K2-SKU-001035 LIVE
+				4051 heading Combino Spaghetti Bio Di Semola Di Grano 500 g, Value: 3
+					4052 text Combino Spaghetti Bio Di Semola Di Grano 500 g
+				4053 text STOCK 0 RETAIL SRP ₱ 249
+				4054 button Batches (0)
+					4055 text Batches (
+					4056 text 0
+					4057 text )
+				4058 button Enrich product specs
+				4059 button Website assignment
+				4060 container Product status
+					4061 checkbox Draft, Help: Invisible to customers, Value: 0
+					4062 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					4063 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					4064 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					4065 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				4066 button Delete product, Help: Permanently delete this product
+				4067 button Photos
+				4068 button Edit, Help: Edit product details
+			4091 container
+				4092 checkbox (settable, integer) Description: Select Combino Spaghetti No. 5 500 g, Value: 1
+				4093 image Combino Spaghetti No. 5 500 g
+				4094 text K2-SKU-001036 LIVE
+				4095 heading Combino Spaghetti No. 5 500 g, Value: 3
+					4096 text Combino Spaghetti No. 5 500 g
+				4097 text STOCK 0 RETAIL SRP ₱ 199
+				4098 button Batches (0)
+					4099 text Batches (
+					4100 text 0
+					4101 text )
+				4102 button Enrich product specs
+				4103 button Website assignment
+				4104 container Product status
+					4105 checkbox Draft, Help: Invisible to customers, Value: 0
+					4106 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					4107 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					4108 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					4109 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				4110 button Delete product, Help: Permanently delete this product
+				4111 button Photos
+				4112 button Edit, Help: Edit product details
+			4113 container
+				4114 checkbox (settable, integer) Description: Select Borella Prosciutto, Value: 1
+				4115 image Borella Prosciutto
+				5028 button 104d left
+				4117 text K2-SKU-001021 LIVE
+				4118 heading Borella Prosciutto, Value: 3
+					4119 text Borella Prosciutto
+				4120 text STOCK 22 RETAIL SRP ₱ 259 22  PCS IN  1  LOT Owned:  22  pcs LOCATION
+				5029 container Location - HUB-MNL-CENTRAL: 22 pcs
+					5030 text HUB-MNL-CENTRAL 22
+				5031 text CHANNEL
+				5032 container Channel - Unassigned: 22 pcs
+					5033 text Unassigned 22
+				5034 text HOLDER
+				5035 container Holder - CUST-JENNA-MAE-GUERRA: 22 pcs
+					5036 text CUST-JENNA-MAE-GUERRA 22
+				4129 button Batches (1)
+					4130 text Batches (
+					4131 text 1
+					4132 text )
+				4133 button Enrich product specs
+				4134 button Website assignment
+				4135 container Product status
+					4136 checkbox Draft, Help: Invisible to customers, Value: 0
+					4137 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					4138 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					4139 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					4140 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				4141 button Delete product, Help: Permanently delete this product
+				4142 button Photos
+				4143 button Edit, Help: Edit product details
+			4369 container
+				4370 checkbox (settable, integer) Description: Select Combino Farfalle 500 g, Value: 1
+				4371 image Combino Farfalle 500 g
+				5037 button 813d left
+				4373 text K2-SKU-001034 LIVE
+				4374 heading Combino Farfalle 500 g, Value: 3
+					4375 text Combino Farfalle 500 g
+				4376 text STOCK 6 RETAIL SRP ₱ 199 6  PCS IN  1  LOT Owned:  6  pcs LOCATION
+				5038 container Location - HUB-MNL-CENTRAL: 6 pcs
+					5039 text HUB-MNL-CENTRAL 6
+				5040 text CHANNEL
+				5041 container Channel - Unassigned: 6 pcs
+					5042 text Unassigned 6
+				5043 text HOLDER
+				5044 container Holder - CUST-JENNA-MAE-GUERRA: 6 pcs
+					5045 text CUST-JENNA-MAE-GUERRA 6
+				4385 button Batches (1)
+					4386 text Batches (
+					4387 text 1
+					4388 text )
+				4389 button Enrich product specs
+				4390 button Website assignment
+				4391 container Product status
+					4392 checkbox Draft, Help: Invisible to customers, Value: 0
+					4393 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					4394 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					4395 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					4396 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				4397 button Delete product, Help: Permanently delete this product
+				4398 button Photos
+				4399 button Edit, Help: Edit product details
+			4444 container
+				4445 checkbox (settable, integer) Description: Select Borella Carne, Value: 1
+				4446 image Borella Carne
+				5046 button 105d left
+				4448 text K2-SKU-001017 LIVE
+				4449 heading Borella Carne, Value: 3
+					4450 text Borella Carne
+				4451 text STOCK 45 RETAIL SRP ₱ 259 45  PCS IN  1  LOT Owned:  45  pcs LOCATION
+				5047 container Location - HUB-MNL-CENTRAL: 45 pcs
+					5048 text HUB-MNL-CENTRAL 45
+				5049 text CHANNEL
+				5050 container Channel - Unassigned: 45 pcs
+					5051 text Unassigned 45
+				5052 text HOLDER
+				5053 container Holder - CUST-JENNA-MAE-GUERRA: 45 pcs
+					5054 text CUST-JENNA-MAE-GUERRA 45
+				4460 button Batches (1)
+					4461 text Batches (
+					4462 text 1
+					4463 text )
+				4464 button Enrich product specs
+				4465 button Website assignment
+				4466 container Product status
+					4467 checkbox Draft, Help: Invisible to customers, Value: 0
+					4468 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					4469 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					4470 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					4471 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				4472 button Delete product, Help: Permanently delete this product
+				4473 button Photos
+				4474 button Edit, Help: Edit product details
+			4497 container
+				4498 checkbox (settable, integer) Description: Select Borella Carne, Value: 1
+				4499 image Borella Carne
+				4500 text K2-SKU-001018 LIVE
+				4501 heading Borella Carne, Value: 3
+					4502 text Borella Carne
+				4503 text STOCK 0 RETAIL SRP ₱ 259
+				4504 button Batches (0)
+					4505 text Batches (
+					4506 text 0
+					4507 text )
+				4508 button Enrich product specs
+				4509 button Website assignment
+				4510 container Product status
+					4511 checkbox Draft, Help: Invisible to customers, Value: 0
+					4512 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					4513 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 1
+					4514 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					4515 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				4516 button Delete product, Help: Permanently delete this product
+				4517 button Photos
+				4518 button Edit, Help: Edit product details
+			4594 container
+				4595 checkbox (settable, integer) Description: Select Donna Chiara Fusilli 1 kg, Value: 1
+				4596 image Donna Chiara Fusilli 1 kg
+				4597 text K2-SKU-001046 DRAFT
+				4598 heading Donna Chiara Fusilli 1 kg, Value: 3
+					4599 text Donna Chiara Fusilli 1 kg
+				4600 text STOCK 0 RETAIL SRP ₱ 299
+				4601 button Batches (0)
+					4602 text Batches (
+					4603 text 0
+					4604 text )
+				4605 button Enrich product specs
+				4606 button Website assignment
+				4607 container Product status
+					4608 checkbox Draft, Help: Invisible to customers, Value: 1
+					4609 checkbox Review, Help: Awaiting an administrator publication decision, Value: 0
+					4610 checkbox Live, Help: In the catalogue, browsable and buyable, Value: 0
+					4611 checkbox Unlisted, Help: Hidden from browse: direct link still works, Value: 0
+					4612 checkbox Discontinued, Help: Permanently removed from sale, with history retained, Value: 0
+				4613 button Delete product, Help: Permanently delete this product
+				4614 button Photos
+				4615 button Edit, Help: Edit product details
+			4907 container
+				4908 text 22  selected
+				4909 button Clear
+				4910 button Set Draft
+				4911 button Set Review
+				4912 button Set Live
+				4913 button Set Unlisted
+				4914 button Set Discontinued
+				4915 button Delete 22
+					4916 text Delete
+					4917 text 22
+		4850 pop up button (collapsed) Description: Open Admin tools, Help: Staff Tools & Margin Planner (drag to move), Secondary Actions: Expand
+
+The focused UI element is 4926 combo box (settable) Store category, Value: Pasta

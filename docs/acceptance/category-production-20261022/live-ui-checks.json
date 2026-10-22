@@ -1,0 +1,117 @@
+{
+  "observedAt": "2026-10-22T07:51:04.689Z",
+  "commit": "297b0ef1de43e0b2fc7e6bf8b63b75f79688caa7",
+  "catalogProducts": 93,
+  "catalogCategories": [
+    "Beverages",
+    "Biscuits and wafers",
+    "Chocolate",
+    "Coffee and drink preparations",
+    "Cooking oils",
+    "Fragrances",
+    "Pasta",
+    "Pasta sauces",
+    "Personal care",
+    "Pesto and sauces",
+    "Spaghetti",
+    "Sweet spreads",
+    "Sweets",
+    "Sweets and confectionery",
+    "Tinned fish"
+  ],
+  "homeCategories": [
+    {
+      "name": "Beverages",
+      "count": 1
+    },
+    {
+      "name": "Biscuits and wafers",
+      "count": 5
+    },
+    {
+      "name": "Chocolate",
+      "count": 10
+    },
+    {
+      "name": "Coffee and drink preparations",
+      "count": 15
+    },
+    {
+      "name": "Cooking oils",
+      "count": 2
+    },
+    {
+      "name": "Fragrances",
+      "count": 6
+    },
+    {
+      "name": "Pasta",
+      "count": 13
+    },
+    {
+      "name": "Pasta sauces",
+      "count": 4
+    },
+    {
+      "name": "Personal care",
+      "count": 6
+    },
+    {
+      "name": "Pesto and sauces",
+      "count": 15
+    },
+    {
+      "name": "Spaghetti",
+      "count": 1
+    },
+    {
+      "name": "Sweet spreads",
+      "count": 4
+    },
+    {
+      "name": "Sweets",
+      "count": 5
+    },
+    {
+      "name": "Sweets and confectionery",
+      "count": 2
+    },
+    {
+      "name": "Tinned fish",
+      "count": 4
+    }
+  ],
+  "footerCategories": [
+    "Beverages",
+    "Biscuits and wafers",
+    "Chocolate",
+    "Coffee and drink preparations",
+    "Cooking oils",
+    "Fragrances",
+    "Pasta",
+    "Pasta sauces",
+    "Personal care",
+    "Pesto and sauces",
+    "Spaghetti",
+    "Sweet spreads",
+    "Sweets",
+    "Sweets and confectionery",
+    "Tinned fish"
+  ],
+  "allThreeMatch": true,
+  "fragranceResults": 6,
+  "fragranceSoldOutRequestControls": 6,
+  "adminSkusLoaded": 196,
+  "adminPastaFilterCount": 22,
+  "bulkPreview": {
+    "selected": 22,
+    "destination": "Pasta",
+    "saved": 0,
+    "remaining": 22,
+    "applyEnabled": true,
+    "closedWithoutApply": true,
+    "selectionCleared": true
+  },
+  "productWrites": false,
+  "ordersSubmitted": false
+}

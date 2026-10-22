@@ -1,6 +1,6 @@
 # Store categories
 
-Owner: MAP-023 / IDEA-20261022-01. Source implementation is locally verified; production release and genuine staff acceptance are separate actions.
+Owner: MAP-023 / IDEA-20261022-01. Source 297b0ef is verified live on the separate Admin and storefront production hosts. Navigation and authenticated filter/select/preview passed. Actual staff category saves and recovery remain separate operational acceptance; no production label assignment was made for release testing.
 
 The store category is the customer-facing shelf saved on each product as `subcategory`. If blank, the storefront uses the canonical category name. Canonical `category_id` remains the authority for operational category policy and family eligibility. A store category edit never changes that ID, stock, lots, pricing, human review, lifecycle, Website assignment or publication.
 
@@ -20,6 +20,6 @@ New category names become reusable through actual product assignment. A name ass
 
 ## Verification and recovery
 
-`npm run test:store-categories` runs pure category/batch checks plus actual-component Chromium journeys against synthetic data. The fresh read-only inventory audit, focused regression results, screenshots and development-gate receipt live in `docs/acceptance/CATEGORY_ALIGNMENT_20261022.md`.
+`npm run test:store-categories` runs pure category/batch checks plus actual-component Chromium journeys against synthetic data. Local focused evidence is in `docs/acceptance/CATEGORY_ALIGNMENT_20261022.md`. Full release qualification, real-host/browser results, before/after screenshots, exact deployment IDs and limits are in `docs/acceptance/CATEGORY_PRODUCTION_RELEASE_20261022.md`. Do not repeat passing release gates for receipt-only updates. Known nonblocking limit: a real shelf literally named `Unassigned` collides with the Inventory filter sentinel; retain its source follow-up in MAP-023.
 
 Source rollback removes only the scoped category resolver, bulk dialog, category wiring/filter, Admin category-name projection and associated tests/configuration. Preserve existing Product Master recovery and all pending original requests. If staff have subsequently applied labels, correct them from fresh current versions through normal Admin; a source rollback does not revert stored labels. No stock, database restore or provider rollback is required by this source change.
