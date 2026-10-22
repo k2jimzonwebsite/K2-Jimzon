@@ -1,9 +1,10 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import BeforeAfterSlider from '../components/BeforeAfterSlider'
 import ProductCard from '../components/ProductCard'
 import ProductPassport from '../components/ProductPassport'
 import ProductKnowledge from '../components/ProductKnowledge'
+import ProductVariationSelector from '../components/ProductVariationSelector'
 import { UNAVAILABLE_TEXT } from '../lib/productKnowledge'
 import { GhostButton, RedButton, StockPill, TrustBadge, Kicker, QuantityStepper } from '../components/ui/bits'
 import { ArrowIcon } from '../components/ui/icons'
@@ -13,20 +14,26 @@ import { productStock } from '../lib/cartInventory'
 import { displayBrand, displayCategory } from '../lib/productIdentity'
 import { applyImageFallback } from '../lib/imageFallback'
 import { formatNetWeight } from '../lib/productNetWeight'
+import { groupFamilyResults } from '../lib/productFamilyPresentation'
 
 export default function MasterProduct() {
-  const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, go, requestPasabuyItem, askStaffAboutProduct, loading } = useStore()
+  const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, go, requestPasabuyItem, askStaffAboutProduct, loading, selectProductVariant } = useStore()
   const [qty, setQty] = useState(1)
   const [currentSlide, setCurrentSlide] = useState(0)
   const reducedMotion = useReducedMotion()
+  const product = getProduct(productId)
+  const familyId = product?.family?.id || null
+  const previousProduct = useRef(null)
 
   useEffect(() => {
-    setQty(1)
-    setCurrentSlide(0)
-    window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' })
-  }, [productId, reducedMotion])
-
-  const product = getProduct(productId)
+    const previous = previousProduct.current
+    if (previous?.sku !== productId) {
+      setQty(1)
+      setCurrentSlide(0)
+      if (!familyId || previous?.familyId !== familyId) window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' })
+    }
+    previousProduct.current = { sku: productId, familyId }
+  }, [productId, familyId, reducedMotion])
 
   if (!product && loading) {
     return (
@@ -215,6 +222,8 @@ export default function MasterProduct() {
               <span>{/^contains\b/i.test(String(product.allergens).trim()) ? product.allergens : `Contains ${product.allergens}`}</span>
             </div>
           )}
+
+          <ProductVariationSelector product={product} onSelect={selectProductVariant} />
 
           {/* Add to Cart Actions - positioned directly after price and safety notices */}
           <div className="z-10 mt-6 shrink-0 rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-5 shadow-sm">
@@ -467,12 +476,13 @@ function RelatedProducts({ currentProduct }) {
 
   const related = useMemo(() => {
     if (!listedProducts || !currentProduct) return []
-    const others = listedProducts.filter(p => (p.sku || p.id) !== (currentProduct.sku || currentProduct.id))
+    const others = listedProducts.filter(p => (p.sku || p.id) !== (currentProduct.sku || currentProduct.id)
+      && (!currentProduct.family || p.family?.id !== currentProduct.family.id))
     const sameSubcategory = others.filter(p => currentProduct.subcategory && p.subcategory === currentProduct.subcategory)
     const sameCategory = others.filter(p => p.category === currentProduct.category && !sameSubcategory.includes(p))
     const rest = others.filter(p => !sameSubcategory.includes(p) && !sameCategory.includes(p))
 
-    return [...sameSubcategory, ...sameCategory, ...rest].slice(0, 4)
+    return groupFamilyResults([...sameSubcategory, ...sameCategory, ...rest]).slice(0, 4)
   }, [listedProducts, currentProduct])
 
   if (!related.length) return null

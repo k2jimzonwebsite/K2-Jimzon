@@ -137,6 +137,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   } = adminInbox
   const [dbProducts, setDbProducts] = useState([])
   const [websiteVisibleSkus, setWebsiteVisibleSkus] = useState(null)
+  const [familyLinks, setFamilyLinks] = useState({})
   const [loading, setLoading] = useState(true)
   // A failed refresh must never read as an empty store, and a retained
   // snapshot must never read as current. `catalogFailed` means no usable
@@ -358,9 +359,17 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
             : (Object.hasOwn(stockAvailable, p.sku) ? (stockAvailable[p.sku] == null ? null : Number(stockAvailable[p.sku])) : null),
         }))
         setDbProducts(merged)
+        // Price/availability can render before optional grouping returns.
+        setLoading(false)
+        setFamilyLinks({})
+        try {
+          const { loadStorefrontProductFamilies } = await import('../lib/productFamilies')
+          setFamilyLinks(await loadStorefrontProductFamilies(supabase, productsResult.data, websiteSkus))
+        } catch { /* Individual products remain the safe presentation. */ }
       } else {
         // The product read itself failed: keep any retained list, but mark
         // it stale — or failed when there is nothing to show.
+        setFamilyLinks({})
         const failed = !hadCatalogRef.current
         setCatalogFailed(failed)
         setCatalogStale(!failed)
@@ -374,6 +383,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     } catch {
       // A failed refresh is not an empty store, and a retained list is not
       // a current one.
+      setFamilyLinks({})
       const failed = !hadCatalogRef.current
       setCatalogFailed(failed)
       setCatalogStale(!failed)
@@ -402,6 +412,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     return dbProducts.map((dbP) => {
       return {
         ...dbP,
+        ...familyLinks[dbP.sku],
         created_at: dbP.created_at || null,
         category: getStoreCategory(dbP),
         sku: dbP.sku,
@@ -443,7 +454,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         status: dbP.status,
       }
     })
-  }, [dbProducts])
+  }, [dbProducts, familyLinks])
 
   const localCatalog = !isSupabaseConfigured && import.meta.env.DEV
   const listedProducts = useMemo(
@@ -528,6 +539,14 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       setView('master_product')
       window.scrollTo(0, 0)
     }, { sync: true, focusSelector: '' })
+  }
+
+  // Same-family SKU changes keep the current controls, focus and scroll.
+  const selectProductVariant = (sku) => {
+    const current = getProduct(productId), target = getProduct(sku)
+    if (!current?.family || !target?.family || current.family.id !== target.family.id || target.sku === current.sku) return
+    syncLocation('master_product', sku)
+    setProductId(sku)
   }
 
   const go = (v, { focusSelector = '' } = {}) => {
@@ -937,6 +956,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     go,
     productId,
     openProduct,
+    selectProductVariant,
     cart,
     addToCart,
     addBundleToCart,

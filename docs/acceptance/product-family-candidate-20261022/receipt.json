@@ -1,0 +1,228 @@
+{
+  "owner": "MAP-023",
+  "idea": "IDEA-20261021-03",
+  "recordedAt": "2026-10-22T15:40:27.695Z",
+  "state": "locally-verified-source-candidate-not-promoted",
+  "branch": "codex/inventory-variations",
+  "base": "a9e369a7a6b7f586f05efaee5ea8d109f64b688b",
+  "productionMutation": false,
+  "migrationReplayed": false,
+  "familyAssigned": false,
+  "fullReleaseGateRun": false,
+  "migrationSha256": "e3ffcaa9b9029cb92d3c071c411f6131c67ba8053a4828f99f53b3f9648bb1cb",
+  "results": {
+    "familyNode": "18/18",
+    "familyBrowser": "23/23",
+    "adjacent": "8/8",
+    "development": 0,
+    "storefrontBuild": 0,
+    "adminBuild": 0
+  },
+  "regressionEvidence": [
+    {
+      "behavior": "authorized selected-SKU and empty-family GET",
+      "before": "2/2 fail:503 instead of200",
+      "after": "2/2 pass with actual authorization/handler and synthetic remote transport"
+    },
+    {
+      "behavior": "new-member lifecycle and Website labels",
+      "before": "missing Live · Website Assigned · published",
+      "after": "focused browser and full final suite pass"
+    },
+    {
+      "behavior": "exact-variant search representative",
+      "before": "Coffee b opens /product/a; full browser20/21",
+      "after": "Coffee b, b and500g each open /product/b; final23/23"
+    }
+  ],
+  "environment": [
+    "Initial restricted browser run refused Vite cache write; unchanged permitted run reached the intended failing assertion.",
+    "No owner-controlled environment loaded; fixture envDir=false; browser/Auth/PostgREST synthetic.",
+    "Fresh source build uses its existing offline indexing fixture; generated noindex/sitemap is not hosted state.",
+    "Native SQL rehearsal not rerun: unchanged installed migration and prior isolated evidence reused; captured verifier fixture included for reproducibility.",
+    "Durable log/fixture text is normalized to LF with trailing whitespace removed for Git; original command outcomes are unchanged. The only post-gate code edit removes one blank EOF line from productVariantOptions.js; node --check verifies syntax."
+  ],
+  "limits": [
+    "No production promotion or real family membership decision.",
+    "No real-host save/retry/cart/order/reservation/FEFO proof for families.",
+    "103 Drafts and factual identity/photo/price/taxonomy/human-review holds remain.",
+    "Dependency sourcemap, color and reduced-motion warnings retained; storefront optional3Dchunk warning passes existing landing budget."
+  ],
+  "files": [
+    {
+      "path": "package.json",
+      "sha256": "d764d50600cd73c73a756460f3a8032bc33376429f5870e8ecb5d600e751a9c5"
+    },
+    {
+      "path": "playwright.config.js",
+      "sha256": "3b637c296074ea49908ac7379c2a61554de266cbc08457ecf8897172d78958c3"
+    },
+    {
+      "path": "scripts/security-surface-policy.mjs",
+      "sha256": "f232f23c20343fb0a0e3fcfbb62b0f3fb96f482392329c73940804596d9d9ceb"
+    },
+    {
+      "path": "server/admin-bff/router.js",
+      "sha256": "34ae671a61dcffc334ee3bc0824cf61aa85f2188b63f7446eb755e5c619032c8"
+    },
+    {
+      "path": "src/components/CartDrawer.jsx",
+      "sha256": "a27b0571703e057d3b9b71eb82f47faab215405cc9e8a089c73cf0d89831ca23"
+    },
+    {
+      "path": "src/components/CatalogGrid.jsx",
+      "sha256": "df4cc82e508e05bf9e0829a4d657d7e316b54671742c3806b9da80af57550aec"
+    },
+    {
+      "path": "src/components/ProductCard.jsx",
+      "sha256": "4edd89cff2daa42db303c17d3176111e74e69bef9e767727a35d69a235557176"
+    },
+    {
+      "path": "src/components/home/Hero.jsx",
+      "sha256": "50979f554024f02db976634762fc0f4d4150433be066928c9da41b55ec6a9fa7"
+    },
+    {
+      "path": "src/components/home/NewArrivals.jsx",
+      "sha256": "5c550f2c64f960c23c5ecf6bf4e823db16c8ffe5b46b0d2667b235c582060c11"
+    },
+    {
+      "path": "src/context/StoreContext.jsx",
+      "sha256": "bbd9175e1d200a86dbc9b28be98bad493cb5cd423c330b127ec20b846744d495"
+    },
+    {
+      "path": "src/services/adminBffService.js",
+      "sha256": "3b8b527f7e27a08f3276be7cb10e89bca822ca6304b7713e7966b4267448a19f"
+    },
+    {
+      "path": "src/views/Checkout.jsx",
+      "sha256": "2409ba2f651e9f7a309752d5288580cfbc4205d4b063a7644eb87629e36a9a18"
+    },
+    {
+      "path": "src/views/MasterProduct.jsx",
+      "sha256": "2eaa6e56895084015a02922b6531dc6390d209d27f1541b04883e7fa20d0c7d4"
+    },
+    {
+      "path": "src/views/admin/InventoryGrid.jsx",
+      "sha256": "9af8dcb656bc4527e32adea04f67f497e1130d49b02961b7f0010f277c543a4c"
+    },
+    {
+      "path": "playwright.product-families.config.js",
+      "sha256": "0f878a1a773d89bd6f95cce562ac344e2420aa4ff90793d9a843210c50bc1b2f"
+    },
+    {
+      "path": "prepared-api/admin/product-families.js",
+      "sha256": "2370d9d272ae874039bc13b6350c5324faab441e68541e50e6639b8a376e71df"
+    },
+    {
+      "path": "scripts/rehearse-product-families.mjs",
+      "sha256": "e3ca0bdf68eb90c368c7153617ff22b53ab1f43521e8e61f0affc321798f7841"
+    },
+    {
+      "path": "server/admin-bff/product-families.js",
+      "sha256": "10ac6ac3973018f669e878d754c746899df5f74a55d58447f7c9e3400990112a"
+    },
+    {
+      "path": "src/components/ProductVariationSelector.jsx",
+      "sha256": "c88d7107d836d5d3da78d0859ed5f3c21760f3ae180b7b03aaa80bc8f69b60a6"
+    },
+    {
+      "path": "src/hooks/useProductFamilyRecovery.js",
+      "sha256": "f9bcc1cc59a117d8584273449d08dba2115de38b3740a857bfd9e8756cda85e2"
+    },
+    {
+      "path": "src/lib/productFamilies.js",
+      "sha256": "7adb15aed92bb2fe3c00fcb40afb2a210bacd0fbc8ff932ba308c40baf8d3539"
+    },
+    {
+      "path": "src/lib/productFamilyPresentation.js",
+      "sha256": "fb48219777a170979c25c8d044a261e576e8e828cb2b8460d71da310dd075646"
+    },
+    {
+      "path": "src/lib/productFamilyRecovery.js",
+      "sha256": "0caeeb34bf1551215b94ee2d94a6737b2f324778241be03e11d4bb6d4320017c"
+    },
+    {
+      "path": "src/lib/productVariantOptions.js",
+      "sha256": "53764805513ac6f55617f95f3d9b000455ff9d8ee5462f5ebefcf228550d6220"
+    },
+    {
+      "path": "src/views/admin/ProductFamilyEditor.jsx",
+      "sha256": "e257c00ab9e03b34b40ecf0137c44673be38bc7c735739b5815d088e35347e9c"
+    },
+    {
+      "path": "supabase/migrations/20261021_product_families.sql",
+      "sha256": "e3ffcaa9b9029cb92d3c071c411f6131c67ba8053a4828f99f53b3f9648bb1cb"
+    },
+    {
+      "path": "tests/fixtures/product-families-vite.config.js",
+      "sha256": "4088af107c6ba9a246c25d62d6e990716a06bd93819a098d985954c5f144178d"
+    },
+    {
+      "path": "tests/fixtures/product-families.html",
+      "sha256": "f5a27d215bdcedecd4c2fb9297aa6aa5dd719110bbebac2da0927fb1b50f9df6"
+    },
+    {
+      "path": "tests/fixtures/product-families.jsx",
+      "sha256": "125165f66de1dbdb462d53eaffd557e5fb88597e4e928bf79956591470db8e9e"
+    },
+    {
+      "path": "tests/product-families-ui.spec.js",
+      "sha256": "73c0713a84484afed20d0e74609550ed4c72aa168acdf2491f054cbb9a13d7fe"
+    },
+    {
+      "path": "tests/product-families.test.mjs",
+      "sha256": "8b6d33f9ea905375e603006b848515128bc04652aeef663c9dabd26d1d94f339"
+    },
+    {
+      "path": "tests/product-family-authorized-read.test.mjs",
+      "sha256": "c4382d0956da468f5110d99bdd371f07b8e55e4b3553192b442a08b3d2f57daa"
+    },
+    {
+      "path": "tests/product-family-boundary.test.mjs",
+      "sha256": "5782c76f55c6669727b69c619a3dfbec6120670ca92fffdcd0d95e56be4e2d70"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-focused-verification.txt",
+      "sha256": "d04a3a49fc515094db17e9f373db53165ab2dfb92cfe994c163532e1227951b1"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-regression-verification.txt",
+      "sha256": "9cce3f457f9914bb1c33e1c6f6276a8ae56b9cc4804ca0c5af36a55a4bbb386f"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-focused-final.txt",
+      "sha256": "7f87c4ff8eef1e8a843d4755025a254e4fd3535a60dbd80f808458b221612eaa"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-adjacent-final.txt",
+      "sha256": "7c12fbe0d3a53dba35aacd18bf8ade0120cf1f94121ee300c383bbf358d5263a"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-development-final.txt",
+      "sha256": "e1d78be31fb6202d208918f435514e58efb35d791d4e3bcd5e4d87d83d6930ab"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-storefront-build.txt",
+      "sha256": "def984d89673a0c1c7ad349b18cc97004f44d31c3ea57d2440f31a5ba5722651"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-admin-build.txt",
+      "sha256": "c7b24706de354af386e4535ca8c86ac87fd0a658ffd2871f98bf969d0894242f"
+    },
+    {
+      "path": "docs/acceptance/product-knowledge-install-20261021/live-function-metadata.json",
+      "sha256": "945206cb1e4822eb7a3f4fdac518ad216355d77dd38d2b2e226086fe6ac3974d"
+    }
+  ],
+  "review": {
+    "verdict": "approved",
+    "critical": 0,
+    "important": 0,
+    "scope": "independent bounded actual candidate source review; three findings addressed;18Node/23browser final log verified",
+    "source": "family_integration_review",
+    "hostedAcceptance": false
+  },
+  "candidateRoot": "C:\\Users\\jerze\\.codex\\worktrees\\inventory-variations\\K2 JImzon"
+}

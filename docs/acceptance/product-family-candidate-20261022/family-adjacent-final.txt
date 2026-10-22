@@ -1,0 +1,16 @@
+✔ saved Product Master actor mismatch refuses before command RPC (47.3847ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (9.7563ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (12.6494ms)
+✔ existing clients without actor header retain current authenticated actor behavior (3.3344ms)
+✔ Website has its own durable actor-scoped original request recovery (1.3511ms)
+✔ Website literal body and key survive reload and cannot be replaced (2.3573ms)
+✔ corrupt Website records remain untouched and invalid bodies never persist (0.9397ms)
+✔ existing unassigned Website listing keeps a real version; only absent row has null identity (0.3309ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1026.1919

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useStore } from '../context/StoreContext'
+import { variantSummary } from '../lib/productFamilyPresentation'
 import { productStock } from '../lib/cartInventory'
 import { peso } from '../data/products'
 import ProductVisual from './ProductVisual'
@@ -171,7 +172,7 @@ function CartLine({ line }) {
       <ProductVisual product={product} className="h-16 w-16 shrink-0 rounded-md border border-[var(--store-surface-border)]" pad="p-1" />
       <div className="min-w-0 flex-1">
         <p className="break-words font-sans text-base font-semibold leading-snug text-navy">{product.name}</p>
-        <p className="mt-0.5 text-xs text-navy-soft">{product.size}</p>
+        <p className="mt-0.5 break-words text-xs text-navy-soft">{variantSummary(product) ? `${variantSummary(product)} · ${product.sku}` : product.size}</p>
         <div className="mt-2 flex items-center justify-between">
           {pendingCheckout ? (
             <span className="text-xs font-semibold text-navy-soft">Held for your pending order request</span>

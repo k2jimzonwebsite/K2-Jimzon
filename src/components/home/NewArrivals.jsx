@@ -6,13 +6,14 @@ import ProductCard from '../ProductCard'
 import ProductVisual from '../ProductVisual'
 import { ArrowIcon } from '../ui/icons'
 import { peso } from '../../data/products'
+import { groupFamilyResults, familyPriceRange } from '../../lib/productFamilyPresentation'
 
 export default function NewArrivals() {
   const { listedProducts: products, loading, catalogStale, catalogFailed, openProduct, isWholesale, go } = useStore()
   // Recency is derived, not asserted: newest catalog additions first, with
   // undated rows keeping their catalog order.
-  const arrivals = useMemo(() => [...(products || [])]
-    .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+  const arrivals = useMemo(() => groupFamilyResults([...(products || [])]
+    .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)))
     .slice(0, 4), [products])
   const [featuredIndex, setFeaturedIndex] = useState(0)
   const reducedMotion = useReducedMotion()
@@ -76,6 +77,9 @@ export default function NewArrivals() {
                 const isSelected = idx === featuredIndex
                 const price = isWholesale ? item.wholesale_price : item.srp
                 const stock = Number(item.stock ?? item.stock_available ?? 0)
+                const multiple = item.family?.members.length > 1
+                const range = multiple ? familyPriceRange(item, products, isWholesale) : null
+                const priceLabel = multiple ? range ? `${range.min === range.max ? '' : 'From '}${peso(range.min)}` : 'Choose an option' : peso(price)
 
                 return (
                   <div
@@ -96,13 +100,13 @@ export default function NewArrivals() {
                           {item.category || 'Import'}
                         </p>
                         <h4 className="font-serif text-sm font-semibold text-navy group-hover:text-crimson truncate">
-                          {item.name}
+                          {multiple ? item.family.name : item.name}
                         </h4>
                         <div className="mt-1 flex items-center gap-2">
-                          <span className="font-bold text-xs text-crimson tabular">{peso(price)}</span>
+                          <span className="font-bold text-xs text-crimson tabular">{priceLabel}</span>
                           <span className="text-[10px] text-navy-faint">·</span>
                           <span className={`text-[10px] font-semibold ${stock > 0 ? 'text-forest' : 'text-navy-faint'}`}>
-                            {stock > 0 ? `${stock} in Manila` : 'Pasabuy order'}
+                            {multiple ? `${item.family.members.length} options` : stock > 0 ? `${stock} in Manila` : 'Pasabuy order'}
                           </span>
                         </div>
                       </div>

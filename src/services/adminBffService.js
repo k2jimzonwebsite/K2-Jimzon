@@ -2,6 +2,7 @@ import { fetchReadWithRetry, fetchWithTimeout, isRequestTimeoutError } from '../
 import { referenceRecoveryKey, validateReferencePayloadText } from '../lib/referenceCommandRecovery.js'
 import { productMasterRecoveryKey, validateProductMasterPayloadText } from '../lib/productMasterCommandRecovery.js'
 import { websiteAssignmentRecovery, validateWebsiteAssignmentPayloadText } from '../lib/websiteAssignmentRecovery.js'
+import { productFamilyRecovery, validateFamilyPayloadText } from '../lib/productFamilyRecovery.js'
 
 export function adminBffEnabled() {
   return String(import.meta.env.VITE_ADMIN_BFF_ENABLED || '').toLowerCase() === 'true'
@@ -90,6 +91,12 @@ const ERROR_MESSAGES = {
   OVERVIEW_UNAVAILABLE: 'Operational analytics are temporarily unavailable.',
   PRODUCTS_UNAVAILABLE: 'Product and stock records are temporarily unavailable.',
   PRODUCT_ADMIN_REQUIRED: 'Only an administrator can change product-master records.',
+  FAMILY_INVALID: 'Review the mother product, variation labels and unique SKU combinations. Fill every value and remove unused dimensions.',
+  FAMILY_UNAVAILABLE: 'Product variations are unavailable. Keep any pending request; the grouping dependency may need installation.',
+  FAMILY_VERSION_CONFLICT: 'This mother product changed. Review the latest grouping before making a new decision.',
+  FAMILY_MEMBERSHIP_CONFLICT: 'A selected SKU belongs to another mother product. Review that grouping first.',
+  FAMILY_MIXED: 'Select products from only one mother product at a time.',
+  FAMILY_TAXONOMY: 'Grouped products must have matching canonical brand and category. Review membership before saving.',
   PRODUCT_ACTOR_CHANGED: 'The original staff account must resume this saved product decision. Keep it and sign in with that account.',
   PRODUCT_COMMAND_INVALID: 'Review the product details and enter a specific reason before saving.',
   PRODUCT_COMMAND_UNAVAILABLE: 'The product change could not be recorded safely. Refresh and try again.',
@@ -837,6 +844,21 @@ export function getAdminProcurementBff(signal) {
 
 export function getAdminProductMasterBff(sku, signal) {
   return adminRequest(`/api/admin/product-master?sku=${encodeURIComponent(sku)}`, { signal })
+}
+
+export function getAdminProductFamiliesBff(skus = [], familyId = null, signal) {
+  const query = new URLSearchParams()
+  if (familyId) query.set('familyId', familyId)
+  if (skus.length) query.set('skus', skus.join(','))
+  return adminRequest(`/api/admin/product-families?${query}`, { signal })
+}
+
+export function sendSavedProductFamilyBff(payloadText, idempotencyKey, expectedActorId) {
+  try {
+    validateFamilyPayloadText(payloadText); productFamilyRecovery.key(expectedActorId)
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idempotencyKey)) throw Error()
+  } catch { return Promise.resolve({ ok: false, code: 'FAMILY_INVALID', error: ERROR_MESSAGES.FAMILY_INVALID }) }
+  return adminRequest('/api/admin/product-families', { method: 'POST', bodyText: payloadText, expectedActorId, csrf: true, idempotencyKey })
 }
 
 export function commandAdminProductMasterBff(action, payload, idempotencyKey = crypto.randomUUID()) {

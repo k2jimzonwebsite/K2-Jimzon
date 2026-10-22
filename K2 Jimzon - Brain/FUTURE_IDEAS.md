@@ -1,3 +1,7 @@
+## IDEA-20261021-03 — Mother product with selectable weight, flavour and real variants
+
+22 October source-candidate outcome: ACCEPT/MERGE remains owned only by MAP-023. The owner selected linking existing SKUs and included flavours on21October. Keep separate identities, prices, stock, media, Knowledge, publication and order history. Source is prepared on `codex/inventory-variations` against production main without unrelated features. Local checks and reproduced defects are recorded in docs/acceptance/PRODUCT_FAMILY_CANDIDATE_20261022.md. The separately approved exact migration was installed once; no schema replay, real assignment or main promotion occurred in this candidate work. This decision register is not a second backlog.
+
 ## IDEA-20261022-01 — Inventory-aligned storefront categories and bulk staff assignment
 
 22 October production outcome: ACCEPT/MERGE remains under MAP-023. Owner-authorized source 297b0ef is pushed to main and both separate production artifacts are READY. Genuine browser checks verify 15 shared shelves/93 listings, sold-out Pasabuy and signed-in 196-SKU Admin bulk preview of 22 products without applying. No product/provider write. Release qualification, exact deployment IDs, limitations and rollback: docs/acceptance/CATEGORY_PRODUCTION_RELEASE_20261022.md. Completed release actions are removed; held listings, actual staff saves/recovery and the nonblocking Unassigned filter sentinel remain in MAP-023. Older local-only outcomes below are historical.

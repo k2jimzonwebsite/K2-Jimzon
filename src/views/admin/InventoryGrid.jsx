@@ -20,6 +20,8 @@ import { applyImageFallback } from '../../lib/imageFallback'
 import useProductMasterRecovery from '../../hooks/useProductMasterRecovery'
 import ProductMasterRecovery, { PendingProductDecision } from './ProductMasterRecovery'
 import BulkStoreCategoryDialog from './BulkStoreCategoryDialog'
+import useProductFamilyRecovery from '../../hooks/useProductFamilyRecovery'
+import ProductFamilyEditor, { PendingProductFamilyDecision } from './ProductFamilyEditor'
 import { getStoreCategory, storeCategoryEntries } from '../../lib/storeCategories'
 import useWebsiteAssignmentRecovery from '../../hooks/useWebsiteAssignmentRecovery'
 import WebsiteAssignmentDialog,{PendingWebsiteDecision} from './WebsiteAssignmentDialog'
@@ -249,6 +251,8 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   const [enrichProduct, setEnrichProduct] = useState(null)
   const [selected, setSelected] = useState(() => new Set())
   const [showStoreCategories, setShowStoreCategories] = useState(false)
+  const [showFamilyEditor, setShowFamilyEditor] = useState(false)
+  const familyRecovery = useProductFamilyRecovery({ actorId, enabled: secure, canManageProducts })
   const [categoryFilter, setCategoryFilter] = useState('All')
   const [deleteTargets, setDeleteTargets] = useState(null)
   const [statusBusy, setStatusBusy] = useState(null)
@@ -712,6 +716,8 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
       {secure && actorId && <PendingReferenceCreation actorId={actorId} onReview={setReferenceKind} />}
       {secure && <PendingProductDecision recovery={recovery} onReview={() => setShowProductRecovery(true)} />}
       {secure&&<PendingWebsiteDecision recovery={websiteRecovery} onReview={setWebsiteSku}/>}
+      {secure && <PendingProductFamilyDecision recovery={familyRecovery} onReview={() => setShowFamilyEditor(true)} />}
+      {secure && showFamilyEditor && <ProductFamilyEditor key={actorId} selectedSkus={[...selected]} actorId={actorId} canManageProducts={canManageProducts} recovery={familyRecovery} onClose={() => setShowFamilyEditor(false)} onSaved={() => { flash('Product variations recorded.'); void fetchProducts() }} />}
       {secure&&websiteSku&&<WebsiteAssignmentDialog key={`${actorId}:${websiteSku}:${canManageProducts}`} sku={websiteSku} actorId={actorId} canManageProducts={canManageProducts} recovery={websiteRecovery} onClose={()=>setWebsiteSku(null)}/>}
       {secure && showProductRecovery && <ProductMasterRecovery recovery={recovery} canManageProducts={canManageProducts}
         onNotApplied={(product, taxonomyReview) => {
@@ -724,7 +730,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
           await fetchProducts(); flash(`${sku} decision was recorded. Current product facts were refreshed.`)
         }} />}
       {visibleProducts.length > 0 && (
-        <div className="mb-3 flex items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2">
+        <div className="mb-3 flex flex-wrap items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2">
           <label className="flex items-center gap-2.5 cursor-pointer select-none min-h-11">
             <input
               type="checkbox"
@@ -740,6 +746,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
           {selected.size > 0 && (
             <>
             {secure && canManageProducts && <button type="button" className={secondaryButton} disabled={recovery.working || !!recovery.pending || recovery.storageBlocked} onClick={() => setShowStoreCategories(true)}>Set store category</button>}
+            {secure && canManageProducts && <button type="button" className={secondaryButton} disabled={selected.size > 100 || familyRecovery.working || !!familyRecovery.pending || familyRecovery.storageBlocked} onClick={() => setShowFamilyEditor(true)}>Manage variations</button>}
             <button onClick={clearSelection} className="ml-auto text-xs font-semibold text-white/50 hover:text-white transition-colors min-h-11 px-2">
               Clear
             </button>

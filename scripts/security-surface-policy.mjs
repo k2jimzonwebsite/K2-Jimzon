@@ -1,5 +1,7 @@
 export const EXPECTED_ANON_FUNCTIONS = Object.freeze([
   'public.get_public_product_stock()',
+  // Explicitly eligible published Website variants only; no stock or write authority.
+  'public.read_storefront_product_families_v1(text[])',
   'public.read_delivery_pilot_localities_v1()',
   'public.consume_admin_preauth_rate_v1(text,bigint,uuid,text,text,text)',
   'public.consume_storefront_customer_auth_rate_v1(text,bigint,uuid,text,text,text)',
