@@ -1,6 +1,7 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useStore } from '../context/StoreContext'
+import { variantSummary } from '../lib/productFamilyPresentation'
 import { CustomerAccountContext } from '../context/customerAccountContextValue'
 import { peso } from '../data/products'
 import ProductVisual from '../components/ProductVisual'
@@ -243,6 +244,7 @@ export default function Checkout() {
                 <ProductVisual product={product} className="h-12 w-12 shrink-0 rounded-md border border-line" pad="p-1" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-serif text-base font-medium">{product.name}</p>
+                  {variantSummary(product) && <p className="break-words text-xs text-navy-soft">{variantSummary(product)} · {product.sku}</p>}
                   <p className="text-sm text-navy-soft">Qty {qty} · {peso(unit)} each</p>
                 </div>
                 <span className="text-base font-semibold tabular">{peso(unit * qty)}</span>

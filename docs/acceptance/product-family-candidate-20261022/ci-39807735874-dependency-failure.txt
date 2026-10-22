@@ -1,0 +1,52 @@
+2026-10-22T15:45:36.0515807Z
+2026-10-22T15:45:36.0523617Z added 146 packages, and audited 147 packages in 4s
+2026-10-22T15:45:36.0523986Z
+2026-10-22T15:45:36.0524290Z 19 packages are looking for funding
+2026-10-22T15:45:36.0524761Z   run `npm fund` for details
+2026-10-22T15:45:36.0617387Z
+2026-10-22T15:45:36.0618013Z 1 high severity vulnerability
+2026-10-22T15:45:36.0618399Z
+2026-10-22T15:45:36.0618623Z To address all issues, run:
+2026-10-22T15:45:36.0619289Z   npm audit fix
+2026-10-22T15:45:36.0619562Z
+2026-10-22T15:45:36.0619760Z Run `npm audit` for details.
+2026-10-22T15:45:36.0628836Z npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+2026-10-22T15:45:36.0630187Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+2026-10-22T15:45:36.0630945Z npm warn install-scripts
+2026-10-22T15:45:36.0631962Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+2026-10-22T15:45:36.1504201Z ##[group]Run npm run security:dependency-audit && npm run security:dependency-policy
+2026-10-22T15:45:36.1504847Z [36;1mnpm run security:dependency-audit && npm run security:dependency-policy[0m
+2026-10-22T15:45:36.1564372Z shell: /usr/bin/bash -e {0}
+2026-10-22T15:45:36.1564650Z ##[endgroup]
+2026-10-22T15:45:36.2648511Z
+2026-10-22T15:45:36.2649563Z > k2-jimzon-prototype@0.1.0 security:dependency-audit
+2026-10-22T15:45:36.2650271Z > npm audit --audit-level=low
+2026-10-22T15:45:36.2650599Z
+2026-10-22T15:45:36.8353752Z # npm audit report
+2026-10-22T15:45:36.8354071Z
+2026-10-22T15:45:36.8354286Z vite  8.2.0 - 8.2.2
+2026-10-22T15:45:36.8354627Z Severity: high
+2026-10-22T15:45:36.8355541Z launch-editor: escapeCmdArgs() omits % escaping on Windows - https://github.com/advisories/GHSA-698v-4r3x-3vcv
+2026-10-22T15:45:36.8357172Z launch-editor: Editor CLI flag misinterpretation causing arbitrary command execution for some editors - https://github.com/advisories/GHSA-r825-w8mm-5pxw
+2026-10-22T15:45:36.8358944Z launch-editor: `fs.existsSync()` existence check can be bypassed on Windows - https://github.com/advisories/GHSA-587h-7wmj-h5pm
+2026-10-22T15:45:36.8360645Z Vite: Cross origin script execution through Vite custom middleware - https://github.com/advisories/GHSA-9jrq-w75r-8gcw
+2026-10-22T15:45:36.8362329Z Vite: Files outside `server.fs.allow` could be served when project paths match system paths on non-Windows machine - https://github.com/advisories/GHSA-rq7h-c2jc-7f22
+2026-10-22T15:45:36.8364570Z Vite: First 4 bytes of files outside of `server.fs` setting is exposed by `?vite-wasm-instance` - https://github.com/advisories/GHSA-vfpm-58rq-9qcg
+2026-10-22T15:45:36.8365595Z fix available via `npm audit fix`
+2026-10-22T15:45:36.8366054Z node_modules/vite
+2026-10-22T15:45:36.8366265Z
+2026-10-22T15:45:36.8366470Z 1 high severity vulnerability
+2026-10-22T15:45:36.8366731Z
+2026-10-22T15:45:36.8366917Z To address all issues, run:
+2026-10-22T15:45:36.8367328Z   npm audit fix
+2026-10-22T15:45:36.8604320Z ##[error]Process completed with exit code 1.
+2026-10-22T15:45:36.8731149Z ##[group]Run actions/upload-artifact@v4
+2026-10-22T15:45:36.8731459Z with:
+2026-10-22T15:45:36.8731682Z   name: playwright-evidence
+2026-10-22T15:45:36.8731973Z   path: playwright-report/
+2026-10-22T15:45:36.8732287Z   if-no-files-found: ignore
+2026-10-22T15:45:36.8732533Z   retention-days: 7
+2026-10-22T15:45:36.8732753Z   compression-level: 6
+2026-10-22T15:45:36.8732978Z   overwrite: false
+2026-10-22T15:45:36.8733232Z   include-hidden-files: false
+2026-10-22T15:45:36.8733485Z ##[endgroup]

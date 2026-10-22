@@ -4,6 +4,7 @@ import { RedButton, GhostButton, Kicker } from '../ui/bits'
 import { ArrowIcon, CheckIcon, PlaneIcon, ShieldIcon, GridIcon } from '../ui/icons'
 import FlightMap from './FlightMap'
 import { peso } from '../../data/products'
+import { groupFamilyResults, familyPriceRange } from '../../lib/productFamilyPresentation'
 import './Hero.css'
 
 const reveal = {
@@ -52,13 +53,17 @@ function Hero() {
           <div className="hero-collection" aria-label="Explore the collection" aria-busy={loading}>
             <p className="hero-collection-heading">A little Italy, for your everyday.</p>
             <div className="hero-collection-shelf">
-              {!loading && listedProducts.slice(0, 3).map(product => (
+              {!loading && groupFamilyResults(listedProducts).slice(0, 3).map(product => {
+                const multiple = product.family?.members.length > 1
+                const range = multiple ? familyPriceRange(product, listedProducts, isWholesale) : null
+                const priceLabel = multiple ? range ? `${range.min === range.max ? '' : 'From '}${peso(range.min)}` : 'Choose an option' : peso(isWholesale ? product.wholesale_price : product.srp)
+                return (
                 <button key={product.sku} className="hero-collection-item" onClick={() => openProduct(product.sku)}>
                   <img className="hero-collection-image" src={product.img || '/images/placeholder.svg'} alt="" onError={event => { if (!event.currentTarget.src.endsWith('/images/placeholder.svg')) event.currentTarget.src = '/images/placeholder.svg' }} />
-                  <span className="hero-collection-name">{product.name}</span>
-                  <span className="hero-collection-price">{peso(isWholesale ? product.wholesale_price : product.srp)} <ArrowIcon size={14} /></span>
+                  <span className="hero-collection-name">{multiple ? product.family.name : product.name}</span>
+                  <span className="hero-collection-price">{priceLabel} <ArrowIcon size={14} /></span>
                 </button>
-              ))}
+              )})}
               {(loading || !listedProducts.length) && <p className="hero-collection-empty">{loading ? 'Loading the collection…' : 'Explore the collection or request a favorite from Italy.'}</p>}
             </div>
           </div>

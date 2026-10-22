@@ -1,0 +1,156 @@
+
+> k2-jimzon-prototype@0.1.0 test:product-families
+> node --test tests/product-families.test.mjs tests/product-family-boundary.test.mjs tests/product-family-authorized-read.test.mjs && playwright test --config=playwright.product-families.config.js
+
+✔ shows only dimensions with multiple actual values, and supports another real dimension (7.5106ms)
+✔ single visible variant and ordinary products have no variation controls (0.3345ms)
+✔ metadata cannot introduce an unpublished or non-Website SKU (0.3656ms)
+✔ sparse choices name changed dimensions before selecting a different flavour (0.4713ms)
+✔ search result grouping preserves the exact matching representative and complete family (0.6455ms)
+✔ malformed or duplicate family mappings fall back to separate existing products (0.4989ms)
+✔ canonical commands reject fake axes, duplicate combinations and visually duplicate labels (1.4459ms)
+✔ joining families never changes SKU-specific facts, price or stock (0.9471ms)
+✔ authorized selected-SKU family GET enriches and returns current product state (40.6232ms)
+✔ authorized family-ID GET preserves an empty family for pending ungroup recovery (3.9694ms)
+✔ family endpoint refuses unsupported verbs and unsigned-key writes (1.4584ms)
+✔ family endpoint cannot operate on the storefront deployment (0.8426ms)
+✔ family route declares protected POST and read-only GET in the sole router (1855.2908ms)
+✔ family pending recovery binds literal payload and original actor without losing unknown outcomes (2.7501ms)
+✔ fresh grouping reads require complete, well-formed family members and selected SKUs (0.4664ms)
+✔ admin family reads include current per-SKU lifecycle and Website assignment state (0.8115ms)
+✔ admin family reads can return an identified empty family snapshot without SKU queries (0.219ms)
+✔ migration source declares no PUBLIC execution and exactly one bounded anonymous reader (17.4616ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2085.1202
+[WebServer] (node:28928) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:10448) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 21 tests using 1 worker
+
+(node:29352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+[WebServer] 11:19:55 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\product-families-ui.spec.js:31:1 › other-channel variants do not contribute public choices even in a malformed grouping response (1.2s)
+[WebServer] 11:19:58 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\product-families-ui.spec.js:38:1 › a large real option set uses one compact native select (3.4s)
+[WebServer] 11:19:59 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\product-families-ui.spec.js:49:1 › a slow optional grouping read does not block SKU price and availability (867ms)
+[WebServer] 11:20:00 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 11:20:00 PM [vite] (client) Pre-transform error: Failed to resolve import "@k2-app-entry" from "src/main.jsx". Does the file exist?
+[WebServer]   Plugin: vite:import-analysis
+[WebServer]   File: C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/src/main.jsx:7:16
+[WebServer]   5  |  // Vite resolves this alias to a target-specific application entry. Production
+[WebServer]   6  |  // builds contain either the storefront or the admin UI, never both.
+[WebServer]   7  |  import App from "@k2-app-entry";
+[WebServer]      |                   ^
+[WebServer]   8  |  import { installErrorReporting } from "./lib/reportError";
+[WebServer]   9  |  var _jsxFileName = "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/src/main.jsx";
+[WebServer] 11:20:00 PM [vite] (client) Pre-transform error: Failed to resolve import "@k2-app-entry" from "src/main.jsx". Does the file exist?
+[WebServer]   Plugin: vite:import-analysis
+[WebServer]   File: C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/src/main.jsx:7:16
+[WebServer]   5  |  // Vite resolves this alias to a target-specific application entry. Production
+[WebServer]   6  |  // builds contain either the storefront or the admin UI, never both.
+[WebServer]   7  |  import App from "@k2-app-entry";
+[WebServer]      |                   ^
+[WebServer]   8  |  import { installErrorReporting } from "./lib/reportError";
+[WebServer]   9  |  var _jsxFileName = "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/src/main.jsx";
+[WebServer] 11:20:00 PM [vite] (client) Pre-transform error: Failed to resolve import "@k2-app-entry" from "src/main.jsx". Does the file exist?
+[WebServer]   Plugin: vite:import-analysis
+[WebServer]   File: C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/src/main.jsx:7:16
+[WebServer]   5  |  // Vite resolves this alias to a target-specific application entry. Production
+[WebServer]   6  |  // builds contain either the storefront or the admin UI, never both.
+[WebServer]   7  |  import App from "@k2-app-entry";
+[WebServer]      |                   ^
+[WebServer]   8  |  import { installErrorReporting } from "./lib/reportError";
+[WebServer]   9  |  var _jsxFileName = "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/src/main.jsx";
+  ok  4 tests\product-families-ui.spec.js:60:1 › existing Montegrappa listings demonstrate Flavour only without invented weight options (1.7s)
+[WebServer] 11:20:02 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x   5 tests\product-families-ui.spec.js:86:1 › one mother card keeps complete choices after an exact-variant search (6.1s)
+(node:16748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 11:20:08 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\product-families-ui.spec.js:99:1 › size selection updates exact SKU facts and retains scroll and keyboard focus (1.0s)
+[WebServer] 11:20:09 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\product-families-ui.spec.js:117:1 › sparse choices explicitly label a flavour change and respect selected sold-out stock (920ms)
+[WebServer] 11:20:10 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 11:20:11 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  8 tests\product-families-ui.spec.js:127:1 › unused selectors stay absent; a real additional type appears (1.6s)
+[WebServer] 11:20:12 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  9 tests\product-families-ui.spec.js:137:1 › a single-value family dimension stays visible as a product detail (930ms)
+[WebServer] 11:20:13 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 11:20:14 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\product-families-ui.spec.js:145:1 › a single eligible member has no selectors and missing grouping falls back to separate SKUs (1.4s)
+[WebServer] 11:20:14 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 11 tests\product-families-ui.spec.js:163:34 › compact options fit 375px and preserve SKU-specific basket lines (2.1s)
+[WebServer] 11:20:16 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\product-families-ui.spec.js:163:34 › compact options fit 1440px and preserve SKU-specific basket lines (2.5s)
+  ok 13 tests\product-families-ui.spec.js:215:1 › Admin asks before discarding an unsaved variation draft from Close or Escape (1.3s)
+  ok 14 tests\product-families-ui.spec.js:231:1 › Admin shows each family member’s current Live and Website status (1.1s)
+  ok 15 tests\product-families-ui.spec.js:245:1 › Admin preserves selected new members’ lifecycle and Website labels (1.1s)
+  ok 16 tests\product-families-ui.spec.js:257:1 › Admin confirms ungroup before saving an empty family membership (1.3s)
+  ok 17 tests\product-families-ui.spec.js:285:1 › Admin saves only explicit dimensions and existing SKU membership with no typed audit reason (1.5s)
+  ok 18 tests\product-families-ui.spec.js:306:1 › stale saved grouping after reload opens complete fresh membership before a new decision (990ms)
+  ok 19 tests\product-families-ui.spec.js:320:1 › a first-save version conflict retains its request until complete latest membership is reviewed (1.6s)
+  ok 20 tests\product-families-ui.spec.js:363:1 › version-conflict recovery can review an ungrouped mother product and restore pending SKU candidates (1.1s)
+  ok 21 tests\product-families-ui.spec.js:391:1 › Admin lost reply survives reload and retries the exact original actor, body and key (1.9s)
+
+
+  1) tests\product-families-ui.spec.js:86:1 › one mother card keeps complete choices after an exact-variant search
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/product\/b/
+    Received string:  "http://127.0.0.1:5219/product/a"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        14 × locator resolved to <html lang="en">…</html>
+           - unexpected value "http://127.0.0.1:5219/product/a"
+
+
+      91 |   await page.getByPlaceholder(/Search/i).first().fill('Coffee b')
+      92 |   await page.getByRole('button', { name: 'Choose options' }).click()
+    > 93 |   await expect(page).toHaveURL(/\/product\/b/)
+         |                      ^
+      94 |   await expect(page.getByRole('group', { name: 'Flavour' })).toBeVisible()
+      95 |   await expect(page.getByRole('group', { name: 'Weight' })).toBeVisible()
+      96 |   await expect(page.getByRole('group', { name: 'Pack', exact: true })).toHaveCount(0)
+        at C:\Users\jerze\.codex\worktrees\inventory-variations\K2 JImzon\tests\product-families-ui.spec.js:93:22
+
+    Error Context: .tools\product-families-ui-results\product-families-ui-one-mo-5eea1-ter-an-exact-variant-search\error-context.md
+
+  1 failed
+    tests\product-families-ui.spec.js:86:1 › one mother card keeps complete choices after an exact-variant search
+  20 passed (39.3s)

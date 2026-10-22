@@ -12,6 +12,7 @@ import sessionsRevoke from '../../prepared-api/admin/sessions/revoke.js'
 import overview from '../../prepared-api/admin/overview.js'
 import products from '../../prepared-api/admin/products.js'
 import productMaster from '../../prepared-api/admin/product-master.js'
+import productFamilies from '../../prepared-api/admin/product-families.js'
 import references from '../../prepared-api/admin/references.js'
 import productMedia from '../../prepared-api/admin/product-media.js'
 import productMediaAssign from '../../prepared-api/admin/product-media/assign.js'
@@ -126,6 +127,7 @@ const ROUTES = new Map([
   ['overview', overview],
   ['products', products],
   ['product-master', productMaster],
+  ['product-families', productFamilies],
   ['references', references],
   ['product-media', productMedia],
   ['product-media/assign', productMediaAssign],
@@ -224,6 +226,7 @@ const ADMIN_POST_ROUTES = new Set([
   'auth/password-recovery/request', 'auth/password-recovery/complete',
   'product-media', 'product-media/assign', 'product-media/orphans',
   'product-master',
+  'product-families',
   'sessions/revoke',
   'fulfillment/assign-box', 'fulfillment/confirm', 'fulfillment/delivery',
   'fulfillment/cancel',
@@ -293,7 +296,7 @@ export const ADMIN_BFF_ROUTE_CONTROLS = Object.freeze(Object.fromEntries(
     const staffAccessMethods = route === 'staff-access'
       ? Object.freeze({ POST: Object.freeze({ csrf: true, idempotency: true, rateLimit: 'database' }) })
       : undefined
-    const productMasterMethods = route === 'product-master' || route === 'references'
+    const productMasterMethods = route === 'product-master' || route === 'references' || route === 'product-families'
       ? Object.freeze({ GET: Object.freeze({ csrf: false, idempotency: false, rateLimit: 'database' }) })
       : undefined
     const ownerCloseMethods = route === 'owner-close/session' || route === 'owner-close/coverage' || route === 'owner-close/fees' || route === 'owner-close/stock' || route === 'owner-close/pasabuy' || route === 'owner-close/bookkeeping'
