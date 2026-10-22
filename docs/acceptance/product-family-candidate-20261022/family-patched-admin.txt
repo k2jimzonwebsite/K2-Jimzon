@@ -1,0 +1,70 @@
+
+> k2-jimzon-prototype@0.1.0 build:admin
+> vite build --mode admin --configLoader runner && node scripts/emit-static-404.mjs admin && node scripts/emit-admin-head.mjs admin && node scripts/verify-build-boundary.mjs admin && node scripts/verify-bundle-budgets.mjs admin && node scripts/scan-secrets.mjs dist
+
+vite v8.2.4 building client environment for admin...
+transforming...
+✓ 704 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/k2-build-target.json                                0.02 kB │ gzip:   0.04 kB
+dist/admin-sw.js                                         0.41 kB
+dist/manifest.json                                       0.74 kB │ gzip:   0.30 kB
+dist/index.html                                          3.13 kB │ gzip:   0.98 kB
+dist/.vite/manifest.json                                16.97 kB │ gzip:   1.96 kB
+dist/assets/Admin-pjuiq6QD.css                           0.68 kB │ gzip:   0.31 kB
+dist/assets/MasterWorkflowGraph-B4iZfrXt.css             0.81 kB │ gzip:   0.41 kB
+dist/assets/index-BT_CQQlo.css                         199.81 kB │ gzip:  29.43 kB
+dist/assets/imageFallback-7DFuhpJV.js                    0.19 kB │ gzip:   0.15 kB
+dist/assets/useBodyScrollLock-41VEGZHc.js                0.32 kB │ gzip:   0.23 kB
+dist/assets/orderChargeState-Clw0vEvX.js                 0.55 kB │ gzip:   0.33 kB
+dist/assets/rolldown-runtime-hePW80VL.js                 0.71 kB │ gzip:   0.42 kB
+dist/assets/overviewAvailability-B6AtXXy0.js             0.96 kB │ gzip:   0.53 kB
+dist/assets/channelMeta-0DXB9A7f.js                      1.12 kB │ gzip:   0.48 kB
+dist/assets/useRetainedFulfillmentCommand-CLCrSq6y.js    1.66 kB │ gzip:   0.91 kB
+dist/assets/WorkflowGuideModal-k-i1z8e0.js               5.83 kB │ gzip:   2.14 kB
+dist/assets/FefoWorkflowDiagram-B7I0oaJA.js              6.02 kB │ gzip:   2.19 kB
+dist/assets/AdminWorkspaceUi-EQj0r_6_.js                 6.03 kB │ gzip:   1.93 kB
+dist/assets/TourSelectionModal-DdS3yZtw.js               6.58 kB │ gzip:   2.30 kB
+dist/assets/FulfillmentWorkflowDiagram-loJ9HR71.js       7.05 kB │ gzip:   2.71 kB
+dist/assets/CustodyWorkflowDiagram-BDx5RHPG.js           7.09 kB │ gzip:   2.64 kB
+dist/assets/FlightWorkflowDiagram-8fgq8CGn.js            7.32 kB │ gzip:   2.81 kB
+dist/assets/Kanban-xrSG_Za6.js                           7.36 kB │ gzip:   2.31 kB
+dist/assets/PasabuyWorkflowDiagram-D5Cl5fiD.js           7.78 kB │ gzip:   3.00 kB
+dist/assets/ReservationHolds-CCJ0HhdF.js                 8.76 kB │ gzip:   3.43 kB
+dist/assets/Suppliers-Bv5NoOT_.js                       12.30 kB │ gzip:   3.92 kB
+dist/assets/productResearchContract-Brii40Gn.js         12.31 kB │ gzip:   3.73 kB
+dist/assets/SpotlightTourOverlay-CfzSskZd.js            13.45 kB │ gzip:   4.10 kB
+dist/assets/StoreAssetStudio-CmA8EdSr.js                17.00 kB │ gzip:   5.41 kB
+dist/assets/GlobeCms-85SSEMyS.js                        17.47 kB │ gzip:   5.29 kB
+dist/assets/Customers-DcSIRZW8.js                       17.64 kB │ gzip:   5.12 kB
+dist/assets/PasabuyManager-CkVyDBW4.js                  18.24 kB │ gzip:   6.26 kB
+dist/assets/CouponManager-BbAH0iyN.js                   20.07 kB │ gzip:   5.74 kB
+dist/assets/index-D7Av04PO.js                           32.29 kB │ gzip:  12.08 kB
+dist/assets/StaffPermissionManager-osoqm7NO.js          33.92 kB │ gzip:   8.95 kB
+dist/assets/ConsignmentManager-DQyc_FnZ.js              36.15 kB │ gzip:   9.56 kB
+dist/assets/tourData-CANGzczX.js                        36.47 kB │ gzip:  11.48 kB
+dist/assets/DeliveryRateControl-G1qldciI.js             40.40 kB │ gzip:  11.64 kB
+dist/assets/ChannelIntegrations-D_EmQiN5.js             40.97 kB │ gzip:  10.68 kB
+dist/assets/Overview-iO6mgeRU.js                        41.19 kB │ gzip:  11.25 kB
+dist/assets/Inbox-DQ8CW8Xz.js                           57.36 kB │ gzip:  14.22 kB
+dist/assets/BulkCsvImportModal-CKzhzPJ8.js              58.63 kB │ gzip:  19.01 kB
+dist/assets/adminBffService-BbtOF8oU.js                 58.66 kB │ gzip:  16.55 kB
+dist/assets/OwnerCountClose-t-SfFUx_.js                 71.65 kB │ gzip:  17.87 kB
+dist/assets/Sheet-DJc1w3OX.js                           94.22 kB │ gzip:  20.16 kB
+dist/assets/InventoryGrid-Eqo5HsBU.js                  112.35 kB │ gzip:  27.59 kB
+dist/assets/OmniOperationsHub-DL8bTckm.js              124.30 kB │ gzip:  28.17 kB
+dist/assets/vendor-motion-BK6tTnu6.js                  133.06 kB │ gzip:  43.53 kB
+dist/assets/MasterWorkflowGraph-BdBNa0_H.js            176.59 kB │ gzip:  49.96 kB
+dist/assets/ProductIntakeSessionModal--GfKIXkA.js      191.37 kB │ gzip:  50.84 kB
+dist/assets/vendor-react-Fz_k0-wU.js                   210.63 kB │ gzip:  65.70 kB
+dist/assets/vendor-supabase-C_uyFMkg.js                214.18 kB │ gzip:  55.01 kB
+dist/assets/Admin-DhWZcD93.js                          226.68 kB │ gzip:  61.39 kB
+dist/assets/esm-Kw9dQLLf.js                            368.72 kB │ gzip: 108.07 kB
+
+✓ built in 2.04s
+Emitted admin static 404 recovery page.
+emit-admin-head: Admin discovery tags written to dist/index.html.
+Verified admin production boundary (46 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker).
+Admin application budget passed: 226.68 kB/300.00 kB minified.
+Secret scan passed (88 files checked; secret values are never printed).

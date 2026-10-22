@@ -51,7 +51,7 @@
   "files": [
     {
       "path": "package.json",
-      "sha256": "d764d50600cd73c73a756460f3a8032bc33376429f5870e8ecb5d600e751a9c5"
+      "sha256": "a05398acadf813b8fad4604e74ff815ddec76e0180e64722ec814bdd55f7a308"
     },
     {
       "path": "playwright.config.js",
@@ -180,6 +180,10 @@
     {
       "path": "tests/product-family-boundary.test.mjs",
       "sha256": "5782c76f55c6669727b69c619a3dfbec6120670ca92fffdcd0d95e56be4e2d70"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "6fbc497704c89d0e6c607324d6cadfd80069e349c2f3f703bec737e539b9f687"
     }
   ],
   "evidence": [
@@ -214,6 +218,34 @@
     {
       "path": "docs/acceptance/product-knowledge-install-20261021/live-function-metadata.json",
       "sha256": "945206cb1e4822eb7a3f4fdac518ad216355d77dd38d2b2e226086fe6ac3974d"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-dependency-audit-after.txt",
+      "sha256": "781008d3cfa57c95531f98a2b6f7e3c1952af96bfc99108cbfee47c0b6e83508"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-patched-focused.txt",
+      "sha256": "26eef43a631e3b01d5d8eb55fa9d44f35b17331c209fce8d376b9236fe6e4ad3"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-patched-development.txt",
+      "sha256": "f87acc70ae7dbffb07c9f3edad673fde97fb38fa4dfad4ae94ad6607681da4da"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-patched-storefront.txt",
+      "sha256": "508b327bfc53fa5541867f0da75d43daf15a4b42e2712e78be8533e989ebc8bf"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/family-patched-admin.txt",
+      "sha256": "27e3817158d7b10f0bfdedbd0c401cb2f548e1185d160d6b1013f7922f3829c2"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/dependency-audit-before.json",
+      "sha256": "44b74d67e255fcff96c4b438cd30b07146beea38618ef092cff44002c372c6f5"
+    },
+    {
+      "path": "docs/acceptance/product-family-candidate-20261022/ci-39807735874-dependency-failure.txt",
+      "sha256": "8185c206462592fe5b84303c86f82b17dbe5e125b264244aacbc17b91cb342d5"
     }
   ],
   "review": {
@@ -224,5 +256,27 @@
     "source": "family_integration_review",
     "hostedAcceptance": false
   },
-  "candidateRoot": "C:\\Users\\jerze\\.codex\\worktrees\\inventory-variations\\K2 JImzon"
+  "candidateRoot": "C:\\Users\\jerze\\.codex\\worktrees\\inventory-variations\\K2 JImzon",
+  "pr": "https://github.com/k2jimzonwebsite/K2-Jimzon/pull/21",
+  "sourceCommit": "38fc7a9edc52382e92ab343749c09c546e089fef",
+  "dependencyBatch": {
+    "idea": "IDEA-20261022-03",
+    "from": "8.2.2",
+    "to": "8.2.4",
+    "transitiveChanges": 0,
+    "auditBefore": 1,
+    "auditAfter": 0,
+    "policy": 0,
+    "familyNode": "18/18",
+    "familyBrowser": "23/23",
+    "development": 0,
+    "storefront": 0,
+    "admin": 0,
+    "originalCi": {
+      "run": "39807735874",
+      "build": "failed-dependency-audit-before-application",
+      "criticalSql": "success"
+    },
+    "patchedCi": "pending-push"
+  }
 }
