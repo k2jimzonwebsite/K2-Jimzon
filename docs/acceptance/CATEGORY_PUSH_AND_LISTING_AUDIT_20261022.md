@@ -23,3 +23,9 @@ MAP-023 retains the real listing work. Obtain exact primary/package/brand/catego
 ## Final isolated verification
 
 The exact category-only candidate passes 16/16 pure category/protected-product read checks, npm run test:store-categories (4 pure + 11 rendered Chromium), 21/21 existing catalog truth/freshness checks, and npm run verify:development (exit 0, secret scan 2,389 files, import integrity and source security gates). Logs are retained in category-push-20261022/. No application change followed these checks. The commit is prepared for the owner-requested feature-branch push; no main or production promotion follows.
+
+## Verified source push
+
+Category code commit 4a0506ce2bdcd6d59f0886f68c7e1aa03e734bbd was pushed successfully to origin/codex/inventory-categories. Independent git ls-remote confirms that exact remote hash and unchanged production-linked main 5f700020f313d481407a4bc76a7e3d3e2f613781. No production promotion or product write occurred. The subsequent documentation-only receipt commit carries this result and removes the completed commit/push action from MAP-023; it requires no application rerun.
+
+The inventory request remains partially blocked: 93 of 196 products are listed, 103 held Drafts have no publication-ready candidate. MAP-023 retains exact missing evidence/human acceptance and future normal Admin/public readback. Current browser access is disabled. The original dirty checkout is preserved; the clean attached category worktree remains available for review or later merge with main.

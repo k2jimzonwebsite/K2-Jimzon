@@ -940,5 +940,14 @@
         "human_review"
       ]
     }
-  ]
+  ],
+  "sourcePush": {
+    "codeCommit": "4a0506ce2bdcd6d59f0886f68c7e1aa03e734bbd",
+    "branch": "codex/inventory-categories",
+    "remoteVerified": true,
+    "productionMain": "5f700020f313d481407a4bc76a7e3d3e2f613781",
+    "mainChanged": false,
+    "productionProductWrites": false,
+    "listingObjectiveComplete": false
+  }
 }
