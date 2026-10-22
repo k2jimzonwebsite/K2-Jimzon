@@ -13,6 +13,7 @@ export default function ProductPassport({ product, stock = null }) {
   const batch = product.batch_number || product.lot_number || null
   const bestBefore = product.expiry_date || product.best_before || null
   const storage = product.storage_instructions || null
+  const packSize = typeof product.size === 'string' ? product.size.trim() : ''
   const weight = formatNetWeight(product.net_weight)
   const netWeight = weight ? `${weight}${product.package_type ? ` (${product.package_type})` : ''}` : null
 
@@ -55,6 +56,12 @@ export default function ProductPassport({ product, stock = null }) {
           <div className="flex justify-between py-2">
             <dt className="font-medium text-navy-faint">Best Before</dt>
             <dd className="font-medium text-navy text-right">{bestBefore}</dd>
+          </div>
+        )}
+        {packSize && (
+          <div className="flex justify-between py-2">
+            <dt className="font-medium text-navy-faint">Pack size</dt>
+            <dd className="max-w-[60%] break-words text-right font-medium text-navy">{packSize}</dd>
           </div>
         )}
         {netWeight && (

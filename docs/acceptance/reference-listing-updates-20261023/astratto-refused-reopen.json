@@ -1,0 +1,121 @@
+[
+  {
+    "index": 0,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "text",
+    "value": "ASTRATTO VINO ROSSO 10%VOL. WINE BOTTLE 750ML"
+  },
+  {
+    "index": 1,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "text",
+    "value": ""
+  },
+  {
+    "index": 2,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "text",
+    "value": ""
+  },
+  {
+    "index": 3,
+    "placeholder": "e.g. Pasta Sauces",
+    "tag": "INPUT",
+    "type": "text",
+    "value": ""
+  },
+  {
+    "index": 4,
+    "placeholder": "e.g. Parma, Italy",
+    "tag": "INPUT",
+    "type": "text",
+    "value": ""
+  },
+  {
+    "index": 5,
+    "placeholder": "Weight in grams",
+    "tag": "INPUT",
+    "type": "number",
+    "value": ""
+  },
+  {
+    "index": 6,
+    "placeholder": "e.g. Glass Jar",
+    "tag": "INPUT",
+    "type": "text",
+    "value": ""
+  },
+  {
+    "index": 7,
+    "placeholder": "e.g. 400g jar",
+    "tag": "INPUT",
+    "type": "text",
+    "value": ""
+  },
+  {
+    "index": 8,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "date",
+    "value": ""
+  },
+  {
+    "index": 9,
+    "placeholder": null,
+    "tag": "SELECT",
+    "type": "select-one",
+    "value": ""
+  },
+  {
+    "index": 10,
+    "placeholder": null,
+    "tag": "SELECT",
+    "type": "select-one",
+    "value": ""
+  },
+  {
+    "index": 11,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "number",
+    "value": "0"
+  },
+  {
+    "index": 12,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "number",
+    "value": "249"
+  },
+  {
+    "index": 13,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "number",
+    "value": "0"
+  },
+  {
+    "index": 14,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "number",
+    "value": "0"
+  },
+  {
+    "index": 15,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "number",
+    "value": "0"
+  },
+  {
+    "index": 16,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "checkbox",
+    "value": "on"
+  }
+]

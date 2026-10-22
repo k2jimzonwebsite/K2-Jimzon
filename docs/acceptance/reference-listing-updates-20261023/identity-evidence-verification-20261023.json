@@ -1,0 +1,27 @@
+{
+  "checksPassed": 7,
+  "applicationTestsNeeded": false,
+  "productionWrites": 0,
+  "files": [
+    {
+      "path": "outputs\\original-inventory-comparison-20261022\\current-inventory-196.json",
+      "sha256": "d00991956f0a6a957bff0848dac3304b7183a94a1c76012e80d63b2be49bf25a"
+    },
+    {
+      "path": "outputs\\original-inventory-comparison-20261022\\variation-review.json",
+      "sha256": "f19b6cbd3d9a6af84dc40d4ab149cf6613236a3a3bc6de638bac1e695332c5ab"
+    },
+    {
+      "path": "outputs\\original-inventory-comparison-20261022\\identity-evidence-reconciliation-20261023.json",
+      "sha256": "f8f53ed5f309def86285309d9bc60e676a83bc3a0c7039b4e69d27304102fe1c"
+    },
+    {
+      "path": "outputs\\original-inventory-comparison-20261022\\identity-evidence-reconciliation-20261023.csv",
+      "sha256": "a427b365bd9f4e915500fd333c10dc07a4041639201149e5869161dc9eedec6d"
+    },
+    {
+      "path": "docs/acceptance/LISTING_IDENTITY_EVIDENCE_20261023.md",
+      "sha256": "1c65cf3ef0dc6ffb1a918fac20ab41eb4e0c688ae27c153aa899bb33285bd845"
+    }
+  ]
+}

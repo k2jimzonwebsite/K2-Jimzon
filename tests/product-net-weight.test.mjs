@@ -28,3 +28,26 @@ test('structured product weight uses canonical gram units and exact value', () =
   assert.deepEqual(buildProductStructuredData({ product: { net_weight: 1000 } }).weight,
     { '@type': 'QuantitativeValue', value: 1000, unitCode: 'GRM' })
 })
+
+
+test('recorded volume pack sizes render independently of gram weight', () => {
+  for (const size of ['1 L bottle', '750 ml bottle']) {
+    const html = component.exports.render({ size, package_type: 'Bottle', net_weight: null })
+    assert.match(html, />Pack size</)
+    assert.ok(html.includes(size))
+    assert.doesNotMatch(html, />Net Weight</)
+  }
+})
+
+test('multipack size and canonical weight keep their separate meanings', () => {
+  const html = component.exports.render({ size: '4 x 70 g cans', net_weight: 280, package_type: 'Tin' })
+  assert.match(html, />Pack size</)
+  assert.ok(html.includes('4 x 70 g cans'))
+  assert.match(html, />280 g \(Tin\)</)
+})
+
+test('missing pack size is omitted without guessing from product names', () => {
+  for (const size of [null, undefined, '', '   ', 750, true, {}]) {
+    assert.doesNotMatch(component.exports.render({ size, name: 'Olive oil 1 L', net_weight: null }), />Pack size</)
+  }
+})

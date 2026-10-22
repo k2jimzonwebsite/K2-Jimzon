@@ -1,0 +1,109 @@
+{
+  "owner": "MAP-023",
+  "idea": "IDEA-20261023-01",
+  "date": "2026-10-23",
+  "sourceBase": "5b594f9dbdac7819c760b7430d2ff13aea80420f",
+  "branch": "codex/storefront-pack-size",
+  "dataState": "six display fields persisted and reopened in production Admin",
+  "changes": [
+    {
+      "sku": "K2-SKU-001038",
+      "changes": {
+        "short": {
+          "before": "",
+          "after": "Dante Olive Oil 1 L"
+        },
+        "package_type": {
+          "before": "",
+          "after": "Bottle"
+        },
+        "size": {
+          "before": "",
+          "after": "1 L bottle"
+        }
+      }
+    },
+    {
+      "sku": "K2-SKU-001039",
+      "changes": {
+        "short": {
+          "before": "",
+          "after": "Dante Olive Oil 750 ml"
+        },
+        "package_type": {
+          "before": "",
+          "after": "Bottle"
+        },
+        "size": {
+          "before": "",
+          "after": "750 ml bottle"
+        }
+      }
+    }
+  ],
+  "astratto": "three fields prepared only; refused for missing existing brand/category; canceled and reopened unchanged",
+  "publicState": "existing price/stock retained on both refreshed Dante routes; recorded size still absent on deployed source",
+  "sourceState": "locally verified; not deployed; explicit new source-release request still required",
+  "checks": {
+    "failingFirst": "4 pass / 2 fail: missing Pack size",
+    "component": "6/6 pass",
+    "fullPage": "4/4 pass, 375/1440 light/dark",
+    "development": "exit 0; prebuild inventory/security/import gate, not release build",
+    "independentReview": "Approved; no Critical or Important findings"
+  },
+  "noChanges": [
+    "price",
+    "stock",
+    "Website assignment",
+    "lifecycle",
+    "human review",
+    "gram weight",
+    "family membership",
+    "SQL",
+    "provider configuration"
+  ],
+  "deferred": {
+    "primaryImages": 97,
+    "canonicalPairs": 34,
+    "zeroOrBlankPrices": 33,
+    "unsupportedPopulatedPrices": 5,
+    "heldDrafts": 103
+  },
+  "hashes": {
+    "astratto-authorized-candidate.json": "8dc7397e35290b8fb11ff55e12ab1f9319e2d34832f09b8300d8ebdf5fb54ef7",
+    "astratto-before-fields.json": "44d420f269ec30c0e52a0dc7c6e03c30c86757e5ac0e8c14d1b71500a0563068",
+    "astratto-preflight.log": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6",
+    "astratto-prepared-diff.json": "c4851151856267a3a767cc382cec0bdc0e0e80556d8ef74faeceee2a3e022ba0",
+    "astratto-readiness.log": "cc57a964adc542e9dbe7bd96fe863977d35104a2105da8940ca51ea9cea153d6",
+    "astratto-refused-reopen.json": "d897bda6ddbe4c5646b3cbfb2e3173e39f4a4989974b9cccb843b64da2f48a51",
+    "astratto-save-refusal.txt": "c99a22a8f4090e42665f3d8be37137ddee7def512c5850872560d35cb236cc26",
+    "dante-authorized-candidates.json": "f9f2797b57d1a234ec45b84ce22dbd519ef1387c7a421b50cfffb171b9512220",
+    "dante038-admin-persisted.png": "ef5de651b13019745e32f7637e1e809c76c8dd692a8bb228bd9b2d6ae8fcb062",
+    "dante038-before-fields.json": "c13cc63e9e38e7326739623a5ee7c76c07a91edad5c65cc3046b806d0945f8e5",
+    "dante038-persisted-fields.json": "60668c3c8a42bf06d620daba3651c5981dfe316d4c9f9ebefd13824b66871f50",
+    "dante038-preflight.log": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6",
+    "dante038-prepared-diff.json": "9256f6e385c89ba93e4f217a82f5e68271335cf6b11a4d58348aff22999bf523",
+    "dante038-public-after-first-load.txt": "c9e529cf07c3940ed6638467062c4267f1514f7e293ebb4387aa01b342ecbf53",
+    "dante038-public-reloaded.png": "6d2cee0a836271f8d363d30fdd31c8f486a8ff4d3cc11f17900ee1465bb896ae",
+    "dante038-public-reloaded.txt": "4f34027529837769cad8993245d6336e80164448116fbf9a8bacb5f238d1fc89",
+    "dante038-readiness.log": "cc57a964adc542e9dbe7bd96fe863977d35104a2105da8940ca51ea9cea153d6",
+    "dante039-admin-persisted.png": "cd356dcd1fc8cc1d3318a67309e6ea628d789a2e434e63af5be3bbf11c8cb57b",
+    "dante039-before-fields.json": "3484b8b37736941c928226c03deb467de03ca1aae3cc1f1225677aa9bffdc939",
+    "dante039-persisted-fields.json": "6245d3bf71e9f0484900353f60f83970ef29b975b50f608bb327b40659f585e4",
+    "dante039-preflight.log": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6",
+    "dante039-prepared-diff.json": "c89e070f7473dcde3d6689094d84b8d8915facb2c5d18e6d729b4d1ac12cd560",
+    "dante039-public-reloaded.png": "38101026445c16d4545e8355e8b62f989242fef6c9f1a794f13100a240449f19",
+    "dante039-public-reloaded.txt": "d7561daf8e281c6df85c3452fdffdf6e93dcf0b56aa7fd0806a8f341b8764436",
+    "dante039-readiness.log": "cc57a964adc542e9dbe7bd96fe863977d35104a2105da8940ca51ea9cea153d6",
+    "failing-first.log": "207488b661afda80bdd813183356d27cf7f6815e65584b1307a5747b0424d905",
+    "focused-browser.log": "e725fccb21d043f840d6b3897b69b7f2114e81b25ce7c9ce0ceee85dc9523621",
+    "focused-node.log": "cd473861375132a22522f22d62d16c0fcda56e92d6accf1feec9aa8d53b323ca",
+    "identity-evidence-reconciliation-20261023.csv": "a427b365bd9f4e915500fd333c10dc07a4041639201149e5869161dc9eedec6d",
+    "identity-evidence-reconciliation-20261023.json": "f8f53ed5f309def86285309d9bc60e676a83bc3a0c7039b4e69d27304102fe1c",
+    "identity-evidence-verification-20261023.json": "070a048b6664b6bdf55d32ba81c201255fa50fddd97c7c14cbdd151a394d1e0a",
+    "online-identity-reference-20261023.json": "ba6a6c9016209b0156bd19439e8fc7c91cf16f3a4a1df08f334c314b19b5ed18",
+    "online-identity-reference-verification-20261023.json": "df84d68a01e678f8474691192c4b9a7ed60f66b0b5932f1f45d7358853539cb6",
+    "verify-development.exit": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+    "verify-development.log": "5f2e648c829a130290e92134fe7c8f1625b59a68eb916b7bf2fa2edbc73377d1"
+  }
+}

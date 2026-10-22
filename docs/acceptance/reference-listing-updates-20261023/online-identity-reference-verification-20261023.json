@@ -1,0 +1,22 @@
+{
+  "owner": "MAP-023",
+  "checkedAt": "2026-10-22T16:54:37.606Z",
+  "checks": [
+    "two unique honey SKUs match retained inventory/source rows",
+    "two separate producer references recorded without K2 match",
+    "four additional bounded SKU leads resolve to retained inventory",
+    "all dispositions distinguish candidate/inference/defer",
+    "all business/provider write counters zero",
+    "current MAP/rulebook/Brain/runbook/decision register link the receipt"
+  ],
+  "files": [
+    {
+      "path": "outputs/original-inventory-comparison-20261022/online-identity-reference-20261023.json",
+      "sha256": "ba6a6c9016209b0156bd19439e8fc7c91cf16f3a4a1df08f334c314b19b5ed18"
+    },
+    {
+      "path": "docs/acceptance/MAP023_ONLINE_IDENTITY_REFERENCES_20261023.md",
+      "sha256": "2e1ab43323ef450ff213f16d3726adbfc622a087dcad05eaaf386d268c730120"
+    }
+  ]
+}

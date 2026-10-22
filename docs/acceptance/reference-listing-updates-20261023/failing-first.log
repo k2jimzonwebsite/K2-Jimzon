@@ -1,0 +1,58 @@
+✔ actual product passport labels canonical grams without losing precision (11.3923ms)
+✔ unknown or invalid canonical weights never become a customer claim (6.191ms)
+✔ structured product weight uses canonical gram units and exact value (1.466ms)
+✖ recorded volume pack sizes render independently of gram weight (1.3855ms)
+✖ multipack size and canonical weight keep their separate meanings (0.9631ms)
+✔ missing pack size is omitted without guessing from product names (3.7145ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 4
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 410.946
+
+✖ failing tests:
+
+test at tests\product-net-weight.test.mjs:33:1
+✖ recorded volume pack sizes render independently of gram weight (1.3855ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression />Pack size</. Input:
+  
+  '<div class="rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-5 shadow-sm"><div class="flex items-center justify-between border-b border-line pb-3"><div class="flex items-center gap-2"><svg viewBox="0 0 24 24" width="16" height="16" class="text-forest" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Zm-3 9 2.2 2.2L15 10.5"></path></svg><span class="font-serif text-sm font-semibold tracking-wide text-navy">Product Details</span></div></div><dl class="mt-3 divide-y divide-line/60 text-xs"><div class="flex justify-between py-2"><dt class="font-medium text-navy-faint">Manila Stock</dt><dd class="font-semibold text-forest text-right flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" class="" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"></path></svg> 10 units ready in Manila</dd></div></dl></div>'
+  
+      at TestContext.<anonymous> (file:///C:/Users/jerze/.codex/worktrees/inventory-variations/K2%20JImzon/tests/product-net-weight.test.mjs:36:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<div class="rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-5 shadow-sm"><div class="flex items-center justify-between border-b border-line pb-3"><div class="flex items-center gap-2"><svg viewBox="0 0 24 24" width="16" height="16" class="text-forest" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Zm-3 9 2.2 2.2L15 10.5"></path></svg><span class="font-serif text-sm font-semibold tracking-wide text-navy">Product Details</span></div></div><dl class="mt-3 divide-y divide-line/60 text-xs"><div class="flex justify-between py-2"><dt class="font-medium text-navy-faint">Manila Stock</dt><dd class="font-semibold text-forest text-right flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" class="" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"></path></svg> 10 units ready in Manila</dd></div></dl></div>',
+    expected: />Pack size</,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests\product-net-weight.test.mjs:42:1
+✖ multipack size and canonical weight keep their separate meanings (0.9631ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression />Pack size</. Input:
+  
+  '<div class="rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-5 shadow-sm"><div class="flex items-center justify-between border-b border-line pb-3"><div class="flex items-center gap-2"><svg viewBox="0 0 24 24" width="16" height="16" class="text-forest" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Zm-3 9 2.2 2.2L15 10.5"></path></svg><span class="font-serif text-sm font-semibold tracking-wide text-navy">Product Details</span></div></div><dl class="mt-3 divide-y divide-line/60 text-xs"><div class="flex justify-between py-2"><dt class="font-medium text-navy-faint">Manila Stock</dt><dd class="font-semibold text-forest text-right flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" class="" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"></path></svg> 10 units ready in Manila</dd></div><div class="flex justify-between py-2"><dt class="font-medium text-navy-faint">Net Weight</dt><dd class="font-medium text-navy text-right">280 g (Tin)</dd></div></dl></div>'
+  
+      at TestContext.<anonymous> (file:///C:/Users/jerze/.codex/worktrees/inventory-variations/K2%20JImzon/tests/product-net-weight.test.mjs:44:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<div class="rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-5 shadow-sm"><div class="flex items-center justify-between border-b border-line pb-3"><div class="flex items-center gap-2"><svg viewBox="0 0 24 24" width="16" height="16" class="text-forest" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Zm-3 9 2.2 2.2L15 10.5"></path></svg><span class="font-serif text-sm font-semibold tracking-wide text-navy">Product Details</span></div></div><dl class="mt-3 divide-y divide-line/60 text-xs"><div class="flex justify-between py-2"><dt class="font-medium text-navy-faint">Manila Stock</dt><dd class="font-semibold text-forest text-right flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" class="" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"></path></svg> 10 units ready in Manila</dd></div><div class="flex justify-between py-2"><dt class="font-medium text-navy-faint">Net Weight</dt><dd class="font-medium text-navy text-right">280 g (Tin)</dd></div></dl></div>',
+    expected: />Pack size</,
+    operator: 'match',
+    diff: 'simple'
+  }
