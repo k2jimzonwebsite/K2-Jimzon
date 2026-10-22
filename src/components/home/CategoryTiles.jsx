@@ -1,75 +1,12 @@
-import { useMemo } from 'react'
-import * as motion from 'motion/react-m'
-import { useReducedMotion } from 'motion/react'
 import { useStore } from '../../context/StoreContext'
-import { BoxIcon, CupIcon, HeartIcon, PlaneIcon, SparkleIcon, StarIcon, ArrowIcon } from '../ui/icons'
-
-const CABINET_SECTIONS = [
-  {
-    cat: 'Snack & Sweets',
-    title: 'Dolci & Biscotti',
-    subtitle: 'Morning biscuits, wafers, and chocolates',
-    icon: StarIcon,
-    queryMatch: 'Snack',
-  },
-  {
-    cat: 'Beverages',
-    title: 'Caffè & Bevande',
-    subtitle: 'Italian espresso roasts and drinks',
-    icon: CupIcon,
-    queryMatch: 'Beverages',
-  },
-  {
-    cat: 'Seasoning, Staple Foods & Baking Ingredients',
-    title: 'Pasta & Dispensa',
-    subtitle: 'Bronze-die pasta, tomato sauces, and pantry staples',
-    icon: BoxIcon,
-    queryMatch: 'Seasoning',
-  },
-  {
-    cat: 'Bath & Body',
-    title: 'Cura & Benessere',
-    subtitle: 'Traditional Italian soaps and body care',
-    icon: HeartIcon,
-    queryMatch: 'Bath',
-  },
-  {
-    cat: 'Skin Care',
-    title: 'Profumeria & Bellezza',
-    subtitle: 'Italian fragrances, lotions, and skin care',
-    icon: SparkleIcon,
-    queryMatch: 'Skin',
-  },
-  {
-    cat: 'Pasabuy',
-    title: 'Pasabuy su Misura',
-    subtitle: 'Custom sourcing for items not currently in stock',
-    icon: PlaneIcon,
-    isPasabuy: true,
-  },
-]
+import { BoxIcon, PlaneIcon, ArrowIcon } from '../ui/icons'
 
 export default function CategoryTiles() {
-  const { setCategory, setQuery, go, listedProducts: products } = useStore()
-  const reducedMotion = useReducedMotion()
-
-  const counts = useMemo(() => {
-    const result = {}
-    if (!products) return result
-    products.forEach((p) => {
-      const cat = p.category || ''
-      CABINET_SECTIONS.forEach((section) => {
-        // Count exactly what the tile opens: the catalog filters by exact
-        // category, so a substring count here would advertise products the
-        // grid never shows.
-        if (section.isPasabuy) return
-        if (cat === section.cat) {
-          result[section.title] = (result[section.title] || 0) + 1
-        }
-      })
-    })
-    return result
-  }, [products])
+  const { setCategory, setQuery, go, storeCategories = [] } = useStore()
+  const sections = [...storeCategories.map(({ name, count }) => ({
+    cat: name, title: name, count, icon: BoxIcon,
+    subtitle: `${count} listed product${count === 1 ? '' : 's'}`,
+  })), { title: 'Pasabuy su Misura', subtitle: 'Request something from Italy', icon: PlaneIcon, isPasabuy: true }]
 
   const open = (section) => {
     if (section.isPasabuy) return go('pasabuy')
@@ -87,7 +24,7 @@ export default function CategoryTiles() {
             The Cabinet
           </h2>
           <p className="mt-1.5 text-sm text-navy-soft">
-            Browse our Italian grocery shelves and pantry staples.
+            Browse the categories in our current catalog.
           </p>
         </div>
         <button
@@ -98,26 +35,15 @@ export default function CategoryTiles() {
         </button>
       </div>
 
-      <motion.div
-        initial={reducedMotion ? false : 'hidden'}
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={{ visible: { transition: { staggerChildren: 0.04 } } }}
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
-      >
-        {CABINET_SECTIONS.map((section) => {
-          const { title, subtitle, icon: CategoryIcon, isPasabuy } = section
-          const count = counts[title]
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {sections.map((section) => {
+          const { title, subtitle, count, icon: CategoryIcon, isPasabuy } = section
 
           return (
-            <motion.button
-              key={title}
+            <button
+              key={isPasabuy ? 'service:pasabuy' : `category:${title}`}
               onClick={() => open(section)}
-              variants={{
-                hidden: { opacity: 0, transform: 'translateY(8px)' },
-                visible: { opacity: 1, transform: 'translateY(0)', transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] } },
-              }}
-              className="group relative flex min-h-[5.5rem] items-center justify-between rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left shadow-[var(--store-surface-shadow)] transition-all duration-200 hover:border-crimson/30 hover:shadow-md active:scale-[0.98] cursor-pointer sm:p-5"
+              className="group relative flex min-h-[5.5rem] items-center justify-between rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left shadow-[var(--store-surface-shadow)] transition-[border-color,box-shadow,transform] duration-200 hover:border-crimson/30 hover:shadow-md active:scale-[0.98] motion-reduce:transform-none motion-reduce:transition-none cursor-pointer sm:p-5"
             >
               {/* Subtle Italian apothecary corner tick-marks */}
               <span className="pointer-events-none absolute top-2 right-2 h-1.5 w-1.5 border-t border-r border-crimson/40 opacity-0 transition-opacity duration-150 group-hover:opacity-100" aria-hidden="true" />
@@ -128,16 +54,16 @@ export default function CategoryTiles() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="block font-serif text-base font-semibold text-navy group-hover:text-crimson truncate">
+                    <span className="block text-base font-semibold text-navy group-hover:text-crimson break-words">
                       {title}
                     </span>
                     {count !== undefined && count > 0 && (
-                      <span className="rounded-full bg-shell px-2 py-0.5 text-[10px] font-bold tabular text-navy-soft">
+                      <span className="rounded-full bg-shell px-2 py-0.5 text-xs font-bold tabular text-navy-soft">
                         {count}
                       </span>
                     )}
                     {isPasabuy && (
-                      <span className="rounded-full bg-forest/10 px-2 py-0.5 text-[10px] font-bold text-forest">
+                      <span className="rounded-full bg-forest/10 px-2 py-0.5 text-xs font-bold text-forest">
                         Custom order
                       </span>
                     )}
@@ -151,10 +77,10 @@ export default function CategoryTiles() {
                 size={15}
                 className="ml-3 shrink-0 text-navy-faint transition-transform duration-150 group-hover:translate-x-1 group-hover:text-crimson"
               />
-            </motion.button>
+            </button>
           )
         })}
-      </motion.div>
+      </div>
     </section>
   )
 }

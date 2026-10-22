@@ -1,0 +1,28 @@
+
+Running 21 tests using 1 worker
+
+(node:16100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\catalog-freshness-contract.spec.js:9:1 › storefront catalog has a bounded visible-page freshness fallback (10ms)
+  ok  2 tests\catalog-freshness-contract.spec.js:30:1 › catalog refresh is overlap-safe and degrades safely without the stock projection (8ms)
+  ok  3 tests\catalog-freshness-contract.spec.js:52:1 › storefront catalog is gated on the staff publication flag, not status alone (2ms)
+  ok  4 tests\catalog-freshness-contract.spec.js:66:1 › an empty database renders an empty production catalog, never the local seed (3ms)
+  ok  5 tests\storefront-truth-contract.spec.js:8:1 › zero stock reaches the stock pill instead of falling back (8ms)
+  ok  6 tests\storefront-truth-contract.spec.js:14:1 › a failed catalog load never reads as empty and a stale list says so (6ms)
+  ok  7 tests\storefront-truth-contract.spec.js:26:1 › route changes move screen-reader and keyboard focus to the destination (5ms)
+  ok  8 tests\storefront-truth-contract.spec.js:35:1 › retries keep their idempotency identity and double submits stay silent (5ms)
+  ok  9 tests\storefront-truth-contract.spec.js:45:1 › provenance claims render only from recorded origin evidence (4ms)
+  ok 10 tests\storefront-truth-contract.spec.js:53:1 › checkout offers the server-accepted fulfillment methods instead of hardcoding one (10ms)
+  ok 11 tests\storefront-truth-contract.spec.js:61:1 › wholesale rejects malformed contact details before submission (2ms)
+  ok 12 tests\storefront-truth-contract.spec.js:67:1 › story section uses honest neutral fallback on media error (2ms)
+  ok 13 tests\storefront-truth-contract.spec.js:73:1 › new arrivals and product page controls meet the 44px touch target invariant (4ms)
+  ok 14 tests\storefront-truth-contract.spec.js:82:1 › catalog grid provides newest arrivals sort option and explicit comparator logic (3ms)
+  ok 15 tests\storefront-truth-contract.spec.js:92:1 › storefront context queries products newest-first and supports shareable catalog URL params (4ms)
+  ok 16 tests\storefront-truth-contract.spec.js:103:1 › mobile buying order places purchase controls and safety notices before secondary product detail (4ms)
+  ok 17 tests\storefront-truth-contract.spec.js:120:1 › product detail replaces full catalog duplication with curated related provisions and browse link (3ms)
+  ok 18 tests\storefront-truth-contract.spec.js:129:1 › catalog grid supports 2-column mobile scanning on phones 370px and above (2ms)
+  ok 19 tests\storefront-truth-contract.spec.js:134:1 › before and after comparison sliders enforce solid background, touch isolation, and layman labels (8ms)
+  ok 20 tests\storefront-truth-contract.spec.js:154:1 › catalog grid provides Shopee/Lazada search relevance partitioning, recommendation discovery feed, and progressive scroll sentinel (4ms)
+  ok 21 tests\storefront-truth-contract.spec.js:168:1 › catalog grid provides dynamic category resolution, clothing support, and admin category search (15ms)
+
+  21 passed (2.6s)

@@ -1,0 +1,944 @@
+{
+  "observedAt": "2026-10-22T05:36:32.786Z",
+  "project": "pixplcjqivlfflickobf",
+  "readOnly": true,
+  "total": 196,
+  "listed": 93,
+  "draft": 103,
+  "byStatus": {
+    "Live": 93,
+    "Draft": 103
+  },
+  "listedMissing": [],
+  "liveNotListed": [],
+  "draftMissingCounts": {
+    "name": 0,
+    "brand": 34,
+    "category": 34,
+    "price": 33,
+    "primary_photo": 97,
+    "human_review": 103
+  },
+  "draftReadyByFieldPresence": [],
+  "drafts": [
+    {
+      "sku": "K2-SKU-001004",
+      "name": "ASTRATTO VINO ROSSO 10%VOL. WINE BOTTLE 750ML",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001005",
+      "name": "Baiocchi Pistacchio",
+      "missing": [
+        "price",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001008",
+      "name": "Baresa Pesto Plain",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001012",
+      "name": "Barissimo Orzo Barley",
+      "missing": [
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001014",
+      "name": "Bench Body Undergarments Medium",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001015",
+      "name": "Bench Body Undergarments Small",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001016",
+      "name": "Borella Carne",
+      "missing": [
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001019",
+      "name": "Borella Prosciutto",
+      "missing": [
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001023",
+      "name": "Caffe Solubile Crastan 100 g",
+      "missing": [
+        "price",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001027",
+      "name": "Cien Cream Soap Honey And Milk 2-Pack",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001029",
+      "name": "Cien Cream Soap Olive 2-Pack",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001031",
+      "name": "Cien Macadamia Conditioner",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001033",
+      "name": "CLOSE KIDS SLIPPER",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001037",
+      "name": "Combino Spaghetti Integralli 500 g",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001040",
+      "name": "DELIZIA PISTACCHIO 45% 600ML",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001041",
+      "name": "DELUXE LIDL PISTACHIO",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001042",
+      "name": "DELUXE PISTACCHIO",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001043",
+      "name": "Delverde Lasagne Pasta 500 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001044",
+      "name": "Disano Pistacchio Spread 320 g 20% Pistacchio",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001046",
+      "name": "Donna Chiara Fusilli 1 kg",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001047",
+      "name": "DRESS",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001048",
+      "name": "DULCIAR  PISTACHIO",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001049",
+      "name": "DULCIAR ARANCIA",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001050",
+      "name": "Dulciar Bar Dark",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001054",
+      "name": "DULCIAR PISTACCHIO",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001055",
+      "name": "Eccelenze Di Prix Pistacchio Cream",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001056",
+      "name": "ETRE FLORISSANT PERFUME SET",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001057",
+      "name": "FARBO 100G",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001069",
+      "name": "GUCCI MICKEY SLIPPER",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001071",
+      "name": "GUSTO ELMA PISTACCHIO SPREAD 20% 600G",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001072",
+      "name": "Homme Paris",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001073",
+      "name": "Homme Paris",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001074",
+      "name": "Homme Sport",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001075",
+      "name": "Homme Sport",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001076",
+      "name": "Homme Sport",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001082",
+      "name": "Italiamo In Can 2 x 180 g Ragu Con Salsicia",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001084",
+      "name": "Italiamo Salsiccia Sauce",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001087",
+      "name": "Italian Coffee Nespresso Ginseng",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001091",
+      "name": "JEWELRY BOX BIG EMPTY",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001092",
+      "name": "JEWELRY BOX BILOG SET",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001093",
+      "name": "JEWELRY BOX BLUE RIBBON EMPTY",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001094",
+      "name": "JEWELRY BOX RED BILOG EMPTY",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001095",
+      "name": "JEWELRY BOX SMALL BLUE SET",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001096",
+      "name": "JEWELRY BOXX BLACK BILOG EMPTY",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001097",
+      "name": "JOGGING PANTS",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001098",
+      "name": "JOLIE",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001100",
+      "name": "Eccellenza Ligure Pesto",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001102",
+      "name": "LACURA ACQUA 100ML",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001103",
+      "name": "LADY SLIPPER",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001111",
+      "name": "Lavazza Rossa 1 kg",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001113",
+      "name": "Lavazza Rossa 6 x 250 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001115",
+      "name": "Loacker Blueberry Wafer",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001116",
+      "name": "Loacker Raspberry Wafer",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001117",
+      "name": "LUXURY PERFUME CHARM",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001119",
+      "name": "Mareblu 12 x 60 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001120",
+      "name": "Maruzella 3 x 80 g",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001121",
+      "name": "Maruzella 6 x 60 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001122",
+      "name": "Marysol Tuna",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001123",
+      "name": "Marysol Tuna 3 x 70 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001126",
+      "name": "MILLEFIONI HONEY 1Kg",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001127",
+      "name": "MILLEFIORI HONEY 1Kg",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001128",
+      "name": "Montana Corned Beef",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001129",
+      "name": "Montegrappa Carne",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001130",
+      "name": "Montegrappa Prosciutto",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001133",
+      "name": "NIKE SHORT",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001134",
+      "name": "Nixe Tonno 12 x 70 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001135",
+      "name": "Nixe Tuna 3 x 70 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001136",
+      "name": "Nixe Tuna Solo Can 160 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001137",
+      "name": "Nixe Tuna With Olive Oil 4 x 70 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001138",
+      "name": "Nostromo 12 x 60 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001139",
+      "name": "Nostromo 8 x 60 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001140",
+      "name": "Nostromo Tuna 6 x 70 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001141",
+      "name": "Novi Caramel",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001142",
+      "name": "Novi Mirtillo",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001143",
+      "name": "Novi Pistacchio",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001145",
+      "name": "One Fragrance",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001146",
+      "name": "One Fragrance",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001147",
+      "name": "One Fragrance",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001148",
+      "name": "One Fragrance",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001149",
+      "name": "Pagani Formaggi",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001150",
+      "name": "Pagani Prosciutto",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001151",
+      "name": "Pagani Prosciutto",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001152",
+      "name": "Pagani Prosciutto",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001153",
+      "name": "Pellini Ground Coffee 4 x 250 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001155",
+      "name": "Pernigotti Chocolate 80 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001156",
+      "name": "PILL BOX",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001159",
+      "name": "Preferiti Extra Virgin Olive Oil",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001160",
+      "name": "Ribeira Tuna 12 x 70 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001161",
+      "name": "Rio Mare 14 x 80 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001167",
+      "name": "Sacla Pesto 190 g",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001168",
+      "name": "SAFARI KIDS SLIPPER",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001169",
+      "name": "Segafredo 250Gx4",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001170",
+      "name": "Selex Savoiardi Ladyfinger Biscuits",
+      "missing": [
+        "price",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001171",
+      "name": "SETS JEWELRY RED BIG BOX",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001174",
+      "name": "Sondey Lady Finger",
+      "missing": [
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001176",
+      "name": "STRAWBERRY SLIPPER",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001188",
+      "name": "TSHIRT OVERSIZED",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001189",
+      "name": "Tuna Francesco Moretti 3 x 80 g",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001190",
+      "name": "UNA TIRA L ALTRA BERRIES GUMMY",
+      "missing": [
+        "brand",
+        "category",
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001193",
+      "name": "X Bolt Perfume",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001194",
+      "name": "Xbolt",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001195",
+      "name": "Xbolt",
+      "missing": [
+        "primary_photo",
+        "human_review"
+      ]
+    },
+    {
+      "sku": "K2-SKU-001196",
+      "name": "ZODIAC SIGN",
+      "missing": [
+        "brand",
+        "category",
+        "price",
+        "primary_photo",
+        "human_review"
+      ]
+    }
+  ]
+}

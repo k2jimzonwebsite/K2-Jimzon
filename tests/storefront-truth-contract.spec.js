@@ -172,7 +172,7 @@ test('catalog grid provides dynamic category resolution, clothing support, and a
 
   const context = await readFile(new URL('../src/context/StoreContext.jsx', import.meta.url), 'utf8')
   expect(context).toContain('categories(id, name)')
-  expect(context).toContain('dbP.categories?.name')
+  expect(context).toContain('getStoreCategory(dbP)')
 
   const adminGrid = await readFile(new URL('../src/views/admin/InventoryGrid.jsx', import.meta.url), 'utf8')
   expect(adminGrid).toContain('product.category')

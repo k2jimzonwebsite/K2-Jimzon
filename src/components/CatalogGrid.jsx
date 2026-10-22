@@ -1,7 +1,6 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useStore } from '../context/StoreContext'
-import { CATEGORIES } from '../data/products'
 import ProductCard from './ProductCard'
 import { SearchIcon, XIcon } from './ui/icons'
 import { compareCatalogProducts } from '../lib/catalogSort'
@@ -20,6 +19,7 @@ export default function CatalogGrid() {
     sortBy: storeSortBy,
     setSortBy: setStoreSortBy,
     listedProducts: products,
+    storeCategories = [],
     requestPasabuyItem,
     loading,
     catalogStale,
@@ -32,26 +32,12 @@ export default function CatalogGrid() {
   const setSortBy = setStoreSortBy ?? setLocalSortBy
   const reducedMotion = useReducedMotion()
 
-  // Dynamic categories: derives categories from catalog products so new categories appear automatically
-  const availableCategories = useMemo(() => {
-    const dynamicCats = new Set()
-    if (Array.isArray(products)) {
-      for (const p of products) {
-        if (p.category && p.category !== 'Uncategorised') {
-          dynamicCats.add(p.category)
-        }
-      }
-    }
-    if (dynamicCats.size === 0) return CATEGORIES
-    if (category && category !== 'All' && !dynamicCats.has(category)) {
-      dynamicCats.add(category)
-    }
-    return ['All', ...Array.from(dynamicCats).sort((a, b) => a.localeCompare(b))]
-  }, [products, category])
+  const availableCategories = useMemo(() => ['All', ...storeCategories.map(entry => entry.name)], [storeCategories])
 
   // Shopee/Lazada style search relevance partitioning
   const { directMatches, recommendedMatches, hasQuery } = useMemo(() => {
-    return partitionCatalogSearch(products, query, category, sortBy)
+    const result = partitionCatalogSearch(products, query, category, sortBy)
+    return result
   }, [products, query, category, sortBy])
 
   // Progressive batching / infinite scroll state
@@ -203,7 +189,7 @@ export default function CatalogGrid() {
               <AnimatePresence initial={false}>
                 {visibleDirect.map((product, index) => (
                   <motion.div
-                    key={product.id || product.sku}
+                    key={product.family?.id || product.id || product.sku}
                     layout={reducedMotion ? false : true}
                     initial={reducedMotion ? { opacity: 0 } : { opacity: 0, transform: 'translateY(8px)' }}
                     animate={{ opacity: 1, transform: 'translateY(0)' }}
