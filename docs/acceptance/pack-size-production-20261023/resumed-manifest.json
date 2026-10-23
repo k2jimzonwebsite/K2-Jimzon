@@ -1,0 +1,17 @@
+{
+  "initialHead": "3ac12531fd70d86e359afa3c84a77a40512ef8bc",
+  "testOnlyCorrection": "quotation status locator narrowed; focused1/1 pass",
+  "commands": [
+    "npx playwright test --config=playwright.sheet-reference.config.js tests/admin-secure-sheet-reference.spec.js",
+    "npm run test:admin-website-assignment-ui",
+    "npm run test:owner-count-close-ui",
+    "npm run test:customer-account-ui",
+    "npm run test:selling-surfaces",
+    "npm run test:order-receipt-direct",
+    "npm run test:workflow-api",
+    "npm run test:intake-ai-ui",
+    "npm run test:vercel-output",
+    "npm run build:storefront",
+    "npm run build:admin"
+  ]
+}

@@ -1,0 +1,4264 @@
+- main:
+  - heading "Inventory" [level=1]
+  - button "Open scan center":
+  - button "Search dashboard":
+  - button "Open navigation menu":
+  - paragraph: Catalog and stock control
+  - heading "Inventory & stock checks" [level=2]
+  - 'button "About: Inventory & stock checks"':
+    - generic: "?"
+  - generic: 196 SKUs loaded
+  - button "Add inventory":
+    - generic: Add inventory
+  - button "Scan box":
+    - text: Scan box
+  - button "Unused uploads"
+  - button "Add product"
+  - term: Active SKUs
+  - definition: "93"
+  - paragraph: 196 total product records
+  - term: Available units
+  - definition: "273"
+  - paragraph: Product master available stock
+  - term: Out of stock
+  - definition: "152"
+  - paragraph: Immediate replenishment review
+  - term: Low stock
+  - definition: "33"
+  - paragraph: At or below reorder level
+  - term: Expiry risk
+  - definition: "0"
+  - paragraph: Expired or within 90 days
+  - heading "Products" [level=3]
+  - generic: "196"
+  - 'button "About: Products"':
+    - generic: "?"
+  - generic: Search inventory
+  - searchbox "Search inventory"
+  - generic "Filter inventory exceptions":
+    - button "All 196" [pressed]
+    - button "Out 152"
+    - button "Low 33"
+    - button "Expiry 0"
+    - button "Drafts 103"
+  - text: Store category filter
+  - combobox "Store category filter":
+    - option "All categories" [selected]
+    - option "No custom store category"
+    - option "Beverages (1)"
+    - option "Biscuits (1)"
+    - option "Biscuits and wafers (9)"
+    - option "Chocolate (14)"
+    - option "Clothing (2)"
+    - option "Coffee and drink preparations (22)"
+    - option "Cooking oils (3)"
+    - option "Filled pasta (3)"
+    - option "Fragrances (6)"
+    - option "Pasta (21)"
+    - option "Pasta sauces (6)"
+    - option "Personal care (21)"
+    - option "Pesto and sauces (18)"
+    - option "Spaghetti (1)"
+    - option "Sweet spreads (6)"
+    - option "Sweets (5)"
+    - option "Sweets and confectionery (3)"
+    - option "Tinned fish (19)"
+    - option "Tinned meat (1)"
+  - checkbox "Select visible (196)"
+  - generic: Select visible (196)
+  - checkbox "Select Pagani Prosciutto"
+  - img "Pagani Prosciutto"
+  - generic: K2-SKU-001152
+  - generic: Draft
+  - heading "Pagani Prosciutto" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱274
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tigullio Carciofi E Noci"
+  - img "Tigullio Carciofi E Noci"
+  - button "449d left"
+  - generic: K2-SKU-001177
+  - generic: Live
+  - heading "Tigullio Carciofi E Noci" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱297
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Pernigotti Chocolate 80 g"
+  - img "Pernigotti Chocolate 80 g"
+  - generic: K2-SKU-001155
+  - generic: Draft
+  - heading "Pernigotti Chocolate 80 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱159
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tortina White"
+  - img "Tortina White"
+  - generic: K2-SKU-001187
+  - generic: Live
+  - heading "Tortina White" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱429
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select STRAWBERRY SLIPPER"
+  - img "STRAWBERRY SLIPPER"
+  - generic: K2-SKU-001176
+  - generic: Draft
+  - heading "STRAWBERRY SLIPPER" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Siciliani Pistacchio Crunchy 200 g"
+  - img "Siciliani Pistacchio Crunchy 200 g"
+  - button "97d left"
+  - generic: K2-SKU-001173
+  - generic: Live
+  - heading "Siciliani Pistacchio Crunchy 200 g" [level=3]
+  - generic: Stock
+  - generic: 7 pcs
+  - generic: SRP
+  - generic: ₱499
+  - generic: 7 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "7"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 7 pcs"': Unassigned 7
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select UNA TIRA L ALTRA BERRIES GUMMY"
+  - img "UNA TIRA L ALTRA BERRIES GUMMY"
+  - generic: K2-SKU-001190
+  - generic: Draft
+  - heading "UNA TIRA L ALTRA BERRIES GUMMY" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱159
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tigullio Zafferano"
+  - img "Tigullio Zafferano"
+  - button "567d left"
+  - generic: K2-SKU-001185
+  - generic: Live
+  - heading "Tigullio Zafferano" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱297
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Sondey Lady Finger"
+  - img "Sondey Lady Finger"
+  - generic: K2-SKU-001174
+  - generic: Draft
+  - heading "Sondey Lady Finger" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Laica Praline Assortite 150 g"
+  - img "Laica Praline Assortite 150 g"
+  - button "220d left"
+  - generic: K2-SKU-001158
+  - generic: Live
+  - heading "Laica Praline Assortite 150 g" [level=3]
+  - generic: Stock
+  - generic: 4 pcs
+  - generic: SRP
+  - generic: ₱399
+  - generic: 4 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "4"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 4 pcs"': Unassigned 4
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Poppies Caramel Biscuit"
+  - img "Poppies Caramel Biscuit"
+  - button "391d left"
+  - generic: K2-SKU-001157
+  - generic: Live
+  - heading "Poppies Caramel Biscuit" [level=3]
+  - generic: Stock
+  - generic: 4 pcs
+  - generic: SRP
+  - generic: ₱299
+  - generic: 4 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "4"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 4 pcs"': Unassigned 4
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select ZODIAC SIGN"
+  - img "ZODIAC SIGN"
+  - generic: K2-SKU-001196
+  - generic: Draft
+  - heading "ZODIAC SIGN" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Xbolt"
+  - img "Xbolt"
+  - generic: K2-SKU-001195
+  - generic: Draft
+  - heading "Xbolt" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select PILL BOX"
+  - img "PILL BOX"
+  - generic: K2-SKU-001156
+  - generic: Draft
+  - heading "PILL BOX" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱50
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tigullio Ricotta e Noci"
+  - img "Tigullio Ricotta e Noci"
+  - button "357d left"
+  - generic: K2-SKU-001184
+  - generic: Live
+  - heading "Tigullio Ricotta e Noci" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱297
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Xbolt"
+  - img "Xbolt"
+  - generic: K2-SKU-001194
+  - generic: Draft
+  - heading "Xbolt" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Ribeira Tuna 12 x 70 g"
+  - img "Ribeira Tuna 12 x 70 g"
+  - generic: K2-SKU-001160
+  - generic: Draft
+  - heading "Ribeira Tuna 12 x 70 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱1,304
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Rio Mare 8 x 80 g"
+  - img "Rio Mare 8 x 80 g"
+  - generic: K2-SKU-001165
+  - generic: Live
+  - heading "Rio Mare 8 x 80 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱1,650
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select X Bolt Perfume"
+  - img "X Bolt Perfume"
+  - generic: K2-SKU-001193
+  - generic: Draft
+  - heading "X Bolt Perfume" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Rio Mare 6 x 120 g"
+  - img "Rio Mare 6 x 120 g"
+  - button "1165d left"
+  - generic: K2-SKU-001162
+  - generic: Live
+  - heading "Rio Mare 6 x 120 g" [level=3]
+  - generic: Stock
+  - generic: 20 pcs
+  - generic: SRP
+  - generic: ₱1,700
+  - generic: 20 pcs in 4 lots
+  - text: "Owned:"
+  - strong: "20"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 20 pcs"': Unassigned 20
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (4)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Segafredo 250Gx4"
+  - img "Segafredo 250Gx4"
+  - generic: K2-SKU-001169
+  - generic: Draft
+  - heading "Segafredo 250Gx4" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱529
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Sondey Savoiardi Lady Finger 400 g"
+  - img "Sondey Savoiardi Lady Finger 400 g"
+  - button "101d left"
+  - generic: K2-SKU-001175
+  - generic: Live
+  - heading "Sondey Savoiardi Lady Finger 400 g" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱409
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Selex Savoiardi Ladyfinger Biscuits"
+  - img "Selex Savoiardi Ladyfinger Biscuits"
+  - generic: K2-SKU-001170
+  - generic: Draft
+  - heading "Selex Savoiardi Ladyfinger Biscuits" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select TSHIRT OVERSIZED"
+  - img "TSHIRT OVERSIZED"
+  - generic: K2-SKU-001188
+  - generic: Draft
+  - heading "TSHIRT OVERSIZED" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Suddenly Fragrances Rosa Eau de Parfum 75 ml"
+  - img "Suddenly Fragrances Rosa Eau de Parfum 75 ml"
+  - generic: K2-SKU-001166
+  - generic: Live
+  - heading "Suddenly Fragrances Rosa Eau de Parfum 75 ml" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱599
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Vidal Unicorns 90 g"
+  - img "Vidal Unicorns 90 g"
+  - generic: K2-SKU-001192
+  - generic: Live
+  - heading "Vidal Unicorns 90 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱175
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Rio Mare 6 x 80 g"
+  - img "Rio Mare 6 x 80 g"
+  - button "1530d left"
+  - generic: K2-SKU-001163
+  - generic: Live
+  - heading "Rio Mare 6 x 80 g" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱1,439
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tigullio Peperoni E Noci"
+  - img "Tigullio Peperoni E Noci"
+  - button "421d left"
+  - generic: K2-SKU-001180
+  - generic: Live
+  - heading "Tigullio Peperoni E Noci" [level=3]
+  - generic: Stock
+  - generic: 9 pcs
+  - generic: SRP
+  - generic: ₱297
+  - generic: 9 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "9"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 9 pcs"': Unassigned 9
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Rio Mare 14 x 80 g"
+  - img "Rio Mare 14 x 80 g"
+  - generic: K2-SKU-001161
+  - generic: Draft
+  - heading "Rio Mare 14 x 80 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱2,200
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tigullio Radicchio e Speck"
+  - img "Tigullio Radicchio e Speck"
+  - button "568d left"
+  - generic: K2-SKU-001183
+  - generic: Live
+  - heading "Tigullio Radicchio e Speck" [level=3]
+  - generic: Stock
+  - generic: 4 pcs
+  - generic: SRP
+  - generic: ₱297
+  - generic: 4 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "4"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 4 pcs"': Unassigned 4
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tuna Francesco Moretti 3 x 80 g"
+  - img "Tuna Francesco Moretti 3 x 80 g"
+  - generic: K2-SKU-001189
+  - generic: Draft
+  - heading "Tuna Francesco Moretti 3 x 80 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱297
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select SAFARI KIDS SLIPPER"
+  - img "SAFARI KIDS SLIPPER"
+  - generic: K2-SKU-001168
+  - generic: Draft
+  - heading "SAFARI KIDS SLIPPER" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tigullio Pesto Plain"
+  - img "Tigullio Pesto Plain"
+  - button "378d left"
+  - generic: K2-SKU-001181
+  - generic: Live
+  - heading "Tigullio Pesto Plain" [level=3]
+  - generic: Stock
+  - generic: 4 pcs
+  - generic: SRP
+  - generic: ₱297
+  - generic: 4 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "4"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 4 pcs"': Unassigned 4
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select SETS JEWELRY RED BIG BOX"
+  - img "SETS JEWELRY RED BIG BOX"
+  - generic: K2-SKU-001171
+  - generic: Draft
+  - heading "SETS JEWELRY RED BIG BOX" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Siciliani Pistacchio Crema 200 g"
+  - img "Siciliani Pistacchio Crema 200 g"
+  - generic: K2-SKU-001172
+  - generic: Live
+  - heading "Siciliani Pistacchio Crema 200 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱499
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tigullio Pomodori Secchi Pistacchio"
+  - img "Tigullio Pomodori Secchi Pistacchio"
+  - button "450d left"
+  - generic: K2-SKU-001182
+  - generic: Live
+  - heading "Tigullio Pomodori Secchi Pistacchio" [level=3]
+  - generic: Stock
+  - generic: 4 pcs
+  - generic: SRP
+  - generic: ₱297
+  - generic: 4 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "4"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 4 pcs"': Unassigned 4
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tigullio Genovese Plain"
+  - img "Tigullio Genovese Plain"
+  - button "400d left"
+  - generic: K2-SKU-001178
+  - generic: Live
+  - heading "Tigullio Genovese Plain" [level=3]
+  - generic: Stock
+  - generic: 4 pcs
+  - generic: SRP
+  - generic: ₱297
+  - generic: 4 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "4"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 4 pcs"': Unassigned 4
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tigullio Gran Pesto Cremoso"
+  - img "Tigullio Gran Pesto Cremoso"
+  - generic: K2-SKU-001186
+  - generic: Live
+  - heading "Tigullio Gran Pesto Cremoso" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱297
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Vidal Jelly Teeth 90 g"
+  - img "Vidal Jelly Teeth 90 g"
+  - generic: K2-SKU-001191
+  - generic: Live
+  - heading "Vidal Jelly Teeth 90 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱175
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Perfume Rebile"
+  - img "Perfume Rebile"
+  - generic: K2-SKU-001154
+  - generic: Live
+  - heading "Perfume Rebile" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱604
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Pellini Ground Coffee 4 x 250 g"
+  - img "Pellini Ground Coffee 4 x 250 g"
+  - generic: K2-SKU-001153
+  - generic: Draft
+  - heading "Pellini Ground Coffee 4 x 250 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱499
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Tigullio Olive E Capperi"
+  - img "Tigullio Olive E Capperi"
+  - generic: K2-SKU-001179
+  - generic: Live
+  - heading "Tigullio Olive E Capperi" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱297
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Rio Mare 7 x 80 g"
+  - img "Rio Mare 7 x 80 g"
+  - button "1530d left"
+  - generic: K2-SKU-001164
+  - generic: Live
+  - heading "Rio Mare 7 x 80 g" [level=3]
+  - generic: Stock
+  - generic: 14 pcs
+  - generic: SRP
+  - generic: ₱1,550
+  - generic: 14 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "14"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 14 pcs"': Unassigned 14
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Sacla Pesto 190 g"
+  - img "Sacla Pesto 190 g"
+  - generic: K2-SKU-001167
+  - generic: Draft
+  - heading "Sacla Pesto 190 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Preferiti Extra Virgin Olive Oil"
+  - img "Preferiti Extra Virgin Olive Oil"
+  - generic: K2-SKU-001159
+  - generic: Draft
+  - heading "Preferiti Extra Virgin Olive Oil" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select One Fragrance"
+  - img "One Fragrance"
+  - generic: K2-SKU-001148
+  - generic: Draft
+  - heading "One Fragrance" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Montegrappa Carne"
+  - img "Montegrappa Carne"
+  - generic: K2-SKU-001129
+  - generic: Draft
+  - heading "Montegrappa Carne" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Montegrappa Prosciutto"
+  - img "Montegrappa Prosciutto"
+  - generic: K2-SKU-001130
+  - generic: Draft
+  - heading "Montegrappa Prosciutto" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Novi Mirtillo"
+  - img "Novi Mirtillo"
+  - generic: K2-SKU-001142
+  - generic: Draft
+  - heading "Novi Mirtillo" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱279
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Novi Caramel"
+  - img "Novi Caramel"
+  - generic: K2-SKU-001141
+  - generic: Draft
+  - heading "Novi Caramel" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱279
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Nostromo 8 x 60 g"
+  - img "Nostromo 8 x 60 g"
+  - generic: K2-SKU-001139
+  - generic: Draft
+  - heading "Nostromo 8 x 60 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱899
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Lavazza Oro 3 x 250 g"
+  - img "Lavazza Oro 3 x 250 g"
+  - generic: K2-SKU-001110
+  - generic: Live
+  - heading "Lavazza Oro 3 x 250 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱789
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Marysol Tuna"
+  - img "Marysol Tuna"
+  - generic: K2-SKU-001122
+  - generic: Draft
+  - heading "Marysol Tuna" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱345
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Laica Bar Nocciola"
+  - img "Laica Bar Nocciola"
+  - generic: K2-SKU-001105
+  - generic: Live
+  - heading "Laica Bar Nocciola" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱175
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Lavazza Rossa 6 x 250 g"
+  - img "Lavazza Rossa 6 x 250 g"
+  - generic: K2-SKU-001113
+  - generic: Draft
+  - heading "Lavazza Rossa 6 x 250 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱579
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Madame Perfume"
+  - img "Madame Perfume"
+  - generic: K2-SKU-001118
+  - generic: Live
+  - heading "Madame Perfume" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱599
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Lavazza Rossa 1 kg"
+  - img "Lavazza Rossa 1 kg"
+  - generic: K2-SKU-001111
+  - generic: Draft
+  - heading "Lavazza Rossa 1 kg" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱1,790
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Pagani Prosciutto"
+  - img "Pagani Prosciutto"
+  - generic: K2-SKU-001151
+  - generic: Draft
+  - heading "Pagani Prosciutto" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱274
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Nixe Tuna Solo Can 160 g"
+  - img "Nixe Tuna Solo Can 160 g"
+  - generic: K2-SKU-001136
+  - generic: Draft
+  - heading "Nixe Tuna Solo Can 160 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱399
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select McKennedy Cookie Creme Duo Cookie"
+  - img "McKennedy Cookie Creme Duo Cookie"
+  - button "113d left"
+  - generic: K2-SKU-001125
+  - generic: Live
+  - heading "McKennedy Cookie Creme Duo Cookie" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱399
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Loacker Raspberry Wafer"
+  - img "Loacker Raspberry Wafer"
+  - generic: K2-SKU-001116
+  - generic: Draft
+  - heading "Loacker Raspberry Wafer" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱299
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Novi Pistacchio"
+  - img "Novi Pistacchio"
+  - generic: K2-SKU-001143
+  - generic: Draft
+  - heading "Novi Pistacchio" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱279
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Maruzella 3 x 80 g"
+  - img "Maruzella 3 x 80 g"
+  - generic: K2-SKU-001120
+  - generic: Draft
+  - heading "Maruzella 3 x 80 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Nostromo Tuna 6 x 70 g"
+  - img "Nostromo Tuna 6 x 70 g"
+  - generic: K2-SKU-001140
+  - generic: Draft
+  - heading "Nostromo Tuna 6 x 70 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱990
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Lavazza Suerte 4 x 250 g"
+  - img "Lavazza Suerte 4 x 250 g"
+  - button "433d left"
+  - generic: K2-SKU-001114
+  - generic: Live
+  - heading "Lavazza Suerte 4 x 250 g" [level=3]
+  - generic: Stock
+  - generic: 3 pcs
+  - generic: SRP
+  - generic: ₱549
+  - generic: 3 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "3"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 3 pcs"': Unassigned 3
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Nixe Tuna 3 x 70 g"
+  - img "Nixe Tuna 3 x 70 g"
+  - generic: K2-SKU-001135
+  - generic: Draft
+  - heading "Nixe Tuna 3 x 70 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱499
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select MILLEFIONI HONEY 1Kg"
+  - img "MILLEFIONI HONEY 1Kg"
+  - generic: K2-SKU-001126
+  - generic: Draft
+  - heading "MILLEFIONI HONEY 1Kg" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱799
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Lavazza Crema Gusto 3 x 250 g"
+  - img "Lavazza Crema Gusto 3 x 250 g"
+  - generic: K2-SKU-001106
+  - generic: Live
+  - heading "Lavazza Crema Gusto 3 x 250 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱549
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Montana Corned Beef"
+  - img "Montana Corned Beef"
+  - generic: K2-SKU-001128
+  - generic: Draft
+  - heading "Montana Corned Beef" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱349
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Montegrappa Tortellini Prosciutto"
+  - img "Montegrappa Tortellini Prosciutto"
+  - button "199d left"
+  - generic: K2-SKU-001132
+  - generic: Live
+  - heading "Montegrappa Tortellini Prosciutto" [level=3]
+  - generic: Stock
+  - generic: 3 pcs
+  - generic: SRP
+  - generic: ₱274
+  - generic: 3 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "3"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 3 pcs"': Unassigned 3
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select One Fragrance"
+  - img "One Fragrance"
+  - generic: K2-SKU-001146
+  - generic: Draft
+  - heading "One Fragrance" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Marysol Tuna 3 x 70 g"
+  - img "Marysol Tuna 3 x 70 g"
+  - generic: K2-SKU-001123
+  - generic: Draft
+  - heading "Marysol Tuna 3 x 70 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱590
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Nostromo 12 x 60 g"
+  - img "Nostromo 12 x 60 g"
+  - generic: K2-SKU-001138
+  - generic: Draft
+  - heading "Nostromo 12 x 60 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱1,299
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Lavazza Crema Gusto 6 x 250 g"
+  - img "Lavazza Crema Gusto 6 x 250 g"
+  - generic: K2-SKU-001107
+  - generic: Live
+  - heading "Lavazza Crema Gusto 6 x 250 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱549
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select MILLEFIORI HONEY 1Kg"
+  - img "MILLEFIORI HONEY 1Kg"
+  - generic: K2-SKU-001127
+  - generic: Draft
+  - heading "MILLEFIORI HONEY 1Kg" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱799
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Loacker Blueberry Wafer"
+  - img "Loacker Blueberry Wafer"
+  - generic: K2-SKU-001115
+  - generic: Draft
+  - heading "Loacker Blueberry Wafer" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱299
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select LACURA ACQUA 100ML"
+  - img "LACURA ACQUA 100ML"
+  - generic: K2-SKU-001102
+  - generic: Draft
+  - heading "LACURA ACQUA 100ML" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱749
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Nixe Tuna With Olive Oil 4 x 70 g"
+  - img "Nixe Tuna With Olive Oil 4 x 70 g"
+  - generic: K2-SKU-001137
+  - generic: Draft
+  - heading "Nixe Tuna With Olive Oil 4 x 70 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱599
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select NIKE SHORT"
+  - img "NIKE SHORT"
+  - generic: K2-SKU-001133
+  - generic: Draft
+  - heading "NIKE SHORT" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Laica Bar Di Latte"
+  - img "Laica Bar Di Latte"
+  - generic: K2-SKU-001104
+  - generic: Live
+  - heading "Laica Bar Di Latte" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱175
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Nixe Tonno 12 x 70 g"
+  - img "Nixe Tonno 12 x 70 g"
+  - generic: K2-SKU-001134
+  - generic: Draft
+  - heading "Nixe Tonno 12 x 70 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱1,099
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Lavazza Rossa 4 x 250 g"
+  - img "Lavazza Rossa 4 x 250 g"
+  - button "433d left"
+  - generic: K2-SKU-001112
+  - generic: Live
+  - heading "Lavazza Rossa 4 x 250 g" [level=3]
+  - generic: Stock
+  - generic: 1 pcs
+  - generic: SRP
+  - generic: ₱579
+  - generic: 1 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "1"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 1 pcs"': Unassigned 1
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Lavazza Dek 250Gx2"
+  - img "Lavazza Dek 250Gx2"
+  - button "250d left"
+  - generic: K2-SKU-001109
+  - generic: Live
+  - heading "Lavazza Dek 250Gx2" [level=3]
+  - generic: Stock
+  - generic: 1 pcs
+  - generic: SRP
+  - generic: ₱585
+  - generic: 1 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "1"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 1 pcs"': Unassigned 1
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Maruzella 6 x 60 g"
+  - img "Maruzella 6 x 60 g"
+  - generic: K2-SKU-001121
+  - generic: Draft
+  - heading "Maruzella 6 x 60 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱735
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select LADY SLIPPER"
+  - img "LADY SLIPPER"
+  - generic: K2-SKU-001103
+  - generic: Draft
+  - heading "LADY SLIPPER" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Nutella Biscuit"
+  - img "Nutella Biscuit"
+  - generic: K2-SKU-001144
+  - generic: Live
+  - heading "Nutella Biscuit" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱399
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Pagani Prosciutto"
+  - img "Pagani Prosciutto"
+  - generic: K2-SKU-001150
+  - generic: Draft
+  - heading "Pagani Prosciutto" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱274
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select One Fragrance"
+  - img "One Fragrance"
+  - generic: K2-SKU-001147
+  - generic: Draft
+  - heading "One Fragrance" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Montegrappa Tortellini Carne"
+  - img "Montegrappa Tortellini Carne"
+  - button "213d left"
+  - generic: K2-SKU-001131
+  - generic: Live
+  - heading "Montegrappa Tortellini Carne" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱274
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select LUXURY PERFUME CHARM"
+  - img "LUXURY PERFUME CHARM"
+  - generic: K2-SKU-001117
+  - generic: Draft
+  - heading "LUXURY PERFUME CHARM" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱849
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Pagani Formaggi"
+  - img "Pagani Formaggi"
+  - generic: K2-SKU-001149
+  - generic: Draft
+  - heading "Pagani Formaggi" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱274
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Lavazza Crema Gusto Forte 4 x 250 g"
+  - img "Lavazza Crema Gusto Forte 4 x 250 g"
+  - generic: K2-SKU-001108
+  - generic: Live
+  - heading "Lavazza Crema Gusto Forte 4 x 250 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱559
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Mareblu 12 x 60 g"
+  - img "Mareblu 12 x 60 g"
+  - generic: K2-SKU-001119
+  - generic: Draft
+  - heading "Mareblu 12 x 60 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱1,415
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Mckennedy Cookie Crème Choco Cookie"
+  - img "Mckennedy Cookie Crème Choco Cookie"
+  - button "112d left"
+  - generic: K2-SKU-001124
+  - generic: Live
+  - heading "Mckennedy Cookie Crème Choco Cookie" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱399
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select One Fragrance"
+  - img "One Fragrance"
+  - generic: K2-SKU-001145
+  - generic: Draft
+  - heading "One Fragrance" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select GUSTO ELMA PISTACCHIO SPREAD 20% 600G"
+  - img "GUSTO ELMA PISTACCHIO SPREAD 20% 600G"
+  - generic: K2-SKU-001071
+  - generic: Draft
+  - heading "GUSTO ELMA PISTACCHIO SPREAD 20% 600G" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱1,200
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italian Coffee Nespresso Orzo Bio"
+  - img "Italian Coffee Nespresso Orzo Bio"
+  - button "700d left"
+  - generic: K2-SKU-001088
+  - generic: Live
+  - heading "Italian Coffee Nespresso Orzo Bio" [level=3]
+  - generic: Stock
+  - generic: 1 pcs
+  - generic: SRP
+  - generic: ₱249
+  - generic: 1 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "1"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 1 pcs"': Unassigned 1
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select GUCCI MICKEY SLIPPER"
+  - img "GUCCI MICKEY SLIPPER"
+  - generic: K2-SKU-001069
+  - generic: Draft
+  - heading "GUCCI MICKEY SLIPPER" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select JEWELRY BOXX BLACK BILOG EMPTY"
+  - img "JEWELRY BOXX BLACK BILOG EMPTY"
+  - generic: K2-SKU-001096
+  - generic: Draft
+  - heading "JEWELRY BOXX BLACK BILOG EMPTY" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select DULCIAR PISTACCHIO"
+  - img "DULCIAR PISTACCHIO"
+  - generic: K2-SKU-001054
+  - generic: Draft
+  - heading "DULCIAR PISTACCHIO" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱199
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italiamo Salsiccia Sauce"
+  - img "Italiamo Salsiccia Sauce"
+  - generic: K2-SKU-001084
+  - generic: Draft
+  - heading "Italiamo Salsiccia Sauce" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select JEWELRY BOX BIG EMPTY"
+  - img "JEWELRY BOX BIG EMPTY"
+  - generic: K2-SKU-001091
+  - generic: Draft
+  - heading "JEWELRY BOX BIG EMPTY" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select FARBO 100G"
+  - img "FARBO 100G"
+  - generic: K2-SKU-001057
+  - generic: Draft
+  - heading "FARBO 100G" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Homme Paris"
+  - img "Homme Paris"
+  - generic: K2-SKU-001073
+  - generic: Draft
+  - heading "Homme Paris" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Giglio Lasagne Pasta 500 g"
+  - img "Giglio Lasagne Pasta 500 g"
+  - generic: K2-SKU-001066
+  - generic: Live
+  - heading "Giglio Lasagne Pasta 500 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱349
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Eccellenza Ligure Pesto"
+  - img "Eccellenza Ligure Pesto"
+  - generic: K2-SKU-001100
+  - generic: Draft
+  - heading "Eccellenza Ligure Pesto" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italian Nespresso Padova"
+  - img "Italian Nespresso Padova"
+  - generic: K2-SKU-001089
+  - generic: Live
+  - heading "Italian Nespresso Padova" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱349
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select JEWELRY BOX BILOG SET"
+  - img "JEWELRY BOX BILOG SET"
+  - generic: K2-SKU-001092
+  - generic: Draft
+  - heading "JEWELRY BOX BILOG SET" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Fin Carré White Chocolate"
+  - img "Fin Carré White Chocolate"
+  - button "204d left"
+  - generic: K2-SKU-001060
+  - generic: Live
+  - heading "Fin Carré White Chocolate" [level=3]
+  - generic: Stock
+  - generic: 4 pcs
+  - generic: SRP
+  - generic: ₱199
+  - generic: 4 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "4"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 4 pcs"': Unassigned 4
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select La Suissa Tre Strati Caffe Chocolate 150 g"
+  - img "La Suissa Tre Strati Caffe Chocolate 150 g"
+  - generic: K2-SKU-001101
+  - generic: Live
+  - heading "La Suissa Tre Strati Caffe Chocolate 150 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱249
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Fini Smile 90 g"
+  - img "Fini Smile 90 g"
+  - generic: K2-SKU-001062
+  - generic: Live
+  - heading "Fini Smile 90 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱135
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select ETRE FLORISSANT PERFUME SET"
+  - img "ETRE FLORISSANT PERFUME SET"
+  - generic: K2-SKU-001056
+  - generic: Draft
+  - heading "ETRE FLORISSANT PERFUME SET" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱699
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Gimoka Nespresso Aluminum Gran Crema Ciocolatto"
+  - img "Gimoka Nespresso Aluminum Gran Crema Ciocolatto"
+  - generic: K2-SKU-001068
+  - generic: Live
+  - heading "Gimoka Nespresso Aluminum Gran Crema Ciocolatto" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱374
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Homme Sport"
+  - img "Homme Sport"
+  - generic: K2-SKU-001074
+  - generic: Draft
+  - heading "Homme Sport" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Gullon Savoiardi Lady Finger 300"
+  - img "Gullon Savoiardi Lady Finger 300"
+  - generic: K2-SKU-001070
+  - generic: Live
+  - heading "Gullon Savoiardi Lady Finger 300" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱297
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Homme Paris"
+  - img "Homme Paris"
+  - generic: K2-SKU-001072
+  - generic: Draft
+  - heading "Homme Paris" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italian Coffee Nespresso Ginseng"
+  - img "Italian Coffee Nespresso Ginseng"
+  - generic: K2-SKU-001087
+  - generic: Draft
+  - heading "Italian Coffee Nespresso Ginseng" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱249
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Homme Sport"
+  - img "Homme Sport"
+  - generic: K2-SKU-001075
+  - generic: Draft
+  - heading "Homme Sport" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Homme Sport"
+  - img "Homme Sport"
+  - generic: K2-SKU-001076
+  - generic: Draft
+  - heading "Homme Sport" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italiamo Bottle 400 g Ricotta"
+  - img "Italiamo Bottle 400 g Ricotta"
+  - generic: K2-SKU-001080
+  - generic: Live
+  - heading "Italiamo Bottle 400 g Ricotta" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱349
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italiamo In Can 2 x 180 g Ragu Con Salsicia"
+  - img "Italiamo In Can 2 x 180 g Ragu Con Salsicia"
+  - generic: K2-SKU-001082
+  - generic: Draft
+  - heading "Italiamo In Can 2 x 180 g Ragu Con Salsicia" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱345
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Galatine Blue 150 g"
+  - img "Galatine Blue 150 g"
+  - button "517d left"
+  - generic: K2-SKU-001065
+  - generic: Live
+  - heading "Galatine Blue 150 g" [level=3]
+  - generic: Stock
+  - generic: 1 pcs
+  - generic: SRP
+  - generic: ₱469
+  - generic: 1 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "1"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 1 pcs"': Unassigned 1
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Galatine Blue 125 g"
+  - img "Galatine Blue 125 g"
+  - button "469d left"
+  - generic: K2-SKU-001064
+  - generic: Live
+  - heading "Galatine Blue 125 g" [level=3]
+  - generic: Stock
+  - generic: 1 pcs
+  - generic: SRP
+  - generic: ₱439
+  - generic: 1 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "1"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 1 pcs"': Unassigned 1
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Fin Carré 50%"
+  - img "Fin Carré 50%"
+  - button "503d left"
+  - generic: K2-SKU-001058
+  - generic: Live
+  - heading "Fin Carré 50%" [level=3]
+  - generic: Stock
+  - generic: 3 pcs
+  - generic: SRP
+  - generic: ₱199
+  - generic: 3 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "3"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 3 pcs"': Unassigned 3
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italiamo In Can 2 x 180 g Ragu"
+  - img "Italiamo In Can 2 x 180 g Ragu"
+  - generic: K2-SKU-001081
+  - generic: Live
+  - heading "Italiamo In Can 2 x 180 g Ragu" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱345
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Eccelenze Di Prix Pistacchio Cream"
+  - img "Eccelenze Di Prix Pistacchio Cream"
+  - generic: K2-SKU-001055
+  - generic: Draft
+  - heading "Eccelenze Di Prix Pistacchio Cream" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select JOGGING PANTS"
+  - img "JOGGING PANTS"
+  - generic: K2-SKU-001097
+  - generic: Draft
+  - heading "JOGGING PANTS" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italian Coffee Nespresso Aluminio Venezia Arabica"
+  - img "Italian Coffee Nespresso Aluminio Venezia Arabica"
+  - generic: K2-SKU-001086
+  - generic: Live
+  - heading "Italian Coffee Nespresso Aluminio Venezia Arabica" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱349
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Gimoka Nespresso Aluminum Forte"
+  - img "Gimoka Nespresso Aluminum Forte"
+  - generic: K2-SKU-001067
+  - generic: Live
+  - heading "Gimoka Nespresso Aluminum Forte" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱374
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Jolie Perfume"
+  - img "Jolie Perfume"
+  - generic: K2-SKU-001099
+  - generic: Live
+  - heading "Jolie Perfume" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱689
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italian Coffee Nespresso Aluminio Ristretto Torino"
+  - img "Italian Coffee Nespresso Aluminio Ristretto Torino"
+  - generic: K2-SKU-001085
+  - generic: Live
+  - heading "Italian Coffee Nespresso Aluminio Ristretto Torino" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱349
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italian Nespresso Torino"
+  - img "Italian Nespresso Torino"
+  - generic: K2-SKU-001090
+  - generic: Live
+  - heading "Italian Nespresso Torino" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱349
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select JEWELRY BOX RED BILOG EMPTY"
+  - img "JEWELRY BOX RED BILOG EMPTY"
+  - generic: K2-SKU-001094
+  - generic: Draft
+  - heading "JEWELRY BOX RED BILOG EMPTY" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Galatine Blue"
+  - img "Galatine Blue"
+  - generic: K2-SKU-001063
+  - generic: Live
+  - heading "Galatine Blue" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱439
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Dulciar Bar Gianduia"
+  - img "Dulciar Bar Gianduia"
+  - button "188d left"
+  - generic: K2-SKU-001052
+  - generic: Live
+  - heading "Dulciar Bar Gianduia" [level=3]
+  - generic: Stock
+  - generic: 5 pcs
+  - generic: SRP
+  - generic: ₱199
+  - generic: 5 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "5"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 5 pcs"': Unassigned 5
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italiamo 500 g Di Gragnano Linguine"
+  - img "Italiamo 500 g Di Gragnano Linguine"
+  - generic: K2-SKU-001077
+  - generic: Live
+  - heading "Italiamo 500 g Di Gragnano Linguine" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱249
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select JEWELRY BOX BLUE RIBBON EMPTY"
+  - img "JEWELRY BOX BLUE RIBBON EMPTY"
+  - generic: K2-SKU-001093
+  - generic: Draft
+  - heading "JEWELRY BOX BLUE RIBBON EMPTY" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italiamo Bottle 400 g Amatriciana"
+  - img "Italiamo Bottle 400 g Amatriciana"
+  - generic: K2-SKU-001079
+  - generic: Live
+  - heading "Italiamo Bottle 400 g Amatriciana" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱349
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select JEWELRY BOX SMALL BLUE SET"
+  - img "JEWELRY BOX SMALL BLUE SET"
+  - generic: K2-SKU-001095
+  - generic: Draft
+  - heading "JEWELRY BOX SMALL BLUE SET" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Fini Fried Egg 90 g"
+  - img "Fini Fried Egg 90 g"
+  - generic: K2-SKU-001061
+  - generic: Live
+  - heading "Fini Fried Egg 90 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱135
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Dulciar Bar Pistacchio"
+  - img "Dulciar Bar Pistacchio"
+  - button "206d left"
+  - generic: K2-SKU-001053
+  - generic: Live
+  - heading "Dulciar Bar Pistacchio" [level=3]
+  - generic: Stock
+  - generic: 8 pcs
+  - generic: SRP
+  - generic: ₱199
+  - generic: 8 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "8"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 8 pcs"': Unassigned 8
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italiamo Pesto Lemon"
+  - img "Italiamo Pesto Lemon"
+  - button "421d left"
+  - generic: K2-SKU-001083
+  - generic: Live
+  - heading "Italiamo Pesto Lemon" [level=3]
+  - generic: Stock
+  - generic: 1 pcs
+  - generic: SRP
+  - generic: ₱259
+  - generic: 1 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "1"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 1 pcs"': Unassigned 1
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Fin Carré Milk Choc"
+  - img "Fin Carré Milk Choc"
+  - button "104d left"
+  - generic: K2-SKU-001059
+  - generic: Live
+  - heading "Fin Carré Milk Choc" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱199
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Italiamo 500 g Di Gragnano Spaghetti"
+  - img "Italiamo 500 g Di Gragnano Spaghetti"
+  - generic: K2-SKU-001078
+  - generic: Live
+  - heading "Italiamo 500 g Di Gragnano Spaghetti" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱249
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select JOLIE"
+  - img "JOLIE"
+  - generic: K2-SKU-001098
+  - generic: Draft
+  - heading "JOLIE" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱689
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Borella Prosciutto"
+  - img "Borella Prosciutto"
+  - button "103d left"
+  - generic: K2-SKU-001021
+  - generic: Live
+  - heading "Borella Prosciutto" [level=3]
+  - generic: Stock
+  - generic: 22 pcs
+  - generic: SRP
+  - generic: ₱259
+  - generic: 22 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "22"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 22 pcs"': Unassigned 22
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Baresa Pesto Ricotta E Noci"
+  - img "Baresa Pesto Ricotta E Noci"
+  - button "890d left"
+  - generic: K2-SKU-001009
+  - generic: Live
+  - heading "Baresa Pesto Ricotta E Noci" [level=3]
+  - generic: Stock
+  - generic: 1 pcs
+  - generic: SRP
+  - generic: ₱249
+  - generic: 1 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "1"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 1 pcs"': Unassigned 1
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Baiocchi Pistacchio"
+  - img "Baiocchi Pistacchio"
+  - generic: K2-SKU-001005
+  - generic: Draft
+  - heading "Baiocchi Pistacchio" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Combino Spaghetti No. 5 500 g"
+  - img "Combino Spaghetti No. 5 500 g"
+  - generic: K2-SKU-001036
+  - generic: Live
+  - heading "Combino Spaghetti No. 5 500 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱199
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Combino Spaghetti Bio Di Semola Di Grano 500 g"
+  - img "Combino Spaghetti Bio Di Semola Di Grano 500 g"
+  - generic: K2-SKU-001035
+  - generic: Live
+  - heading "Combino Spaghetti Bio Di Semola Di Grano 500 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱249
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select CLOSE KIDS SLIPPER"
+  - img "CLOSE KIDS SLIPPER"
+  - generic: K2-SKU-001033
+  - generic: Draft
+  - heading "CLOSE KIDS SLIPPER" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Delverde Lasagne Pasta 500 g"
+  - img "Delverde Lasagne Pasta 500 g"
+  - generic: K2-SKU-001043
+  - generic: Draft
+  - heading "Delverde Lasagne Pasta 500 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱345
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select DELUXE PISTACCHIO"
+  - img "DELUXE PISTACCHIO"
+  - generic: K2-SKU-001042
+  - generic: Draft
+  - heading "DELUXE PISTACCHIO" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱399
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Cien Cream Soap Honey And Milk 2-Pack"
+  - img "Cien Cream Soap Honey And Milk 2-Pack"
+  - generic: K2-SKU-001027
+  - generic: Draft
+  - heading "Cien Cream Soap Honey And Milk 2-Pack" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱105
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Cien Cream Soap Olive 2-Pack"
+  - img "Cien Cream Soap Olive 2-Pack"
+  - generic: K2-SKU-001028
+  - generic: Live
+  - heading "Cien Cream Soap Olive 2-Pack" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱100
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Baresa Pesto Without Garlic"
+  - img "Baresa Pesto Without Garlic"
+  - generic: K2-SKU-001010
+  - generic: Live
+  - heading "Baresa Pesto Without Garlic" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱255
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Cien Cream Soap Olive 2-Pack"
+  - img "Cien Cream Soap Olive 2-Pack"
+  - generic: K2-SKU-001029
+  - generic: Draft
+  - heading "Cien Cream Soap Olive 2-Pack" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱100
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Combino Farfalle 500 g"
+  - img "Combino Farfalle 500 g"
+  - button "812d left"
+  - generic: K2-SKU-001034
+  - generic: Live
+  - heading "Combino Farfalle 500 g" [level=3]
+  - generic: Stock
+  - generic: 6 pcs
+  - generic: SRP
+  - generic: ₱199
+  - generic: 6 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "6"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 6 pcs"': Unassigned 6
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Baresa Pesto Genovese 290 g"
+  - img "Baresa Pesto Genovese 290 g"
+  - button "574d left"
+  - generic: K2-SKU-001007
+  - generic: Live
+  - heading "Baresa Pesto Genovese 290 g" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱289
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Caffe Solubile Crastan 100 g"
+  - img "Caffe Solubile Crastan 100 g"
+  - generic: K2-SKU-001023
+  - generic: Draft
+  - heading "Caffe Solubile Crastan 100 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Bellarum Orzo"
+  - img "Bellarum Orzo"
+  - button "826d left"
+  - generic: K2-SKU-001013
+  - generic: Live
+  - heading "Bellarum Orzo" [level=3]
+  - generic: Stock
+  - generic: 8 pcs
+  - generic: SRP
+  - generic: ₱499
+  - generic: 8 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "8"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 8 pcs"': Unassigned 8
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select DELIZIA PISTACCHIO 45% 600ML"
+  - img "DELIZIA PISTACCHIO 45% 600ML"
+  - generic: K2-SKU-001040
+  - generic: Draft
+  - heading "DELIZIA PISTACCHIO 45% 600ML" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱1,749
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Borella Prosciutto"
+  - img "Borella Prosciutto"
+  - button "103d left"
+  - generic: K2-SKU-001020
+  - generic: Live
+  - heading "Borella Prosciutto" [level=3]
+  - generic: Stock
+  - generic: 42 pcs
+  - generic: SRP
+  - generic: ₱259
+  - generic: 42 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "42"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 42 pcs"': Unassigned 42
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Barilla Ragu Bolognese"
+  - img "Barilla Ragu Bolognese"
+  - button "244d left"
+  - generic: K2-SKU-001011
+  - generic: Live
+  - heading "Barilla Ragu Bolognese" [level=3]
+  - generic: Stock
+  - generic: 4 pcs
+  - generic: SRP
+  - generic: ₱379
+  - generic: 4 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "4"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 4 pcs"': Unassigned 4
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Chalou"
+  - img "Chalou"
+  - generic: K2-SKU-001025
+  - generic: Live
+  - heading "Chalou" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Dante Extra Virgin Olive 1 Liter"
+  - img "Dante Extra Virgin Olive 1 Liter"
+  - button "325d left"
+  - generic: K2-SKU-001038
+  - generic: Live
+  - heading "Dante Extra Virgin Olive 1 Liter" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱1,199
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Borella Carne"
+  - img "Borella Carne"
+  - generic: K2-SKU-001016
+  - generic: Draft
+  - heading "Borella Carne" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱259
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Chalou"
+  - img "Chalou"
+  - generic: K2-SKU-001024
+  - generic: Live
+  - heading "Chalou" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱649
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Divella Spaghetti Pasta 1 kg"
+  - img "Divella Spaghetti Pasta 1 kg"
+  - generic: K2-SKU-001045
+  - generic: Live
+  - heading "Divella Spaghetti Pasta 1 kg" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱299
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Caffé Poli Nespresso Gold 10S"
+  - img "Caffé Poli Nespresso Gold 10S"
+  - generic: K2-SKU-001022
+  - generic: Live
+  - heading "Caffé Poli Nespresso Gold 10S" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱299
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Barissimo Orzo Barley"
+  - img "Barissimo Orzo Barley"
+  - generic: K2-SKU-001012
+  - generic: Draft
+  - heading "Barissimo Orzo Barley" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱499
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Baresa Pesto Plain"
+  - img "Baresa Pesto Plain"
+  - generic: K2-SKU-001008
+  - generic: Draft
+  - heading "Baresa Pesto Plain" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱255
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select DULCIAR PISTACHIO"
+  - img "DULCIAR PISTACHIO"
+  - generic: K2-SKU-001048
+  - generic: Draft
+  - heading "DULCIAR PISTACHIO" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱199
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Disano Pistacchio Spread 320 g 20% Pistacchio"
+  - img "Disano Pistacchio Spread 320 g 20% Pistacchio"
+  - generic: K2-SKU-001044
+  - generic: Draft
+  - heading "Disano Pistacchio Spread 320 g 20% Pistacchio" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱699
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Amalfi Lotion Coco"
+  - img "Amalfi Lotion Coco"
+  - generic: K2-SKU-001003
+  - generic: Live
+  - heading "Amalfi Lotion Coco" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱404
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Cien Keratin Conditioner"
+  - img "Cien Keratin Conditioner"
+  - generic: K2-SKU-001030
+  - generic: Live
+  - heading "Cien Keratin Conditioner" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱599
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Borella Prosciutto"
+  - img "Borella Prosciutto"
+  - generic: K2-SKU-001019
+  - generic: Draft
+  - heading "Borella Prosciutto" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱259
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Borella Carne"
+  - img "Borella Carne"
+  - generic: K2-SKU-001018
+  - generic: Live
+  - heading "Borella Carne" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱259
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Dulciar Bar Dark"
+  - img "Dulciar Bar Dark"
+  - generic: K2-SKU-001050
+  - generic: Draft
+  - heading "Dulciar Bar Dark" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱199
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Donna Chiara Fusilli 1 kg"
+  - img "Donna Chiara Fusilli 1 kg"
+  - generic: K2-SKU-001046
+  - generic: Draft
+  - heading "Donna Chiara Fusilli 1 kg" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱299
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select DRESS"
+  - img "DRESS"
+  - generic: K2-SKU-001047
+  - generic: Draft
+  - heading "DRESS" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Combino Spaghetti Integralli 500 g"
+  - img "Combino Spaghetti Integralli 500 g"
+  - generic: K2-SKU-001037
+  - generic: Draft
+  - heading "Combino Spaghetti Integralli 500 g" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Amalfi Lotion Argan"
+  - img "Amalfi Lotion Argan"
+  - generic: K2-SKU-001002
+  - generic: Live
+  - heading "Amalfi Lotion Argan" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱404
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select ASTRATTO VINO ROSSO 10%VOL. WINE BOTTLE 750ML"
+  - img "ASTRATTO VINO ROSSO 10%VOL. WINE BOTTLE 750ML"
+  - generic: K2-SKU-001004
+  - generic: Draft
+  - heading "ASTRATTO VINO ROSSO 10%VOL. WINE BOTTLE 750ML" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱249
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Borella Carne"
+  - img "Borella Carne"
+  - button "104d left"
+  - generic: K2-SKU-001017
+  - generic: Live
+  - heading "Borella Carne" [level=3]
+  - generic: Stock
+  - generic: 45 pcs
+  - generic: SRP
+  - generic: ₱259
+  - generic: 45 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "45"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 45 pcs"': Unassigned 45
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Cien Macadamia Conditioner"
+  - img "Cien Macadamia Conditioner"
+  - generic: K2-SKU-001031
+  - generic: Draft
+  - heading "Cien Macadamia Conditioner" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱599
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Bench Body Undergarments Small"
+  - img "Bench Body Undergarments Small"
+  - generic: K2-SKU-001015
+  - generic: Draft
+  - heading "Bench Body Undergarments Small" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select DULCIAR ARANCIA"
+  - img "DULCIAR ARANCIA"
+  - generic: K2-SKU-001049
+  - generic: Draft
+  - heading "DULCIAR ARANCIA" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱199
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Bench Body Undergarments Medium"
+  - img "Bench Body Undergarments Medium"
+  - generic: K2-SKU-001014
+  - generic: Draft
+  - heading "Bench Body Undergarments Medium" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱0
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select DELUXE LIDL PISTACHIO"
+  - img "DELUXE LIDL PISTACHIO"
+  - generic: K2-SKU-001041
+  - generic: Draft
+  - heading "DELUXE LIDL PISTACHIO" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱399
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft" [pressed]
+    - button "Review"
+    - button "Live"
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Cien Argan Hair Oil"
+  - img "Cien Argan Hair Oil"
+  - generic: K2-SKU-001032
+  - generic: Live
+  - heading "Cien Argan Hair Oil" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱404
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Cien Cream Soap Honey And Milk 2-Pack"
+  - img "Cien Cream Soap Honey And Milk 2-Pack"
+  - generic: K2-SKU-001026
+  - generic: Live
+  - heading "Cien Cream Soap Honey And Milk 2-Pack" [level=3]
+  - generic: Stock
+  - generic: 0 pcs
+  - generic: SRP
+  - generic: ₱105
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (0)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Dante Extra Virgin Olive Oil 750 ml"
+  - img "Dante Extra Virgin Olive Oil 750 ml"
+  - button "250d left"
+  - generic: K2-SKU-001039
+  - generic: Live
+  - heading "Dante Extra Virgin Olive Oil 750 ml" [level=3]
+  - generic: Stock
+  - generic: 2 pcs
+  - generic: SRP
+  - generic: ₱949
+  - generic: 2 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "2"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 2 pcs"': Unassigned 2
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Dulciar Bar Fragola"
+  - img "Dulciar Bar Fragola"
+  - button "320d left"
+  - generic: K2-SKU-001051
+  - generic: Live
+  - heading "Dulciar Bar Fragola" [level=3]
+  - generic: Stock
+  - generic: 4 pcs
+  - generic: SRP
+  - generic: ₱199
+  - generic: 4 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "4"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 4 pcs"': Unassigned 4
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Baresa Pesto Calabrese"
+  - img "Baresa Pesto Calabrese"
+  - button "891d left"
+  - generic: K2-SKU-001006
+  - generic: Live
+  - heading "Baresa Pesto Calabrese" [level=3]
+  - generic: Stock
+  - generic: 1 pcs
+  - generic: SRP
+  - generic: ₱249
+  - generic: 1 pcs in 1 lot
+  - text: "Owned:"
+  - strong: "1"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 1 pcs"': Unassigned 1
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (1)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+  - checkbox "Select Combino Spaghetti No. 5 1kg"
+  - img "Combino Spaghetti No. 5 1kg"
+  - button "441d left"
+  - generic: K2-SKU-001001
+  - generic: Live
+  - heading "Combino Spaghetti No. 5 1kg" [level=3]
+  - generic: Stock
+  - generic: 10 pcs
+  - generic: SRP
+  - generic: ₱349
+  - generic: 10 pcs in 3 lots
+  - text: "Owned:"
+  - strong: "10"
+  - generic: Channel
+  - 'generic "Channel - Unassigned: 10 pcs"': Unassigned 10
+  - button "Photos"
+  - button "Edit"
+  - button "Specs"
+  - button "Batches (3)"
+  - button "Website assignment": Website
+  - group "Product status":
+    - button "Draft"
+    - button "Review"
+    - button "Live" [pressed]
+    - button "Unlisted"
+    - button "Discontinued"
+- navigation:
+  - button "Home":
+    - generic: Home
+  - button "Inventory":
+    - generic: Inventory
+  - button "Fulfil":
+    - generic: Fulfil
+  - button "Messages":
+    - generic: Messages
+  - button "More":
+    - generic: More
+- button "Open Admin tools":

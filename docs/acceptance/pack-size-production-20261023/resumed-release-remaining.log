@@ -1,0 +1,948 @@
+
+RESUME COMMAND: npx playwright test --config=playwright.sheet-reference.config.js tests/admin-secure-sheet-reference.spec.js
+[WebServer] (node:15816) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19824) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:13516) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+  ok 1 [chromium] › tests\admin-secure-sheet-reference.spec.js:15:1 › secure Sheet taxonomy is readable with protected Grid Edit guidance and no anonymous taxonomy access (1.3s)
+  ok 2 [chromium] › tests\admin-secure-sheet-reference.spec.js:36:1 › secure reference hook refuses explicit reload and create calls without taxonomy transport (652ms)
+
+  2 passed (4.9s)
+
+RESUME COMMAND: npm run test:admin-website-assignment-ui
+
+> k2-jimzon-prototype@0.1.0 test:admin-website-assignment-ui
+> playwright test --config=playwright.product-master.config.js tests/admin-website-assignment.spec.js
+
+[WebServer] (node:18736) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:6004) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 14 tests using 1 worker
+
+(node:11796) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+  ok  1 [chromium] › tests\admin-website-assignment.spec.js:19:1 › separate reasoned Website assign and remove preserve current row version without Product Master writes (1.7s)
+  ok  2 [chromium] › tests\admin-website-assignment.spec.js:34:1 › lost Website reply survives reload missing product and Staff refusal; historical receipt is separate from current state (1.7s)
+  ok  3 [chromium] › tests\admin-website-assignment.spec.js:46:1 › Website stale saved request releases only after explicit exact recheck and valid fresh read (1.3s)
+  ok  4 [chromium] › tests\admin-website-assignment.spec.js:57:69 › Website reconciliation preserves evidence on unavailable read (1.9s)
+  ok  5 [chromium] › tests\admin-website-assignment.spec.js:57:69 › Website reconciliation preserves evidence on wrong SKU read (1.1s)
+  ok  6 [chromium] › tests\admin-website-assignment.spec.js:57:69 › Website reconciliation preserves evidence on missing version read (1.1s)
+  ok  7 [chromium] › tests\admin-website-assignment.spec.js:64:1 › malformed successful Website receipt cannot erase pending evidence (927ms)
+  ok  8 [chromium] › tests\admin-website-assignment.spec.js:68:1 › corrupt Website storage blocks fresh controls and remains untouched (723ms)
+  ok  9 [chromium] › tests\admin-website-assignment.spec.js:74:1 › Website actor switch away and back cannot acknowledge held original receipt (968ms)
+  ok 10 [chromium] › tests\admin-website-assignment.spec.js:80:1 › Website two tabs cannot replace a held request with another decision (1.5s)
+  ok 11 [chromium] › tests\admin-website-assignment.spec.js:87:1 › Website current account change during latest read retains request (1.2s)
+  ok 12 [chromium] › tests\admin-website-assignment.spec.js:95:1 › Website storage remove and restore invalidates held reconciliation (1.1s)
+  ok 13 [chromium] › tests\admin-website-assignment.spec.js:105:1 › Website in-progress refusal never enables replacement (974ms)
+  ok 14 [chromium] › tests\admin-website-assignment.spec.js:110:1 › delayed Website lock completion cannot leave stale handoff for a later saved decision (1.5s)
+
+  14 passed (20.7s)
+
+RESUME COMMAND: npm run test:owner-count-close-ui
+
+> k2-jimzon-prototype@0.1.0 test:owner-count-close-ui
+> playwright test --config=playwright.owner-close.config.js tests/owner-count-close-ui.spec.js
+
+[WebServer] (node:1572) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3260) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:20800) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 10:34:09 AM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 1 tests\owner-count-close-ui.spec.js:12:1 › phone Owner Count & Close reaches a sealed customer-free handoff (7.1s)
+
+  1 passed (10.4s)
+
+RESUME COMMAND: npm run test:customer-account-ui
+
+> k2-jimzon-prototype@0.1.0 test:customer-account-ui
+> node scripts/test-customer-account-ui.mjs
+
+
+Running 8 tests using 1 worker
+
+(node:11380) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\customer-account-ui.spec.js:56:1 › legacy account history keeps recorded payment and messages without final bill or approval (841ms)
+  ok 2 tests\customer-account-ui.spec.js:74:1 › authenticated express approval recovers an already accepted lost reply after reload (1.3s)
+  ok 3 tests\customer-account-ui.spec.js:104:1 › authenticated express late receipt stays with the original account and accepts an explicit zero fee (937ms)
+  ok 4 tests\customer-account-ui.spec.js:146:1 › account switch discards a late previous-customer history response (767ms)
+  ok 5 tests\customer-account-ui.spec.js:194:1 › a verified new customer can save profile settings and read a scoped notification before ordering (766ms)
+  ok 6 tests\customer-account-ui.spec.js:236:1 › customer account entry is phone-safe, passwordless, recoverable, and keeps primary mobile navigation at five (2.6s)
+  ok 7 tests\customer-account-ui.spec.js:273:1 › verified account claims once, loads only customer-visible history, and sends an authenticated bounded reply (948ms)
+  ok 8 tests\wholesale-inquiry-ui.spec.js:3:1 › secure wholesale inquiry returns only a server receipt and no commercial authority (1.9s)
+
+  8 passed (10.9s)
+
+RESUME COMMAND: npm run test:selling-surfaces
+
+> k2-jimzon-prototype@0.1.0 test:selling-surfaces
+> playwright test --config=playwright.selling.config.js tests/storefront-selling-surfaces.spec.js tests/hero-enhancement.spec.js tests/storefront-readiness-ui.spec.js
+
+[WebServer] (node:15116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:11748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 14 tests using 1 worker
+
+(node:15404) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 10:34:34 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\hero-enhancement.spec.js:21:1 › additive hero preserves the original content and supports keyboard shopping (5.1s)
+[WebServer] 10:34:39 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\hero-enhancement.spec.js:67:1 › unavailable product images fall back without losing the product link (1.3s)
+[WebServer] 10:34:40 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:34:41 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\hero-enhancement.spec.js:78:1 › loading and empty collection keep both original shopping routes available (1.9s)
+[WebServer] 10:34:42 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:34:43 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:34:43 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 390px light (6.0s)
+[WebServer] 10:34:48 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:34:49 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:34:49 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 390px dark (5.5s)
+[WebServer] 10:34:54 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:34:55 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:34:56 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 1440px light (9.4s)
+[WebServer] 10:35:03 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:35:04 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:35:04 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 1440px dark (5.6s)
+  ok  8 tests\storefront-readiness-ui.spec.js:62:1 › checkout offers the two approved QR methods after staff confirmation (1.7s)
+  ok  9 tests\storefront-selling-surfaces.spec.js:30:1 › product detail renders canonical price and stock, then enforces the cart limit (1.3s)
+  ok 10 tests\storefront-selling-surfaces.spec.js:82:1 › guest message start and reply paths preserve scoped behavioral receipts (923ms)
+  ok 11 tests\storefront-selling-surfaces.spec.js:166:1 › recorded pickup instructions show the matching MariBank QR (4.3s)
+  ok 12 tests\storefront-selling-surfaces.spec.js:166:1 › recorded pickup instructions show the matching GCash QR (4.9s)
+  ok 13 tests\storefront-selling-surfaces.spec.js:295:1 › cold confirmation handles an expired guest grant with a useful recovery state (712ms)
+  ok 14 tests\storefront-selling-surfaces.spec.js:311:1 › unknown storefront and product URLs render explicit recovery pages (1.1s)
+
+  14 passed (56.6s)
+
+RESUME COMMAND: npm run test:order-receipt-direct
+
+> k2-jimzon-prototype@0.1.0 test:order-receipt-direct
+> playwright test --config=playwright.order-receipt.config.js tests/order-receipt-direct-ui.spec.js
+
+[WebServer] (node:17920) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:5740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:15112) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\order-receipt-direct-ui.spec.js:13:1 › direct saved order conversation accepts a private receipt after fresh instructions without asking identity again (1.4s)
+  ok 2 tests\order-receipt-direct-ui.spec.js:68:1 › direct saved legacy receipt waits for fresh charge and keeps messages after review or refresh failure (9.1s)
+
+  2 passed (13.6s)
+
+RESUME COMMAND: npm run test:workflow-api
+
+> k2-jimzon-prototype@0.1.0 test:workflow-api
+> playwright test --config=playwright.workflow.config.js && npm run test:workflow-map
+
+[WebServer] (node:120) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:8596) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:19280) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\workflow-api-ui.spec.js:5:1 › workflow step requests real API records only on staff action (3.8s)
+  ok 2 tests\workflow-api-ui.spec.js:26:1 › partial data stays explicit and a refresh replaces the previous batch (657ms)
+  ok 3 tests\workflow-api-ui.spec.js:43:1 › denied and malformed replies do not masquerade as empty success (632ms)
+  ok 4 tests\workflow-api-ui.spec.js:54:1 › switching steps drops old responses and loads the new allowed route (688ms)
+
+  4 passed (9.1s)
+
+> k2-jimzon-prototype@0.1.0 test:workflow-map
+> playwright test --config=playwright.workflow-map.config.js
+
+[WebServer] (node:19564) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:16736) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 11 tests using 1 worker
+
+(node:7248) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\workflow-map-ui.spec.js:8:1 › map opens at reading scale with a focused workflow (1.8s)
+  ok  2 tests\workflow-map-ui.spec.js:16:1 › filters show readable matches instead of dimming words (650ms)
+  ok  3 tests\workflow-map-ui.spec.js:24:1 › search results select and bring a distant step into the viewport (730ms)
+  ok  4 tests\workflow-map-ui.spec.js:38:1 › full map scrolls, keyboard pans and reset restores reading size (800ms)
+  ok  5 tests\workflow-map-ui.spec.js:50:1 › keyboard search selection keeps focus on the selected map step (628ms)
+  ok  6 tests\workflow-map-ui.spec.js:58:1 › background drag pans without selecting a step (721ms)
+  ok  7 tests\workflow-map-ui.spec.js:72:1 › search focus stays in its own guide when two maps are mounted (1.1s)
+  ok  8 tests\workflow-map-ui.spec.js:82:1 › empty search recovers and selected details retain the full text (943ms)
+  ok  9 tests\workflow-map-ui.spec.js:94:1 › phone exploration has readable details and no document overflow (628ms)
+  ok 10 tests\workflow-map-ui.spec.js:102:1 › phone role filter fits wider native control text and remains usable (621ms)
+  ok 11 tests\workflow-map-ui.spec.js:111:1 › enlarged text retains full instructions and landscape stays contained (1.2s)
+
+  11 passed (13.0s)
+
+RESUME COMMAND: npm run test:intake-ai-ui
+
+> k2-jimzon-prototype@0.1.0 test:intake-ai-ui
+> playwright test --config=playwright.intake-ai.config.js
+
+[WebServer] (node:11828) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:10604) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 26 tests using 1 worker
+
+(node:8956) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\intake-ai-ui.spec.js:7:35 › completed CSV import opens the same Draft for package review (890ms)
+  ok  2 tests\intake-ai-ui.spec.js:7:35 › completed CSV import refuses stale selection (678ms)
+  ok  3 tests\intake-ai-ui.spec.js:37:1 › imported Draft manual review keeps its baseline and saves only explicit staff corrections (1.2s)
+  ok  4 tests\intake-ai-ui.spec.js:100:1 › barcode scan shows a public catalog suggestion and saves only staff-confirmed provenance (599ms)
+  ok  5 tests\intake-ai-ui.spec.js:129:1 › an incomplete resume read never authorizes a new intake session (518ms)
+  ok  6 tests\intake-ai-ui.spec.js:150:1 › fresh public SEO data must still match the product staff confirmed (577ms)
+  ok  7 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after response loss (519ms)
+  ok  8 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after refresh failure (1.3s)
+  ok  9 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after incomplete receipt (545ms)
+  ok 10 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after stale record (578ms)
+  ok 11 tests\intake-ai-ui.spec.js:209:3 › intake session creation retains both identities after response loss (518ms)
+  ok 12 tests\intake-ai-ui.spec.js:209:3 › intake session creation retains both identities after refresh failure (808ms)
+  ok 13 tests\intake-ai-ui.spec.js:209:3 › intake session creation retains both identities after retry denial (541ms)
+  ok 14 tests\intake-ai-ui.spec.js:247:1 › publication keeps its frozen command when the receipt refresh fails (1.4s)
+  ok 15 tests\intake-ai-ui.spec.js:282:1 › automatic field review retains an uncertain transition for exact retry (649ms)
+  ok 16 tests\intake-ai-ui.spec.js:318:1 › replacing the actor during a Draft command ignores its late receipt (560ms)
+  ok 17 tests\intake-ai-ui.spec.js:345:1 › uncertain intake step freezes its reviewed payload and retries the same outer receipt key (623ms)
+  ok 18 tests\intake-ai-ui.spec.js:386:1 › pending packaging review freezes every reviewed control and allows correction only after rejection (563ms)
+  ok 19 tests\intake-ai-ui.spec.js:428:1 › uncertain Draft creation after response loss retries the frozen reviewed Draft with the same outer receipt key (839ms)
+  ok 20 tests\intake-ai-ui.spec.js:428:1 › uncertain Draft creation after refresh failure retries the frozen reviewed Draft with the same outer receipt key (1.4s)
+  ok 21 tests\intake-ai-ui.spec.js:428:1 › uncertain Draft creation after incomplete receipt retries the frozen reviewed Draft with the same outer receipt key (576ms)
+  ok 22 tests\intake-ai-ui.spec.js:476:1 › uncertain first inventory preserves separate inner request and outer receipt identities (749ms)
+  ok 23 tests\intake-ai-ui.spec.js:519:1 › real modal persists automatic field-review transition before saving reviewed canonical Draft (845ms)
+  ok 24 tests\intake-ai-ui.spec.js:573:1 › manual product JSON creates a reviewed Draft without calling the automatic provider (761ms)
+  ok 25 tests\intake-ai-ui.spec.js:626:1 › phone recovery, missing configuration, reviewed image and canonical attachment remain deliberate (911ms)
+  ok 26 tests\intake-ai-ui.spec.js:661:1 › confirmed barcode catalog allows Gemini SEO draft request and shows staff review text (567ms)
+
+  26 passed (25.2s)
+
+RESUME COMMAND: npm run test:vercel-output
+
+> k2-jimzon-prototype@0.1.0 test:vercel-output
+> node --test tests/vercel-build-output.test.mjs
+
+✔ the Storefront sitemap dependency imports in Node ESM (4.164ms)
+✔ Build Output candidate isolates each API and preserves static/security routes (1662.45ms)
+✔ Build Output refuses to replace its own static source (1.1064ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1755.379
+
+RESUME COMMAND: npm run build:storefront
+
+> k2-jimzon-prototype@0.1.0 prebuild:storefront
+> npm run prebuild
+
+
+> k2-jimzon-prototype@0.1.0 prebuild
+> npm run security:test && npm run security:test-admin-session && npm run security:test-env-contract && npm run security:test-k2-project && npm run security:test-live-readiness && npm run security:test-files && npm run security:files && npm run security:test-env-source && npm run security:env-source && npm run security:dependency-policy && npm run security:surfaces && npm run security:secrets && node scripts/check-imports.mjs
+
+
+> k2-jimzon-prototype@0.1.0 security:test
+> node scripts/test-secret-scan.mjs
+
+Secret scanner tests passed (fabricated values only).
+
+> k2-jimzon-prototype@0.1.0 security:test-admin-session
+> node --test tests/admin-mfa-sdk-qr.test.mjs tests/admin-bff-refresh-token.test.mjs tests/admin-product-read-taxonomy.test.mjs tests/admin-product-stock-read.test.mjs tests/admin-reference-command.test.mjs tests/admin-reference-handler.test.mjs tests/admin-lot-snapshot-read.test.mjs tests/product-master-command-recovery.test.mjs tests/admin-product-master-recovery-client.test.mjs tests/admin-product-master-actor.test.mjs tests/website-assignment-recovery.test.mjs tests/admin-website-assignment-actor.test.mjs tests/admin-google-bff.test.mjs tests/turnstile-loader-recovery.test.mjs tests/photo-csv-batch.test.mjs tests/admin-photo-batch-actor.test.mjs
+
+✔ protocol-valid 12-character refresh token survives all Admin encrypted session boundaries (6.5992ms)
+✔ refresh lower/upper bounds and access-token lower bound still refuse malformed sessions (0.595ms)
+✔ actual Supabase SDK generates PKCE with encrypted browser-bound verifier and exact K2 return route (34.4655ms)
+✔ Google callback rejects wrong-origin before provider exchange (8.4291ms)
+✔ Google callback rejects no-cookie before provider exchange (2.7928ms)
+✔ Google callback rejects altered-cookie before provider exchange (2.1445ms)
+✔ Google callback rejects wrong-state before provider exchange (3.1485ms)
+✔ Google callback rejects expired before provider exchange (3.9698ms)
+✔ Google callback rejects extra-fields before provider exchange (3.0337ms)
+✔ Google AAL1 session stays pending for the existing authenticator challenge without active session registration (2.9068ms)
+✔ Google callback non-staff retains staff/AAL2/registry authority (2.4735ms)
+✔ Google callback unverified-email retains staff/AAL2/registry authority (1.8823ms)
+✔ Google callback enrollment retains staff/AAL2/registry authority (1.627ms)
+✔ Google callback aal2 retains staff/AAL2/registry authority (2.7672ms)
+✔ Google callback registry-failed retains staff/AAL2/registry authority (2.4256ms)
+✔ Google start fails closed for missing bot verification or unavailable durable budget (2.3235ms)
+✔ consolidated router advertises both Google routes with origin, PKCE/bot and durable budget guards (0.2596ms)
+✔ lot read derives physical and allocations from one coherent snapshot (2.9541ms)
+✔ complete empty snapshot is a verified empty lot read (0.3853ms)
+✔ partial, malformed, over-bound and refused snapshots cannot produce healthy totals (1.3433ms)
+✔ pending enrollment accepts the installed Supabase SDK QR format without cancelling the factor (41.4366ms)
+✔ pending enrollment bounds oversized SVG data and cancels only the new unverified factor (1.5724ms)
+✔ pending enrollment preserves an already verified authenticator without creating or deleting factors (0.4896ms)
+✔ pending enrollment still rejects a non-SVG QR response and cancels its unverified factor (2.1443ms)
+✔ installed SDK completes password, enrollment, challenge and AAL2 verification against the provider protocol fixture (11.8437ms)
+✔ photo upload and assignment actor mismatch refuse before Storage or command dispatch (76.4495ms)
+✔ existing and actor-bound assignment clients retain current staff command behavior (11.357ms)
+✔ saved Product Master actor mismatch refuses before command RPC (63.7512ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (8.8131ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (15.6558ms)
+✔ existing clients without actor header retain current authenticated actor behavior (6.1761ms)
+✔ Product Master recovery has a literal-body actor-bound browser client (0.8949ms)
+✔ lost HTTP reply and later auth refusal preserve same literal request key and current CSRF (78.0597ms)
+✔ protected catalog preserves canonical assigned and nullable unassigned taxonomy (2.3609ms)
+✔ category filters can use the canonical name when no store label is assigned (0.2938ms)
+✔ stock failure preserves canonical taxonomy while reporting unknown stock (0.3291ms)
+✔ protected catalog retains every saved photo slot for reopening the photo manager (0.251ms)
+✔ stock failure does not hide saved after-use or supporting photos (0.2778ms)
+✔ internal Draft receives canonical staff stock even when public offer is absent (2.1656ms)
+✔ a complete no-lot staff row proves zero without inferring it from an absent public offer (0.2444ms)
+✔ missing row preserves product discovery and explicit unknown stock (0.2315ms)
+✔ unreadable taxonomy preserves product discovery and explicit unknown stock (0.2101ms)
+✔ fractional quantity preserves product discovery and explicit unknown stock (0.2848ms)
+✔ duplicate row preserves product discovery and explicit unknown stock (0.176ms)
+✔ query failure preserves product discovery and explicit unknown stock (0.1947ms)
+✔ creation preserves raw command strings and property order for saved retry identity (1.5016ms)
+✔ name bound counts Unicode characters after printable whitespace cleanup (0.8882ms)
+✔ endpoint refuses unsupported methods and missing command keys before dispatch (0.5834ms)
+✔ endpoint cannot be used on the storefront deployment (0.9262ms)
+✔ reference route advertises protected POST and a read-only GET (254.5709ms)
+✔ controls are refused before cleanup and malformed strings never reach SQL (0.2331ms)
+✔ creation rejects extra fields, coerced values and ambiguous category parent (0.4391ms)
+✔ protected options retain category hierarchy and permit an empty catalog (0.4768ms)
+✔ partial, unavailable, over-limit or malformed options fail closed (0.4603ms)
+✔ current Staff role cannot create even when cookie claims Admin (41.8565ms)
+✔ saved-request actor mismatch refuses before reference dispatch (3.3318ms)
+✔ Admin and SuperAdmin send one correctly signed exact command (10.3112ms)
+✔ CSRF, current AAL2 and registry refusal prevent creation dispatch (7.1219ms)
+✔ historical receipt is shown separately from changed or missing current reference (9.9171ms)
+✔ committed receipt survives unavailable current readback (7026.1608ms)
+✔ unknown command failure hides provider details and retains retry classification (2.1013ms)
+✔ saved Website assignment actor mismatch refuses before command RPC (47.3496ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (5.4834ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (9.2808ms)
+✔ existing clients without actor header retain current authenticated actor behavior (2.5394ms)
+✔ bounded Website read distinguishes absent, paused and active existing rows (10.2994ms)
+✔ Website read refuses duplicate partial malformed failed or missing product evidence (7045.6464ms)
+✔ current Staff and invalid SKU refuse per-product read before data lookup; aggregate contract stays (5.2665ms)
+✔ mapping resolves exact existing Draft and retains untouched photo slots (10.2837ms)
+✔ invalid identities, duplicate files/SKUs, missing files, existing slots and live targets refuse before upload (2.8461ms)
+✔ lost assignment reply survives reload and retries original payload/key without uploading twice (5.7741ms)
+✔ actor change, byte substitution and current-media drift stop before mutation (1.8416ms)
+✔ storage failure refuses dispatch and malformed recovery is retained (1.1636ms)
+✔ multi-product batch resumes at failed row and never replays completed rows (2.4607ms)
+✔ account changes after upload or media drift during upload refuse assignment (2.2333ms)
+✔ recovery refuses a changed literal command and a competing batch (0.9558ms)
+✔ saved but unconfirmed command cannot overwrite later media or a non-Draft target (1.8086ms)
+✔ Product Master updates have durable actor-scoped recovery (2.4204ms)
+✔ reload preserves literal bytes version reason and original key (1.6504ms)
+✔ changed key payload version or review decision cannot replace unknown request (1.0318ms)
+✔ actor and operation identity isolate reading and acknowledgement (0.2942ms)
+✔ corruption foreign actor secret field and oversize storage remain untouched (0.8125ms)
+✔ malformed or non-update commands cannot be held or sent (1.0312ms)
+✔ failed Turnstile download releases the cached failure for the next attempt (5.5426ms)
+✔ Website has its own durable actor-scoped original request recovery (0.8882ms)
+✔ Website literal body and key survive reload and cannot be replaced (1.9697ms)
+✔ corrupt Website records remain untouched and invalid bodies never persist (0.727ms)
+✔ existing unassigned Website listing keeps a real version; only absent row has null identity (0.2543ms)
+ℹ tests 88
+ℹ suites 0
+ℹ pass 88
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7872.9166
+
+> k2-jimzon-prototype@0.1.0 security:test-env-contract
+> node scripts/verify-deployment-environment-contract.mjs --self-test
+
+Deployment environment contract self-test passed (5 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:test-k2-project
+> node --test tests/k2-supabase-project-identity.test.mjs
+
+✔ accepts the exact K2 URL only when the management token sees K2 (26.8208ms)
+✔ rejects a ScoutIT-only management token (0.8894ms)
+✔ rejects a ScoutIT URL before sending the token (0.2779ms)
+✔ rejects missing token and management access failure without logging secrets (0.5373ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 116.0352
+
+> k2-jimzon-prototype@0.1.0 security:test-live-readiness
+> node --test tests/k2-live-readiness-contract.test.mjs tests/k2-installed-readiness.test.mjs tests/admin-preauth-dependency-readiness.test.mjs
+
+✔ only the approved signed pre-auth rate RPC may extend the installed permission profile (13.7222ms)
+✔ normal readiness blocks the completely missing login dependency (0.3355ms)
+✔ preparation mode cannot admit partial installation or grant/body drift (0.2979ms)
+✔ only exact installed rate authority and private forced RLS classify verified (0.2228ms)
+✔ incomplete metadata and invalid source hashes do not pass (0.1545ms)
+✔ exact installed source receipt and all required relations classify installed, never permission to reapply (1.2381ms)
+✔ empty legacy baseline is first apply only when every chain relation is absent (0.2008ms)
+✔ changed complete-source receipt, duplicate or old controlled receipt refuse (0.2513ms)
+✔ partial installed schema and malformed relation evidence refuse (0.2124ms)
+✔ installed permission classification names exact reviewed signatures and invoker trigger exceptions (12.6861ms)
+✔ extra overload or altered authority cannot hide behind a function name (2.3353ms)
+✔ extra PUBLIC execute and trigger SECURITY DEFINER drift refuse (0.6865ms)
+✔ two arbitrary triggers do not inherit the named PUBLIC exception (0.6248ms)
+✔ same-named private trigger cannot replace PUBLIC schema exception (0.356ms)
+✔ approved order-chat adapter extends the exact installed catalog without admitting other grants (0.5606ms)
+✔ backup must match encrypted bytes/hash and actual restored current migration (1.8165ms)
+✔ missing proof and impossible/future creation or restoration evidence refuse (0.2148ms)
+✔ unknown backup creation metadata cannot be bypassed by a valid candidate (0.3149ms)
+✔ backup chronology requires real UTC ISO strings rather than Date.parse coercion (0.1627ms)
+✔ the gate keeps the read-only guard in front of every query (1.1774ms)
+✔ the production query is declared read_only (0.2859ms)
+✔ every SQL template literal is a SELECT with no write verb (0.8634ms)
+✔ the gate reports provider surfaces as blocked instead of assuming them (0.1949ms)
+✔ the gate refuses to send a query before identity passes (0.1891ms)
+✔ documented K2 gates load the owner-controlled local environment file (0.5851ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 126.0345
+
+> k2-jimzon-prototype@0.1.0 security:test-files
+> node scripts/test-sensitive-file-policy.mjs
+
+Sensitive-file policy tests passed (13 blocked, 4 allowed, and the source inventory).
+
+> k2-jimzon-prototype@0.1.0 security:files
+> node scripts/verify-tracked-sensitive-files.mjs
+
+Sensitive-file policy passed in git mode (2548 files checked).
+
+> k2-jimzon-prototype@0.1.0 security:test-env-source
+> node scripts/test-environment-source-boundary.mjs
+
+Environment source-boundary tests passed (8 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:env-source
+> node scripts/verify-environment-source-boundary.mjs
+
+Environment source boundary passed (255 browser and 192 server/Edge files checked).
+
+> k2-jimzon-prototype@0.1.0 security:dependency-policy
+> node scripts/verify-dependency-policy.mjs
+
+Dependency policy passed (20 direct, 246 locked packages, 2 reviewed install scripts).
+Reviewed licenses: 0BSD=2, Apache-2.0=25, Apache-2.0 AND LGPL-3.0-or-later=3, Apache-2.0 AND LGPL-3.0-or-later AND MIT=1, BSD-2-Clause=1, BSD-3-Clause=2, ISC=7, LGPL-3.0-or-later=10, MIT=170, MPL-2.0=24, UNKNOWN=1
+
+> k2-jimzon-prototype@0.1.0 security:surfaces
+> node scripts/audit-security-surfaces.mjs --fail-on-gaps
+
+# MAP-020 Security Surface Inventory
+
+Generated: 2026-10-23T02:36:46.739Z
+
+- Prepared Admin routes: 104
+- Prepared Storefront routes: 21
+- Supabase Edge Functions: 2 (invite-staff, shopee-webhook)
+- api_request: 69 source operations
+- auth: 45 source operations
+- realtime: 12 source operations
+- rpc: 143 source operations
+- storage: 16 source operations
+- table: 141 source operations
+- SQL functionDefinitionOccurrences: 246
+- SQL uniqueFunctionSignatures: 188
+- SQL functionGrantEvents: 181
+- SQL functionRevokeEvents: 265
+- SQL functionSearchPathHardeningEvents: 6
+- SQL effectiveSecurityDefinerWithoutFixedSearchPath: 0
+- SQL effectiveFunctionsWithPublicExecute: 0
+- SQL effectiveFunctionsWithAnonExecute: 20
+- SQL effectiveFunctionsWithAuthenticatedExecute: 104
+- SQL effectiveFunctionsWithServiceRoleExecute: 13
+- SQL scheduledJobs: 0
+- SQL publicationChanges: 16
+- SQL policyDefinitions: 156
+- SQL storagePolicyDefinitions: 15
+- Dynamic operations requiring explicit review: 0
+- Exact expected anonymous function grants: 20
+- Unexpected PUBLIC function grants: 0
+- Unexpected anonymous function grants: 0
+- Missing expected anonymous function grants: 0
+- BFF route-control classification gaps: 0
+- Wildcard CORS production sources: 0
+
+This is a source inventory, not deployment or authorization evidence.
+
+> k2-jimzon-prototype@0.1.0 security:secrets
+> node scripts/scan-secrets.mjs
+
+Secret scan passed (2550 files checked; secret values are never printed).
+✓ Import-integrity check passed — all hooks and supabase usages are imported.
+
+> k2-jimzon-prototype@0.1.0 build:storefront
+> vite build --mode storefront --configLoader runner && node scripts/emit-static-404.mjs storefront && node scripts/emit-storefront-sitemap.mjs && node scripts/verify-build-boundary.mjs storefront && node scripts/verify-bundle-budgets.mjs storefront && node scripts/scan-secrets.mjs dist
+
+vite v8.2.4 building client environment for storefront...
+transforming...
+✓ 1133 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/k2-build-target.json                             0.02 kB │ gzip:   0.04 kB
+dist/manifest.json                                    0.73 kB │ gzip:   0.29 kB
+dist/index.html                                       3.30 kB │ gzip:   1.02 kB
+dist/.vite/manifest.json                             17.66 kB │ gzip:   2.05 kB
+dist/assets/StoreChatPanel-DeMF7Ywq.css               0.67 kB │ gzip:   0.30 kB
+dist/assets/Home-Bkbl-Q5X.css                         1.48 kB │ gzip:   0.62 kB
+dist/assets/InteractiveShop-DcxJhXz4.css             29.24 kB │ gzip:   6.34 kB
+dist/assets/index-BT_CQQlo.css                      199.81 kB │ gzip:  29.43 kB
+dist/assets/is-html-element-DvgHo_1h.js               0.12 kB │ gzip:   0.12 kB
+dist/assets/supabaseClient-CBMGyDRM.js                0.31 kB │ gzip:   0.25 kB
+dist/assets/productFamilyPresentation-BfDfEwQt.js     0.52 kB │ gzip:   0.33 kB
+dist/assets/rolldown-runtime-hePW80VL.js              0.71 kB │ gzip:   0.42 kB
+dist/assets/useProductKnowledgeVersion-B7_AEEWB.js    0.97 kB │ gzip:   0.49 kB
+dist/assets/NotFound-BzOE7hKu.js                      0.98 kB │ gzip:   0.54 kB
+dist/assets/StorefrontChatButton-PPE6mhSb.js          1.15 kB │ gzip:   0.63 kB
+dist/assets/TurnstileChallenge-BjXvd3_V.js            1.26 kB │ gzip:   0.70 kB
+dist/assets/HeroVideo-CL8THmk2.js                     1.70 kB │ gzip:   0.74 kB
+dist/assets/productStructuredData-CCg_acfp.js         2.18 kB │ gzip:   1.13 kB
+dist/assets/ProductVisual-Dj2njKHm.js                 2.35 kB │ gzip:   1.08 kB
+dist/assets/productFamilies-DxhEk7QF.js               2.66 kB │ gzip:   1.29 kB
+dist/assets/StoreChatDrawer-Bl2LSwng.js               2.80 kB │ gzip:   1.24 kB
+dist/assets/StorefrontMetadata-BcPDUF3w.js            2.94 kB │ gzip:   1.32 kB
+dist/assets/icons-B_4OD3QU.js                         2.97 kB │ gzip:   1.31 kB
+dist/assets/site-CPesnmLU.js                          3.24 kB │ gzip:   1.59 kB
+dist/assets/InteractiveReveal-DbulaCvh.js             3.45 kB │ gzip:   1.42 kB
+dist/assets/CustomerAccountProvider-DCxz3Nss.js       4.07 kB │ gzip:   1.42 kB
+dist/assets/customerAccountService-COPjI96l.js        5.11 kB │ gzip:   2.10 kB
+dist/assets/Footer-CP0oggQN.js                        5.91 kB │ gzip:   1.87 kB
+dist/assets/StorySection-Cyl3lnM9.js                  6.38 kB │ gzip:   2.64 kB
+dist/assets/FaqSection-1TV7zevv.js                    6.40 kB │ gzip:   2.43 kB
+dist/assets/CartDrawer-BfO5vx0l.js                    7.24 kB │ gzip:   2.48 kB
+dist/assets/ProductCard-DpnIWwUz.js                   7.74 kB │ gzip:   2.29 kB
+dist/assets/Catalog-keONTTpc.js                       8.34 kB │ gzip:   3.04 kB
+dist/assets/ExpressDeliveryApproval-ZPu2AVEV.js       8.41 kB │ gzip:   3.35 kB
+dist/assets/Policy-lGHc6Obm.js                        9.14 kB │ gzip:   3.64 kB
+dist/assets/Contact-D6gE7jQN.js                       9.58 kB │ gzip:   2.75 kB
+dist/assets/Pasabuy-B2HmQP-k.js                       9.76 kB │ gzip:   3.31 kB
+dist/assets/StoreChatPanel-DcasN5m3.js               10.24 kB │ gzip:   3.41 kB
+dist/assets/motion-DTmOU2Yv.js                       11.33 kB │ gzip:   4.68 kB
+dist/assets/GuestMessages-FFz8dYVQ.js                12.08 kB │ gzip:   3.98 kB
+dist/assets/GlobeSection-B2uJEUGw.js                 13.43 kB │ gzip:   5.07 kB
+dist/assets/Confirmation-BEXnskRO.js                 14.98 kB │ gzip:   5.01 kB
+dist/assets/Wholesale-B-Gdjxlu.js                    20.10 kB │ gzip:   5.53 kB
+dist/assets/Checkout-BjpkHfgk.js                     21.15 kB │ gzip:   6.63 kB
+dist/assets/CustomerAccount-B5snp-7X.js              26.20 kB │ gzip:   7.07 kB
+dist/assets/Home-BSJf42vB.js                         27.89 kB │ gzip:   8.20 kB
+dist/assets/MasterProduct-hIwgGBK7.js                30.04 kB │ gzip:   8.29 kB
+dist/assets/is-svg-component-DcgyhjxC.js             31.55 kB │ gzip:  11.40 kB
+dist/assets/InteractiveShop-DD7QYRDf.js              43.74 kB │ gzip:  13.19 kB
+dist/assets/react-CEdkAH0S.js                        45.83 kB │ gzip:  13.76 kB
+dist/assets/StoreContext-DyJOgrrD.js                 53.31 kB │ gzip:  18.87 kB
+dist/assets/index-CABp-9i_.js                        83.72 kB │ gzip:  29.48 kB
+dist/assets/ShelfScene3D-BJknx4tw.js                126.80 kB │ gzip:  38.17 kB
+dist/assets/vendor-supabase-C_uyFMkg.js             214.18 kB │ gzip:  55.01 kB
+dist/assets/vendor-react-CQcqwgYb.js                218.85 kB │ gzip:  68.27 kB
+dist/assets/react-three-fiber.esm-BGzkPJ5b.js       912.75 kB │ gzip: 242.14 kB
+
+✓ built in 1.50s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+Emitted storefront static 404 recovery page.
+[sitemap] dist/sitemap.xml written with 4 stable routes and 0 product URLs
+[metadata] 1 product page prerendered
+[metadata] 3 marketing pages prerendered
+[sitemap] NOTE: the pre-launch indexing gate is ON, so no product URL is
+[sitemap] listed and /product/* is served noindex. This is deliberate while
+[sitemap] products have no photographs or descriptions. To launch product
+[sitemap] pages into search, follow docs/PRELAUNCH_INDEXING.md.
+Verified storefront production boundary (49 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker).
+Storefront landing budget passed: JS 147.42 kB/150.50 kB gzip; CSS 29.95 kB/30.00 kB gzip.
+Secret scan passed (95 files checked; secret values are never printed).
+
+RESUME COMMAND: npm run build:admin
+
+> k2-jimzon-prototype@0.1.0 prebuild:admin
+> npm run prebuild
+
+
+> k2-jimzon-prototype@0.1.0 prebuild
+> npm run security:test && npm run security:test-admin-session && npm run security:test-env-contract && npm run security:test-k2-project && npm run security:test-live-readiness && npm run security:test-files && npm run security:files && npm run security:test-env-source && npm run security:env-source && npm run security:dependency-policy && npm run security:surfaces && npm run security:secrets && node scripts/check-imports.mjs
+
+
+> k2-jimzon-prototype@0.1.0 security:test
+> node scripts/test-secret-scan.mjs
+
+Secret scanner tests passed (fabricated values only).
+
+> k2-jimzon-prototype@0.1.0 security:test-admin-session
+> node --test tests/admin-mfa-sdk-qr.test.mjs tests/admin-bff-refresh-token.test.mjs tests/admin-product-read-taxonomy.test.mjs tests/admin-product-stock-read.test.mjs tests/admin-reference-command.test.mjs tests/admin-reference-handler.test.mjs tests/admin-lot-snapshot-read.test.mjs tests/product-master-command-recovery.test.mjs tests/admin-product-master-recovery-client.test.mjs tests/admin-product-master-actor.test.mjs tests/website-assignment-recovery.test.mjs tests/admin-website-assignment-actor.test.mjs tests/admin-google-bff.test.mjs tests/turnstile-loader-recovery.test.mjs tests/photo-csv-batch.test.mjs tests/admin-photo-batch-actor.test.mjs
+
+✔ protocol-valid 12-character refresh token survives all Admin encrypted session boundaries (5.2291ms)
+✔ refresh lower/upper bounds and access-token lower bound still refuse malformed sessions (0.6458ms)
+✔ actual Supabase SDK generates PKCE with encrypted browser-bound verifier and exact K2 return route (38.8983ms)
+✔ Google callback rejects wrong-origin before provider exchange (8.7992ms)
+✔ Google callback rejects no-cookie before provider exchange (2.4985ms)
+✔ Google callback rejects altered-cookie before provider exchange (4.0162ms)
+✔ Google callback rejects wrong-state before provider exchange (3.0938ms)
+✔ Google callback rejects expired before provider exchange (3.6381ms)
+✔ Google callback rejects extra-fields before provider exchange (1.9679ms)
+✔ Google AAL1 session stays pending for the existing authenticator challenge without active session registration (2.5025ms)
+✔ Google callback non-staff retains staff/AAL2/registry authority (2.2755ms)
+✔ Google callback unverified-email retains staff/AAL2/registry authority (2.8053ms)
+✔ Google callback enrollment retains staff/AAL2/registry authority (1.9994ms)
+✔ Google callback aal2 retains staff/AAL2/registry authority (2.8569ms)
+✔ Google callback registry-failed retains staff/AAL2/registry authority (3.3179ms)
+✔ Google start fails closed for missing bot verification or unavailable durable budget (1.1714ms)
+✔ consolidated router advertises both Google routes with origin, PKCE/bot and durable budget guards (0.1882ms)
+✔ lot read derives physical and allocations from one coherent snapshot (2.6123ms)
+✔ complete empty snapshot is a verified empty lot read (0.3119ms)
+✔ partial, malformed, over-bound and refused snapshots cannot produce healthy totals (1.4997ms)
+✔ pending enrollment accepts the installed Supabase SDK QR format without cancelling the factor (44.6807ms)
+✔ pending enrollment bounds oversized SVG data and cancels only the new unverified factor (0.8023ms)
+✔ pending enrollment preserves an already verified authenticator without creating or deleting factors (0.2959ms)
+✔ pending enrollment still rejects a non-SVG QR response and cancels its unverified factor (0.4343ms)
+✔ installed SDK completes password, enrollment, challenge and AAL2 verification against the provider protocol fixture (13.3073ms)
+✔ photo upload and assignment actor mismatch refuse before Storage or command dispatch (66.0762ms)
+✔ existing and actor-bound assignment clients retain current staff command behavior (12.8017ms)
+✔ saved Product Master actor mismatch refuses before command RPC (58.4219ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (9.6106ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (13.3807ms)
+✔ existing clients without actor header retain current authenticated actor behavior (3.3967ms)
+✔ Product Master recovery has a literal-body actor-bound browser client (1.2362ms)
+✔ lost HTTP reply and later auth refusal preserve same literal request key and current CSRF (67.1987ms)
+✔ protected catalog preserves canonical assigned and nullable unassigned taxonomy (2.3481ms)
+✔ category filters can use the canonical name when no store label is assigned (0.288ms)
+✔ stock failure preserves canonical taxonomy while reporting unknown stock (0.3342ms)
+✔ protected catalog retains every saved photo slot for reopening the photo manager (0.2601ms)
+✔ stock failure does not hide saved after-use or supporting photos (0.2843ms)
+✔ internal Draft receives canonical staff stock even when public offer is absent (2.3915ms)
+✔ a complete no-lot staff row proves zero without inferring it from an absent public offer (0.2632ms)
+✔ missing row preserves product discovery and explicit unknown stock (0.2374ms)
+✔ unreadable taxonomy preserves product discovery and explicit unknown stock (0.2068ms)
+✔ fractional quantity preserves product discovery and explicit unknown stock (0.2004ms)
+✔ duplicate row preserves product discovery and explicit unknown stock (0.1456ms)
+✔ query failure preserves product discovery and explicit unknown stock (0.1762ms)
+✔ creation preserves raw command strings and property order for saved retry identity (1.2538ms)
+✔ name bound counts Unicode characters after printable whitespace cleanup (0.816ms)
+✔ endpoint refuses unsupported methods and missing command keys before dispatch (0.5331ms)
+✔ endpoint cannot be used on the storefront deployment (0.7468ms)
+✔ reference route advertises protected POST and a read-only GET (251.1373ms)
+✔ controls are refused before cleanup and malformed strings never reach SQL (0.2332ms)
+✔ creation rejects extra fields, coerced values and ambiguous category parent (0.4177ms)
+✔ protected options retain category hierarchy and permit an empty catalog (0.4903ms)
+✔ partial, unavailable, over-limit or malformed options fail closed (0.4727ms)
+✔ current Staff role cannot create even when cookie claims Admin (39.1237ms)
+✔ saved-request actor mismatch refuses before reference dispatch (3.6199ms)
+✔ Admin and SuperAdmin send one correctly signed exact command (10.1156ms)
+✔ CSRF, current AAL2 and registry refusal prevent creation dispatch (7.2513ms)
+✔ historical receipt is shown separately from changed or missing current reference (9.7228ms)
+✔ committed receipt survives unavailable current readback (7025.6638ms)
+✔ unknown command failure hides provider details and retains retry classification (2.0159ms)
+✔ saved Website assignment actor mismatch refuses before command RPC (45.612ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (5.9499ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (9.1716ms)
+✔ existing clients without actor header retain current authenticated actor behavior (3.8432ms)
+✔ bounded Website read distinguishes absent, paused and active existing rows (9.4859ms)
+✔ Website read refuses duplicate partial malformed failed or missing product evidence (7028.7585ms)
+✔ current Staff and invalid SKU refuse per-product read before data lookup; aggregate contract stays (4.9807ms)
+✔ mapping resolves exact existing Draft and retains untouched photo slots (11.6531ms)
+✔ invalid identities, duplicate files/SKUs, missing files, existing slots and live targets refuse before upload (2.9274ms)
+✔ lost assignment reply survives reload and retries original payload/key without uploading twice (5.4069ms)
+✔ actor change, byte substitution and current-media drift stop before mutation (3.2273ms)
+✔ storage failure refuses dispatch and malformed recovery is retained (2.0581ms)
+✔ multi-product batch resumes at failed row and never replays completed rows (3.7716ms)
+✔ account changes after upload or media drift during upload refuse assignment (3.8393ms)
+✔ recovery refuses a changed literal command and a competing batch (1.8006ms)
+✔ saved but unconfirmed command cannot overwrite later media or a non-Draft target (2.6953ms)
+✔ Product Master updates have durable actor-scoped recovery (1.5798ms)
+✔ reload preserves literal bytes version reason and original key (1.6797ms)
+✔ changed key payload version or review decision cannot replace unknown request (1.064ms)
+✔ actor and operation identity isolate reading and acknowledgement (0.3019ms)
+✔ corruption foreign actor secret field and oversize storage remain untouched (0.8306ms)
+✔ malformed or non-update commands cannot be held or sent (1.0255ms)
+✔ failed Turnstile download releases the cached failure for the next attempt (6.0723ms)
+✔ Website has its own durable actor-scoped original request recovery (0.8017ms)
+✔ Website literal body and key survive reload and cannot be replaced (1.7535ms)
+✔ corrupt Website records remain untouched and invalid bodies never persist (0.7095ms)
+✔ existing unassigned Website listing keeps a real version; only absent row has null identity (0.2537ms)
+ℹ tests 88
+ℹ suites 0
+ℹ pass 88
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7871.9053
+
+> k2-jimzon-prototype@0.1.0 security:test-env-contract
+> node scripts/verify-deployment-environment-contract.mjs --self-test
+
+Deployment environment contract self-test passed (5 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:test-k2-project
+> node --test tests/k2-supabase-project-identity.test.mjs
+
+✔ accepts the exact K2 URL only when the management token sees K2 (28.1084ms)
+✔ rejects a ScoutIT-only management token (0.8802ms)
+✔ rejects a ScoutIT URL before sending the token (0.2776ms)
+✔ rejects missing token and management access failure without logging secrets (0.4887ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 114.7007
+
+> k2-jimzon-prototype@0.1.0 security:test-live-readiness
+> node --test tests/k2-live-readiness-contract.test.mjs tests/k2-installed-readiness.test.mjs tests/admin-preauth-dependency-readiness.test.mjs
+
+✔ only the approved signed pre-auth rate RPC may extend the installed permission profile (13.7024ms)
+✔ normal readiness blocks the completely missing login dependency (0.3422ms)
+✔ preparation mode cannot admit partial installation or grant/body drift (0.285ms)
+✔ only exact installed rate authority and private forced RLS classify verified (0.2102ms)
+✔ incomplete metadata and invalid source hashes do not pass (0.1688ms)
+✔ exact installed source receipt and all required relations classify installed, never permission to reapply (1.1244ms)
+✔ empty legacy baseline is first apply only when every chain relation is absent (0.1681ms)
+✔ changed complete-source receipt, duplicate or old controlled receipt refuse (0.2438ms)
+✔ partial installed schema and malformed relation evidence refuse (0.2098ms)
+✔ installed permission classification names exact reviewed signatures and invoker trigger exceptions (12.0916ms)
+✔ extra overload or altered authority cannot hide behind a function name (2.5449ms)
+✔ extra PUBLIC execute and trigger SECURITY DEFINER drift refuse (0.8615ms)
+✔ two arbitrary triggers do not inherit the named PUBLIC exception (0.729ms)
+✔ same-named private trigger cannot replace PUBLIC schema exception (0.3837ms)
+✔ approved order-chat adapter extends the exact installed catalog without admitting other grants (0.5057ms)
+✔ backup must match encrypted bytes/hash and actual restored current migration (1.6705ms)
+✔ missing proof and impossible/future creation or restoration evidence refuse (0.2156ms)
+✔ unknown backup creation metadata cannot be bypassed by a valid candidate (0.3478ms)
+✔ backup chronology requires real UTC ISO strings rather than Date.parse coercion (0.1504ms)
+✔ the gate keeps the read-only guard in front of every query (0.9382ms)
+✔ the production query is declared read_only (0.2359ms)
+✔ every SQL template literal is a SELECT with no write verb (0.8079ms)
+✔ the gate reports provider surfaces as blocked instead of assuming them (0.2305ms)
+✔ the gate refuses to send a query before identity passes (0.1761ms)
+✔ documented K2 gates load the owner-controlled local environment file (0.6091ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 124.3834
+
+> k2-jimzon-prototype@0.1.0 security:test-files
+> node scripts/test-sensitive-file-policy.mjs
+
+Sensitive-file policy tests passed (13 blocked, 4 allowed, and the source inventory).
+
+> k2-jimzon-prototype@0.1.0 security:files
+> node scripts/verify-tracked-sensitive-files.mjs
+
+Sensitive-file policy passed in git mode (2548 files checked).
+
+> k2-jimzon-prototype@0.1.0 security:test-env-source
+> node scripts/test-environment-source-boundary.mjs
+
+Environment source-boundary tests passed (8 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:env-source
+> node scripts/verify-environment-source-boundary.mjs
+
+Environment source boundary passed (255 browser and 192 server/Edge files checked).
+
+> k2-jimzon-prototype@0.1.0 security:dependency-policy
+> node scripts/verify-dependency-policy.mjs
+
+Dependency policy passed (20 direct, 246 locked packages, 2 reviewed install scripts).
+Reviewed licenses: 0BSD=2, Apache-2.0=25, Apache-2.0 AND LGPL-3.0-or-later=3, Apache-2.0 AND LGPL-3.0-or-later AND MIT=1, BSD-2-Clause=1, BSD-3-Clause=2, ISC=7, LGPL-3.0-or-later=10, MIT=170, MPL-2.0=24, UNKNOWN=1
+
+> k2-jimzon-prototype@0.1.0 security:surfaces
+> node scripts/audit-security-surfaces.mjs --fail-on-gaps
+
+# MAP-020 Security Surface Inventory
+
+Generated: 2026-10-23T02:37:10.792Z
+
+- Prepared Admin routes: 104
+- Prepared Storefront routes: 21
+- Supabase Edge Functions: 2 (invite-staff, shopee-webhook)
+- api_request: 69 source operations
+- auth: 45 source operations
+- realtime: 12 source operations
+- rpc: 143 source operations
+- storage: 16 source operations
+- table: 141 source operations
+- SQL functionDefinitionOccurrences: 246
+- SQL uniqueFunctionSignatures: 188
+- SQL functionGrantEvents: 181
+- SQL functionRevokeEvents: 265
+- SQL functionSearchPathHardeningEvents: 6
+- SQL effectiveSecurityDefinerWithoutFixedSearchPath: 0
+- SQL effectiveFunctionsWithPublicExecute: 0
+- SQL effectiveFunctionsWithAnonExecute: 20
+- SQL effectiveFunctionsWithAuthenticatedExecute: 104
+- SQL effectiveFunctionsWithServiceRoleExecute: 13
+- SQL scheduledJobs: 0
+- SQL publicationChanges: 16
+- SQL policyDefinitions: 156
+- SQL storagePolicyDefinitions: 15
+- Dynamic operations requiring explicit review: 0
+- Exact expected anonymous function grants: 20
+- Unexpected PUBLIC function grants: 0
+- Unexpected anonymous function grants: 0
+- Missing expected anonymous function grants: 0
+- BFF route-control classification gaps: 0
+- Wildcard CORS production sources: 0
+
+This is a source inventory, not deployment or authorization evidence.
+
+> k2-jimzon-prototype@0.1.0 security:secrets
+> node scripts/scan-secrets.mjs
+
+Secret scan passed (2550 files checked; secret values are never printed).
+✓ Import-integrity check passed — all hooks and supabase usages are imported.
+
+> k2-jimzon-prototype@0.1.0 build:admin
+> vite build --mode admin --configLoader runner && node scripts/emit-static-404.mjs admin && node scripts/emit-admin-head.mjs admin && node scripts/verify-build-boundary.mjs admin && node scripts/verify-bundle-budgets.mjs admin && node scripts/scan-secrets.mjs dist
+
+vite v8.2.4 building client environment for admin...
+transforming...
+✓ 704 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/k2-build-target.json                                0.02 kB │ gzip:   0.04 kB
+dist/admin-sw.js                                         0.41 kB
+dist/manifest.json                                       0.74 kB │ gzip:   0.30 kB
+dist/index.html                                          3.13 kB │ gzip:   0.98 kB
+dist/.vite/manifest.json                                16.97 kB │ gzip:   1.96 kB
+dist/assets/Admin-pjuiq6QD.css                           0.68 kB │ gzip:   0.31 kB
+dist/assets/MasterWorkflowGraph-B4iZfrXt.css             0.81 kB │ gzip:   0.41 kB
+dist/assets/index-BT_CQQlo.css                         199.81 kB │ gzip:  29.43 kB
+dist/assets/imageFallback-7DFuhpJV.js                    0.19 kB │ gzip:   0.15 kB
+dist/assets/useBodyScrollLock-41VEGZHc.js                0.32 kB │ gzip:   0.23 kB
+dist/assets/orderChargeState-Clw0vEvX.js                 0.55 kB │ gzip:   0.33 kB
+dist/assets/rolldown-runtime-hePW80VL.js                 0.71 kB │ gzip:   0.42 kB
+dist/assets/overviewAvailability-B6AtXXy0.js             0.96 kB │ gzip:   0.53 kB
+dist/assets/channelMeta-0DXB9A7f.js                      1.12 kB │ gzip:   0.48 kB
+dist/assets/useRetainedFulfillmentCommand-CLCrSq6y.js    1.66 kB │ gzip:   0.91 kB
+dist/assets/WorkflowGuideModal-k-i1z8e0.js               5.83 kB │ gzip:   2.14 kB
+dist/assets/FefoWorkflowDiagram-B7I0oaJA.js              6.02 kB │ gzip:   2.19 kB
+dist/assets/AdminWorkspaceUi-EQj0r_6_.js                 6.03 kB │ gzip:   1.93 kB
+dist/assets/TourSelectionModal-DdS3yZtw.js               6.58 kB │ gzip:   2.30 kB
+dist/assets/FulfillmentWorkflowDiagram-loJ9HR71.js       7.05 kB │ gzip:   2.71 kB
+dist/assets/CustodyWorkflowDiagram-BDx5RHPG.js           7.09 kB │ gzip:   2.64 kB
+dist/assets/FlightWorkflowDiagram-8fgq8CGn.js            7.32 kB │ gzip:   2.81 kB
+dist/assets/Kanban-xrSG_Za6.js                           7.36 kB │ gzip:   2.31 kB
+dist/assets/PasabuyWorkflowDiagram-D5Cl5fiD.js           7.78 kB │ gzip:   3.00 kB
+dist/assets/ReservationHolds-CCJ0HhdF.js                 8.76 kB │ gzip:   3.43 kB
+dist/assets/Suppliers-Bv5NoOT_.js                       12.30 kB │ gzip:   3.92 kB
+dist/assets/productResearchContract-Brii40Gn.js         12.31 kB │ gzip:   3.73 kB
+dist/assets/SpotlightTourOverlay-CfzSskZd.js            13.45 kB │ gzip:   4.10 kB
+dist/assets/StoreAssetStudio-CmA8EdSr.js                17.00 kB │ gzip:   5.41 kB
+dist/assets/GlobeCms-85SSEMyS.js                        17.47 kB │ gzip:   5.29 kB
+dist/assets/Customers-DcSIRZW8.js                       17.64 kB │ gzip:   5.12 kB
+dist/assets/PasabuyManager-CkVyDBW4.js                  18.24 kB │ gzip:   6.26 kB
+dist/assets/CouponManager-BbAH0iyN.js                   20.07 kB │ gzip:   5.74 kB
+dist/assets/index-D7Av04PO.js                           32.29 kB │ gzip:  12.08 kB
+dist/assets/StaffPermissionManager-osoqm7NO.js          33.92 kB │ gzip:   8.95 kB
+dist/assets/ConsignmentManager-DQyc_FnZ.js              36.15 kB │ gzip:   9.56 kB
+dist/assets/tourData-CANGzczX.js                        36.47 kB │ gzip:  11.48 kB
+dist/assets/DeliveryRateControl-G1qldciI.js             40.40 kB │ gzip:  11.64 kB
+dist/assets/ChannelIntegrations-D_EmQiN5.js             40.97 kB │ gzip:  10.68 kB
+dist/assets/Overview-iO6mgeRU.js                        41.19 kB │ gzip:  11.25 kB
+dist/assets/Inbox-DQ8CW8Xz.js                           57.36 kB │ gzip:  14.22 kB
+dist/assets/BulkCsvImportModal-CKzhzPJ8.js              58.63 kB │ gzip:  19.01 kB
+dist/assets/adminBffService-BbtOF8oU.js                 58.66 kB │ gzip:  16.55 kB
+dist/assets/OwnerCountClose-t-SfFUx_.js                 71.65 kB │ gzip:  17.87 kB
+dist/assets/Sheet-DJc1w3OX.js                           94.22 kB │ gzip:  20.16 kB
+dist/assets/InventoryGrid-Eqo5HsBU.js                  112.35 kB │ gzip:  27.59 kB
+dist/assets/OmniOperationsHub-DL8bTckm.js              124.30 kB │ gzip:  28.17 kB
+dist/assets/vendor-motion-BK6tTnu6.js                  133.06 kB │ gzip:  43.53 kB
+dist/assets/MasterWorkflowGraph-BdBNa0_H.js            176.59 kB │ gzip:  49.96 kB
+dist/assets/ProductIntakeSessionModal--GfKIXkA.js      191.37 kB │ gzip:  50.84 kB
+dist/assets/vendor-react-Fz_k0-wU.js                   210.63 kB │ gzip:  65.70 kB
+dist/assets/vendor-supabase-C_uyFMkg.js                214.18 kB │ gzip:  55.01 kB
+dist/assets/Admin-DhWZcD93.js                          226.68 kB │ gzip:  61.39 kB
+dist/assets/esm-Kw9dQLLf.js                            368.72 kB │ gzip: 108.07 kB
+
+✓ built in 1.10s
+Emitted admin static 404 recovery page.
+emit-admin-head: Admin discovery tags written to dist/index.html.
+Verified admin production boundary (46 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker).
+Admin application budget passed: 226.68 kB/300.00 kB minified.
+Secret scan passed (88 files checked; secret values are never printed).

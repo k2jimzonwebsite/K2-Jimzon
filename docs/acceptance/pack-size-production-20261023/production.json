@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-23",
+  "owner": "MAP-023",
+  "idea": "IDEA-20261023-01",
+  "pullRequest": "https://github.com/k2jimzonwebsite/K2-Jimzon/pull/22",
+  "approvedHead": "d0421fdf167c1880510537b329245c08a3cf35d1",
+  "mergeCommit": "a3982419dcd87f20d19433dbc503adcb31e81869",
+  "ciRun": "39890232988",
+  "production": [
+    {
+      "id": "dpl_GX28e64ScRgGjhX5UhDLFXtZc1Mm",
+      "projectId": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "state": "READY",
+      "source": "a3982419dcd87f20d19433dbc503adcb31e81869",
+      "aliases": [
+        "www.k2jimzon.com",
+        "k2-jimzon-vert.vercel.app",
+        "k2jimzon.com",
+        "k2-jimzon-k2-jimzon.vercel.app",
+        "k2-jimzon-git-main-k2-jimzon.vercel.app"
+      ],
+      "url": "k2-jimzon-350uhfag4-k2-jimzon.vercel.app"
+    },
+    {
+      "id": "dpl_BCxbUMzAZSVxEDgYSm16vVxSMMHL",
+      "projectId": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "state": "READY",
+      "source": "a3982419dcd87f20d19433dbc503adcb31e81869",
+      "aliases": [
+        "admin.k2jimzon.com",
+        "k2-jimzon-admin-seven.vercel.app",
+        "k2-jimzon-admin-k2-jimzon.vercel.app",
+        "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+      ],
+      "url": "k2-jimzon-admin-ipizresa1-k2-jimzon.vercel.app"
+    }
+  ],
+  "rollback": [
+    {
+      "id": "dpl_3QsTqaJEu7h5xUzz5pjkkHkWycQ4",
+      "projectId": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "source": "8d5d4e3cc00d44ca334f2abd6d3913361f143036",
+      "url": "k2-jimzon-nxsr13xxn-k2-jimzon.vercel.app"
+    },
+    {
+      "id": "dpl_AZWP7K74vpyXWoQi3v9MxUYHno35",
+      "projectId": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "source": "8d5d4e3cc00d44ca334f2abd6d3913361f143036",
+      "url": "k2-jimzon-admin-1shgq8nwv-k2-jimzon.vercel.app"
+    }
+  ],
+  "observedHosts": {
+    "admin": "196 records /93Active /103Draft /273 projected units",
+    "dante038": "Pack size =1 L bottle; PHP1199;2 units",
+    "dante039": "Pack size =750 ml bottle; PHP949;2 units"
+  },
+  "releaseQualification": "Initial complete invocation exit1 at existing two-status locator; unchanged focused exit1, narrowed assertion focused1/1, development0, all unrun manifest remainder/artifact/builds exit0. Entire maintained manifest covered as reconciled union; no claim initial invocation passed.",
+  "noBusinessWritesDuringPromotion": true,
+  "hashes": {
+    "admin-inventory.png": "9d4e2b2e61eeb428d5c9f6364ed37d2db67fb474a34197088d52f9e6bfe99484",
+    "admin-inventory.txt": "51d5af27e27d00724f8766d4b5013e2c2d66feabe587f8f135fc6013d980bd74",
+    "dante038-live.png": "a48c185ea4292c829d6622f6648bad9a142a27debeb41e6a9fbcca53e6ebe0d9",
+    "dante038-live.txt": "e1be048631d7824d5424df5f4d8cab8562cec17b2d7a4817e045c9441f5b38d3",
+    "dante039-live.png": "38101026445c16d4545e8355e8b62f989242fef6c9f1a794f13100a240449f19",
+    "dante039-live.txt": "ba4140f0eda16802d676650e18ca3b7d9958fbeed5de22ec4cf31f387b28715a",
+    "focused-quotation-fixed.log": "b435dc2f107ed4edb40501651f510cff02b2ab195f725e34c2fe179286ec5ac5",
+    "focused-quotation.log": "84fc5fc02eb4d6b509de317c8cd4030fb926194a7ee4efa83951d2bfa8ce2610",
+    "initial-quotation-error-context.md": "871ab8ef5be582a193249bdab81593be2013689a5fb620b279fb30066b20ef74",
+    "pr22-final-preflight.log": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6",
+    "pr22-final-readiness.log": "cc57a964adc542e9dbe7bd96fe863977d35104a2105da8940ca51ea9cea153d6",
+    "pr22-premerge-checks.json": "667b34ae5c58afd1252b43a46225bc88b920b1ea1a3816e34e490eb04f54449c",
+    "resumed-manifest.json": "28c8dbde1619591cbfc2f350bdb35d89684811268b43fce6c62e3a469b159eda",
+    "resumed-release-remaining.log": "8c6ed165314cab5f8e4ede6a395bc4ef1e1cd0d392d580b5e02313bb0b2636c5",
+    "resumed-release.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "resumed-release.log": "601d1b8fa3fe7aed01f4c0441c5427618818bce58a55cfcdcd7a07dbbfa3f46e",
+    "verify-release.exit": "f1b2f662800122bed0ff255693df89c4487fbdcf453d3524a42d4ec20c3d9c04",
+    "verify-release.log": "686f2a8dec0aeb55065e59a53d3d6b8bb5cf8053fa8e3f3e34e9f79976547a40"
+  }
+}
