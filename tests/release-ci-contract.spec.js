@@ -80,7 +80,8 @@ test('remote CI runs the complete local acceptance command without skipping prot
 
   expect(workflow).toMatch(/^\s*run:\s*npm test\s*$/m)
   expect(workflow).toContain("CI: 'true'")
-  expect(workflow).not.toContain('VITE_SUPABASE_URL')
+  const acceptanceStep = workflow.split(/\r?\n(?=      - )/).find(step => /^\s*run:\s*npm test\s*$/m.test(step))
+  expect(acceptanceStep).not.toContain('VITE_SUPABASE_URL')
   expect(adminConfig).toContain("VITE_SUPABASE_URL: 'https://fixture.supabase.co'")
   expect(adminDashboard).toContain("const supabaseUrl = 'https://fixture.supabase.co'")
   expect(adminDashboard).not.toContain('test.skip(!supabaseUrl')
@@ -91,6 +92,21 @@ test('remote CI runs the complete local acceptance command without skipping prot
   expect(accountSpec).not.toContain('pixplcjqivlfflickobf')
   expect(accountSpec).toContain("page.route('https://fixture.supabase.co/**'")
   expect(workflow).toContain('test-results/')
+})
+
+test('configured production flags stay isolated from acceptance fixtures and Admin builds', async () => {
+  const workflow = await read('.github/workflows/ci.yml')
+  const steps = workflow.split(/\r?\n(?=      - )/)
+  const storefront = steps.find(step => step.includes('name: Build isolated storefront production'))
+  expect(storefront).toContain('VITE_SUPABASE_URL: https://pixplcjqivlfflickobf.supabase.co')
+  for (const flag of ['VITE_GUEST_BFF_ENABLED', 'VITE_CUSTOMER_ACCOUNT_ENABLED']) {
+    expect(storefront).toContain(`${flag}: 'true'`)
+  }
+  for (const step of steps.filter(step => step !== storefront)) {
+    for (const key of ['VITE_SUPABASE_URL', 'VITE_GUEST_BFF_ENABLED', 'VITE_CUSTOMER_ACCOUNT_ENABLED']) {
+      expect(step).not.toContain(key)
+    }
+  }
 })
 
 test('the shared Playwright server cannot be reused by a CI run', async () => {

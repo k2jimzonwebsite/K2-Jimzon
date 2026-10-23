@@ -4,10 +4,7 @@ import { BoxIcon, PlaneIcon, ArrowIcon } from '../ui/icons'
 
 export default function CategoryTiles() {
   const { setCategory, setQuery, go, storeCategories = [] } = useStore()
-  const sections = [...storeCategories.map(({ name, count }) => ({
-    cat: name, title: name, count, icon: BoxIcon,
-    subtitle: `${count} listed product${count === 1 ? '' : 's'}`,
-  })), { title: 'Pasabuy su Misura', subtitle: 'Request something from Italy', icon: PlaneIcon, isPasabuy: true }]
+  const sections = [...storeCategories, { name: 'Pasabuy su Misura', isPasabuy: true }]
 
   const railRef = useRef(null)
   const dragRef = useRef(null)
@@ -75,7 +72,7 @@ export default function CategoryTiles() {
   const open = (section) => {
     if (section.isPasabuy) return go('pasabuy')
     setQuery('')
-    setCategory(section.cat)
+    setCategory(section.name)
     go('catalog')
   }
 
@@ -110,10 +107,7 @@ export default function CategoryTiles() {
         onPointerMove={drag}
         onPointerUp={finishDrag}
         onPointerCancel={finishDrag}
-        onLostPointerCapture={() => {
-          if (dragRef.current) dragRef.current.pointerId = null
-          setDragging(false)
-        }}
+        onLostPointerCapture={finishDrag}
         onClickCapture={(event) => {
           if (event.detail !== 0 && dragRef.current?.moved) {
             event.preventDefault()
@@ -134,7 +128,8 @@ export default function CategoryTiles() {
         className={`flex gap-3 overflow-x-auto overscroll-x-contain pb-3 select-none rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
       >
         {sections.map((section) => {
-          const { title, subtitle, count, icon: CategoryIcon, isPasabuy } = section
+          const { name: title, count, isPasabuy } = section
+          const CategoryIcon = isPasabuy ? PlaneIcon : BoxIcon
 
           return (
             <button
@@ -143,9 +138,6 @@ export default function CategoryTiles() {
               style={{ flexBasis: 'calc((100% - 0.75rem) / 2)', scrollSnapAlign: 'start', cursor: 'inherit' }}
               className="group relative flex min-w-0 shrink-0 min-h-[10.5rem] flex-col items-start justify-between sm:min-h-[5.5rem] sm:flex-row sm:items-center rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left shadow-[var(--store-surface-shadow)] transition-[border-color,box-shadow,transform] duration-200 hover:border-crimson/30 hover:shadow-md active:scale-[0.98] motion-reduce:transform-none motion-reduce:transition-none sm:p-5"
             >
-              {/* Subtle Italian apothecary corner tick-marks */}
-              <span className="pointer-events-none absolute top-2 right-2 h-1.5 w-1.5 border-t border-r border-crimson/40 opacity-0 transition-opacity duration-150 group-hover:opacity-100" aria-hidden="true" />
-              <span className="pointer-events-none absolute bottom-2 left-2 h-1.5 w-1.5 border-b border-l border-crimson/40 opacity-0 transition-opacity duration-150 group-hover:opacity-100" aria-hidden="true" />
               <div className="flex w-full min-w-0 flex-1 flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-3.5">
                 <span className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] text-crimson transition-colors duration-150 group-hover:border-crimson/25 group-hover:bg-crimson-wash">
                   <CategoryIcon size={20} />
@@ -167,7 +159,7 @@ export default function CategoryTiles() {
                     )}
                   </div>
                   <span className="mt-0.5 block text-xs text-navy-faint break-words">
-                    {subtitle}
+                    {isPasabuy ? 'Request something from Italy' : `${count} listed product${count === 1 ? '' : 's'}`}
                   </span>
                 </div>
               </div>

@@ -3791,3 +3791,8 @@ MAP-018 catalog installation identity rule (13 October): the locally tested cata
 
 
 16October B25 MAP-023 approval boundary: owner explicitly approves the exact48-SKU successor proposal pinned in CANONICAL_REFERENCE_SUCCESSOR_B25_AUTHORIZATION_20261016.json. This extends only named firstbrand/category and supportedcopy saves; earlier108approval and appliedreferences must never be replayed. Preserve unassigned/unknown items outside the48scope. All Draft/publication/Website/review/price/stock/heldfacts and normal current-version reason/pending recovery requirements remain.
+
+
+### Cabinet production configuration correction — 23 October2026
+
+MAP-023 / IDEA-20261023-02: PR23 merged409dbcd after final-head CI passed on retry and the local release gate passed. Admin production dpl_CMgfkjebhpMJu26HvvRAxzMb5Phu is READY. Storefront dpl_CJxW7P35K5VcgPS9MpVHToU2v5kL failed JS150.55/150.50kB (CSS29.98/30.00 passed); prior storefront remains live. A local build with the public K2 URL and guest/customer switches enabled reproduces150.58kB, while the unconfigured local build was148.56. CI now tests those public production branches; no secrets or provider settings changed. Duplicate control mapping did not save bytes and was reverted. Category data is rendered directly and lost capture shares the equivalent finish handler; useId, recovery, counts, bounds and destinations remain. Owner explicitly chose removing the two decorative hover ticks; the resulting configured build passes JS150.46/150.50 and CSS29.99/30.00. All26 browser category cases pass. Final development/release/CI and real-host proof remain required; owning next action and rollback stay in MAP-023. No Cabinet production success or data change is claimed.
