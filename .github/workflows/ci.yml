@@ -64,6 +64,11 @@ jobs:
         run: npm run check:imports
 
       - name: Build isolated storefront production
+        env:
+          # Exercise the configured production branches, not the smaller unconfigured bundle.
+          VITE_SUPABASE_URL: https://pixplcjqivlfflickobf.supabase.co
+          VITE_GUEST_BFF_ENABLED: 'true'
+          VITE_CUSTOMER_ACCOUNT_ENABLED: 'true'
         run: npm run build:storefront
 
       - name: Build isolated admin production
