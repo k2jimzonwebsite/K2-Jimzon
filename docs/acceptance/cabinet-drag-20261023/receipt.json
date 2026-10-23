@@ -1,0 +1,38 @@
+{
+  "owner": "MAP-023",
+  "idea": "IDEA-20261023-02",
+  "state": "locally verified, not deployed",
+  "browser": 26,
+  "development": 0,
+  "review": "Approved after hybrid fix; no remaining Important/Critical",
+  "files": {
+    "src/components/home/CategoryTiles.jsx": "06ab17b40294398d2bcf8972642b051a8f6c071627314f969f4505e44e441822",
+    "tests/store-categories-ui.spec.js": "ad9408b11847dcdfd626e091a224faf45c55e16721bc31df5eb55c63c48727da"
+  },
+  "evidence": {
+    "failing-first.log": "13acc0b6be924f0853196b29e3c18a9f771b102b4bdc98686ecb6e5702d803ad",
+    "final-categories.log": "14849a385d04eb107fafee0e0f07e497e401127c961b387298cbc7589666414c",
+    "focused-browser.log": "e069b99c6d3c0318c7fc8f516a3ea2b93211efe46877463889f3ffc15e4888f7",
+    "focused-layout.log": "16cc1b3519ef5fcdba87e236dd53fa5f8fc8fd1c361fd2f9234a08443582ef67",
+    "hybrid-green.log": "e8ff5f55f428942b336f7e50752ff49132aef1024890d6a545d03a0ff78bb910",
+    "hybrid-red.log": "b58c9de5ead2605b7bf666e18fe89e376b7e42ce1e9c830676d3e5b081e13682",
+    "long-name-capture.log": "1ae32ecce33c2e8c2c4897a5a2553a4f1f3a3abc01e0d20b3199846365f65290",
+    "verify-development.exit": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+    "verify-development.log": "4e222956d621d754cbd57eada4ce223d62796aacd16fd305251c0da92d9fdaef",
+    "budget-ci-initial-failure.log": "61ec6efec166b471d82e7a17e52c3286d9253deea69e1ddac09f2b2ded254bea",
+    "budget-first-local-failure.log": "73df7ea22fb5b2b29c93d2481cf9418879dbc14903b222bbfdbc3856ffb32e4b",
+    "budget-fixed-build.log": "190c06ef54afd5145d4813105658e7a0f54f35a3d65ce1e9e62fd9a2011d6a0f",
+    "budget-style-regressions.log": "b9cbb3db131867826363d3632d2c4ba076ba751bd40d5fa2f14417d196543cc5",
+    "budget-development.log": "80edb429b31c8d0d18fb44b0221b4a871a59dcc0e92d4c3ea9bdf1b285245913",
+    "budget-development.exit": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+  },
+  "performance": {
+    "initialCi": "39893751441 CSS30.17/30.00 refused",
+    "localFirst": "30.02/30.00 refused",
+    "fixed": "CSS29.99/30.00 JS148.56/150.50 pass",
+    "focusedBrowser": 15,
+    "development": 0,
+    "review": "approved",
+    "release": "owner-approved, revised-head CI and complete qualification pending"
+  }
+}
