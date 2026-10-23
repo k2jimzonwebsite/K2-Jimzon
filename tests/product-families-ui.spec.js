@@ -416,3 +416,25 @@ test('Admin lost reply survives reload and retries the exact original actor, bod
   expect(writes[1]).toEqual(writes[0])
   expect(writes[0].actor).toBe(actor)
 })
+
+
+for (const { width, theme, size } of [
+  { width: 375, theme: 'light', size: '1 L bottle' },
+  { width: 1440, theme: 'dark', size: '1 L bottle' },
+  { width: 375, theme: 'dark', size: '750 ml bottle' },
+  { width: 1440, theme: 'light', size: '750 ml bottle' },
+]) {
+  test(`recorded pack size remains visible without invented gram weight at ${width}px ${theme}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: width === 375 ? 812 : 900 })
+    await fixture(page, { familyRows: [], products: [{ ...catalog[3], sku: 'recorded-volume', name: 'Recorded volume fixture', size, package_type: 'Bottle', net_weight: null }] })
+    await page.goto('/product/recorded-volume')
+    await page.evaluate(theme => document.documentElement.classList.toggle('dark', theme === 'dark'), theme)
+    await expect(page.getByRole('term').filter({ hasText: /^Pack size$/ })).toBeVisible()
+    await expect(page.getByRole('definition').filter({ hasText: new RegExp('^' + size + '$') })).toBeVisible()
+    await expect(page.getByText('Net Weight', { exact: true })).toHaveCount(0)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await page.getByText('Pack size', { exact: true }).scrollIntoViewIfNeeded()
+    fs.mkdirSync('docs/design-checkpoints/20261023-pack-size', { recursive: true })
+    await page.screenshot({ path: `docs/design-checkpoints/20261023-pack-size/${width}-${theme}.png` })
+  })
+}

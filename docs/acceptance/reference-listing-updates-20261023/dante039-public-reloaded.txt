@@ -1,0 +1,192 @@
+- banner:
+  - generic: Italy-sourced goods, fulfilled in Manila · Final stock and delivery are confirmed by K2 staff
+  - button "K2 Jimzon home":
+    - text: K2 Jimzon
+    - generic: Direct Italian imports
+  - navigation "Storefront":
+    - button "Home": Home
+    - button "Inventory & Catalog": Shop
+    - button "Pasabuy": Pasabuy
+    - button "Wholesale": Wholesale
+    - button "Contact us": Contact us
+  - generic: Search the catalog
+  - searchbox "Search the catalog"
+  - button "Open cart, 0 items":
+  - button "Switch to light mode":
+- main:
+  - navigation:
+    - button "Home"
+    - generic: /
+    - button "3D Store"
+    - generic: /
+    - button "Catalog"
+    - generic: /
+    - generic: Dante Extra Virgin Olive Oil 750 ml
+  - button "Back to 3D Store":
+    - generic: ←
+    - text: Back to 3D Store
+  - slider "Drag to compare base product and after use":
+    - img "After use"
+    - img "Dante Extra Virgin Olive Oil 750 ml"
+    - generic: Base product
+    - generic: After use
+    - generic: Drag left / right
+  - button "Go to slide 1"
+  - button "Go to slide 2"
+  - button "Go to slide 3"
+  - generic "2 units available": Only 2 available
+  - generic: Cooking oils
+  - heading "Dante Extra Virgin Olive Oil 750 ml" [level=1]
+  - generic: ₱949
+  - button "Decrease quantity":
+  - generic: "1"
+  - button "Increase quantity":
+  - generic: In stock and ready for Manila delivery.
+  - button "Add to cart · ₱949"
+  - paragraph: Dante extra virgin olive oil for salads and everyday cooking.
+  - generic: Product Details
+  - term: Manila Stock
+  - definition:
+    - text: 2 units ready in Manila
+  - paragraph: Product specifications
+  - generic: Product specifications are not available yet.
+  - button "Ingredients"
+  - button "Instructions"
+  - heading "What you'll need" [level=4]
+  - paragraph: Ingredient details are not available yet. Check the package or ask K2 staff.
+  - region "Product details":
+    - heading "Product details" [level=2]
+    - generic "About this product":
+      - text: About this product
+      - generic: ▾
+    - generic "What you can make with it":
+      - text: What you can make with it
+      - generic: ▾
+    - heading "Common questions" [level=2]
+    - paragraph: No reviewed questions for this product yet. Ask below and staff will answer directly.
+    - paragraph: Ask K2 staff
+    - generic: Ask about this product and staff will reply in your messages.
+    - textbox "Ask about this product and staff will reply in your messages.":
+      - /placeholder: "For example: is this the whole bean or ground?"
+    - button "Send to staff" [disabled]
+    - status: Messages are reviewed during Manila business hours. No response time is promised.
+  - region "Related Italian Provisions":
+    - paragraph: Curated Pairing
+    - heading "Related Italian Provisions" [level=2]
+    - paragraph: Handpicked favorites from the same pantry category in our Manila inventory.
+    - button "Browse full catalog":
+      - generic: Browse full catalog
+    - article:
+      - button "View Dante Extra Virgin Olive 1 Liter":
+        - img "Dante Extra Virgin Olive 1 Liter"
+      - paragraph: Cooking oils
+      - button "Dante Extra Virgin Olive 1 Liter":
+        - heading "Dante Extra Virgin Olive 1 Liter" [level=3]
+      - generic "2 units available": Only 2 available
+      - paragraph: ₱1,199
+      - button "Add Dante Extra Virgin Olive 1 Liter to cart":
+    - article:
+      - button "View Tigullio Carciofi E Noci":
+        - img "Tigullio Carciofi E Noci"
+      - paragraph: Pesto and sauces
+      - button "Tigullio Carciofi E Noci":
+        - heading "Tigullio Carciofi E Noci" [level=3]
+      - generic "2 units available": Only 2 available
+      - paragraph: ₱297
+      - button "Add Tigullio Carciofi E Noci to cart":
+    - article:
+      - button "View Tigullio Gran Pesto Cremoso":
+        - img "Tigullio Gran Pesto Cremoso"
+      - paragraph: Pesto and sauces
+      - button "Tigullio Gran Pesto Cremoso":
+        - heading "Tigullio Gran Pesto Cremoso" [level=3]
+      - generic "Sold out": Sold out
+      - paragraph: ₱297
+      - button "Request Tigullio Gran Pesto Cremoso on Pasabuy": Request
+    - article:
+      - button "View Vidal Unicorns 90 g":
+        - img "Vidal Unicorns 90 g"
+      - paragraph: Sweets
+      - button "Vidal Unicorns 90 g":
+        - heading "Vidal Unicorns 90 g" [level=3]
+      - generic "Sold out": Sold out
+      - paragraph: ₱175
+      - button "Request Vidal Unicorns 90 g on Pasabuy": Request
+- complementary "Store concierge chat":
+  - button "Chat with K2 staff":
+    - generic: Chat with K2
+- contentinfo:
+  - button "K2 Jimzon Direct Italian imports":
+    - text: K2 Jimzon
+    - generic: Direct Italian imports
+  - paragraph: Italian goods for homes and businesses in the Philippines. Shop what is in stock or ask us to source something from Italy.
+  - paragraph: Website · Shopee · TikTok Shop · Lazada · Pasabuy
+  - heading "Shop" [level=3]
+  - list:
+    - button "Beverages"
+    - button "Biscuits and wafers"
+    - button "Chocolate"
+    - button "Coffee and drink preparations"
+    - button "Cooking oils"
+    - button "Fragrances"
+    - button "Pasta"
+    - button "Pasta sauces"
+    - button "Personal care"
+    - button "Pesto and sauces"
+    - button "Spaghetti"
+    - button "Sweet spreads"
+    - button "Sweets"
+    - button "Sweets and confectionery"
+    - button "Tinned fish"
+  - heading "Services" [level=3]
+  - list:
+    - button "Request from Italy"
+    - button "Wholesale orders"
+    - button "Browse products"
+    - button "Review your basket"
+  - heading "Contact" [level=3]
+  - list:
+    - button "Contact us"
+    - link "Call 0931 864 9654":
+      - /url: tel:09318649654
+      - generic: 0931 864 9654
+    - link "Email K2 Jimzon":
+      - /url: mailto:k2jimzonwebsite@gmail.com
+      - generic: Email K2 Jimzon
+    - link "Facebook · Family Pin Italy":
+      - /url: https://www.facebook.com/FamilyPinItaly
+      - generic: Facebook · Family Pin Italy
+    - link "Instagram · @kaikiko8":
+      - /url: https://www.instagram.com/kaikiko8/
+      - generic: Instagram · @kaikiko8
+    - generic: Manila, Philippines
+  - region "Find our shops":
+    - heading "Find our shops" [level=3]
+    - paragraph: These links open our marketplace shops. Stock and messages there stay in each marketplace until a connector is approved.
+    - paragraph: Pasabuy Italy by K2
+    - list:
+      - link "Lazada":
+        - /url: https://s.lazada.com.ph/s.Z777zD?c=x
+        - text: Lazada
+      - link "Shopee":
+        - /url: https://s.shopee.ph/9V1fXWQ0gK
+        - text: Shopee
+      - link "TikTok":
+        - /url: https://vt.tiktok.com/ZS9Afhgs231Wm-Zj3hN/
+        - text: TikTok
+    - paragraph: Jworldbasket
+    - list:
+      - link "Lazada":
+        - /url: https://s.lazada.com.ph/s.Z77ieU?c=x
+        - text: Lazada
+      - link "Shopee":
+        - /url: https://s.shopee.ph/5fowyVvX1R
+        - text: Shopee
+      - link "TikTok":
+        - /url: https://vt.tiktok.com/ZS9AfhVYjAJUb-HhBEF/
+        - text: TikTok
+  - button "Privacy & Data"
+  - button "Terms of Service"
+  - button "Returns & Replacements"
+  - paragraph: Submitting a Website or Pasabuy request does not collect payment. K2 staff confirms availability, delivery, and payment instructions directly.
+  - paragraph: © 2026 K2 Jimzon · Direct Italian imports

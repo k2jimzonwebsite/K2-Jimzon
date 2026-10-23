@@ -1,0 +1,202 @@
+[
+  {
+    "checked": null,
+    "index": 0,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "text",
+    "value": "Dante Extra Virgin Olive Oil 750 ml"
+  },
+  {
+    "checked": null,
+    "index": 1,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "text",
+    "value": "Dante Olive Oil 750 ml"
+  },
+  {
+    "checked": null,
+    "index": 2,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "text",
+    "value": ""
+  },
+  {
+    "checked": null,
+    "index": 3,
+    "placeholder": "e.g. Pasta Sauces",
+    "tag": "INPUT",
+    "type": "text",
+    "value": "Cooking oils"
+  },
+  {
+    "checked": null,
+    "index": 4,
+    "placeholder": "e.g. Parma, Italy",
+    "tag": "INPUT",
+    "type": "text",
+    "value": ""
+  },
+  {
+    "checked": null,
+    "index": 5,
+    "placeholder": "Weight in grams",
+    "tag": "INPUT",
+    "type": "number",
+    "value": ""
+  },
+  {
+    "checked": null,
+    "index": 6,
+    "placeholder": "e.g. Glass Jar",
+    "tag": "INPUT",
+    "type": "text",
+    "value": "Bottle"
+  },
+  {
+    "checked": null,
+    "index": 7,
+    "placeholder": "e.g. 400g jar",
+    "tag": "INPUT",
+    "type": "text",
+    "value": "750 ml bottle"
+  },
+  {
+    "checked": null,
+    "index": 8,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "date",
+    "value": ""
+  },
+  {
+    "checked": null,
+    "index": 9,
+    "placeholder": null,
+    "tag": "TEXTAREA",
+    "type": "textarea",
+    "value": "Dante extra virgin olive oil for salads and everyday cooking."
+  },
+  {
+    "checked": null,
+    "index": 10,
+    "placeholder": null,
+    "tag": "TEXTAREA",
+    "type": "textarea",
+    "value": ""
+  },
+  {
+    "checked": null,
+    "index": 11,
+    "placeholder": null,
+    "tag": "TEXTAREA",
+    "type": "textarea",
+    "value": ""
+  },
+  {
+    "checked": null,
+    "index": 12,
+    "placeholder": null,
+    "tag": "TEXTAREA",
+    "type": "textarea",
+    "value": "Drizzle over fresh salads or bruschetta, or add to recipes where olive oil fits."
+  },
+  {
+    "checked": null,
+    "index": 13,
+    "placeholder": null,
+    "tag": "TEXTAREA",
+    "type": "textarea",
+    "value": ""
+  },
+  {
+    "checked": null,
+    "index": 14,
+    "placeholder": null,
+    "tag": "TEXTAREA",
+    "type": "textarea",
+    "value": ""
+  },
+  {
+    "checked": null,
+    "index": 15,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "text",
+    "value": ""
+  },
+  {
+    "checked": null,
+    "index": 16,
+    "placeholder": "e.g. Cooked pasta dish",
+    "tag": "INPUT",
+    "type": "text",
+    "value": ""
+  },
+  {
+    "checked": null,
+    "index": 17,
+    "placeholder": "Spread on warm pandesal, Pair with espresso, …",
+    "tag": "INPUT",
+    "type": "text",
+    "value": ""
+  },
+  {
+    "checked": null,
+    "index": 18,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "number",
+    "value": "0"
+  },
+  {
+    "checked": null,
+    "index": 19,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "number",
+    "value": "949"
+  },
+  {
+    "checked": null,
+    "index": 20,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "number",
+    "value": "0"
+  },
+  {
+    "checked": null,
+    "index": 21,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "number",
+    "value": "0"
+  },
+  {
+    "checked": null,
+    "index": 22,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "number",
+    "value": "0"
+  },
+  {
+    "checked": true,
+    "index": 23,
+    "placeholder": null,
+    "tag": "INPUT",
+    "type": "checkbox",
+    "value": "on"
+  },
+  {
+    "checked": null,
+    "index": 24,
+    "placeholder": null,
+    "tag": "TEXTAREA",
+    "type": "textarea",
+    "value": ""
+  }
+]

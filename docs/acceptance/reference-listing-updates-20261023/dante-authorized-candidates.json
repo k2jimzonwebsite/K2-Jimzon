@@ -1,0 +1,27 @@
+{
+  "owner": "MAP-023",
+  "existingIdea": "IDEA-20261018-01",
+  "ownerInstruction": "proceed with supported reference-based listing work; leave unmatched",
+  "source": "https://www.oliodante.com/olio-dante/olio-extra-vergine-di-oliva-100-italiano/",
+  "sourceLimit": "format corroboration only; no100%Italian/botanical/formula/grade-revision claim assigned from reference",
+  "items": [
+    {
+      "sku": "K2-SKU-001038",
+      "changes": {
+        "package_type": "Bottle",
+        "short": "Dante Olive Oil 1 L",
+        "size": "1 L bottle"
+      }
+    },
+    {
+      "sku": "K2-SKU-001039",
+      "changes": {
+        "package_type": "Bottle",
+        "short": "Dante Olive Oil 750 ml",
+        "size": "750 ml bottle"
+      }
+    }
+  ],
+  "state": "saved through normal Admin once per SKU; exact reopened fields verified",
+  "fieldMappingNote": "Canonical Product Master fields are short/package_type/size. Earlier proposal aliases short_name/pack_size were UI-label shorthand, never direct API arguments."
+}

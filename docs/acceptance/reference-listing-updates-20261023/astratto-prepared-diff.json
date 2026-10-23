@@ -1,0 +1,22 @@
+[
+  {
+    "index": 1,
+    "from": "",
+    "to": "Astratto Vino Rosso"
+  },
+  {
+    "index": 6,
+    "from": "",
+    "to": "Bottle"
+  },
+  {
+    "index": 7,
+    "from": "",
+    "to": "750 ml bottle"
+  },
+  {
+    "index": 20,
+    "from": "",
+    "to": "Completed the short card name and bottle/750 ml display fields from the original inventory name and matching Astratto retail reference. Barcode, canonical pair, origin, label facts, price and physical stock remain unchanged."
+  }
+]

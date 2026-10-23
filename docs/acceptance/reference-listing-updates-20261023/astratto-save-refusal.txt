@@ -1,0 +1,134 @@
+Edit Product
+
+K2-SKU-001004
+
+Listing Quality: 50%
+Next: Scan or add barcode
+Details
+Pricing & stock
+
+PRODUCT BASICS
+
+PRODUCT NAME
+(?)
+SHORT NAME FOR PRODUCT CARDS
+(?)
+BARCODE / EAN
+(?)
+STORE CATEGORY
+(?)
+ORIGIN
+(?)
+NET WEIGHT
+(?)
+PACKAGE TYPE
+(?)
+PACK SIZE
+(?)
+EXPIRY DATE
+(?)
+
+Expiry is recorded on each batch during receiving.
+
+INITIAL BRAND AND CATEGORY
+
+This unpublished Draft has no stock or inventory history. Assign existing canonical records before receiving begins. These IDs cannot be changed after assignment.
+
+BRAND
+(?)
+Choose an existing brand
+Amalfi
+Baresa
+Barilla
+Barissimo
+Bellarom
+Bench Body
+Borella
+Caffè Poli
+Cien
+Combino
+Crastan
+Dante
+Delverde
+Disano
+Divella
+Donna Chiara
+Dulciar
+Eccellenza Ligure
+Eccellenze di Prix
+Fin Carré
+Fini
+Francesco Moretti
+G. Bellini
+Galatine
+Giglio
+Gimoka
+Gullón
+I Siciliani
+Italiamo
+Italian Coffee
+La Suissa
+Laica
+Lavazza
+Loacker
+Mareblu
+Maruzzella
+Marysol
+McKennedy
+Montana
+Montegrappa
+Mulino Bianco
+Nixe
+Nostromo
+Novi
+Nutella
+Pagani
+Pellini
+Pernigotti
+Poppies
+Preferiti
+Ribeira
+Rio Mare
+Saclà
+Segafredo
+Selex
+Sondey
+Suddenly
+Tigullio
+Vidal
+Create brand
+CANONICAL CATEGORY
+(?)
+Choose an existing category
+Biscuits and wafers
+Chocolate
+Clothing
+Coffee and drink preparations
+Cooking oils
+Pasta
+Pasta sauces
+Personal care
+Pesto and sauces
+Sweet spreads
+Sweets
+Tinned fish
+Tinned meat
+Create category
+Product description
+Hide
+DESCRIPTION (3 SENTENCES)
+(?)
+WHY BUY THIS? (MAX 18 WORDS)
+(?)
+WHY IS IT HARD TO FIND IN THE PHILIPPINES?
+(?)
+Use & ingredients
+Show
+
+Product details save separately from photos, publication, and batch reconciliation.
+
+Choose an existing brand and category before saving this zero-stock Draft.
+Reason for this change
+Saved permanently in this product's change history.
+Cancel
+Save Changes

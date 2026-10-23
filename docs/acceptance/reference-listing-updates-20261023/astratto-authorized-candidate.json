@@ -1,0 +1,30 @@
+{
+  "owner": "MAP-023",
+  "existingIdea": "IDEA-20261018-01",
+  "sku": "K2-SKU-001004",
+  "authorization": "Owner proceed after source-reference continuation",
+  "changes": {
+    "package_type": "Bottle",
+    "short": "Astratto Vino Rosso",
+    "size": "750 ml bottle"
+  },
+  "source": [
+    "Original source row4 and existing recorded product name",
+    "https://www.ilprimo.sk/vino-rosso-10-bottiglia-bordolese-standard/"
+  ],
+  "state": "prepared only; normal Save refused missing existing brand/category; canceled; reopen confirms three blanks",
+  "excluded": [
+    "net_weight_g",
+    "barcode",
+    "brand_id",
+    "category_id",
+    "origin",
+    "formula",
+    "price",
+    "stock",
+    "human_review",
+    "publication",
+    "website"
+  ],
+  "fieldMappingNote": "Canonical Product Master fields are short/package_type/size. Earlier proposal aliases short_name/pack_size were UI-label shorthand, never direct API arguments."
+}

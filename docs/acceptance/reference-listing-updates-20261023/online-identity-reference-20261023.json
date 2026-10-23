@@ -1,0 +1,93 @@
+{
+  "owner": "MAP-023",
+  "existingIdea": "IDEA-20261018-01",
+  "recordedDate": "2026-10-23",
+  "ownerInstruction": "take a look online for reference, if not leave it behind",
+  "mode": "public reference research only; no provider or business read/write",
+  "queries": [
+    "\"MILLEFIONI\" honey 1kg",
+    "\"millefiori\" miele \"1 kg\" produttore",
+    "\"MILLEFIONI\" miele",
+    "\"MILLEFIONI\" honey",
+    "\"ASTRATTO\" \"rosso\" \"10\" \"750\"",
+    "\"FARBO\" \"100g\"",
+    "\"GUSTO ELMA\" pistacchio",
+    "\"DELIZIA PISTACCHIO\" \"45%\" \"600\""
+  ],
+  "honey": {
+    "skus": [
+      "K2-SKU-001126",
+      "K2-SKU-001127"
+    ],
+    "sourceRows": [
+      150,
+      151,
+      152
+    ],
+    "retainedState": "Draft, not Website-visible; last retained snapshot, no fresh provider query",
+    "disposition": "defer both unmatched identities; preserve separate canonical SKU/source history; no repeated question without new evidence",
+    "finding": "Millefiori identifies a multifloral honey type, used by multiple producers selling 1 kg products. The name and size alone do not identify the K2 maker or establish duplicate-versus-distinct jars.",
+    "inference": "MILLEFIONI may be a spelling variation; this is not a verified correction or product merge.",
+    "sources": [
+      {
+        "url": "https://www.manfrediniapicoltura.it/prodotto/miele-millefiori-1-kg/",
+        "kind": "producer",
+        "observed": "Indexed producer description and initial page read support multiple floral sources and a 1 kg product. Later direct reopen timed out.",
+        "doesNotProve": "K2 stock supplier, exact jar, origin, formulation, price or identity match"
+      },
+      {
+        "url": "https://apicolturascola.it/miele-millefiori",
+        "kind": "producer",
+        "observed": "Initial direct page read lists MIELE MILLEFIORI 1KG, 1000 g, Apicoltura Scola. Later direct reopen timed out.",
+        "doesNotProve": "K2 stock supplier, exact jar or a relationship to the first producer"
+      },
+      {
+        "url": "https://parma.coldiretti.it/wp-content/uploads/2020/10/LocancinaDOMICILIO-full.pdf",
+        "kind": "historical producer-list search result only",
+        "observed": "Indexed literal Millefioni occurs in an old organic-honey list; PDF was not opened/downloaded for exact package review.",
+        "doesNotProve": "Unique brand named Millefioni, a K2 supplier association, or a verified spelling correction"
+      }
+    ]
+  },
+  "otherBoundedLeads": [
+    {
+      "sku": "K2-SKU-001004",
+      "recordedName": "ASTRATTO VINO ROSSO 10%VOL. WINE BOTTLE 750ML",
+      "url": "https://www.ilprimo.sk/vino-rosso-10-bottiglia-bordolese-standard/",
+      "level": "retailer reference candidate",
+      "observed": "Search-indexed retailer page lists Astratto Rosso 10°, 750 ml, with candidate EAN 8050148522454. Subsequent direct open timed out.",
+      "disposition": "retain reference for exact record review; do not write candidate EAN, taste, ingredients, origin, price or branding into K2 automatically"
+    },
+    {
+      "sku": "K2-SKU-001057",
+      "recordedName": "FARBO 100G",
+      "url": "https://www.farbosrl.com/it-IT/prodotti/lattissima/lattissima.html",
+      "level": "direct manufacturer product reference, insufficient variant match",
+      "observed": "Direct manufacturer page lists Lattissima milk tablets in 100 g, 250 g and 1 kg bags, and navigation lists other Farbo candy ranges.",
+      "disposition": "producer/category lead only; FARBO 100G does not establish Lattissima versus another Farbo product; no formula/image assignment"
+    },
+    {
+      "sku": "K2-SKU-001071",
+      "recordedName": "GUSTO ELMA PISTACCHIO SPREAD 20% 600G",
+      "level": "unmatched literal search",
+      "disposition": "leave unresolved; unrelated Dr. Gusto apple-flavouring result rejected"
+    },
+    {
+      "sku": "K2-SKU-001040",
+      "recordedName": "DELIZIA PISTACCHIO 45% 600ML",
+      "level": "marketplace leads only",
+      "observed": "Vera Delizia 45% 600 g listings are candidates, while K2 source says 600 ml; no reliable source matches the held brand/form/unit.",
+      "disposition": "leave unresolved; do not convert ml to g or select a brand from name similarity"
+    }
+  ],
+  "writes": {
+    "products": 0,
+    "media": 0,
+    "families": 0,
+    "prices": 0,
+    "stock": 0,
+    "publication": 0,
+    "provider": 0
+  },
+  "nextActionLocation": "MASTER_ACTION_PLAN.md MAP-023"
+}

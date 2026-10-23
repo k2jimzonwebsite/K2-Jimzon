@@ -188,7 +188,7 @@ test('express staff quotation retains the exact lost-response command through re
   await page.getByRole('button', { name: 'Retry pending quotation' }).click()
   await expect(page.getByRole('alert')).toContainText('two-factor')
   await page.getByRole('button', { name: 'Retry pending quotation' }).click()
-  await expect(page.getByRole('status')).toContainText('customer must approve')
+  await expect(page.getByRole('status').filter({ hasText: 'customer must approve' })).toBeVisible()
   expect(writes).toHaveLength(3)
   expect(writes[1]).toEqual(writes[0]); expect(writes[2]).toEqual(writes[0])
   expect(await page.evaluate(key => localStorage.getItem(key), pendingExpressKey)).toBeNull()

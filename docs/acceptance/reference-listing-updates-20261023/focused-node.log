@@ -1,0 +1,14 @@
+✔ actual product passport labels canonical grams without losing precision (9.7933ms)
+✔ unknown or invalid canonical weights never become a customer claim (6.3065ms)
+✔ structured product weight uses canonical gram units and exact value (0.7947ms)
+✔ recorded volume pack sizes render independently of gram weight (1.8799ms)
+✔ multipack size and canonical weight keep their separate meanings (0.8253ms)
+✔ missing pack size is omitted without guessing from product names (3.209ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 238.5585
