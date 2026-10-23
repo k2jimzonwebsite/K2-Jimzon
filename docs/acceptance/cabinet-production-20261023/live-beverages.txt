@@ -1,0 +1,53 @@
+Browser tab: 2, Title: "Italian Imported Goods in Manila | K2 Jimzon", URL: "https://www.k2jimzon.com/catalog?category=Beverages".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~		328 container
++			329 text CURRENT MANILA CATALOG
++			330 heading Explore the Italian cabinet., Value: 1, ID: catalog-heading
++				331 text Explore the Italian cabinet.
++			332 text Search current published products and send your cart as an order request. Availability is verified before payment instructions are provided.
++			333 button Enter the store
++			334 container catalog
++				335 container
++					336 text SHOP BY CATEGORY
++					337 checkbox All, Value: 0
++					338 checkbox Beverages, Value: 1
++					339 checkbox Biscuits and wafers, Value: 0
++					340 checkbox Chocolate, Value: 0
++					341 checkbox Coffee and drink preparations, Value: 0
++					342 checkbox Cooking oils, Value: 0
++					343 checkbox Fragrances, Value: 0
++					344 checkbox Pasta, Value: 0
++					345 checkbox Pasta sauces, Value: 0
++					346 checkbox Personal care, Value: 0
++					347 checkbox Pesto and sauces, Value: 0
++					348 checkbox Spaghetti, Value: 0
++					349 checkbox Sweet spreads, Value: 0
++					350 checkbox Sweets, Value: 0
++					351 checkbox Sweets and confectionery, Value: 0
++					352 checkbox Tinned fish, Value: 0
++				353 container
++					354 text Search products
++					355 search text field (settable) Search products
++				356 container
++					357 text 1  products
++				358 container
++					359 text Sort
++					360 pop up button (collapsed, settable) Sort, Value: Featured first, Secondary Actions: Expand
++						361 menu
++							362 (selected) Featured first
++							363 Newest arrivals
++							364 Price: low to high
++							365 Price: high to low
++				366 container
++					367 button View Bellarum Orzo
++						368 image Bellarum Orzo
++					369 text BEVERAGES
++					370 button Bellarum Orzo
++						371 heading Bellarum Orzo, Value: 3
++							372 text Bellarum Orzo
++					373 text Bellarum Orzo
++					374 container 8 units available
++						375 text 8 available
++					376 text ₱499
++					377 button Add Bellarum Orzo to cart
+The focused UI element is 1 AXWebArea Italian Imported Goods in Manila | K2 Jimzon, URL: k2jimzon.com/catalog?category=Beverages

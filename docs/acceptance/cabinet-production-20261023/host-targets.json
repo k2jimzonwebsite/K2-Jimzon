@@ -1,0 +1,16 @@
+[
+  {
+    "host": "https://www.k2jimzon.com",
+    "status": 200,
+    "target": {
+      "target": "storefront"
+    }
+  },
+  {
+    "host": "https://admin.k2jimzon.com",
+    "status": 200,
+    "target": {
+      "target": "admin"
+    }
+  }
+]

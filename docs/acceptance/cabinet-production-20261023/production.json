@@ -1,0 +1,122 @@
+{
+  "source": "3975f2fd9ed4f833f07f72e4768b6fa977f161e9",
+  "qualifiedHead": "fa6a578b5f28f7cf5ff924673b30fd5da97a6d29",
+  "pullRequests": [
+    23,
+    24
+  ],
+  "storefront": {
+    "id": "dpl_GAy5LLMp9EEZWUWfVaXppDirULbD",
+    "url": "k2-jimzon-afdf2fed3-k2-jimzon.vercel.app",
+    "readyState": "READY",
+    "aliases": [
+      "www.k2jimzon.com",
+      "k2-jimzon-vert.vercel.app",
+      "k2jimzon.com",
+      "k2-jimzon-k2-jimzon.vercel.app",
+      "k2-jimzon-git-main-k2-jimzon.vercel.app"
+    ],
+    "source": "3975f2fd9ed4f833f07f72e4768b6fa977f161e9"
+  },
+  "admin": {
+    "id": "dpl_Ti8CP9nvmNPSd2xv4S7JJynQ8f89",
+    "url": "k2-jimzon-admin-arqkfrc5m-k2-jimzon.vercel.app",
+    "readyState": "READY",
+    "aliases": [
+      "admin.k2jimzon.com",
+      "k2-jimzon-admin-seven.vercel.app",
+      "k2-jimzon-admin-k2-jimzon.vercel.app",
+      "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+    ],
+    "source": "3975f2fd9ed4f833f07f72e4768b6fa977f161e9"
+  },
+  "productionBuildEvents": [
+    {
+      "date": 1792729320116,
+      "text": "Creating build cache..."
+    },
+    {
+      "date": 1792729320108,
+      "text": "Deployment completed"
+    },
+    {
+      "date": 1792729314701,
+      "text": "Deploying outputs..."
+    },
+    {
+      "date": 1792729314667,
+      "text": "Build Completed in /vercel/output [34s]"
+    },
+    {
+      "date": 1792729311907,
+      "text": "Secret scan passed (95 files checked; secret values are never printed)."
+    },
+    {
+      "date": 1792729311723,
+      "text": "Storefront landing budget passed: JS 150.42 kB/150.50 kB gzip; CSS 29.98 kB/30.00 kB gzip."
+    },
+    {
+      "date": 1792729311652,
+      "text": "Verified storefront production boundary (49 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker)."
+    },
+    {
+      "date": 1792729311568,
+      "text": "[sitemap] pages into search, follow docs/PRELAUNCH_INDEXING.md."
+    },
+    {
+      "date": 1792729311568,
+      "text": "[sitemap] products have no photographs or descriptions. To launch product"
+    },
+    {
+      "date": 1792729311568,
+      "text": "[sitemap] listed and /product/* is served noindex. This is deliberate while"
+    },
+    {
+      "date": 1792729311568,
+      "text": "[sitemap] NOTE: the pre-launch indexing gate is ON, so no product URL is"
+    },
+    {
+      "date": 1792729311568,
+      "text": "[metadata] 3 marketing pages prerendered"
+    }
+  ],
+  "businessDataWrites": false,
+  "hostedChecks": {
+    "desktop": {
+      "viewport": 1280,
+      "railWidth": 1217,
+      "cardWidth": 602.5,
+      "dragScroll": [
+        0,
+        615
+      ],
+      "dragNavigated": false
+    },
+    "phone": {
+      "viewport": 375,
+      "railWidth": 328,
+      "cardWidth": 158,
+      "documentWidth": 360,
+      "clientWidth": 360,
+      "nextScroll": [
+        0,
+        340
+      ],
+      "endScroll": 2380,
+      "endNextDisabled": true
+    },
+    "category": {
+      "url": "https://www.k2jimzon.com/catalog?category=Beverages",
+      "selected": "Beverages",
+      "productCount": 1,
+      "product": "Bellarum Orzo"
+    },
+    "admin": {
+      "total": 196,
+      "active": 93,
+      "draft": 103,
+      "availableUnits": 273
+    },
+    "physicalTouchDeviceVerified": false
+  }
+}

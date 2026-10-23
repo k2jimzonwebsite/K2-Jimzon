@@ -1,0 +1,181 @@
+{
+  "correctionHead": "fa6a578b5f28f7cf5ff924673b30fd5da97a6d29",
+  "ownerChoice": "Remove the decorative hover ticks",
+  "publicBuildConfiguration": {
+    "VITE_SUPABASE_URL": "https://pixplcjqivlfflickobf.supabase.co",
+    "VITE_GUEST_BFF_ENABLED": "true",
+    "VITE_CUSTOMER_ACCOUNT_ENABLED": "true"
+  },
+  "files": {
+    "src/components/home/CategoryTiles.jsx": {
+      "sha256": "6062e92ec5614733216d8bb27c751033b06eba3a298238b98584789360b1e11a",
+      "gitBlob": "ba66e2f1708a69b613ffd81edff85ff4b984a83d"
+    },
+    ".github/workflows/ci.yml": {
+      "sha256": "220b79d993f518dde2a42e11ff7081cdbb3677e22ce5420a9aabdd99f08553b6",
+      "gitBlob": "a934c6bd61e7da355b905cfb7f21986dd3250ada"
+    },
+    "tests/release-ci-contract.spec.js": {
+      "sha256": "b617e8fb51a7e70b337c02cf62a15ae2fe1163db1314a3324c65cd0de75d9b4f",
+      "gitBlob": "51142de0b84f39f9ff93d22b19be668949b6edd2"
+    },
+    "tests/store-categories-ui.spec.js": {
+      "sha256": "ad9408b11847dcdfd626e091a224faf45c55e16721bc31df5eb55c63c48727da",
+      "gitBlob": "fedb8b79e89e21255c9547e7382fef95c9631bd6"
+    }
+  },
+  "localLogs": {
+    "production-flags-baseline.log": {
+      "sha256": "b8e989ef62c30514ab7d17c01de3b7326137c4a9b9e587a681f2d6f4ead83471",
+      "relevantLines": [
+        "Secret scan passed (2597 files checked; secret values are never printed).",
+        "\u2713 Import-integrity check passed \u2014 all hooks and supabase usages are imported.",
+        "    throw new Error(`Storefront landing budget exceeded: JS ${format(js)}/150.50 kB gzip; CSS ${format(css)}/30.00 kB gzip.`)",
+        "Error: Storefront landing budget exceeded: JS 150.58 kB/150.50 kB gzip; CSS 29.99 kB/30.00 kB gzip."
+      ]
+    },
+    "production-flags-fixed.log": {
+      "sha256": "a0e6cc6f6f95338fc290811877156238be94380c274147d2fddcb72af7016120",
+      "relevantLines": [
+        "Secret scan passed (2597 files checked; secret values are never printed).",
+        "\u2713 Import-integrity check passed \u2014 all hooks and supabase usages are imported.",
+        "    throw new Error(`Storefront landing budget exceeded: JS ${format(js)}/150.50 kB gzip; CSS ${format(css)}/30.00 kB gzip.`)",
+        "Error: Storefront landing budget exceeded: JS 150.58 kB/150.50 kB gzip; CSS 29.99 kB/30.00 kB gzip."
+      ]
+    },
+    "production-final-browser.log": {
+      "sha256": "06cc7c3576aa29e81a285f56ca95b441e6c1f99c09bf63732e4ca41787734aac",
+      "relevantLines": [
+        "  26 passed (43.5s)"
+      ]
+    },
+    "production-contract-development.log": {
+      "sha256": "5be5fbd48d72df719b11f26887ce1db8bee2c134dbdd3c547d7a11b8e562a3cb",
+      "relevantLines": [
+        "Secret scan passed (2597 files checked; secret values are never printed).",
+        "\u2713 Import-integrity check passed \u2014 all hooks and supabase usages are imported."
+      ]
+    },
+    "production-ci-contract-focused.log": {
+      "sha256": "7582f181ab38eb90f63992818b35429c4c2dae44ca1521f91bea5de16e9c02aa",
+      "relevantLines": [
+        "  13 passed (3.7s)"
+      ]
+    },
+    "production-final-release.log": {
+      "sha256": "0026d34e824e54cd0ddbfaf7520a6e69a26620187528a2a3f56113874c2acf17",
+      "relevantLines": [
+        "  27 passed (47.6s)",
+        "  26 passed (49.8s)",
+        "  1 failed",
+        "  1104 passed (1.2m)"
+      ]
+    },
+    "production-qualified-release.log": {
+      "sha256": "ca0b9a2a8ef732137f2cb4004e2faa212e1a0063ede16a69bb8a4abc56c8affb",
+      "relevantLines": [
+        "\u2139 fail 0",
+        "\u2139 pass 9",
+        "\u2139 fail 0",
+        "\u2139 pass 10",
+        "\u2139 fail 0",
+        "\u2139 pass 8",
+        "\u2139 fail 0",
+        "\u2139 pass 14",
+        "\u2139 fail 0",
+        "\u2139 pass 28",
+        "\u2139 fail 0",
+        "\u2139 pass 9",
+        "\u2139 fail 0",
+        "\u2139 pass 37",
+        "\u2139 fail 0",
+        "\u2139 pass 24",
+        "\u2139 fail 0",
+        "\u2139 pass 24",
+        "\u2139 fail 0",
+        "\u2139 pass 3",
+        "\u2139 fail 0",
+        "\u2139 pass 5",
+        "\u2139 fail 0",
+        "\u2139 pass 8",
+        "\u2139 fail 0",
+        "  1106 passed (1.1m)",
+        "  4 passed (828ms)",
+        "  12 passed (1.6m)"
+      ]
+    },
+    "fixture-isolation-recovery.log": {
+      "sha256": "6d9bd942e3d0121af68d26c2307b4faecb76f2bb161237584e1d40442d2328c7",
+      "relevantLines": [
+        "  23 passed (1.9m)"
+      ]
+    },
+    "production-release-remainder.log": {
+      "sha256": "318575ce058faa7547a523ffcefbbfd974c6e047078ab51ecbdf082fd0ce2307",
+      "relevantLines": [
+        "  9 passed (27.9s)",
+        "  29 passed (1.8m)",
+        "  42 passed (1.6m)",
+        "  8 passed (17.9s)",
+        "  5 passed (9.8s)",
+        "  47 passed (51.6s)",
+        "  1 passed (6.7s)",
+        "  41 passed (37.6s)",
+        "  56 passed (1.6m)",
+        "  2 passed (6.7s)",
+        "  14 passed (25.2s)",
+        "  1 passed (14.6s)",
+        "  8 passed (18.3s)"
+      ]
+    },
+    "production-packaging.log": {
+      "sha256": "11eadcc2b5839e8d48bc3249e4a8c79fd1fa0a5954bb2854a4db014709c2a12b",
+      "relevantLines": [
+        "\u2139 pass 3",
+        "\u2139 fail 0"
+      ]
+    },
+    "correction-ci-complete.log": {
+      "sha256": "b36f1ffc12c9763c165d80689e961f9358ccf9aa825a8a4b0a26c54f277daa38",
+      "relevantLines": [
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:05:10.8695819Z \u2139 fail 0",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:05:11.0893248Z \u2139 pass 3",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:05:11.0893599Z \u2139 fail 0",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:05:11.3193551Z \u2139 pass 5",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:05:11.3193944Z \u2139 fail 0",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:05:11.5697207Z \u2139 pass 8",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:05:11.5697818Z \u2139 fail 0",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:06:04.0255324Z   1106 passed (51.9s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:06:05.3845381Z   4 passed (654ms)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:07:59.0017913Z   12 passed (1.9m)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:10:01.2738566Z   32 passed (2.0m)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:11:49.0243238Z   29 passed (1.8m)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:13:14.5681194Z   42 passed (1.4m)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:13:28.3285380Z   8 passed (13.2s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:13:35.9233273Z   5 passed (7.0s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:14:19.6508863Z   47 passed (43.1s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:14:23.0967709Z   1 passed (2.9s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:14:50.0736716Z   41 passed (26.3s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:16:12.2268548Z   56 passed (1.4m)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:16:16.4547184Z   2 passed (3.7s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:16:36.4800308Z   14 passed (19.4s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:16:43.4862734Z   1 passed (6.3s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:16:57.9479743Z   8 passed (13.1s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:17:56.3678479Z   14 passed (57.7s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:18:10.0764948Z   2 passed (13.0s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:18:15.4719583Z   4 passed (4.7s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:18:27.2821680Z   11 passed (11.2s)",
+        "build-and-smoke\tComplete Storefront and Admin BOS acceptance suite\t2026-10-23T04:18:52.6516187Z   26 passed (24.7s)"
+      ]
+    }
+  },
+  "productionSource": "3975f2fd9ed4f833f07f72e4768b6fa977f161e9",
+  "ci": {
+    "id": 39898140906,
+    "head": "fa6a578b5f28f7cf5ff924673b30fd5da97a6d29",
+    "result": "success",
+    "completeAcceptance": true,
+    "bothBuilds": true
+  },
+  "releaseQualification": "reconciled constituents; failed/interrupted local aggregates retained, no aggregate exit0 claim"
+}

@@ -1,0 +1,25 @@
+{
+  "cards": [
+    {
+      "text": "Beverages\n1\n1 listed product",
+      "width": 158,
+      "x": 16
+    },
+    {
+      "text": "Biscuits and wafers\n5\n5 listed products",
+      "width": 158,
+      "x": 186
+    },
+    {
+      "text": "Chocolate\n10\n10 listed products",
+      "width": 158,
+      "x": 356
+    }
+  ],
+  "clientWidth": 360,
+  "left": 0,
+  "pageWidth": 360,
+  "url": "https://www.k2jimzon.com/",
+  "viewport": 375,
+  "width": 328
+}

@@ -1,6 +1,6 @@
 # Draggable two-column Cabinet — 23 October2026
 
-MAP-023 / IDEA-20261023-02. The owner supplied a screenshot of the tall three-column Cabinet and asked for left/right dragging and mobile optimization, then explicitly confirmed two cards side by side. This is a local source preparation receipt, not a live release.
+MAP-023 / IDEA-20261023-02. The owner supplied a screenshot of the tall three-column Cabinet and asked for left/right dragging and mobile optimization, then explicitly confirmed two cards side by side. This preserves preparation-time evidence. The Cabinet was subsequently released and verified on production; the authoritative final receipt is CABINET_PRODUCTION_RELEASE_20261023.md.
 
 | Before | Locally verified after | Why |
 | --- | --- | --- |
@@ -22,7 +22,7 @@ Executed evidence:
 
 Source: src/components/home/CategoryTiles.jsx and tests/store-categories-ui.spec.js only. Source base d0421fdf167c1880510537b329245c08a3cf35d1; approved PR22 source has independently promoted at a3982419dcd87f20d19433dbc503adcb31e81869. The Cabinet branch incorporates released main, including receipt-only e8a9833a. The documentation merge preserves both records, and exact component/test Git object hashes match the verified Cabinet commit. Current screenshots and checks are in cabinet-drag-20261023/receipt.json and docs/design-checkpoints/20261023-cabinet/.
 
-Next/recovery lives only MAP-023: reviewed Cabinet PR, explicit Cabinet source-release request, required CI and one release gate before any later promotion, then both separate artifacts and real Cabinet interaction verified. No Cabinet production release is authorized by the earlier PR22 approval. Revert only this component/test slice and matching records to recover; preserve all unrelated dirty files and original pending operational requests. Do not restore product/stock snapshots or replay SQL. Physical-device acceptance remains unverified.
+Historical release prerequisites were subsequently satisfied under the separate owner Cabinet approval and PR24 correction. Both artifacts and real Cabinet interaction are verified in CABINET_PRODUCTION_RELEASE_20261023.md. Remaining operational/listing work lives only in MAP-023. Revert only this component/test slice and matching records to recover; preserve all unrelated dirty files and original pending operational requests. Do not restore product/stock snapshots or replay SQL. Physical-device acceptance remains unverified.
 
 ## Performance gate correction
 
@@ -35,3 +35,13 @@ MAP-023 / IDEA-20261023-02: PR23 merged409dbcd after final-head CI passed on ret
 
 
 Final qualification correction: release invocation at842bdbc failed one CI contract after1104 passing base checks because the old assertion banned VITE_SUPABASE_URL anywhere in the workflow. The safeguard now checks the npm-test acceptance step and a new regression requires all public production flags to remain confined to the storefront build, absent from every other step including Admin. All13 focused CI contract checks pass. Obsolete CI39897758175 canceled after diagnosis; its SQL job had passed. A fresh exact-head CI/release qualification is required before promotion. Runtime source is unchanged by this test correction.
+
+
+Qualification environment correction: the local final-head invocation incorrectly exported production guest/account flags across fixture tests. Product-family/category/base1106, moderation4 and orientation12 checks passed, but commerce-inactive smoke/buyer fixtures failed with those flags inherited; the owned process tree was stopped. This is an invocation error, not a runtime regression or passing gate. Production flags are confined to the build process; fixtures use their dedicated configuration. Focused affected journeys and the unrun gate remainder are being qualified; exact final-head CI independently runs the complete npm-test command with build-only flags. Preserve both failed invocation receipts, do not restart unaffected passing checks or claim a clean full local invocation.
+
+
+### Cabinet verified production behavior — 23 October2026
+
+MAP-023 / IDEA-20261023-02 is released for this Cabinet slice. Owner-approved PR23 plus bounded correction PR24 promote source3975f2fd9ed4f833f07f72e4768b6fa977f161e9 to separate READY storefront dpl_GAy5LLMp9EEZWUWfVaXppDirULbD and Admin dpl_Ti8CP9nvmNPSd2xv4S7JJynQ8f89, with matching source metadata/custom aliases and target-correct HTTP200 markers. The real storefront shows exactly two cards, mouse drag changes rail0→615 without navigating, and a fresh Beverages click opens its one-product result. At375px, two158px cards fit328px rail with no page overflow; Next, End/Home and disabled bounds pass. Native touch/vertical scrolling and320/768/1440/light/dark/long-name behavior are covered by the26 browser fixture cases; physical-device touch remains unverified. Owner chose removing only decorative hover ticks; content, badges, focus and recovery remain. Actual production budget passes JS150.42/150.50 and CSS29.98/30.00kB.
+
+CI39898140906 passed both jobs on exact reviewedfa6a578b5f28f7cf5ff924673b30fd5da97a6d29: complete npm-test acceptance plus both builds; local packaging3/3, contract13/13 and final development0 pass. Failed aggregate/local configuration attempts are preserved and reconciled; there is no claim of a clean full local aggregate exit0. Admin reload confirms196total/93active/103Draft/273available. No product/stock/price/publication/provider/SQL change. Completed Cabinet action is removed from MAP-023 only after this durable record. Remaining listing/operational facts stay in MAP-023. Full evidence, failed-build diagnosis, actual-host images, source hashes and rollback: docs/acceptance/CABINET_PRODUCTION_RELEASE_20261023.md.

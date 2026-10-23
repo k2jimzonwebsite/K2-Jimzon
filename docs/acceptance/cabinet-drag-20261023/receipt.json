@@ -34,5 +34,10 @@
     "development": 0,
     "review": "approved",
     "release": "owner-approved, revised-head CI and complete qualification pending"
+  },
+  "productionRelease": {
+    "source": "3975f2fd9ed4f833f07f72e4768b6fa977f161e9",
+    "state": "verified",
+    "receipt": "docs/acceptance/CABINET_PRODUCTION_RELEASE_20261023.md"
   }
 }

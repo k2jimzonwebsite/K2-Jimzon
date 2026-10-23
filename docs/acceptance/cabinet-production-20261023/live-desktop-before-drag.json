@@ -1,0 +1,95 @@
+{
+  "cards": [
+    {
+      "text": "Beverages\n1\n1 listed product",
+      "width": 602.5,
+      "x": 24
+    },
+    {
+      "text": "Biscuits and wafers\n5\n5 listed products",
+      "width": 602.5,
+      "x": 638.5
+    },
+    {
+      "text": "Chocolate\n10\n10 listed products",
+      "width": 602.5,
+      "x": 1253
+    },
+    {
+      "text": "Coffee and drink preparations\n15\n15 listed products",
+      "width": 602.5,
+      "x": 1867.5
+    },
+    {
+      "text": "Cooking oils\n2\n2 listed products",
+      "width": 602.5,
+      "x": 2482
+    },
+    {
+      "text": "Fragrances\n6\n6 listed products",
+      "width": 602.5,
+      "x": 3096.5
+    },
+    {
+      "text": "Pasta\n13\n13 listed products",
+      "width": 602.5,
+      "x": 3711
+    },
+    {
+      "text": "Pasta sauces\n4\n4 listed products",
+      "width": 602.5,
+      "x": 4325.5
+    },
+    {
+      "text": "Personal care\n6\n6 listed products",
+      "width": 602.5,
+      "x": 4940
+    },
+    {
+      "text": "Pesto and sauces\n15\n15 listed products",
+      "width": 602.5,
+      "x": 5554.5
+    },
+    {
+      "text": "Spaghetti\n1\n1 listed product",
+      "width": 602.5,
+      "x": 6169
+    },
+    {
+      "text": "Sweet spreads\n4\n4 listed products",
+      "width": 602.5,
+      "x": 6783.5
+    },
+    {
+      "text": "Sweets\n4\n4 listed products",
+      "width": 602.5,
+      "x": 7398
+    },
+    {
+      "text": "Sweets and confectionery\n3\n3 listed products",
+      "width": 602.5,
+      "x": 8012.5
+    },
+    {
+      "text": "Tinned fish\n4\n4 listed products",
+      "width": 602.5,
+      "x": 8627
+    },
+    {
+      "text": "Pasabuy su Misura\nCustom order\nRequest something from Italy",
+      "width": 602.5,
+      "x": 9241.5
+    }
+  ],
+  "left": 0,
+  "pageWidth": 1265,
+  "rect": {
+    "height": 110.59375,
+    "width": 1217,
+    "x": 24,
+    "y": 464.671875
+  },
+  "url": "https://www.k2jimzon.com/",
+  "viewport": 1280,
+  "width": 1217
+}

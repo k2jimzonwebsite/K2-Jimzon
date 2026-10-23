@@ -1,0 +1,80 @@
+Browser tab: 1, Title: "K2 Jimzon Admin", URL: "https://admin.k2jimzon.com/?section=inventory".
+1 AXWebArea K2 Jimzon Admin, URL: admin.k2jimzon.com/
+	2 container root
+		3 container
+			4 heading Inventory, Value: 1
+				5 text Inventory
+			6 button Open scan center
+			7 button Search dashboard
+			8 button Open navigation menu
+			9 container
+				10 text CATALOG AND STOCK CONTROL
+				11 heading Inventory & stock checks, Value: 2
+					12 text Inventory & stock checks
+				13 button (collapsed) Description: About: Inventory & stock checks, Secondary Actions: Expand
+				14 text 196 SKUs loaded
+				15 button Add inventory
+				16 button Scan box
+				17 button Unused uploads
+				18 button Add product
+			19 definition list
+				20 container ACTIVE SKUS
+					21 text ACTIVE SKUS
+				22 text 93
+				23 text 196 total product records
+				24 container AVAILABLE UNITS
+					25 text AVAILABLE UNITS
+				26 text 273
+				27 text Product master available stock
+				28 container OUT OF STOCK
+					29 text OUT OF STOCK
+				30 text 152
+				31 text Immediate replenishment review
+				32 container LOW STOCK
+					33 text LOW STOCK
+				34 text 33
+				35 text At or below reorder level
+				36 container EXPIRY RISK
+					37 text EXPIRY RISK
+				38 text 0
+				39 text Expired or within 90 days
+			40 container
+				41 heading Products, Value: 3
+					42 text Products
+				43 text 196
+				44 button (collapsed) Description: About: Products, Secondary Actions: Expand
+				45 text Search inventory
+				46 search text field (settable) Search inventory
+				47 container Filter inventory exceptions
+					48 checkbox All 196, Value: 1
+						49 text All
+						50 text 196
+					51 checkbox Out 152, Value: 0
+						52 text Out
+						53 text 152
+					54 checkbox Low 33, Value: 0
+						55 text Low
+						56 text 33
+					57 checkbox Expiry 0, Value: 0
+						58 text Expiry
+						59 text 0
+					60 checkbox Drafts 103, Value: 0
+						61 text Drafts
+						62 text 103
+			63 container
+				64 text Store category filter
+				65 pop up button (collapsed, settable) Store category filter, Value: All categories, Secondary Actions: Expand
+					66 menu
+						67 (selected) All categories
+						68 No custom store category
+						69 Beverages (1)
+						70 Biscuits (1)
+						71 Biscuits and wafers (9)
+						72 Chocolate (14)
+						73 Clothing (2)
+						74 Coffee and drink preparations (22)
+						75 Cooking oils (3)
+						76 Filled pasta (3)
+						77 Fragrances (6)
+						78 Pasta (21)
+						7

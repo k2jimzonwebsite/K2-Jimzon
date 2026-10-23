@@ -650,3 +650,8 @@ separate Storefront/Admin source receipts; do not infer database activation from
 deployment. MAP-025 owns the next release/human gate, MAP-018/023 the full workflow
 and remaining provider admission. Recovery for this local correction is a scoped
 revert of MasterWorkflowGraph.jsx and the new regression; no database rollback.
+
+
+### Configured storefront performance qualification — 23 October2026
+
+For the Cabinet release correction (MAP-023 / IDEA-20261023-02), qualify the storefront budget with its public K2 URL and enabled guest/customer switches. The unconfigured bundle can be smaller than production. Confine VITE_SUPABASE_URL, VITE_GUEST_BFF_ENABLED and VITE_CUSTOMER_ACCOUNT_ENABLED to the storefront build process; do not export them across acceptance fixtures or the Admin build. CI now enforces this boundary with a scoped regression contract. Preserve failed invocation receipts and reconcile focused recovery plus unrun constituents honestly; never label an interrupted or failed aggregate as exit0. Existing150.50kB JS/30.00kB CSS limits remain unchanged. Current qualification and recovery evidence: docs/acceptance/CABINET_PRODUCTION_RELEASE_20261023.md; Both artifacts and real hosts subsequently passed for source3975f2fd; this receipt documents the completed Cabinet promotion. MAP-023 retains only remaining operational/listing work.
