@@ -105,5 +105,17 @@
     "online-identity-reference-verification-20261023.json": "df84d68a01e678f8474691192c4b9a7ed60f66b0b5932f1f45d7358853539cb6",
     "verify-development.exit": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
     "verify-development.log": "5f2e648c829a130290e92134fe7c8f1625b59a68eb916b7bf2fa2edbc73377d1"
+  },
+  "pullRequest": {
+    "number": 22,
+    "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/pull/22",
+    "runtimeCommit": "fa530634ecea6cdcb00357efc7cb288e3812b8df",
+    "ciRun": "39822115077",
+    "buildAndSmoke": "SUCCESS",
+    "criticalSqlBehavior": "SUCCESS",
+    "storefrontPreview": "SUCCESS",
+    "adminPreview": "SUCCESS",
+    "releaseApproval": "pending",
+    "production": "unchanged"
   }
 }
