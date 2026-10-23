@@ -1,3 +1,4 @@
+import { useEffect, useId, useRef, useState } from 'react'
 import { useStore } from '../../context/StoreContext'
 import { BoxIcon, PlaneIcon, ArrowIcon } from '../ui/icons'
 
@@ -7,6 +8,69 @@ export default function CategoryTiles() {
     cat: name, title: name, count, icon: BoxIcon,
     subtitle: `${count} listed product${count === 1 ? '' : 's'}`,
   })), { title: 'Pasabuy su Misura', subtitle: 'Request something from Italy', icon: PlaneIcon, isPasabuy: true }]
+
+  const railRef = useRef(null)
+  const dragRef = useRef(null)
+  const hintId = useId()
+  const [dragging, setDragging] = useState(false)
+  const [canPrevious, setCanPrevious] = useState(false)
+  const [canNext, setCanNext] = useState(false)
+
+  const updateBounds = () => {
+    const rail = railRef.current
+    if (!rail) return
+    setCanPrevious(rail.scrollLeft > 1)
+    setCanNext(rail.scrollLeft < rail.scrollWidth - rail.clientWidth - 1)
+  }
+
+  useEffect(() => {
+    const rail = railRef.current
+    rail.scrollTo({ left: 0, behavior: 'instant' })
+    updateBounds()
+    const observer = new ResizeObserver(updateBounds)
+    observer.observe(rail)
+    const cancelDrag = () => {
+      const pointerId = dragRef.current?.pointerId
+      if (pointerId != null && rail.hasPointerCapture(pointerId)) rail.releasePointerCapture(pointerId)
+      dragRef.current = null
+      setDragging(false)
+    }
+    window.addEventListener('blur', cancelDrag)
+    return () => { observer.disconnect(); window.removeEventListener('blur', cancelDrag) }
+  }, [sections.length])
+
+  const move = (direction, instant = false) => {
+    const rail = railRef.current
+    rail.scrollBy({ left: direction * (rail.clientWidth + 12), behavior: instant || window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
+  }
+
+  const startDrag = (event) => {
+    if (event.pointerType !== 'mouse') {
+      dragRef.current = null
+      setDragging(false)
+      return
+    }
+    if (event.button !== 0) return
+    dragRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, left: event.currentTarget.scrollLeft, moved: false }
+  }
+  const drag = (event) => {
+    const held = dragRef.current
+    if (!held || held.pointerId !== event.pointerId || event.buttons !== 1) return
+    const distance = event.clientX - held.x
+    if (!held.moved) {
+      if (Math.abs(distance) < 6 || Math.abs(distance) <= Math.abs(event.clientY - held.y)) return
+      held.moved = true
+      event.currentTarget.setPointerCapture(event.pointerId)
+      setDragging(true)
+    }
+    event.preventDefault()
+    event.currentTarget.scrollLeft = held.left - distance
+  }
+  const finishDrag = (event) => {
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
+    if (dragRef.current) dragRef.current.pointerId = null
+    setDragging(false)
+  }
 
   const open = (section) => {
     if (section.isPasabuy) return go('pasabuy')
@@ -35,7 +99,39 @@ export default function CategoryTiles() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div
+        ref={railRef}
+        role="group"
+        aria-label="Cabinet categories"
+        aria-describedby={hintId}
+        tabIndex={0}
+        onScroll={updateBounds}
+        onPointerDown={startDrag}
+        onPointerMove={drag}
+        onPointerUp={finishDrag}
+        onPointerCancel={finishDrag}
+        onLostPointerCapture={() => {
+          if (dragRef.current) dragRef.current.pointerId = null
+          setDragging(false)
+        }}
+        onClickCapture={(event) => {
+          if (event.detail !== 0 && dragRef.current?.moved) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+        }}
+        onKeyDown={(event) => {
+          if (event.target !== event.currentTarget) return
+          if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+            event.preventDefault()
+            move(event.key === 'ArrowLeft' ? -1 : 1, true)
+          } else if (event.key === 'Home' || event.key === 'End') {
+            event.preventDefault()
+            event.currentTarget.scrollTo({ left: event.key === 'Home' ? 0 : event.currentTarget.scrollWidth, behavior: 'instant' })
+          }
+        }}
+        className={`flex gap-3 overflow-x-auto overscroll-x-contain pb-3 select-none rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-crimson [scrollbar-width:thin] ${dragging ? 'cursor-grabbing snap-none' : 'cursor-grab snap-x snap-mandatory'}`}
+      >
         {sections.map((section) => {
           const { title, subtitle, count, icon: CategoryIcon, isPasabuy } = section
 
@@ -43,18 +139,18 @@ export default function CategoryTiles() {
             <button
               key={isPasabuy ? 'service:pasabuy' : `category:${title}`}
               onClick={() => open(section)}
-              className="group relative flex min-h-[5.5rem] items-center justify-between rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left shadow-[var(--store-surface-shadow)] transition-[border-color,box-shadow,transform] duration-200 hover:border-crimson/30 hover:shadow-md active:scale-[0.98] motion-reduce:transform-none motion-reduce:transition-none cursor-pointer sm:p-5"
+              className="group relative flex min-w-0 basis-[calc((100%-0.75rem)/2)] shrink-0 snap-start min-h-[10.5rem] flex-col items-start justify-between sm:min-h-[5.5rem] sm:flex-row sm:items-center rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left shadow-[var(--store-surface-shadow)] transition-[border-color,box-shadow,transform] duration-200 hover:border-crimson/30 hover:shadow-md active:scale-[0.98] motion-reduce:transform-none motion-reduce:transition-none cursor-[inherit] sm:p-5"
             >
               {/* Subtle Italian apothecary corner tick-marks */}
               <span className="pointer-events-none absolute top-2 right-2 h-1.5 w-1.5 border-t border-r border-crimson/40 opacity-0 transition-opacity duration-150 group-hover:opacity-100" aria-hidden="true" />
               <span className="pointer-events-none absolute bottom-2 left-2 h-1.5 w-1.5 border-b border-l border-crimson/40 opacity-0 transition-opacity duration-150 group-hover:opacity-100" aria-hidden="true" />
-              <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] text-crimson transition-colors duration-150 group-hover:border-crimson/25 group-hover:bg-crimson-wash">
+              <div className="flex w-full min-w-0 flex-1 flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-3.5">
+                <span className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] text-crimson transition-colors duration-150 group-hover:border-crimson/25 group-hover:bg-crimson-wash">
                   <CategoryIcon size={20} />
                 </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="block text-base font-semibold text-navy group-hover:text-crimson break-words">
+                <div className="w-full min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <span className="block text-sm sm:text-base font-semibold text-navy group-hover:text-crimson break-words">
                       {title}
                     </span>
                     {count !== undefined && count > 0 && (
@@ -68,18 +164,29 @@ export default function CategoryTiles() {
                       </span>
                     )}
                   </div>
-                  <span className="mt-0.5 block text-xs text-navy-faint truncate">
+                  <span className="mt-0.5 block text-xs text-navy-faint break-words">
                     {subtitle}
                   </span>
                 </div>
               </div>
               <ArrowIcon
                 size={15}
-                className="ml-3 shrink-0 text-navy-faint transition-transform duration-150 group-hover:translate-x-1 group-hover:text-crimson"
+                className="mt-3 self-end sm:mt-0 sm:ml-3 sm:self-auto shrink-0 text-navy-faint transition-transform duration-150 group-hover:translate-x-1 group-hover:text-crimson"
               />
             </button>
           )
         })}
+      </div>
+      <div className="mt-3 flex items-center justify-between gap-3">
+        <p id={hintId} className="text-xs text-navy-soft">Drag or swipe to browse. Use the arrows for more categories.</p>
+        <div className="flex shrink-0 gap-2">
+          <button type="button" aria-label="Previous categories" disabled={!canPrevious} onClick={() => move(-1)} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] text-navy enabled:cursor-pointer enabled:hover:bg-crimson-wash disabled:opacity-35 focus-visible:outline-2 focus-visible:outline-crimson">
+            <ArrowIcon size={18} className="rotate-180" />
+          </button>
+          <button type="button" aria-label="Next categories" disabled={!canNext} onClick={() => move(1)} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] text-navy enabled:cursor-pointer enabled:hover:bg-crimson-wash disabled:opacity-35 focus-visible:outline-2 focus-visible:outline-crimson">
+            <ArrowIcon size={18} />
+          </button>
+        </div>
       </div>
     </section>
   )
