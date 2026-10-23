@@ -1,0 +1,50 @@
+{
+  "headRefOid": "d0421fdf167c1880510537b329245c08a3cf35d1",
+  "isDraft": true,
+  "statusCheckRollup": [
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-23T02:49:41Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/39890232988/job/120207952781",
+      "name": "build-and-smoke",
+      "startedAt": "2026-10-23T02:33:41Z",
+      "status": "COMPLETED",
+      "workflowName": "CI"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-23T02:34:41Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/39890232988/job/120207952355",
+      "name": "critical-sql-behavior",
+      "startedAt": "2026-10-23T02:33:41Z",
+      "status": "COMPLETED",
+      "workflowName": "CI"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-23T02:35:06Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://vercel.com/github",
+      "name": "Vercel Preview Comments",
+      "startedAt": "2026-10-23T02:35:06Z",
+      "status": "COMPLETED",
+      "workflowName": ""
+    },
+    {
+      "__typename": "StatusContext",
+      "context": "Vercel – k2-jimzon",
+      "startedAt": "2026-10-23T02:34:20Z",
+      "state": "SUCCESS",
+      "targetUrl": "https://vercel.com/k2-jimzon/k2-jimzon/GTx6dTLZfLxfMz4Qi4TeqhiHpw6q"
+    },
+    {
+      "__typename": "StatusContext",
+      "context": "Vercel – k2-jimzon-admin",
+      "startedAt": "2026-10-23T02:35:04Z",
+      "state": "SUCCESS",
+      "targetUrl": "https://vercel.com/k2-jimzon/k2-jimzon-admin/Bxd64JxqdMkxezwUYMzPC5t9swtU"
+    }
+  ]
+}
