@@ -130,7 +130,8 @@ export default function CategoryTiles() {
             event.currentTarget.scrollTo({ left: event.key === 'Home' ? 0 : event.currentTarget.scrollWidth, behavior: 'instant' })
           }
         }}
-        className={`flex gap-3 overflow-x-auto overscroll-x-contain pb-3 select-none rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-crimson [scrollbar-width:thin] ${dragging ? 'cursor-grabbing snap-none' : 'cursor-grab snap-x snap-mandatory'}`}
+        style={{ scrollbarWidth: 'thin', scrollSnapType: dragging ? 'none' : 'x mandatory' }}
+        className={`flex gap-3 overflow-x-auto overscroll-x-contain pb-3 select-none rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
       >
         {sections.map((section) => {
           const { title, subtitle, count, icon: CategoryIcon, isPasabuy } = section
@@ -139,7 +140,8 @@ export default function CategoryTiles() {
             <button
               key={isPasabuy ? 'service:pasabuy' : `category:${title}`}
               onClick={() => open(section)}
-              className="group relative flex min-w-0 basis-[calc((100%-0.75rem)/2)] shrink-0 snap-start min-h-[10.5rem] flex-col items-start justify-between sm:min-h-[5.5rem] sm:flex-row sm:items-center rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left shadow-[var(--store-surface-shadow)] transition-[border-color,box-shadow,transform] duration-200 hover:border-crimson/30 hover:shadow-md active:scale-[0.98] motion-reduce:transform-none motion-reduce:transition-none cursor-[inherit] sm:p-5"
+              style={{ flexBasis: 'calc((100% - 0.75rem) / 2)', scrollSnapAlign: 'start', cursor: 'inherit' }}
+              className="group relative flex min-w-0 shrink-0 min-h-[10.5rem] flex-col items-start justify-between sm:min-h-[5.5rem] sm:flex-row sm:items-center rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left shadow-[var(--store-surface-shadow)] transition-[border-color,box-shadow,transform] duration-200 hover:border-crimson/30 hover:shadow-md active:scale-[0.98] motion-reduce:transform-none motion-reduce:transition-none sm:p-5"
             >
               {/* Subtle Italian apothecary corner tick-marks */}
               <span className="pointer-events-none absolute top-2 right-2 h-1.5 w-1.5 border-t border-r border-crimson/40 opacity-0 transition-opacity duration-150 group-hover:opacity-100" aria-hidden="true" />
@@ -171,7 +173,7 @@ export default function CategoryTiles() {
               </div>
               <ArrowIcon
                 size={15}
-                className="mt-3 self-end sm:mt-0 sm:ml-3 sm:self-auto shrink-0 text-navy-faint transition-transform duration-150 group-hover:translate-x-1 group-hover:text-crimson"
+                className="mt-3 ml-auto sm:mt-0 sm:ml-3 shrink-0 text-navy-faint transition-transform duration-150 group-hover:translate-x-1 group-hover:text-crimson"
               />
             </button>
           )
@@ -180,10 +182,10 @@ export default function CategoryTiles() {
       <div className="mt-3 flex items-center justify-between gap-3">
         <p id={hintId} className="text-xs text-navy-soft">Drag or swipe to browse. Use the arrows for more categories.</p>
         <div className="flex shrink-0 gap-2">
-          <button type="button" aria-label="Previous categories" disabled={!canPrevious} onClick={() => move(-1)} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] text-navy enabled:cursor-pointer enabled:hover:bg-crimson-wash disabled:opacity-35 focus-visible:outline-2 focus-visible:outline-crimson">
+          <button type="button" aria-label="Previous categories" disabled={!canPrevious} onClick={() => move(-1)} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] text-navy cursor-pointer hover:bg-crimson-wash disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-2 focus-visible:outline-crimson">
             <ArrowIcon size={18} className="rotate-180" />
           </button>
-          <button type="button" aria-label="Next categories" disabled={!canNext} onClick={() => move(1)} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] text-navy enabled:cursor-pointer enabled:hover:bg-crimson-wash disabled:opacity-35 focus-visible:outline-2 focus-visible:outline-crimson">
+          <button type="button" aria-label="Next categories" disabled={!canNext} onClick={() => move(1)} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] text-navy cursor-pointer hover:bg-crimson-wash disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-2 focus-visible:outline-crimson">
             <ArrowIcon size={18} />
           </button>
         </div>
