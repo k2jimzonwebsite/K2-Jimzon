@@ -125,5 +125,12 @@
   "finalFocused": {
     "passed": 7,
     "exitCode": 0
+  },
+  "delivery": {
+    "sourceCommit": "a439507a8e63aacb0b14a273f4288b09f7e03a2a",
+    "remoteBranch": "origin/codex/mobile-homepage-fixes",
+    "pushExitCode": 0,
+    "independentLsRemoteMatched": true,
+    "productionChanged": false
   }
 }

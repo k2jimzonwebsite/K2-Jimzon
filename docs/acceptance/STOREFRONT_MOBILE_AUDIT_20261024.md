@@ -55,3 +55,8 @@ Final verification reconciliation: the last54-case delta passes53 and reproduces
 
 
 Final exact-source focused7/exit0 and development/exit0 confirmed. Scoped source is qualified for the owner-requested feature-branch push. This receipt does not claim a main merge or deployment. Local preview stopped after captures.
+
+
+## Delivered feature branch
+
+24October2026 delivery / MAP-023 / IDEA-20261024-03: verified source commit a439507a8e63aacb0b14a273f4288b09f7e03a2a pushed to origin/codex/mobile-homepage-fixes; independent git ls-remote matches. No main merge or production deployment. Audit source/tests/docs are committed; remaining unstaged files are unrelated generated baseline images. Required next actions remain payment-first operational-copy reconciliation,device/hosted acceptance and separately owner-requested release. Final evidence/recovery: docs/acceptance/STOREFRONT_MOBILE_AUDIT_20261024.md. This delivery receipt is documentation-only; no repeat app gate/deployment required.
