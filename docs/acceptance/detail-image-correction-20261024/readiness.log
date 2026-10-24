@@ -1,0 +1,26 @@
+
+> k2-jimzon-prototype@0.1.0 readiness:k2-live
+> node --env-file=.env.local scripts/k2-live-readiness.mjs
+
+PASS       project-identity                   K2 pixplcjqivlfflickobf
+PASS       migration-ledger                   11 entries, latest 20261013110000
+PASS       canonical-installation             Exact phased complete-source receipt and canonical relations installed; installer must not be repeated
+PASS       category-policy-activation         Private category activation present, maximum depth 10; exact value approval/recovery and operational acceptance remain separate
+PASS       installed-permission-catalog       Exact reviewed27 explicit anonymous grants and2 invoker trigger ACLs; hosted caller/legacy-route acceptance remains separate
+OWNER      hosted-caller-acceptance           Installed signatures match only; authenticated staff/customer and legacy-route acceptance remain unverified
+PASS       admin-preauth-dependency           Exact signed Admin pre-auth function, limited execute and private forced-RLS rate tables verified; genuine hosted login remains separate
+OWNER      stock-facts                        196 products (125 live), 49 lots; physical count unproven
+PASS       backup-freshness                   product-families-before-20261021.k2backup: Encrypted file hash/bytes, K2 backup identity and isolated restored current migration verified; managed provider recovery remains excluded
+PASS       backup-restore-proof               Encrypted file hash/bytes, K2 backup identity and isolated restored current migration verified; managed provider recovery remains excluded
+CONNECTOR  vercel-preview                     no Vercel API token or CLI in this harness
+CONNECTOR  vercel-edge-gate                   Admin Vercel edge routing rule state not readable from this script
+CONNECTOR  provider-advisor                   Supabase advisor findings need a signed-in session
+PASS       release-branch                     ## codex/admin-google-turnstile-recovery...origin/codex/admin-google-turnstile-recovery
+
+verified 9 | owner 2 | connector 3 | blocked 0
+
+This receipt proves preconditions only. It applies nothing, changes no flag,
+creates no deployment and writes no row. Production writes still require the
+owner authorization named in MASTER_ACTION_PLAN.md.
+
+wrote .tools/current-production-backups/live-readiness.json

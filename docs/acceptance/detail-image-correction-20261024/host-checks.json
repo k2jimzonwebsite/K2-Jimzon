@@ -1,0 +1,12 @@
+[
+  {
+    "host": "https://www.k2jimzon.com",
+    "httpStatus": 200,
+    "target": "storefront"
+  },
+  {
+    "host": "https://admin.k2jimzon.com",
+    "httpStatus": 200,
+    "target": "admin"
+  }
+]

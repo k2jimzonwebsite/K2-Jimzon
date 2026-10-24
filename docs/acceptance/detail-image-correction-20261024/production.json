@@ -1,0 +1,94 @@
+{
+  "source": "da2872816b83d79d55abc951f3e25aa8d067e214",
+  "qualifiedHead": "0e13a00b5c05d49dc058fa4cb58147e8f89481c2",
+  "tree": "ad6e93bd6fed4f91941a8119ffc5728a6c8818f8",
+  "pullRequest": 25,
+  "localDevelopmentExit": 0,
+  "localReleaseExit": 0,
+  "ci": {
+    "run": 40053829323,
+    "conclusion": "success",
+    "jobs": [
+      "critical-sql-behavior",
+      "build-and-smoke"
+    ]
+  },
+  "deployments": [
+    {
+      "id": "dpl_AeFYdfXiD8uARk7oY8gvvkrbCXB2",
+      "project": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "name": "k2-jimzon",
+      "state": "READY",
+      "source": "da2872816b83d79d55abc951f3e25aa8d067e214",
+      "aliases": [
+        "www.k2jimzon.com",
+        "k2-jimzon-vert.vercel.app",
+        "k2jimzon.com",
+        "k2-jimzon-k2-jimzon.vercel.app",
+        "k2-jimzon-git-main-k2-jimzon.vercel.app"
+      ]
+    },
+    {
+      "id": "dpl_9ihoo8KmixHRPcbDDvRsYZs5QgV5",
+      "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "name": "k2-jimzon-admin",
+      "state": "READY",
+      "source": "da2872816b83d79d55abc951f3e25aa8d067e214",
+      "aliases": [
+        "admin.k2jimzon.com",
+        "k2-jimzon-admin-seven.vercel.app",
+        "k2-jimzon-admin-k2-jimzon.vercel.app",
+        "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+      ]
+    }
+  ],
+  "live": {
+    "sku": "K2-SKU-001001",
+    "preFix": {
+      "primaryHeight": 757.25,
+      "wellHeight": 618.609375
+    },
+    "checks": [
+      {
+        "theme": "dark",
+        "width": 1280,
+        "height": 618.609375,
+        "well": 618.609375,
+        "comparison": 58
+      },
+      {
+        "theme": "light",
+        "width": 1280,
+        "height": 618.609375,
+        "well": 618.609375,
+        "comparison": 96
+      },
+      {
+        "theme": "light",
+        "width": 390,
+        "height": 339,
+        "well": 339,
+        "comparison": 96
+      },
+      {
+        "theme": "dark",
+        "width": 390,
+        "height": 339,
+        "well": 339,
+        "comparison": 96
+      }
+    ],
+    "allEdgesContained": true,
+    "primaryAndAfterDecoded": true,
+    "sourceURLsUnchanged": true,
+    "noHorizontalPageOverflow": true,
+    "screenshots": "Four actual-host screenshots visually inspected through CUA; not retained as local files.",
+    "viewportOverrideReset": true,
+    "initialDarkThemeRestored": true
+  },
+  "limits": [
+    "Representative live detail acceptance; prior all-125 catalog/249asset evidence reused, not repeated.",
+    "71 Drafts still held for item-specific staff facts; no business data or media assignment change.",
+    "No physical-device or complete operational acceptance claim."
+  ]
+}
