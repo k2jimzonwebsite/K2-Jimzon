@@ -176,6 +176,10 @@ The source-release action has been removed after durable evidence; the remaining
 
 ### MAP-023: Finish real order, payment and fulfillment cycles
 
+24 October 2026 / MAP-023 / IDEA-20261024-01 — prepared detail-image correction. The recorded live lower-package crop is reproduced in an actual-component browser regression: the portrait image bottom is 794.109px versus the clipping-well bound of 640px. BeforeAfterSlider now gives the existing ProductVisual caller h-full/w-full instead of conflicting absolute positioning. Twelve focused rendered checks pass (390/1280, light/dark, portrait/square, error fallback, decoded sources, contained geometry and keyboard controls). Independent Luna review approves with no blockers. This is local preparation only; release qualification and actual-host acceptance remain open. All 125 existing live listings and 71 item-specific staff holds are preserved; no business/media/provider write occurred. Evidence and recovery: docs/acceptance/MAP023_DETAIL_IMAGE_CORRECTION_20261024.md.
+Exact next action for this admitted correction: finish verify:development, independently reviewed source/receipt commit, run verify:release once on the isolated candidate, then source promotion and separate Storefront/Admin deployment verification plus real 001001 light/dark desktop/mobile containment. Preserve failed qualification evidence and fix focused failures before continuing. Remaining 71 Drafts require exact held-item facts per outputs/listing-team-20261023/goal-team/remaining-products/staff-held-drafts.csv in the primary workspace. Two Luna audits find no further supported item write; do not repeat exhausted research or infer approvals. Listing inventory remains incomplete. Recovery: revert only caller/test/source artifacts, preserve current product/stock/pending-command data.
+
+
 
 
 

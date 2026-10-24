@@ -88,7 +88,7 @@ export default function BeforeAfterSlider({ product }) {
         style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
       >
         {product.img ? (
-          <ProductVisual product={product} className="absolute inset-0" pad="p-8" />
+          <ProductVisual product={product} className="h-full w-full" pad="p-8" />
         ) : (
           <ProductArt product={product} mode="sealed" className="absolute inset-0" />
         )}

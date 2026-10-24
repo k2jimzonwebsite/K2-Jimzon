@@ -1,0 +1,23 @@
+[WebServer] (node:7712) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:6700) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:12200) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\product-comparison-containment.spec.js:6:7 › 390 light portrait: complete primary stays inside comparison well (663ms)
+  ok  2 tests\product-comparison-containment.spec.js:6:7 › 390 light square: complete primary stays inside comparison well (370ms)
+  ok  3 tests\product-comparison-containment.spec.js:33:5 › 390 light: failed primary retains a contained fallback (358ms)
+  ok  4 tests\product-comparison-containment.spec.js:6:7 › 390 dark portrait: complete primary stays inside comparison well (392ms)
+  ok  5 tests\product-comparison-containment.spec.js:6:7 › 390 dark square: complete primary stays inside comparison well (341ms)
+  ok  6 tests\product-comparison-containment.spec.js:33:5 › 390 dark: failed primary retains a contained fallback (319ms)
+  ok  7 tests\product-comparison-containment.spec.js:6:7 › 1280 light portrait: complete primary stays inside comparison well (864ms)
+  ok  8 tests\product-comparison-containment.spec.js:6:7 › 1280 light square: complete primary stays inside comparison well (551ms)
+  ok  9 tests\product-comparison-containment.spec.js:33:5 › 1280 light: failed primary retains a contained fallback (494ms)
+  ok 10 tests\product-comparison-containment.spec.js:6:7 › 1280 dark portrait: complete primary stays inside comparison well (406ms)
+  ok 11 tests\product-comparison-containment.spec.js:6:7 › 1280 dark square: complete primary stays inside comparison well (333ms)
+  ok 12 tests\product-comparison-containment.spec.js:33:5 › 1280 dark: failed primary retains a contained fallback (290ms)
+
+  12 passed (12.6s)
