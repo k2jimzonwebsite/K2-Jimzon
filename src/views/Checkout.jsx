@@ -231,7 +231,7 @@ export default function Checkout() {
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson">Final review</p>
       <h1 className="mt-2 font-serif text-4xl font-semibold tracking-tight">Review order request</h1>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-navy-soft">
-        No upfront payment is required. We will verify our Manila stock, review order and delivery details, and send payment instructions directly to you.
+        GCash and MariBank orders are paid before dispatch. Submit your order, then follow its payment details once the final total is available.
       </p>
 
       <form onSubmit={submit} className="mt-9 grid grid-cols-1 gap-6 md:grid-cols-[1fr_0.86fr] md:gap-10">
@@ -320,7 +320,7 @@ export default function Checkout() {
               <ShieldIcon size={20} className="mt-0.5 shrink-0 text-forest" />
               <div>
                 <h2 className="font-serif text-lg font-semibold">Contact and delivery</h2>
-                <p className="mt-1 text-sm text-navy-soft">Submitting this form does not charge you or require immediate payment.</p>
+                <p className="mt-1 text-sm text-navy-soft">Submitting saves your order. QR transfers are made separately using your order payment details.</p>
               </div>
             </div>
 
@@ -373,7 +373,7 @@ export default function Checkout() {
               <fieldset className="block pt-2">
                 <legend className="text-sm font-semibold text-navy">Payment preference</legend>
                 <p className="mt-0.5 text-xs text-navy-soft">
-                  Select a preferred method. K2 staff will confirm the order and tell you when to pay.
+                  Choose a method. Check your order page for the final total and payment details when available.
                 </p>
                 <div className="mt-2.5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {codAvailable && (<label
@@ -408,8 +408,8 @@ export default function Checkout() {
                   </label>)}
 
                   {[
-                    ['gcash', 'GCash', 'Pay by scanning the GCash QR after staff confirms your order.'],
-                    ['maribank', 'MariBank', 'Pay by scanning the MariBank QR after staff confirms your order.'],
+                    ['gcash', 'GCash', 'GCash QR payment details appear on your order page when available.'],
+                    ['maribank', 'MariBank', 'MariBank QR payment details appear on your order page when available.'],
                   ].map(([method, name, description]) => <label
                     key={method}
                     className={`flex min-h-[4rem] cursor-pointer items-start justify-between rounded-xl border p-3.5 transition-colors duration-150 ${
@@ -482,7 +482,7 @@ export default function Checkout() {
               </button>
             )}
             <p className="mt-3 text-center text-xs text-navy-soft">
-              Our staff will contact you directly with payment instructions before dispatch. Contact details are protected under our{' '}
+              Follow your order payment details and upload your receipt. Staff verify the funds before dispatch. Contact details are protected under our{' '}
               <button type="button" onClick={() => go('privacy')} className="underline hover:text-crimson font-medium">Privacy Policy</button>
               {' '}and{' '}
               <button type="button" onClick={() => go('terms')} className="underline hover:text-crimson font-medium">Terms of Service</button>.

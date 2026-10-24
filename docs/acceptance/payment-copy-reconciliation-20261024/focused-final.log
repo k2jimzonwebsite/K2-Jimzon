@@ -1,0 +1,29 @@
+[WebServer] (node:21308) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:11988) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 18 tests using 1 worker
+
+(node:5080) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\storefront-copy-contract.spec.js:10:1 › wholesale receipt copy follows the submission path (9ms)
+  ok  2 tests\storefront-copy-contract.spec.js:18:1 › contact makes one consistent reviewed-hours statement (5ms)
+  ok  3 tests\storefront-copy-contract.spec.js:24:1 › storefront promises reconcile with manual launch facts without false SLAs or unapproved payment methods (10ms)
+  ok  4 tests\storefront-copy-contract.spec.js:52:1 › the receipt never offers a QR that differs from the recorded checkout method (2ms)
+  ok  5 tests\storefront-copy-contract.spec.js:64:3 › gcash receiving crop preserves the supplied QR and recipient pixels (37ms)
+  ok  6 tests\storefront-copy-contract.spec.js:64:3 › maribank receiving crop preserves the supplied QR and recipient pixels (42ms)
+  ok  7 tests\storefront-copy-contract.spec.js:76:1 › public payment copy describes the current manual QR options (2ms)
+  ok  8 tests\storefront-copy-contract.spec.js:85:1 › product allergen notice does not add a second Contains prefix (2ms)
+  ok  9 tests\storefront-mobile-audit.spec.js:53:3 › light: checkout retains complete names and contains coupon controls (1.5s)
+  ok 10 tests\storefront-mobile-audit.spec.js:86:3 › light: policy navigation exposes current page and works with keyboard (885ms)
+  ok 11 tests\storefront-mobile-audit.spec.js:53:3 › dark: checkout retains complete names and contains coupon controls (997ms)
+  ok 12 tests\storefront-mobile-audit.spec.js:86:3 › dark: policy navigation exposes current page and works with keyboard (673ms)
+  ok 13 tests\storefront-mobile-audit.spec.js:199:40 › light: QR payment guidance follows the current final-total and funds status (2.1s)
+  ok 14 tests\storefront-mobile-audit.spec.js:199:40 › dark: QR payment guidance follows the current final-total and funds status (1.9s)
+  ok 15 tests\storefront-policy-contract.spec.js:7:1 › storefront route registry provides dedicated policy destinations (3ms)
+  ok 16 tests\storefront-policy-contract.spec.js:19:1 › vercel storefront rewrites maintain exact parity with STOREFRONT_SPA_PATHS (6ms)
+  ok 17 tests\storefront-policy-contract.spec.js:28:1 › customer-facing policies adhere strictly to manual launch facts (7ms)
+  ok 18 tests\storefront-policy-contract.spec.js:51:1 › footer and data collection forms offer reachable policy entry points with 44px hit areas (6ms)
+
+  18 passed (16.6s)

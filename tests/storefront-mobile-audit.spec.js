@@ -195,3 +195,41 @@ for (const width of [768, 1023]) test(`${width}: tablet has navigation and chat 
   await nav.getByRole('button', { name: 'Inventory & Catalog', exact: true }).click()
   await expect(page).toHaveURL(/\/catalog$/)
 })
+
+for (const theme of ['light', 'dark']) test(`${theme}: QR payment guidance follows the current final-total and funds status`, async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.addInitScript(theme => {
+    localStorage.setItem('theme', theme)
+    localStorage.setItem('k2-payment-choice:PAYMENT-COPY-AUDIT', 'gcash')
+  }, theme)
+  let final = false
+  let paymentStatus = 'awaiting_instructions'
+  const snapshot = () => ({ public_reference: 'PAYMENT-COPY-AUDIT', total_amount: final ? 499 : null, shipping_quote_status: final ? 'customer_confirmed' : 'pending_quote', delivery_review_required: false, status: 'submitted', order_status: 'submitted', payment_status: paymentStatus, messages: [] })
+  await page.route('**/api/storefront/order/status', r => r.fulfill({ json: { ok: true, orders: [snapshot()] } }))
+  await page.route('**/api/storefront/order/conversation', r => r.fulfill({ json: { ok: true, receipt: snapshot() } }))
+  await page.goto('/confirmation')
+  await expect(page.getByRole('heading', { name: 'Order request received' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toHaveCount(0)
+  await expect(page.getByRole('heading', { name: 'Send your e-receipt' })).toHaveCount(0)
+  await expect(page.getByText('Receipt upload appears when this order has a final total and current payment instructions.')).toBeVisible()
+  final = true
+  paymentStatus = 'not_requested'
+  await page.reload()
+  await expect(page.getByRole('heading', { name: 'Your order conversation' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toHaveCount(0)
+  await expect(page.getByRole('heading', { name: 'Send your e-receipt' })).toHaveCount(0)
+  paymentStatus = 'awaiting_instructions'
+  await page.reload()
+  await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Send your e-receipt' })).toBeVisible()
+  await expect(page.getByText('Payment before dispatch', { exact: true })).toBeVisible()
+  await expect(page.locator('img[src="/payment/gcash-receive-crop.png"]')).toBeVisible()
+  await expect(page.locator('img[src="/payment/maribank-receive-crop.png"]')).toHaveCount(0)
+  await expect(page.getByText(/No payment was charged|contact you before you transfer/)).toHaveCount(0)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
+  paymentStatus = 'verified'
+  await page.reload()
+  await expect(page.getByRole('heading', { name: 'Your order conversation' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toHaveCount(0)
+  await expect(page.getByRole('heading', { name: 'Send your e-receipt' })).toHaveCount(0)
+})

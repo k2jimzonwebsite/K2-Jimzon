@@ -1,0 +1,104 @@
+{
+  "map": "MAP-023",
+  "idea": "IDEA-20261024-03",
+  "scope": "Source copy only; no payment behavior change or deployment",
+  "baseline": "a2f016cd",
+  "checks": {
+    "focused": 18,
+    "savedReceipt": 2,
+    "readability": 7,
+    "checkoutSmoke": 1,
+    "finalCopyPolicy": 12,
+    "developmentExitCode": 0
+  },
+  "storefront": {
+    "exitCode": 0,
+    "jsGzipKB": 150.5,
+    "cssGzipKB": 29.98,
+    "limitsUnchanged": true
+  },
+  "admin": {
+    "exitCode": 0,
+    "KB": 226.68,
+    "limitKB": 300
+  },
+  "review": "Helper overpromise corrected; final-total-only/instructions-unavailable state added to browser proof",
+  "sources": [
+    {
+      "path": "src/components/CartDrawer.jsx",
+      "sha256": "2c72c34282ff36c2cd194df89722d85f4007b4eae0d60486a347cdb579e2752e"
+    },
+    {
+      "path": "src/components/Footer.jsx",
+      "sha256": "2956a42b25c8d060b59e18bb848a8823f2d7b95cb2451524243255a5d0da6d60"
+    },
+    {
+      "path": "src/components/ProductKnowledge.jsx",
+      "sha256": "aad5dd72d1d02baedb7d9429c45ac67f8ffbb1908af5385618fdeca1dce39016"
+    },
+    {
+      "path": "src/components/home/FaqSection.jsx",
+      "sha256": "201266a99aa9421256c3ea401b198b011943a1cde6ff96f1171ebe032fdd4d75"
+    },
+    {
+      "path": "src/components/shop/ExpressDeliveryApproval.jsx",
+      "sha256": "848d16273f0931f6cbb7e5d4f4364212ebd1a6868bf65c6700a115cf069dc6a2"
+    },
+    {
+      "path": "src/components/shop/OrderConversation.jsx",
+      "sha256": "2bc5853447167163d51605e93d310a2ed69b681c042878f885f370b4780c1163"
+    },
+    {
+      "path": "src/components/shop/ShelfProductPanel.jsx",
+      "sha256": "573526756a0857fb6bcef745a983399a3cee3f779f146ecadf10531b745fb9a9"
+    },
+    {
+      "path": "src/data/policies.js",
+      "sha256": "bf176cf8826c611bb6adaa3e28c835c99c980836bd02b9d99eb76b51f3d79358"
+    },
+    {
+      "path": "src/data/site.js",
+      "sha256": "79c08280c8940688520cb06046fa6422a5a35a737689e1219a24d392bee87423"
+    },
+    {
+      "path": "src/lib/storefrontSeoPages.js",
+      "sha256": "f10c8abd82094496a01f042a0e1455e32420cc0b8a40499604b9d1a8fc2d7583"
+    },
+    {
+      "path": "src/views/Catalog.jsx",
+      "sha256": "04047669add3fab804e9a8836bc5b7104bc51d5e7ecc3bf8512a6c9d5829e036"
+    },
+    {
+      "path": "src/views/Checkout.jsx",
+      "sha256": "8c4fa8581daeed21b925df019d26ab25e714d9ecfa1eab7e9c546bb0e179b9e6"
+    },
+    {
+      "path": "src/views/Confirmation.jsx",
+      "sha256": "699a616bbdb4fbd539fe4393bb8a4bef4e46b740bdc51ea39fd30c976201bbc2"
+    },
+    {
+      "path": "src/views/Pasabuy.jsx",
+      "sha256": "824c9d0965edf6b388bcca83464def7e6812c1624ec33f1996cf188b033c4387"
+    },
+    {
+      "path": "tests/order-receipt-direct-ui.spec.js",
+      "sha256": "dd6021d54065c312f9584605cdd685468c9c5d2feaf6cd77113cefc77719af46"
+    },
+    {
+      "path": "tests/smoke.spec.js",
+      "sha256": "68ca8d90acb75f5f376ffacbf2bdbafca493d82efa986d9ee34ffff7baa90ccc"
+    },
+    {
+      "path": "tests/storefront-copy-contract.spec.js",
+      "sha256": "7e498e531b40fe9a7400699c1282f4f35c623c79a865ebf7efca80272ba34e8c"
+    },
+    {
+      "path": "tests/storefront-mobile-audit.spec.js",
+      "sha256": "03b0fbbc0f2a264fb4c67da844902866ccadebf6c1bb66800da32b41df812da5"
+    },
+    {
+      "path": "tests/storefront-policy-contract.spec.js",
+      "sha256": "17933b4b312cb2d553c185c9614d0c5498eff643b1af2d9ca8a4209628ba3d5a"
+    }
+  ]
+}

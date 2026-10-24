@@ -1,0 +1,286 @@
+[WebServer] (node:18352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:10852) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:15080) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\storefront-copy-contract.spec.js:10:1 › wholesale receipt copy follows the submission path (9ms)
+  ok  2 tests\storefront-copy-contract.spec.js:18:1 › contact makes one consistent reviewed-hours statement (5ms)
+  x   3 tests\storefront-copy-contract.spec.js:24:1 › storefront promises reconcile with manual launch facts without false SLAs or unapproved payment methods (5ms)
+(node:19008) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  4 tests\storefront-copy-contract.spec.js:52:1 › the receipt never offers a QR that differs from the recorded checkout method (10ms)
+  ok  5 tests\storefront-copy-contract.spec.js:64:3 › gcash receiving crop preserves the supplied QR and recipient pixels (40ms)
+  ok  6 tests\storefront-copy-contract.spec.js:64:3 › maribank receiving crop preserves the supplied QR and recipient pixels (38ms)
+  ok  7 tests\storefront-copy-contract.spec.js:76:1 › public payment copy describes the current manual QR options (3ms)
+  ok  8 tests\storefront-copy-contract.spec.js:85:1 › product allergen notice does not add a second Contains prefix (2ms)
+  ok  9 tests\storefront-policy-contract.spec.js:7:1 › storefront route registry provides dedicated policy destinations (3ms)
+  ok 10 tests\storefront-policy-contract.spec.js:19:1 › vercel storefront rewrites maintain exact parity with STOREFRONT_SPA_PATHS (7ms)
+  x  11 tests\storefront-policy-contract.spec.js:28:1 › customer-facing policies adhere strictly to manual launch facts (13ms)
+(node:2752) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 12 tests\storefront-policy-contract.spec.js:51:1 › footer and data collection forms offer reachable policy entry points with 44px hit areas (10ms)
+
+
+  1) tests\storefront-copy-contract.spec.js:24:1 › storefront promises reconcile with manual launch facts without false SLAs or unapproved payment methods
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "before dispatch"
+    Received string:    "// Lifestyle photography (Unsplash) + editorial content for the storefront.·
+    const U = (id, w = 1200) =>
+      `https://images.unsplash.com/${id}?w=${w}&q=75&auto=format&fit=crop`·
+    export const LIFESTYLE = {
+      italyCoast: U('photo-1516483638261-f4dbaf036963', 900), // Manarola, Cinque Terre
+      venice: U('photo-1498307833015-e7b400441eb8', 1200), // Venice canal at dusk
+      market: U('photo-1542838132-92c53300491e', 900), // grocery shelves
+      warehouse: U('photo-1553413077-190dd305871c', 900), // warehouse aisle
+      plane: U('photo-1436491865332-7a61a109cc05', 900), // wing above clouds
+      kitchen: U('photo-1466637574441-749b8f19452f', 900), // cooking board
+    }·
+    export const REVIEWS = [
+      {
+        name: 'cokeynuts',
+        channel: 'Shopee · verified',
+        stars: 5,
+        text: 'Authentic Italian product. Seller packed well in corrugated board and then bubble wrap to protect from dents. Seller shipped immediately. Will order again as needed. Thank you.',
+        item: 'Rio Mare tuna',
+        date: 'Nov 04, 2024',
+      },
+      {
+        name: 'ladyluck.eve',
+        channel: 'Shopee · verified',
+        stars: 5,
+        text: 'I usually buy this brand of espresso ground coffee, Lavazza. It is really strong robust flavor and smell, definitely an authentic Italian cup of coffee. Thanks seller.',
+        item: 'Lavazza Suerte',
+        date: 'Oct 13, 2024',
+      },
+      {
+        name: 'maxdalla1966',
+        channel: 'Shopee · verified',
+        stars: 5,
+        text: 'I received the products I purchased well packaged and on time. Therefore, I would like to thank the seller, whom I can absolutely recommend to everyone for their purchases. Thanks also to the courier SPX Express for the speed of delivery.',
+        item: 'Lavazza Dek',
+        date: 'Oct 31, 2025',
+      },
+      {
+        name: 's*****s',
+        channel: 'Shopee · verified',
+        stars: 5,
+        text: 'I love Lindt and so I expected it to melt during transit since the milk chocolates easily do. I suspect the seller also suspected that might happen, so they bubble wrapped my order. Thank you seller! Looks legit!',
+        item: 'Lindt Bianco',
+        date: 'Oct 10, 2024',
+      },
+      {
+        name: 'mscastillones',
+        channel: 'Shopee · verified',
+        stars: 5,
+        text: 'Smoothest transaction ever!! Thank you thank you!! GRABE WALANG BASAG, WALANG LEAK, AUTHENTIC PRODUCTS!! super safe ng packaging. Same quality as the ones I bought sa London, long lasting, fave scentttt.',
+        item: 'Suddenly Fragrance',
+        date: 'Feb 04, 2025',
+      },
+      {
+        name: 'jrcnb',
+        channel: 'Shopee · verified',
+        stars: 5,
+        text: 'So happy of this scent I randomly came across the seller while hunting for a scent na hindi mahal pero kakaiba ang scent. Solid na secure sa packaging, 3 layers kaya naman hindi nag spill at hindi nabasag. Na deliver pa in less than 5 days. Will surely order again from this shop as a repeat buyer.',
+        item: 'Suddenly Fragrance',
+        date: 'Oct 24, 2025',
+      },
+      {
+        name: 'k*****i',
+        channel: 'Shopee · verified',
+        stars: 5,
+        text: 'Been missing this flavor! Very rare find, glad this shop sells this! Well packed by seller. First tasted this in turkey and I really love the flavor! A bit pricey but still worth my money. Will order again if they still have stocks.',
+        item: 'Pringles Paprika',
+        date: 'Nov 27, 2022',
+      },
+      {
+        name: 'm*****s',
+        channel: 'Shopee · verified',
+        stars: 5,
+        text: 'Very happy that this was delivered very fast and I appreciate the effort in packaging in a box to maintain quality. I love Lindt chocolates, they are creamy.',
+        item: 'Lindt Bianco',
+        date: 'May 10, 2024',
+      },
+    ]·
+    export const FAQS = [
+      {
+        cat: 'Ordering & Stock',
+        q: 'How does your Single Master Inventory work?',
+        a: 'K2 staff manage products and stock in one master inventory. Only products assigned to Website and eligible for sale appear in our catalog. Marketplace connectors are not yet live, so staff reconcile those sales manually. Wait for K2 staff to confirm your stock and final total before paying.',
+      },
+      {
+        cat: 'Ordering & Stock',
+        q: 'How do payments work and why is confirmation not instant?',
+        a: 'Checkout submits an order request without charging you immediately. Once staff confirm your stock, package details, and final total, you can pay instantly via our verified GCash or MariBank QR codes. Confirmation is completed manually by staff rather than an automated gateway.',
+      },
+      {
+        cat: 'Freshness & Dates',
+        q: 'Are your Italian grocery items really authentic and fresh?',
+        a: 'We source products in Italy and record batch and best-before details as stock is received. Eligible lots follow FEFO (First-Expired, First-Out) rules. Check the reviewed product information and ask staff for the current package dates before confirming your purchase.',
+      },
+      {
+        cat: 'Freshness & Dates',
+        q: 'Why do your Milano fragrances say \"inspired scent\"?',
+        a: 'Inspired scents are sold under their own product names. They are not presented as designer-brand originals. Check each listing and package for the reviewed maker, origin and fragrance details.',
+      },
+      {
+        cat: 'Delivery & Pickup',
+        q: 'What are your delivery options and can I pick up in Manila?',
+        a: 'You can request Metro Manila express delivery, provincial shipping, or pickup at our Manila hub. Staff confirm the courier, fee, packing and handover arrangements for your order. Submitting a request does not confirm a delivery date. For pickup, wait until staff tell you the order is ready.',
+      },
+      {
+        cat: 'Delivery & Pickup',
+        q: 'How are delivery rates calculated?',
+        a: 'Standard delivery uses K2’s published regional and package-weight rates. Express delivery requires a staff quote for your actual route and parcel. Staff confirm any pending fee and your final total before payment; a courier estimate is not a confirmed delivery booking.',
+      },
+      {
+        cat: 'Pasabuy & Flights',
+        q: 'What is Pasabuy and how do scheduled flights work?',
+        a: 'Pasabuy lets you request an item from Italy that is not in our regular catalog. Send a photo, product name, or link. Staff check sourcing, price, freight and the available flight schedule before confirming a quote. The request itself does not reserve stock or guarantee an arrival date.',
+      },
+      {
+        cat: 'Wholesale & B2B',
+        q: 'Can restaurants, cafés, or bakeries order at wholesale prices?',
+        a: 'Restaurants, cafés and bakeries can submit an inquiry through our Wholesale portal or contact us directly. Staff confirm available products, quantities and applicable case or carton pricing. An inquiry does not reserve stock or confirm a wholesale order.',
+      },
+    ]·
+    "
+
+      29 |   expect(site).not.toMatch(/1–2 business-day|2–3 week|guaranteed delivery/i)
+      30 |   // Payment precedes dispatch; final totals and receiving details remain required
+    > 31 |   expect(site).toContain('before dispatch')
+         |                ^
+      32 |   expect(site).not.toContain('Wait for K2 staff to confirm your stock')
+      33 |   expect(site).toContain('Submitting a request does not confirm a delivery date')
+      34 |
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-copy-contract.spec.js:31:16
+
+    Error Context: test-results\storefront-copy-contract-s-346fd--unapproved-payment-methods\error-context.md
+
+  2) tests\storefront-policy-contract.spec.js:28:1 › customer-facing policies adhere strictly to manual launch facts
+
+    Error: expect(received).not.toMatch(expected)
+
+    Expected pattern: not /no upfront|does not collect upfront|confirmed by staff before payment/i
+    Received string:      "/**
+     * Authoritative customer policies for K2 Jimzon.
+     * Reconciled with manual launch operating facts:
+     * - Direct Italian import verification.
+     * - Manual order request model (no upfront charge).
+     * - Staff stock confirmation & courier delivery quotation.
+     * - Manual GCash/MariBank QR payment instructions after staff review.
+     * - Case-by-case inspection & resolution for damaged/incorrect items within 48 hours.
+     * - Zero selling or sharing of customer data with advertisers or data brokers.
+     */
+
+    export const PRIVACY_POLICY = {
+      id: 'privacy',
+      title: 'Privacy & Data Protection',
+      lastUpdated: '24 September 2026',
+      summary: 'We use customer contact, delivery, and optional account details to manage requests, orders, and service updates. We never sell or share customer data with advertisers.',
+      sections: [
+        {
+          heading: 'Information We Collect',
+          content: 'When you submit an order request, Pasabuy sourcing request, wholesale inquiry, or customer service message, we collect your name, email address, Philippine mobile number, delivery address, and any optional delivery notes you provide. If you create a verified customer account, we also store the name, delivery address, and in-app notification preference you save, plus private references to service updates and whether you have read them. Anonymous session state may be retained locally in your browser to remember your shopping cart.',
+        },
+        {
+          heading: 'How Your Information Is Used',
+          content: 'Your information is used to check physical inventory in Manila, calculate delivery rates, contact you about stock, payment and order status, and label parcels for dispatch. Saved account details can fill empty checkout fields. In-app updates show verified account holders references to staff replies, order or Pasabuy status changes, and confirmed payment; they do not replace staff payment verification.',
+        },
+        {
+          heading: 'Zero Third-Party Data Selling or Advertising',
+          content: 'We do not sell, rent, monetize, or trade your personal contact or delivery data to external advertising networks, brokers, or marketing platforms. Your information is accessed only by authorized K2 staff members conducting store operations.',
+        },
+        {
+          heading: 'Courier & Fulfillment Handover',
+          content: 'Once you approve an order quote and payment is verified, your delivery name, address, and mobile number are shared solely with the courier company (such as J&T Express or dedicated Manila riders) selected to deliver your physical parcel.',
+        },
+        {
+          heading: 'Data Security & Inquiries',
+          content: 'All communication with our services uses encrypted HTTPS. You may inquire about your saved request history, update contact details, or request deletion of outdated order records by contacting staff directly at k2jimzonwebsite@gmail.com.',
+        },
+      ],
+    }
+
+    export const TERMS_POLICY = {
+      id: 'terms',
+      title: 'Terms of Service & Order Requests',
+      lastUpdated: '15 September 2026',
+      summary: 'Placing a request on K2 Jimzon is an order request, not an automated transaction. Stock and delivery fees are confirmed by staff before payment.',
+      sections: [
+        {
+          heading: 'Order Request Model',
+          content: 'Submitting an order request on our website, Pasabuy form, or wholesale form does not collect upfront payment or guarantee immediate dispatch. It registers your requested items for review by K2 staff in Manila.',
+        },
+        {
+          heading: 'Stock & Price Verification',
+          content: 'All products are authentic Italian imports. While our catalog reflects available inventory, staff manually verifies physical item condition, batch expiry dates, and actual on-hand quantity before issuing a confirmed payment total.',
+        },
+        {
+          heading: 'Payment Instructions',
+          content: 'You may choose GCash or MariBank QR transfer for an order request. Do not send payment until K2 staff contacts you with confirmed stock availability, exact courier delivery fees, and verified recipient account details. Submitted payments are manually verified by staff.',
+        },
+        {
+          heading: 'Courier Delivery & Timelines',
+          content: 'Delivery fees vary by locality and parcel weight. Courier options (Metro Manila direct or regional courier) and estimated delivery timelines are provided during staff quotation. We do not promise instant, overnight, or fixed transit windows without courier confirmation.',
+        },
+        {
+          heading: 'Pasabuy Sourcing Terms',
+          content: 'Pasabuy items are sourced directly from stores, pharmacies, or suppliers in Italy upon customer request. Estimated arrival times depend on air or sea cargo schedules and customs processing. Staff will provide an all-inclusive quote before purchasing abroad.',
+        },
+      ],
+    }
+
+    export const RETURNS_POLICY = {
+      id: 'returns',
+      title: 'Returns, Replacements & Item Care',
+      lastUpdated: '15 September 2026',
+      summary: 'Every Italian import is inspected before dispatch. If an item arrives damaged or incorrect, contact staff within 48 hours for case-by-case resolution.',
+      sections: [
+        {
+          heading: 'Direct Import Quality & Inspection',
+          content: 'Every product is sourced authentically in Italy and inspected upon receipt in Manila before climate-controlled storage. Parcels are carefully packed with protective cushioning prior to courier handover.',
+        },
+        {
+          heading: 'Inspection Upon Courier Delivery',
+          content: 'Customers are advised to inspect their package immediately upon courier handover. Please record an unboxing video or take clear photographs of the package, shipping label, and contents upon arrival.',
+        },
+        {
+          heading: 'Reporting Transit Damage or Discrepancies',
+          content: 'If an item arrives damaged, leaking, broken, or differs from your confirmed order, notify K2 staff via our Contact page or Guest Messages within 48 hours of delivery. Please include your order reference number and clear photos of the issue.',
+        },
+        {
+          heading: 'Case-by-Case Resolution',
+          content: 'Because groceries, specialty foods, and personal care products cannot be resold once opened or delivered, we do not operate an automated self-service return or refund portal. Approved claims are resolved manually by K2 staff via item replacement, credit, or adjusted settlement.',
+        },
+      ],
+    }
+
+    export const ALL_POLICIES = [PRIVACY_POLICY, TERMS_POLICY, RETURNS_POLICY]
+
+    export function getPolicyById(id) {
+      const cleanId = String(id || '').trim().toLowerCase()
+      return ALL_POLICIES.find(p => p.id === cleanId) || PRIVACY_POLICY
+    }
+    "
+
+      40 |   expect(policiesSource).toContain('GCash')
+      41 |   expect(policiesSource).toContain('before dispatch')
+    > 42 |   expect(policiesSource).not.toMatch(/no upfront|does not collect upfront|confirmed by staff before payment/i)
+         |                              ^
+      43 |
+      44 |   // Returns: case-by-case inspection, no self-service returns
+      45 |   expect(policiesSource).toContain('RETURNS_POLICY')
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-policy-contract.spec.js:42:30
+
+    Error Context: test-results\storefront-policy-contract-9a095-ctly-to-manual-launch-facts\error-context.md
+
+  2 failed
+    tests\storefront-copy-contract.spec.js:24:1 › storefront promises reconcile with manual launch facts without false SLAs or unapproved payment methods
+    tests\storefront-policy-contract.spec.js:28:1 › customer-facing policies adhere strictly to manual launch facts
+  10 passed (9.3s)

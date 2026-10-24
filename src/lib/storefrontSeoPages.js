@@ -3,12 +3,12 @@ export const STOREFRONT_SEO_PAGES = {
   home: {
     path: '/',
     title: 'K2 Jimzon — Italian imports, direct to the Philippines',
-    description: 'Italian products sourced in Italy and fulfilled in Manila. K2 staff confirms availability before payment.',
+    description: 'Italian products sourced in Italy and fulfilled in Manila. Pay by GCash or MariBank QR before dispatch.',
   },
   catalog: {
     path: '/catalog',
     title: 'Italian Imported Goods in Manila | K2 Jimzon',
-    description: 'Italian groceries, coffee and pantry goods in Manila. Stock and delivery confirmed before payment.',
+    description: 'Italian groceries, coffee and pantry goods in Manila. GCash and MariBank QR payment before dispatch.',
   },
   pasabuy: {
     path: '/pasabuy',

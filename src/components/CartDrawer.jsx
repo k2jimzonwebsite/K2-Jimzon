@@ -110,10 +110,10 @@ export default function CartDrawer() {
                       <span>Fulfilled by K2 Jimzon · Manila Warehouse Dispatch</span>
                     </div>
                     <ol className="space-y-1 pl-4 list-decimal text-xs leading-relaxed text-navy-soft">
-                      <li>Submit your request with no upfront payment</li>
-                      <li>Our staff checks current Manila stock</li>
-                      <li>We arrange delivery with our verified courier</li>
-                      <li>Pay as agreed with our staff after confirmation</li>
+                      <li>Review your cart and submit your order</li>
+                      <li>Use your order payment details once the final total is ready</li>
+                      <li>Send your receipt for staff to verify the funds</li>
+                      <li>Packing and dispatch follow payment verification</li>
                     </ol>
                   </div>
                 </div>
@@ -156,7 +156,7 @@ export default function CartDrawer() {
                 </button>
               </div>
               <p className="mt-2 text-center text-xs leading-relaxed text-navy-faint">
-                Fulfilled by K2 Jimzon · Manila stock verified before confirmation.
+                Fulfilled by K2 Jimzon · Payment verified before dispatch.
               </p>
             </footer>
           </motion.aside>

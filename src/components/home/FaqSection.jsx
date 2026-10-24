@@ -46,7 +46,7 @@ export default function FaqSection() {
             Questions, answered honestly.
           </h2>
           <p className="mt-4 text-sm leading-7 text-navy-soft">
-            Clear expectations on stock reconciliation, expiry dates, delivery rates, and Italian sourcing before you pay.
+            Clear information on stock, payment, expiry dates, delivery, and Italian sourcing.
           </p>
 
           {/* Search filter input */}

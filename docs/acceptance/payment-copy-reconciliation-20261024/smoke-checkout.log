@@ -1,0 +1,41 @@
+[WebServer] (node:13836) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:8428) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:20152) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 2:22:55 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  x  1 tests\smoke.spec.js:103:3 › launch-critical storefront › cart closes before checkout and checkout is an order request (3.3s)
+
+
+  1) tests\smoke.spec.js:103:3 › launch-critical storefront › cart closes before checkout and checkout is an order request
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/GCash and MariBank orders are paid before dispatch/i)
+    Expected: visible
+    Error: strict mode violation: getByText(/GCash and MariBank orders are paid before dispatch/i) resolved to 2 elements:
+        1) <p class="mt-2 max-w-2xl text-sm leading-relaxed text-navy-soft">GCash and MariBank orders are paid before dispatc…</p> aka getByText('GCash and MariBank orders are paid before dispatch. Submit your order, then')
+        2) <p>GCash and MariBank orders are paid before dispatc…</p> aka getByText('GCash and MariBank orders are paid before dispatch. Follow your order payment')
+
+    Call log:
+      - Expect "toBeVisible" getByText(/GCash and MariBank orders are paid before dispatch/i) with timeout 5000ms
+      - waiting for getByText(/GCash and MariBank orders are paid before dispatch/i)
+
+
+      112 |     await expect(page.getByRole('heading', { name: /Review order request/i })).toBeVisible({ timeout: 60000 })
+      113 |     await expect(page.getByText(/Submitting saves your order. QR transfers are made separately/i)).toBeVisible()
+    > 114 |     await expect(page.getByText(/GCash and MariBank orders are paid before dispatch/i)).toBeVisible()
+          |                                                                                         ^
+      115 |     await expect(page.getByRole('button', { name: /Submit order request/i })).toBeVisible()
+      116 |     await expect(page.getByText(/Confirm payment|Scan with any QR/i)).toHaveCount(0)
+      117 |   })
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\smoke.spec.js:114:89
+
+    Error Context: test-results\smoke-launch-critical-stor-598ff-heckout-is-an-order-request\error-context.md
+
+  1 failed
+    tests\smoke.spec.js:103:3 › launch-critical storefront › cart closes before checkout and checkout is an order request

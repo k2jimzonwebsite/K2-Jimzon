@@ -102,7 +102,7 @@ export default function OrderConversation({ access, chargeFinal = false, onPayme
       {conversation && <>
         {access.paymentMethod !== 'cod' && !['verified', 'refunded'].includes(conversation.payment_status)
           && (!chargeFinal || !chargeRead || conversation.payment_status === 'not_requested')
-          && <p role="status" className="mt-4 text-sm leading-6 text-navy-soft">Receipt upload will appear here after staff confirm the final total and payment instructions.</p>}
+          && <p role="status" className="mt-4 text-sm leading-6 text-navy-soft">Receipt upload appears when this order has a final total and current payment instructions.</p>}
         <div aria-label="Messages about this order" aria-live="polite" className="mt-5 max-h-72 space-y-3 overflow-y-auto rounded-xl border border-line bg-shell p-3">
           {(conversation.messages || []).map((item, index) => <div key={item.id || index} className={`max-w-[92%] rounded-xl p-3 text-sm ${item.direction === 'inbound' ? 'ml-auto bg-crimson text-white' : 'border border-line bg-paper text-navy'}`}>
             <p className="whitespace-pre-wrap break-words">{item.content}</p>
@@ -118,7 +118,7 @@ export default function OrderConversation({ access, chargeFinal = false, onPayme
       </>}
       {conversation && chargeFinal && chargeRead && access.paymentMethod !== 'cod' && ['awaiting_instructions', 'evidence_submitted', 'failed'].includes(conversation.payment_status) && ['submitted', 'confirmed'].includes(conversation.order_status) && <form onSubmit={upload} className="mt-6 border-t border-line pt-5">
         <h3 className="font-serif text-lg font-semibold">Send your e-receipt</h3>
-        <p className="mt-1 text-sm leading-6 text-navy-soft">Upload only after K2 staff confirm your exact total and you make the transfer. Your file goes to this order for staff review.</p>
+        <p className="mt-1 text-sm leading-6 text-navy-soft">After transferring the final order total, upload your receipt here. Staff verify the funds before dispatch.</p>
         <label htmlFor="order-payment-reference" className="mt-4 block text-sm font-semibold">Payment reference</label>
         <input id="order-payment-reference" className="store-field mt-2 min-h-11 w-full px-4 text-base" value={reference} onChange={event => { setReference(event.target.value); uploadKey.current = '' }} maxLength={100} placeholder="Transaction or confirmation number" />
         <label htmlFor="order-receipt-file" className="mt-4 block text-sm font-semibold">Upload e-receipt</label>

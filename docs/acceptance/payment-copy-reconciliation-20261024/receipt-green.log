@@ -1,0 +1,13 @@
+[WebServer] (node:13924) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:5636) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:10592) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\order-receipt-direct-ui.spec.js:13:1 › direct saved order conversation accepts a private receipt after fresh instructions without asking identity again (1.7s)
+  ok 2 tests\order-receipt-direct-ui.spec.js:71:1 › direct saved legacy receipt waits for fresh charge and keeps messages after review or refresh failure (9.2s)
+
+  2 passed (15.3s)
