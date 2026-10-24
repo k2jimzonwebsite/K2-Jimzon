@@ -270,6 +270,15 @@
   line-height: 1.5;
 }
 
+.storefront-ui header .wordmark-tagline {
+  white-space: nowrap;
+  font-size: .6875rem;
+  letter-spacing: .16em;
+}
+@media (max-width: 359px) {
+  .storefront-ui header .wordmark-tagline { display: none; }
+}
+
 /* Reading colors are separate from solid button fills in dark mode. */
 :root:not(.dark) .storefront-ui .text-crimson { color: #982C29; }
 :root:not(.dark) .storefront-ui .text-forest { color: #28523B; }

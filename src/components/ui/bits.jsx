@@ -48,7 +48,7 @@ export function Wordmark({ size = 'text-2xl', onClick, light = false }) {
       </span>
       <span
         className={
-          'mt-1 block text-xs font-medium uppercase tracking-[0.32em] ' +
+          'wordmark-tagline mt-1 block text-xs font-medium uppercase tracking-[0.32em] ' +
           (light ? 'text-white/60' : 'text-navy-soft')
         }
       >

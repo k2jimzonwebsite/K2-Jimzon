@@ -1,0 +1,92 @@
+
+> k2-jimzon-prototype@0.1.0 build:storefront
+> vite build --mode storefront --configLoader runner && node scripts/emit-static-404.mjs storefront && node scripts/emit-storefront-sitemap.mjs && node scripts/verify-build-boundary.mjs storefront && node scripts/verify-bundle-budgets.mjs storefront && node scripts/scan-secrets.mjs dist
+
+vite v8.2.2 building client environment for storefront...
+transforming...
+✓ 1133 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/k2-build-target.json                             0.02 kB │ gzip:   0.04 kB
+dist/manifest.json                                    0.73 kB │ gzip:   0.29 kB
+dist/index.html                                       3.30 kB │ gzip:   1.02 kB
+dist/.vite/manifest.json                             17.66 kB │ gzip:   2.04 kB
+dist/assets/StoreChatPanel-DeMF7Ywq.css               0.67 kB │ gzip:   0.30 kB
+dist/assets/Home-DN-7aoDT.css                         1.89 kB │ gzip:   0.77 kB
+dist/assets/InteractiveShop-DcxJhXz4.css             29.24 kB │ gzip:   6.34 kB
+dist/assets/index-B_zEtz_l.css                      199.55 kB │ gzip:  29.42 kB
+dist/assets/is-html-element-DvgHo_1h.js               0.12 kB │ gzip:   0.12 kB
+dist/assets/productFamilyPresentation-BfDfEwQt.js     0.52 kB │ gzip:   0.33 kB
+dist/assets/supabaseClient-DOHCmk_M.js                0.53 kB │ gzip:   0.40 kB
+dist/assets/rolldown-runtime-hePW80VL.js              0.71 kB │ gzip:   0.42 kB
+dist/assets/useProductKnowledgeVersion-C8Q5b68M.js    0.97 kB │ gzip:   0.49 kB
+dist/assets/NotFound-BrudvdJl.js                      0.98 kB │ gzip:   0.54 kB
+dist/assets/StorefrontChatButton-DDmWtDVS.js          1.25 kB │ gzip:   0.69 kB
+dist/assets/TurnstileChallenge-BjXvd3_V.js            1.26 kB │ gzip:   0.70 kB
+dist/assets/HeroVideo-CL8THmk2.js                     1.70 kB │ gzip:   0.74 kB
+dist/assets/productStructuredData-CeTTdlCf.js         2.18 kB │ gzip:   1.13 kB
+dist/assets/ProductVisual-Dj2njKHm.js                 2.35 kB │ gzip:   1.08 kB
+dist/assets/productFamilies-DIssc4YL.js               2.66 kB │ gzip:   1.29 kB
+dist/assets/StoreChatDrawer-DY3LR93A.js               2.80 kB │ gzip:   1.24 kB
+dist/assets/StorefrontMetadata-CAekDFwY.js            2.94 kB │ gzip:   1.33 kB
+dist/assets/icons-B_4OD3QU.js                         2.97 kB │ gzip:   1.31 kB
+dist/assets/site-CPesnmLU.js                          3.24 kB │ gzip:   1.59 kB
+dist/assets/InteractiveReveal-DbulaCvh.js             3.45 kB │ gzip:   1.42 kB
+dist/assets/CustomerAccountProvider-CHJ9avb5.js       4.07 kB │ gzip:   1.42 kB
+dist/assets/Footer-C3EHa1VE.js                        5.91 kB │ gzip:   1.87 kB
+dist/assets/StorySection-C5ObHmUL.js                  6.38 kB │ gzip:   2.64 kB
+dist/assets/FaqSection-FOCRasTZ.js                    6.40 kB │ gzip:   2.43 kB
+dist/assets/CartDrawer-0l9xDWBa.js                    7.24 kB │ gzip:   2.48 kB
+dist/assets/ProductCard-DvNMGdet.js                   7.74 kB │ gzip:   2.29 kB
+dist/assets/Catalog-CSpom2nX.js                       8.34 kB │ gzip:   3.04 kB
+dist/assets/ExpressDeliveryApproval-Dw7cKIXC.js       8.41 kB │ gzip:   3.35 kB
+dist/assets/Policy-DQx38w_C.js                        9.14 kB │ gzip:   3.64 kB
+dist/assets/Contact-CCZ8hCxo.js                       9.58 kB │ gzip:   2.75 kB
+dist/assets/Pasabuy-B4qtBsTE.js                       9.76 kB │ gzip:   3.31 kB
+dist/assets/StoreChatPanel-Bnlv6JZc.js               10.24 kB │ gzip:   3.42 kB
+dist/assets/motion-DTmOU2Yv.js                       11.33 kB │ gzip:   4.68 kB
+dist/assets/customerAccountService-CCt3k2WU.js       11.45 kB │ gzip:   4.10 kB
+dist/assets/GuestMessages-BOi49nn3.js                12.08 kB │ gzip:   3.98 kB
+dist/assets/GlobeSection-Bn8q8eSh.js                 13.43 kB │ gzip:   5.08 kB
+dist/assets/Confirmation-CKSkslVV.js                 14.98 kB │ gzip:   5.01 kB
+dist/assets/Wholesale-Cur5Zm0s.js                    20.10 kB │ gzip:   5.53 kB
+dist/assets/Checkout-CXXsLTAN.js                     21.15 kB │ gzip:   6.63 kB
+dist/assets/CustomerAccount-DulkZplj.js              26.20 kB │ gzip:   7.08 kB
+dist/assets/Home-C-5w8hv2.js                         29.80 kB │ gzip:   8.91 kB
+dist/assets/MasterProduct-1_E-zyno.js                30.03 kB │ gzip:   8.29 kB
+dist/assets/is-svg-component-DcgyhjxC.js             31.55 kB │ gzip:  11.40 kB
+dist/assets/InteractiveShop-BS92b1ie.js              43.74 kB │ gzip:  13.19 kB
+dist/assets/react-Bai9eZpR.js                        45.83 kB │ gzip:  13.76 kB
+dist/assets/StoreContext-BRWOE2tE.js                 53.31 kB │ gzip:  18.86 kB
+dist/assets/index-DAuKEwPE.js                        83.87 kB │ gzip:  29.51 kB
+dist/assets/ShelfScene3D-CP6HQ-Og.js                126.80 kB │ gzip:  38.17 kB
+dist/assets/vendor-supabase-C_uyFMkg.js             214.18 kB │ gzip:  55.01 kB
+dist/assets/vendor-react-CQcqwgYb.js                218.85 kB │ gzip:  68.27 kB
+dist/assets/react-three-fiber.esm-BGzkPJ5b.js       912.75 kB │ gzip: 242.14 kB
+
+✓ built in 1.64s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+Emitted storefront static 404 recovery page.
+[sitemap] dist/sitemap.xml written with 4 stable routes and 0 product URLs
+[metadata] 1 product page prerendered
+[metadata] 3 marketing pages prerendered
+[sitemap] NOTE: the pre-launch indexing gate is ON, so no product URL is
+[sitemap] listed and /product/* is served noindex. This is deliberate while
+[sitemap] products have no photographs or descriptions. To launch product
+[sitemap] pages into search, follow docs/PRELAUNCH_INDEXING.md.
+Verified storefront production boundary (49 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker).
+file:///C:/Users/jerze/.codex/worktrees/listing-detail-image-fix/K2%20JImzon/scripts/verify-bundle-budgets.mjs:60
+    throw new Error(`Storefront landing budget exceeded: JS ${format(js)}/150.50 kB gzip; CSS ${format(css)}/30.00 kB gzip.`)
+          ^
+
+Error: Storefront landing budget exceeded: JS 150.14 kB/150.50 kB gzip; CSS 30.07 kB/30.00 kB gzip.
+    at file:///C:/Users/jerze/.codex/worktrees/listing-detail-image-fix/K2%20JImzon/scripts/verify-bundle-budgets.mjs:60:11
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:633:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.16.0

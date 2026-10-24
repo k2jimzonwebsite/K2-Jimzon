@@ -1,0 +1,198 @@
+[WebServer] (node:8508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:16832) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:3684) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 11:08:50 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x  1 tests\homepage-mobile-fixes.spec.js:16:3 › 320 dark: homepage shopping stays readable and reachable (16.5s)
+
+
+  1) tests\homepage-mobile-fixes.spec.js:16:3 › 320 dark: homepage shopping stays readable and reachable 
+
+    Error: primary action above fixed navigation on arrival
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 743.40625
+    Received:   849.109130859375
+
+      24 |       const nav = await page.getByRole('navigation', { name: 'Mobile storefront' }).boundingBox()
+      25 |       const action = await cta.boundingBox()
+    > 26 |       expect.soft(action.y + action.height, 'primary action above fixed navigation on arrival').toBeLessThan(nav.y - 8)
+         |                                                                                                 ^
+      27 |       const chat = await page.getByRole('button', { name: 'Chat with K2 staff', exact: true }).boundingBox()
+      28 |       expect.soft(chat.width, 'compact mobile chat footprint').toBeLessThanOrEqual(52)
+      29 |       const copy = await hero.locator('h1 + p').boundingBox()
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:26:97
+
+    Error: compact mobile chat footprint
+
+    expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 52
+    Received:    154
+
+      26 |       expect.soft(action.y + action.height, 'primary action above fixed navigation on arrival').toBeLessThan(nav.y - 8)
+      27 |       const chat = await page.getByRole('button', { name: 'Chat with K2 staff', exact: true }).boundingBox()
+    > 28 |       expect.soft(chat.width, 'compact mobile chat footprint').toBeLessThanOrEqual(52)
+         |                                                                ^
+      29 |       const copy = await hero.locator('h1 + p').boundingBox()
+      30 |       expect.soft(copy.y + copy.height, 'hero copy clears fixed chat').toBeLessThan(chat.y)
+      31 |       const images = hero.locator('.hero-collection-image')
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:28:64
+
+    Error: hero copy clears fixed chat
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 682
+    Received:   769.0027465820312
+
+      28 |       expect.soft(chat.width, 'compact mobile chat footprint').toBeLessThanOrEqual(52)
+      29 |       const copy = await hero.locator('h1 + p').boundingBox()
+    > 30 |       expect.soft(copy.y + copy.height, 'hero copy clears fixed chat').toBeLessThan(chat.y)
+         |                                                                        ^
+      31 |       const images = hero.locator('.hero-collection-image')
+      32 |       for (const img of [images.nth(0), images.nth(1)]) {
+      33 |         const area = await img.evaluate(e => e.clientWidth - parseFloat(getComputedStyle(e).paddingLeft) - parseFloat(getComputedStyle(e).paddingRight))
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:30:72
+
+    Error: hero image usable width
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 100
+    Received:    56
+
+      32 |       for (const img of [images.nth(0), images.nth(1)]) {
+      33 |         const area = await img.evaluate(e => e.clientWidth - parseFloat(getComputedStyle(e).paddingLeft) - parseFloat(getComputedStyle(e).paddingRight))
+    > 34 |         expect.soft(area, 'hero image usable width').toBeGreaterThanOrEqual(100)
+         |                                                      ^
+      35 |       }
+      36 |       const routeTitle = hero.getByText('Milano to Manila', { exact: true })
+      37 |       const title = await routeTitle.evaluate(e => ({ height: e.getBoundingClientRect().height, line: parseFloat(getComputedStyle(e).lineHeight) }))
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:34:54
+
+    Error: hero image usable width
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 100
+    Received:    56
+
+      32 |       for (const img of [images.nth(0), images.nth(1)]) {
+      33 |         const area = await img.evaluate(e => e.clientWidth - parseFloat(getComputedStyle(e).paddingLeft) - parseFloat(getComputedStyle(e).paddingRight))
+    > 34 |         expect.soft(area, 'hero image usable width').toBeGreaterThanOrEqual(100)
+         |                                                      ^
+      35 |       }
+      36 |       const routeTitle = hero.getByText('Milano to Manila', { exact: true })
+      37 |       const title = await routeTitle.evaluate(e => ({ height: e.getBoundingClientRect().height, line: parseFloat(getComputedStyle(e).lineHeight) }))
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:34:54
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 29
+    Received:    56
+
+      36 |       const routeTitle = hero.getByText('Milano to Manila', { exact: true })
+      37 |       const title = await routeTitle.evaluate(e => ({ height: e.getBoundingClientRect().height, line: parseFloat(getComputedStyle(e).lineHeight) }))
+    > 38 |       expect.soft(title.height).toBeLessThanOrEqual(title.line + 1)
+         |                                 ^
+      39 |     }
+      40 |     await expect.soft(page.getByText('Monthly Cargo Flights', { exact: true })).toHaveCount(0)
+      41 |     await expect.soft(page.getByText('Direct Sourcing', { exact: true })).toHaveCount(0)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:38:33
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByText('Monthly Cargo Flights', { exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "soft toHaveCount" getByText('Monthly Cargo Flights', { exact: true }) with timeout 5000ms
+      - waiting for getByText('Monthly Cargo Flights', { exact: true })
+        13 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      38 |       expect.soft(title.height).toBeLessThanOrEqual(title.line + 1)
+      39 |     }
+    > 40 |     await expect.soft(page.getByText('Monthly Cargo Flights', { exact: true })).toHaveCount(0)
+         |                                                                                 ^
+      41 |     await expect.soft(page.getByText('Direct Sourcing', { exact: true })).toHaveCount(0)
+      42 |     expect.soft(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+      43 |     await page.screenshot({ path: `docs/design-checkpoints/20261024-homepage-mobile/${width}-${theme}-top.png` })
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:40:81
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByText('Direct Sourcing', { exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "soft toHaveCount" getByText('Direct Sourcing', { exact: true }) with timeout 5000ms
+      - waiting for getByText('Direct Sourcing', { exact: true })
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      39 |     }
+      40 |     await expect.soft(page.getByText('Monthly Cargo Flights', { exact: true })).toHaveCount(0)
+    > 41 |     await expect.soft(page.getByText('Direct Sourcing', { exact: true })).toHaveCount(0)
+         |                                                                           ^
+      42 |     expect.soft(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+      43 |     await page.screenshot({ path: `docs/design-checkpoints/20261024-homepage-mobile/${width}-${theme}-top.png` })
+      44 |     const thumb = page.getByRole('region', { name: 'New arrivals' }).locator('img').filter({ hasNot: page.locator('.hero-collection-image') }).last()
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:41:75
+
+    Error: arrival thumbnail usable area
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 40
+    Received:    14
+
+      44 |     const thumb = page.getByRole('region', { name: 'New arrivals' }).locator('img').filter({ hasNot: page.locator('.hero-collection-image') }).last()
+      45 |     const area = await thumb.evaluate(e => ({ width: e.clientWidth - parseFloat(getComputedStyle(e).paddingLeft) - parseFloat(getComputedStyle(e).paddingRight), height: e.clientHeight - parseFloat(getComputedStyle(e).paddingTop) - parseFloat(getComputedStyle(e).paddingBottom) }))
+    > 46 |     expect.soft(Math.min(area.width, area.height), 'arrival thumbnail usable area').toBeGreaterThanOrEqual(40)
+         |                                                                                     ^
+      47 |     const stops = hero.getByRole('group', { name: 'Sourcing route stops' })
+      48 |     await expect(stops.getByRole('button')).toHaveCount(3)
+      49 |     for (const button of await stops.getByRole('button').all()) {
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:46:85
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('section').filter({ has: locator('h1') }).first().getByRole('group', { name: 'Sourcing route stops' }).getByRole('button')
+    Expected: 3
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('section').filter({ has: locator('h1') }).first().getByRole('group', { name: 'Sourcing route stops' }).getByRole('button') with timeout 5000ms
+      - waiting for locator('section').filter({ has: locator('h1') }).first().getByRole('group', { name: 'Sourcing route stops' }).getByRole('button')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      46 |     expect.soft(Math.min(area.width, area.height), 'arrival thumbnail usable area').toBeGreaterThanOrEqual(40)
+      47 |     const stops = hero.getByRole('group', { name: 'Sourcing route stops' })
+    > 48 |     await expect(stops.getByRole('button')).toHaveCount(3)
+         |                                             ^
+      49 |     for (const button of await stops.getByRole('button').all()) {
+      50 |       const box = await button.boundingBox()
+      51 |       expect(box.width).toBeGreaterThanOrEqual(44)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:48:45
+
+    Error Context: test-results\homepage-mobile-fixes-320--fae74-tays-readable-and-reachable\error-context.md
+
+  1 failed
+    tests\homepage-mobile-fixes.spec.js:16:3 › 320 dark: homepage shopping stays readable and reachable 

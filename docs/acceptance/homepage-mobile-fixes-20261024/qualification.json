@@ -1,0 +1,76 @@
+{
+  "owningMap": "MAP-023",
+  "idea": "IDEA-20261024-02",
+  "branch": "codex/mobile-homepage-fixes",
+  "scope": "Local source only; no push or deployment",
+  "homepageAndHero": {
+    "passed": 14,
+    "exitCode": 0
+  },
+  "readability": {
+    "passed": 7,
+    "exitCode": 0
+  },
+  "developmentExitCode": 0,
+  "storefront": {
+    "jsGzipKB": 150.17,
+    "jsLimitKB": 150.5,
+    "cssGzipKB": 29.97,
+    "exitCode": 0,
+    "cssLimitKB": 30.0,
+    "configuredPublicFlags": true
+  },
+  "admin": {
+    "exitCode": 0,
+    "applicationKB": 226.68,
+    "limitKB": 300
+  },
+  "independentReview": "No source blockers; final equivalent style changes reviewed",
+  "sources": [
+    {
+      "path": "src/components/home/Hero.jsx",
+      "sha256": "DC60762CB8544ADB8109F6218AFED2FE9346613D8FF3D7305ACCB10D9CBF7D83"
+    },
+    {
+      "path": "src/components/home/Hero.css",
+      "sha256": "BA39C30D5C2EA86917AB37E0BBCDD54EADB768BFBB6E14B2711998514AC008BD"
+    },
+    {
+      "path": "src/components/home/FlightMap.jsx",
+      "sha256": "EBD6D16C0C5A8F28195D2CD47457BE4F92F9534492AFA695E6F81E487FB5CBEC"
+    },
+    {
+      "path": "src/components/home/NewArrivals.jsx",
+      "sha256": "D7CE3F52FC77872D30DF33374818C6A7F609070F14B8E8C52BFB681D75531FB1"
+    },
+    {
+      "path": "src/views/Home.jsx",
+      "sha256": "1C35253C48EC5E3755C184E9AF78C1F22A7953038C1700C2C5F7C51D1A6470C9"
+    },
+    {
+      "path": "src/components/shop/StorefrontChatButton.jsx",
+      "sha256": "2BF639B3426ABB8E9A63497DDDD745511E10F4D370271007F1075453B9830847"
+    },
+    {
+      "path": "src/components/ui/bits.jsx",
+      "sha256": "9865BF6531F9E1EDA3A1DDD83280020EFFE9FB3A6AC8D36B110E4194915A873E"
+    },
+    {
+      "path": "src/index.css",
+      "sha256": "5B99D3F4F179AC57BD93C0216529785D7C4552EC6F11B982520073EE6AC3E1A5"
+    },
+    {
+      "path": "tests/homepage-mobile-fixes.spec.js",
+      "sha256": "CE7E0322195F0FF771B08BC0AC7E60EF1A423303FD9A5E286D06C57D3E67EB5D"
+    },
+    {
+      "path": "package.json",
+      "sha256": "48CBAF8EEB0FCB52FEBEA3D434CD8B7DBC0740D3FBA7328EC248C8B2FB5A4F47"
+    },
+    {
+      "path": "playwright.config.js",
+      "sha256": "B80B5E2C9E0135AB7ACAE9598BEE8B6997A35EA42DF26594ED31C45AB084FB84"
+    }
+  ],
+  "visualEvidence": "Synthetic actual-component matrix plus local intercepted fixture rendering unchanged previously audited cached photo bytes. No live or physical-device acceptance."
+}

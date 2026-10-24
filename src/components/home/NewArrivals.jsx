@@ -92,8 +92,8 @@ export default function NewArrivals() {
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] p-1">
-                        <ProductVisual product={item} className="h-full w-full object-contain" />
+                      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] p-1">
+                        <ProductVisual product={item} className="h-full w-full object-contain" pad="p-1" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-bold uppercase tracking-wider text-navy-faint truncate">

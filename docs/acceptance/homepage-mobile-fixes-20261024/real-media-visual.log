@@ -1,0 +1,21 @@
+{
+  "kind": "Local intercepted fixture, not live catalog evidence",
+  "sourceAssets": [
+    {
+      "sku": "K2-SKU-001173",
+      "url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a065bdd5-0497-451d-938c-8e6be2389adf-b98912e4b7d5266b.png",
+      "sha256": "b98912e4b7d5266b943fce6ac9154e1b4c5ba86ae9af2c0f00a61caf89fda3dc"
+    },
+    {
+      "sku": "K2-SKU-001072",
+      "url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/5b62151c-4a85-44e8-8278-6befa2dc9be8-e6649920e705d196.png",
+      "sha256": "e6649920e705d1962eaf82bf48b624695e1e41de6bfccf8d8541037396794456"
+    },
+    {
+      "sku": "K2-SKU-001073",
+      "url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2c78b77f-7430-4eee-8321-2f1790d17633-e6649920e705d196.png",
+      "sha256": "e6649920e705d1962eaf82bf48b624695e1e41de6bfccf8d8541037396794456"
+    }
+  ],
+  "captured": 6
+}

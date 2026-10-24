@@ -1,0 +1,83 @@
+
+> k2-jimzon-prototype@0.1.0 build:storefront
+> vite build --mode storefront --configLoader runner && node scripts/emit-static-404.mjs storefront && node scripts/emit-storefront-sitemap.mjs && node scripts/verify-build-boundary.mjs storefront && node scripts/verify-bundle-budgets.mjs storefront && node scripts/scan-secrets.mjs dist
+
+vite v8.2.2 building client environment for storefront...
+transforming...
+✓ 1133 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/k2-build-target.json                             0.02 kB │ gzip:   0.04 kB
+dist/manifest.json                                    0.73 kB │ gzip:   0.29 kB
+dist/index.html                                       3.30 kB │ gzip:   1.02 kB
+dist/.vite/manifest.json                             17.66 kB │ gzip:   2.04 kB
+dist/assets/StoreChatPanel-DeMF7Ywq.css               0.67 kB │ gzip:   0.30 kB
+dist/assets/Home-B1jyyxxl.css                         1.52 kB │ gzip:   0.66 kB
+dist/assets/InteractiveShop-DcxJhXz4.css             29.24 kB │ gzip:   6.34 kB
+dist/assets/index-C0wlCEdx.css                      199.76 kB │ gzip:  29.43 kB
+dist/assets/is-html-element-DvgHo_1h.js               0.12 kB │ gzip:   0.12 kB
+dist/assets/productFamilyPresentation-BfDfEwQt.js     0.52 kB │ gzip:   0.33 kB
+dist/assets/supabaseClient-DOHCmk_M.js                0.53 kB │ gzip:   0.40 kB
+dist/assets/rolldown-runtime-hePW80VL.js              0.71 kB │ gzip:   0.42 kB
+dist/assets/useProductKnowledgeVersion-Cl59BDHn.js    0.97 kB │ gzip:   0.49 kB
+dist/assets/NotFound-CjU-xSnO.js                      0.98 kB │ gzip:   0.54 kB
+dist/assets/StorefrontChatButton-098m1K4v.js          1.25 kB │ gzip:   0.69 kB
+dist/assets/TurnstileChallenge-BjXvd3_V.js            1.26 kB │ gzip:   0.70 kB
+dist/assets/HeroVideo-CL8THmk2.js                     1.70 kB │ gzip:   0.74 kB
+dist/assets/productStructuredData-BPazsBls.js         2.18 kB │ gzip:   1.13 kB
+dist/assets/ProductVisual-Dj2njKHm.js                 2.35 kB │ gzip:   1.08 kB
+dist/assets/productFamilies-wCdkIWi8.js               2.66 kB │ gzip:   1.29 kB
+dist/assets/StoreChatDrawer-qbFM36rQ.js               2.80 kB │ gzip:   1.24 kB
+dist/assets/StorefrontMetadata-CquIyh6x.js            2.94 kB │ gzip:   1.33 kB
+dist/assets/icons-B_4OD3QU.js                         2.97 kB │ gzip:   1.31 kB
+dist/assets/site-CPesnmLU.js                          3.24 kB │ gzip:   1.59 kB
+dist/assets/InteractiveReveal-DbulaCvh.js             3.45 kB │ gzip:   1.42 kB
+dist/assets/CustomerAccountProvider-BQs9mCP-.js       4.07 kB │ gzip:   1.42 kB
+dist/assets/Footer-DeuyLL8c.js                        5.91 kB │ gzip:   1.87 kB
+dist/assets/StorySection-C6FGFRfR.js                  6.38 kB │ gzip:   2.64 kB
+dist/assets/FaqSection-DIah5XTz.js                    6.40 kB │ gzip:   2.43 kB
+dist/assets/CartDrawer-dlmGLLwh.js                    7.24 kB │ gzip:   2.48 kB
+dist/assets/ProductCard-BNG6UG7U.js                   7.74 kB │ gzip:   2.29 kB
+dist/assets/Catalog-BoQOW6yu.js                       8.34 kB │ gzip:   3.04 kB
+dist/assets/ExpressDeliveryApproval-CpKuNngU.js       8.41 kB │ gzip:   3.35 kB
+dist/assets/Policy-uMfI0Ptn.js                        9.14 kB │ gzip:   3.64 kB
+dist/assets/Contact-CLdib9Yj.js                       9.58 kB │ gzip:   2.75 kB
+dist/assets/Pasabuy-DIbZTgoe.js                       9.76 kB │ gzip:   3.31 kB
+dist/assets/StoreChatPanel-Bnlv6JZc.js               10.24 kB │ gzip:   3.42 kB
+dist/assets/motion-DTmOU2Yv.js                       11.33 kB │ gzip:   4.68 kB
+dist/assets/customerAccountService-CCt3k2WU.js       11.45 kB │ gzip:   4.10 kB
+dist/assets/GuestMessages-C-0hc2DJ.js                12.08 kB │ gzip:   3.98 kB
+dist/assets/GlobeSection-D6QrsTmr.js                 13.43 kB │ gzip:   5.07 kB
+dist/assets/Confirmation-Db80nxQj.js                 14.98 kB │ gzip:   5.01 kB
+dist/assets/Wholesale-DmtEz0YR.js                    20.10 kB │ gzip:   5.53 kB
+dist/assets/Checkout-dwa0zDYa.js                     21.15 kB │ gzip:   6.63 kB
+dist/assets/CustomerAccount-Mu9DWPiA.js              26.20 kB │ gzip:   7.07 kB
+dist/assets/Home-CVeBeMIv.js                         29.91 kB │ gzip:   8.93 kB
+dist/assets/MasterProduct-BPF1EEPg.js                30.03 kB │ gzip:   8.29 kB
+dist/assets/is-svg-component-DcgyhjxC.js             31.55 kB │ gzip:  11.40 kB
+dist/assets/InteractiveShop-Doiw_i_u.js              43.74 kB │ gzip:  13.19 kB
+dist/assets/react-BJFajwws.js                        45.83 kB │ gzip:  13.76 kB
+dist/assets/StoreContext-BdzwgoYw.js                 53.31 kB │ gzip:  18.87 kB
+dist/assets/index-C66BRacY.js                        83.87 kB │ gzip:  29.51 kB
+dist/assets/ShelfScene3D-BdphvKSO.js                126.80 kB │ gzip:  38.17 kB
+dist/assets/vendor-supabase-C_uyFMkg.js             214.18 kB │ gzip:  55.01 kB
+dist/assets/vendor-react-CQcqwgYb.js                218.85 kB │ gzip:  68.27 kB
+dist/assets/react-three-fiber.esm-BGzkPJ5b.js       912.75 kB │ gzip: 242.14 kB
+
+✓ built in 1.22s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+Emitted storefront static 404 recovery page.
+[sitemap] dist/sitemap.xml written with 4 stable routes and 0 product URLs
+[metadata] 1 product page prerendered
+[metadata] 3 marketing pages prerendered
+[sitemap] NOTE: the pre-launch indexing gate is ON, so no product URL is
+[sitemap] listed and /product/* is served noindex. This is deliberate while
+[sitemap] products have no photographs or descriptions. To launch product
+[sitemap] pages into search, follow docs/PRELAUNCH_INDEXING.md.
+Verified storefront production boundary (49 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker).
+Storefront landing budget passed: JS 150.17 kB/150.50 kB gzip; CSS 29.97 kB/30.00 kB gzip.
+Secret scan passed (95 files checked; secret values are never printed).

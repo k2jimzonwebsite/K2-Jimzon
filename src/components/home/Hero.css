@@ -1,4 +1,9 @@
-/* Additive merchandise shelf. Existing hero and shared theme remain intact. */
+.hero-layout { padding-block: 1.5rem; }
+.hero-headline {
+  margin-top: 1rem;
+  font-size: clamp(2rem, 8.5vw, 3rem);
+  line-height: 1.04;
+}
 .hero-collection { margin-bottom: 1.5rem; }
 .hero-collection-heading {
   margin-bottom: 1rem;
@@ -8,16 +13,20 @@
 }
 .hero-collection-shelf {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - .75rem) / 2);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: .5rem;
   gap: .75rem;
-  min-height: 13rem;
 }
 .hero-collection-item {
   display: flex;
   flex-direction: column;
   min-width: 0;
   min-height: 44px;
-  padding: .5rem;
+  padding: .25rem;
+  scroll-snap-align: start;
   text-align: left;
   border-bottom: 1px solid var(--store-surface-border);
   color: var(--color-navy);
@@ -26,29 +35,17 @@
 }
 .hero-collection-image {
   width: 100%;
-  height: 7rem;
+  height: 10rem;
   margin-bottom: .75rem;
   border-radius: .5rem;
   background-color: var(--product-img-bg);
   object-fit: contain;
-  padding: .5rem;
+  padding: .25rem;
 }
 .hero-collection-name {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   font-size: .875rem;
   line-height: 1.35;
-}
-.hero-collection-price {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: .25rem;
-  width: 100%;
-  margin-top: auto;
-  padding-top: .5rem;
-  font-size: .875rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
 }
 .hero-collection-empty {
   grid-column: 1 / -1;
@@ -57,16 +54,17 @@
   line-height: 1.5;
 }
 .hero-collection-item:active { background-color: var(--color-crimson-wash); }
-@media (hover: hover) {
-  .hero-collection-item:hover {
-    background-color: var(--store-surface-bg);
-    border-color: var(--color-crimson);
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   .hero-collection-item { transition: none; }
 }
-@media (min-width: 768px) and (max-width: 1023px) {
-  .hero-collection-shelf { gap: .25rem; }
-  .hero-collection-item { padding-inline: .25rem; }
+@media (min-width: 1024px) {
+  .hero-layout { padding-block: 5rem; }
+  .hero-headline { font-size: clamp(3rem, 5.75vw, 4.6rem); line-height: .98; }
+  .hero-collection-shelf {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow-x: visible;
+  }
+  .hero-collection-image { height: 7rem; }
 }

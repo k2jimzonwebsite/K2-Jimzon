@@ -1,0 +1,77 @@
+[WebServer] (node:3648) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:16536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 20 tests using 1 worker
+
+(node:7456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 11:14:31 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x   1 tests\hero-enhancement.spec.js:21:1 › additive hero preserves the original content and supports keyboard shopping (6.0s)
+(node:16416) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 11:14:38 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\hero-enhancement.spec.js:67:1 › unavailable product images fall back without losing the product link (1.0s)
+[WebServer] 11:14:39 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 11:14:39 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\hero-enhancement.spec.js:78:1 › loading and empty collection keep both original shopping routes available (1.6s)
+[WebServer] 11:14:40 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\homepage-mobile-fixes.spec.js:16:3 › 320 light: homepage shopping stays readable and reachable (1.4s)
+[WebServer] 11:14:41 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\homepage-mobile-fixes.spec.js:16:3 › 320 dark: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 11:14:43 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\homepage-mobile-fixes.spec.js:16:3 › 375 light: homepage shopping stays readable and reachable (1.3s)
+[WebServer] 11:14:44 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\homepage-mobile-fixes.spec.js:16:3 › 375 dark: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 11:14:46 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  8 tests\homepage-mobile-fixes.spec.js:16:3 › 430 light: homepage shopping stays readable and reachable (1.3s)
+[WebServer] 11:14:47 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  9 tests\homepage-mobile-fixes.spec.js:16:3 › 430 dark: homepage shopping stays readable and reachable (1.6s)
+[WebServer] 11:14:49 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\homepage-mobile-fixes.spec.js:16:3 › 768 light: homepage shopping stays readable and reachable (1.3s)
+[WebServer] 11:14:50 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 11 tests\homepage-mobile-fixes.spec.js:16:3 › 768 dark: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 11:14:52 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\homepage-mobile-fixes.spec.js:16:3 › 1440 light: homepage shopping stays readable and reachable (1.6s)
+[WebServer] 11:14:53 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\homepage-mobile-fixes.spec.js:16:3 › 1440 dark: homepage shopping stays readable and reachable (1.6s)
+  ok 14 tests\homepage-mobile-fixes.spec.js:71:1 › mobile homepage preserves layout with 200% text and ordinary motion (1.2s)
+  ok 15 tests\storefront-selling-surfaces.spec.js:30:1 › product detail renders canonical price and stock, then enforces the cart limit (1.4s)
+  ok 16 tests\storefront-selling-surfaces.spec.js:82:1 › guest message start and reply paths preserve scoped behavioral receipts (965ms)
+  ok 17 tests\storefront-selling-surfaces.spec.js:166:1 › recorded pickup instructions show the matching MariBank QR (4.3s)
+  ok 18 tests\storefront-selling-surfaces.spec.js:166:1 › recorded pickup instructions show the matching GCash QR (4.4s)
+  ok 19 tests\storefront-selling-surfaces.spec.js:295:1 › cold confirmation handles an expired guest grant with a useful recovery state (800ms)
+  ok 20 tests\storefront-selling-surfaces.spec.js:311:1 › unknown storefront and product URLs render explicit recovery pages (1.3s)
+
+
+  1) tests\hero-enhancement.spec.js:21:1 › additive hero preserves the original content and supports keyboard shopping 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('section').filter({ has: locator('h1') }).first().getByText('Milano to Manila').first()
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" locator('section').filter({ has: locator('h1') }).first().getByText('Milano to Manila').first() with timeout 5000ms
+      - waiting for locator('section').filter({ has: locator('h1') }).first().getByText('Milano to Manila').first()
+        13 × locator resolved to <span class="md:hidden">Milano to Manila</span>
+           - unexpected value "hidden"
+
+
+      26 |   await expect(hero.getByRole('heading', { level: 1 })).toContainText('Italy, chosen well.', { timeout: 60000 })
+      27 |   for (const text of ['Delivered to Manila.', 'Milano to Manila', 'Genuine catalog', 'Personal confirmation', 'No payment required at checkout. We verify stock first.']) {
+    > 28 |     await expect(hero.getByText(text, { exact: false }).first()).toBeVisible()
+         |                                                                  ^
+      29 |   }
+      30 |   await expect(hero.getByRole('button', { name: 'Shop the Collection' })).toBeVisible()
+      31 |   await expect(hero.getByRole('button', { name: 'Request from Italy' })).toBeVisible()
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\hero-enhancement.spec.js:28:66
+
+    Error Context: test-results\hero-enhancement-additive--80cc0--supports-keyboard-shopping\error-context.md
+
+  1 failed
+    tests\hero-enhancement.spec.js:21:1 › additive hero preserves the original content and supports keyboard shopping 
+  19 passed (45.9s)
