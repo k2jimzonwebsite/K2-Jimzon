@@ -1,0 +1,32 @@
+[WebServer] (node:11024) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20872) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:16472) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\product-comparison-containment.spec.js:6:7 › 1280 light portrait: complete primary stays inside comparison well (669ms)
+
+
+  1) tests\product-comparison-containment.spec.js:6:7 › 1280 light portrait: complete primary stays inside comparison well 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 640
+    Received:    794.109375
+
+      20 |         expect(geometry.image.height).toBeGreaterThan(0)
+      21 |         for (const edge of ['top', 'left']) expect(geometry.image[edge]).toBeGreaterThanOrEqual(geometry.well[edge] - 1)
+    > 22 |         for (const edge of ['bottom', 'right']) expect(geometry.image[edge]).toBeLessThanOrEqual(geometry.well[edge] + 1)
+         |                                                                              ^
+      23 |         await expect.poll(() => slider.getByRole('img', { name: 'After use', exact: true }).evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true)
+      24 |         await slider.focus()
+      25 |         await page.keyboard.press('ArrowRight')
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\product-comparison-containment.spec.js:22:78
+
+    Error Context: test-results\product-comparison-contain-9a99e-tays-inside-comparison-well\error-context.md
+
+  1 failed
+    tests\product-comparison-containment.spec.js:6:7 › 1280 light portrait: complete primary stays inside comparison well 

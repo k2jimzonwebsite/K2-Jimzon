@@ -1,0 +1,23 @@
+# MAP-023 detail image correction — 24 October 2026
+
+IDEA-20261024-01 is accepted into the existing MAP-023 listing work. The owner requested 2–3 Luna agents, full live listings, research then defer unresolved product facts, and images working in light and dark mode. Two Luna agents independently audited the image root cause and the 71-row staff handoff; the image agent then reviewed the correction. No item-level write is supported by the retained unresolved facts. Current retained baseline is 196 products / 125 Live Website / 71 Drafts / 49 lots / 273 projected units, not a physical stock count. Earlier dated release receipts with 93 listings are historical.
+
+## Prepared source and evidence
+
+The live 001001 root-cause capture in the primary workspace shows a 757.25px primary image within a 618.61px clipping well. ProductVisual prepends relative positioning, which wins over the comparison caller's absolute class. The source correction changes only that caller to h-full w-full, preserving the shared ProductVisual component, image URLs/bytes, object-contain padding, after-use behavior, keyboard controls and K2 themes.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Primary wrapper grows beyond its square clip and hides the package bottom. | Caller explicitly fills the existing well height and width. | Relative root no longer depends on a conflicting absolute utility for sizing. |
+
+New actual-component fixture and regression: tests/fixtures/product-comparison-harness.html/.jsx and tests/product-comparison-containment.spec.js, added to the existing selling-surface suite. Deterministic SVG fixtures are synthetic geometry probes, not real product photos or product identity evidence. The initial sandbox attempt was interrupted after startup stalled; it is not a failing application result. The isolated permitted red-sized run fails at actual image bottom 794.109375 > allowed 640; the correction then passes 12/12 rendered cases. The earlier unbounded harness run also failed geometry and is retained as red.log; red-sized.log is the live-sized authoritative reproduction. green.log and four 390/1280 light/dark PNGs are retained in outputs/listing-team-20261023/goal-team/detail-crop-fix-20261024/ in the managed release worktree. Focused checks cover portrait/square decoded images, all four element edges within the clipping well, contain fit, after-use decode, keyboard movement, horizontal viewport bounds and primary-error fallback.
+
+Independent Luna source/test review approves with no blockers; it inspected light mobile/desktop captures and distinguishes component evidence from actual-host acceptance. No full-route, physical-device or live source correction is claimed yet. No application data, media assignment, price, stock, review, publication, SQL/provider setting or credential changed.
+
+## Listing holds and next action
+
+The exact existing staff handoff has 71 unique SKUs at 2026-10-24T01:32:37.386Z, with overlapping 68 missing primaries / 34 missing canonical pairs / 33 no-positive-price / 71 human reviews; all 38 populated prices also retain item-specific review (three unsupported mapped-source values included). Preserve seven deferred primaries, Ginseng/Disano/Nixe research-then-skip, rejected Donna 500g front, and identity/duplicate/recipe/honey/unknown-maker/family holds. Details and staff actions remain in the current primary-workspace handoff: outputs/listing-team-20261023/goal-team/remaining-products/staff-held-drafts.csv. Two Luna audits find no new exact supported write; no repeated source loop or staff message is needed. Staff facts are separate from physical stock counting and zero-stock publication can proceed only when otherwise supported.
+
+The sole active queue is MAP-023: finish development/release qualification of this source correction, then verify both separate production artifacts and actual 001001 gallery in desktop/mobile light/dark. The full inventory remains unfinished until item-specific holds are resolved. Release results must be appended here before any live claim. Recovery reverts only the comparison caller/tests and qualified source artifact; preserve all current catalog/stock/history and pending commands. Never restore a stale product snapshot.
+
+Development gate: npm run verify:development exited 0 on the final source/test batch. Complete npm run verify:release is running; no promotion is claimed. Rollback baseline: main76e6810bae94f6edbd9172adc0076d991345bc9a; Storefront dpl_HiiHRGraTANJ7V8XQpTx5etPwH9z / Admin dpl_9Npvy75PZrhV44ufXditWZkujvfJ both observed READY on that exact source with canonical aliases before this release.
