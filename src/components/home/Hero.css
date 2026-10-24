@@ -35,12 +35,12 @@
 }
 .hero-collection-image {
   width: 100%;
-  height: 10rem;
+  height: clamp(10rem, 50vw, 14rem);
   margin-bottom: .75rem;
   border-radius: .5rem;
   background-color: var(--product-img-bg);
   object-fit: contain;
-  padding: .25rem;
+  padding: 0;
 }
 .hero-collection-name {
   overflow-wrap: break-word;

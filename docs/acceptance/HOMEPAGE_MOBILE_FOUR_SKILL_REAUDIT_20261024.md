@@ -2,6 +2,10 @@
 
 Owning MAP-023 / IDEA-20261024-02. Owner requested verification of what exists now using all four required design skills. Audit only; no application,photo,data,provider,branch push or deployment change.
 
+## Subsequent authorized correction
+
+After this audit the owner directed “proceed on fixing it”. The two H04 observations below are historical audit findings. Native rail controls and larger full-photo display frames are now locally verified; source-photo whitespace remains qualified. Current source/evidence/remaining release action: [follow-up receipt](HOMEPAGE_MOBILE_RAIL_FOLLOWUP_20261024.md). No live promotion occurred.
+
 ## Current source versus live
 
 Local candidate: ca0f27cd3bc17d88c2c7386e12dc45a1271d8826 on codex/mobile-homepage-fixes. Every recorded application/test/config SHA-256 matches qualification.json; no source drift was found.

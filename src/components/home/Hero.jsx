@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import * as motion from 'motion/react-m'
 import { useReducedMotion } from 'motion/react'
 import { useStore } from '../../context/StoreContext'
@@ -16,6 +17,25 @@ const reveal = {
 function Hero() {
   const { go, listedProducts, loading, openProduct, isWholesale, openStoreChat } = useStore()
   const reducedMotion = useReducedMotion()
+  const railRef = useRef(null)
+  const [canPrevious, setCanPrevious] = useState(false)
+  const [canNext, setCanNext] = useState(false)
+  const updateRail = () => {
+    const rail = railRef.current
+    if (!rail) return
+    setCanPrevious(rail.scrollLeft > 1)
+    setCanNext(rail.scrollLeft < rail.scrollWidth - rail.clientWidth - 1)
+  }
+  useEffect(() => {
+    const observer = new ResizeObserver(updateRail)
+    observer.observe(railRef.current)
+    updateRail()
+    return () => observer.disconnect()
+  }, [loading, listedProducts])
+  const moveRail = direction => railRef.current?.scrollBy({
+    left: direction * railRef.current.clientWidth,
+    behavior: reducedMotion ? 'instant' : 'smooth',
+  })
 
   return (
     <section className="store-atmosphere relative overflow-hidden border-b border-line">
@@ -59,7 +79,7 @@ function Hero() {
         <motion.div initial={reducedMotion ? false : { opacity: 0, transform: 'translateX(14px)' }} animate={{ opacity: 1, transform: 'translateX(0)' }} transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }} className="relative min-w-0">
           <div className="hero-collection" aria-label="Explore the collection" aria-busy={loading}>
             <p className="hero-collection-heading">A little Italy, for your everyday.</p>
-            <div className="hero-collection-shelf">
+            <div id="hero-collection-rail" ref={railRef} onScroll={updateRail} className="hero-collection-shelf">
               {!loading && groupFamilyResults(listedProducts).slice(0, 3).map(product => {
                 const multiple = product.family?.members.length > 1
                 const range = multiple ? familyPriceRange(product, listedProducts, isWholesale) : null
@@ -73,6 +93,14 @@ function Hero() {
               )})}
               {(loading || !listedProducts.length) && <p className="hero-collection-empty">{loading ? 'Loading the collection…' : 'Explore the collection or request a favorite from Italy.'}</p>}
             </div>
+            {(canPrevious || canNext) && <div className="mt-2 flex justify-end gap-2 lg:hidden">
+              <button type="button" aria-label="Previous featured products" aria-controls="hero-collection-rail" disabled={!canPrevious} onClick={() => moveRail(-1)} className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-navy disabled:opacity-40">
+                <ArrowIcon size={18} className="rotate-180" />
+              </button>
+              <button type="button" aria-label="Next featured products" aria-controls="hero-collection-rail" disabled={!canNext} onClick={() => moveRail(1)} className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-navy disabled:opacity-40">
+                <ArrowIcon size={18} />
+              </button>
+            </div>}
           </div>
           <div className="store-panel overflow-hidden p-5 sm:p-7">
             <div className="mb-2 flex flex-col items-start gap-3 border-b border-[var(--store-surface-border)] pb-4 sm:flex-row sm:items-center sm:justify-between">

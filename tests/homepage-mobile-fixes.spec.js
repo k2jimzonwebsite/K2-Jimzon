@@ -83,3 +83,41 @@ test('mobile homepage preserves layout with 200% text and ordinary motion', asyn
   await page.getByRole('main').getByRole('button', { name: 'Request from Italy', exact: true }).click()
   await expect(page).toHaveURL(/\/pasabuy$/)
 })
+
+for (const width of [320, 375, 430]) for (const theme of ['light', 'dark']) {
+  test(`${width} ${theme}: featured browsing controls reveal every product and preserve full photos`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 812 })
+    await page.goto('/')
+    const hero = page.locator('section').filter({ has: page.locator('h1') }).first()
+    await expect(hero.locator('.hero-collection-item')).toHaveCount(3, { timeout: 60000 })
+    await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), theme === 'dark')
+    const thumb = page.getByRole('region', { name: 'New arrivals' }).locator('img').last()
+    const area = await thumb.evaluate(e => Math.min(e.clientWidth - parseFloat(getComputedStyle(e).paddingLeft) - parseFloat(getComputedStyle(e).paddingRight), e.clientHeight - parseFloat(getComputedStyle(e).paddingTop) - parseFloat(getComputedStyle(e).paddingBottom)))
+    expect.soft(area, 'readable full-photo thumbnail content').toBeGreaterThanOrEqual(64)
+    const previous = hero.getByRole('button', { name: 'Previous featured products', exact: true })
+    const next = hero.getByRole('button', { name: 'Next featured products', exact: true })
+    await expect(previous).toBeDisabled()
+    await expect(next).toBeEnabled()
+    for (const button of [previous,next]) {
+      const box = await button.boundingBox()
+      expect(box.width).toBeGreaterThanOrEqual(44)
+      expect(box.height).toBeGreaterThanOrEqual(44)
+    }
+    await next.focus()
+    await page.keyboard.press('Enter')
+    await expect(next).toBeDisabled()
+    await expect(previous).toBeEnabled()
+    const rail = hero.locator('.hero-collection-shelf')
+    const positions = await rail.evaluate(e => ({ left:e.scrollLeft,last:e.lastElementChild.getBoundingClientRect().right,right:e.getBoundingClientRect().right }))
+    expect(positions.left).toBeGreaterThan(0)
+    expect(positions.last).toBeLessThanOrEqual(positions.right+1)
+    await expect(page).toHaveURL(/\/$/)
+    await previous.click()
+    await expect(previous).toBeDisabled()
+    await expect(next).toBeEnabled()
+    await expect.poll(() => rail.evaluate(e => e.scrollLeft)).toBeLessThanOrEqual(1)
+    const fits = await hero.locator('.hero-collection-image').evaluateAll(images => images.map(e => ({ fit:getComputedStyle(e).objectFit,padding:getComputedStyle(e).padding,width:e.clientWidth,height:e.clientHeight })))
+    for(const image of fits){ expect(image.fit).toBe('contain');expect(image.padding).toBe('0px');expect(image.height).toBeGreaterThanOrEqual(160) }
+    await hero.locator('.hero-collection').screenshot({ path:`docs/design-checkpoints/20261024-homepage-mobile/rail-${width}-${theme}.png` })
+  })
+}

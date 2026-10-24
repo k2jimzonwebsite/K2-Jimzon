@@ -1,0 +1,35 @@
+{
+  "map": "MAP-023",
+  "idea": "IDEA-20261024-02",
+  "state": "Locally verified, not deployed",
+  "tests": {
+    "homepageHero": 20,
+    "readability": 7
+  },
+  "developmentExitCode": 0,
+  "storefront": {
+    "exitCode": 0,
+    "jsKB": 150.37,
+    "jsLimitKB": 150.5,
+    "cssKB": 29.98,
+    "cssLimitKB": 30
+  },
+  "sources": [
+    {
+      "path": "src/components/home/Hero.jsx",
+      "sha256": "9efbbd8d267fe54beee0f03d9d26f7604fd8a942c7ea32cb46488f11a4760abc"
+    },
+    {
+      "path": "src/components/home/Hero.css",
+      "sha256": "8b8c06d6583b04cb282f9a81936c40c2bd712b3f4e01bc107f673d6a0c9ca3a7"
+    },
+    {
+      "path": "src/components/home/NewArrivals.jsx",
+      "sha256": "66c0284683c01f7d1f1cf96a76d9921c2fcb002871bc0f732c9d37603e713a3b"
+    },
+    {
+      "path": "tests/homepage-mobile-fixes.spec.js",
+      "sha256": "3ee6c437663999de8db47918aea3752140f148dbcf5c86f619d9c47cd839189b"
+    }
+  ]
+}

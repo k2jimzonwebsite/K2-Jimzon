@@ -1,0 +1,56 @@
+[WebServer] (node:16104) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:16784) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:3356) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 12:05:43 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x  1 tests\homepage-mobile-fixes.spec.js:88:3 › 375 dark: featured browsing controls reveal every product and preserve full photos (6.2s)
+
+
+  1) tests\homepage-mobile-fixes.spec.js:88:3 › 375 dark: featured browsing controls reveal every product and preserve full photos
+
+    Error: readable full-photo thumbnail content
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 64
+    Received:    46
+
+      94 |     const thumb = page.getByRole('region', { name: 'New arrivals' }).locator('img').last()
+      95 |     const area = await thumb.evaluate(e => Math.min(e.clientWidth - parseFloat(getComputedStyle(e).paddingLeft) - parseFloat(getComputedStyle(e).paddingRight), e.clientHeight - parseFloat(getComputedStyle(e).paddingTop) - parseFloat(getComputedStyle(e).paddingBottom)))
+    > 96 |     expect.soft(area, 'readable full-photo thumbnail content').toBeGreaterThanOrEqual(64)
+         |                                                                ^
+      97 |     const previous = hero.getByRole('button', { name: 'Previous featured products', exact: true })
+      98 |     const next = hero.getByRole('button', { name: 'Next featured products', exact: true })
+      99 |     await expect(previous).toBeDisabled()
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:96:64
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator: locator('section').filter({ has: locator('h1') }).first().getByRole('button', { name: 'Previous featured products', exact: true })
+    Expected: disabled
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeDisabled" locator('section').filter({ has: locator('h1') }).first().getByRole('button', { name: 'Previous featured products', exact: true }) with timeout 5000ms
+      - waiting for locator('section').filter({ has: locator('h1') }).first().getByRole('button', { name: 'Previous featured products', exact: true })
+
+
+       97 |     const previous = hero.getByRole('button', { name: 'Previous featured products', exact: true })
+       98 |     const next = hero.getByRole('button', { name: 'Next featured products', exact: true })
+    >  99 |     await expect(previous).toBeDisabled()
+          |                            ^
+      100 |     await expect(next).toBeEnabled()
+      101 |     for (const button of [previous,next]) {
+      102 |       const box = await button.boundingBox()
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\homepage-mobile-fixes.spec.js:99:28
+
+    Error Context: test-results\homepage-mobile-fixes-375--4eabd-ct-and-preserve-full-photos\error-context.md
+
+  1 failed
+    tests\homepage-mobile-fixes.spec.js:88:3 › 375 dark: featured browsing controls reveal every product and preserve full photos
