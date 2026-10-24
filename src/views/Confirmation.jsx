@@ -179,7 +179,7 @@ export default function Confirmation() {
             <p className="mt-5 text-sm font-semibold text-navy">Selected at checkout: {paymentMethod === 'maribank' ? 'MariBank' : 'GCash'}</p>
             <img className="mx-auto mt-5 h-auto w-full max-w-[360px] rounded-xl border border-line bg-white" src={`/payment/${paymentMethod}-receive-crop.png`} alt={`${paymentMethod === 'maribank' ? 'MariBank' : 'GCash'} receiving QR code and account details`} width={paymentMethod === 'maribank' ? 699 : 541} height={paymentMethod === 'maribank' ? 840 : 811} />
             <a className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-crimson underline underline-offset-4" href={`/payment/${paymentMethod}-receive-crop.png`} target="_blank" rel="noopener noreferrer">Open larger QR image</a>
-          </> : <p className="mt-5 rounded-xl border border-amber-600/30 bg-amber-50 p-4 text-sm leading-6 text-navy" role="status"><strong>Payment method unavailable.</strong> Ask K2 staff to confirm the receiving account before transferring. Your order request is still saved.</p>}
+          </> : <p className="mt-5 rounded-xl border border-gold/30 bg-shell p-4 text-sm leading-6 text-navy" role="status"><strong>Payment method unavailable.</strong> Ask K2 staff to confirm the receiving account before transferring. Your order request is still saved.</p>}
           <p className="mt-3 text-sm text-navy-soft">After transferring, upload your e-receipt and payment reference below. Payment remains pending until a separate staff reviewer confirms the funds in the receiving account.</p>
         </section>
       )}

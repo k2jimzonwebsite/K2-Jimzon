@@ -1,0 +1,1958 @@
+[
+  {
+    "path": "/",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-16 -top-24 h-64 w-64 rounded-full border border-gold/20"
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-5 -top-12 h-44 w-44 rounded-full border border-gold/20"
+      }
+    ],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      },
+      {
+        "tag": "LABEL",
+        "text": "Search questions",
+        "cls": "sr-only"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "ORDERING & STOCK\nHow does your Single Master Inventory work?",
+        "cls": "faq-trigger flex min-h-16 w-full items-start justify-between gap-4 py-4 text-left transition-colors hover:text-crimson focus-visible:outline-2 focus-visible:outline-crimson"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Italy, chosen well.Delivered to Manila."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/catalog",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Explore the Italian cabinet."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/product/mobile-audit-0",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Siciliani Pistacchio Crunchy Italian Cream with Chopped Pistachios 200 g"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/pasabuy",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Terms",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 37,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Pasabuy,straight from Italy."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/trade",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Authentic Italian supply,reviewed by our sourcing team."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/contact",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Ask us directly."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/messages",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Your K2 conversations"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/account",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Keep verified K2 history across devices."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/checkout",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "FIELDSET",
+        "text": "Coupon code\nApply",
+        "cls": "mt-4 border-t border-line pt-4"
+      },
+      {
+        "tag": "DIV",
+        "text": "Apply",
+        "cls": "mt-1.5 flex gap-2"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Apply",
+        "cls": "min-h-11 rounded-lg border border-line px-3 text-sm font-bold disabled:opacity-40"
+      }
+    ],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Terms of Service",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 104,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Review order request"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/confirmation",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Order request status unavailable"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/privacy",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Privacy & Data Protection"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/terms",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Terms of Service & Order Requests"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/returns",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Returns, Replacements & Item Care"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/policies",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Privacy & Data Protection"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/missing-mobile-audit",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Page not found"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/store",
+    "width": 320,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-a"
+      },
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-b"
+      }
+    ],
+    "small": [],
+    "textclip": [],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "The store"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-16 -top-24 h-64 w-64 rounded-full border border-gold/20"
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-5 -top-12 h-44 w-44 rounded-full border border-gold/20"
+      }
+    ],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      },
+      {
+        "tag": "LABEL",
+        "text": "Search questions",
+        "cls": "sr-only"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "ORDERING & STOCK\nHow does your Single Master Inventory work?",
+        "cls": "faq-trigger flex min-h-16 w-full items-start justify-between gap-4 py-4 text-left transition-colors hover:text-crimson focus-visible:outline-2 focus-visible:outline-crimson"
+      }
+    ],
+    "fields": [],
+    "bright": [
+      {
+        "tag": "BUTTON",
+        "text": "All",
+        "cls": "min-h-11 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors active:scale-[0.98] bg-navy text-white shadow-sm"
+      }
+    ],
+    "h1": [
+      "Italy, chosen well.Delivered to Manila."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/catalog",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Explore the Italian cabinet."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/product/mobile-audit-0",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Siciliani Pistacchio Crunchy Italian Cream with Chopped Pistachios 200 g"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/pasabuy",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Terms",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 37,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Pasabuy,straight from Italy."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/trade",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Authentic Italian supply,reviewed by our sourcing team."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/contact",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Ask us directly."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/messages",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Your K2 conversations"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/account",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Keep verified K2 history across devices."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/checkout",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "FIELDSET",
+        "text": "Coupon code\nApply",
+        "cls": "mt-4 border-t border-line pt-4"
+      },
+      {
+        "tag": "DIV",
+        "text": "Apply",
+        "cls": "mt-1.5 flex gap-2"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Apply",
+        "cls": "min-h-11 rounded-lg border border-line px-3 text-sm font-bold disabled:opacity-40"
+      }
+    ],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Terms of Service",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 104,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Review order request"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/confirmation",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Order request status unavailable"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/privacy",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [
+      {
+        "tag": "BUTTON",
+        "text": "Contact Staff",
+        "cls": "min-h-11 rounded-lg bg-navy px-5 text-xs font-bold text-cream hover:bg-navy-deep transition-colors"
+      }
+    ],
+    "h1": [
+      "Privacy & Data Protection"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/terms",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [
+      {
+        "tag": "BUTTON",
+        "text": "Contact Staff",
+        "cls": "min-h-11 rounded-lg bg-navy px-5 text-xs font-bold text-cream hover:bg-navy-deep transition-colors"
+      }
+    ],
+    "h1": [
+      "Terms of Service & Order Requests"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/returns",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [
+      {
+        "tag": "BUTTON",
+        "text": "Contact Staff",
+        "cls": "min-h-11 rounded-lg bg-navy px-5 text-xs font-bold text-cream hover:bg-navy-deep transition-colors"
+      }
+    ],
+    "h1": [
+      "Returns, Replacements & Item Care"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/policies",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [
+      {
+        "tag": "BUTTON",
+        "text": "Contact Staff",
+        "cls": "min-h-11 rounded-lg bg-navy px-5 text-xs font-bold text-cream hover:bg-navy-deep transition-colors"
+      }
+    ],
+    "h1": [
+      "Privacy & Data Protection"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/missing-mobile-audit",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "K2 Jimzon",
+        "cls": "group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 cursor-pointer",
+        "w": 111,
+        "h": 33
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Page not found"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/store",
+    "width": 320,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-a"
+      },
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-b"
+      }
+    ],
+    "small": [],
+    "textclip": [],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "The store"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-16 -top-24 h-64 w-64 rounded-full border border-gold/20"
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-5 -top-12 h-44 w-44 rounded-full border border-gold/20"
+      }
+    ],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      },
+      {
+        "tag": "LABEL",
+        "text": "Search questions",
+        "cls": "sr-only"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "ORDERING & STOCK\nHow does your Single Master Inventory work?",
+        "cls": "faq-trigger flex min-h-16 w-full items-start justify-between gap-4 py-4 text-left transition-colors hover:text-crimson focus-visible:outline-2 focus-visible:outline-crimson"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Italy, chosen well.Delivered to Manila."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/catalog",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Explore the Italian cabinet."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/product/mobile-audit-0",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Siciliani Pistacchio Crunchy Italian Cream with Chopped Pistachios 200 g"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/pasabuy",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Terms",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 37,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Pasabuy,straight from Italy."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/trade",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Authentic Italian supply,reviewed by our sourcing team."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/contact",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Ask us directly."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/messages",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Your K2 conversations"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/account",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Keep verified K2 history across devices."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/checkout",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Terms of Service",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 104,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Review order request"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/confirmation",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Order request status unavailable"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/privacy",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Privacy & Data Protection"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/terms",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Terms of Service & Order Requests"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/returns",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Returns, Replacements & Item Care"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/policies",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Privacy & Data Protection"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/missing-mobile-audit",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Page not found"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/store",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-a"
+      },
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-b"
+      }
+    ],
+    "small": [],
+    "textclip": [],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "The store"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-16 -top-24 h-64 w-64 rounded-full border border-gold/20"
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-5 -top-12 h-44 w-44 rounded-full border border-gold/20"
+      }
+    ],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      },
+      {
+        "tag": "LABEL",
+        "text": "Search questions",
+        "cls": "sr-only"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "ORDERING & STOCK\nHow does your Single Master Inventory work?",
+        "cls": "faq-trigger flex min-h-16 w-full items-start justify-between gap-4 py-4 text-left transition-colors hover:text-crimson focus-visible:outline-2 focus-visible:outline-crimson"
+      }
+    ],
+    "fields": [],
+    "bright": [
+      {
+        "tag": "BUTTON",
+        "text": "All",
+        "cls": "min-h-11 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors active:scale-[0.98] bg-navy text-white shadow-sm"
+      }
+    ],
+    "h1": [
+      "Italy, chosen well.Delivered to Manila."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/catalog",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Explore the Italian cabinet."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/product/mobile-audit-0",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Siciliani Pistacchio Crunchy Italian Cream with Chopped Pistachios 200 g"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/pasabuy",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Terms",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 37,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Pasabuy,straight from Italy."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/trade",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Authentic Italian supply,reviewed by our sourcing team."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/contact",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Ask us directly."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/messages",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Your K2 conversations"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/account",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Keep verified K2 history across devices."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/checkout",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Terms of Service",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 104,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Review order request"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/confirmation",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Order request status unavailable"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/privacy",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [
+      {
+        "tag": "BUTTON",
+        "text": "Contact Staff",
+        "cls": "min-h-11 rounded-lg bg-navy px-5 text-xs font-bold text-cream hover:bg-navy-deep transition-colors"
+      }
+    ],
+    "h1": [
+      "Privacy & Data Protection"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/terms",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [
+      {
+        "tag": "BUTTON",
+        "text": "Contact Staff",
+        "cls": "min-h-11 rounded-lg bg-navy px-5 text-xs font-bold text-cream hover:bg-navy-deep transition-colors"
+      }
+    ],
+    "h1": [
+      "Terms of Service & Order Requests"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/returns",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [
+      {
+        "tag": "BUTTON",
+        "text": "Contact Staff",
+        "cls": "min-h-11 rounded-lg bg-navy px-5 text-xs font-bold text-cream hover:bg-navy-deep transition-colors"
+      }
+    ],
+    "h1": [
+      "Returns, Replacements & Item Care"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/policies",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [
+      {
+        "tag": "BUTTON",
+        "text": "Contact Staff",
+        "cls": "min-h-11 rounded-lg bg-navy px-5 text-xs font-bold text-cream hover:bg-navy-deep transition-colors"
+      }
+    ],
+    "h1": [
+      "Privacy & Data Protection"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/missing-mobile-audit",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Page not found"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/store",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-a"
+      },
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-b"
+      }
+    ],
+    "small": [],
+    "textclip": [],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "The store"
+    ],
+    "errors": []
+  }
+]

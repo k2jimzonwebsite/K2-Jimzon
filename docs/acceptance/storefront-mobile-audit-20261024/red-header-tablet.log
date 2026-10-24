@@ -1,0 +1,91 @@
+[WebServer] (node:13588) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:6908) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:13896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 12:45:22 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x  1 tests\storefront-mobile-audit.spec.js:172:1 › enlarged mobile text preserves every header control without trapping the viewport (867ms)
+(node:6112) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\storefront-mobile-audit.spec.js:182:34 › 768: tablet has navigation and chat clears it (5.4s)
+(node:7052) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\storefront-mobile-audit.spec.js:182:34 › 1023: tablet has navigation and chat clears it (5.4s)
+
+
+  1) tests\storefront-mobile-audit.spec.js:172:1 › enlarged mobile text preserves every header control without trapping the viewport
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      176 |   await page.evaluate(() => document.documentElement.style.fontSize = '200%')
+      177 |   const controls = page.locator('header.store-nav-surface button:visible')
+    > 178 |   expect(await controls.evaluateAll(es => es.every(e => { const r=e.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth + 1 }))).toBe(true)
+          |                                                                                                                                                   ^
+      179 |   expect(await page.locator('header.store-nav-surface').evaluate(e => getComputedStyle(e).position)).not.toBe('sticky')
+      180 | })
+      181 |
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:178:147
+
+    Error Context: test-results\storefront-mobile-audit-en-8b4ea-thout-trapping-the-viewport\error-context.md
+
+  2) tests\storefront-mobile-audit.spec.js:182:34 › 768: tablet has navigation and chat clears it ──
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('navigation', { name: 'Mobile storefront' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('navigation', { name: 'Mobile storefront' }) with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Mobile storefront' })
+
+
+      184 |   await page.goto('/contact')
+      185 |   const nav = page.getByRole('navigation', { name: 'Mobile storefront' })
+    > 186 |   await expect(nav).toBeVisible()
+          |                     ^
+      187 |   const chat = await page.getByRole('button', { name: 'Chat with K2 staff', exact: true }).boundingBox()
+      188 |   const bounds = await nav.boundingBox()
+      189 |   expect(chat.y + chat.height).toBeLessThan(bounds.y - 8)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:186:21
+
+    Error Context: test-results\storefront-mobile-audit-76-e35fb-vigation-and-chat-clears-it\error-context.md
+
+  3) tests\storefront-mobile-audit.spec.js:182:34 › 1023: tablet has navigation and chat clears it ─
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('navigation', { name: 'Mobile storefront' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('navigation', { name: 'Mobile storefront' }) with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Mobile storefront' })
+
+
+      184 |   await page.goto('/contact')
+      185 |   const nav = page.getByRole('navigation', { name: 'Mobile storefront' })
+    > 186 |   await expect(nav).toBeVisible()
+          |                     ^
+      187 |   const chat = await page.getByRole('button', { name: 'Chat with K2 staff', exact: true }).boundingBox()
+      188 |   const bounds = await nav.boundingBox()
+      189 |   expect(chat.y + chat.height).toBeLessThan(bounds.y - 8)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:186:21
+
+    Error Context: test-results\storefront-mobile-audit-10-c55cf-vigation-and-chat-clears-it\error-context.md
+
+  3 failed
+    tests\storefront-mobile-audit.spec.js:172:1 › enlarged mobile text preserves every header control without trapping the viewport
+    tests\storefront-mobile-audit.spec.js:182:34 › 768: tablet has navigation and chat clears it ───
+    tests\storefront-mobile-audit.spec.js:182:34 › 1023: tablet has navigation and chat clears it ──

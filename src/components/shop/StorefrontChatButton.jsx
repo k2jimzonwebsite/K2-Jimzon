@@ -9,7 +9,7 @@ export default function StorefrontChatButton() {
   return (
     <aside
       aria-label="Store concierge chat"
-      className={`fixed bottom-20 right-4 z-40 md:bottom-6 md:right-6 ${view === 'home' ? 'hidden lg:block' : ''}`}
+      className={`fixed bottom-[calc(1rem+var(--k2-mobile-nav-height,5rem))] right-4 z-40 lg:bottom-6 md:right-6 ${view === 'home' ? 'hidden lg:block' : ''}`}
     >
       <button
         type="button"

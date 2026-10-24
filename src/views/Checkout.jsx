@@ -240,14 +240,14 @@ export default function Checkout() {
           <h2 className="font-serif text-lg font-semibold">Order summary</h2>
           <div className="mt-4 divide-y divide-line">
             {lines.map(({ product, qty, unit }) => (
-              <div key={product.id} className="flex items-center gap-3 py-3.5">
+              <div key={product.id} style={{ gridTemplateColumns: 'auto minmax(0, 1fr)' }} className="grid items-start gap-x-3 gap-y-1 py-3.5">
                 <ProductVisual product={product} className="h-12 w-12 shrink-0 rounded-md border border-line" pad="p-1" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-serif text-base font-medium">{product.name}</p>
+                  <p className="break-words font-serif text-base font-medium">{product.name}</p>
                   {variantSummary(product) && <p className="break-words text-xs text-navy-soft">{variantSummary(product)} · {product.sku}</p>}
                   <p className="text-sm text-navy-soft">Qty {qty} · {peso(unit)} each</p>
                 </div>
-                <span className="text-base font-semibold tabular">{peso(unit * qty)}</span>
+                <span className="col-start-2 text-base font-semibold tabular">{peso(unit * qty)}</span>
               </div>
             ))}
           </div>
@@ -278,7 +278,7 @@ export default function Checkout() {
             </div>
           </div>
 
-          <fieldset disabled={submitting || Boolean(pendingCheckout)} className="mt-4 border-t border-line pt-4">
+          <fieldset disabled={submitting || Boolean(pendingCheckout)} className="mt-4 min-w-0 border-t border-line pt-4">
             <label htmlFor="checkout-coupon" className="text-sm font-semibold">Coupon code</label>
             <div className="mt-1.5 flex gap-2">
               <input

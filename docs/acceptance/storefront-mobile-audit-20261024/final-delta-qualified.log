@@ -1,0 +1,143 @@
+[WebServer] (node:21260) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:14808) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 54 tests using 1 worker
+
+(node:9568) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 2:07:13 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\homepage-mobile-fixes.spec.js:16:3 › 320 light: homepage shopping stays readable and reachable (1.4s)
+[WebServer] 2:07:15 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\homepage-mobile-fixes.spec.js:16:3 › 320 dark: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 2:07:16 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\homepage-mobile-fixes.spec.js:16:3 › 375 light: homepage shopping stays readable and reachable (1.4s)
+[WebServer] 2:07:17 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\homepage-mobile-fixes.spec.js:16:3 › 375 dark: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 2:07:19 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\homepage-mobile-fixes.spec.js:16:3 › 430 light: homepage shopping stays readable and reachable (1.3s)
+[WebServer] 2:07:20 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\homepage-mobile-fixes.spec.js:16:3 › 430 dark: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 2:07:22 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\homepage-mobile-fixes.spec.js:16:3 › 768 light: homepage shopping stays readable and reachable (1.2s)
+[WebServer] 2:07:23 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  8 tests\homepage-mobile-fixes.spec.js:16:3 › 768 dark: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 2:07:25 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  9 tests\homepage-mobile-fixes.spec.js:16:3 › 1440 light: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 2:07:26 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\homepage-mobile-fixes.spec.js:16:3 › 1440 dark: homepage shopping stays readable and reachable (1.6s)
+  ok 11 tests\homepage-mobile-fixes.spec.js:71:1 › mobile homepage preserves layout with 200% text and ordinary motion (1.6s)
+[WebServer] 2:07:29 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\homepage-mobile-fixes.spec.js:88:3 › 320 light: featured browsing controls reveal every product and preserve full photos (1.2s)
+[WebServer] 2:07:30 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\homepage-mobile-fixes.spec.js:88:3 › 320 dark: featured browsing controls reveal every product and preserve full photos (1.4s)
+[WebServer] 2:07:32 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 14 tests\homepage-mobile-fixes.spec.js:88:3 › 375 light: featured browsing controls reveal every product and preserve full photos (1.3s)
+[WebServer] 2:07:33 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 15 tests\homepage-mobile-fixes.spec.js:88:3 › 375 dark: featured browsing controls reveal every product and preserve full photos (1.4s)
+[WebServer] 2:07:34 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 16 tests\homepage-mobile-fixes.spec.js:88:3 › 430 light: featured browsing controls reveal every product and preserve full photos (1.3s)
+[WebServer] 2:07:36 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 17 tests\homepage-mobile-fixes.spec.js:88:3 › 430 dark: featured browsing controls reveal every product and preserve full photos (1.5s)
+  ok 18 tests\storefront-copy-contract.spec.js:10:1 › wholesale receipt copy follows the submission path (3ms)
+  ok 19 tests\storefront-copy-contract.spec.js:18:1 › contact makes one consistent reviewed-hours statement (7ms)
+  ok 20 tests\storefront-copy-contract.spec.js:24:1 › storefront promises reconcile with manual launch facts without false SLAs or unapproved payment methods (8ms)
+  ok 21 tests\storefront-copy-contract.spec.js:49:1 › the receipt never offers a QR that differs from the recorded checkout method (2ms)
+  ok 22 tests\storefront-copy-contract.spec.js:61:3 › gcash receiving crop preserves the supplied QR and recipient pixels (35ms)
+  ok 23 tests\storefront-copy-contract.spec.js:61:3 › maribank receiving crop preserves the supplied QR and recipient pixels (37ms)
+  ok 24 tests\storefront-copy-contract.spec.js:73:1 › public payment copy describes the current manual QR options (5ms)
+  ok 25 tests\storefront-copy-contract.spec.js:82:1 › product allergen notice does not add a second Contains prefix (7ms)
+[WebServer] 2:07:38 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:07:38 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:07:39 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 26 tests\storefront-mobile-audit.spec.js:35:3 › 320 light: every storefront route reflows without runtime errors (9.5s)
+[WebServer] 2:07:47 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:07:48 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:07:49 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 27 tests\storefront-mobile-audit.spec.js:35:3 › 320 dark: every storefront route reflows without runtime errors (7.0s)
+[WebServer] 2:07:54 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:07:55 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:07:55 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 28 tests\storefront-mobile-audit.spec.js:35:3 › 375 light: every storefront route reflows without runtime errors (6.3s)
+[WebServer] 2:08:00 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:01 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:01 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 29 tests\storefront-mobile-audit.spec.js:35:3 › 375 dark: every storefront route reflows without runtime errors (5.8s)
+[WebServer] 2:08:06 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:07 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:07 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 30 tests\storefront-mobile-audit.spec.js:35:3 › 430 light: every storefront route reflows without runtime errors (6.6s)
+[WebServer] 2:08:13 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:13 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:14 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 31 tests\storefront-mobile-audit.spec.js:35:3 › 430 dark: every storefront route reflows without runtime errors (5.9s)
+[WebServer] 2:08:19 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:19 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:20 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 32 tests\storefront-mobile-audit.spec.js:35:3 › 768 light: every storefront route reflows without runtime errors (7.7s)
+[WebServer] 2:08:26 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:27 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:27 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 33 tests\storefront-mobile-audit.spec.js:35:3 › 768 dark: every storefront route reflows without runtime errors (5.9s)
+[WebServer] 2:08:32 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:33 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:33 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 34 tests\storefront-mobile-audit.spec.js:35:3 › 1440 light: every storefront route reflows without runtime errors (8.9s)
+[WebServer] 2:08:41 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:42 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 2:08:42 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 35 tests\storefront-mobile-audit.spec.js:35:3 › 1440 dark: every storefront route reflows without runtime errors (6.1s)
+  ok 36 tests\storefront-mobile-audit.spec.js:53:3 › light: checkout retains complete names and contains coupon controls (794ms)
+[WebServer] 2:08:48 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 37 tests\storefront-mobile-audit.spec.js:67:3 › light: FAQ controls remain readable, sized and recover from no results (827ms)
+  ok 38 tests\storefront-mobile-audit.spec.js:86:3 › light: policy navigation exposes current page and works with keyboard (552ms)
+  ok 39 tests\storefront-mobile-audit.spec.js:99:3 › light: unavailable receiving-account warning has readable contrast (694ms)
+  ok 40 tests\storefront-mobile-audit.spec.js:53:3 › dark: checkout retains complete names and contains coupon controls (756ms)
+[WebServer] 2:08:51 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 41 tests\storefront-mobile-audit.spec.js:67:3 › dark: FAQ controls remain readable, sized and recover from no results (816ms)
+  ok 42 tests\storefront-mobile-audit.spec.js:86:3 › dark: policy navigation exposes current page and works with keyboard (540ms)
+  ok 43 tests\storefront-mobile-audit.spec.js:99:3 › dark: unavailable receiving-account warning has readable contrast (615ms)
+[WebServer] 2:08:53 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 44 tests\storefront-mobile-audit.spec.js:113:3 › cart: modal keyboard focus stays in panel and returns to opener (1.2s)
+[WebServer] 2:08:54 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 45 tests\storefront-mobile-audit.spec.js:113:3 › chat: modal keyboard focus stays in panel and returns to opener (1.1s)
+[WebServer] 2:08:55 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 46 tests\storefront-mobile-audit.spec.js:135:1 › home-indicator spacing keeps mobile chat clear of navigation (685ms)
+[WebServer] 2:08:56 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 47 tests\storefront-mobile-audit.spec.js:145:1 › cart checkout action focuses the new route heading (1.8s)
+[WebServer] 2:08:58 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 48 tests\storefront-mobile-audit.spec.js:158:34 › 320: chat returns focus after browser Back changes its trigger (1.6s)
+[WebServer] 2:09:00 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 49 tests\storefront-mobile-audit.spec.js:158:34 › 1440: chat returns focus after browser Back changes its trigger (2.0s)
+[WebServer] 2:09:01 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x  50 tests\storefront-mobile-audit.spec.js:172:1 › enlarged mobile text preserves every header control without trapping the viewport (702ms)
+(node:17092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 51 tests\storefront-mobile-audit.spec.js:187:34 › 768: tablet has navigation and chat clears it (860ms)
+  ok 52 tests\storefront-mobile-audit.spec.js:187:34 › 1023: tablet has navigation and chat clears it (757ms)
+  ok 53 tests\storefront-theme.spec.js:28:3 › storefront theme contract › saved theme is applied before render and persists after toggling (1.7s)
+  ok 54 tests\storefront-theme.spec.js:69:3 › storefront theme contract › first visit follows the operating-system preference (587ms)
+
+
+  1) tests\storefront-mobile-audit.spec.js:172:1 › enlarged mobile text preserves every header control without trapping the viewport
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 594.4375
+    Received:   620
+
+      182 |   const bounds = await nav.boundingBox()
+      183 |   const chat = await page.getByRole('button', { name: 'Chat with K2 staff', exact: true }).boundingBox()
+    > 184 |   expect(chat.y + chat.height).toBeLessThan(bounds.y - 8)
+          |                                ^
+      185 | })
+      186 |
+      187 | for (const width of [768, 1023]) test(`${width}: tablet has navigation and chat clears it`, async ({ page }) => {
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:184:32
+
+    Error Context: test-results\storefront-mobile-audit-en-8b4ea-thout-trapping-the-viewport\error-context.md
+
+  1 failed
+    tests\storefront-mobile-audit.spec.js:172:1 › enlarged mobile text preserves every header control without trapping the viewport
+  53 passed (2.0m)

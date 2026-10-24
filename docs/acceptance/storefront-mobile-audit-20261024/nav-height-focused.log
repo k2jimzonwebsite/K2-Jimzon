@@ -1,0 +1,40 @@
+[WebServer] (node:15216) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:1892) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:22880) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 2:09:50 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x  1 tests\storefront-mobile-audit.spec.js:135:1 › home-indicator spacing keeps mobile chat clear of navigation (1.0s)
+(node:14788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 2:09:51 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 2 tests\storefront-mobile-audit.spec.js:172:1 › enlarged mobile text preserves every header control without trapping the viewport (898ms)
+  ok 3 tests\storefront-mobile-audit.spec.js:185:34 › 768: tablet has navigation and chat clears it (867ms)
+  ok 4 tests\storefront-mobile-audit.spec.js:185:34 › 1023: tablet has navigation and chat clears it (810ms)
+
+
+  1) tests\storefront-mobile-audit.spec.js:135:1 › home-indicator spacing keeps mobile chat clear of navigation
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 695.8125
+    Received:   722
+
+      140 |   const nav = await page.getByRole('navigation', { name: 'Mobile storefront' }).boundingBox()
+      141 |   const chat = await page.getByRole('button', { name: 'Chat with K2 staff', exact: true }).boundingBox()
+    > 142 |   expect(chat.y + chat.height).toBeLessThan(nav.y - 8)
+          |                                ^
+      143 | })
+      144 |
+      145 | test('cart checkout action focuses the new route heading', async ({ page }) => {
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:142:32
+
+    Error Context: test-results\storefront-mobile-audit-ho-6215c-le-chat-clear-of-navigation\error-context.md
+
+  1 failed
+    tests\storefront-mobile-audit.spec.js:135:1 › home-indicator spacing keeps mobile chat clear of navigation
+  3 passed (13.1s)

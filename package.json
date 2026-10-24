@@ -118,7 +118,7 @@
     "test:smoke": "playwright test tests/smoke.spec.js",
     "test:map027-smoke": "playwright test --config=playwright.map027.config.js tests/smoke.spec.js",
     "test:storefront-ui": "playwright test --config=playwright.map027.config.js tests/smoke.spec.js tests/buyer.spec.js tests/storefront-mobile.spec.js tests/storefront-motion.spec.js tests/storefront-theme.spec.js",
-    "test:selling-surfaces": "playwright test --config=playwright.selling.config.js tests/storefront-selling-surfaces.spec.js tests/hero-enhancement.spec.js tests/storefront-readiness-ui.spec.js tests/product-comparison-containment.spec.js tests/homepage-mobile-fixes.spec.js",
+    "test:selling-surfaces": "playwright test --config=playwright.selling.config.js tests/storefront-selling-surfaces.spec.js tests/hero-enhancement.spec.js tests/storefront-readiness-ui.spec.js tests/product-comparison-containment.spec.js tests/homepage-mobile-fixes.spec.js tests/storefront-mobile-audit.spec.js",
     "test:order-receipt-direct": "playwright test --config=playwright.order-receipt.config.js tests/order-receipt-direct-ui.spec.js",
     "test:guest-order-conversation-native": "node scripts/test-guest-order-conversation.mjs",
     "test:admin-ui": "playwright test --config=playwright.admin.config.js tests/admin.spec.js tests/admin-dashboard-redesign.spec.js && playwright test --config=playwright.shop-stock.config.js && playwright test --config=playwright.auth-recovery.config.js",

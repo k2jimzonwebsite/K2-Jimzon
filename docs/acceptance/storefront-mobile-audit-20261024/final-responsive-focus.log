@@ -1,0 +1,25 @@
+[WebServer] (node:6284) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:1980) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:22476) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 12:46:00 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 1 tests\storefront-mobile-audit.spec.js:113:3 › cart: modal keyboard focus stays in panel and returns to opener (1.5s)
+[WebServer] 12:46:02 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 2 tests\storefront-mobile-audit.spec.js:113:3 › chat: modal keyboard focus stays in panel and returns to opener (1.6s)
+[WebServer] 12:46:03 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 3 tests\storefront-mobile-audit.spec.js:135:1 › home-indicator spacing keeps mobile chat clear of navigation (678ms)
+[WebServer] 12:46:04 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 4 tests\storefront-mobile-audit.spec.js:158:34 › 320: chat returns focus after browser Back changes its trigger (1.9s)
+[WebServer] 12:46:06 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 5 tests\storefront-mobile-audit.spec.js:158:34 › 1440: chat returns focus after browser Back changes its trigger (2.2s)
+[WebServer] 12:46:08 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 6 tests\storefront-mobile-audit.spec.js:172:1 › enlarged mobile text preserves every header control without trapping the viewport (761ms)
+  ok 7 tests\storefront-mobile-audit.spec.js:182:34 › 768: tablet has navigation and chat clears it (825ms)
+  ok 8 tests\storefront-mobile-audit.spec.js:182:34 › 1023: tablet has navigation and chat clears it (790ms)
+
+  8 passed (18.0s)

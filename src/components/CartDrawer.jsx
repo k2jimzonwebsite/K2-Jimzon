@@ -1,3 +1,4 @@
+import { useStorefrontDialog } from '../hooks/useStorefrontDialog'
 import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useStore } from '../context/StoreContext'
@@ -10,6 +11,8 @@ import { BagIcon, XIcon, ShieldCheckIcon } from './ui/icons'
 
 export default function CartDrawer() {
   const { cartOpen, setCartOpen, lines, subtotal, wholesaleSavings, isWholesale, go, count } = useStore()
+  const panelRef = useRef(null)
+  useStorefrontDialog(cartOpen, panelRef)
   const headingRef = useRef(null)
   const openerRef = useRef(null)
 
@@ -48,6 +51,7 @@ export default function CartDrawer() {
             className="absolute inset-0 bg-navy/35 backdrop-blur-[2px] cursor-pointer"
           />
           <motion.aside
+            ref={panelRef}
             initial={{ transform: 'translateX(100%)' }}
             animate={{ transform: 'translateX(0)' }}
             exit={{ transform: 'translateX(100%)' }}
@@ -55,7 +59,7 @@ export default function CartDrawer() {
             className="absolute right-0 top-0 flex h-[100dvh] w-full max-w-md flex-col overflow-hidden border-l border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-float"
           >
             <Tricolor />
-            <header className="flex items-center justify-between px-5 py-4 border-b border-[var(--store-surface-border)]">
+            <header style={{ paddingTop: 'calc(1rem + var(--k2-safe-top, env(safe-area-inset-top, 0px)))' }} className="flex items-center justify-between px-5 py-4 border-b border-[var(--store-surface-border)]">
               <h2 ref={headingRef} tabIndex={-1} className="font-serif text-xl font-semibold text-navy outline-none">
                 Your cart <span className="text-sm font-normal text-navy-soft">({count})</span>
               </h2>
@@ -80,13 +84,13 @@ export default function CartDrawer() {
                   </p>
                   <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
                     <button
-                      onClick={() => { setCartOpen(false); go('store') }}
+                      onClick={() => { setCartOpen(false); go('store', { focusSelector: 'main h1' }) }}
                       className="min-h-11 rounded-lg bg-crimson px-4 text-sm font-bold text-white shadow-sm hover:bg-crimson-deep transition-colors cursor-pointer"
                     >
                       Shop 3D Store
                     </button>
                     <button
-                      onClick={() => { setCartOpen(false); go('catalog') }}
+                      onClick={() => { setCartOpen(false); go('catalog', { focusSelector: 'main h1' }) }}
                       className="min-h-11 rounded-lg border border-[var(--store-surface-border)] px-4 text-sm font-bold hover:border-navy/30 text-navy bg-[var(--store-surface-bg)] cursor-pointer"
                     >
                       Browse catalog
@@ -116,7 +120,7 @@ export default function CartDrawer() {
               )}
             </div>
 
-            <footer className="border-t border-[var(--store-surface-border)] px-5 py-4 pb-safe bg-[var(--store-surface-bg)]">
+            <footer style={{ paddingBottom: 'calc(1rem + var(--k2-safe-bottom, env(safe-area-inset-bottom, 0px)))' }} className="border-t border-[var(--store-surface-border)] px-5 py-4 bg-[var(--store-surface-bg)]">
               {isWholesale && wholesaleSavings > 0 && (
                 <p className="mb-2 flex justify-between text-sm font-medium text-blue">
                   <span>Wholesale discount applied</span>
@@ -129,24 +133,24 @@ export default function CartDrawer() {
               </div>
               <CrimsonButton
                 className="w-full py-3.5 text-base font-bold shadow-sm cursor-pointer"
-                onClick={() => { setCartOpen(false); go('checkout') }}
+                onClick={() => { setCartOpen(false); go('checkout', { focusSelector: 'main h1' }) }}
                 disabled={lines.length === 0}
               >
                 Review order request
               </CrimsonButton>
-              <div className="mt-2.5 flex items-center justify-center gap-3 text-xs font-semibold text-navy-soft">
+              <div className="mt-2.5 flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-navy-soft">
                 <button
                   type="button"
-                  onClick={() => { setCartOpen(false); go('store') }}
-                  className="hover:text-crimson transition-colors cursor-pointer"
+                  onClick={() => { setCartOpen(false); go('store', { focusSelector: 'main h1' }) }}
+                  className="min-h-11 px-2 hover:text-crimson transition-colors cursor-pointer"
                 >
                   Continue shopping in 3D Store
                 </button>
                 <span aria-hidden="true">·</span>
                 <button
                   type="button"
-                  onClick={() => { setCartOpen(false); go('catalog') }}
-                  className="hover:text-navy transition-colors cursor-pointer"
+                  onClick={() => { setCartOpen(false); go('catalog', { focusSelector: 'main h1' }) }}
+                  className="min-h-11 px-2 hover:text-navy transition-colors cursor-pointer"
                 >
                   Browse catalog
                 </button>

@@ -95,7 +95,7 @@ function Shell() {
       )}
       {isStorefront && <Footer />}
       {/* Space so page content clears the fixed mobile tab bar */}
-      {isStorefront && <div className="h-16 md:hidden" aria-hidden />}
+      {isStorefront && <div style={{ height: 'var(--k2-mobile-nav-height, 5rem)' }} className="lg:hidden" aria-hidden />}
       {isStorefront && <MobileNavBar />}
     </div>
   )

@@ -1,0 +1,129 @@
+{
+  "map": "MAP-023",
+  "idea": "IDEA-20261024-03",
+  "branch": "codex/mobile-homepage-fixes",
+  "baseline": "1c8b3b9c",
+  "scope": "Feature-branch push only; not deployed",
+  "baselineStates": 64,
+  "finalRouteMatrixStates": 160,
+  "fullSellingPrior": {
+    "passed": 70,
+    "exitCode": 0
+  },
+  "finalDelta": {
+    "passed": 53,
+    "failed": 1,
+    "cause": "Default content-box observer misses safe-padding-only changes, corrected with border-box observation"
+  },
+  "borderBoxFocused": {
+    "passed": 4,
+    "exitCode": 0
+  },
+  "readability": {
+    "passed": 7,
+    "exitCode": 0
+  },
+  "storefront": {
+    "exitCode": 0,
+    "jsKB": 150.49,
+    "jsLimitKB": 150.5,
+    "cssKB": 29.98,
+    "cssLimitKB": 30
+  },
+  "admin": {
+    "exitCode": 0,
+    "KB": 226.68,
+    "limitKB": 300,
+    "reusedAfterStorefrontOnlyNavChange": true
+  },
+  "dependencies": {
+    "auditExitCode": 0,
+    "vulnerabilities": 0,
+    "policyExitCode": 0
+  },
+  "sources": [
+    {
+      "path": "src/App.jsx",
+      "sha256": "3ece391e4c5a8cd491b2eb9a39876e4b3759c003c8e9688c6a46c1138a0bede8"
+    },
+    {
+      "path": "src/StorefrontApp.jsx",
+      "sha256": "9678fa1a629bc96dcb5f8a6043fae0892a95c3aa59c3ca7707073545340fd687"
+    },
+    {
+      "path": "src/components/CartDrawer.jsx",
+      "sha256": "73067790b86526093112eeadad4739fc5f59091a43c541c7d2a3009d664c2e84"
+    },
+    {
+      "path": "src/components/StoreHeader.jsx",
+      "sha256": "046d2b20028e5a3c38a60b8ec04031bfb5b93caec93325e925c678b89601f64f"
+    },
+    {
+      "path": "src/components/home/FaqSection.jsx",
+      "sha256": "0d05117f26ca498c85f76addddf468e4b87a309cdf3aff57ed525628071a4bdc"
+    },
+    {
+      "path": "src/components/home/Hero.css",
+      "sha256": "1fab7b17cfb7701572fa2daaa9b43a94d5051d42f0fc64788b14465b096ebbd6"
+    },
+    {
+      "path": "src/components/home/Hero.jsx",
+      "sha256": "b54ad1853f810031eda76b7309d9a384573624edfe2f080c416a38a6371f8b6e"
+    },
+    {
+      "path": "src/components/nav/MobileNavBar.jsx",
+      "sha256": "82c0791f32113e74416a8eeb61acff4a841ddfab334aa4baff0fd0fa0e4f5306"
+    },
+    {
+      "path": "src/components/shop/StoreChatDrawer.jsx",
+      "sha256": "b7eeace9dd27bf02b37b07483e3fd857ea42c9765744abe3cd9fdb986f99273b"
+    },
+    {
+      "path": "src/components/shop/StorefrontChatButton.jsx",
+      "sha256": "8359d16145e9a0953b99c78d728a3f535a9eaac02a1ff45d43614cdaaab7b421"
+    },
+    {
+      "path": "src/components/ui/bits.jsx",
+      "sha256": "3d4a49016b7d03befeaa1a13e738a8518ce55b3ede9afee4aff44e599a54524f"
+    },
+    {
+      "path": "src/views/Checkout.jsx",
+      "sha256": "ff3fe27fa3930cafa73422c1a243463228e7983caef2e390b4f517221d52d1d3"
+    },
+    {
+      "path": "src/views/Confirmation.jsx",
+      "sha256": "c846a78dd56302152e74f33ba9e227ff81549e883cc2d52bcc6a2efb74d70125"
+    },
+    {
+      "path": "src/views/Policy.jsx",
+      "sha256": "8d8cdd4d09279b4c2c32aee8d43b017ccc22af2eafeb940a5c7c67486a488b71"
+    },
+    {
+      "path": "src/hooks/useStorefrontDialog.js",
+      "sha256": "7539032e8b20119cc292429c91d8ef19ff6336dc148166e64fd6062bbba8488b"
+    },
+    {
+      "path": "tests/storefront-mobile-audit.spec.js",
+      "sha256": "15f47d7cf4afc060248696da065eb9712d59204992edd8bd02522550ba0f282d"
+    },
+    {
+      "path": "package.json",
+      "sha256": "11eec04711c19c1b1731760761ae54a783af4c1b6d63c70b89977c28ea6c248f"
+    },
+    {
+      "path": "playwright.config.js",
+      "sha256": "762680b445a6ec6a9ed12a1cb5ec75529a3f00aa54d9bd108105a9b426af4d00"
+    },
+    {
+      "path": "playwright.selling.config.js",
+      "sha256": "a0ad8923242dee83a227755bf5a8176d0fe3abcc4bbd32d7a4fdc5c7ee55397b"
+    }
+  ],
+  "finalDevelopment": {
+    "exitCode": 0
+  },
+  "finalFocused": {
+    "passed": 7,
+    "exitCode": 0
+  }
+}

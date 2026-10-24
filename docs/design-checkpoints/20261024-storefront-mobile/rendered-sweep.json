@@ -1,0 +1,384 @@
+[
+  {
+    "path": "/",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-16 -top-24 h-64 w-64 rounded-full border border-gold/20"
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-5 -top-12 h-44 w-44 rounded-full border border-gold/20"
+      }
+    ],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      },
+      {
+        "tag": "LABEL",
+        "text": "Search questions",
+        "cls": "sr-only"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Italy, chosen well.Delivered to Manila."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/catalog",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Explore the Italian cabinet."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/product/mobile-audit-0",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Siciliani Pistacchio Crunchy Italian Cream with Chopped Pistachios 200 g"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/checkout",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Terms of Service",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 104,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Review order request"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/contact",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Ask us directly."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/privacy",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Privacy & Data Protection"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/store",
+    "width": 375,
+    "theme": "light",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-a"
+      },
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-b"
+      }
+    ],
+    "small": [],
+    "textclip": [],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "The store"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-16 -top-24 h-64 w-64 rounded-full border border-gold/20"
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "cls": "absolute -right-5 -top-12 h-44 w-44 rounded-full border border-gold/20"
+      }
+    ],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      },
+      {
+        "tag": "LABEL",
+        "text": "Search questions",
+        "cls": "sr-only"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Italy, chosen well.Delivered to Manila."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/catalog",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Explore the Italian cabinet."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/product/mobile-audit-0",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Siciliani Pistacchio Crunchy Italian Cream with Chopped Pistachios 200 g"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/checkout",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Terms of Service",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 104,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Review order request"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/contact",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [
+      {
+        "tag": "BUTTON",
+        "text": "Privacy Policy",
+        "cls": "underline hover:text-crimson font-medium",
+        "w": 87,
+        "h": 21
+      }
+    ],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Ask us directly."
+    ],
+    "errors": []
+  },
+  {
+    "path": "/privacy",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [],
+    "small": [],
+    "textclip": [
+      {
+        "tag": "BUTTON",
+        "text": "1",
+        "cls": "relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+      }
+    ],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "Privacy & Data Protection"
+    ],
+    "errors": []
+  },
+  {
+    "path": "/store",
+    "width": 375,
+    "theme": "dark",
+    "rootOverflow": 0,
+    "over": [
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-a"
+      },
+      {
+        "tag": "SPAN",
+        "text": "",
+        "cls": "k2-store-ambient-orb k2-store-ambient-orb-b"
+      }
+    ],
+    "small": [],
+    "textclip": [],
+    "fields": [],
+    "bright": [],
+    "h1": [
+      "The store"
+    ],
+    "errors": []
+  }
+]

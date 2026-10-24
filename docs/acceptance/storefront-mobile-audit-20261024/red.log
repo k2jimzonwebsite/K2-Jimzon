@@ -1,0 +1,260 @@
+[WebServer] (node:9092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:10064) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 1 worker
+
+(node:19068) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   1 tests\storefront-mobile-audit.spec.js:42:3 › light: checkout retains complete names and contains coupon controls (945ms)
+(node:21088) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 12:27:11 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x   2 tests\storefront-mobile-audit.spec.js:56:3 › light: FAQ controls remain readable, sized and recover from no results (1.0s)
+(node:14516) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   3 tests\storefront-mobile-audit.spec.js:75:3 › light: policy navigation exposes current page and works with keyboard (5.3s)
+(node:9468) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   4 tests\storefront-mobile-audit.spec.js:87:3 › light: unavailable receiving-account warning has readable contrast (5.4s)
+(node:15952) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   5 tests\storefront-mobile-audit.spec.js:42:3 › dark: checkout retains complete names and contains coupon controls (814ms)
+(node:2948) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 12:27:26 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x   6 tests\storefront-mobile-audit.spec.js:56:3 › dark: FAQ controls remain readable, sized and recover from no results (946ms)
+(node:21844) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   7 tests\storefront-mobile-audit.spec.js:75:3 › dark: policy navigation exposes current page and works with keyboard (5.5s)
+(node:16152) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   8 tests\storefront-mobile-audit.spec.js:87:3 › dark: unavailable receiving-account warning has readable contrast (5.4s)
+(node:1508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 12:27:40 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x   9 tests\storefront-mobile-audit.spec.js:99:3 › cart: modal keyboard focus stays in panel and returns to opener (836ms)
+(node:20912) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 12:27:41 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x  10 tests\storefront-mobile-audit.spec.js:99:3 › chat: modal keyboard focus stays in panel and returns to opener (1.1s)
+
+
+  1) tests\storefront-mobile-audit.spec.js:42:3 › light: checkout retains complete names and contains coupon controls
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "ellipsis"
+
+      46 |     const title = page.getByText(name, { exact: true })
+      47 |     await expect(title).toBeVisible()
+    > 48 |     expect(await title.evaluate(e => getComputedStyle(e).textOverflow)).not.toBe('ellipsis')
+         |                                                                             ^
+      49 |     const coupon = page.getByRole('button', { name: 'Apply', exact: true })
+      50 |     const bounds = await coupon.boundingBox()
+      51 |     expect(bounds.x + bounds.width).toBeLessThanOrEqual(304)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:48:77
+
+    Error Context: test-results\storefront-mobile-audit-li-7ffc8-nd-contains-coupon-controls\error-context.md
+
+  2) tests\storefront-mobile-audit.spec.js:56:3 › light: FAQ controls remain readable, sized and recover from no results
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      64 |     expect(contrast(colors.fg, colors.bg)).toBeGreaterThanOrEqual(4.5)
+      65 |     const questions = page.locator('.faq-trigger')
+    > 66 |     expect(await questions.evaluateAll(es => es.every(e => e.scrollWidth <= e.clientWidth + 1))).toBe(true)
+         |                                                                                                  ^
+      67 |     await search.fill('no-matching-question-xyz')
+      68 |     const clear = page.getByRole('button', { name: 'Clear search filters' })
+      69 |     expect((await clear.boundingBox()).height).toBeGreaterThanOrEqual(44)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:66:98
+
+    Error Context: test-results\storefront-mobile-audit-li-4e0fd-and-recover-from-no-results\error-context.md
+
+  3) tests\storefront-mobile-audit.spec.js:75:3 › light: policy navigation exposes current page and works with keyboard
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy Policy', exact: true })
+    Expected: "page"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy Policy', exact: true }) with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy Policy', exact: true })
+
+
+      77 |     await page.goto('/privacy')
+      78 |     const nav = page.getByRole('navigation', { name: 'Policy sections' })
+    > 79 |     await expect(nav.getByRole('button', { name: 'Privacy Policy', exact: true })).toHaveAttribute('aria-current', 'page')
+         |                                                                                    ^
+      80 |     const next = nav.getByRole('button', { name: 'Terms of Service', exact: true })
+      81 |     await next.focus(); await page.keyboard.press('Enter')
+      82 |     await expect(page).toHaveURL(/\/terms$/)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:79:84
+
+    Error Context: test-results\storefront-mobile-audit-li-d466d-age-and-works-with-keyboard\error-context.md
+
+  4) tests\storefront-mobile-audit.spec.js:87:3 › light: unavailable receiving-account warning has readable contrast
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('status').filter({ hasText: 'Payment method unavailable.' }) with timeout 5000ms
+      - waiting for getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+
+
+      90 |     await page.goto('/confirmation')
+      91 |     const warning = page.getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+    > 92 |     await expect(warning).toBeVisible()
+         |                           ^
+      93 |     const colors = await warning.evaluate(e => ({ fg: getComputedStyle(e).color, bg: getComputedStyle(e).backgroundColor }))
+      94 |     expect(contrast(colors.fg, colors.bg)).toBeGreaterThanOrEqual(4.5)
+      95 |   })
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:92:27
+
+    Error Context: test-results\storefront-mobile-audit-li-1ff25-rning-has-readable-contrast\error-context.md
+
+  5) tests\storefront-mobile-audit.spec.js:42:3 › dark: checkout retains complete names and contains coupon controls
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "ellipsis"
+
+      46 |     const title = page.getByText(name, { exact: true })
+      47 |     await expect(title).toBeVisible()
+    > 48 |     expect(await title.evaluate(e => getComputedStyle(e).textOverflow)).not.toBe('ellipsis')
+         |                                                                             ^
+      49 |     const coupon = page.getByRole('button', { name: 'Apply', exact: true })
+      50 |     const bounds = await coupon.boundingBox()
+      51 |     expect(bounds.x + bounds.width).toBeLessThanOrEqual(304)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:48:77
+
+    Error Context: test-results\storefront-mobile-audit-da-6be20-nd-contains-coupon-controls\error-context.md
+
+  6) tests\storefront-mobile-audit.spec.js:56:3 › dark: FAQ controls remain readable, sized and recover from no results
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    1.0450258243709754
+
+      62 |     const active = page.getByRole('group', { name: 'FAQ categories' }).getByRole('button', { name: 'All', exact: true })
+      63 |     const colors = await active.evaluate(e => ({ fg: getComputedStyle(e).color, bg: getComputedStyle(e).backgroundColor }))
+    > 64 |     expect(contrast(colors.fg, colors.bg)).toBeGreaterThanOrEqual(4.5)
+         |                                            ^
+      65 |     const questions = page.locator('.faq-trigger')
+      66 |     expect(await questions.evaluateAll(es => es.every(e => e.scrollWidth <= e.clientWidth + 1))).toBe(true)
+      67 |     await search.fill('no-matching-question-xyz')
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:64:44
+
+    Error Context: test-results\storefront-mobile-audit-da-f38da-and-recover-from-no-results\error-context.md
+
+  7) tests\storefront-mobile-audit.spec.js:75:3 › dark: policy navigation exposes current page and works with keyboard
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy Policy', exact: true })
+    Expected: "page"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy Policy', exact: true }) with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy Policy', exact: true })
+
+
+      77 |     await page.goto('/privacy')
+      78 |     const nav = page.getByRole('navigation', { name: 'Policy sections' })
+    > 79 |     await expect(nav.getByRole('button', { name: 'Privacy Policy', exact: true })).toHaveAttribute('aria-current', 'page')
+         |                                                                                    ^
+      80 |     const next = nav.getByRole('button', { name: 'Terms of Service', exact: true })
+      81 |     await next.focus(); await page.keyboard.press('Enter')
+      82 |     await expect(page).toHaveURL(/\/terms$/)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:79:84
+
+    Error Context: test-results\storefront-mobile-audit-da-d6c21-age-and-works-with-keyboard\error-context.md
+
+  8) tests\storefront-mobile-audit.spec.js:87:3 › dark: unavailable receiving-account warning has readable contrast
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('status').filter({ hasText: 'Payment method unavailable.' }) with timeout 5000ms
+      - waiting for getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+
+
+      90 |     await page.goto('/confirmation')
+      91 |     const warning = page.getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+    > 92 |     await expect(warning).toBeVisible()
+         |                           ^
+      93 |     const colors = await warning.evaluate(e => ({ fg: getComputedStyle(e).color, bg: getComputedStyle(e).backgroundColor }))
+      94 |     expect(contrast(colors.fg, colors.bg)).toBeGreaterThanOrEqual(4.5)
+      95 |   })
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:92:27
+
+    Error Context: test-results\storefront-mobile-audit-da-cd37a-rning-has-readable-contrast\error-context.md
+
+  9) tests\storefront-mobile-audit.spec.js:99:3 › cart: modal keyboard focus stays in panel and returns to opener
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      108 |     await visibleButtons.last().focus()
+      109 |     await page.keyboard.press('Tab')
+    > 110 |     expect(await panel.evaluate(e => e.contains(document.activeElement))).toBe(true)
+          |                                                                           ^
+      111 |     await visibleButtons.first().focus(); await page.keyboard.press('Shift+Tab')
+      112 |     expect(await panel.evaluate(e => e.contains(document.activeElement))).toBe(true)
+      113 |     await page.evaluate(() => document.querySelector('.storefront-ui').style.setProperty('--k2-safe-top', '44px'))
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:110:75
+
+    Error Context: test-results\storefront-mobile-audit-ca-24ee7-panel-and-returns-to-opener\error-context.md
+
+  10) tests\storefront-mobile-audit.spec.js:99:3 › chat: modal keyboard focus stays in panel and returns to opener
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      108 |     await visibleButtons.last().focus()
+      109 |     await page.keyboard.press('Tab')
+    > 110 |     expect(await panel.evaluate(e => e.contains(document.activeElement))).toBe(true)
+          |                                                                           ^
+      111 |     await visibleButtons.first().focus(); await page.keyboard.press('Shift+Tab')
+      112 |     expect(await panel.evaluate(e => e.contains(document.activeElement))).toBe(true)
+      113 |     await page.evaluate(() => document.querySelector('.storefront-ui').style.setProperty('--k2-safe-top', '44px'))
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:110:75
+
+    Error Context: test-results\storefront-mobile-audit-ch-df124-panel-and-returns-to-opener\error-context.md
+
+  10 failed
+    tests\storefront-mobile-audit.spec.js:42:3 › light: checkout retains complete names and contains coupon controls
+    tests\storefront-mobile-audit.spec.js:56:3 › light: FAQ controls remain readable, sized and recover from no results
+    tests\storefront-mobile-audit.spec.js:75:3 › light: policy navigation exposes current page and works with keyboard
+    tests\storefront-mobile-audit.spec.js:87:3 › light: unavailable receiving-account warning has readable contrast
+    tests\storefront-mobile-audit.spec.js:42:3 › dark: checkout retains complete names and contains coupon controls
+    tests\storefront-mobile-audit.spec.js:56:3 › dark: FAQ controls remain readable, sized and recover from no results
+    tests\storefront-mobile-audit.spec.js:75:3 › dark: policy navigation exposes current page and works with keyboard
+    tests\storefront-mobile-audit.spec.js:87:3 › dark: unavailable receiving-account warning has readable contrast
+    tests\storefront-mobile-audit.spec.js:99:3 › cart: modal keyboard focus stays in panel and returns to opener
+    tests\storefront-mobile-audit.spec.js:99:3 › chat: modal keyboard focus stays in panel and returns to opener

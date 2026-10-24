@@ -36,7 +36,7 @@ export default function Policy() {
         Authoritative operating guidance for K2 Jimzon · Direct Italian imports · Updated {currentPolicy.lastUpdated}
       </p>
 
-      {/* Policy switcher tabs - 44px minimum hit area */}
+      {/* Policy section navigation - 44px minimum hit area */}
       <nav className="mt-8 flex flex-wrap gap-2 border-b border-line pb-4" aria-label="Policy sections">
         {ALL_POLICIES.map((p) => {
           const isActive = p.id === activeTab
@@ -52,8 +52,7 @@ export default function Policy() {
                   ? 'bg-crimson text-white shadow-sm'
                   : 'bg-shell/80 border border-line text-navy-soft hover:bg-shell hover:text-navy'
               }`}
-              role="tab"
-              aria-selected={isActive}
+              aria-current={isActive ? 'page' : undefined}
             >
               {p.title.split('&')[0].trim()}
             </button>
@@ -71,7 +70,7 @@ export default function Policy() {
       </div>
 
       {/* Policy Sections */}
-      <div className="mt-10 space-y-8" role="tabpanel" aria-label={currentPolicy.title}>
+      <div className="mt-10 space-y-8" role="region" aria-label={currentPolicy.title}>
         {currentPolicy.sections.map((section, idx) => (
           <section key={idx} className="rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-6 shadow-sm">
             <h3 className="font-serif text-lg font-semibold text-navy">
@@ -91,7 +90,7 @@ export default function Policy() {
         <div className="mt-4 flex flex-wrap justify-center gap-3">
           <button
             onClick={() => go('contact')}
-            className="min-h-11 rounded-lg bg-navy px-5 text-xs font-bold text-cream hover:bg-navy-deep transition-colors"
+            className="min-h-11 rounded-lg bg-crimson px-5 text-xs font-bold text-white hover:bg-crimson-deep transition-colors"
           >
             Contact Staff
           </button>

@@ -1,0 +1,126 @@
+[WebServer] (node:16760) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:12352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:16840) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\storefront-mobile-audit.spec.js:75:3 › light: policy navigation exposes current page and works with keyboard (5.5s)
+(node:20592) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\storefront-mobile-audit.spec.js:87:3 › light: unavailable receiving-account warning has readable contrast (5.4s)
+(node:1120) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\storefront-mobile-audit.spec.js:75:3 › dark: policy navigation exposes current page and works with keyboard (5.4s)
+(node:4520) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 tests\storefront-mobile-audit.spec.js:87:3 › dark: unavailable receiving-account warning has readable contrast (5.4s)
+
+
+  1) tests\storefront-mobile-audit.spec.js:75:3 › light: policy navigation exposes current page and works with keyboard
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy', exact: true })
+    Expected: "page"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy', exact: true }) with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy', exact: true })
+
+
+      77 |     await page.goto('/privacy')
+      78 |     const nav = page.getByRole('navigation', { name: 'Policy sections' })
+    > 79 |     await expect(nav.getByRole('button', { name: 'Privacy', exact: true })).toHaveAttribute('aria-current', 'page')
+         |                                                                             ^
+      80 |     const next = nav.getByRole('button', { name: 'Terms of Service', exact: true })
+      81 |     await next.focus(); await page.keyboard.press('Enter')
+      82 |     await expect(page).toHaveURL(/\/terms$/)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:79:77
+
+    Error Context: test-results\storefront-mobile-audit-li-d466d-age-and-works-with-keyboard\error-context.md
+
+  2) tests\storefront-mobile-audit.spec.js:87:3 › light: unavailable receiving-account warning has readable contrast
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('status').filter({ hasText: 'Payment method unavailable.' }) with timeout 5000ms
+      - waiting for getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+
+
+      90 |     await page.goto('/confirmation')
+      91 |     const warning = page.getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+    > 92 |     await expect(warning).toBeVisible()
+         |                           ^
+      93 |     const colors = await warning.evaluate(e => ({ fg: getComputedStyle(e).color, bg: getComputedStyle(e).backgroundColor }))
+      94 |     expect(contrast(colors.fg, colors.bg)).toBeGreaterThanOrEqual(4.5)
+      95 |   })
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:92:27
+
+    Error Context: test-results\storefront-mobile-audit-li-1ff25-rning-has-readable-contrast\error-context.md
+
+  3) tests\storefront-mobile-audit.spec.js:75:3 › dark: policy navigation exposes current page and works with keyboard
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy', exact: true })
+    Expected: "page"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy', exact: true }) with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Policy sections' }).getByRole('button', { name: 'Privacy', exact: true })
+
+
+      77 |     await page.goto('/privacy')
+      78 |     const nav = page.getByRole('navigation', { name: 'Policy sections' })
+    > 79 |     await expect(nav.getByRole('button', { name: 'Privacy', exact: true })).toHaveAttribute('aria-current', 'page')
+         |                                                                             ^
+      80 |     const next = nav.getByRole('button', { name: 'Terms of Service', exact: true })
+      81 |     await next.focus(); await page.keyboard.press('Enter')
+      82 |     await expect(page).toHaveURL(/\/terms$/)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:79:77
+
+    Error Context: test-results\storefront-mobile-audit-da-d6c21-age-and-works-with-keyboard\error-context.md
+
+  4) tests\storefront-mobile-audit.spec.js:87:3 › dark: unavailable receiving-account warning has readable contrast
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('status').filter({ hasText: 'Payment method unavailable.' }) with timeout 5000ms
+      - waiting for getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+
+
+      90 |     await page.goto('/confirmation')
+      91 |     const warning = page.getByRole('status').filter({ hasText: 'Payment method unavailable.' })
+    > 92 |     await expect(warning).toBeVisible()
+         |                           ^
+      93 |     const colors = await warning.evaluate(e => ({ fg: getComputedStyle(e).color, bg: getComputedStyle(e).backgroundColor }))
+      94 |     expect(contrast(colors.fg, colors.bg)).toBeGreaterThanOrEqual(4.5)
+      95 |   })
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:92:27
+
+    Error Context: test-results\storefront-mobile-audit-da-cd37a-rning-has-readable-contrast\error-context.md
+
+  4 failed
+    tests\storefront-mobile-audit.spec.js:75:3 › light: policy navigation exposes current page and works with keyboard
+    tests\storefront-mobile-audit.spec.js:87:3 › light: unavailable receiving-account warning has readable contrast
+    tests\storefront-mobile-audit.spec.js:75:3 › dark: policy navigation exposes current page and works with keyboard
+    tests\storefront-mobile-audit.spec.js:87:3 › dark: unavailable receiving-account warning has readable contrast

@@ -41,12 +41,12 @@ export default function StoreHeader() {
   ]
 
   return (
-    <header className="store-nav-surface sticky top-0 z-40 border-b border-line backdrop-blur-xl">
+    <header className="store-nav-surface top-0 lg:sticky z-40 border-b border-line backdrop-blur-xl">
       <div className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-4 py-2 text-center text-xs font-semibold leading-5 tracking-wide text-navy-soft">
         Italy-sourced goods, fulfilled in Manila <span className="mx-2 text-crimson">·</span> Final stock and delivery are confirmed by K2 staff
       </div>
 
-      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 lg:px-6">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-3 lg:px-6">
         <Wordmark onClick={() => go('home')} size="text-[1.55rem]" />
 
         <nav className="ml-6 hidden min-w-0 flex-1 items-stretch lg:flex" aria-label="Storefront">

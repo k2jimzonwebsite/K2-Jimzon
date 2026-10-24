@@ -76,7 +76,7 @@ function Hero() {
 
         <motion.div initial={reducedMotion ? false : { opacity: 0, transform: 'translateX(14px)' }} animate={{ opacity: 1, transform: 'translateX(0)' }} transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }} className="relative min-w-0">
           <div className="hero-collection" aria-label="Explore the collection" aria-busy={loading}>
-            <p className="hero-collection-heading">A little Italy, for your everyday.</p>
+            <p className="mb-4 font-serif text-xl text-navy">A little Italy, for your everyday.</p>
             <div id="hero-collection-rail" ref={railRef} onScroll={updateRail} className="hero-collection-shelf">
               {!loading && groupFamilyResults(listedProducts).slice(0, 3).map(product => {
                 const multiple = product.family?.members.length > 1

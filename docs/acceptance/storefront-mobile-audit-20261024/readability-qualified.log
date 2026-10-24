@@ -1,0 +1,21 @@
+[WebServer] (node:12308) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:5740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 7 tests using 1 worker
+
+(node:12892) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 390px in light mode (2.6s)
+  ok 2 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 390px in dark mode (2.9s)
+  ok 3 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 1440px in light mode (2.3s)
+  ok 4 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 1440px in dark mode (2.0s)
+[WebServer] 2:05:28 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 2:05:28 PM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok 5 tests\store-readability-ui.spec.js:73:1 › short mobile drag changes shelf; zoom controls and hint leave room to browse (18.6s)
+  ok 6 tests\store-readability-ui.spec.js:126:1 › enlarged phone text keeps store help reachable (1.2s)
+[WebServer] 2:05:46 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 7 tests\store-readability-ui.spec.js:142:1 › catalog footer remains readable in both themes (1.4s)
+
+  7 passed (45.1s)

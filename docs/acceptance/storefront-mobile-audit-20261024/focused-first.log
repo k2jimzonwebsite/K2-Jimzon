@@ -1,0 +1,159 @@
+[WebServer] (node:12312) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2756) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 15 tests using 1 worker
+
+(node:11780) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 12:30:02 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 12:30:03 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 12:30:03 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\storefront-mobile-audit.spec.js:24:3 › 320 light: every storefront route reflows without runtime errors (7.1s)
+[WebServer] 12:30:09 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 12:30:10 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 12:30:10 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\storefront-mobile-audit.spec.js:24:3 › 320 dark: every storefront route reflows without runtime errors (5.8s)
+[WebServer] 12:30:15 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 12:30:15 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 12:30:16 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\storefront-mobile-audit.spec.js:24:3 › 430 light: every storefront route reflows without runtime errors (7.0s)
+[WebServer] 12:30:22 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 12:30:22 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 12:30:23 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\storefront-mobile-audit.spec.js:24:3 › 430 dark: every storefront route reflows without runtime errors (6.3s)
+  ok  5 tests\storefront-mobile-audit.spec.js:42:3 › light: checkout retains complete names and contains coupon controls (926ms)
+[WebServer] 12:30:29 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x   6 tests\storefront-mobile-audit.spec.js:56:3 › light: FAQ controls remain readable, sized and recover from no results (843ms)
+(node:22308) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  7 tests\storefront-mobile-audit.spec.js:75:3 › light: policy navigation exposes current page and works with keyboard (782ms)
+  x   8 tests\storefront-mobile-audit.spec.js:87:3 › light: unavailable receiving-account warning has readable contrast (925ms)
+(node:18828) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  9 tests\storefront-mobile-audit.spec.js:42:3 › dark: checkout retains complete names and contains coupon controls (1.0s)
+[WebServer] 12:30:34 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x  10 tests\storefront-mobile-audit.spec.js:56:3 › dark: FAQ controls remain readable, sized and recover from no results (1.0s)
+(node:3840) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 11 tests\storefront-mobile-audit.spec.js:75:3 › dark: policy navigation exposes current page and works with keyboard (701ms)
+  x  12 tests\storefront-mobile-audit.spec.js:87:3 › dark: unavailable receiving-account warning has readable contrast (754ms)
+(node:21952) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 12:30:38 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\storefront-mobile-audit.spec.js:101:3 › cart: modal keyboard focus stays in panel and returns to opener (1.2s)
+[WebServer] 12:30:39 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x  14 tests\storefront-mobile-audit.spec.js:101:3 › chat: modal keyboard focus stays in panel and returns to opener (6.2s)
+(node:4904) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 12:30:46 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 15 tests\storefront-mobile-audit.spec.js:123:1 › home-indicator spacing keeps mobile chat clear of navigation (883ms)
+
+
+  1) tests\storefront-mobile-audit.spec.js:56:3 › light: FAQ controls remain readable, sized and recover from no results
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      64 |     expect(contrast(colors.fg, colors.bg)).toBeGreaterThanOrEqual(4.5)
+      65 |     const questions = page.locator('.faq-trigger')
+    > 66 |     expect(await questions.evaluateAll(es => es.every(e => e.scrollWidth <= e.clientWidth + 1))).toBe(true)
+         |                                                                                                  ^
+      67 |     await search.fill('no-matching-question-xyz')
+      68 |     const clear = page.getByRole('button', { name: 'Clear search filters' })
+      69 |     expect((await clear.boundingBox()).height).toBeGreaterThanOrEqual(44)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:66:98
+
+    Error Context: test-results\storefront-mobile-audit-li-4e0fd-and-recover-from-no-results\error-context.md
+
+  2) tests\storefront-mobile-audit.spec.js:87:3 › light: unavailable receiving-account warning has readable contrast
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    1.1231765692448015
+
+      94 |     await expect.poll(() => page.locator('html').evaluate(e => e.classList.contains('dark'))).toBe(theme === 'dark')
+      95 |     const colors = await warning.evaluate(e => ({ fg: getComputedStyle(e).color, bg: getComputedStyle(e).backgroundColor }))
+    > 96 |     expect(contrast(colors.fg, colors.bg)).toBeGreaterThanOrEqual(4.5)
+         |                                            ^
+      97 |   })
+      98 | }
+      99 |
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:96:44
+
+    Error Context: test-results\storefront-mobile-audit-li-1ff25-rning-has-readable-contrast\error-context.md
+
+  3) tests\storefront-mobile-audit.spec.js:56:3 › dark: FAQ controls remain readable, sized and recover from no results
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      64 |     expect(contrast(colors.fg, colors.bg)).toBeGreaterThanOrEqual(4.5)
+      65 |     const questions = page.locator('.faq-trigger')
+    > 66 |     expect(await questions.evaluateAll(es => es.every(e => e.scrollWidth <= e.clientWidth + 1))).toBe(true)
+         |                                                                                                  ^
+      67 |     await search.fill('no-matching-question-xyz')
+      68 |     const clear = page.getByRole('button', { name: 'Clear search filters' })
+      69 |     expect((await clear.boundingBox()).height).toBeGreaterThanOrEqual(44)
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:66:98
+
+    Error Context: test-results\storefront-mobile-audit-da-f38da-and-recover-from-no-results\error-context.md
+
+  4) tests\storefront-mobile-audit.spec.js:87:3 › dark: unavailable receiving-account warning has readable contrast
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    1.1244965914469744
+
+      94 |     await expect.poll(() => page.locator('html').evaluate(e => e.classList.contains('dark'))).toBe(theme === 'dark')
+      95 |     const colors = await warning.evaluate(e => ({ fg: getComputedStyle(e).color, bg: getComputedStyle(e).backgroundColor }))
+    > 96 |     expect(contrast(colors.fg, colors.bg)).toBeGreaterThanOrEqual(4.5)
+         |                                            ^
+      97 |   })
+      98 | }
+      99 |
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:96:44
+
+    Error Context: test-results\storefront-mobile-audit-da-cd37a-rning-has-readable-contrast\error-context.md
+
+  5) tests\storefront-mobile-audit.spec.js:101:3 › chat: modal keyboard focus stays in panel and returns to opener
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'Chat with K2 staff', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('button', { name: 'Chat with K2 staff', exact: true }) with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Chat with K2 staff', exact: true })
+        14 × locator resolved to <button type="button" aria-label="Chat with K2 staff" class="group flex h-12 w-12 items-center justify-center gap-2.5 md:h-auto md:w-auto rounded-full border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-0 shadow-float md:px-4 md:py-2.5 transition-[transform,border-color,background-color] duration-150 hover:border-amber hover:bg-cream active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson cursor-pointer">…</button>
+           - unexpected value "inactive"
+
+
+      117 |     await page.keyboard.press('Escape')
+      118 |     await expect(dialog).toHaveCount(0)
+    > 119 |     await expect(opener).toBeFocused()
+          |                          ^
+      120 |   })
+      121 | }
+      122 |
+        at C:\Users\jerze\.codex\worktrees\listing-detail-image-fix\K2 JImzon\tests\storefront-mobile-audit.spec.js:119:26
+
+    Error Context: test-results\storefront-mobile-audit-ch-df124-panel-and-returns-to-opener\error-context.md
+
+  5 failed
+    tests\storefront-mobile-audit.spec.js:56:3 › light: FAQ controls remain readable, sized and recover from no results
+    tests\storefront-mobile-audit.spec.js:87:3 › light: unavailable receiving-account warning has readable contrast
+    tests\storefront-mobile-audit.spec.js:56:3 › dark: FAQ controls remain readable, sized and recover from no results
+    tests\storefront-mobile-audit.spec.js:87:3 › dark: unavailable receiving-account warning has readable contrast
+    tests\storefront-mobile-audit.spec.js:101:3 › chat: modal keyboard focus stays in panel and returns to opener
+  10 passed (52.8s)
