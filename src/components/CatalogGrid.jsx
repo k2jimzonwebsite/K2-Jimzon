@@ -5,6 +5,7 @@ import ProductCard from './ProductCard'
 import { SearchIcon, XIcon } from './ui/icons'
 
 import { compareCatalogProducts } from '../lib/catalogSort'
+import { partitionCatalogSearch } from '../lib/catalogSearch'
 import { groupFamilyResults } from '../lib/productFamilyPresentation'
 
 export { compareCatalogProducts }
@@ -21,12 +22,7 @@ export default function CatalogGrid() {
   const filteredProducts = useMemo(() => {
     let result = products || []
     if (category !== 'All') result = result.filter((product) => product.category === category)
-    const needle = query.trim().toLowerCase()
-    const directMatch = product => [product.sku, product.name, product.short, product.tag, product.category, ...Object.values(product.variantOptions || {})]
-      .some(value => value?.toLowerCase().includes(needle))
-    const relevance = product => !needle ? 0 : [product.sku, product.name].some(value => value?.toLowerCase() === needle) ? 2 : directMatch(product) ? 1 : 0
-    if (needle) result = result.filter(product => directMatch(product) || product.family?.name.toLowerCase().includes(needle))
-    return groupFamilyResults([...result].sort((a, b) => relevance(b) - relevance(a) || compareCatalogProducts(a, b, sortBy)))
+    return groupFamilyResults(partitionCatalogSearch(result, query, 'All', sortBy).directMatches)
   }, [products, query, category, sortBy])
 
   const clear = () => {
