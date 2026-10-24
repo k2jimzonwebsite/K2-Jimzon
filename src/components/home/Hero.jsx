@@ -67,13 +67,11 @@ function Hero() {
               Request from Italy
             </GhostButton>
           </motion.div>
-          <motion.p variants={reveal} className="mt-4 flex items-start gap-2 text-xs font-semibold text-navy-faint">
-            <ShieldIcon size={15} className="mt-0.5 shrink-0 text-forest" />
-            <span className="flex-1">No payment required at checkout. We verify stock first.</span>
+          <motion.div variants={reveal} className="mt-4 flex justify-end lg:hidden">
             <button type="button" aria-label="Chat with K2 staff" onClick={() => openStoreChat({ origin: 'storefront_button' })} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-line text-navy lg:hidden">
               <ChatIcon size={18} />
             </button>
-          </motion.p>
+          </motion.div>
         </motion.div>
 
         <motion.div initial={reducedMotion ? false : { opacity: 0, transform: 'translateX(14px)' }} animate={{ opacity: 1, transform: 'translateX(0)' }} transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }} className="relative min-w-0">
@@ -115,7 +113,7 @@ function Hero() {
             <FlightMap />
             <div className="grid grid-cols-2 gap-3 border-t border-[var(--store-surface-border)] pt-4 text-xs">
               <p><span className="block font-bold text-navy">Genuine catalog</span><span className="text-navy-faint">Checked items in Manila</span></p>
-              <p><span className="block font-bold text-navy">Personal confirmation</span><span className="text-navy-faint">Staff checks before you pay</span></p>
+              <p><span className="block font-bold text-navy">Personal confirmation</span><span className="text-navy-faint">Help from our Manila team</span></p>
             </div>
           </div>
         </motion.div>
@@ -128,8 +126,8 @@ function TrustRow() {
   const items = [
     [CheckIcon, 'Authentic Italian imports'],
     [PlaneIcon, 'Direct flights from Milan'],
-    [GridIcon, 'Availability checked before payment'],
-    [ShieldIcon, 'Checked by staff before payment'],
+    [GridIcon, 'Manila stock and Pasabuy options'],
+    [ShieldIcon, 'Personal support from our Manila team'],
   ]
 
   return (

@@ -32,8 +32,8 @@ test('storefront promises reconcile with manual launch facts without false SLAs 
   expect(site).toContain('Submitting a request does not confirm a delivery date')
 
   const hero = await readFile(new URL('../src/components/home/Hero.jsx', import.meta.url), 'utf8')
-  expect(hero).toContain('No payment required at checkout')
-  expect(hero).toContain('Staff checks before you pay')
+  expect(hero).not.toContain('No payment required at checkout')
+  expect(hero).not.toMatch(/before you pay|before payment|We verify stock first/)
 
   const confirmation = await readFile(new URL('../src/views/Confirmation.jsx', import.meta.url), 'utf8')
   expect(confirmation).toContain('No payment was charged')
