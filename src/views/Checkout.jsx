@@ -10,6 +10,7 @@ import { CheckIcon, ShieldIcon } from '../components/ui/icons'
 import TurnstileChallenge from '../components/security/TurnstileChallenge'
 import { guestBffEnabled } from '../services/guestCommerceService'
 import DeliveryEstimate from '../components/DeliveryEstimate'
+import StorefrontChatButton from '../components/shop/StorefrontChatButton'
 
 const DELIVERY_OPTIONS = [
   { id: 'standard', methodName: 'Standard Courier Delivery', hint: 'Delivery charge calculated for your basket and area.' },
@@ -109,6 +110,7 @@ export default function Checkout() {
         <h1 className="font-serif text-2xl font-semibold">Your cart is empty</h1>
         <p className="mt-2 text-base text-navy-soft">You have not added any products to request yet.</p>
         <GhostButton className="mt-6" onClick={() => go('home')}>Back to catalog</GhostButton>
+        <StorefrontChatButton inline />
       </main>
     )
   }
@@ -233,6 +235,7 @@ export default function Checkout() {
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-navy-soft">
         No upfront payment is required. We will verify our Manila stock, review order and delivery details, and send payment instructions directly to you.
       </p>
+      <StorefrontChatButton inline />
 
       <form onSubmit={submit} className="mt-9 grid grid-cols-1 gap-6 md:grid-cols-[1fr_0.86fr] md:gap-10">
         {/* Order Summary Column */}
