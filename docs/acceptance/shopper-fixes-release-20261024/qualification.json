@@ -1,0 +1,55 @@
+{
+  "recorded_at": "2026-10-25T02:26:52.810842+00:00",
+  "head": "c5dfd241de24d97d4a0b1e9d00dd2b970ee1049a",
+  "qualification": "complete release manifest reconciled from exact-head CI plus local packaging; not a clean local aggregate exit0",
+  "ci_run": "40102590657",
+  "ci_url": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40102590657",
+  "coverage": {
+    "npm test": "exact-head CI build-and-smoke SUCCESS",
+    "build:storefront": "exact-head configured CI SUCCESS",
+    "build:admin": "exact-head CI SUCCESS",
+    "test:vercel-output": "local3/3 exit0",
+    "verify:development": "final local exit0",
+    "focused_search": "13/13",
+    "focused_shopper": "10/10",
+    "local_shared_suite": "1118/1118; remaining duplicate browser work interrupted after exact-head CI confirmed full coverage"
+  },
+  "sources": [
+    {
+      "path": "src/components/CatalogGrid.jsx",
+      "sha256": "52abe483d971f0c1493f8771b2da0dc983009d11d5b550996b883f6f68fa0f66"
+    },
+    {
+      "path": "src/components/shop/StorefrontChatButton.jsx",
+      "sha256": "6d6bd6ef5fd8941c9940f3329cc7958687fed0a5f2a9caf5147f1e6eda7ee337"
+    },
+    {
+      "path": "src/views/Checkout.jsx",
+      "sha256": "f6ce575e02319ff08f313eb1893e2f55295e4f448277c6c8df8b6d1441a05015"
+    },
+    {
+      "path": "src/lib/catalogSearch.js",
+      "sha256": "8cda7b55c59866c54d547cd4765ea25fe65e694959d0655860bbb672229a2944"
+    },
+    {
+      "path": "tests/catalog-search.test.mjs",
+      "sha256": "9e771880d13dd993bec4ead81da7cd77b1a15e3603a3c4ecba942471641d1825"
+    },
+    {
+      "path": "tests/checkout-chat-ui.spec.js",
+      "sha256": "94f70a1c22671c29d8239d080d217fda4408005539e7795a92dfcc40676fcc32"
+    },
+    {
+      "path": "playwright.config.js",
+      "sha256": "d5ffd2736015c8125cf910413ce136ff2ef8b259fb69dc6390e6c9f706f98447"
+    },
+    {
+      "path": "playwright.storefront-recovery.config.js",
+      "sha256": "81243dfbc42dcc7a408cb72d13065c408658fc7021ff4318b1052dca7e84c7eb"
+    },
+    {
+      "path": "package.json",
+      "sha256": "4eb9541ee8aad1124ba46d4059ac7c641f12342ab6911ac11eaa8525f452bed7"
+    }
+  ]
+}

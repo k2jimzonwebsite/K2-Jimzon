@@ -1,0 +1,52 @@
+[
+  {
+    "path": "docs/acceptance/shopper-fixes-release-20261024/ci-final.json",
+    "bytes": 6435,
+    "sha256": "aff5be0520ad8bb6e21c15387abe58695d7c5e3a70f1e341e527c5dcbba1434c"
+  },
+  {
+    "path": "docs/acceptance/shopper-fixes-release-20261024/host-checks.json",
+    "bytes": 379,
+    "sha256": "c6ae4455ab9f9c692380429845381a4b87a7045bacb52d62d5b48da95896b678"
+  },
+  {
+    "path": "docs/acceptance/shopper-fixes-release-20261024/live-checkout-390-dark.png",
+    "bytes": 41934,
+    "sha256": "3ba15f6bf02b3bba8fa13b3f1524347e5fe161d742b2cd992c240765c6a4fd73"
+  },
+  {
+    "path": "docs/acceptance/shopper-fixes-release-20261024/live-checkout-390-light.png",
+    "bytes": 40658,
+    "sha256": "867f8ec1be64103dbd789b2426bd5bbf059d2411929ef941058989e55c9674c9"
+  },
+  {
+    "path": "docs/acceptance/shopper-fixes-release-20261024/preflight-final.log",
+    "bytes": 176,
+    "sha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
+  },
+  {
+    "path": "docs/acceptance/shopper-fixes-release-20261024/preflight.log",
+    "bytes": 176,
+    "sha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
+  },
+  {
+    "path": "docs/acceptance/shopper-fixes-release-20261024/production.json",
+    "bytes": 6310,
+    "sha256": "78b68b1d7f99a0a15c6e325a5f5d1fa2e24cb2fa936c7f6da045ee047dd17089"
+  },
+  {
+    "path": "docs/acceptance/shopper-fixes-release-20261024/qualification.json",
+    "bytes": 2171,
+    "sha256": "d4e87003761942a779a018f60c2a014375a4e535d39cb06330e459429817e25e"
+  },
+  {
+    "path": "docs/acceptance/shopper-fixes-release-20261024/readiness-final.log",
+    "bytes": 2380,
+    "sha256": "fa6e98b8b0d02287678271b352c4c4186f6953528f8bd8ee0e8d94680d1cf7e1"
+  },
+  {
+    "path": "docs/acceptance/shopper-fixes-release-20261024/readiness.log",
+    "bytes": 2380,
+    "sha256": "fa6e98b8b0d02287678271b352c4c4186f6953528f8bd8ee0e8d94680d1cf7e1"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "host": "https://www.k2jimzon.com",
+    "status": 200,
+    "markerStatus": 200,
+    "target": "storefront",
+    "htmlHasRoot": true,
+    "checkedAt": "2026-10-25T02:31:08.482Z"
+  },
+  {
+    "host": "https://admin.k2jimzon.com",
+    "status": 200,
+    "markerStatus": 200,
+    "target": "admin",
+    "htmlHasRoot": true,
+    "checkedAt": "2026-10-25T02:31:09.144Z"
+  }
+]

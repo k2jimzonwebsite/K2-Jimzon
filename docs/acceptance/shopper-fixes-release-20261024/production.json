@@ -1,0 +1,92 @@
+{
+  "storefront": {
+    "url": "https://vercel.com/k2-jimzon/k2-jimzon/47mGZStT9nXxxEyfsvCsgd5y8w43",
+    "text": "k2-jimzon\nDeployments\n47mGZStT9\nCreate New\nDeployment\nLogs\nResources\nSource\nOpen Graph\nDeployment Details\nShare\nLogs\nVisit\nCreated\nEdgerzXc\n5m ago\nStatus\nReady\nLatest\nDuration\n48s\n4m ago\nEnvironment\nProduction\nCurrent\nDomains\nwww.k2jimzon.com\n+2\nk2-jimzon-git-main-k2-jimzon.vercel.app\nk2-jimzon-8jx0k37ck-k2-jimzon.vercel.app\nSource\nmain\n9caa067\nfix(storefront): Clear checkout actions and match pistachio terms (#26)\nDeployment Settings\n2 Recommendations\nDeploy Logs\n17\n48s\nDeployment Summary\nResources\nDeployment Checks\nAssigning Custom Domains\n\nRuntime Logs\n\nView and debug runtime logs & errors\n\nObservability\n\nMonitor app health & performance\n\nSpeed Insights\n\nNot Enabled\n\nPerformance metrics from real users\n\nWeb Analytics\n\nNot Enabled\n\nAnalyze visitors & traffic in real-time",
+    "commitUrl": "https://github.com/k2jimzonwebsite/K2-Jimzon/commit/9caa06792f8e4272e30779431e43f68290f41305",
+    "deploymentId": "dpl_47mGZStT9nXxxEyfsvCsgd5y8w43"
+  },
+  "admin": {
+    "url": "https://vercel.com/k2-jimzon/k2-jimzon-admin/7fqkhWc4B8szdUTJfD3XviMQv6KV",
+    "text": "K2 Jimzon\nHobby\nFind\nF\nOverview\nDeployments\nLogs\nAnalytics\nSpeed Insights\nObservability\nFirewall\nCDN\nEnvironment Variables\n1\nDomains\nConnect\nIntegrations\nStorage\nFlags\nAgent\nAI Gateway\nSandboxes\nWorkflows\nImages\nDaemons\nUsage\nSupport\nSettings\nAI Gateway Credits\nGet $5 in Free AI Gateway Credit each month. You can use this credit only with eligible models, which have lower rate limits. Your card won\u2019t be charged.\nAdd a Credit Card\nk2jimzonwebsite\nk2-jimzon-admin\nDeployments\n7fqkhWc4B\nCreate New\nAgent\nDeployment\nLogs\nResources\nSource\nOpen Graph\nDeployment Details\nShare\nLogs\nVisit\nCreated\nEdgerzXc\n2m ago\nStatus\nReady\nLatest\nDuration\n49s\nJust now\nEnvironment\nProduction\nCurrent\nDomains\nadmin.k2jimzon.com\n+2\nk2-jimzon-admin-git-main-k2-jimzon.vercel.app\nk2-jimzon-admin-af8pdt9ml-k2-jimzon.vercel.app\nSource\nmain\n9caa067\nfix(storefront): Clear checkout actions and match pistachio terms (#26)\nDeployment Settings\n2 Recommendations\nDeploy Logs\n16\n49s\nDeployment Summary\nResources\nDeployment Checks\nAssigning Custom Domains\n\nRuntime Logs\n\nView and debug runtime logs & errors\n\nObservability\n\nMonitor app health & performance\n\nSpeed Insights\n\nNot Enabled\n\nPerformance metrics from real users\n\nWeb Analytics\n\nNot Enabled\n\nAnalyze visitors & traffic in real-time",
+    "commitUrl": "https://github.com/k2jimzonwebsite/K2-Jimzon/commit/9caa06792f8e4272e30779431e43f68290f41305",
+    "deploymentId": "dpl_7fqkhWc4B8szdUTJfD3XviMQv6KV"
+  },
+  "shopper": {
+    "englishNames": [
+      "Gusto Etna Pistachio Spread 20% 600 g",
+      "Siciliani Pistacchio Crema 200 g",
+      "Siciliani Pistacchio Crunchy 200 g",
+      "Tigullio Pomodori Secchi Pistacchio",
+      "Dulciar Bar Pistacchio"
+    ],
+    "italianNames": [
+      "Siciliani Pistacchio Crema 200 g",
+      "Siciliani Pistacchio Crunchy 200 g",
+      "Tigullio Pomodori Secchi Pistacchio",
+      "Dulciar Bar Pistacchio",
+      "Gusto Etna Pistachio Spread 20% 600 g"
+    ],
+    "partialSkuNames": [
+      "Siciliani Pistacchio Crunchy 200 g"
+    ],
+    "darkGeometry": {
+      "chat": {
+        "height": 50,
+        "width": 148,
+        "x": 16,
+        "y": -1782.53125
+      },
+      "chatCount": 1,
+      "chatPosition": "static",
+      "submit": {
+        "height": 52,
+        "width": 301,
+        "x": 37,
+        "y": 696.21875
+      },
+      "submitDisabled": true,
+      "viewport": {
+        "height": 844,
+        "scrollWidth": 375,
+        "width": 390
+      }
+    },
+    "lightGeometry": {
+      "chat": {
+        "height": 50,
+        "width": 148,
+        "x": 16,
+        "y": -1782.53125
+      },
+      "chatCount": 1,
+      "chatPosition": "static",
+      "submit": {
+        "height": 52,
+        "width": 301,
+        "x": 37,
+        "y": 696.21875
+      },
+      "viewport": {
+        "height": 844,
+        "scrollWidth": 375,
+        "width": 390
+      }
+    },
+    "chatOpened": true,
+    "focusReturned": true,
+    "cleanup": {
+      "cartEmpty": true,
+      "theme": "dark",
+      "url": "https://www.k2jimzon.com/checkout"
+    }
+  },
+  "adminHydration": {
+    "url": "https://admin.k2jimzon.com/?section=inventory",
+    "text": "Product Catalog & Stock\n?\nScan\nAlt S\nWorkflow Map\nGuided Tours\nStart here\nAlerts\nOperations guide\nSearch\nCtrl K\nAdd inventory\nUpload CSV\nSheet mode\n\nCATALOG AND STOCK CONTROL\n\nInventory & stock checks\n?\n196 SKUs loaded\nAdd inventory\nScan box\nUnused uploads\nAdd product\nACTIVE SKUS\n130\n\n196 total product records\n\nAVAILABLE UNITS\n273\n\nProduct master available stock\n\nOUT OF STOCK\n152\n\nImmediate replenishment review\n\nLOW STOCK\n33\n\nAt or below reorder level\n\nEXPIRY RISK\n0\n\nExpired or within 90 days\n\nProducts\n196\n?\nSearch inventory\nAll 196\nOut 152\nLow 33\nExpiry 0\nDrafts 66\nStore category filter\nAll categories\nNo custom store category\nBeverages (2)\nBiscuits (1)\nBiscuits and wafers (9)\nChocolate (14)\nClothing (2)\nCoffee and drink preparations (22)\nCooking oils (3)\nFilled pasta (3)\nFragrances (19)\nPasta (21)\nPasta sauces (6)\nPersonal care (9)\nPesto and sauces (18)\nSpaghetti (1)\nSweet spreads (7)\nSweets (5)\nSweets and confectionery (3)\nTinned fish (19)\nTinned meat (1)\nSelect visible (196)\nK2-SKU-001189\nLIVE\nFrancesco Moretti Tuna in Sunflower Oil 3 x 80 g\n\nSTOCK\n\n0\n\nRETAIL SRP\n\n\u20b1297\n\nBatches (0)\nEnrich product specs\nWebsite assignment\nDraft\nReview\nLive\nUnlisted\nDiscontinued\nDelete product\nPhotos\nEdit\nK2-SKU-001191\nLIVE\nVidal Jelly Teeth 90 g\n\nSTOCK\n\n0\n\nRETAIL SRP\n\n\u20b1175\n\nBatches (0)\nEnrich product specs\nWebsite assignment\nDraft\nReview\nLive\n"
+  },
+  "verifiedAt": "2026-10-25T02:32:01.008Z",
+  "mergedCommit": "9caa06792f8e4272e30779431e43f68290f41305",
+  "qualifiedHead": "c5dfd241de24d97d4a0b1e9d00dd2b970ee1049a",
+  "exactTree": "d5d8f5ac120c0811a18167ebeea2a06efebda593",
+  "noTransactionsSubmitted": true
+}
