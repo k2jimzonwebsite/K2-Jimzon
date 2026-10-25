@@ -1,0 +1,248 @@
+[
+  {
+    "arrivals": [
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      }
+    ],
+    "badges": 0,
+    "ctaBottom": 505.71875,
+    "documentWidth": 305,
+    "homeChat": [
+      {
+        "position": "static",
+        "visible": true
+      },
+      {
+        "position": "fixed",
+        "visible": false
+      }
+    ],
+    "navTop": 737.8125,
+    "routeButtons": 3,
+    "theme": "dark",
+    "width": 320
+  },
+  {
+    "arrivals": [
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      }
+    ],
+    "badges": 0,
+    "ctaBottom": 468.15625,
+    "documentWidth": 360,
+    "homeChat": [
+      {
+        "position": "static",
+        "visible": true
+      },
+      {
+        "position": "fixed",
+        "visible": false
+      }
+    ],
+    "navTop": 737.8125,
+    "routeButtons": 3,
+    "theme": "dark",
+    "width": 375
+  },
+  {
+    "arrivals": [
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      }
+    ],
+    "badges": 0,
+    "ctaBottom": 477.625,
+    "documentWidth": 415,
+    "homeChat": [
+      {
+        "position": "static",
+        "visible": true
+      },
+      {
+        "position": "fixed",
+        "visible": false
+      }
+    ],
+    "navTop": 751.40625,
+    "routeButtons": 3,
+    "theme": "dark",
+    "width": 430
+  },
+  {
+    "arrivals": [
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      }
+    ],
+    "badges": 0,
+    "ctaBottom": 505.71875,
+    "documentWidth": 305,
+    "homeChat": [
+      {
+        "position": "static",
+        "visible": true
+      },
+      {
+        "position": "fixed",
+        "visible": false
+      }
+    ],
+    "navTop": 737.8125,
+    "routeButtons": 3,
+    "theme": "light",
+    "width": 320
+  },
+  {
+    "arrivals": [
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      }
+    ],
+    "badges": 0,
+    "ctaBottom": 468.15625,
+    "documentWidth": 360,
+    "homeChat": [
+      {
+        "position": "static",
+        "visible": true
+      },
+      {
+        "position": "fixed",
+        "visible": false
+      }
+    ],
+    "navTop": 737.8125,
+    "routeButtons": 3,
+    "theme": "light",
+    "width": 375
+  },
+  {
+    "arrivals": [
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      },
+      {
+        "height": 70,
+        "padding": "0px",
+        "width": 70
+      }
+    ],
+    "badges": 0,
+    "ctaBottom": 477.625,
+    "documentWidth": 415,
+    "homeChat": [
+      {
+        "position": "static",
+        "visible": true
+      },
+      {
+        "position": "fixed",
+        "visible": false
+      }
+    ],
+    "navTop": 751.40625,
+    "routeButtons": 3,
+    "theme": "light",
+    "width": 430
+  }
+]

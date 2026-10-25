@@ -1,0 +1,77 @@
+[
+  {
+    "stage": "test:storefront-recovery",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-storefront-recovery.log"
+  },
+  {
+    "stage": "test:admin-ui",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-admin-ui.log"
+  },
+  {
+    "stage": "test:payment-ui",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-payment-ui.log"
+  },
+  {
+    "stage": "test:inbox-ui",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-inbox-ui.log"
+  },
+  {
+    "stage": "test:admin-product-master-ui",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-admin-product-master-ui.log"
+  },
+  {
+    "stage": "test:admin-website-assignment-ui",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-admin-website-assignment-ui.log"
+  },
+  {
+    "stage": "test:owner-count-close-ui",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-owner-count-close-ui.log"
+  },
+  {
+    "stage": "test:customer-account-ui",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-customer-account-ui.log"
+  },
+  {
+    "stage": "test:selling-surfaces",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-selling-surfaces.log"
+  },
+  {
+    "stage": "test:order-receipt-direct",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-order-receipt-direct.log"
+  },
+  {
+    "stage": "test:workflow-api",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-workflow-api.log"
+  },
+  {
+    "stage": "test:intake-ai-ui",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-intake-ai-ui.log"
+  },
+  {
+    "stage": "test:vercel-output",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-test-vercel-output.log"
+  },
+  {
+    "stage": "build:storefront",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-build-storefront.log"
+  },
+  {
+    "stage": "build:admin",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/final-build-admin.log"
+  }
+]

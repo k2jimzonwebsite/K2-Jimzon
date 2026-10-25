@@ -1,0 +1,186 @@
+
+> k2-jimzon-prototype@0.1.0 test:storefront-recovery
+> playwright test --config=playwright.storefront-recovery.config.js
+
+[WebServer] (node:19764) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:8332) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 39 tests using 1 worker
+
+(node:4776) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 8:55:02 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 320px light (2.7s)
+[WebServer] 8:55:04 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 320px dark (2.3s)
+[WebServer] 8:55:07 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 390px light (2.5s)
+[WebServer] 8:55:09 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 390px dark (2.3s)
+[WebServer] 8:55:12 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 430px light (2.6s)
+[WebServer] 8:55:14 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 430px dark (2.6s)
+[WebServer] 8:55:17 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 1440px light (3.3s)
+[WebServer] 8:55:20 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  8 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 1440px dark (2.4s)
+  ok  9 tests\checkout-chat-ui.spec.js:53:1 › empty checkout retains accessible chat help (1.0s)
+[WebServer] 8:55:24 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\checkout-chat-ui.spec.js:63:1 › English pistachio finds the Italian listing in the rendered catalog (773ms)
+[WebServer] 8:55:25 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 11 tests\storefront-recovery-ui.spec.js:3:1 › legacy charge review withholds cached payment and survives failed or late refresh (4.6s)
+[WebServer] 8:55:29 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\storefront-recovery-ui.spec.js:60:1 › express buyer approval keeps exact unknown request through reload and accepted refresh (3.4s)
+[WebServer] 8:55:33 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\storefront-recovery-ui.spec.js:101:1 › express buyer malformed recovery refuses before sending approval (1.7s)
+[WebServer] 8:55:34 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 14 tests\storefront-recovery-ui.spec.js:167:50 › activated commerce hides a published product with missing Website membership (681ms)
+[WebServer] 8:55:35 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 15 tests\storefront-recovery-ui.spec.js:167:50 › activated commerce hides a published product with unassigned Website membership (652ms)
+[WebServer] 8:55:36 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 16 tests\storefront-recovery-ui.spec.js:180:1 › a failed batch-stock read keeps the product visible but hides the stale row count (2.3s)
+[WebServer] 8:55:38 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 17 tests\storefront-recovery-ui.spec.js:212:1 › reviewed delivery still requires contact before any order transport (3.0s)
+[WebServer] 8:55:41 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 18 tests\storefront-recovery-ui.spec.js:226:1 › uncertain checkout freezes details and retries the same payload with a fresh challenge (3.3s)
+[WebServer] 8:55:44 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 19 tests\storefront-recovery-ui.spec.js:262:1 › definite server rejection unlocks form and submits with fresh idempotency key (4.2s)
+[WebServer] 8:55:49 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 20 tests\storefront-recovery-ui.spec.js:302:1 › uncertain checkout contact navigation preserves original request identity (4.9s)
+[WebServer] 8:55:53 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 21 tests\storefront-recovery-ui.spec.js:334:1 › server rejection on retry unlocks form for editing with fresh idempotency key (4.4s)
+[WebServer] 8:55:58 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 22 tests\storefront-recovery-ui.spec.js:377:1 › held checkout blocks cart changes and retries the same basket and key (4.0s)
+[WebServer] 8:56:02 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 23 tests\storefront-recovery-ui.spec.js:407:3 › pasabuy renews its challenge after a failed submission (1.4s)
+[WebServer] 8:56:03 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 24 tests\storefront-recovery-ui.spec.js:407:3 › messages renews its challenge after a failed submission (1.4s)
+[WebServer] 8:56:05 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 25 tests\storefront-recovery-ui.spec.js:432:1 › product facts and availability remain honest when canonical fields are missing (714ms)
+[WebServer] 8:56:05 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 26 tests\storefront-recovery-ui.spec.js:443:1 › phone product identity precedes supporting content and controls have usable targets (1.6s)
+[WebServer] 8:56:07 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 27 tests\storefront-recovery-ui.spec.js:461:1 › gallery shrinking during refresh preserves the product and its buying context (868ms)
+[WebServer] 8:56:08 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 8:56:10 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 8:56:11 PM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 8:56:11 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+  ok 28 tests\storefront-recovery-ui.spec.js:472:3 › review globe does not fabricate feedback when the review source is empty (3.9s)
+[WebServer] 8:56:11 PM [vite] (client) [Unhandled error] TypeError: Cannot assign to read only property 'position' of object '#<Mesh>'
+[WebServer]  > applyProps node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:519:11
+[WebServer]  > handleContainerEffects node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16684:2
+[WebServer]  > handleContainerEffects node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16716:46
+[WebServer]  > appendChild node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16735:2
+[WebServer]  > appendChildToContainer node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:17031:4
+[WebServer]  > Cu node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:67
+[WebServer]  > Cu node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:273
+[WebServer] 
+[WebServer] 8:56:11 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "window-error", pathname: "/" } TypeError: Cannot assign to read only property 'position' of object '#<Mesh>'
+[WebServer]     at applyProps (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:53463:14)
+[WebServer]     at handleContainerEffects (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:62290:2)
+[WebServer]     at handleContainerEffects (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:62311:46)
+[WebServer]     at appendChild (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:62322:2)
+[WebServer]     at appendChildToContainer (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:62529:3)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:58876:64)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:58877:183)
+[WebServer] 8:56:12 PM [vite] (client) [Unhandled error] TypeError: Cannot convert undefined or null to object
+[WebServer]  > removeChild node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16800:15
+[WebServer]  > removeChild node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16795:4
+[WebServer]  > removeChildFromContainer node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:17036:4
+[WebServer]  > B node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:9173:59
+[WebServer]  > En node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12925:16
+[WebServer]  > ln node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer]  > En node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12945:46
+[WebServer]  > ln node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer]  > En node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12954:55
+[WebServer]  > ln node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer] 
+[WebServer] 8:56:12 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:12 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:12 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:12 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:12 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:12 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:12 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:12 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:12 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 8:56:13 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 8:56:14 PM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 8:56:21 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 8:56:22 PM [vite] (client) [Unhandled error] TypeError: Cannot assign to read only property 'position' of object '#<Mesh>'
+[WebServer]  > applyProps node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:519:11
+[WebServer]  > handleContainerEffects node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16684:2
+[WebServer]  > handleContainerEffects node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16716:46
+[WebServer]  > appendChild node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16735:2
+[WebServer]  > appendChildToContainer node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:17031:4
+[WebServer]  > Cu node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:67
+[WebServer]  > Cu node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:273
+[WebServer] 
+[WebServer] 8:56:22 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "window-error", pathname: "/" } TypeError: Cannot assign to read only property 'position' of object '#<Mesh>'
+[WebServer]     at applyProps (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:53463:14)
+[WebServer]     at handleContainerEffects (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:62290:2)
+[WebServer]     at handleContainerEffects (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:62311:46)
+[WebServer]     at appendChild (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:62322:2)
+[WebServer]     at appendChildToContainer (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:62529:3)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:58876:64)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-kr7a6whB.js?v=ddd7244d:58877:183)
+  ok 29 tests\storefront-recovery-ui.spec.js:472:3 › review globe does not fabricate feedback when the review source is unavailable (10.5s)
+[WebServer] 8:56:22 PM [vite] (client) [Unhandled error] TypeError: Cannot convert undefined or null to object
+[WebServer]  > removeChild node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16800:15
+[WebServer]  > removeChild node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16795:4
+[WebServer]  > removeChildFromContainer node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:17036:4
+[WebServer]  > B node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:9173:59
+[WebServer]  > En node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12925:16
+[WebServer]  > ln node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer]  > En node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12945:46
+[WebServer]  > ln node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer]  > En node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12954:55
+[WebServer]  > ln node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer] 
+[WebServer] 8:56:22 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:22 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:22 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:22 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:22 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:22 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:22 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:22 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 8:56:23 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 8:56:25 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 30 tests\storefront-recovery-ui.spec.js:491:1 › private guest journeys stay noindex while public browsing stays indexable (3.6s)
+[WebServer] 8:56:26 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 31 tests\storefront-recovery-ui.spec.js:501:1 › the wholesale alias publishes the established trade canonical (1.2s)
+[WebServer] 8:56:27 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 32 tests\storefront-recovery-ui.spec.js:509:1 › canonical express stays unpriced through submission and confirmation with no payment QR (4.0s)
+[WebServer] 8:56:31 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 33 tests\storefront-recovery-ui.spec.js:540:1 › canonical pickup needs acceptance and no delivery address or browser price (3.3s)
+[WebServer] 8:56:34 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 34 tests\storefront-recovery-ui.spec.js:561:1 › canonical changed address removes accepted quote until the new quote is reviewed (5.0s)
+[WebServer] 8:56:39 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 35 tests\storefront-recovery-ui.spec.js:578:1 › lost order response then pre-receipt rate refusal preserves exact retry identity (3.4s)
+[WebServer] 8:56:43 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 8:56:46 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 36 tests\storefront-recovery-ui.spec.js:614:1 › restart recovery refresh and reopened tabs retry one identity and consume terminal receipt (6.8s)
+[WebServer] 8:56:50 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 37 tests\storefront-recovery-ui.spec.js:657:1 › restart recovery queued retry consumes a receipt already reconciled by its tab (3.3s)
+[WebServer] 8:56:53 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 38 tests\storefront-recovery-ui.spec.js:684:1 › restart recovery refuses unavailable or corrupt persistence before HTTP (5.9s)
+[WebServer] 8:56:59 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 39 tests\storefront-recovery-ui.spec.js:719:1 › restart recovery terminal write failure retains pending request and excludes receipt secrets (3.3s)
+
+  39 passed (2.1m)

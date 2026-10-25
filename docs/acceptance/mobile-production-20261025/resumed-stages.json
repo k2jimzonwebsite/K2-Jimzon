@@ -1,0 +1,17 @@
+[
+  {
+    "stage": "test:mobile-moderation",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/resume-test-mobile-moderation.log"
+  },
+  {
+    "stage": "test:store-orientation",
+    "exitCode": 0,
+    "log": "docs/acceptance/mobile-production-20261025/resume-test-store-orientation.log"
+  },
+  {
+    "stage": "test:storefront-ui",
+    "exitCode": 1,
+    "log": "docs/acceptance/mobile-production-20261025/resume-test-storefront-ui.log"
+  }
+]

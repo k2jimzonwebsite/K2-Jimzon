@@ -1,0 +1,89 @@
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* codex/mobile-production-reconcile CI k2jimzonwebsite/K2-Jimzon#28 · 40195341705
+Triggered via pull_request about 18 minutes ago
+
+JOBS
+* build-and-smoke (ID 121174860880)
+  ✓ Set up job
+  ✓ Initialize containers
+  ✓ Run actions/checkout@v4
+  ✓ Run actions/setup-node@v4
+  ✓ Install dependencies
+  ✓ Dependency vulnerability and supply-chain policy
+  ✓ Secret scanner regression fixtures
+  ✓ Deployment environment contract fixtures
+  ✓ Tracked sensitive-file policy
+  ✓ Browser/server environment source boundary
+  ✓ Working-tree secret scan
+  ✓ Full Git-history secret scan
+  ✓ Import-integrity check (catches "X is not defined" runtime crashes)
+  ✓ Build isolated storefront production
+  ✓ Build isolated admin production
+  ✓ Install Playwright browser
+  * Complete Storefront and Admin BOS acceptance suite
+  * Create isolated MAP-017 rehearsal database
+  * MAP-017 PostgreSQL migration, rollback, and authorization rehearsal
+  * Catalog spreadsheet PostgreSQL migration and rollback rehearsal
+  * Upload Playwright failure evidence
+  * Post Run actions/setup-node@v4
+  * Post Run actions/checkout@v4
+  * Stop containers
+✓ critical-sql-behavior in 1m3s (ID 121174860985)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Run actions/setup-node@v4
+  ✓ Install PostgreSQL 17 from the official PostgreSQL repository
+  ✓ Execute real stock payment and final-Admin transitions
+  ✓ Post Run actions/setup-node@v4
+  ✓ Post Run actions/checkout@v4
+  ✓ Complete job
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+critical-sql-behavior: .github#2
+
+✓ codex/mobile-production-reconcile CI k2jimzonwebsite/K2-Jimzon#28 · 40195341705
+Triggered via pull_request about 19 minutes ago
+
+JOBS
+✓ build-and-smoke in 18m44s (ID 121174860880)
+  ✓ Set up job
+  ✓ Initialize containers
+  ✓ Run actions/checkout@v4
+  ✓ Run actions/setup-node@v4
+  ✓ Install dependencies
+  ✓ Dependency vulnerability and supply-chain policy
+  ✓ Secret scanner regression fixtures
+  ✓ Deployment environment contract fixtures
+  ✓ Tracked sensitive-file policy
+  ✓ Browser/server environment source boundary
+  ✓ Working-tree secret scan
+  ✓ Full Git-history secret scan
+  ✓ Import-integrity check (catches "X is not defined" runtime crashes)
+  ✓ Build isolated storefront production
+  ✓ Build isolated admin production
+  ✓ Install Playwright browser
+  ✓ Complete Storefront and Admin BOS acceptance suite
+  ✓ Create isolated MAP-017 rehearsal database
+  ✓ MAP-017 PostgreSQL migration, rollback, and authorization rehearsal
+  ✓ Catalog spreadsheet PostgreSQL migration and rollback rehearsal
+  ✓ Upload Playwright failure evidence
+  ✓ Post Run actions/setup-node@v4
+  ✓ Post Run actions/checkout@v4
+  ✓ Stop containers
+  ✓ Complete job
+✓ critical-sql-behavior in 1m3s (ID 121174860985)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Run actions/setup-node@v4
+  ✓ Install PostgreSQL 17 from the official PostgreSQL repository
+  ✓ Execute real stock payment and final-Admin transitions
+  ✓ Post Run actions/setup-node@v4
+  ✓ Post Run actions/checkout@v4
+  ✓ Complete job
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+critical-sql-behavior: .github#2
+
