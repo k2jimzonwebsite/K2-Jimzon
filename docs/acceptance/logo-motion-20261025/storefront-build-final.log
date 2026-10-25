@@ -307,7 +307,7 @@ dist/assets/vendor-supabase-Bwm3Z89P.js             214.38 kB │ gzip:  55.16 k
 dist/assets/vendor-react-C2ZZQvfb.js                218.75 kB │ gzip:  68.27 kB
 dist/assets/react-three-fiber.esm-DO_wltZG.js       914.30 kB │ gzip: 242.70 kB
 
-[plugin builtin:vite-reporter] 
+[plugin builtin:vite-reporter]
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
