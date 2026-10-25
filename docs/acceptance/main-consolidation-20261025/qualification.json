@@ -1,0 +1,133 @@
+{
+  "qualifiedHead": "980b63b0d550f958b30a4018ca9091d4619f89f9",
+  "qualifiedTree": "9646be3172406d218a00448f916d4e18222429c4",
+  "sourceClean": true,
+  "initialAggregate": {
+    "exitCode": 1,
+    "basePassed": 1130,
+    "baseFailures": 4,
+    "log": "release.log"
+  },
+  "focused": {
+    "releaseSuites": 156,
+    "custody": 2,
+    "reference": 8
+  },
+  "resumed": [
+    {
+      "task": "verify:development",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:mobile-moderation",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:store-orientation",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:storefront-ui",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:storefront-recovery",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:admin-ui",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:payment-ui",
+      "exitCode": 1,
+      "error": null
+    }
+  ],
+  "resumed2": [
+    {
+      "task": "test:inbox-ui",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:admin-product-master-ui",
+      "exitCode": 4294967295,
+      "error": null
+    }
+  ],
+  "resumed3": [
+    {
+      "task": "sheet-reference",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:admin-website-assignment-ui",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:owner-count-close-ui",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:customer-account-ui",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:selling-surfaces",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:order-receipt-direct",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:workflow-api",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:intake-ai-ui",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "test:vercel-output",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "build:storefront",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "task": "build:admin",
+      "exitCode": 0,
+      "error": null
+    }
+  ],
+  "ciRun": 40204594330,
+  "ciStatus": "SUCCESS",
+  "merge": "ede57563a34796a8f4e66b6e536bffc935cf7dc4",
+  "production": "Both separate artifacts Ready/Production, actual hosts/assets and hydrated Storefront/signed-in Admin verified",
+  "notes": [
+    "First aggregate failure is retained, not called0.",
+    "Payment46passing + focused custody2 reconciles one old assertion failure and new blank-note case.",
+    "Product Master52passing + reference8 + Sheet reference phase reconciles the interrupted obsolete-locator invocation.",
+    "Final source differs from214b5 only by focused test corrections; no app edit since final development pass.",
+    "Every full-release manifest stage has passing evidence; exact-head CI remains required before main."
+  ]
+}

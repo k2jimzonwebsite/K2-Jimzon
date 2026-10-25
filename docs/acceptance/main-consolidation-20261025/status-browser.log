@@ -1,0 +1,111 @@
+[WebServer] (node:24828) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:9248) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 47 tests using 1 worker
+
+(node:18768) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+  ok  1 [chromium] › tests\admin-human-review-editor.spec.js:16:1 › status saving defaults to immediate execution with an audit note and no dialog (1.5s)
+  ok  2 [chromium] › tests\admin-human-review-editor.spec.js:38:1 › optional status notes wait for explicit save and preserve the entered note (827ms)
+  ok  3 [chromium] › tests\admin-human-review-editor.spec.js:55:1 › immediate status refusal preserves current status and explicitly retries the identical command (852ms)
+  ok  4 [chromium] › tests\admin-human-review-editor.spec.js:75:1 › status saving locks all status controls while one command is in flight (784ms)
+  ok  5 [chromium] › tests\admin-human-review-editor.spec.js:93:1 › listing suggestions open safely, preserve field choices and reuse the matching product cache (1.4s)
+  ok  6 [chromium] › tests\admin-human-review-editor.spec.js:157:1 › human review is explicit, reasoned, saved and reversible independently of publication (2.2s)
+  ok  7 [chromium] › tests\admin-human-review-editor.spec.js:201:1 › failed human-review save preserves the unsaved decision and exact unchanged retry (1.5s)
+  ok  8 [chromium] › tests\admin-human-review-editor.spec.js:230:1 › initial explicit version rejection permits cancelling and a fresh canonical read (1.3s)
+  ok  9 [chromium] › tests\admin-human-review-editor.spec.js:243:1 › existing human review survives an unrelated detail save (1.0s)
+  ok 10 [chromium] › tests\admin-product-master-recovery.spec.js:26:1 › proven non-applied decision opens fresh details only after explicit reconciliation (1.9s)
+  ok 11 [chromium] › tests\admin-product-master-recovery.spec.js:86:4 › non-applied reconciliation preserves saved evidence on unavailable current read (2.5s)
+  ok 12 [chromium] › tests\admin-product-master-recovery.spec.js:86:4 › non-applied reconciliation preserves saved evidence on wrong SKU current read (1.3s)
+  ok 13 [chromium] › tests\admin-product-master-recovery.spec.js:86:4 › non-applied reconciliation preserves saved evidence on invalid version current read (1.3s)
+  ok 14 [chromium] › tests\admin-product-master-recovery.spec.js:95:1 › reconciliation preserves request when current cookie actor changes during latest read (1.3s)
+  ok 15 [chromium] › tests\admin-product-master-recovery.spec.js:104:1 › role downgrade during reconciliation read retains original saved request (1.4s)
+  ok 16 [chromium] › tests\admin-product-master-recovery.spec.js:113:1 › actor switch away and back cannot consume pending evidence from a held latest read (1.5s)
+  ok 17 [chromium] › tests\admin-product-master-recovery.spec.js:127:1 › only canonical version refusal permits latest-review action (1.3s)
+  ok 18 [chromium] › tests\admin-product-master-recovery.spec.js:137:1 › storage remove and restore invalidates already admitted reconciliation (1.3s)
+  ok 19 [chromium] › tests\admin-product-master-recovery.spec.js:153:1 › historical receipt during explicit reconciliation confirms history instead of opening replacement (1.3s)
+  ok 20 [chromium] › tests\admin-product-master-recovery.spec.js:163:1 › reload forgets non-applied observation while retaining the exact pending request (1.7s)
+  ok 21 [chromium] › tests\admin-product-master-recovery.spec.js:169:1 › lost reply survives close reload missing product and refusal before exact retry confirms (1.9s)
+  ok 22 [chromium] › tests\admin-product-master-recovery.spec.js:201:1 › queued retry cannot become a fresh save after another tab resolves it (1.2s)
+  ok 23 [chromium] › tests\admin-product-master-recovery.spec.js:215:1 › late reply after actor switch preserves original request for original account (1.2s)
+  ok 24 [chromium] › tests\admin-product-master-recovery.spec.js:224:1 › changed cookie actor refuses retry before HTTP and retains request (1.3s)
+  ok 25 [chromium] › tests\admin-product-master-recovery.spec.js:232:1 › unusable storage or malformed saved command refuses before a fresh POST (1.8s)
+  ok 26 [chromium] › tests\admin-product-master-recovery.spec.js:240:1 › invalid successful reply cannot erase pending decision (1.1s)
+  ok 27 [chromium] › tests\admin-product-master-recovery.spec.js:247:1 › two tabs cannot submit different new decisions under one actor lock (1.9s)
+  ok 28 [chromium] › tests\admin-product-master-recovery.spec.js:269:1 › current role downgrade refuses before retry and retains the request (1.4s)
+  ok 29 [chromium] › tests\admin-product-master-recovery.spec.js:278:1 › changed session after a valid receipt cannot acknowledge the original request (1.3s)
+  ok 30 [chromium] › tests\admin-product-master-recovery.spec.js:286:1 › retained editor survives actor switch back while the old reply is still held (1.8s)
+  ok 31 [chromium] › tests\admin-product-master-ui.spec.js:20:1 › cancellation recovery survives lost reply and missing queue, permission refusal and actor switch (1.6s)
+  ok 32 [chromium] › tests\admin-product-master-ui.spec.js:55:1 › cancellation queued retry never becomes a fresh command after another tab resolves it (846ms)
+  ok 33 [chromium] › tests\admin-product-master-ui.spec.js:73:1 › cancellation late receipt resolves only its original staff record (984ms)
+  ok 34 [chromium] › tests\admin-product-master-ui.spec.js:87:1 › cancellation stale version requires refreshed order and explicit new review (890ms)
+  ok 35 [chromium] › tests\admin-product-master-ui.spec.js:104:1 › cancellation malformed success receipts retain the exact command until a valid confirmation (1.1s)
+  ok 36 [chromium] › tests\admin-product-master-ui.spec.js:127:1 › cancellation malformed recovery is preserved and refuses a new write (619ms)
+  ok 37 [chromium] › tests\admin-product-master-ui.spec.js:162:1 › express staff quotation retains the exact lost-response command through reload and permission refusal (1.8s)
+  ok 38 [chromium] › tests\admin-product-master-ui.spec.js:197:1 › express staff stale quote requires refresh and renewed review (940ms)
+  ok 39 [chromium] › tests\admin-product-master-ui.spec.js:216:1 › express staff identity switch keeps the previous unknown command isolated (976ms)
+  ok 40 [chromium] › tests\admin-product-master-ui.spec.js:241:1 › express staff corrupt saved quotation refuses before HTTP (1.0s)
+  ok 41 [chromium] › tests\admin-product-master-ui.spec.js:271:1 › customer rates Staff editor retains one publication across reload permission denial and retry (1.9s)
+  ok 42 [chromium] › tests\admin-product-master-ui.spec.js:310:1 › customer rates stale version requires refresh and fresh review before another publication (1.9s)
+  ok 43 [chromium] › tests\admin-product-master-ui.spec.js:338:1 › customer rates empty matrix and unavailable persistence never publish invented values (1.1s)
+  ok 44 [chromium] › tests\admin-product-master-ui.spec.js:364:1 › customer rates queued retry stops after another tab resolved the publication (771ms)
+  ok 45 [chromium] › tests\admin-product-master-ui.spec.js:387:1 › customer rates changed actor cannot consume a late receipt or the previous pending change (954ms)
+  x  46 [chromium] › tests\admin-product-master-ui.spec.js:438:1 › keeps secure Product Master edit, lifecycle, and delete decisions usable at 375px (7.7s)
+(node:21816) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 47 [chromium] › tests\admin-product-master-ui.spec.js:556:1 › an unconfirmed deletion freezes the form and retries the same identity (1.1s)
+
+
+  1) [chromium] › tests\admin-product-master-ui.spec.js:438:1 › keeps secure Product Master edit, lifecycle, and delete decisions usable at 375px
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: 'Set Under Review' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: 'Set Under Review' }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: 'Set Under Review' })
+
+
+      535 |   await page.getByRole('button', { name: 'Review', exact: true }).click()
+      536 |   const statusDialog = page.getByRole('dialog', { name: 'Set Under Review' })
+    > 537 |   await expect(statusDialog).toBeVisible()
+          |                              ^
+      538 |   await statusDialog.getByLabel('Reason for the status change').fill('Reviewed package and publication evidence.')
+      539 |   expect(await statusDialog.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(1)
+      540 |   await page.screenshot({ path: testInfo.outputPath('product-master-status-mobile.png'), fullPage: true })
+        at C:\Users\jerze\.codex\worktrees\mobile-production-reconcile\K2 JImzon\tests\admin-product-master-ui.spec.js:537:30
+
+    Error Context: test-results\admin-product-master-ui-ke-a143d-e-decisions-usable-at-375px-chromium\error-context.md
+
+  1 failed
+    [chromium] › tests\admin-product-master-ui.spec.js:438:1 › keeps secure Product Master edit, lifecycle, and delete decisions usable at 375px
+  46 passed (1.2m)

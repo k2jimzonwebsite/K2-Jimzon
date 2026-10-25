@@ -108,3 +108,5 @@ verify canonical host boundaries and genuine owner-controlled security checks.
 The operational runbook is `docs/runbooks/SECURITY_CHECK_GUARDRAILS.md`.
 Rollback is a scoped component/helper/gates/test revert; preserve server
 verification and unrelated work. No database or provider rollback is required.
+
+25 October release supersedes the earlier local-only state: recovered source is now main PR30/ede57563, both separate artifacts/actual hosts verified and CI40204594330 passes. Current signed-in Admin read is observed; genuine new provider-challenge/login remains MAP-025. Final evidence, preserved initial failures and recovery: MAIN_CONSOLIDATION_20261025.md.

@@ -1,0 +1,12 @@
+[
+  {
+    "task": "test:inbox-ui",
+    "exitCode": 0,
+    "error": null
+  },
+  {
+    "task": "test:admin-product-master-ui",
+    "exitCode": 4294967295,
+    "error": null
+  }
+]

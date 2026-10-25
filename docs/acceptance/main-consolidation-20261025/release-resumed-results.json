@@ -1,0 +1,37 @@
+[
+  {
+    "task": "verify:development",
+    "exitCode": 0,
+    "error": null
+  },
+  {
+    "task": "test:mobile-moderation",
+    "exitCode": 0,
+    "error": null
+  },
+  {
+    "task": "test:store-orientation",
+    "exitCode": 0,
+    "error": null
+  },
+  {
+    "task": "test:storefront-ui",
+    "exitCode": 0,
+    "error": null
+  },
+  {
+    "task": "test:storefront-recovery",
+    "exitCode": 0,
+    "error": null
+  },
+  {
+    "task": "test:admin-ui",
+    "exitCode": 0,
+    "error": null
+  },
+  {
+    "task": "test:payment-ui",
+    "exitCode": 1,
+    "error": null
+  }
+]

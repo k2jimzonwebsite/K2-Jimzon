@@ -1,0 +1,23 @@
+
+> k2-jimzon-prototype@0.1.0 test:security-check-ui
+> playwright test --config=playwright.security-check.config.js
+
+[WebServer] (node:1960) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:25536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:12516) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\security-check-recovery.spec.js:6:3 › admin_auth: a silent provider has visible progress, bounded retry and no unverified submission (1.2s)
+  ok 2 tests\security-check-recovery.spec.js:6:3 › customer_auth: a silent provider has visible progress, bounded retry and no unverified submission (1.3s)
+  ok 3 tests\security-check-recovery.spec.js:6:3 › guest_order: a silent provider has visible progress, bounded retry and no unverified submission (1.5s)
+  ok 4 tests\security-check-recovery.spec.js:6:3 › guest_start: a silent provider has visible progress, bounded retry and no unverified submission (1.3s)
+  ok 5 tests\security-check-recovery.spec.js:6:3 › guest_wholesale: a silent provider has visible progress, bounded retry and no unverified submission (1.3s)
+  ok 6 tests\security-check-recovery.spec.js:6:3 › guest_pasabuy: a silent provider has visible progress, bounded retry and no unverified submission (1.2s)
+  ok 7 tests\security-check-recovery.spec.js:40:1 › download refusal is recoverable and expiry clears a previously verified token (405ms)
+  ok 8 tests\security-check-recovery.spec.js:56:1 › provider geometry fits narrow containers and recovers across viewport changes (420ms)
+
+  8 passed (11.8s)

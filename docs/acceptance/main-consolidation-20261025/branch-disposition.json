@@ -1,0 +1,735 @@
+{
+  "mainBefore": "7c764830089557a24f9269a314a03f322b2b284c",
+  "archive": "C:/Users/jerze/K2 JImzon/.tools/branch-cleanup-recovery-20261025/recovery.git",
+  "refs": [
+    {
+      "ref": "refs/heads/chore/intake-docs-cleanup-20260925",
+      "head": "d7a4b386e0cd853afde11f6fb759ea2a077b770d",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/chore/map-audit-verification-and-worktree-merge",
+      "head": "8d60e0e4ab263ee4f98bcdc041239ad5ca939769",
+      "upstream": "origin/chore/map-audit-verification-and-worktree-merge",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/admin-google-turnstile-recovery",
+      "head": "bdc6d8d898de81033fe61a9f8b25281738d20c66",
+      "upstream": "origin/codex/admin-google-turnstile-recovery",
+      "ancestor": false,
+      "ahead": 1,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/admin-media-read-release",
+      "head": "3cc47af56535fdf5d1f4a3a9577e1f1ed0c96e5a",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/automatic-intake-preparation",
+      "head": "67157cf71e5ff99c5712db28cea8826f56113272",
+      "upstream": "origin/codex/automatic-intake-preparation",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/cabinet-drag",
+      "head": "80f76e9c999219d135570922eded6d7c8374106b",
+      "upstream": "origin/codex/cabinet-drag",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/cabinet-production-budget",
+      "head": "fa6a578b5f28f7cf5ff924673b30fd5da97a6d29",
+      "upstream": "origin/codex/cabinet-production-budget",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/cabinet-production-receipt",
+      "head": "76e6810bae94f6edbd9172adc0076d991345bc9a",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/cabinet-release-receipt",
+      "head": "409dbcd20c0f43caacf4f606002dd95f40290c7a",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/cashout-qr-polish-20260927",
+      "head": "fcc2c370f0b2e06c066271f369e2198de2810fc4",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/category-production-release",
+      "head": "a9e369a7a6b7f586f05efaee5ea8d109f64b688b",
+      "upstream": "origin/codex/category-production-release",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/channel-slices-20260929",
+      "head": "dd33ce174c005d607a23826548ea01abe39a3b4c",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/connector-handoff-20260929",
+      "head": "27c7457fc0070fc5e4c6fd79e52d02f4548621c1",
+      "upstream": "origin/codex/connector-handoff-20260929",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/count-close-activation-readiness",
+      "head": "1b6df799a3e23b1b2a1fdbbc7271ce7a28b148ec",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/dependabot-continuation",
+      "head": "b00e9feea9db771f838ceb8434d8d2ab989cb2c5",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/dependabot-motion-145",
+      "head": "7fdc88632400938cd2fe0c12007fb7020a6608ce",
+      "upstream": "origin/dependabot/npm_and_yarn/compatible-updates-765f58eb1d",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/dependabot-release-receipt",
+      "head": "280efb49a7d142ad05ab5c9ea7c8389150f374c3",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/dependabot-remediation",
+      "head": "d88d985015b7286805fd94bbdb81016aed1c11af",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 3,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/dummy-production-acceptance",
+      "head": "3dc185170a60e324a9e7b9d0ae2ba62222ccb5fa",
+      "upstream": "origin/codex/dummy-production-acceptance",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/google-signin-live-20261016",
+      "head": "9f4d1c461846556d65a6774d72a43a3b5dbd935b",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 4,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/hero-additive-release",
+      "head": "04734cb85a36110ed6b8dfdba349737431cf982a",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/human-testing-release",
+      "head": "57604cdcf17362bb9601d61c4140f717bc421e53",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/intake-cleanup",
+      "head": "1f59a93aa2e53b9adc8bea3ff0dc4e7606e6bb47",
+      "upstream": "origin/codex/intake-cleanup",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/inventory-categories",
+      "head": "442b652686c7b1f81ecee0fd2d5c6a89992298ce",
+      "upstream": "origin/codex/inventory-categories",
+      "ancestor": false,
+      "ahead": 3,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/inventory-display-release-20261018",
+      "head": "f15d05de01b7a5ba747a68d41ca7748dd1f2b358",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 1,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/inventory-variations",
+      "head": "dcca20ac441b903a41ff514b12a430d101e90571",
+      "upstream": "origin/codex/inventory-variations",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/inventory-variations-release-receipt",
+      "head": "5b594f9dbdac7819c760b7430d2ff13aea80420f",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/listing-detail-image-fix",
+      "head": "e8279aeb5496fb84d738732ed8fb14420da477f2",
+      "upstream": "origin/codex/listing-detail-image-fix",
+      "ancestor": false,
+      "ahead": 2,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/listing-readiness-finish-20261016",
+      "head": "aefeb8d5399f4f39d79f33d0479ed9731c326807",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 5,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/listing-release",
+      "head": "e6fe012a976b03d38e3376cf47c30202d2d37721",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/logo-motion-direction",
+      "head": "138ea136c69a587e3d0b773252af6f438ec1c033",
+      "upstream": "origin/codex/logo-motion-direction",
+      "ancestor": false,
+      "ahead": 3,
+      "decision": "MERGE THEN DELETE",
+      "reason": "Reviewed qualified logo, security recovery and optional-note source; CI pending"
+    },
+    {
+      "ref": "refs/heads/codex/manual-inventory-listing-project",
+      "head": "48883ca930567af744be8fda494a2a33d1aea962",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 4,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/manual-qr-payments",
+      "head": "2d6f7cfd9a380bce5871064de7044c28eefbe346",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/map017-guest-chat-continuity-audit",
+      "head": "0c45a6bf0761eedb4c7e772a0eb53c2ca883201b",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/map017-guest-chat-preview",
+      "head": "9a9b9e68dc67cc2adf707759bd0a3d22f5288480",
+      "upstream": "origin/codex/map017-guest-chat-preview",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/map017-guest-chat-test-only",
+      "head": "149ef3d531bf44ce7f3232d7bcdc34950cc123e0",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/map017-stock-grant",
+      "head": "7dad60d53b647afb72410c9d0b7307c3bd14f3ad",
+      "upstream": "origin/codex/map017-stock-grant",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/mobile-final-receipt",
+      "head": "7f26179729fa734a336cc0d5d314034c50992f76",
+      "upstream": "origin/codex/mobile-final-receipt",
+      "ancestor": false,
+      "ahead": 1,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/mobile-homepage-fixes",
+      "head": "901c15df4ec9d65f6f922e39c16a2309c3168744",
+      "upstream": "origin/codex/mobile-homepage-fixes",
+      "ancestor": false,
+      "ahead": 9,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/mobile-production-reconcile",
+      "head": "de522dfafcabd8d38cab21b022b57ddadeac7e05",
+      "upstream": "origin/codex/mobile-production-reconcile",
+      "ancestor": false,
+      "ahead": 3,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/mobile-release-receipt-20261025",
+      "head": "3ed01b0eae62e48c4be385e8f52365bc078aed98",
+      "upstream": "origin/codex/mobile-release-receipt-20261025",
+      "ancestor": false,
+      "ahead": 5,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/pack-size-release-receipt",
+      "head": "e8a9833a8061b909a6cb5ac4891b90e742a92a5f",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/product-knowledge-publish-fix",
+      "head": "a164f206b5a6ecad91fa2ba7d2847eae2d665f5d",
+      "upstream": "origin/codex/product-knowledge-publish-fix",
+      "ancestor": false,
+      "ahead": 2,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Runtime source exactly equals main; superseded draft20 closed"
+    },
+    {
+      "ref": "refs/heads/codex/proportionate-release-checks",
+      "head": "bde1f12a1e8f964718b4896e49d8427d44560ec7",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/shopper-fixes-production",
+      "head": "c5dfd241de24d97d4a0b1e9d00dd2b970ee1049a",
+      "upstream": "origin/codex/shopper-fixes-production",
+      "ancestor": false,
+      "ahead": 2,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/heads/codex/shopper-release-receipt",
+      "head": "b3f9dc67437bc3a351a5a3dd4ddc94df36a3168b",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/sku-merge-owner-approved",
+      "head": "b00e9feea9db771f838ceb8434d8d2ab989cb2c5",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/staff-custody-release",
+      "head": "b59377f0a6548ac29f60c88383adb1bdfc10ea05",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/staff-session-seven-days",
+      "head": "3b546f415e4161efd07e8a30c9ab6f94f2cbc0f1",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/step-1-launch-core",
+      "head": "0e73f84785e7fa5dabc98e61c5388786e089ef46",
+      "upstream": "origin/codex/step-1-launch-core",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/store-assets-loader-20261020",
+      "head": "5f700020f313d481407a4bc76a7e3d3e2f613781",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/codex/storefront-pack-size",
+      "head": "d0421fdf167c1880510537b329245c08a3cf35d1",
+      "upstream": "origin/codex/storefront-pack-size",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/feature/pim-schema",
+      "head": "785f26de9b1cb0ea090469604a8f955cc49d68a8",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/fix/inbox-viewport-and-archiving",
+      "head": "e9a498583232f42812f3b8cd3048e4f49464e388",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/heads/main",
+      "head": "44d793a34b7d871f4577e291bcda3f407b920aa8",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "KEEP",
+      "reason": "Canonical production main"
+    },
+    {
+      "ref": "refs/remotes/origin/chore/map-audit-verification-and-worktree-merge",
+      "head": "8bf8f6fff30e2e3bf96a9ce97d80634484c41d8c",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/admin-google-turnstile-recovery",
+      "head": "bdc6d8d898de81033fe61a9f8b25281738d20c66",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 1,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/automatic-intake-preparation",
+      "head": "3211624b77f9df11a61d0909f8706ef79a08ab5d",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/cabinet-drag",
+      "head": "80f76e9c999219d135570922eded6d7c8374106b",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/cabinet-production-budget",
+      "head": "fa6a578b5f28f7cf5ff924673b30fd5da97a6d29",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/category-production-release",
+      "head": "a9e369a7a6b7f586f05efaee5ea8d109f64b688b",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/connector-handoff-20260929",
+      "head": "27c7457fc0070fc5e4c6fd79e52d02f4548621c1",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/dummy-production-acceptance",
+      "head": "3dc185170a60e324a9e7b9d0ae2ba62222ccb5fa",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/intake-cleanup",
+      "head": "1f59a93aa2e53b9adc8bea3ff0dc4e7606e6bb47",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/inventory-categories",
+      "head": "442b652686c7b1f81ecee0fd2d5c6a89992298ce",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 3,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/inventory-variations",
+      "head": "dcca20ac441b903a41ff514b12a430d101e90571",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/listing-detail-image-fix",
+      "head": "0e13a00b5c05d49dc058fa4cb58147e8f89481c2",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 1,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/logo-motion-direction",
+      "head": "138ea136c69a587e3d0b773252af6f438ec1c033",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 3,
+      "decision": "MERGE THEN DELETE",
+      "reason": "Reviewed qualified logo, security recovery and optional-note source; CI pending"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/map017-guest-chat-preview",
+      "head": "a3aa2b26531de4c9b30885bd9a82e096341bf2b2",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/map017-stock-grant",
+      "head": "7dad60d53b647afb72410c9d0b7307c3bd14f3ad",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/mobile-final-receipt",
+      "head": "7f26179729fa734a336cc0d5d314034c50992f76",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 1,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/mobile-homepage-fixes",
+      "head": "901c15df4ec9d65f6f922e39c16a2309c3168744",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 9,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/mobile-production-reconcile",
+      "head": "de522dfafcabd8d38cab21b022b57ddadeac7e05",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 3,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/mobile-release-receipt-20261025",
+      "head": "eef23eb7d7b0ca14ed6143b39e98c03f94179d63",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 4,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/product-knowledge-publish-fix",
+      "head": "a164f206b5a6ecad91fa2ba7d2847eae2d665f5d",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 2,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Runtime source exactly equals main; superseded draft20 closed"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/real-inventory-listing-20260928",
+      "head": "75cdd326b1bb86b515884df7799b70adada4fda3",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/shopper-fixes-production",
+      "head": "c5dfd241de24d97d4a0b1e9d00dd2b970ee1049a",
+      "upstream": "",
+      "ancestor": false,
+      "ahead": 2,
+      "decision": "DELETE AFTER ARCHIVE AND NECESSITY AUDIT",
+      "reason": "Historical/squashed or superseded release head; required current-source deltas selectively recovered; exact commits retained in independent recovery.git, unfinished SKU scope retained MAP-023"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/step-1-launch-core",
+      "head": "0e73f84785e7fa5dabc98e61c5388786e089ef46",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/storefront-pack-size",
+      "head": "d0421fdf167c1880510537b329245c08a3cf35d1",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/feature/pim-schema",
+      "head": "785f26de9b1cb0ea090469604a8f955cc49d68a8",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "DELETE AFTER ARCHIVE",
+      "reason": "Exact ancestor of initial main; checked-out worktree first detached without changing files"
+    },
+    {
+      "ref": "refs/remotes/origin/main",
+      "head": "7c764830089557a24f9269a314a03f322b2b284c",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0,
+      "decision": "KEEP",
+      "reason": "Canonical production main"
+    }
+  ]
+}

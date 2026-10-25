@@ -1,0 +1,177 @@
+{
+  "files": [
+    {
+      "name": "release.log",
+      "passedSummaries": [
+        {
+          "count": 7,
+          "duration": "922ms"
+        },
+        {
+          "count": 8,
+          "duration": "11.6s"
+        },
+        {
+          "count": 27,
+          "duration": "36.3s"
+        },
+        {
+          "count": 26,
+          "duration": "41.5s"
+        },
+        {
+          "count": 1130,
+          "duration": "1.5m"
+        }
+      ],
+      "failureSummaries": [
+        4
+      ],
+      "interrupted": false
+    },
+    {
+      "name": "release-focused.log",
+      "passedSummaries": [
+        {
+          "count": 156,
+          "duration": "39.5s"
+        }
+      ],
+      "failureSummaries": [],
+      "interrupted": false
+    },
+    {
+      "name": "release-resumed.log",
+      "passedSummaries": [
+        {
+          "count": 7,
+          "duration": "925ms"
+        },
+        {
+          "count": 4,
+          "duration": "693ms"
+        },
+        {
+          "count": 12,
+          "duration": "1.3m"
+        },
+        {
+          "count": 32,
+          "duration": "1.7m"
+        },
+        {
+          "count": 39,
+          "duration": "2.0m"
+        },
+        {
+          "count": 42,
+          "duration": "1.2m"
+        },
+        {
+          "count": 8,
+          "duration": "15.7s"
+        },
+        {
+          "count": 6,
+          "duration": "8.4s"
+        },
+        {
+          "count": 46,
+          "duration": "49.5s"
+        }
+      ],
+      "failureSummaries": [
+        1
+      ],
+      "interrupted": false
+    },
+    {
+      "name": "custody-focused.log",
+      "passedSummaries": [
+        {
+          "count": 2,
+          "duration": "5.8s"
+        }
+      ],
+      "failureSummaries": [],
+      "interrupted": false
+    },
+    {
+      "name": "release-resumed2.log",
+      "passedSummaries": [
+        {
+          "count": 41,
+          "duration": "32.4s"
+        }
+      ],
+      "failureSummaries": [],
+      "interrupted": true
+    },
+    {
+      "name": "reference-focused.log",
+      "passedSummaries": [
+        {
+          "count": 8,
+          "duration": "16.3s"
+        }
+      ],
+      "failureSummaries": [],
+      "interrupted": false
+    },
+    {
+      "name": "release-resumed3.log",
+      "passedSummaries": [
+        {
+          "count": 2,
+          "duration": "8.7s"
+        },
+        {
+          "count": 14,
+          "duration": "30.2s"
+        },
+        {
+          "count": 1,
+          "duration": "20.3s"
+        },
+        {
+          "count": 8,
+          "duration": "13.7s"
+        },
+        {
+          "count": 72,
+          "duration": "3.2m"
+        },
+        {
+          "count": 2,
+          "duration": "14.3s"
+        },
+        {
+          "count": 4,
+          "duration": "10.7s"
+        },
+        {
+          "count": 11,
+          "duration": "13.4s"
+        },
+        {
+          "count": 26,
+          "duration": "32.4s"
+        },
+        {
+          "count": 7,
+          "duration": "1.2s"
+        },
+        {
+          "count": 7,
+          "duration": "1.0s"
+        }
+      ],
+      "failureSummaries": [],
+      "interrupted": false
+    }
+  ],
+  "countingRule": "Do not sum overlapping focused/aggregate passes. All npm-test manifest stages are reconciled through original, focused and unrun remainder receipts; final CI is authoritative aggregate proof.",
+  "requiredStageNames": [
+    "verify:release"
+  ]
+}

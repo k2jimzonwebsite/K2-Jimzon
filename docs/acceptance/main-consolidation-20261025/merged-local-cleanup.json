@@ -1,0 +1,229 @@
+{
+  "criterion": "Exact ancestor of main, not checked out; archived before removal",
+  "deleted": [
+    {
+      "ref": "refs/heads/chore/intake-docs-cleanup-20260925",
+      "head": "d7a4b386e0cd853afde11f6fb759ea2a077b770d",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/chore/map-audit-verification-and-worktree-merge",
+      "head": "8d60e0e4ab263ee4f98bcdc041239ad5ca939769",
+      "upstream": "origin/chore/map-audit-verification-and-worktree-merge",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/admin-media-read-release",
+      "head": "3cc47af56535fdf5d1f4a3a9577e1f1ed0c96e5a",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/cabinet-drag",
+      "head": "80f76e9c999219d135570922eded6d7c8374106b",
+      "upstream": "origin/codex/cabinet-drag",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/cabinet-production-budget",
+      "head": "fa6a578b5f28f7cf5ff924673b30fd5da97a6d29",
+      "upstream": "origin/codex/cabinet-production-budget",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/cabinet-release-receipt",
+      "head": "409dbcd20c0f43caacf4f606002dd95f40290c7a",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/cashout-qr-polish-20260927",
+      "head": "fcc2c370f0b2e06c066271f369e2198de2810fc4",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/channel-slices-20260929",
+      "head": "dd33ce174c005d607a23826548ea01abe39a3b4c",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/connector-handoff-20260929",
+      "head": "27c7457fc0070fc5e4c6fd79e52d02f4548621c1",
+      "upstream": "origin/codex/connector-handoff-20260929",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/count-close-activation-readiness",
+      "head": "1b6df799a3e23b1b2a1fdbbc7271ce7a28b148ec",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/dependabot-continuation",
+      "head": "b00e9feea9db771f838ceb8434d8d2ab989cb2c5",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/dependabot-release-receipt",
+      "head": "280efb49a7d142ad05ab5c9ea7c8389150f374c3",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/dummy-production-acceptance",
+      "head": "3dc185170a60e324a9e7b9d0ae2ba62222ccb5fa",
+      "upstream": "origin/codex/dummy-production-acceptance",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/hero-additive-release",
+      "head": "04734cb85a36110ed6b8dfdba349737431cf982a",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/human-testing-release",
+      "head": "57604cdcf17362bb9601d61c4140f717bc421e53",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/intake-cleanup",
+      "head": "1f59a93aa2e53b9adc8bea3ff0dc4e7606e6bb47",
+      "upstream": "origin/codex/intake-cleanup",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/inventory-variations",
+      "head": "dcca20ac441b903a41ff514b12a430d101e90571",
+      "upstream": "origin/codex/inventory-variations",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/inventory-variations-release-receipt",
+      "head": "5b594f9dbdac7819c760b7430d2ff13aea80420f",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/listing-release",
+      "head": "e6fe012a976b03d38e3376cf47c30202d2d37721",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/manual-qr-payments",
+      "head": "2d6f7cfd9a380bce5871064de7044c28eefbe346",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/map017-guest-chat-continuity-audit",
+      "head": "0c45a6bf0761eedb4c7e772a0eb53c2ca883201b",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/map017-guest-chat-preview",
+      "head": "9a9b9e68dc67cc2adf707759bd0a3d22f5288480",
+      "upstream": "origin/codex/map017-guest-chat-preview",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/map017-guest-chat-test-only",
+      "head": "149ef3d531bf44ce7f3232d7bcdc34950cc123e0",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/map017-stock-grant",
+      "head": "7dad60d53b647afb72410c9d0b7307c3bd14f3ad",
+      "upstream": "origin/codex/map017-stock-grant",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/pack-size-release-receipt",
+      "head": "e8a9833a8061b909a6cb5ac4891b90e742a92a5f",
+      "upstream": "origin/main",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/proportionate-release-checks",
+      "head": "bde1f12a1e8f964718b4896e49d8427d44560ec7",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/staff-custody-release",
+      "head": "b59377f0a6548ac29f60c88383adb1bdfc10ea05",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/staff-session-seven-days",
+      "head": "3b546f415e4161efd07e8a30c9ab6f94f2cbc0f1",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/step-1-launch-core",
+      "head": "0e73f84785e7fa5dabc98e61c5388786e089ef46",
+      "upstream": "origin/codex/step-1-launch-core",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/codex/storefront-pack-size",
+      "head": "d0421fdf167c1880510537b329245c08a3cf35d1",
+      "upstream": "origin/codex/storefront-pack-size",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/feature/pim-schema",
+      "head": "785f26de9b1cb0ea090469604a8f955cc49d68a8",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    },
+    {
+      "ref": "refs/heads/fix/inbox-viewport-and-archiving",
+      "head": "e9a498583232f42812f3b8cd3048e4f49464e388",
+      "upstream": "",
+      "ancestor": true,
+      "ahead": 0
+    }
+  ]
+}

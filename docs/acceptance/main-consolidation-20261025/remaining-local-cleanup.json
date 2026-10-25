@@ -1,0 +1,137 @@
+{
+  "removed": [
+    {
+      "branch": "codex/admin-google-turnstile-recovery",
+      "head": "bdc6d8d898de81033fe61a9f8b25281738d20c66",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/automatic-intake-preparation",
+      "head": "67157cf71e5ff99c5712db28cea8826f56113272",
+      "inMain": true,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/cabinet-production-receipt",
+      "head": "76e6810bae94f6edbd9172adc0076d991345bc9a",
+      "inMain": true,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/category-production-release",
+      "head": "a9e369a7a6b7f586f05efaee5ea8d109f64b688b",
+      "inMain": true,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/dependabot-motion-145",
+      "head": "7fdc88632400938cd2fe0c12007fb7020a6608ce",
+      "inMain": true,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/dependabot-remediation",
+      "head": "d88d985015b7286805fd94bbdb81016aed1c11af",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/google-signin-live-20261016",
+      "head": "9f4d1c461846556d65a6774d72a43a3b5dbd935b",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/inventory-categories",
+      "head": "442b652686c7b1f81ecee0fd2d5c6a89992298ce",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/inventory-display-release-20261018",
+      "head": "f15d05de01b7a5ba747a68d41ca7748dd1f2b358",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/listing-detail-image-fix",
+      "head": "e8279aeb5496fb84d738732ed8fb14420da477f2",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/listing-readiness-finish-20261016",
+      "head": "aefeb8d5399f4f39d79f33d0479ed9731c326807",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/logo-motion-direction",
+      "head": "980b63b0d550f958b30a4018ca9091d4619f89f9",
+      "inMain": true,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/manual-inventory-listing-project",
+      "head": "48883ca930567af744be8fda494a2a33d1aea962",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/mobile-final-receipt",
+      "head": "7f26179729fa734a336cc0d5d314034c50992f76",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/mobile-homepage-fixes",
+      "head": "901c15df4ec9d65f6f922e39c16a2309c3168744",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/mobile-production-reconcile",
+      "head": "de522dfafcabd8d38cab21b022b57ddadeac7e05",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/mobile-release-receipt-20261025",
+      "head": "3ed01b0eae62e48c4be385e8f52365bc078aed98",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/product-knowledge-publish-fix",
+      "head": "a164f206b5a6ecad91fa2ba7d2847eae2d665f5d",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/shopper-fixes-production",
+      "head": "c5dfd241de24d97d4a0b1e9d00dd2b970ee1049a",
+      "inMain": false,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/shopper-release-receipt",
+      "head": "b3f9dc67437bc3a351a5a3dd4ddc94df36a3168b",
+      "inMain": true,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/sku-merge-owner-approved",
+      "head": "b00e9feea9db771f838ceb8434d8d2ab989cb2c5",
+      "inMain": true,
+      "archivePreserved": true
+    },
+    {
+      "branch": "codex/store-assets-loader-20261020",
+      "head": "5f700020f313d481407a4bc76a7e3d3e2f613781",
+      "inMain": true,
+      "archivePreserved": true
+    }
+  ],
+  "remaining": "(HEAD detached at origin/main)\nmain"
+}

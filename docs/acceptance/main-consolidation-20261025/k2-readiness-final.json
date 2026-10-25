@@ -1,0 +1,169 @@
+{
+  "projectRef": "pixplcjqivlfflickobf",
+  "ledger": {
+    "entries": 11,
+    "latest": "20261013110000"
+  },
+  "absent": {
+    "intake_sessions": 1,
+    "sku_seq": 1,
+    "channels": 1,
+    "channel_shops": 1
+  },
+  "installation": {
+    "state": "verified",
+    "mode": "installed",
+    "reapplyAllowed": false,
+    "detail": "Exact phased complete-source receipt and canonical relations installed; installer must not be repeated"
+  },
+  "categoryActivationSnapshot": {
+    "relation": {
+      "rls": true,
+      "owner": "postgres",
+      "anonAccess": false,
+      "publicAccess": false,
+      "serviceAccess": false,
+      "authenticatedAccess": false
+    },
+    "rows": [
+      {
+        "singleton": true,
+        "maximumDepth": 10
+      }
+    ]
+  },
+  "categoryActivation": {
+    "state": "verified",
+    "mode": "installed",
+    "reapplyAllowed": false,
+    "detail": "Private category activation present, maximum depth 10; exact value approval/recovery and operational acceptance remain separate"
+  },
+  "categoryActivationNormal": {
+    "state": "verified",
+    "mode": "installed",
+    "reapplyAllowed": false,
+    "detail": "Private category activation present, maximum depth 10; exact value approval/recovery and operational acceptance remain separate"
+  },
+  "categoryPreparationRequested": false,
+  "categoryPreparationTarget": null,
+  "controlledReceipts": [
+    {
+      "version": "20261013110000",
+      "name": "k2_category_operating_full_catalog_phased_controlled_20261013",
+      "idempotencyKey": "k2-controlled-v1:sha256:587e481e549039dc31c1ee3cff9670a0a9bbf8a9cf9a95ee18a20711bf384c3d",
+      "statementCount": 1,
+      "statementBytes": 10588727,
+      "statementSha256": "587e481e549039dc31c1ee3cff9670a0a9bbf8a9cf9a95ee18a20711bf384c3d"
+    }
+  ],
+  "installedPermissions": {
+    "state": "verified",
+    "mode": "installed",
+    "reapplyAllowed": false,
+    "detail": "Exact reviewed27 explicit anonymous grants and2 invoker trigger ACLs; hosted caller/legacy-route acceptance remains separate"
+  },
+  "grants": {
+    "anon_execute": 29
+  },
+  "facts": {
+    "products": 196,
+    "live_products": 130,
+    "lots": 49
+  },
+  "backup": {
+    "file": "product-families-before-20261021.k2backup",
+    "mtime": "2026-10-21T15:37:52.279Z"
+  },
+  "backupProof": {
+    "state": "verified",
+    "mode": "backup",
+    "reapplyAllowed": false,
+    "detail": "Encrypted file hash/bytes, K2 backup identity and isolated restored current migration verified; managed provider recovery remains excluded"
+  },
+  "gates": [
+    {
+      "id": "project-identity",
+      "owner": "none",
+      "state": "verified",
+      "detail": "K2 pixplcjqivlfflickobf"
+    },
+    {
+      "id": "migration-ledger",
+      "owner": "none",
+      "state": "verified",
+      "detail": "11 entries, latest 20261013110000"
+    },
+    {
+      "id": "canonical-installation",
+      "owner": "none",
+      "state": "verified",
+      "detail": "Exact phased complete-source receipt and canonical relations installed; installer must not be repeated"
+    },
+    {
+      "id": "category-policy-activation",
+      "owner": "owner",
+      "state": "verified",
+      "detail": "Private category activation present, maximum depth 10; exact value approval/recovery and operational acceptance remain separate"
+    },
+    {
+      "id": "installed-permission-catalog",
+      "owner": "none",
+      "state": "verified",
+      "detail": "Exact reviewed27 explicit anonymous grants and2 invoker trigger ACLs; hosted caller/legacy-route acceptance remains separate"
+    },
+    {
+      "id": "hosted-caller-acceptance",
+      "owner": "owner",
+      "state": "owner",
+      "detail": "Installed signatures match only; authenticated staff/customer and legacy-route acceptance remain unverified"
+    },
+    {
+      "id": "admin-preauth-dependency",
+      "owner": "owner",
+      "state": "verified",
+      "detail": "Exact signed Admin pre-auth function, limited execute and private forced-RLS rate tables verified; genuine hosted login remains separate"
+    },
+    {
+      "id": "stock-facts",
+      "owner": "owner",
+      "state": "owner",
+      "detail": "196 products (130 live), 49 lots; physical count unproven"
+    },
+    {
+      "id": "backup-freshness",
+      "owner": "none",
+      "state": "verified",
+      "detail": "product-families-before-20261021.k2backup: Encrypted file hash/bytes, K2 backup identity and isolated restored current migration verified; managed provider recovery remains excluded"
+    },
+    {
+      "id": "backup-restore-proof",
+      "owner": "owner",
+      "state": "verified",
+      "detail": "Encrypted file hash/bytes, K2 backup identity and isolated restored current migration verified; managed provider recovery remains excluded"
+    },
+    {
+      "id": "vercel-preview",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "no Vercel API token or CLI in this harness"
+    },
+    {
+      "id": "vercel-edge-gate",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "Admin Vercel edge routing rule state not readable from this script"
+    },
+    {
+      "id": "provider-advisor",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "Supabase advisor findings need a signed-in session"
+    },
+    {
+      "id": "release-branch",
+      "owner": "none",
+      "state": "verified",
+      "detail": "## HEAD (no branch)"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "observed": "2026-10-25",
+  "project": "pixplcjqivlfflickobf",
+  "readOnly": true,
+  "implemented": false,
+  "installedMergeAction": false,
+  "lotTrigger": "trg_sync_product_batch_compat_columns",
+  "requiresContext": "k2_private.current_category_lot_context_v1",
+  "state": "Prototype remains incomplete; no runtime command/schema/data changes admitted by consolidation",
+  "owningMap": "MAP-023",
+  "idea": "IDEA-20261025-04",
+  "groups": [
+    {
+      "canonical": "K2-SKU-001145",
+      "sources": [
+        "K2-SKU-001146",
+        "K2-SKU-001147",
+        "K2-SKU-001148"
+      ]
+    },
+    {
+      "canonical": "K2-SKU-001017",
+      "sources": [
+        "K2-SKU-001016",
+        "K2-SKU-001018"
+      ]
+    },
+    {
+      "canonical": "K2-SKU-001020",
+      "sources": [
+        "K2-SKU-001019",
+        "K2-SKU-001021"
+      ]
+    }
+  ]
+}

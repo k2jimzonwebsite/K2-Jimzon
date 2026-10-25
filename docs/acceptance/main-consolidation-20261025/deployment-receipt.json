@@ -1,0 +1,51 @@
+{
+  "source": "ede57563a34796a8f4e66b6e536bffc935cf7dc4",
+  "qualifiedHead": "980b63b0d550f958b30a4018ca9091d4619f89f9",
+  "tree": "9646be3172406d218a00448f916d4e18222429c4",
+  "ciRun": 40204594330,
+  "ci": "SUCCESS",
+  "observedVia": "Signed-in Vercel browser plus actual canonical HTTP/browser readback; connector team access403 was not represented as observed",
+  "artifacts": [
+    {
+      "project": "k2-jimzon",
+      "id": "dpl_GBmRAxFKEwQ49C84dtg9P2kGHtG2",
+      "environment": "Production",
+      "state": "Ready",
+      "alias": "https://www.k2jimzon.com",
+      "source": "ede57563a34796a8f4e66b6e536bffc935cf7dc4"
+    },
+    {
+      "project": "k2-jimzon-admin",
+      "id": "dpl_2564ykXmW9292uawWv989ptBrZeE",
+      "environment": "Production",
+      "state": "Ready",
+      "alias": "https://admin.k2jimzon.com",
+      "source": "ede57563a34796a8f4e66b6e536bffc935cf7dc4"
+    }
+  ],
+  "actualBrowser": {
+    "storefrontHydrated": true,
+    "headerLogo": {
+      "width": 36,
+      "height": 36,
+      "arrival": "played"
+    },
+    "footerGlobe": {
+      "width": 112,
+      "height": 102
+    },
+    "observedStorefrontViewport": 1280,
+    "storefrontScreenshot": "actual-storefront-desktop-dark.png",
+    "authenticatedAdminHydrated": true,
+    "adminStatusSaving": "immediate",
+    "adminInventory": {
+      "total": 196,
+      "active": 130,
+      "drafts": 66,
+      "displayedAvailableUnits": 273,
+      "physicalCountVerified": false
+    },
+    "businessSavePerformed": false
+  },
+  "physicalDeviceAndInstaller": false
+}

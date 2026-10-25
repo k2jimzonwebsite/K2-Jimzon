@@ -1,0 +1,19 @@
+{
+  "branches": [
+    "chore/map-audit-verification-and-worktree-merge",
+    "codex/automatic-intake-preparation",
+    "codex/cabinet-drag",
+    "codex/cabinet-production-budget",
+    "codex/category-production-release",
+    "codex/connector-handoff-20260929",
+    "codex/dummy-production-acceptance",
+    "codex/intake-cleanup",
+    "codex/inventory-variations",
+    "codex/map017-guest-chat-preview",
+    "codex/map017-stock-grant",
+    "codex/real-inventory-listing-20260928",
+    "codex/step-1-launch-core",
+    "codex/storefront-pack-size",
+    "feature/pim-schema"
+  ]
+}

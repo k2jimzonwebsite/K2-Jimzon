@@ -1,0 +1,20 @@
+{
+  "localBranches": [
+    "main"
+  ],
+  "remoteBranches": [
+    "main"
+  ],
+  "localBranchesRemoved": 54,
+  "remoteBranchesRemoved": 25,
+  "initialLocalBranches": 55,
+  "initialRemoteHeads": 26,
+  "oldWorktreesDetachedWithoutFileChanges": 13,
+  "all15InitialWorktreeSnapshotsCommitted": true,
+  "primary": "C:/Users/jerze/K2 JImzon",
+  "primaryBranch": "main",
+  "primaryCleanAtSource": "ede57563a34796a8f4e66b6e536bffc935cf7dc4",
+  "primaryNpmCi": "exit0,143packages,0vulnerabilities,guardrailsinstalled",
+  "recoveryArchive": "C:/Users/jerze/K2 JImzon/.tools/branch-cleanup-recovery-20261025/recovery.git",
+  "scopeLimit": "Ignored owner environments/tools preserved; old detached worktree files not deleted; no private snapshots pushed; required unfinished SKU operation retained in MAP-023"
+}

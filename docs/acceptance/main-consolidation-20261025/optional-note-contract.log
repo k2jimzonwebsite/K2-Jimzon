@@ -1,0 +1,26 @@
+
+Running 19 tests using 1 worker
+
+(node:20180) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\admin-retained-command-gaps.spec.js:7:1 › coupon decisions carry a pre-click Admin blocker and a two-step archive (10ms)
+  ok  2 tests\admin-retained-command-gaps.spec.js:14:1 › photo discard and uncertain close cannot drop a protected operation (6ms)
+  ok  3 tests\admin-retained-command-gaps.spec.js:20:1 › fulfillment audit reasons meet the ten-character standard (3ms)
+  ok  4 tests\admin-retained-command-gaps.spec.js:25:1 › product deletion freezes an unconfirmed form and retries one identity (3ms)
+  ok  5 tests\admin-retained-command-gaps.spec.js:32:1 › owner-close retries reuse their attempt identity (8ms)
+  ok  6 tests\admin-retained-command-gaps.spec.js:40:1 › Sheet row action buttons and domain jumps meet 44px touch targets (3ms)
+  ok  7 tests\admin-retained-command-gaps.spec.js:46:1 › InventoryGrid search exception buttons and select-all meet 44px touch targets (3ms)
+  ok  8 tests\admin-retained-command-gaps.spec.js:51:1 › Admin sidebar and lock buttons meet 44px touch targets (4ms)
+  ok  9 tests\admin-retained-command-gaps.spec.js:57:1 › OmniOperationsHub packing queue provides responsive phone cards for <lg screens (3ms)
+  ok 10 tests\admin-retained-command-gaps.spec.js:62:1 › OmniOperationsHub and Suppliers dialogs accept and pass returnFocusRef (7ms)
+  ok 11 tests\admin-retained-command-gaps.spec.js:72:1 › adminBffService maps AAL2_REQUIRED and role errors explicitly without falling back to unavailable (3ms)
+  ok 12 tests\admin-security-status-and-delete-pin.spec.js:8:3 › Admin access, MFA status, and permanent product deletion contracts › new Auth identities default to Customer and the Admin runtime accepts only canonical staff roles (4ms)
+  ok 13 tests\admin-security-status-and-delete-pin.spec.js:17:3 › Admin access, MFA status, and permanent product deletion contracts › MFA status is read from verified provider factors and remains visible after enrollment (5ms)
+  ok 14 tests\admin-security-status-and-delete-pin.spec.js:27:3 › Admin access, MFA status, and permanent product deletion contracts › Delete PIN secrets move to a private schema and every public function is Admin+AAL2 guarded (8ms)
+  ok 15 tests\admin-security-status-and-delete-pin.spec.js:39:3 › Admin access, MFA status, and permanent product deletion contracts › deletion is bounded, retry-safe, audited, throttled, and refuses operational history (11ms)
+  ok 16 tests\owner-count-close-contract.spec.js:32:1 › Owner Count & Close uses the accepted resumable step order without inventing completion (4ms)
+  ok 17 tests\owner-count-close-contract.spec.js:41:1 › close-session draft is exact-shop, Asia/Manila, versioned, and bounded (10ms)
+  ok 18 tests\owner-count-close-contract.spec.js:59:1 › review summary preserves duplicates, conflicts, unresolved rows, and the next human decision (4ms)
+  ok 19 tests\owner-count-close-contract.spec.js:74:1 › phone workflow is wired only through fixed Admin BFF services and exposes complete states (53ms)
+
+  19 passed (1.5s)

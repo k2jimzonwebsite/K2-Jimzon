@@ -1,0 +1,74 @@
+{
+  "refs": [
+    {
+      "head": "bdc6d8d898de81033fe61a9f8b25281738d20c66",
+      "ref": "refs/heads/codex/admin-google-turnstile-recovery",
+      "branch": "codex/admin-google-turnstile-recovery",
+      "inMain": false,
+      "archived": true
+    },
+    {
+      "head": "442b652686c7b1f81ecee0fd2d5c6a89992298ce",
+      "ref": "refs/heads/codex/inventory-categories",
+      "branch": "codex/inventory-categories",
+      "inMain": false,
+      "archived": true
+    },
+    {
+      "head": "0e13a00b5c05d49dc058fa4cb58147e8f89481c2",
+      "ref": "refs/heads/codex/listing-detail-image-fix",
+      "branch": "codex/listing-detail-image-fix",
+      "inMain": false,
+      "archived": true
+    },
+    {
+      "head": "980b63b0d550f958b30a4018ca9091d4619f89f9",
+      "ref": "refs/heads/codex/logo-motion-direction",
+      "branch": "codex/logo-motion-direction",
+      "inMain": true,
+      "archived": true
+    },
+    {
+      "head": "7f26179729fa734a336cc0d5d314034c50992f76",
+      "ref": "refs/heads/codex/mobile-final-receipt",
+      "branch": "codex/mobile-final-receipt",
+      "inMain": false,
+      "archived": true
+    },
+    {
+      "head": "901c15df4ec9d65f6f922e39c16a2309c3168744",
+      "ref": "refs/heads/codex/mobile-homepage-fixes",
+      "branch": "codex/mobile-homepage-fixes",
+      "inMain": false,
+      "archived": true
+    },
+    {
+      "head": "de522dfafcabd8d38cab21b022b57ddadeac7e05",
+      "ref": "refs/heads/codex/mobile-production-reconcile",
+      "branch": "codex/mobile-production-reconcile",
+      "inMain": false,
+      "archived": true
+    },
+    {
+      "head": "eef23eb7d7b0ca14ed6143b39e98c03f94179d63",
+      "ref": "refs/heads/codex/mobile-release-receipt-20261025",
+      "branch": "codex/mobile-release-receipt-20261025",
+      "inMain": false,
+      "archived": true
+    },
+    {
+      "head": "a164f206b5a6ecad91fa2ba7d2847eae2d665f5d",
+      "ref": "refs/heads/codex/product-knowledge-publish-fix",
+      "branch": "codex/product-knowledge-publish-fix",
+      "inMain": false,
+      "archived": true
+    },
+    {
+      "head": "c5dfd241de24d97d4a0b1e9d00dd2b970ee1049a",
+      "ref": "refs/heads/codex/shopper-fixes-production",
+      "branch": "codex/shopper-fixes-production",
+      "inMain": false,
+      "archived": true
+    }
+  ]
+}

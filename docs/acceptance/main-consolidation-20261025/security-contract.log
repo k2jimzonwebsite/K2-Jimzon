@@ -1,0 +1,39 @@
+
+> k2-jimzon-prototype@0.1.0 security:test-turnstile
+> node --test tests/turnstile-loader-recovery.test.mjs tests/turnstile-widget-lifecycle.test.mjs tests/git-guardrails.test.mjs && playwright test --config=playwright.api.config.js tests/turnstile-wiring-contract.spec.js tests/bot-challenge-contract.spec.js
+
+✔ commit guard refuses unstaged runtime inputs that could hide a staged regression (4.7031ms)
+✔ push guard requires committed runtime and test inputs but permits receipt-only edits (0.3764ms)
+✔ lint configuration is a verification input for commits and pushes (0.2465ms)
+✔ hook installation preserves an existing custom hooks directory (2.1022ms)
+✔ push guard refuses outgoing commits other than the checked HEAD (0.5341ms)
+✔ failed Turnstile download releases the cached failure for the next attempt (6.7147ms)
+✔ a silent rendered challenge times out without ever granting a token (7.2343ms)
+✔ success is visible and cancels the pending deadline; expiry invalidates the token (0.4446ms)
+✔ provider errors are visible, bounded, and never bypass verification (0.3593ms)
+✔ unmount cancels deadlines and ignores all stale provider callbacks (0.3053ms)
+✔ an interactive challenge gets the provider interaction window instead of the background deadline (0.3891ms)
+✔ interactive cleanup after success cannot restart the pending deadline (0.319ms)
+✔ a synchronous render failure becomes a retryable error (0.2937ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 123.5287
+
+Running 7 tests using 1 worker
+
+(node:17360) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\bot-challenge-contract.spec.js:19:1 › a missing secret fails closed without calling the provider (8ms)
+  ok 2 tests\bot-challenge-contract.spec.js:36:1 › an explicit unconfigured bypass is opt-in and auditable (1ms)
+  ok 3 tests\bot-challenge-contract.spec.js:51:1 › a token is single-use: its replay is rejected (2ms)
+  ok 4 tests\bot-challenge-contract.spec.js:64:1 › a token minted for another host is rejected (1ms)
+  ok 5 tests\bot-challenge-contract.spec.js:76:1 › every server call site binds its validated request hostname (6ms)
+  ok 6 tests\turnstile-wiring-contract.spec.js:20:1 › every TurnstileChallenge usage wires onTokenChange, never onVerify (131ms)
+  ok 7 tests\turnstile-wiring-contract.spec.js:38:1 › widget bot-check actions agree with the server expected actions (9ms)
+
+  7 passed (888ms)

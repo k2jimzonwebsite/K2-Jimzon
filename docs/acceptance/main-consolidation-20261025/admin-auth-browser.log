@@ -1,0 +1,17 @@
+[WebServer] (node:19808) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:25068) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:21980) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\admin-auth-recovery.spec.js:8:1 › secure Admin keeps Google available and routes the verified token through its BFF (1.2s)
+  ok 2 tests\admin-auth-recovery.spec.js:27:1 › a failed challenge script can be retried without reloading the login form (2.7s)
+  ok 3 tests\admin-auth-recovery.spec.js:45:3 › Google return handles MFA_REQUIRED without a browser provider session (679ms)
+  ok 4 tests\admin-auth-recovery.spec.js:45:3 › Google return handles MFA_ENROLLMENT_REQUIRED without a browser provider session (1.2s)
+  ok 5 tests\admin-auth-recovery.spec.js:45:3 › Google return handles OAUTH_RETURN_INVALID without a browser provider session (661ms)
+  ok 6 tests\admin-auth-recovery.spec.js:81:1 › the visible provider widget fits the actual Admin form at phone and desktop widths (1.2s)
+
+  6 passed (10.7s)

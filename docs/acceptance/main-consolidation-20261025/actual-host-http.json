@@ -1,0 +1,62 @@
+{
+  "source": "ede57563a34796a8f4e66b6e536bffc935cf7dc4",
+  "results": [
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com",
+      "status": 200,
+      "buildMarkerStatus": 200,
+      "buildMarker": {
+        "target": "storefront"
+      },
+      "cspReportOnly": true,
+      "frameOptions": "DENY"
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com",
+      "status": 200,
+      "buildMarkerStatus": 200,
+      "buildMarker": {
+        "target": "admin"
+      },
+      "cspReportOnly": true,
+      "frameOptions": "DENY"
+    },
+    {
+      "asset": "/brand/k2-owner-sheet.webp",
+      "status": 200,
+      "bytes": 129856,
+      "sha256": "b51b870bc89a325226f772b87b5dc177d9d60469058e1af42cc936e961f8cd57",
+      "matchesQualifiedSource": true
+    },
+    {
+      "asset": "/icon.svg",
+      "status": 200,
+      "bytes": 48853,
+      "sha256": "5db611003c674b691c26c3c60dab3c976bdf37ca9e5967e28cf79e1d67e5ced3",
+      "matchesQualifiedSource": true
+    },
+    {
+      "asset": "/icon-192.png",
+      "status": 200,
+      "bytes": 36521,
+      "sha256": "e72ebbf5120ccf6d20b696a68bd97796b55700825e12a57d89ae289a0e0e6bc6",
+      "matchesQualifiedSource": true
+    },
+    {
+      "asset": "/icon-512.png",
+      "status": 200,
+      "bytes": 145523,
+      "sha256": "3bef63e31c624cbbb42a80f381939774f5d78c639050cbca9acb7bea1880ab3b",
+      "matchesQualifiedSource": true
+    },
+    {
+      "asset": "/apple-touch-icon.png",
+      "status": 200,
+      "bytes": 33222,
+      "sha256": "54d660c70d99ffb863b58d064bce3dec989bf44927310515326578ab16b7fa85",
+      "matchesQualifiedSource": true
+    }
+  ]
+}
