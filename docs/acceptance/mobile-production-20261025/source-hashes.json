@@ -158,5 +158,9 @@
   {
     "path": "tests/guest-commerce-bff-contract.spec.js",
     "sha256": "7d7c659b069c862f83e0351f19949bb31014f87cfec4944fd1068bcefef7b824"
+  },
+  {
+    "path": "tests/storefront-mobile.spec.js",
+    "sha256": "02194555f8096aed70c3676126c8813454306a3747ebdcb959c9ef020f69a3fc"
   }
 ]
