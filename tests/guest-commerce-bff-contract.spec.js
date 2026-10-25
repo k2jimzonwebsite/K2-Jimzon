@@ -156,7 +156,8 @@ test('storefront public copy does not claim unverified stock sync or a Pasabuy r
     source('src/context/StoreContext.jsx'),
   ])
   expect(hero).not.toMatch(/multi-channel stock sync/i)
-  expect(hero).toContain('Availability checked before payment')
+  expect(hero).toContain('Manila stock and Pasabuy options')
+  expect(hero).not.toMatch(/Availability checked before payment|No payment required at checkout/i)
   expect(store).not.toMatch(/quote review within 24 hours/i)
   expect(store).toContain("eta: 'Staff review required'")
 })

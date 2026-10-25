@@ -25,3 +25,7 @@ Recovery: revert only this release's scoped source changes or select prior separ
 ## Remaining release state
 
 Prepared locally only. Required CI,complete release result,separate READY production artifacts and real-host320/375/430light/dark plus desktop confirmation remain pending in MAP-023. Read-only owner-environment project preflight/readiness must pass before production promotion; unreached connector gates stay distinct from actual observed Vercel/GitHub evidence. No provider/database write is proposed. Physical-device touch/notch and genuine payment/order/fulfillment acceptance remain outside fixture proof.
+
+## Preserved aggregate failure and focused correction
+
+The one complete local verify:release invocation stopped at test:base:1117 shared cases passed,one stale Hero source-copy assertion required the removed Availability checked before payment phrase. Product-family/category and preceding Node stages passed. release.log preserves the original failure; no clean aggregate0 claim is made. The contract now requires approved Manila stock and Pasabuy options and explicitly rejects the obsolete before-payment/no-payment promises,while preserving stock-sync/SLA/staff-review refusals. Focused correction1/1 and final development0 pass. Independent follow-up review finds no blockers and confirms commerce safeguards unchanged. Only unrun post-base test stages,packaging and both configured builds are resumed; exact revised-head CI must still pass the complete configured workflow.

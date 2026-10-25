@@ -154,5 +154,9 @@
   {
     "path": "tests/storefront-policy-contract.spec.js",
     "sha256": "a48be146dce7b45540ccf52883c0147d65b0e9ed7deb2521947d446373a7ac7b"
+  },
+  {
+    "path": "tests/guest-commerce-bff-contract.spec.js",
+    "sha256": "7d7c659b069c862f83e0351f19949bb31014f87cfec4944fd1068bcefef7b824"
   }
 ]
