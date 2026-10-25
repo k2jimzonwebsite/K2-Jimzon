@@ -8,5 +8,6 @@
   "src/components/home/NewArrivals.jsx": "47a503d1a78c1f8ea3a72685fe708678c72ece72e76ef138d7c6ce065f18b55d",
   "src/data/products.js": "678f378bf23697dc8c5e22c3aeabf71345e54a97c66b2039492c9f32882471bd",
   "src/lib/formatMoney.js": "b9a074dccac8308461e2c2f33602147ff1f50b83c6720546a003918ae0c76dfb",
-  "tests/storefront-motion.spec.js": "19883cfeb59a56d7a109276c2fb8d6b730f2a9169c619af5282e5c9663e54b93"
+  "tests/storefront-motion.spec.js": "19883cfeb59a56d7a109276c2fb8d6b730f2a9169c619af5282e5c9663e54b93",
+  "tests/admin-bff-contract.spec.js": "3a58ede07cce4fe1663691528f4c75b5250ef2d26736d4818adeb883c943e255"
 }

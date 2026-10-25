@@ -1,0 +1,7 @@
+{
+  "command": "npm run verify:release",
+  "finishedAt": "2026-10-25T03:50:55.8228423Z",
+  "startedAt": "2026-10-25T03:47:47.1395597Z",
+  "source": "c2bcfaddaf5654d2e61c60dcd22baddf9db9383b",
+  "exitCode": 1
+}
