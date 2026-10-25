@@ -1,3 +1,9 @@
+## IDEA-20261025-06 — Main consolidation and branch cleanup
+
+Owner requests all necessary work committed/main and removal of old branches, then clarifies: inspect unfinished work, finish it if necessary, ignore it otherwise. ACCEPT bounded main/source consolidation and safe branch cleanup under MAP-028; preserve recoverable snapshots before deleting references. MERGE necessary still-approved source corrections through their existing MAP ownership and dependency order; reject wholesale dirty-checkout replacement, retired MAP-018 revival and deletion of unpreserved changes. This authorizes the reviewed source main release and redundant branch removal, not arbitrary product facts or schema/data changes outside already scoped approvals. Inventory/evidence: docs/acceptance/main-consolidation-20261025/. All execution/status/remaining actions live only in MAP.
+
+
+
 25 October 2026 / IDEA-20261025-05 decision continuation: owner accepts implementation with “proceed on applying it”. ACCEPT source placement/motion/icon work under MAP-028, superseding assessment-only deferral. Raster fidelity wins over literal independent aircraft travel: reject generated redraw and moving cutouts; use intact original artwork with finite flight-curve sweep/highlight. Final33/33 focused/mobile, development and both artifact builds/budgets pass; independent review clear. No main release or real-device claim. Remaining hosted/device/release gates stay MAP-028. Evidence and recovery: docs/acceptance/LOGO_MOTION_DIRECTION_20261025.md.
 
 ## IDEA-20261025-05 — Owner logo placement and brand motion assessment

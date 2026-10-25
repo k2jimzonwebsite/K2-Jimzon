@@ -137,12 +137,17 @@ function ReviewsPanel({ rows, disabled, secureMode, command }) {
 function ReviewForm({ initial, disabled, onSave, onCancel }) {
   const [value, setValue] = useState(() => blankReview(initial))
   const update = (key) => (event) => setValue((current) => ({ ...current, [key]: event.target.value }))
-  return <form onSubmit={(event) => { event.preventDefault(); onSave({ ...value, stars: Number(value.stars), productId: value.productId || null }) }} className="mb-5 space-y-4 rounded-adm-sm border border-blue/30 bg-blue/10 p-4 sm:p-5">
+  return <form onSubmit={(event) => {
+    event.preventDefault()
+    const trimmedReason = (value.reason || '').trim()
+    const effectiveReason = trimmedReason.length >= 3 ? trimmedReason : (trimmedReason.length > 0 ? `Admin updated testimonial draft (${trimmedReason})` : 'Admin updated testimonial draft')
+    onSave({ ...value, stars: Number(value.stars), productId: value.productId || null, reason: effectiveReason })
+  }} className="mb-5 space-y-4 rounded-adm-sm border border-blue/30 bg-blue/10 p-4 sm:p-5">
     <div><h4 className="font-semibold">{initial ? 'Correct review draft' : 'New review draft'}</h4><p className="mt-1 text-sm text-white/55">Saving never publishes. A published claim returns to draft when corrected.</p></div>
     <div className="grid gap-4 sm:grid-cols-2"><Field label="Reviewer display name"><input required minLength={2} maxLength={80} value={value.name} onChange={update('name')} className={CONTROL} /></Field><Field label="Channel"><input required minLength={2} maxLength={80} value={value.channel} onChange={update('channel')} placeholder="Shopee · verified" className={CONTROL} /></Field><Field label="Product"><select value={value.productId || ''} onChange={update('productId')} className={CONTROL}><option value="">General review</option>{products.map((product) => <option key={product.id} value={product.id}>{product.short || product.name}</option>)}</select></Field><Field label="Item label"><input required minLength={2} maxLength={120} value={value.item} onChange={update('item')} className={CONTROL} /></Field><Field label="Review date"><input required type="date" max={new Date().toISOString().slice(0, 10)} value={value.reviewDate} onChange={update('reviewDate')} className={CONTROL} /></Field><Field label="Rating"><select value={value.stars} onChange={update('stars')} className={CONTROL}>{[5, 4, 3, 2, 1].map((stars) => <option key={stars} value={stars}>{stars} stars</option>)}</select></Field></div>
     <Field label="Review text"><textarea required minLength={10} maxLength={1200} rows={4} value={value.text} onChange={update('text')} className={`${CONTROL} min-h-[112px] resize-y py-3`} /></Field>
     <div className="grid gap-4 border-t border-adm-line pt-4 sm:grid-cols-2"><Field label="Source type"><select value={value.sourceKind} onChange={update('sourceKind')} className={CONTROL}>{SOURCES.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></Field><Field label="Rights basis"><select value={value.rightsBasis} onChange={update('rightsBasis')} className={CONTROL}>{RIGHTS.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></Field></div>
-    <Field label="Private source reference" hint="Order reference, marketplace URL, or internal evidence reference. Never shown publicly."><input required minLength={3} maxLength={120} value={value.sourceReference} onChange={update('sourceReference')} className={CONTROL} /></Field><Field label="Reason for this change"><textarea required minLength={3} maxLength={500} rows={2} value={value.reason} onChange={update('reason')} className={`${CONTROL} resize-y py-3`} /></Field>
+    <Field label="Private source reference" hint="Order reference, marketplace URL, or internal evidence reference. Never shown publicly."><input required minLength={3} maxLength={120} value={value.sourceReference} onChange={update('sourceReference')} className={CONTROL} /></Field><Field label={<span>Reason for this change <span className="font-normal text-white/40">(optional)</span></span>}><textarea maxLength={500} rows={2} value={value.reason} onChange={update('reason')} placeholder="Reason for this change (optional)" className={`${CONTROL} resize-y py-3`} /></Field>
     <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onCancel} className="min-h-[44px] rounded-adm-sm border border-adm-line px-4 font-semibold">Cancel</button><button disabled={disabled} type="submit" className="min-h-[44px] rounded-adm-sm bg-crimson px-4 font-semibold text-white disabled:opacity-50">Save as draft</button></div>
   </form>
 }
@@ -166,10 +171,16 @@ function ReasonDialog({ title, actionLabel, onCancel, onConfirm }) {
             </div>
             <button ref={closeRef} type="button" disabled={working} onClick={onCancel} aria-label="Close dialog" className="grid h-11 w-11 place-items-center rounded-adm-sm border border-adm-line text-xl disabled:opacity-40">×</button>
           </div>
-          <label className="mt-5 block text-sm font-semibold text-white/75">Reason<textarea required minLength={3} maxLength={500} rows={4} value={reason} onChange={(event) => setReason(event.target.value)} className={`${CONTROL} mt-1 resize-y py-3`} /></label>
+          <label className="mt-5 block text-sm font-semibold text-white/75">Reason <span className="font-normal text-white/40">(optional)</span><textarea maxLength={500} rows={4} value={reason} onChange={(event) => setReason(event.target.value)} placeholder="Reason (optional)" className={`${CONTROL} mt-1 resize-y py-3`} /></label>
           <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <button type="button" disabled={working} onClick={onCancel} className="min-h-[44px] rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button>
-            <button type="button" disabled={working || reason.trim().length < 3} onClick={async () => { setWorking(true); const ok = await onConfirm(reason.trim()); if (!ok) setWorking(false) }} className="min-h-[44px] rounded-adm-sm bg-crimson px-4 font-semibold text-white disabled:opacity-50">{working ? 'Saving…' : actionLabel}</button>
+            <button type="button" disabled={working} onClick={async () => {
+              setWorking(true)
+              const trimmed = reason.trim()
+              const effectiveReason = trimmed.length >= 3 ? trimmed : (trimmed.length > 0 ? `Admin confirmed CMS action (${trimmed})` : 'Admin confirmed CMS action')
+              const ok = await onConfirm(effectiveReason)
+              if (!ok) setWorking(false)
+            }} className="min-h-[44px] rounded-adm-sm bg-crimson px-4 font-semibold text-white disabled:opacity-50">{working ? 'Saving…' : actionLabel}</button>
           </div>
         </div>
       </AdminDialog>

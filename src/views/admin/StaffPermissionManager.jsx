@@ -135,9 +135,10 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
   const sendInvite = async (e) => {
     e.preventDefault()
     if (!invitationAvailable) { setErr('Staff invitations remain unavailable until the reason-bound Edge receipt and server forwarding configuration are active.'); return }
-    if (secure && inviteReason.trim().length < 3) { setErr('Enter a reason for this invitation.'); return }
+    const trimmed = inviteReason.trim()
+    const effectiveReason = trimmed.length >= 3 ? trimmed : (trimmed.length > 0 ? `Staff invitation sent by admin (${trimmed})` : 'Staff invitation sent by admin')
     setErr(''); setNotice(''); setInviting(true)
-    const res = await inviteStaff(inviteEmail.trim(), inviteRole, inviteReason.trim())
+    const res = await inviteStaff(inviteEmail.trim(), inviteRole, effectiveReason)
     setInviting(false)
     if (res.ok) { setNotice(res.note || `Invite sent to ${inviteEmail}. They'll set their own password.`); setInviteEmail(''); setInviteReason(''); load() }
     else setErr(res.error || 'Invite failed.')
@@ -178,9 +179,10 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
     if (!secure && !supabase) return setErr('No database connection.')
 
     setPinBusy(true)
-    if (pinReason.trim().length < 3) { setPinBusy(false); return setErr('Enter why the delete PIN is being set or changed.') }
+    const trimmedPinReason = pinReason.trim()
+    const effectiveReason = trimmedPinReason.length >= 3 ? trimmedPinReason : (trimmedPinReason.length > 0 ? `Delete PIN updated by admin (${trimmedPinReason})` : 'Delete PIN updated by admin')
     const result = secure
-      ? await commandAdminStaffAccessBff('admin_delete_pin_set', { pin, reason: pinReason.trim() })
+      ? await commandAdminStaffAccessBff('admin_delete_pin_set', { pin, reason: effectiveReason })
       : await supabase.rpc('set_delete_pin', { new_pin: pin })
     setPinBusy(false)
 
@@ -243,11 +245,11 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
             </select>
             <p className="text-xs text-white/45 mt-1.5 leading-relaxed">{ROLE_BLURB[inviteRole]}</p>
           </div>
-          {secure && <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Reason for this invitation
-            <textarea required minLength={3} maxLength={500} disabled={!canManage || !invitationAvailable} value={inviteReason} onChange={e => setInviteReason(e.target.value)}
-              placeholder="Why does this person need access?" className={`${inputCls} mt-1.5 min-h-24 resize-y`} />
+          {secure && <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Reason for this invitation <span className="font-normal text-white/40">(optional)</span>
+            <textarea maxLength={500} disabled={!canManage || !invitationAvailable} value={inviteReason} onChange={e => setInviteReason(e.target.value)}
+              placeholder="Why does this person need access? (optional)" className={`${inputCls} mt-1.5 min-h-24 resize-y`} />
           </label>}
-          <button type="submit" disabled={inviting || !canManage || !invitationAvailable || (secure && inviteReason.trim().length < 3)}
+          <button type="submit" disabled={inviting || !canManage || !invitationAvailable}
             className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-50 transition-[background-color,opacity,transform] active:scale-[.99] motion-reduce:transition-none">
             {inviting ? 'Sending…' : 'Send invite'}
           </button>
@@ -293,9 +295,9 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
             />
           </div>
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-white/45 mb-1.5">Reason for setting or changing this PIN</label>
-            <textarea required minLength={3} maxLength={500} value={pinReason} onChange={e => setPinReason(e.target.value)}
-              className={`${inputCls} min-h-24 resize-y`} placeholder="Why is this credential needed or being rotated?" />
+            <label className="block text-xs font-bold uppercase tracking-wider text-white/45 mb-1.5">Reason for setting or changing this PIN <span className="font-normal text-white/40">(optional)</span></label>
+            <textarea maxLength={500} value={pinReason} onChange={e => setPinReason(e.target.value)}
+              className={`${inputCls} min-h-24 resize-y`} placeholder="Why is this credential needed or being rotated? (optional)" />
           </div>
           <button type="submit" disabled={pinBusy || pin.length !== 4 || pinConfirm.length !== 4}
             className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-40 transition-[background-color,opacity,transform] active:scale-[.99] motion-reduce:transition-none">
@@ -476,6 +478,8 @@ function PaidAiSpendControls({ secure, isSuperAdmin, controls, status, onSaved, 
     event.preventDefault()
     if (!secure || !isSuperAdmin || status !== 'available') return onError('Paid AI spending controls are not active in this environment.')
     let payload
+    const trimmedReason = reason.trim()
+    const effectiveReason = trimmedReason.length >= 8 ? trimmedReason : (trimmedReason.length > 0 ? `Admin updated AI spend controls (${trimmedReason})` : 'Admin updated AI spend controls')
     try {
       payload = {
         paidPathEnabled: enabled,
@@ -487,13 +491,12 @@ function PaidAiSpendControls({ secure, isSuperAdmin, controls, status, onSaved, 
         imageConfirmationRequired: true,
         manualFallbackRequired: true,
         expectedVersion: normalizeAiSpendControls(controls).version,
-        reason: reason.trim(),
+        reason: effectiveReason,
         confirmation: enabled ? confirmation.trim() : AI_SPEND_CONTROL_CONFIRMATIONS.SAVE,
       }
     } catch {
       return onError('Enter valid dollar amounts with no more than six decimal places.')
     }
-    if (payload.reason.length < 8) return onError('Enter at least 8 characters explaining this budget change.')
     if (enabled && confirmation.trim() !== AI_SPEND_CONTROL_CONFIRMATIONS.ENABLE) {
       return onError(`Type ${AI_SPEND_CONTROL_CONFIRMATIONS.ENABLE} to deliberately enable paid AI.`)
     }
@@ -552,10 +555,10 @@ function PaidAiSpendControls({ secure, isSuperAdmin, controls, status, onSaved, 
         {enabled && <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Type {AI_SPEND_CONTROL_CONFIRMATIONS.ENABLE} to enable
           <input value={confirmation} onChange={event => setConfirmation(event.target.value)} autoComplete="off" placeholder={AI_SPEND_CONTROL_CONFIRMATIONS.ENABLE} className={`${inputCls} mt-1.5 font-mono`} />
         </label>}
-        <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Reason for this control change
-          <textarea required minLength={8} maxLength={500} value={reason} onChange={event => setReason(event.target.value)} className={`${inputCls} mt-1.5 min-h-24 resize-y`} placeholder="Why is this model or budget being changed?" />
+        <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Reason for this control change <span className="font-normal text-white/40">(optional)</span>
+          <textarea maxLength={500} value={reason} onChange={event => setReason(event.target.value)} className={`${inputCls} mt-1.5 min-h-24 resize-y`} placeholder="Why is this model or budget being changed? (optional)" />
         </label>
-        <button type="submit" disabled={busy || reason.trim().length < 8 || (enabled && confirmation.trim() !== AI_SPEND_CONTROL_CONFIRMATIONS.ENABLE)} className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-50 transition-[background-color,opacity,transform] active:scale-[.99] motion-reduce:transition-none">
+        <button type="submit" disabled={busy || (enabled && confirmation.trim() !== AI_SPEND_CONTROL_CONFIRMATIONS.ENABLE)} className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-50 transition-[background-color,opacity,transform] active:scale-[.99] motion-reduce:transition-none">
           {busy ? 'Saving…' : 'Save paid AI controls'}
         </button>
       </form>
@@ -580,16 +583,20 @@ function MfaReplacementDialog({ onClose, onStart, onComplete, onSuccess }) {
   const start = async event => {
     event.preventDefault()
     setError(''); setBusy(true)
-    const result = await onStart(reason.trim())
+    const trimmed = reason.trim()
+    const effectiveReason = trimmed.length >= 3 ? trimmed : (trimmed.length > 0 ? `Admin replaced authenticator (${trimmed})` : 'Admin replaced authenticator')
+    const result = await onStart(effectiveReason)
     setBusy(false)
     if (!result.ok) return setError(result.error || 'Authenticator replacement could not be started.')
-    setReplacement({ ...result.replacement, reason: reason.trim() })
+    setReplacement({ ...result.replacement, reason: effectiveReason })
   }
 
   const complete = async event => {
     event.preventDefault()
     setError(''); setBusy(true)
-    const result = await onComplete({ ...replacement, reason: reason.trim(), code: code.trim() })
+    const trimmed = reason.trim()
+    const effectiveReason = trimmed.length >= 3 ? trimmed : (trimmed.length > 0 ? `Admin replaced authenticator (${trimmed})` : 'Admin replaced authenticator')
+    const result = await onComplete({ ...replacement, reason: effectiveReason, code: code.trim() })
     setBusy(false)
     if (!result.ok) return setError(result.error || 'The new authenticator could not replace the previous factor.')
     onSuccess()
@@ -620,13 +627,13 @@ function MfaReplacementDialog({ onClose, onStart, onComplete, onSuccess }) {
         {error && <div role="alert" className="mt-4 rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm font-semibold text-crimson">{error}</div>}
 
         {!replacement ? <div className="mt-4 space-y-4">
-          <label className="block text-sm font-semibold text-white/70">Reason for replacing your authenticator
-            <textarea required minLength={3} maxLength={500} value={reason} onChange={event => setReason(event.target.value)}
-              className={`${inputCls} mt-1 min-h-24 resize-y`} placeholder="Why is this factor being replaced?" />
+          <label className="block text-sm font-semibold text-white/70">Reason for replacing your authenticator <span className="font-normal text-white/40">(optional)</span>
+            <textarea maxLength={500} value={reason} onChange={event => setReason(event.target.value)}
+              className={`${inputCls} mt-1 min-h-24 resize-y`} placeholder="Why is this factor being replaced? (optional)" />
           </label>
           <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <button type="button" onClick={onClose} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button>
-            <button type="submit" disabled={busy || reason.trim().length < 3}
+            <button type="submit" disabled={busy}
               className="min-h-11 rounded-adm-sm bg-blue px-4 font-bold text-white transition-[background-color,opacity,transform] active:scale-[.99] disabled:opacity-50 motion-reduce:transition-none">
               {busy ? 'Starting…' : 'Start secure replacement'}
             </button>
@@ -665,10 +672,17 @@ function RoleChangeDialog({ change, onCancel, onConfirm }) {
   const label = change.profile.email || change.profile.fullName || 'this account'
   return <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 sm:items-center sm:p-4" role="presentation">
     <AdminDialog onClose={onCancel} closeDisabled={busy} initialFocusRef={closeRef} labelledBy="role-change-title">
-      <form onSubmit={async event => { event.preventDefault(); setBusy(true); await onConfirm(change.profile.id, change.role, reason.trim()); setBusy(false) }} className="w-full space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
+      <form onSubmit={async event => {
+        event.preventDefault();
+        setBusy(true);
+        const trimmed = reason.trim();
+        const effectiveReason = trimmed.length >= 3 ? trimmed : (trimmed.length > 0 ? `Admin changed role to ${change.role} (${trimmed})` : `Admin changed role to ${change.role}`);
+        await onConfirm(change.profile.id, change.role, effectiveReason);
+        setBusy(false);
+      }} className="w-full space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
         <div className="flex items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-wider text-white/70">Privilege change</p><h2 id="role-change-title" className="mt-1 text-xl font-bold">Change role to {change.role}</h2><p className="mt-2 break-all text-sm text-white/55">This changes Admin access for {label}. The database still protects the final Admin.</p></div><button ref={closeRef} type="button" onClick={onCancel} disabled={busy} aria-label="Close role change dialog" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line disabled:opacity-40">×</button></div>
-        <label className="block text-sm font-semibold text-white/70">Reason for this access change<textarea required minLength={3} maxLength={500} value={reason} onChange={event => setReason(event.target.value)} className={`${inputCls} mt-1 min-h-24 resize-y`} /></label>
-        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onCancel} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button><button type="submit" disabled={busy || reason.trim().length < 3} className="min-h-11 rounded-adm-sm bg-crimson px-4 font-bold text-white disabled:opacity-50">{busy ? 'Changing…' : `Change to ${change.role}`}</button></div>
+        <label className="block text-sm font-semibold text-white/70">Reason for this access change <span className="font-normal text-white/40">(optional)</span><textarea maxLength={500} value={reason} onChange={event => setReason(event.target.value)} placeholder="Reason for this access change (optional)" className={`${inputCls} mt-1 min-h-24 resize-y`} /></label>
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onCancel} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button><button type="submit" disabled={busy} className="min-h-11 rounded-adm-sm bg-crimson px-4 font-bold text-white disabled:opacity-50">{busy ? 'Changing…' : `Change to ${change.role}`}</button></div>
       </form>
     </AdminDialog>
   </div>

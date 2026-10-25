@@ -69,13 +69,10 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
       setError('A published product must keep a primary photo. Add one before saving.')
       return
     }
-    if (secureMode && trimmedReason.length < 10) {
-      setError('Add a reason of at least 10 characters for this product-media change.')
-      return
-    }
+    const effectiveReason = reason.trim().length < 10 ? (trimmedReason.length > 0 ? `Product photos updated by admin (${trimmedReason})` : 'Product photos updated by admin') : trimmedReason
     setError('')
     const result = await operation.run({ sku: product.sku, primary,
-      lifestyle: afterUse ? [afterUse] : [], secondary: samples, reason: trimmedReason })
+      lifestyle: afterUse ? [afterUse] : [], secondary: samples, reason: effectiveReason })
     if (!result || (!result.ok && !result.cleanupPending)) return
     setCleanupPending(Boolean(result.cleanupPending))
     setDirty(false)
@@ -112,9 +109,9 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
 
           {secureMode && (
             <label className="block text-sm font-semibold text-white/75">
-              Change reason <span aria-hidden="true" className="text-red-300">*</span>
-              <textarea value={reason} onChange={(event) => { setReason(event.target.value); setDirty(true); setError('') }} maxLength={500} rows={3} required aria-describedby="photo-reason-help" className="adm-input mt-2 min-h-24 resize-y text-base" />
-              <span id="photo-reason-help" className="mt-1 block text-xs font-normal text-white/55">Recorded with the signed assignment for audit and recovery.</span>
+              Change reason <span className="font-normal text-white/40">(optional)</span>
+              <textarea value={reason} onChange={(event) => { setReason(event.target.value); setDirty(true); setError('') }} maxLength={500} rows={3} placeholder="Describe the photo changes (optional)" aria-describedby="photo-reason-help" className="adm-input mt-2 min-h-24 resize-y text-base" />
+              <span id="photo-reason-help" className="mt-1 block text-xs font-normal text-white/55">Optional note. A default audit note is recorded if left blank.</span>
             </label>
           )}
 
@@ -138,7 +135,7 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
           <div aria-live="polite" className="sr-only">{saving ? 'Saving product photos' : ''}</div>
           <div className="flex gap-2">
             <button type="button" onClick={requestClose} disabled={closeDisabled} className="min-h-11 flex-1 rounded-adm-sm border border-adm-line px-4 font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-white/5 active:scale-[0.98] disabled:opacity-50">Cancel</button>
-            <button type="button" onClick={() => void handleSave()} disabled={saving || uploading || (operation.uncertain && !secureMode) || (!dirty && !cleanupPending) || (requiresPrimary && !primary) || (secureMode && reason.trim().length < 10)} className="min-h-11 flex-[1.4] rounded-adm-sm bg-forest px-4 font-bold text-navy transition-[background-color,transform] duration-150 hover:bg-forest/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45">
+            <button type="button" onClick={() => void handleSave()} disabled={saving || uploading || (operation.uncertain && !secureMode) || (!dirty && !cleanupPending) || (requiresPrimary && !primary)} className="min-h-11 flex-[1.4] rounded-adm-sm bg-forest px-4 font-bold text-navy transition-[background-color,transform] duration-150 hover:bg-forest/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45">
               {saving ? 'Saving…' : uploading ? 'Wait for photo upload' : cleanupPending ? 'Retry file cleanup' : operation.uncertain ? secureMode ? 'Retry same command' : 'Reconcile product photos first' : 'Save photo assignment'}
             </button>
           </div>

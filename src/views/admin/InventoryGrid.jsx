@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
-import { products as localProducts } from '../../data/products'
+
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
@@ -19,12 +19,12 @@ import ReferenceCreationDialog, { PendingReferenceCreation } from './ReferenceCr
 import { applyImageFallback } from '../../lib/imageFallback'
 import useProductMasterRecovery from '../../hooks/useProductMasterRecovery'
 import ProductMasterRecovery, { PendingProductDecision } from './ProductMasterRecovery'
-import BulkStoreCategoryDialog from './BulkStoreCategoryDialog'
-import useProductFamilyRecovery from '../../hooks/useProductFamilyRecovery'
-import ProductFamilyEditor, { PendingProductFamilyDecision } from './ProductFamilyEditor'
-import { getStoreCategory, storeCategoryEntries } from '../../lib/storeCategories'
 import useWebsiteAssignmentRecovery from '../../hooks/useWebsiteAssignmentRecovery'
 import WebsiteAssignmentDialog,{PendingWebsiteDecision} from './WebsiteAssignmentDialog'
+import useProductFamilyRecovery from '../../hooks/useProductFamilyRecovery'
+import ProductFamilyEditor, { PendingProductFamilyDecision } from './ProductFamilyEditor'
+import BulkStoreCategoryDialog from './BulkStoreCategoryDialog'
+import { getStoreCategory, storeCategoryEntries } from '../../lib/storeCategories'
 import {
   DetailBlock,
   EmptyState,
@@ -32,7 +32,6 @@ import {
   SectionHeading,
   StateBanner,
   WorkspaceIntro,
-  primaryButton,
   secondaryButton,
 } from './AdminWorkspaceUi'
 
@@ -122,23 +121,27 @@ function StatusControl({ value, onChange, disabled }) {
 }
 
 function StatusDecisionDialog({ decision, busy, onCancel, onConfirm }) {
-  const [reason, setReason] = useState('')
+  const [reason, setReason] = useState(decision.reason || '')
   const [error, setError] = useState('')
   const closeRef = useRef(null)
   const submit = async (event) => {
     event.preventDefault()
-    if (reason.trim().length < 8) { setError('Enter a specific reason of at least 8 characters.'); return }
+    const trimmed = reason.trim()
+    const effectiveReason = trimmed.length >= 8
+      ? trimmed
+      : (trimmed.length > 0 ? `Admin set status to ${decision.nextStatus} (${trimmed})` : `Admin set status to ${decision.nextStatus}`)
     setError('')
-    const ok = await onConfirm(reason.trim())
+    const ok = await onConfirm(decision.reason ?? effectiveReason)
     if (ok === false) setError('The status change was not recorded. Review the current product state and try again.')
   }
   return <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 sm:items-center sm:p-4" role="presentation">
     <AdminDialog onClose={onCancel} closeDisabled={busy} initialFocusRef={closeRef} labelledBy="product-status-title">
     <form onSubmit={submit} className="w-full space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
       <div className="flex items-start justify-between gap-4"><div><h2 id="product-status-title" className="font-sans text-xl font-bold">Set {decision.nextStatus}</h2><p className="mt-1 text-sm text-white/55">This changes {decision.skus.length} canonical product record{decision.skus.length === 1 ? '' : 's'}. Live requires reviewed content, price, category, brand, and a primary photo.</p></div><button ref={closeRef} type="button" onClick={onCancel} disabled={busy} aria-label="Close status decision" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line disabled:opacity-50">×</button></div>
-      <label className="block text-sm font-semibold text-white/70">Reason for the status change<textarea autoFocus={false} required minLength={8} maxLength={500} value={reason} onChange={(event) => setReason(event.target.value.slice(0, 500))} className="mt-1 min-h-[96px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" /></label>
-      {error && <p role="alert" className="rounded-adm-sm border border-crimson/40 bg-crimson/10 px-3 py-2 text-sm text-crimson">{error}</p>}
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onCancel} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-50">Cancel</button><button type="submit" disabled={busy || reason.trim().length < 8} className="min-h-11 rounded-adm-sm bg-blue px-4 font-bold text-white transition-transform duration-150 active:scale-[0.98] disabled:opacity-50">{busy ? 'Recording…' : `Set ${decision.nextStatus}`}</button></div>
+      <label className="block text-sm font-semibold text-white/70">Reason for the status change <span className="font-normal text-white/45">(optional)</span><textarea autoFocus={false} maxLength={500} readOnly={decision.reason !== undefined} disabled={busy} placeholder={`Default: Admin set status to ${decision.nextStatus}`} value={decision.reason ?? reason} onChange={(event) => setReason(event.target.value.slice(0, 500))} className="mt-1 min-h-[96px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white placeholder:text-white/30 outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" /></label>
+      {(decision.error || error) && <p role="alert" className="rounded-adm-sm border border-crimson/40 bg-crimson/10 px-3 py-2 text-sm text-crimson">{decision.error || error}</p>}
+      {decision.reason !== undefined && <p className="text-sm text-white/70">Retry keeps the original status, note and request identifier. Check the current product before starting a different change.</p>}
+      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onCancel} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-50">Cancel</button><button type="submit" disabled={busy} className="min-h-11 rounded-adm-sm bg-blue px-4 font-bold text-white transition-transform duration-150 active:scale-[0.98] disabled:opacity-50">{busy ? 'Recording…' : decision.reason !== undefined ? 'Retry same change' : `Set ${decision.nextStatus}`}</button></div>
     </form>
     </AdminDialog>
   </div>
@@ -251,12 +254,14 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   const [enrichProduct, setEnrichProduct] = useState(null)
   const [selected, setSelected] = useState(() => new Set())
   const [showStoreCategories, setShowStoreCategories] = useState(false)
+  const [categoryFilter, setCategoryFilter] = useState('All')
   const [showFamilyEditor, setShowFamilyEditor] = useState(false)
   const familyRecovery = useProductFamilyRecovery({ actorId, enabled: secure, canManageProducts })
-  const [categoryFilter, setCategoryFilter] = useState('All')
   const [deleteTargets, setDeleteTargets] = useState(null)
   const [statusBusy, setStatusBusy] = useState(null)
   const [statusDecision, setStatusDecision] = useState(null)
+  const [statusSavingMode, setStatusSavingMode] = useState('immediate')
+  const statusInFlight = useRef(false)
   const [editReason, setEditReason] = useState('')
   const [productTaxonomyReview, setProductTaxonomyReview] = useState(null)
   const [referenceKind, setReferenceKind] = useState(null)
@@ -269,7 +274,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   const [showProductRecovery, setShowProductRecovery] = useState(false)
   const editIdentity = useRef(null)
   if (editIdentity.current?.actorId !== actorId || editIdentity.current?.canManageProducts !== canManageProducts) editIdentity.current = { actorId, canManageProducts }
-  useEffect(() => { setEditingProduct(null); setShowProductRecovery(false);setWebsiteSku(null); setSaving(false); setEditError(''); setShowStoreCategories(false) }, [actorId, canManageProducts])
+  useEffect(() => { setEditingProduct(null); setShowProductRecovery(false);setWebsiteSku(null); setSaving(false); setEditError(''); setStatusDecision(null); setStatusBusy(null); setShowStoreCategories(false) }, [actorId, canManageProducts])
   const [notice, setNotice] = useState(null)
   const [search, setSearch] = useState('')
   const [stockFilter, setStockFilter] = useState('all')
@@ -472,7 +477,10 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
     e.preventDefault()
     setEditError('')
     if (secure) {
-      if (editReason.trim().length < 8) { setEditError('Enter a specific save reason of at least 8 characters.'); return }
+      const trimmedReason = editReason.trim()
+      const effectiveReason = trimmedReason.length >= 8
+        ? trimmedReason
+        : (trimmedReason.length > 0 ? `Admin updated product details (${trimmedReason})` : 'Admin updated product details')
       if (productTaxonomyReview?.status === 'eligible'
           && (!editingProduct.brand_id || !editingProduct.category_id)) {
         setEditTab('details')
@@ -491,7 +499,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
       }
       const payload = {
         sku: editingProduct.sku, patch,
-        expectedUpdatedAt: editingProduct.updated_at, reason: editReason.trim(),
+        expectedUpdatedAt: editingProduct.updated_at, reason: effectiveReason,
       }
       const result = await recovery.save(payload)
       if (editIdentity.current !== savingIdentity) return
@@ -540,11 +548,41 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
     setTimeout(() => setNotice(null), 4000)
   }
 
+  const saveStatusDecision = async (decision, reason) => {
+    if (statusInFlight.current || !canManageProducts) return false
+    const identity = editIdentity.current
+    statusInFlight.current = true
+    setStatusBusy(decision.nextStatus)
+    try {
+      const result = await commandAdminProductMasterBff('status', {
+        skus: decision.skus, status: decision.nextStatus, reason,
+      }, decision.operationKey)
+      if (editIdentity.current !== identity) return false
+      if (!result.ok) {
+        setStatusDecision({ ...decision, reason, error: result.error || 'The status change could not be confirmed. Check the current product or retry the same change.' })
+        return false
+      }
+      setStatusDecision(null)
+      setSelected(new Set())
+      await fetchProducts()
+      if (editIdentity.current === identity) flash(`${decision.skus.length} product${decision.skus.length === 1 ? '' : 's'} set to ${decision.nextStatus}.`)
+      return true
+    } catch {
+      if (editIdentity.current === identity) setStatusDecision({ ...decision, reason, error: 'The status change could not be confirmed. Check the current product or retry the same change.' })
+      return false
+    } finally {
+      statusInFlight.current = false
+      if (editIdentity.current === identity) setStatusBusy(null)
+    }
+  }
+
   const changeStatus = async (skus, nextStatus) => {
-    if (skus.length === 0) return
+    if (skus.length === 0 || statusInFlight.current) return
     if (secure) {
       if (!canManageProducts) { flash('Only an administrator can change publication state.', true); return }
-      setStatusDecision({ skus, nextStatus, operationKey: crypto.randomUUID() })
+      const decision = { skus, nextStatus, operationKey: crypto.randomUUID() }
+      if (statusSavingMode === 'note') setStatusDecision(decision)
+      else await saveStatusDecision(decision, `Admin set status to ${nextStatus}`)
       return
     }
     setStatusBusy(nextStatus)
@@ -588,8 +626,16 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
     return products.filter(product => {
       if (categoryFilter !== 'All' && (categoryFilter === 'Unassigned'
         ? !!product.subcategory?.trim() : getStoreCategory(product) !== categoryFilter)) return false
-      const matchesSearch = !term || [product.sku, product.name, product.barcode, product.origin, product.country_of_origin, product.category, product.subcategory, product.category_name]
-        .some(value => String(value || '').toLowerCase().includes(term))
+      const matchesSearch = !term || [
+        product.sku,
+        product.name,
+        product.barcode,
+        product.origin,
+        product.country_of_origin,
+        product.category,
+        product.subcategory,
+        product.category_name,
+      ].some(value => String(value || '').toLowerCase().includes(term))
       if (!matchesSearch) return false
       const raw = product?.stock_available
       const stock = raw === null || raw === undefined || raw === '' ? Number.NaN : Number(raw)
@@ -683,11 +729,21 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
 
       <section className="space-y-3">
         <SectionHeading title="Products" description="Filters change the list. Bulk actions show how many products you selected." count={visibleProducts.length} />
+        {secure && canManageProducts && <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+            <label htmlFor="status-saving-mode" className="text-sm font-semibold text-white/80">Status saving</label>
+            <select id="status-saving-mode" value={statusSavingMode} onChange={event => setStatusSavingMode(event.target.value)} disabled={Boolean(statusBusy)} aria-describedby="status-saving-help" className="adm-input min-h-11 w-full text-base sm:w-auto sm:text-sm">
+              <option value="immediate">Save immediately</option>
+              <option value="note">Add a note</option>
+            </select>
+          </div>
+          <p id="status-saving-help" className="text-sm text-white/70">{statusSavingMode === 'immediate' ? 'Selecting a status saves it with an automatic audit note.' : 'Selecting a status opens an optional note before saving.'}</p>
+        </div>}
         <div className="flex flex-col gap-2 rounded-adm-sm border border-adm-line bg-adm-surface p-2 sm:flex-row sm:items-center">
           <label className="relative min-w-0 flex-1">
             <span className="sr-only">Search inventory</span>
             <SearchIcon size={16} className="pointer-events-none absolute left-3 top-3.5 text-white/35" />
-            <input data-tour="search-input" type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search SKU, product, barcode, or origin" className="adm-input min-h-11 pl-9 text-base sm:text-sm" />
+            <input data-tour="search-input" type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search SKU, product, category, barcode, or origin" className="adm-input min-h-11 pl-9 text-base sm:text-sm" />
           </label>
           <div className="flex gap-1 overflow-x-auto" aria-label="Filter inventory exceptions">
             {[
@@ -701,23 +757,22 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
             ].map(([value, label, count]) => <button key={value} onClick={() => setStockFilter(value)} disabled={!batchesReady && ['expiry', 'unresolved'].includes(value)} aria-pressed={stockFilter === value} className={`min-h-11 shrink-0 rounded-adm-sm px-3 text-xs font-semibold transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${stockFilter === value ? 'bg-blue text-white' : 'text-white/45 hover:bg-white/[0.05] hover:text-white disabled:cursor-not-allowed disabled:opacity-60'}`}>{label} <span className="ml-1 font-mono text-xs opacity-70">{count}</span></button>)}
           </div>
         </div>
-      </section>
-
-
         <label className="block space-y-2 text-sm text-white/80"><span>Store category filter</span>
           <select className="adm-input min-h-11 w-full text-base sm:w-auto sm:text-sm" value={categoryFilter} onChange={event => setCategoryFilter(event.target.value)}>
             <option value="All">All categories</option><option value="Unassigned">No custom store category</option>
             {inventoryCategories.map(({ name, count }) => <option key={name} value={name}>{name} ({count})</option>)}
           </select>
         </label>
+      </section>
 
-      {secure && showStoreCategories && <BulkStoreCategoryDialog key={actorId} products={selectedProducts} allProducts={products} recovery={recovery} actorId={actorId} canManageProducts={canManageProducts} onClose={() => setShowStoreCategories(false)} onSaved={() => { void fetchProducts() }} />}
+
       {/* Select-all row */}
       {secure && actorId && <PendingReferenceCreation actorId={actorId} onReview={setReferenceKind} />}
       {secure && <PendingProductDecision recovery={recovery} onReview={() => setShowProductRecovery(true)} />}
       {secure&&<PendingWebsiteDecision recovery={websiteRecovery} onReview={setWebsiteSku}/>}
       {secure && <PendingProductFamilyDecision recovery={familyRecovery} onReview={() => setShowFamilyEditor(true)} />}
       {secure && showFamilyEditor && <ProductFamilyEditor key={actorId} selectedSkus={[...selected]} actorId={actorId} canManageProducts={canManageProducts} recovery={familyRecovery} onClose={() => setShowFamilyEditor(false)} onSaved={() => { flash('Product variations recorded.'); void fetchProducts() }} />}
+      {secure && showStoreCategories && <BulkStoreCategoryDialog key={actorId} products={selectedProducts} allProducts={products} recovery={recovery} actorId={actorId} canManageProducts={canManageProducts} onClose={() => setShowStoreCategories(false)} onSaved={() => { void fetchProducts() }} />}
       {secure&&websiteSku&&<WebsiteAssignmentDialog key={`${actorId}:${websiteSku}:${canManageProducts}`} sku={websiteSku} actorId={actorId} canManageProducts={canManageProducts} recovery={websiteRecovery} onClose={()=>setWebsiteSku(null)}/>}
       {secure && showProductRecovery && <ProductMasterRecovery recovery={recovery} canManageProducts={canManageProducts}
         onNotApplied={(product, taxonomyReview) => {
@@ -1087,21 +1142,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
         decision={statusDecision}
         busy={statusBusy === statusDecision.nextStatus}
         onCancel={() => !statusBusy && setStatusDecision(null)}
-        onConfirm={async (reason) => {
-          setStatusBusy(statusDecision.nextStatus)
-          const result = await commandAdminProductMasterBff('status', {
-            skus: statusDecision.skus, status: statusDecision.nextStatus, reason,
-          }, statusDecision.operationKey)
-          setStatusBusy(null)
-          if (!result.ok) { flash(result.error, true); return false }
-          const changed = statusDecision.skus.length
-          const nextStatus = statusDecision.nextStatus
-          setStatusDecision(null)
-          setSelected(new Set())
-          await fetchProducts()
-          flash(`${changed} product${changed === 1 ? '' : 's'} set to ${nextStatus}.`)
-          return true
-        }}
+        onConfirm={reason => saveStatusDecision(statusDecision, reason)}
       />}
 
       <ProductAiEnrichmentModal
@@ -1429,7 +1470,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                         <option value="Discontinued">Discontinued: retired</option>
                       </select>
                       <p className="mt-1.5 text-xs text-white/45 leading-snug">
-                        {secure ? 'Change status from the product card or selection bar and give a reason.' : (STATUS_OPTIONS.find(o => o.value === normalizeStatus(editingProduct.status))?.hint
+                        {secure ? 'Change status from the product card or selection bar. Choose Add a note above the product list when needed.' : (STATUS_OPTIONS.find(o => o.value === normalizeStatus(editingProduct.status))?.hint
                           || 'Retired product, kept for order history.')}
                       </p>
                     </div>
@@ -1448,8 +1489,8 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                 <p className="text-sm text-white/55 italic">Product details save separately from photos, publication, and batch reconciliation.</p>
                 {editError && <StateBanner tone="danger">{editError}</StateBanner>}
                 {editPending && <StateBanner tone="warning">A product decision is saved for confirmation. Closing or reloading keeps it. Review the pending decision before another save.</StateBanner>}
-                {secure && <label className="block text-sm font-semibold text-white/70">Reason for this change
-                  <textarea disabled={saving || editPending} value={editReason} onChange={(event) => setEditReason(event.target.value.slice(0, 500))} minLength={8} maxLength={500} required className="mt-1 min-h-[88px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" />
+                {secure && <label className="block text-sm font-semibold text-white/70">Reason for this change <span className="font-normal text-white/45">(optional)</span>
+                  <textarea disabled={saving || editPending} value={editReason} onChange={(event) => setEditReason(event.target.value.slice(0, 500))} maxLength={500} placeholder="Default: Admin updated product details" className="mt-1 min-h-[88px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white placeholder:text-white/30 outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" />
                       <span className="mt-1 block text-xs font-normal text-white/45">Saved permanently in this product's change history.</span>
                 </label>}
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
@@ -1458,7 +1499,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
                     className="min-h-11 rounded-adm-sm px-4 py-2 text-base font-semibold text-white/60 transition-colors hover:text-white">
                     Cancel
                   </button>
-                  <button type={editPending ? 'button' : 'submit'} onClick={editPending ? () => setShowProductRecovery(true) : undefined} disabled={saving || (secure && !editPending && editReason.trim().length < 8)}
+                  <button type={editPending ? 'button' : 'submit'} onClick={editPending ? () => setShowProductRecovery(true) : undefined} disabled={saving}
                     className="flex min-h-11 items-center justify-center gap-2 rounded-adm-sm bg-blue px-6 py-2 text-base font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-blue/90 active:scale-[0.98] disabled:opacity-50">
                     {saving && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                     {saving ? 'Saving…' : editPending ? 'Review saved decision' : 'Save Changes'}

@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
+import { mountTurnstileWidget } from '../../lib/turnstileWidget'
 
 let scriptPromise = null
 
@@ -43,48 +44,57 @@ export default function TurnstileChallenge({
   tone = 'storefront',
 }) {
   const containerRef = useRef(null)
-  const widgetRef = useRef(null)
   const errorId = useId()
   const [error, setError] = useState('')
+  const [status, setStatus] = useState('loading')
+  const [widgetSize, setWidgetSize] = useState('compact')
   const [attempt, setAttempt] = useState(0)
   const enabled = enabledOverride ?? true
   const adminTone = tone === 'admin'
   const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
 
   useEffect(() => {
+    const container = containerRef.current
+    if (!enabled || !container) return undefined
+    const measure = () => setWidgetSize(container.clientWidth < 300 ? 'compact' : 'flexible')
+    measure()
+    if (typeof ResizeObserver !== 'function') return undefined
+    const observer = new ResizeObserver(measure)
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [enabled])
+
+  useEffect(() => {
     if (!enabled) return undefined
     setError('')
+    setStatus('loading')
     onTokenChange('')
     if (!siteKey) {
       setError('The security check is not configured. Please contact K2 Jimzon.')
+      setStatus('error')
       onTokenChange('')
       return undefined
     }
     let cancelled = false
+    let disposeWidget
     loadTurnstile().then((turnstile) => {
       if (cancelled || !turnstile || !containerRef.current) return
-      widgetRef.current = turnstile.render(containerRef.current, {
-        sitekey: siteKey,
-        action,
-        appearance: 'always',
-        size: 'flexible',
-        callback: (token) => { if (!cancelled) { setError(''); onTokenChange(token) } },
-        'expired-callback': () => { if (!cancelled) { setError('Security check expired. Please complete it again.'); onTokenChange('') } },
-        'timeout-callback': () => { if (!cancelled) { setError('Security check timed out. Please retry.'); onTokenChange('') } },
-        'error-callback': () => { if (!cancelled) { setError('Security check could not load. Please retry.'); onTokenChange('') }; return true },
+      disposeWidget = mountTurnstileWidget(turnstile, containerRef.current, {
+        siteKey, action, size: widgetSize, onToken: onTokenChange,
+        onState: state => { setStatus(state.status); setError(state.error) },
       })
     }).catch(() => {
       if (!cancelled) {
         setError('Security check could not load. Check your connection and retry.')
+        setStatus('error')
         onTokenChange('')
       }
     })
     return () => {
       cancelled = true
-      if (widgetRef.current != null && window.turnstile) window.turnstile.remove(widgetRef.current)
-      widgetRef.current = null
+      disposeWidget?.()
     }
-  }, [action, enabled, onTokenChange, siteKey, attempt])
+  }, [action, enabled, onTokenChange, siteKey, attempt, widgetSize])
 
   if (!enabled) return null
   return (
@@ -95,6 +105,10 @@ export default function TurnstileChallenge({
       <h3 id={`${errorId}-label`} className={adminTone ? 'text-sm font-bold text-white' : 'text-sm font-semibold text-navy'}>Security check</h3>
       <p className={adminTone ? 'mt-1 text-sm leading-relaxed text-white/65' : 'mt-1 text-sm leading-relaxed text-navy-soft'}>{description}</p>
       <div ref={containerRef} className="mt-3 min-h-16" />
+      {status !== 'error' && <p role="status" aria-label="Security check status"
+        className={adminTone ? 'mt-2 text-sm text-white/80' : 'mt-2 text-sm text-navy-soft'}>
+        {status === 'verified' ? 'Security check complete.' : status === 'interactive' ? 'Complete the check above to continue.' : 'Checking your browser…'}
+      </p>}
       {error && <p id={errorId} role="alert" className="mt-2 text-sm text-crimson">{error}</p>}
       {error && siteKey && <button type="button" onClick={() => setAttempt(value => value + 1)}
         className={adminTone

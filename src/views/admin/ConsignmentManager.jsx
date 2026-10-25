@@ -204,11 +204,11 @@ export default function ConsignmentManager() {
 
   const submitAdvance = async event => {
     event.preventDefault()
-    if (advanceReason.trim().length < 10) {
-      setError('Record a specific reason of at least 10 characters before changing custody state.')
-      return
-    }
-    await advance(advanceTarget, advanceReason)
+    const trimmed = advanceReason.trim()
+    const effectiveReason = advanceReason.trim().length < 10
+      ? (trimmed.length > 0 ? `Custody updated by admin (${trimmed})` : `Custody updated to ${advanceTarget} by admin`)
+      : trimmed
+    await advance(advanceTarget, effectiveReason)
   }
 
   const closeEditor = () => {
@@ -305,7 +305,7 @@ export default function ConsignmentManager() {
             <h2 id="consignment-dialog-title" className="font-sans text-xl font-bold">{advanceTarget ? (advanceTarget === 'In_Transit' ? 'Close Milan packing' : 'Confirm Manila arrival') : showCreate ? 'Create consignment manifest' : 'Add manifest SKU'}</h2>
             {advanceTarget ? <>
               <p className="text-sm leading-relaxed text-white/55">{advanceTarget === 'In_Transit' ? 'This closes Milan scanning. Every expected unit must already be scan-packed.' : 'This opens the independent Manila recount. Milan counts will not be copied as received.'}</p>
-              <Field label="Custody / state-change reason"><textarea minLength={10} maxLength={500} className={`${input} min-h-24 resize-y`} value={advanceReason} onChange={event => setAdvanceReason(event.target.value)} placeholder="Record who confirmed the handoff or arrival and the physical evidence checked" required /></Field>
+              <Field label={<span>Custody / state-change reason <span className="font-normal text-white/40">(optional)</span></span>}><textarea maxLength={500} className={`${input} min-h-24 resize-y`} value={advanceReason} onChange={event => setAdvanceReason(event.target.value)} placeholder="Record who confirmed the handoff or arrival (optional)" /></Field>
             </> : showCreate ? <>
               <Field label="Manifest code"><input className={input} value={create.manifestCode} onChange={e => setCreate(current => ({ ...current, manifestCode: e.target.value }))} minLength={3} maxLength={80} required /></Field>
               <Field label="Flight or shipment reference"><input className={input} value={create.flightNumber} onChange={e => setCreate(current => ({ ...current, flightNumber: e.target.value }))} maxLength={120} placeholder="Record only confirmed details" /></Field>
