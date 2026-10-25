@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
-  testDir: './tests', testMatch: 'storefront-recovery-ui.spec.js',
+  testDir: './tests', testMatch: ['storefront-recovery-ui.spec.js', 'checkout-chat-ui.spec.js'],
   workers: 1, timeout: 180000, reporter: 'list',
   use: { baseURL: 'http://127.0.0.1:5207', viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' },
   webServer: {
