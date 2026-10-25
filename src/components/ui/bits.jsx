@@ -1,3 +1,4 @@
+import BrandMark from './BrandMark'
 import { CheckIcon } from './icons'
 
 // Italian-green trust badge — authenticity, freshness, stock states only.
@@ -36,25 +37,26 @@ export function Tricolor({ className = '' }) {
   return <div className={'h-0.5 bg-crimson opacity-80 rounded-full ' + className} aria-hidden="true" />
 }
 
-export function Wordmark({ size = 'text-2xl', onClick, light = false }) {
+export function Wordmark({ size = 'text-2xl', onClick, light = false, animate = false, mark = true }) {
+  const Tag = onClick ? 'button' : 'span'
   return (
-    <button
+    <Tag
       onClick={onClick}
+      type={onClick ? 'button' : undefined}
       aria-label={onClick ? 'K2 Jimzon home' : undefined}
-      className={'group min-h-11 text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 ' + (onClick ? 'cursor-pointer' : 'cursor-default')}
+      className={'group inline-flex min-h-11 items-center gap-2 text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 ' + (onClick ? 'cursor-pointer' : '')}
     >
-      <span className={'font-serif font-semibold tracking-tight text-crimson ' + size}>
-        K2 Jimzon
+      {mark && <BrandMark animate={animate} />}
+      <span>
+        <span className={'font-serif font-semibold tracking-tight text-crimson ' + size}
+          style={onClick ? { fontSize: 'clamp(1.1rem, 5.2vw, 1.55rem)' } : undefined}>
+          K2 Jimzon
+        </span>
+        <span className={'wordmark-tagline mt-1 block text-xs font-medium uppercase tracking-[0.32em] ' + (light ? 'text-white/60' : 'text-navy-soft')}>
+          Direct Italian imports
+        </span>
       </span>
-      <span
-        className={
-          'wordmark-tagline mt-1 block text-xs font-medium uppercase tracking-[0.32em] ' +
-          (light ? 'text-white/60' : 'text-navy-soft')
-        }
-      >
-        Direct Italian imports
-      </span>
-    </button>
+    </Tag>
   )
 }
 

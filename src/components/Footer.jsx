@@ -1,3 +1,4 @@
+import BrandMark from './ui/BrandMark'
 import { useStore } from '../context/StoreContext'
 import { Wordmark } from './ui/bits'
 import { ArrowIcon, FacebookIcon, InboxIcon, InstagramIcon, MapIcon, PhoneIcon } from './ui/icons'
@@ -34,7 +35,8 @@ export default function Footer() {
       <div className="store-section">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.45fr_0.8fr_0.8fr_1fr]">
           <div className="sm:col-span-2 lg:col-span-1">
-            <Wordmark />
+            <BrandMark variant="globe" />
+            <Wordmark mark={false} />
             <p className="mt-5 max-w-sm text-sm leading-7 text-navy-soft">Italian goods for homes and businesses in the Philippines. Shop what is in stock or ask us to source something from Italy.</p>
             <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-crimson">Website · Shopee · TikTok Shop · Lazada · Pasabuy</p>
           </div>

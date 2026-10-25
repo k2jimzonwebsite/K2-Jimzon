@@ -47,7 +47,7 @@ export default function StoreHeader() {
       </div>
 
       <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-3 lg:px-6">
-        <Wordmark onClick={() => go('home')} size="text-[1.55rem]" />
+        <Wordmark animate={view === 'home'} onClick={() => go('home')} size="text-[1.55rem]" />
 
         <nav className="ml-6 hidden min-w-0 flex-1 items-stretch lg:flex" aria-label="Storefront">
           {nav.map(([key, label]) => {
