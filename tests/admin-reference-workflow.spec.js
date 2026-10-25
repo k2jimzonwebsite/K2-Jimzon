@@ -17,7 +17,7 @@ async function createForm(page){
  await page.getByRole('button',{name:'Create brand',exact:true}).click()
  const dialog=page.getByRole('dialog',{name:'Create brand'})
  await dialog.getByLabel('Brand name',{exact:true}).fill('  Synthetic reviewed brand  ')
- await dialog.getByLabel('Creation reason',{exact:true}).fill('Reviewed supplier catalogue')
+ await dialog.getByLabel(/^Creation reason/).fill('Reviewed supplier catalogue')
  await dialog.getByRole('button',{name:'Create reference',exact:true}).click()
  return dialog
 }
@@ -73,7 +73,7 @@ test('approved U+FEFF reference name remains readable and acknowledgeable',async
  await page.getByRole('button',{name:'Edit',exact:true}).click();await page.getByRole('button',{name:'Create brand',exact:true}).click()
  const dialog=page.getByRole('dialog',{name:'Create brand'})
  await expect(dialog.getByRole('button',{name:'Create reference',exact:true})).toBeEnabled()
- await dialog.getByLabel('Brand name',{exact:true}).fill('\ufeff');await dialog.getByLabel('Creation reason',{exact:true}).fill('Reviewed Unicode identity')
+ await dialog.getByLabel('Brand name',{exact:true}).fill('\ufeff');await dialog.getByLabel(/^Creation reason/).fill('Reviewed Unicode identity')
  await dialog.getByRole('button',{name:'Create reference',exact:true}).click()
  await expect(dialog.getByRole('status')).toContainText('product changes are not saved yet')
  await dialog.getByRole('button',{name:'Use reference',exact:true}).click()
@@ -138,7 +138,7 @@ test('category creation preserves its parent and selects only the unsaved catego
  const dialog=page.getByRole('dialog',{name:'Create category'})
  await dialog.getByLabel('Category name',{exact:true}).fill(child.name)
  await dialog.getByLabel(/^Category parent/).selectOption(category.id)
- await dialog.getByLabel('Creation reason',{exact:true}).fill('Reviewed child identity')
+ await dialog.getByLabel(/^Creation reason/).fill('Reviewed child identity')
  await dialog.getByRole('button',{name:'Create reference',exact:true}).click()
  await expect(dialog.getByRole('status')).toContainText('product changes are not saved yet')
  expect(body).toEqual({kind:'category',name:child.name,parentId:category.id,reason:'Reviewed child identity'})
