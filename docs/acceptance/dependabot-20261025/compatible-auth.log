@@ -1,0 +1,30 @@
+✔ protocol-valid 12-character refresh token survives all Admin encrypted session boundaries (6.1699ms)
+✔ refresh lower/upper bounds and access-token lower bound still refuse malformed sessions (0.617ms)
+✔ actual Supabase SDK generates PKCE with encrypted browser-bound verifier and exact K2 return route (31.5509ms)
+✔ Google callback rejects wrong-origin before provider exchange (5.8527ms)
+✔ Google callback rejects no-cookie before provider exchange (1.9786ms)
+✔ Google callback rejects altered-cookie before provider exchange (1.9165ms)
+✔ Google callback rejects wrong-state before provider exchange (1.8185ms)
+✔ Google callback rejects expired before provider exchange (1.8855ms)
+✔ Google callback rejects extra-fields before provider exchange (1.2786ms)
+✔ Google AAL1 session stays pending for the existing authenticator challenge without active session registration (2.1884ms)
+✔ Google callback non-staff retains staff/AAL2/registry authority (2.0513ms)
+✔ Google callback unverified-email retains staff/AAL2/registry authority (1.8864ms)
+✔ Google callback enrollment retains staff/AAL2/registry authority (1.4031ms)
+✔ Google callback aal2 retains staff/AAL2/registry authority (2.1201ms)
+✔ Google callback registry-failed retains staff/AAL2/registry authority (1.4253ms)
+✔ Google start fails closed for missing bot verification or unavailable durable budget (1.144ms)
+✔ consolidated router advertises both Google routes with origin, PKCE/bot and durable budget guards (0.1573ms)
+✔ pending enrollment accepts the installed Supabase SDK QR format without cancelling the factor (32.9966ms)
+✔ pending enrollment bounds oversized SVG data and cancels only the new unverified factor (0.7129ms)
+✔ pending enrollment preserves an already verified authenticator without creating or deleting factors (0.2205ms)
+✔ pending enrollment still rejects a non-SVG QR response and cancels its unverified factor (0.2812ms)
+✔ installed SDK completes password, enrollment, challenge and AAL2 verification against the provider protocol fixture (5.2802ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2361.2726
