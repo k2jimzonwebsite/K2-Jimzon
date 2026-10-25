@@ -2,51 +2,71 @@
   {
     "path": "docs/acceptance/shopper-fixes-release-20261024/ci-final.json",
     "bytes": 6435,
-    "sha256": "aff5be0520ad8bb6e21c15387abe58695d7c5e3a70f1e341e527c5dcbba1434c"
+    "sha256": "aff5be0520ad8bb6e21c15387abe58695d7c5e3a70f1e341e527c5dcbba1434c",
+    "local_bytes": 6435,
+    "local_sha256": "aff5be0520ad8bb6e21c15387abe58695d7c5e3a70f1e341e527c5dcbba1434c"
   },
   {
     "path": "docs/acceptance/shopper-fixes-release-20261024/host-checks.json",
     "bytes": 379,
-    "sha256": "c6ae4455ab9f9c692380429845381a4b87a7045bacb52d62d5b48da95896b678"
+    "sha256": "c6ae4455ab9f9c692380429845381a4b87a7045bacb52d62d5b48da95896b678",
+    "local_bytes": 379,
+    "local_sha256": "c6ae4455ab9f9c692380429845381a4b87a7045bacb52d62d5b48da95896b678"
   },
   {
     "path": "docs/acceptance/shopper-fixes-release-20261024/live-checkout-390-dark.png",
     "bytes": 41934,
-    "sha256": "3ba15f6bf02b3bba8fa13b3f1524347e5fe161d742b2cd992c240765c6a4fd73"
+    "sha256": "3ba15f6bf02b3bba8fa13b3f1524347e5fe161d742b2cd992c240765c6a4fd73",
+    "local_bytes": 41934,
+    "local_sha256": "3ba15f6bf02b3bba8fa13b3f1524347e5fe161d742b2cd992c240765c6a4fd73"
   },
   {
     "path": "docs/acceptance/shopper-fixes-release-20261024/live-checkout-390-light.png",
     "bytes": 40658,
-    "sha256": "867f8ec1be64103dbd789b2426bd5bbf059d2411929ef941058989e55c9674c9"
+    "sha256": "867f8ec1be64103dbd789b2426bd5bbf059d2411929ef941058989e55c9674c9",
+    "local_bytes": 40658,
+    "local_sha256": "867f8ec1be64103dbd789b2426bd5bbf059d2411929ef941058989e55c9674c9"
   },
   {
     "path": "docs/acceptance/shopper-fixes-release-20261024/preflight-final.log",
-    "bytes": 176,
-    "sha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
+    "bytes": 171,
+    "sha256": "863b38bfdd924891810fade78cab2e60db566af04a7e03cbcf22880289d83d17",
+    "local_bytes": 176,
+    "local_sha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
   },
   {
     "path": "docs/acceptance/shopper-fixes-release-20261024/preflight.log",
-    "bytes": 176,
-    "sha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
+    "bytes": 171,
+    "sha256": "863b38bfdd924891810fade78cab2e60db566af04a7e03cbcf22880289d83d17",
+    "local_bytes": 176,
+    "local_sha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
   },
   {
     "path": "docs/acceptance/shopper-fixes-release-20261024/production.json",
-    "bytes": 6310,
-    "sha256": "78b68b1d7f99a0a15c6e325a5f5d1fa2e24cb2fa936c7f6da045ee047dd17089"
+    "bytes": 6218,
+    "sha256": "dbf567e4f553664276d5cabc98e4248de13c457aa93727cc5de7238e5ea420a6",
+    "local_bytes": 6310,
+    "local_sha256": "78b68b1d7f99a0a15c6e325a5f5d1fa2e24cb2fa936c7f6da045ee047dd17089"
   },
   {
     "path": "docs/acceptance/shopper-fixes-release-20261024/qualification.json",
-    "bytes": 2171,
-    "sha256": "d4e87003761942a779a018f60c2a014375a4e535d39cb06330e459429817e25e"
+    "bytes": 2116,
+    "sha256": "53a07a65bd82dade96aed6eaf7b7c0f13da7fd53f9d556f18cc105d3fe75e34c",
+    "local_bytes": 2171,
+    "local_sha256": "d4e87003761942a779a018f60c2a014375a4e535d39cb06330e459429817e25e"
   },
   {
     "path": "docs/acceptance/shopper-fixes-release-20261024/readiness-final.log",
-    "bytes": 2380,
-    "sha256": "fa6e98b8b0d02287678271b352c4c4186f6953528f8bd8ee0e8d94680d1cf7e1"
+    "bytes": 2354,
+    "sha256": "84a30fa3d74ced8c339aae8d57ba8f1ddfa6582ff3e0c0efb78292fea0fe229c",
+    "local_bytes": 2380,
+    "local_sha256": "fa6e98b8b0d02287678271b352c4c4186f6953528f8bd8ee0e8d94680d1cf7e1"
   },
   {
     "path": "docs/acceptance/shopper-fixes-release-20261024/readiness.log",
-    "bytes": 2380,
-    "sha256": "fa6e98b8b0d02287678271b352c4c4186f6953528f8bd8ee0e8d94680d1cf7e1"
+    "bytes": 2354,
+    "sha256": "84a30fa3d74ced8c339aae8d57ba8f1ddfa6582ff3e0c0efb78292fea0fe229c",
+    "local_bytes": 2380,
+    "local_sha256": "fa6e98b8b0d02287678271b352c4c4186f6953528f8bd8ee0e8d94680d1cf7e1"
   }
 ]
