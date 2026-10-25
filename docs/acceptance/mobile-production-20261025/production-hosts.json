@@ -1,0 +1,26 @@
+[
+  {
+    "host": "https://www.k2jimzon.com",
+    "status": 200,
+    "target": "storefront",
+    "contentType": [
+      "text/html; charset=utf-8"
+    ],
+    "cspReportOnly": true,
+    "frameOptions": [
+      "DENY"
+    ]
+  },
+  {
+    "host": "https://admin.k2jimzon.com",
+    "status": 200,
+    "target": "admin",
+    "contentType": [
+      "text/html; charset=utf-8"
+    ],
+    "cspReportOnly": true,
+    "frameOptions": [
+      "DENY"
+    ]
+  }
+]

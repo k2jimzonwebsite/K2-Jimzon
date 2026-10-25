@@ -1,0 +1,41 @@
+
+> k2-jimzon-prototype@0.1.0 test:intake-ai-ui
+> playwright test --config=playwright.intake-ai.config.js
+
+[WebServer] (node:11300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:1532) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 26 tests using 1 worker
+
+(node:5372) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\intake-ai-ui.spec.js:7:35 › completed CSV import opens the same Draft for package review (990ms)
+  ok  2 tests\intake-ai-ui.spec.js:7:35 › completed CSV import refuses stale selection (735ms)
+  ok  3 tests\intake-ai-ui.spec.js:37:1 › imported Draft manual review keeps its baseline and saves only explicit staff corrections (1.3s)
+  ok  4 tests\intake-ai-ui.spec.js:100:1 › barcode scan shows a public catalog suggestion and saves only staff-confirmed provenance (630ms)
+  ok  5 tests\intake-ai-ui.spec.js:129:1 › an incomplete resume read never authorizes a new intake session (572ms)
+  ok  6 tests\intake-ai-ui.spec.js:150:1 › fresh public SEO data must still match the product staff confirmed (587ms)
+  ok  7 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after response loss (540ms)
+  ok  8 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after refresh failure (1.4s)
+  ok  9 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after incomplete receipt (532ms)
+  ok 10 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after stale record (588ms)
+  ok 11 tests\intake-ai-ui.spec.js:209:3 › intake session creation retains both identities after response loss (521ms)
+  ok 12 tests\intake-ai-ui.spec.js:209:3 › intake session creation retains both identities after refresh failure (1.3s)
+  ok 13 tests\intake-ai-ui.spec.js:209:3 › intake session creation retains both identities after retry denial (526ms)
+  ok 14 tests\intake-ai-ui.spec.js:247:1 › publication keeps its frozen command when the receipt refresh fails (1.9s)
+  ok 15 tests\intake-ai-ui.spec.js:282:1 › automatic field review retains an uncertain transition for exact retry (674ms)
+  ok 16 tests\intake-ai-ui.spec.js:318:1 › replacing the actor during a Draft command ignores its late receipt (486ms)
+  ok 17 tests\intake-ai-ui.spec.js:345:1 › uncertain intake step freezes its reviewed payload and retries the same outer receipt key (626ms)
+  ok 18 tests\intake-ai-ui.spec.js:386:1 › pending packaging review freezes every reviewed control and allows correction only after rejection (572ms)
+  ok 19 tests\intake-ai-ui.spec.js:428:1 › uncertain Draft creation after response loss retries the frozen reviewed Draft with the same outer receipt key (792ms)
+  ok 20 tests\intake-ai-ui.spec.js:428:1 › uncertain Draft creation after refresh failure retries the frozen reviewed Draft with the same outer receipt key (1.9s)
+  ok 21 tests\intake-ai-ui.spec.js:428:1 › uncertain Draft creation after incomplete receipt retries the frozen reviewed Draft with the same outer receipt key (578ms)
+  ok 22 tests\intake-ai-ui.spec.js:476:1 › uncertain first inventory preserves separate inner request and outer receipt identities (761ms)
+  ok 23 tests\intake-ai-ui.spec.js:519:1 › real modal persists automatic field-review transition before saving reviewed canonical Draft (798ms)
+  ok 24 tests\intake-ai-ui.spec.js:573:1 › manual product JSON creates a reviewed Draft without calling the automatic provider (774ms)
+  ok 25 tests\intake-ai-ui.spec.js:626:1 › phone recovery, missing configuration, reviewed image and canonical attachment remain deliberate (893ms)
+  ok 26 tests\intake-ai-ui.spec.js:661:1 › confirmed barcode catalog allows Gemini SEO draft request and shows staff review text (603ms)
+
+  26 passed (26.3s)

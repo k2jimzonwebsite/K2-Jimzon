@@ -177,7 +177,11 @@ The source-release action has been removed after durable evidence; the remaining
 
 ### MAP-023: Finish real order, payment and fulfillment cycles
 
-25 October 2026 / MAP-023 / IDEA-20261024-02 and IDEA-20261024-03: Owner says proceed with fixing the verified branch/production mismatch. Current execution is one isolated reconciliation from production main b00e9fee onto codex/mobile-production-reconcile, recovering pushed mobile901c15df changes while preserving PR25/PR26/Motion14.5/deferred-globe behavior. Existing SKU-merge worktree is preserved, not duplicated. Verify failing-first affected tests, final development, one complete release gate, required CI and both real production artifacts/mobile themes before claiming live. No database/media/stock/order/payment mutation. Recovery: revert this scoped source release to b00e9fee; remaining status/evidence here and docs/acceptance/MOBILE_PRODUCTION_RECONCILIATION_20261025.md.
+
+
+
+
+
 
 
 

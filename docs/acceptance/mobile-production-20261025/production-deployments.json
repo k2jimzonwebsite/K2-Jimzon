@@ -1,0 +1,81 @@
+[
+  {
+    "id": "dpl_GtDmydTGkaKTbfQcpkZPLViRiaaQ",
+    "name": "k2-jimzon",
+    "url": "k2-jimzon-q9ti3qt7r-k2-jimzon.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1792934514708,
+    "creator": {
+      "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+      "username": "k2jimzonwebsite"
+    },
+    "project": {
+      "id": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "name": "k2-jimzon",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "main",
+      "githubCommitSha": "c2e55d7057bb65b72ad2d0a337046d10764e7168",
+      "githubCommitMessage": "fix(storefront): release the missing mobile fixes on current main (#28)\n\n* fix(storefront): Reconcile missing mobile fixes with current production\n\n* test(storefront): Align release contract with approved payment copy\n\n* test(storefront): Verify accessible mobile route controls\n\n---------\n\nCo-aut...",
+      "githubRepo": "K2-Jimzon",
+      "githubOrg": "k2jimzonwebsite"
+    },
+    "alias": [
+      "www.k2jimzon.com",
+      "k2-jimzon-vert.vercel.app",
+      "k2jimzon.com",
+      "k2-jimzon-k2-jimzon.vercel.app",
+      "k2-jimzon-git-main-k2-jimzon.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1792934563209,
+    "ready": 1792934609621,
+    "readyState": "READY",
+    "source": "git",
+    "aliasError": null
+  },
+  {
+    "id": "dpl_2eeHwb8eCDNqJSbhXjGjvhG5PM8c",
+    "name": "k2-jimzon-admin",
+    "url": "k2-jimzon-admin-gggq8wohg-k2-jimzon.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1792934514688,
+    "creator": {
+      "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+      "username": "k2jimzonwebsite"
+    },
+    "project": {
+      "id": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "name": "k2-jimzon-admin",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "main",
+      "githubCommitSha": "c2e55d7057bb65b72ad2d0a337046d10764e7168",
+      "githubCommitMessage": "fix(storefront): release the missing mobile fixes on current main (#28)\n\n* fix(storefront): Reconcile missing mobile fixes with current production\n\n* test(storefront): Align release contract with approved payment copy\n\n* test(storefront): Verify accessible mobile route controls\n\n---------\n\nCo-aut...",
+      "githubRepo": "K2-Jimzon",
+      "githubOrg": "k2jimzonwebsite"
+    },
+    "alias": [
+      "admin.k2jimzon.com",
+      "k2-jimzon-admin-seven.vercel.app",
+      "k2-jimzon-admin-k2-jimzon.vercel.app",
+      "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1792934515675,
+    "ready": 1792934562463,
+    "readyState": "READY",
+    "source": "git",
+    "aliasError": null
+  }
+]

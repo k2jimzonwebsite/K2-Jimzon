@@ -1,0 +1,238 @@
+{
+  "candidate": "de522dfafcabd8d38cab21b022b57ddadeac7e05",
+  "baseline": "b00e9feea9db771f838ceb8434d8d2ab989cb2c5",
+  "originalAggregateExit": 1,
+  "allRequiredLocalConstituentsPassed": true,
+  "unrunReleaseStages": 0,
+  "fixtureFlagIsolation": "No production flags in disabled-commerce tests; configured K2 flags only during builds",
+  "focusedCorrections": [
+    "copy contract1",
+    "fixture environment3",
+    "mobile route1"
+  ],
+  "browserCoverage": [
+    {
+      "log": "release.log",
+      "browserPassCounts": [
+        27,
+        26,
+        1117
+      ],
+      "passed": 1170.0
+    },
+    {
+      "log": "resume-test-mobile-moderation.log",
+      "browserPassCounts": [
+        4
+      ],
+      "passed": 4.0
+    },
+    {
+      "log": "resume-test-store-orientation.log",
+      "browserPassCounts": [
+        12
+      ],
+      "passed": 12.0
+    },
+    {
+      "log": "resume-test-storefront-ui.log",
+      "browserPassCounts": [
+        28
+      ],
+      "passed": 28.0
+    },
+    {
+      "log": "copy-contract-correction.log",
+      "browserPassCounts": [
+        1
+      ],
+      "passed": 1.0
+    },
+    {
+      "log": "focused-release-fixtures.log",
+      "browserPassCounts": [
+        3
+      ],
+      "passed": 3.0
+    },
+    {
+      "log": "mobile-route-correction.log",
+      "browserPassCounts": [
+        1
+      ],
+      "passed": 1.0
+    },
+    {
+      "log": "final-test-storefront-recovery.log",
+      "browserPassCounts": [
+        39
+      ],
+      "passed": 39.0
+    },
+    {
+      "log": "final-test-admin-ui.log",
+      "browserPassCounts": [
+        42,
+        8,
+        5
+      ],
+      "passed": 55.0
+    },
+    {
+      "log": "final-test-payment-ui.log",
+      "browserPassCounts": [
+        47,
+        1
+      ],
+      "passed": 48.0
+    },
+    {
+      "log": "final-test-inbox-ui.log",
+      "browserPassCounts": [
+        41
+      ],
+      "passed": 41.0
+    },
+    {
+      "log": "final-test-admin-product-master-ui.log",
+      "browserPassCounts": [
+        56,
+        2
+      ],
+      "passed": 58.0
+    },
+    {
+      "log": "final-test-admin-website-assignment-ui.log",
+      "browserPassCounts": [
+        14
+      ],
+      "passed": 14.0
+    },
+    {
+      "log": "final-test-owner-count-close-ui.log",
+      "browserPassCounts": [
+        1
+      ],
+      "passed": 1.0
+    },
+    {
+      "log": "final-test-customer-account-ui.log",
+      "browserPassCounts": [
+        8
+      ],
+      "passed": 8.0
+    },
+    {
+      "log": "final-test-selling-surfaces.log",
+      "browserPassCounts": [
+        72
+      ],
+      "passed": 72.0
+    },
+    {
+      "log": "final-test-order-receipt-direct.log",
+      "browserPassCounts": [
+        2
+      ],
+      "passed": 2.0
+    },
+    {
+      "log": "final-test-workflow-api.log",
+      "browserPassCounts": [
+        4,
+        11
+      ],
+      "passed": 15.0
+    },
+    {
+      "log": "final-test-intake-ai-ui.log",
+      "browserPassCounts": [
+        26
+      ],
+      "passed": 26.0
+    }
+  ],
+  "totalReconciledBrowserPasses": 1598.0,
+  "finalStages": [
+    {
+      "stage": "test:storefront-recovery",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-storefront-recovery.log"
+    },
+    {
+      "stage": "test:admin-ui",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-admin-ui.log"
+    },
+    {
+      "stage": "test:payment-ui",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-payment-ui.log"
+    },
+    {
+      "stage": "test:inbox-ui",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-inbox-ui.log"
+    },
+    {
+      "stage": "test:admin-product-master-ui",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-admin-product-master-ui.log"
+    },
+    {
+      "stage": "test:admin-website-assignment-ui",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-admin-website-assignment-ui.log"
+    },
+    {
+      "stage": "test:owner-count-close-ui",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-owner-count-close-ui.log"
+    },
+    {
+      "stage": "test:customer-account-ui",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-customer-account-ui.log"
+    },
+    {
+      "stage": "test:selling-surfaces",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-selling-surfaces.log"
+    },
+    {
+      "stage": "test:order-receipt-direct",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-order-receipt-direct.log"
+    },
+    {
+      "stage": "test:workflow-api",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-workflow-api.log"
+    },
+    {
+      "stage": "test:intake-ai-ui",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-intake-ai-ui.log"
+    },
+    {
+      "stage": "test:vercel-output",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-test-vercel-output.log"
+    },
+    {
+      "stage": "build:storefront",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-build-storefront.log"
+    },
+    {
+      "stage": "build:admin",
+      "exitCode": 0,
+      "log": "docs/acceptance/mobile-production-20261025/final-build-admin.log"
+    }
+  ],
+  "ciRun": 40195341705,
+  "ciStatus": "success",
+  "notes": "Counts include original1117passes plus focused1; failed storefrontUI28 plus focused3 plus route1. Original failures retained; no original clean aggregate0 claimed.",
+  "productionState": "VERIFIED_LIVE",
+  "productionCommit": "c2e55d7057bb65b72ad2d0a337046d10764e7168"
+}
