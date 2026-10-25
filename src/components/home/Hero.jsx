@@ -3,7 +3,7 @@ import { useStore } from '../../context/StoreContext'
 import { RedButton, GhostButton, Kicker } from '../ui/bits'
 import { ArrowIcon, CheckIcon, PlaneIcon, ShieldIcon, GridIcon } from '../ui/icons'
 import FlightMap from './FlightMap'
-import { peso } from '../../data/products'
+import { peso } from '../../lib/formatMoney'
 import { groupFamilyResults, familyPriceRange } from '../../lib/productFamilyPresentation'
 import './Hero.css'
 

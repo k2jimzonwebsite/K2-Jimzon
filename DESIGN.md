@@ -1,3 +1,14 @@
+25October2026 / MAP-021 / IDEA-20261025-01 — local performance preservation
+
+All four required design skills preserve K2 storefront wood/editorial identity, accessible interactions, reduced motion and existing Motion features. No typography/color/layout/content change. Existing budgets retained; module-network and rendered regressions pass. Full release and hosted acceptance pending.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Globe CMS is loaded at landing. | Existing deferred globe section supplies/reuses context. | Load review data with its consumer without duplicate reads. |
+| Price labels import catalog data. | Identical pure formatter with compatibility export. | Preserve displayed prices with smaller landing cost. |
+
+Evidence and recovery: docs/acceptance/DEPENDABOT_REMEDIATION_20261025.md.
+
 25 October2026 / MAP-023 / IDEA-20261024-07 — VERIFIED LIVE shopper source release
 
 Owner-authorized PR26 is merged at9caa06792f8e4272e30779431e43f68290f41305, exact qualified treed5d8f5ac120c0811a18167ebeea2a06efebda593. Storefront dpl_47mGZStT9nXxxEyfsvCsgd5y8w43 and Admin dpl_7fqkhWc4B8szdUTJfD3XviMQv6KV are observed Ready/Production/Current on that source with canonical domains and200/correct artifact markers. Actual English/Italian pistachio each find5same listings; partial001173finds1. Actual390pxdark/light checkout has one inline help opener, zero submit overlap/overflow; Enter/Escape/focus recovery pass. Test jar removed, basket0/dark/viewport restored; no order/payment/message or product/stock/price/provider/SQL change. Fresh authenticated Admin inventory renders196/130active/66Drafts/273displayedunits, not physical recount. Exact-head CI40102590657 full npm-test/both configured builds passes; local final development0/shared1118/packaging3 and independent review pass. Original local aggregate failure/interruption retained; complete coverage is reconciled, not falsely called a clean local aggregate0. Completed source release removed from MAP; exact001173label/66holds/genuine operations remain. Evidence/recovery: docs/acceptance/SHOPPER_FIXES_RELEASE_20261024.md. Receipt-only recording is separate from live functional source.

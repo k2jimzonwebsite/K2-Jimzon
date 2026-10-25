@@ -652,5 +652,4 @@ export const CATEGORIES = [
 
 export const byCollection = (id) => products.filter((p) => p.collections.includes(id))
 
-export const peso = (n) =>
-  '₱' + (Number(n) || 0).toLocaleString('en-PH', { maximumFractionDigits: 0 })
+export { peso } from '../lib/formatMoney'

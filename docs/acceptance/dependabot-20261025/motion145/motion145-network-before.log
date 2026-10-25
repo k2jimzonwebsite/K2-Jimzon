@@ -1,0 +1,33 @@
+[WebServer] (node:15140) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:15656) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:17804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\storefront-motion.spec.js:72:3 › storefront interaction language › Three.js globe chunk is not requested until the section is scrolled near (1.4s)
+
+
+  1) tests\storefront-motion.spec.js:72:3 › storefront interaction language › Three.js globe chunk is not requested until the section is scrolled near 
+
+    Error: expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 1
+    Received array:  ["http://localhost:5192/src/data/globeCms.jsx"]
+
+      83 |     // of the deferral that saves bandwidth.
+      84 |     expect(requestedUrls.filter(url => /GlobeSection/i.test(url))).toHaveLength(0)
+    > 85 |     expect(requestedUrls.filter(url => /globeCms/i.test(url))).toHaveLength(0)
+         |                                                                ^
+      86 |
+      87 |     const globeHeading = page.getByRole('heading', { name: 'Reviews, mapped to the products.' })
+      88 |     await globeHeading.scrollIntoViewIfNeeded()
+        at C:\Users\jerze\.codex\worktrees\dependabot-remediation\K2 JImzon\tests\storefront-motion.spec.js:85:64
+
+    Error Context: test-results\storefront-motion-storefro-8484d-he-section-is-scrolled-near\error-context.md
+
+  1 failed
+    tests\storefront-motion.spec.js:72:3 › storefront interaction language › Three.js globe chunk is not requested until the section is scrolled near 

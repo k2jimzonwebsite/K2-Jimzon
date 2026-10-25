@@ -410,18 +410,20 @@ test('prepared admin client uses same-origin cookies and never receives Supabase
 })
 
 test('secure Admin does not mount the shared direct-browser Globe Auth and data provider', async () => {
-  const [adminApp, storefrontApp, globeProvider] = await Promise.all([
+  const [adminApp, storefrontApp, globeProvider, globeSection] = await Promise.all([
     readFile(new URL('../src/AdminApp.jsx', import.meta.url), 'utf8'),
     readFile(new URL('../src/StorefrontApp.jsx', import.meta.url), 'utf8'),
     readFile(new URL('../src/data/globeCms.jsx', import.meta.url), 'utf8'),
+    readFile(new URL('../src/components/home/GlobeSection.jsx', import.meta.url), 'utf8'),
   ])
 
   expect(adminApp).toContain('<GlobeCmsProvider secureAdmin={adminBffEnabled()}>')
   expect(globeProvider).toContain('function SecureAdminGlobeCmsProvider')
   expect(globeProvider).toContain('if (__K2_ADMIN_BUILD__ || secureAdmin) return <SecureAdminGlobeCmsProvider')
   expect(globeProvider).toContain("import { getSupabaseClient, isSupabaseConfigured } from '../lib/lazySupabaseClient'")
-  expect(storefrontApp).toContain('<GlobeCmsProvider>')
-  expect(storefrontApp).not.toContain('secureAdmin=')
+  expect(storefrontApp).not.toContain('GlobeCmsProvider')
+  expect(globeSection).toContain('<GlobeCmsProvider>')
+  expect(globeSection).not.toContain('secureAdmin=')
 })
 
 test('staff password recovery is server-only, callback-bounded, and leaves provider tokens out of browser code', async () => {

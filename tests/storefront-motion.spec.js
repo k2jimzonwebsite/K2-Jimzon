@@ -82,6 +82,7 @@ test.describe('storefront interaction language', () => {
     // Landing must not pull the largest artifact in the build. This is the half
     // of the deferral that saves bandwidth.
     expect(requestedUrls.filter(url => /GlobeSection/i.test(url))).toHaveLength(0)
+    expect(requestedUrls.filter(url => /globeCms/i.test(url))).toHaveLength(0)
 
     const globeHeading = page.getByRole('heading', { name: 'Reviews, mapped to the products.' })
     await globeHeading.scrollIntoViewIfNeeded()
@@ -93,6 +94,9 @@ test.describe('storefront interaction language', () => {
     // IntersectionObserver never fires and the globe never mounts.
     await expect
       .poll(() => requestedUrls.filter(url => /GlobeSection/i.test(url)).length, { timeout: 30000 })
+      .toBeGreaterThan(0)
+    await expect
+      .poll(() => requestedUrls.filter(url => /globeCms/i.test(url)).length, { timeout: 30000 })
       .toBeGreaterThan(0)
   })
 })
