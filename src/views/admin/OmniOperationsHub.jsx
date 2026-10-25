@@ -823,11 +823,11 @@ export function FulfillmentActionDialog({ action, onClose, onSave, returnFocusRe
   const { run, busy, uncertain, locked, error } = useRetainedFulfillmentCommand(onSave)
   const [reason, setReason] = useState(action.payload.reason || '')
   useEffect(() => { setReason(action.payload.reason || '') }, [action])
-  const reasonOk = reason.trim().length >= 10
   const save = async event => {
     event.preventDefault()
-    if (!reasonOk) return
-    const result = await run({ ...action.payload, reason: reason.trim() })
+    const trimmed = reason.trim()
+    const effectiveReason = reason.trim().length >= 10 ? trimmed : (trimmed.length > 0 ? `Custody updated by admin (${trimmed})` : 'Custody updated by admin')
+    const result = await run({ ...action.payload, reason: effectiveReason })
     if (result?.ok) onClose()
   }
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md">
@@ -838,13 +838,14 @@ export function FulfillmentActionDialog({ action, onClose, onSave, returnFocusRe
         <p className="break-words text-sm text-white/80">{action.details}</p>
         <p id="fulfillment-action-impact" className="text-sm text-white/70">{action.impact}</p>
         {action.from && <p className="text-sm text-white/70">Current holder: <span className="font-semibold text-white">{action.from}</span></p>}
-        <label className="block text-xs font-semibold text-white/80">Reason (audit record)
-          <textarea value={reason} onChange={event => setReason(event.target.value)} disabled={locked} required minLength={10} maxLength={500} rows={2} className="adm-input mt-1.5 min-h-16 resize-y text-base" placeholder="Why is this custody or state changing?" />
+        <label className="block text-xs font-semibold text-white/80">Reason (audit record) <span className="font-normal">(optional)</span>
+          <textarea value={reason} onChange={event => setReason(event.target.value)} disabled={locked} maxLength={500} rows={2} className="adm-input mt-1.5 min-h-16 resize-y text-base" placeholder="Why is this custody or state changing?" />
+          <span className="mt-1 block text-sm font-normal">A default audit note is recorded if left blank.</span>
         </label>
         {error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}
         <div className="flex flex-col-reverse gap-2 sm:flex-row">
           <button type="button" disabled={locked} onClick={onClose} className={`${secondaryButton} flex-1`}>Cancel</button>
-          <button type="submit" disabled={busy || !reasonOk} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? 'Retry same command' : 'Confirm command'}</button>
+          <button type="submit" disabled={busy} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? 'Retry same command' : 'Confirm command'}</button>
         </div>
       </form>
     </AdminDialog>

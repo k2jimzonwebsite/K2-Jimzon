@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   AlertIcon,
   ArrowIcon,
@@ -437,8 +437,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       return (duplicateResult?.matchType === 'none'
           && (catalogResult?.status !== 'found' || Boolean(catalogDecision)))
         || (duplicateResult?.matchType === 'ambiguous'
-          && distinctVariantConfirmed
-          && distinctVariantReason.trim().length >= 10)
+          && distinctVariantConfirmed)
     }
     if (step === 2) {
       return Object.values(packagingImages).every((image) => image?.upload_status === 'uploaded')
@@ -461,6 +460,8 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       let partialData = {}
       if (step === 1) {
         requestedStep = 'packaging_evidence'
+        const trimmedVariantReason = distinctVariantReason.trim()
+        const effectiveVariantReason = trimmedVariantReason.length >= 10 ? trimmedVariantReason : (trimmedVariantReason.length > 0 ? `Distinct variant confirmed by admin (${trimmedVariantReason})` : 'Distinct variant confirmed by admin')
         partialData = {
           barcode: importedTarget ? session.barcode : query || null,
           scanned_identity: importedTarget ? session.scanned_identity : query,
@@ -468,7 +469,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
             ? {
                 duplicate_resolution: {
                   decision: 'confirmed_distinct_variant',
-                  reason: distinctVariantReason.trim(),
+                  reason: effectiveVariantReason,
                   candidate_ids: duplicateResult.candidates.map((candidate) => candidate.id),
                   decided_at: new Date().toISOString(),
                 },
@@ -716,10 +717,6 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
   const handleUpdatePublicationStatus = async (newStatus) => {
     if (sessionLoading) return
-    if (publicationReason.trim().length < 10) {
-      setOperationError('Add a specific publication reason of at least 10 characters before changing status.')
-      return
-    }
     if (!isOnline) {
       setOperationError('You are offline. Publication status was not changed.')
       return
@@ -729,7 +726,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
     // revised decision made mid-flight.
     setPublishing(true)
     setOperationError('')
-    const frozen = { sessionId: session.id, productId: session.product_id, status: newStatus, reason: publicationReason.trim() }
+    const trimmedReason = publicationReason.trim()
+    const effectiveReason = trimmedReason.length >= 10 ? trimmedReason : (trimmedReason.length > 0 ? `Admin set publication status to ${newStatus} (${trimmedReason})` : `Admin set publication status to ${newStatus}`)
+    const frozen = { sessionId: session.id, productId: session.product_id, status: newStatus, reason: effectiveReason }
     const outcome = await intakeCommand.run({
       kind: 'publication',
       label: 'publication change',
@@ -981,7 +980,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                         rows={2}
                         value={distinctVariantReason}
                         onChange={(event) => setDistinctVariantReason(event.target.value)}
-                        placeholder="State the exact physical difference from the candidates."
+                        placeholder="State the exact physical difference from the candidates (optional)."
                         className="w-full bg-black/30 border border-blue-400/25 rounded-lg p-2.5 text-white placeholder-white/35"
                       />
                       <label className="min-h-11 flex items-center gap-2 text-white/80">
@@ -1576,17 +1575,17 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               <div className="p-3 bg-black/40 border border-white/10 rounded-lg space-y-2">
                 <div className="font-semibold text-white/80">Single Publication Status Truth:</div>
                 <label className="block space-y-1.5 text-white/70">
-                  <span>Publication reason</span>
+                  <span>Publication reason <span className="font-normal text-white/40">(optional)</span></span>
                   <textarea
                     rows={3}
                     maxLength={500}
                     value={publicationReason}
                     onChange={(event) => setPublicationReason(event.target.value)}
-                    placeholder="Describe the review evidence and why this status is correct."
+                    placeholder="Describe the review evidence and why this status is correct (optional)."
                     disabled={intakeCommand.locked}
                     className="w-full min-h-24 resize-y rounded-lg border border-white/20 bg-white/10 px-3 py-2.5 text-sm text-white placeholder:text-white/45 focus:border-amber-400 focus:outline-none"
                   />
-                  <span className="block text-xs text-white/50">Required audit note, minimum 10 characters.</span>
+                  <span className="block text-xs text-white/50">Optional audit note. A default audit note is recorded if left blank.</span>
                 </label>
                 <label htmlFor="product-publication-status" className="block text-white/70">Publication status</label>
                 <select

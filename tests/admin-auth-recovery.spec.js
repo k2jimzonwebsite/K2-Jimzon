@@ -77,3 +77,31 @@ for (const code of ['MFA_REQUIRED', 'MFA_ENROLLMENT_REQUIRED', 'OAUTH_RETURN_INV
     expect(await page.evaluate(() => Object.keys(localStorage).filter(key => key.includes('auth-token')))).toEqual([])
   })
 }
+
+test('the visible provider widget fits the actual Admin form at phone and desktop widths', async ({ page }, testInfo) => {
+  await page.addInitScript(() => {
+    window.turnstile = {
+      render(container, options) {
+        const widget = document.createElement('div')
+        widget.dataset.testid = 'provider-widget-geometry'
+        widget.style.cssText = `min-width:${options.size === 'compact' ? 150 : 300}px;height:${options.size === 'compact' ? 140 : 65}px`
+        widget.textContent = 'Synthetic provider geometry'
+        container.appendChild(widget)
+        options.callback('fixture-verified-token')
+        return widget
+      }, remove(widget) { widget.remove() },
+    }
+  })
+  await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
+  for (const width of [375, 1440, 375]) {
+    await page.setViewportSize({ width, height: 900 })
+    const widget = page.getByTestId('provider-widget-geometry')
+    await expect(widget).toBeVisible()
+    await expect.poll(() => widget.evaluate(el => {
+      const box = el.getBoundingClientRect(), parent = el.parentElement.getBoundingClientRect()
+      return box.width <= parent.width && box.right <= parent.right
+    })).toBe(true)
+    await expect(page.getByRole('status', { name: 'Security check status' })).toContainText('complete')
+    await page.screenshot({ path: testInfo.outputPath(`admin-widget-fit-${width}.png`), fullPage: true })
+  }
+})

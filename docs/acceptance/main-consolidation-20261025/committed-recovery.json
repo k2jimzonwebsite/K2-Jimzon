@@ -1,0 +1,110 @@
+{
+  "archive": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\recovery.git",
+  "commits": [
+    {
+      "worktree": "C:/Users/jerze/K2 JImzon",
+      "originalHead": "bdc6d8d898de81033fe61a9f8b25281738d20c66",
+      "tree": "8777652318e8f431f46ea4b9238ccfb68345cd37",
+      "commit": "7a485bf25228cc10621328c4e7a12041c1ee9126",
+      "recoveryRef": "refs/heads/snapshot-00"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/dependabot-continuation/K2 JImzon",
+      "originalHead": "48883ca930567af744be8fda494a2a33d1aea962",
+      "tree": "6d425ad869649c6b40dca2a48004f44c8e7820b6",
+      "commit": "2dc07d95ab73ad6a2f4ee75fcd495bb0df07c056",
+      "recoveryRef": "refs/heads/snapshot-01"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/dependabot-remediation/K2 JImzon",
+      "originalHead": "7fdc88632400938cd2fe0c12007fb7020a6608ce",
+      "tree": "876f7fb470ce25b10b65a953cbc1324e21a164ea",
+      "commit": "22a1baca120d29702987b426ffb631ee45621f4b",
+      "recoveryRef": "refs/heads/snapshot-02"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/inventory-categories/K2 JImzon",
+      "originalHead": "a9e369a7a6b7f586f05efaee5ea8d109f64b688b",
+      "tree": "4214fb07483075a62a23d4f67e74376ed3bbca3e",
+      "commit": "5052b67b7c6b48a1aae270280433d96aa5655e47",
+      "recoveryRef": "refs/heads/snapshot-03"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/inventory-display-release/K2 JImzon",
+      "originalHead": "f15d05de01b7a5ba747a68d41ca7748dd1f2b358",
+      "tree": "18b5b7e926394bf2ebc63acf0da8bdc902346a41",
+      "commit": "e5375be708467e1cc076b1a80b2a23812fff0872",
+      "recoveryRef": "refs/heads/snapshot-04"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon",
+      "originalHead": "76e6810bae94f6edbd9172adc0076d991345bc9a",
+      "tree": "851bd043088e4d8d60c987e75b2cc5c70eeeb1f9",
+      "commit": "e76028d4b5701b97169e2ccaa4675db482e3f223",
+      "recoveryRef": "refs/heads/snapshot-05"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/listing-detail-image-fix/K2 JImzon",
+      "originalHead": "901c15df4ec9d65f6f922e39c16a2309c3168744",
+      "tree": "2fdbdac56d56ba1be201bff9ce2b73ca24ab452d",
+      "commit": "f0cdd9ded78cde2da66d1b5b3216fa3c31f557ed",
+      "recoveryRef": "refs/heads/snapshot-06"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon",
+      "originalHead": "138ea136c69a587e3d0b773252af6f438ec1c033",
+      "tree": "fdf7a7131a875124b9cd7b72467e01917494f27a",
+      "commit": "0c39a0334491d87f31c714a920c14a43c0d08224",
+      "recoveryRef": "refs/heads/snapshot-07"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/product-image-containment/K2 JImzon",
+      "originalHead": "76e6810bae94f6edbd9172adc0076d991345bc9a",
+      "tree": "e9110b63fd8985da5711679b0b00e0ace711dccb",
+      "commit": "f27901114497786fe1dcd650905d4665df58aa36",
+      "recoveryRef": "refs/heads/snapshot-08"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/product-knowledge-publish/K2 JImzon",
+      "originalHead": "a164f206b5a6ecad91fa2ba7d2847eae2d665f5d",
+      "tree": "d5da70d0b4c3b3410b0aada378fc107640e9feb1",
+      "commit": "818c222c5e029c5e8f93eaebae17b118bda11635",
+      "recoveryRef": "refs/heads/snapshot-09"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/shopper-fixes-release/K2 JImzon",
+      "originalHead": "b3f9dc67437bc3a351a5a3dd4ddc94df36a3168b",
+      "tree": "b20af3d4d7b9cbe67fc1d4710fe7b52f14532204",
+      "commit": "000a086ea0dd583a0b6d3814d8af96d004938c0a",
+      "recoveryRef": "refs/heads/snapshot-10"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/sku-merge/K2 JImzon",
+      "originalHead": "b00e9feea9db771f838ceb8434d8d2ab989cb2c5",
+      "tree": "2c93cce326ffc108fb12ac964e143d9220276740",
+      "commit": "45f3f4df3bcabbd80345fa7192a9ea654786fa96",
+      "recoveryRef": "refs/heads/snapshot-11"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/staff-custody-release/K2 JImzon",
+      "originalHead": "aefeb8d5399f4f39d79f33d0479ed9731c326807",
+      "tree": "cadedb56308c890b314fb952b5f22c808215f549",
+      "commit": "07b704fd9edc1a75a6848374dd85143935efc000",
+      "recoveryRef": "refs/heads/snapshot-12"
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/store-assets-loader/K2 JImzon",
+      "originalHead": "5f700020f313d481407a4bc76a7e3d3e2f613781",
+      "tree": "0a886eec1ce4dd4446c53a3e0aa72841c0a6c7f4",
+      "commit": "461905509cdbd2d846d6c79fe7f6349861f407dc",
+      "recoveryRef": "refs/heads/snapshot-13"
+    },
+    {
+      "worktree": "C:/Users/jerze/K2 JImzon/.tools/hero-release",
+      "originalHead": "67157cf71e5ff99c5712db28cea8826f56113272",
+      "tree": "34ea893a893f711eaa476580f018e4ff848d6fcf",
+      "commit": "0c6878ec8e4783cc50ccd52f49a122353d764cee",
+      "recoveryRef": "refs/heads/snapshot-14"
+    }
+  ]
+}

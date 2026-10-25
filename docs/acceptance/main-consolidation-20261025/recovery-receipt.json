@@ -1,0 +1,126 @@
+{
+  "bundle": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\all-refs-before.bundle",
+  "bundleSha256": "7af2b90e15e4bf086650bdf0ff130357fc844aa35ef955b13ef497e685fa4768",
+  "receipts": [
+    {
+      "worktree": "C:/Users/jerze/K2 JImzon",
+      "head": "bdc6d8d898de81033fe61a9f8b25281738d20c66",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\00-jerze",
+      "patchBytes": 6221305,
+      "patchSha256": "ad9bc88ea0b661fad3fc1e28d99e181a7467ecd550e8e1951bb2b782b2f9a96b",
+      "untracked": 755
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/dependabot-continuation/K2 JImzon",
+      "head": "48883ca930567af744be8fda494a2a33d1aea962",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\01-dependabot-continuation",
+      "patchBytes": 40044283,
+      "patchSha256": "3d1989615734d0519ebb98b4cf1db117def980f7b91f8dfcc1d94c6852ab9ea6",
+      "untracked": 5
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/dependabot-remediation/K2 JImzon",
+      "head": "7fdc88632400938cd2fe0c12007fb7020a6608ce",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\02-dependabot-remediation",
+      "patchBytes": 39391929,
+      "patchSha256": "e809cd6757b525d606a8abfedb314e133f3e9d17dd7e9399e062632c0e76ef8f",
+      "untracked": 27
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/inventory-categories/K2 JImzon",
+      "head": "a9e369a7a6b7f586f05efaee5ea8d109f64b688b",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\03-inventory-categories",
+      "patchBytes": 0,
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": 2
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/inventory-display-release/K2 JImzon",
+      "head": "f15d05de01b7a5ba747a68d41ca7748dd1f2b358",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\04-inventory-display-release",
+      "patchBytes": 0,
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": 2
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/inventory-variations/K2 JImzon",
+      "head": "76e6810bae94f6edbd9172adc0076d991345bc9a",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\05-inventory-variations",
+      "patchBytes": 40064036,
+      "patchSha256": "f9a39b1b161c1f548a80dd8a7c5311f187f582199b12519d0e1b36d3d8f941b0",
+      "untracked": 2
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/listing-detail-image-fix/K2 JImzon",
+      "head": "901c15df4ec9d65f6f922e39c16a2309c3168744",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\06-listing-detail-image-fix",
+      "patchBytes": 46952154,
+      "patchSha256": "63268d8d41c5cb9b8555c8ee64eec96d014d6435b3b8080c43656bdc36731e6b",
+      "untracked": 2
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/mobile-production-reconcile/K2 JImzon",
+      "head": "138ea136c69a587e3d0b773252af6f438ec1c033",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\07-mobile-production-reconcile",
+      "patchBytes": 51960342,
+      "patchSha256": "198fe0fc80155c02cb3ba4f3c5079caff370cf4726ca2577d7c5e03ee61499e0",
+      "untracked": 19
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/product-image-containment/K2 JImzon",
+      "head": "76e6810bae94f6edbd9172adc0076d991345bc9a",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\08-product-image-containment",
+      "patchBytes": 0,
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": 0
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/product-knowledge-publish/K2 JImzon",
+      "head": "a164f206b5a6ecad91fa2ba7d2847eae2d665f5d",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\09-product-knowledge-publish",
+      "patchBytes": 35846403,
+      "patchSha256": "4f86dffcfbd346359c4c6e521486b8a9b710b1f2f94ae8a3c8f9da52136f4861",
+      "untracked": 2
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/shopper-fixes-release/K2 JImzon",
+      "head": "b3f9dc67437bc3a351a5a3dd4ddc94df36a3168b",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\10-shopper-fixes-release",
+      "patchBytes": 12294446,
+      "patchSha256": "007eea716094a6377a60a7e63a9960f2e0ff8ffd82f3bda86044f999926440cc",
+      "untracked": 0
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/sku-merge/K2 JImzon",
+      "head": "b00e9feea9db771f838ceb8434d8d2ab989cb2c5",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\11-sku-merge",
+      "patchBytes": 15410,
+      "patchSha256": "ee59e5cfc009459974b5735975e35b5220c362871023c447f9c64a44400623af",
+      "untracked": 2
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/staff-custody-release/K2 JImzon",
+      "head": "aefeb8d5399f4f39d79f33d0479ed9731c326807",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\12-staff-custody-release",
+      "patchBytes": 38817912,
+      "patchSha256": "7d10ce4029366b0df8f830c75d72c2d294abe021cbc25cd10f530a73d6c661b4",
+      "untracked": 0
+    },
+    {
+      "worktree": "C:/Users/jerze/.codex/worktrees/store-assets-loader/K2 JImzon",
+      "head": "5f700020f313d481407a4bc76a7e3d3e2f613781",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\13-store-assets-loader",
+      "patchBytes": 34963477,
+      "patchSha256": "cbbcee99e9d12726b2b4a47c3284cdd239f42c88a9ffbab74ce8ab88e60d729d",
+      "untracked": 2
+    },
+    {
+      "worktree": "C:/Users/jerze/K2 JImzon/.tools/hero-release",
+      "head": "67157cf71e5ff99c5712db28cea8826f56113272",
+      "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\branch-cleanup-recovery-20261025\\14-.tools",
+      "patchBytes": 399552,
+      "patchSha256": "5c401529504bc7443828273a509224f6ab52a99b354d573bc19d6fd10bab0350",
+      "untracked": 0
+    }
+  ]
+}

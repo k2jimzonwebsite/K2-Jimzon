@@ -532,6 +532,7 @@ test('keeps secure Product Master edit, lifecycle, and delete decisions usable a
   expect(updatePayload.patch).not.toHaveProperty('expiry_date')
   await expect(editor).toHaveCount(0)
 
+  await page.getByLabel('Status saving', { exact: true }).selectOption('note')
   await page.getByRole('button', { name: 'Review', exact: true }).click()
   const statusDialog = page.getByRole('dialog', { name: 'Set Under Review' })
   await expect(statusDialog).toBeVisible()

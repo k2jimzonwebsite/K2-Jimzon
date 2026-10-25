@@ -137,3 +137,16 @@ jobs:
           npm run rehearse:payment-recovery
           npm run test:guest-order-conversation-native
           npm run rehearse:final-admin
+
+  security-check-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run security:test-turnstile
+      - run: npm run test:security-check-ui

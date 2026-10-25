@@ -46,11 +46,13 @@ export default function ProductMediaCleanupModal({ onClose }) {
   }
 
   const cleanup = async () => {
-    if (!selectedPaths.length || reason.trim().length < 3) return
+    if (!selectedPaths.length) return
+    const trimmed = reason.trim()
+    const effectiveReason = trimmed.length >= 3 ? trimmed : (trimmed.length > 0 ? `Admin cleaned up unused media (${trimmed})` : 'Admin cleaned up unused media')
     setState({ kind: 'working', message: 'Removing selected unused files…' })
     const result = await cleanupProductMediaOrphansBff({
       objectPaths: selectedPaths,
-      reason: reason.trim(),
+      reason: effectiveReason,
     }, operationKey.current)
     if (!result.ok) {
       setState({ kind: 'error', message: result.error || 'Unused uploads could not be removed safely.' })
@@ -98,12 +100,12 @@ export default function ProductMediaCleanupModal({ onClose }) {
               ))}
             </fieldset>
           )}
-          {items.length > 0 && <label className="block text-sm font-semibold text-white/75">Cleanup reason <span className="text-red-300" aria-hidden="true">*</span><textarea value={reason} onChange={(event) => { setReason(event.target.value); setCleanupPending(false); operationKey.current = crypto.randomUUID() }} maxLength={500} rows={3} className="adm-input mt-2 min-h-24 resize-y text-base" /><span className="mt-1 block text-xs font-normal text-white/50">Recorded with the signed cleanup event.</span></label>}
+          {items.length > 0 && <label className="block text-sm font-semibold text-white/75">Cleanup reason <span className="font-normal text-white/45">(optional)</span><textarea value={reason} placeholder="Default: Admin cleaned up unused media" onChange={(event) => { setReason(event.target.value); setCleanupPending(false); operationKey.current = crypto.randomUUID() }} maxLength={500} rows={3} className="adm-input mt-2 min-h-24 resize-y text-base" /><span className="mt-1 block text-xs font-normal text-white/50">Recorded with the signed cleanup event.</span></label>}
         </div>
 
         <footer className="flex gap-2 border-t border-adm-line bg-black/35 p-4 sm:px-5">
           <button type="button" onClick={onClose} disabled={state.kind === 'working'} className="min-h-11 flex-1 rounded-adm-sm border border-adm-line px-4 font-semibold hover:bg-white/5 disabled:opacity-50">Close</button>
-          <button type="button" onClick={() => void cleanup()} disabled={state.kind === 'working' || !selectedPaths.length || reason.trim().length < 3} className="min-h-11 flex-[1.4] rounded-adm-sm bg-crimson px-4 font-bold text-white hover:bg-crimson/90 disabled:cursor-not-allowed disabled:opacity-45">{state.kind === 'working' ? 'Removing…' : cleanupPending ? 'Retry cleanup' : `Remove ${selectedPaths.length || ''} unused`}</button>
+          <button type="button" onClick={() => void cleanup()} disabled={state.kind === 'working' || !selectedPaths.length} className="min-h-11 flex-[1.4] rounded-adm-sm bg-crimson px-4 font-bold text-white hover:bg-crimson/90 disabled:cursor-not-allowed disabled:opacity-45">{state.kind === 'working' ? 'Removing…' : cleanupPending ? 'Retry cleanup' : `Remove ${selectedPaths.length || ''} unused`}</button>
         </footer>
       </div>
       </AdminDialog>

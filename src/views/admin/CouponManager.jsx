@@ -117,9 +117,6 @@ export default function CouponManager({ secureMode } = {}) {
     if (endsAt && Date.parse(endsAt) <= Date.parse(startsAt)) {
       setError('End date must be later than the start date.'); return
     }
-    if (form.reason.trim().length < 10) {
-      setError('Record a specific reason of at least 10 characters.'); return
-    }
     const discountVal = Number(form.discount_value)
     if (!discountVal || discountVal <= 0 || Number.isNaN(discountVal)) {
       setError('Discount value must be a positive number greater than zero.'); return
@@ -138,13 +135,15 @@ export default function CouponManager({ secureMode } = {}) {
     if (maxRedemptionsVal !== null && (maxRedemptionsVal < 1 || !Number.isInteger(maxRedemptionsVal))) {
       setError('Max redemptions must be an integer of at least 1.'); return
     }
+    const trimmedReason = form.reason.trim()
+    const effectiveReason = trimmedReason.length >= 10 ? trimmedReason : (trimmedReason.length > 0 ? `Admin created promotion (${trimmedReason})` : 'Admin created promotion')
     const command = {
       code: form.code.trim().toUpperCase(), description: form.description.trim(),
       discountType: form.discount_type, discountValue: discountVal,
       minSpend: minSpendVal,
       maxRedemptions: maxRedemptionsVal,
       startsAt, endsAt, isActive: form.is_active, isHunt: form.is_hunt,
-      clue: form.is_hunt ? form.clue.trim() || null : null, reason: form.reason.trim(),
+      clue: form.is_hunt ? form.clue.trim() || null : null, reason: effectiveReason,
     }
     const result = await operation.run(command)
     if (!result) return
@@ -176,11 +175,13 @@ export default function CouponManager({ secureMode } = {}) {
 
   const confirmAction = async (event, operation) => {
     event.preventDefault()
-    if (!pendingAction || pendingAction.reason.trim().length < 10) return
+    if (!pendingAction) return
     if (pendingAction.type === 'archive' && !archiveArmed) { setArchiveArmed(true); return }
     setError(''); setNotice('')
     const { coupon, type, reason } = pendingAction
-    const result = await operation.run({ couponId: coupon.id, type, reason: reason.trim() })
+    const trimmedReason = reason.trim()
+    const effectiveReason = trimmedReason.length >= 10 ? trimmedReason : (trimmedReason.length > 0 ? `Admin ${type} coupon decision (${trimmedReason})` : `Admin ${type} coupon decision`)
+    const result = await operation.run({ couponId: coupon.id, type, reason: effectiveReason })
     if (!result) return
     if (!result.ok) { setError(result.error); return }
     setPendingAction(null)
@@ -228,19 +229,19 @@ export default function CouponManager({ secureMode } = {}) {
           <label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input disabled={operation.locked} type="checkbox" checked={form.is_hunt} onChange={update('is_hunt')} /> Voucher-hunt campaign</label>
           <label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input disabled={operation.locked} type="checkbox" checked={form.is_active} onChange={update('is_active')} /> Activate immediately</label>
           {form.is_hunt && <Field label="Public hunt clue" className="sm:col-span-2"><textarea disabled={operation.locked} className={`${input} min-h-20 resize-y`} value={form.clue} onChange={update('clue')} minLength="3" maxLength="300" required /></Field>}
-          <Field label="Reason for creating this promotion" className="sm:col-span-2"><textarea disabled={operation.locked} className={`${input} min-h-24 resize-y`} value={form.reason} onChange={update('reason')} minLength="10" maxLength="500" aria-describedby="coupon-reason-help" required /><span id="coupon-reason-help" className="mt-1.5 block text-sm font-normal text-white/55">Record the campaign, approver, or business purpose. This becomes audit evidence in secure mode.</span></Field>
+          <Field label={<span>Reason for creating this promotion <span className="font-normal text-white/40">(optional)</span></span>} className="sm:col-span-2"><textarea disabled={operation.locked} className={`${input} min-h-24 resize-y`} value={form.reason} onChange={update('reason')} maxLength="500" aria-describedby="coupon-reason-help" placeholder="Record the campaign, approver, or business purpose (optional)" /><span id="coupon-reason-help" className="mt-1.5 block text-sm font-normal text-white/55">This becomes audit evidence in secure mode (optional note; a default audit note is recorded if left blank).</span></Field>
         </div>
         {(operation.error || error) && <div className="px-5 pb-4"><StateBanner tone={operation.uncertain ? 'warning' : 'danger'}>{operation.error || error}</StateBanner></div>}
-        <footer className="sticky bottom-0 flex justify-end gap-2 border-t border-adm-line bg-adm-surface px-5 py-4"><button type="button" disabled={operation.closeDisabled} onClick={() => setShowCreate(false)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold">Cancel</button><button type="submit" disabled={operation.retryDisabled || form.reason.trim().length < 10} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold text-white disabled:opacity-40">{operation.busy ? 'Saving…' : operation.uncertain ? secure ? 'Retry same command' : 'Reconcile coupons first' : 'Save coupon'}</button></footer>
+        <footer className="sticky bottom-0 flex justify-end gap-2 border-t border-adm-line bg-adm-surface px-5 py-4"><button type="button" disabled={operation.closeDisabled} onClick={() => setShowCreate(false)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold">Cancel</button><button type="submit" disabled={operation.retryDisabled} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold text-white disabled:opacity-40">{operation.busy ? 'Saving…' : operation.uncertain ? secure ? 'Retry same command' : 'Reconcile coupons first' : 'Save coupon'}</button></footer>
       </form>
     )}</CouponCommandDialog>}
 
     {pendingAction && <CouponCommandDialog send={sendDecision} secure={secure} returnFocusRef={openerRef} onClose={() => setPendingAction(null)} labelledBy="coupon-action-title">{operation => (
       <form onSubmit={event => confirmAction(event, operation)} className="max-h-[calc(100dvh-1.5rem)] overflow-y-auto w-full max-w-lg rounded-adm border border-adm-line bg-adm-surface shadow-adm-float">
         <header className="flex items-start justify-between border-b border-adm-line px-5 py-4"><div><p className="text-xs font-bold uppercase tracking-wider text-white/45">Coupon decision</p><h2 id="coupon-action-title" className="mt-1 font-sans text-xl font-bold">{pendingAction.type === 'archive' ? 'Archive' : pendingAction.type === 'activate' ? 'Activate' : 'Pause'} {pendingAction.coupon.code}</h2><p className="mt-2 text-sm text-white/60">{pendingAction.type === 'archive' ? 'Archiving stops validation immediately and cannot be undone from this screen.' : 'The change affects whether checkout can validate this code.'}</p></div><button type="button" disabled={operation.closeDisabled} onClick={() => setPendingAction(null)} aria-label="Close coupon decision" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-adm-sm hover:bg-white/5"><XIcon /></button></header>
-        <div className="p-5"><Field label="Decision reason"><textarea disabled={operation.locked} autoFocus className={`${input} min-h-28 resize-y`} value={pendingAction.reason} onChange={event => setPendingAction(current => ({ ...current, reason: event.target.value }))} minLength="10" maxLength="500" aria-describedby="coupon-action-help" required /><span id="coupon-action-help" className="mt-1.5 block text-sm font-normal text-white/55">At least 10 characters. State what changed and who approved it.</span></Field></div>
+        <div className="p-5"><Field label={<span>Decision reason <span className="font-normal text-white/40">(optional)</span></span>}><textarea disabled={operation.locked} autoFocus className={`${input} min-h-28 resize-y`} value={pendingAction.reason} onChange={event => setPendingAction(current => ({ ...current, reason: event.target.value }))} maxLength="500" aria-describedby="coupon-action-help" placeholder="State what changed and who approved it (optional)" /><span id="coupon-action-help" className="mt-1.5 block text-sm font-normal text-white/55">This becomes audit evidence in secure mode (optional note; a default audit note is recorded if left blank).</span></Field></div>
         {(operation.error || error) && <div className="px-5 pb-4"><StateBanner tone={operation.uncertain ? 'warning' : 'danger'}>{operation.error || error}</StateBanner></div>}
-        <footer className="flex justify-end gap-2 border-t border-adm-line px-5 py-4"><button type="button" disabled={operation.closeDisabled} onClick={() => setPendingAction(null)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold">Cancel</button><button type="submit" disabled={operation.retryDisabled || pendingAction.reason.trim().length < 10} className={`min-h-11 rounded-adm-sm px-5 text-sm font-bold disabled:opacity-40 ${pendingAction.type === 'archive' ? 'bg-crimson text-white' : 'bg-blue text-white'}`}>{operation.busy ? 'Recording…' : operation.uncertain ? secure ? 'Retry same command' : 'Reconcile coupons first' : pendingAction.type === 'archive' && !archiveArmed ? 'Confirm archive' : pendingAction.type === 'archive' ? 'Click again to archive' : `Confirm ${pendingAction.type}`} </button></footer>
+        <footer className="flex justify-end gap-2 border-t border-adm-line px-5 py-4"><button type="button" disabled={operation.closeDisabled} onClick={() => setPendingAction(null)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold">Cancel</button><button type="submit" disabled={operation.retryDisabled} className={`min-h-11 rounded-adm-sm px-5 text-sm font-bold disabled:opacity-40 ${pendingAction.type === 'archive' ? 'bg-crimson text-white' : 'bg-blue text-white'}`}>{operation.busy ? 'Recording…' : operation.uncertain ? secure ? 'Retry same command' : 'Reconcile coupons first' : pendingAction.type === 'archive' && !archiveArmed ? 'Confirm archive' : pendingAction.type === 'archive' ? 'Click again to archive' : `Confirm ${pendingAction.type}`} </button></footer>
       </form>
     )}</CouponCommandDialog>}
   </div>

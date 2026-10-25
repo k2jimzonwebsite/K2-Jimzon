@@ -181,7 +181,7 @@ test('inventory product editing routes every photo assignment through the dedica
   expect(source).toContain("commandAdminProductMasterBff('status'")
   expect(source).toContain("value: 'Under Review'")
   expect(source).toContain("value: 'Discontinued'")
-  expect(source).toContain('Change status from the product card or selection bar and give a reason.')
+  expect(source).toContain('Change status from the product card or selection bar. Choose Add a note above the product list when needed.')
   expect(source).toContain('<ProductIntakeSessionModal')
 })
 

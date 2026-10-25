@@ -1,0 +1,316 @@
+
+> k2-jimzon-prototype@0.1.0 prebuild:admin
+> npm run prebuild
+
+
+> k2-jimzon-prototype@0.1.0 prebuild
+> npm run security:test && npm run security:test-admin-session && npm run security:test-env-contract && npm run security:test-k2-project && npm run security:test-live-readiness && npm run security:test-files && npm run security:files && npm run security:test-env-source && npm run security:env-source && npm run security:dependency-policy && npm run security:surfaces && npm run security:secrets && node scripts/check-imports.mjs
+
+
+> k2-jimzon-prototype@0.1.0 security:test
+> node scripts/test-secret-scan.mjs
+
+Secret scanner tests passed (fabricated values only).
+
+> k2-jimzon-prototype@0.1.0 security:test-admin-session
+> node --test tests/admin-mfa-sdk-qr.test.mjs tests/admin-bff-refresh-token.test.mjs tests/admin-product-read-taxonomy.test.mjs tests/admin-product-stock-read.test.mjs tests/admin-reference-command.test.mjs tests/admin-reference-handler.test.mjs tests/admin-lot-snapshot-read.test.mjs tests/product-master-command-recovery.test.mjs tests/admin-product-master-recovery-client.test.mjs tests/admin-product-master-actor.test.mjs tests/website-assignment-recovery.test.mjs tests/admin-website-assignment-actor.test.mjs tests/admin-google-bff.test.mjs tests/turnstile-loader-recovery.test.mjs tests/photo-csv-batch.test.mjs tests/admin-photo-batch-actor.test.mjs
+
+✔ protocol-valid 12-character refresh token survives all Admin encrypted session boundaries (10.5832ms)
+✔ refresh lower/upper bounds and access-token lower bound still refuse malformed sessions (0.8276ms)
+✔ actual Supabase SDK generates PKCE with encrypted browser-bound verifier and exact K2 return route (35.407ms)
+✔ Google callback rejects wrong-origin before provider exchange (4.0947ms)
+✔ Google callback rejects no-cookie before provider exchange (6.6579ms)
+✔ Google callback rejects altered-cookie before provider exchange (2.8928ms)
+✔ Google callback rejects wrong-state before provider exchange (2.022ms)
+✔ Google callback rejects expired before provider exchange (2.1078ms)
+✔ Google callback rejects extra-fields before provider exchange (1.6896ms)
+✔ Google AAL1 session stays pending for the existing authenticator challenge without active session registration (2.6654ms)
+✔ Google callback non-staff retains staff/AAL2/registry authority (2.8441ms)
+✔ Google callback unverified-email retains staff/AAL2/registry authority (2.0053ms)
+✔ Google callback enrollment retains staff/AAL2/registry authority (1.6198ms)
+✔ Google callback aal2 retains staff/AAL2/registry authority (2.3265ms)
+✔ Google callback registry-failed retains staff/AAL2/registry authority (1.7443ms)
+✔ Google start fails closed for missing bot verification or unavailable durable budget (1.2973ms)
+✔ consolidated router advertises both Google routes with origin, PKCE/bot and durable budget guards (0.2394ms)
+✔ lot read derives physical and allocations from one coherent snapshot (2.8397ms)
+✔ complete empty snapshot is a verified empty lot read (0.4075ms)
+✔ partial, malformed, over-bound and refused snapshots cannot produce healthy totals (1.3859ms)
+✔ pending enrollment accepts the installed Supabase SDK QR format without cancelling the factor (46.6161ms)
+✔ pending enrollment bounds oversized SVG data and cancels only the new unverified factor (1.8436ms)
+✔ pending enrollment preserves an already verified authenticator without creating or deleting factors (1.0159ms)
+✔ pending enrollment still rejects a non-SVG QR response and cancels its unverified factor (0.4368ms)
+✔ installed SDK completes password, enrollment, challenge and AAL2 verification against the provider protocol fixture (7.8373ms)
+✔ photo upload and assignment actor mismatch refuse before Storage or command dispatch (83.7107ms)
+✔ existing and actor-bound assignment clients retain current staff command behavior (9.4811ms)
+✔ saved Product Master actor mismatch refuses before command RPC (56.3873ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (7.2917ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (12.8766ms)
+✔ existing clients without actor header retain current authenticated actor behavior (3.3153ms)
+✔ Product Master recovery has a literal-body actor-bound browser client (1.1469ms)
+✔ lost HTTP reply and later auth refusal preserve same literal request key and current CSRF (81.4161ms)
+✔ protected catalog preserves canonical assigned and nullable unassigned taxonomy (3.0959ms)
+✔ category filters can use the canonical name when no store label is assigned (0.3356ms)
+✔ stock failure preserves canonical taxonomy while reporting unknown stock (0.3757ms)
+✔ protected catalog retains every saved photo slot for reopening the photo manager (0.2561ms)
+✔ stock failure does not hide saved after-use or supporting photos (0.3014ms)
+✔ internal Draft receives canonical staff stock even when public offer is absent (2.2405ms)
+✔ a complete no-lot staff row proves zero without inferring it from an absent public offer (0.2695ms)
+✔ missing row preserves product discovery and explicit unknown stock (0.2457ms)
+✔ unreadable taxonomy preserves product discovery and explicit unknown stock (0.2153ms)
+✔ fractional quantity preserves product discovery and explicit unknown stock (0.2194ms)
+✔ duplicate row preserves product discovery and explicit unknown stock (0.1517ms)
+✔ query failure preserves product discovery and explicit unknown stock (0.181ms)
+✔ creation preserves raw command strings and property order for saved retry identity (1.3768ms)
+✔ name bound counts Unicode characters after printable whitespace cleanup (0.8791ms)
+✔ endpoint refuses unsupported methods and missing command keys before dispatch (0.5526ms)
+✔ endpoint cannot be used on the storefront deployment (0.9856ms)
+✔ reference route advertises protected POST and a read-only GET (255.482ms)
+✔ controls are refused before cleanup and malformed strings never reach SQL (0.2307ms)
+✔ creation rejects extra fields, coerced values and ambiguous category parent (0.4008ms)
+✔ protected options retain category hierarchy and permit an empty catalog (0.4687ms)
+✔ partial, unavailable, over-limit or malformed options fail closed (0.4636ms)
+✔ current Staff role cannot create even when cookie claims Admin (41.6308ms)
+✔ saved-request actor mismatch refuses before reference dispatch (5.0641ms)
+✔ Admin and SuperAdmin send one correctly signed exact command (9.1336ms)
+✔ CSRF, current AAL2 and registry refusal prevent creation dispatch (7.8269ms)
+✔ historical receipt is shown separately from changed or missing current reference (6.5884ms)
+✔ committed receipt survives unavailable current readback (7023.435ms)
+✔ unknown command failure hides provider details and retains retry classification (2.4328ms)
+✔ saved Website assignment actor mismatch refuses before command RPC (44.6294ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (6.0007ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (8.5052ms)
+✔ existing clients without actor header retain current authenticated actor behavior (4.3341ms)
+✔ bounded Website read distinguishes absent, paused and active existing rows (8.8417ms)
+✔ Website read refuses duplicate partial malformed failed or missing product evidence (7025.7103ms)
+✔ current Staff and invalid SKU refuse per-product read before data lookup; aggregate contract stays (5.0959ms)
+✔ mapping resolves exact existing Draft and retains untouched photo slots (11.8291ms)
+✔ invalid identities, duplicate files/SKUs, missing files, existing slots and live targets refuse before upload (2.6508ms)
+✔ lost assignment reply survives reload and retries original payload/key without uploading twice (3.5318ms)
+✔ actor change, byte substitution and current-media drift stop before mutation (1.9039ms)
+✔ storage failure refuses dispatch and malformed recovery is retained (1.1124ms)
+✔ multi-product batch resumes at failed row and never replays completed rows (2.3906ms)
+✔ account changes after upload or media drift during upload refuse assignment (2.5556ms)
+✔ recovery refuses a changed literal command and a competing batch (1.1416ms)
+✔ saved but unconfirmed command cannot overwrite later media or a non-Draft target (1.7967ms)
+✔ Product Master updates have durable actor-scoped recovery (1.6654ms)
+✔ reload preserves literal bytes version reason and original key (1.704ms)
+✔ changed key payload version or review decision cannot replace unknown request (1.1007ms)
+✔ actor and operation identity isolate reading and acknowledgement (0.3102ms)
+✔ corruption foreign actor secret field and oversize storage remain untouched (0.853ms)
+✔ malformed or non-update commands cannot be held or sent (0.9065ms)
+✔ failed Turnstile download releases the cached failure for the next attempt (9.7305ms)
+✔ Website has its own durable actor-scoped original request recovery (0.9525ms)
+✔ Website literal body and key survive reload and cannot be replaced (1.943ms)
+✔ corrupt Website records remain untouched and invalid bodies never persist (0.7278ms)
+✔ existing unassigned Website listing keeps a real version; only absent row has null identity (0.2533ms)
+ℹ tests 88
+ℹ suites 0
+ℹ pass 88
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7867.025
+
+> k2-jimzon-prototype@0.1.0 security:test-env-contract
+> node scripts/verify-deployment-environment-contract.mjs --self-test
+
+Deployment environment contract self-test passed (5 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:test-k2-project
+> node --test tests/k2-supabase-project-identity.test.mjs
+
+✔ accepts the exact K2 URL only when the management token sees K2 (26.3444ms)
+✔ rejects a ScoutIT-only management token (0.894ms)
+✔ rejects a ScoutIT URL before sending the token (0.2795ms)
+✔ rejects missing token and management access failure without logging secrets (0.5016ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 112.6416
+
+> k2-jimzon-prototype@0.1.0 security:test-live-readiness
+> node --test tests/k2-live-readiness-contract.test.mjs tests/k2-installed-readiness.test.mjs tests/admin-preauth-dependency-readiness.test.mjs
+
+✔ only the approved signed pre-auth rate RPC may extend the installed permission profile (13.6226ms)
+✔ normal readiness blocks the completely missing login dependency (0.3506ms)
+✔ preparation mode cannot admit partial installation or grant/body drift (0.3087ms)
+✔ only exact installed rate authority and private forced RLS classify verified (0.2183ms)
+✔ incomplete metadata and invalid source hashes do not pass (0.1583ms)
+✔ exact installed source receipt and all required relations classify installed, never permission to reapply (1.1242ms)
+✔ empty legacy baseline is first apply only when every chain relation is absent (0.1672ms)
+✔ changed complete-source receipt, duplicate or old controlled receipt refuse (0.2389ms)
+✔ partial installed schema and malformed relation evidence refuse (0.1959ms)
+✔ installed permission classification names exact reviewed signatures and invoker trigger exceptions (12.2897ms)
+✔ extra overload or altered authority cannot hide behind a function name (2.3187ms)
+✔ extra PUBLIC execute and trigger SECURITY DEFINER drift refuse (0.721ms)
+✔ two arbitrary triggers do not inherit the named PUBLIC exception (0.698ms)
+✔ same-named private trigger cannot replace PUBLIC schema exception (0.3975ms)
+✔ approved order-chat adapter extends the exact installed catalog without admitting other grants (0.4477ms)
+✔ backup must match encrypted bytes/hash and actual restored current migration (1.4327ms)
+✔ missing proof and impossible/future creation or restoration evidence refuse (0.1776ms)
+✔ unknown backup creation metadata cannot be bypassed by a valid candidate (0.3847ms)
+✔ backup chronology requires real UTC ISO strings rather than Date.parse coercion (0.1667ms)
+✔ the gate keeps the read-only guard in front of every query (0.9812ms)
+✔ the production query is declared read_only (0.261ms)
+✔ every SQL template literal is a SELECT with no write verb (0.9004ms)
+✔ the gate reports provider surfaces as blocked instead of assuming them (0.168ms)
+✔ the gate refuses to send a query before identity passes (0.147ms)
+✔ documented K2 gates load the owner-controlled local environment file (0.7126ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 126.9452
+
+> k2-jimzon-prototype@0.1.0 security:test-files
+> node scripts/test-sensitive-file-policy.mjs
+
+Sensitive-file policy tests passed (13 blocked, 4 allowed, and the source inventory).
+
+> k2-jimzon-prototype@0.1.0 security:files
+> node scripts/verify-tracked-sensitive-files.mjs
+
+Sensitive-file policy passed in git mode (2805 files checked).
+
+> k2-jimzon-prototype@0.1.0 security:test-env-source
+> node scripts/test-environment-source-boundary.mjs
+
+Environment source-boundary tests passed (8 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:env-source
+> node scripts/verify-environment-source-boundary.mjs
+
+Environment source boundary passed (259 browser and 192 server/Edge files checked).
+
+> k2-jimzon-prototype@0.1.0 security:dependency-policy
+> node scripts/verify-dependency-policy.mjs
+
+Dependency policy passed (20 direct, 246 locked packages, 2 reviewed install scripts).
+Reviewed licenses: 0BSD=2, Apache-2.0=25, Apache-2.0 AND LGPL-3.0-or-later=3, Apache-2.0 AND LGPL-3.0-or-later AND MIT=1, BSD-2-Clause=1, BSD-3-Clause=2, ISC=7, LGPL-3.0-or-later=10, MIT=170, MPL-2.0=24, UNKNOWN=1
+
+> k2-jimzon-prototype@0.1.0 security:surfaces
+> node scripts/audit-security-surfaces.mjs --fail-on-gaps
+
+# MAP-020 Security Surface Inventory
+
+Generated: 2026-10-25T14:06:50.898Z
+
+- Prepared Admin routes: 104
+- Prepared Storefront routes: 21
+- Supabase Edge Functions: 2 (invite-staff, shopee-webhook)
+- api_request: 69 source operations
+- auth: 45 source operations
+- realtime: 12 source operations
+- rpc: 143 source operations
+- storage: 16 source operations
+- table: 141 source operations
+- SQL functionDefinitionOccurrences: 246
+- SQL uniqueFunctionSignatures: 188
+- SQL functionGrantEvents: 181
+- SQL functionRevokeEvents: 265
+- SQL functionSearchPathHardeningEvents: 6
+- SQL effectiveSecurityDefinerWithoutFixedSearchPath: 0
+- SQL effectiveFunctionsWithPublicExecute: 0
+- SQL effectiveFunctionsWithAnonExecute: 20
+- SQL effectiveFunctionsWithAuthenticatedExecute: 104
+- SQL effectiveFunctionsWithServiceRoleExecute: 13
+- SQL scheduledJobs: 0
+- SQL publicationChanges: 16
+- SQL policyDefinitions: 156
+- SQL storagePolicyDefinitions: 15
+- Dynamic operations requiring explicit review: 0
+- Exact expected anonymous function grants: 20
+- Unexpected PUBLIC function grants: 0
+- Unexpected anonymous function grants: 0
+- Missing expected anonymous function grants: 0
+- BFF route-control classification gaps: 0
+- Wildcard CORS production sources: 0
+
+This is a source inventory, not deployment or authorization evidence.
+
+> k2-jimzon-prototype@0.1.0 security:secrets
+> node scripts/scan-secrets.mjs
+
+Secret scan passed (2852 files checked; secret values are never printed).
+✓ Import-integrity check passed — all hooks and supabase usages are imported.
+
+> k2-jimzon-prototype@0.1.0 build:admin
+> vite build --mode admin --configLoader runner && node scripts/emit-static-404.mjs admin && node scripts/emit-admin-head.mjs admin && node scripts/verify-build-boundary.mjs admin && node scripts/verify-bundle-budgets.mjs admin && node scripts/scan-secrets.mjs dist
+
+vite v8.3.5 building client environment for admin...
+transforming...
+✓ 718 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/k2-build-target.json                                0.02 kB │ gzip:   0.04 kB
+dist/admin-sw.js                                         0.41 kB
+dist/manifest.json                                       0.74 kB │ gzip:   0.30 kB
+dist/index.html                                          3.30 kB │ gzip:   1.01 kB
+dist/.vite/manifest.json                                18.31 kB │ gzip:   2.08 kB
+dist/assets/Admin-pjuiq6QD.css                           0.68 kB │ gzip:   0.31 kB
+dist/assets/MasterWorkflowGraph-B4iZfrXt.css             0.81 kB │ gzip:   0.41 kB
+dist/assets/index-CJjGL3P1.css                         199.76 kB │ gzip:  29.47 kB
+dist/assets/formatMoney-DcWy64el.js                      0.09 kB │ gzip:   0.11 kB
+dist/assets/imageFallback-CwRuSFqn.js                    0.19 kB │ gzip:   0.15 kB
+dist/assets/useBodyScrollLock-BOvfg3Wi.js                0.32 kB │ gzip:   0.22 kB
+dist/assets/supabaseClient-B9ouFgtD.js                   0.36 kB │ gzip:   0.29 kB
+dist/assets/orderChargeState-Clw0vEvX.js                 0.55 kB │ gzip:   0.33 kB
+dist/assets/rolldown-runtime-XKyaHtl9.js                 0.72 kB │ gzip:   0.42 kB
+dist/assets/reportError-CtVKduJ0.js                      0.89 kB │ gzip:   0.50 kB
+dist/assets/overviewAvailability-BqmpDMaE.js             0.94 kB │ gzip:   0.52 kB
+dist/assets/channelMeta-0DXB9A7f.js                      1.12 kB │ gzip:   0.48 kB
+dist/assets/useRetainedFulfillmentCommand-DC2PP7cg.js    1.66 kB │ gzip:   0.91 kB
+dist/assets/WorkflowGuideModal-D_NGcrEk.js               5.90 kB │ gzip:   2.18 kB
+dist/assets/FefoWorkflowDiagram-D_r4DzBj.js              6.02 kB │ gzip:   2.19 kB
+dist/assets/AdminWorkspaceUi-D4_lx-yP.js                 6.03 kB │ gzip:   1.93 kB
+dist/assets/TourSelectionModal-CQwUwDFn.js               6.58 kB │ gzip:   2.30 kB
+dist/assets/FulfillmentWorkflowDiagram-mkZ5H8Tb.js       7.05 kB │ gzip:   2.71 kB
+dist/assets/CustodyWorkflowDiagram-CToVauS4.js           7.09 kB │ gzip:   2.64 kB
+dist/assets/FlightWorkflowDiagram-BpN_rJvB.js            7.32 kB │ gzip:   2.81 kB
+dist/assets/Kanban-CjQnXKBr.js                           7.45 kB │ gzip:   2.34 kB
+dist/assets/PasabuyWorkflowDiagram-EwLKwEF3.js           7.78 kB │ gzip:   3.00 kB
+dist/assets/ReservationHolds-B-FIANKc.js                 8.75 kB │ gzip:   3.43 kB
+dist/assets/index-DsgoRhKH.js                           10.19 kB │ gzip:   4.05 kB
+dist/assets/productResearchContract-Brii40Gn.js         12.31 kB │ gzip:   3.73 kB
+dist/assets/Suppliers-Bk8jIuFf.js                       12.38 kB │ gzip:   3.96 kB
+dist/assets/SpotlightTourOverlay-VBy7lOuQ.js            13.45 kB │ gzip:   4.10 kB
+dist/assets/StoreAssetStudio-DYugYqAW.js                17.00 kB │ gzip:   5.43 kB
+dist/assets/Customers-Dw-tvDPq.js                       17.64 kB │ gzip:   5.12 kB
+dist/assets/PasabuyManager-Dl4Fhbm5.js                  18.31 kB │ gzip:   6.28 kB
+dist/assets/CouponManager-DeHgI0Ix.js                   20.09 kB │ gzip:   5.76 kB
+dist/assets/StaffPermissionManager-C6hnKvGE.js          33.95 kB │ gzip:   8.97 kB
+dist/assets/ConsignmentManager-BUHnlf_W.js              36.17 kB │ gzip:   9.58 kB
+dist/assets/tourData-CANGzczX.js                        36.47 kB │ gzip:  11.48 kB
+dist/assets/GlobeCms-DawZ5JVr.js                        39.34 kB │ gzip:  12.99 kB
+dist/assets/DeliveryRateControl-x79CYmkP.js             40.39 kB │ gzip:  11.64 kB
+dist/assets/ChannelIntegrations-BXZbIUvD.js             41.00 kB │ gzip:  10.69 kB
+dist/assets/Overview-CHYbajNL.js                        41.27 kB │ gzip:  11.28 kB
+dist/assets/Inbox-Dt_DB5Ba.js                           57.33 kB │ gzip:  14.24 kB
+dist/assets/BulkCsvImportModal-D06pEEnj.js              58.60 kB │ gzip:  19.04 kB
+dist/assets/adminBffService-D7lSrBev.js                 58.66 kB │ gzip:  16.54 kB
+dist/assets/OwnerCountClose-CSAFnxDJ.js                 71.53 kB │ gzip:  17.87 kB
+dist/assets/Sheet-D2Z27EUr.js                           94.23 kB │ gzip:  20.17 kB
+dist/assets/InventoryGrid-BThXtpsl.js                  112.29 kB │ gzip:  27.61 kB
+dist/assets/OmniOperationsHub-CMnj8c2z.js              124.34 kB │ gzip:  28.21 kB
+dist/assets/vendor-motion-CJUFHmvU.js                  144.96 kB │ gzip:  48.04 kB
+dist/assets/MasterWorkflowGraph-BfF8ALIB.js            176.58 kB │ gzip:  49.95 kB
+dist/assets/ProductIntakeSessionModal-BgYVVZQN.js      191.35 kB │ gzip:  50.89 kB
+dist/assets/vendor-react-BuCXCQla.js                   210.53 kB │ gzip:  65.70 kB
+dist/assets/vendor-supabase-Bwm3Z89P.js                214.38 kB │ gzip:  55.16 kB
+dist/assets/Admin-Bm_6wFg6.js                          226.86 kB │ gzip:  61.47 kB
+dist/assets/esm-4S8EBSDO.js                            368.43 kB │ gzip: 108.02 kB
+
+✓ built in 992ms
+Emitted admin static 404 recovery page.
+emit-admin-head: Admin discovery tags written to dist/index.html.
+Verified admin production boundary (49 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker).
+Admin application budget passed: 226.86 kB/300.00 kB minified.
+Secret scan passed (92 files checked; secret values are never printed).
