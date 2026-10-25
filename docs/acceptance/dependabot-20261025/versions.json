@@ -1,0 +1,57 @@
+[
+  {
+    "package": "@react-three/fiber",
+    "before": "9.8.1",
+    "after": "9.8.2"
+  },
+  {
+    "package": "@supabase/supabase-js",
+    "before": "2.117.2",
+    "after": "2.118.0"
+  },
+  {
+    "package": "react",
+    "before": "19.3.0",
+    "after": "19.3.1"
+  },
+  {
+    "package": "react-dom",
+    "before": "19.3.0",
+    "after": "19.3.1"
+  },
+  {
+    "package": "@playwright/test",
+    "before": "1.63.0",
+    "after": "1.64.1"
+  },
+  {
+    "package": "playwright",
+    "before": "1.63.0",
+    "after": "1.64.1"
+  },
+  {
+    "package": "vite",
+    "before": "8.2.4",
+    "after": "8.3.5"
+  },
+  {
+    "package": "motion",
+    "before": "13.1.1",
+    "after": "14.0.0"
+  },
+  {
+    "package": "framer-motion",
+    "before": "13.1.1",
+    "after": "14.0.0"
+  },
+  {
+    "package": "motion-dom",
+    "before": "13.1.1",
+    "after": "14.0.0"
+  },
+  {
+    "package": "motion-utils",
+    "before": "13.0.0",
+    "after": "14.0.0"
+  }
+]
