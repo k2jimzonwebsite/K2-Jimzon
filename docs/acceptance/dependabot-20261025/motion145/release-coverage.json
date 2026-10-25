@@ -1,0 +1,60 @@
+{
+  "qualified_head": "97521c4e2ee1e282db3453936481f68bfeb2c2a2",
+  "merge": "8d210c6fd76841c9a5bafe63b8c6375f288f393c",
+  "identical_tree": "b17cddcb8ba5af63a3dfbb6713276ac7c85234b5",
+  "browser_passes": 1552,
+  "runs": {
+    "motion145-release-initial-failed.log": [
+      27,
+      26,
+      1117
+    ],
+    "motion145-boundary-fix.log": [
+      1
+    ],
+    "motion145-release-resumed.log": [
+      4,
+      12,
+      32,
+      39,
+      42,
+      8,
+      5,
+      47,
+      1,
+      41,
+      55
+    ],
+    "motion145-customer-rate-focused.log": [
+      1
+    ],
+    "motion145-release-final-stages.log": [
+      2,
+      14,
+      1,
+      8,
+      26,
+      2,
+      4,
+      11,
+      26
+    ]
+  },
+  "ci": {
+    "id": 40159878284,
+    "head": "97521c4e2ee1e282db3453936481f68bfeb2c2a2",
+    "conclusion": "success"
+  },
+  "original_local_aggregate_exit": 1,
+  "resumed_final_stages_exit": 0,
+  "local_default_environment_budgets": {
+    "storefront_js_gzip_kb": 127.67,
+    "storefront_css_gzip_kb": 29.99,
+    "admin_js_minified_kb": 226.86
+  },
+  "production_flags_candidate_js_gzip_kb": 142.55,
+  "limits_unchanged": true,
+  "hosted_acceptance": "verified",
+  "production_storefront_js_gzip_kb": 142.51,
+  "production_storefront_css_gzip_kb": 29.98
+}

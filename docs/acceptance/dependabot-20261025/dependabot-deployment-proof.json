@@ -1,0 +1,172 @@
+{
+  "baselineStorefront": {
+    "url": "https://vercel.com/k2-jimzon/k2-jimzon",
+    "text": "K2 Jimzon\nHobby\nFind\nF\nOverview\nDeployments\nLogs\nAnalytics\nSpeed Insights\nObservability\nFirewall\nCDN\nEnvironment Variables\nDomains\nConnect\nIntegrations\nStorage\nFlags\nAgent\nAI Gateway\nSandboxes\nWorkflows\nImages\nDaemons\nUsage\nSupport\nSettings\nk2jimzonwebsite\nk2-jimzon\nOverview\nCreate New\nAgent\nProduction Deployment\nOpen in\nInstant Rollback\nVisit\nDeployment\nk2-jimzon-2ssiddl8g-k2-jimzon.vercel.app\nDomains\nwww.k2jimzon.com\nk2-jimzon-vert.vercel.app\nStatus\nReady\nCreated\n\n18m ago by k2jimzonwebsite\n\nSource\nmain\nb3f9dc6\ndocs(release): Pin normalized evidence checksums\nDeployment Settings\n2 Recommendations\nTo update your Production Deployment, push to the main branch.\nDeployments\n\nProduction Checklist\n\n2/5\nConnect Git Repository\nAdd Custom Domain\nPreview Deployment\nEnable Web Analytics\nUpgrade to Speed Insights Plus\n\nObservability\n\n6h\nCDN Requests\n438\nFunction Invocations\n1\nError Rate\n0%\n\nAnalytics\n\nTrack Visitors and Page Views\n\nSee real-time traffic, top pages, and audience trends.\n\nEnable Analytics\n\nActive Branches\n\nPress slash to focus search\n/\nStatus\n6/7\n\ndependabot/npm_and_yarn/compatible-updates-56840db06d\n\nPreview\nAX3hX4cGz\n#19\n\ndependabot[bot]\n\n22m ago\n\ncodex/shopper-fixes-production\n\nPreview\n51bs9oXF1\n#26\n\nk2jimzonwebsite\n\n12h ago\n\ncodex/mobile-homepage-fixes\n\nPreview\n9KjwfqhxG\nSource\n\nk2jimzonwebsite\n\n20h ago\n\ncodex/listing-detail-image-fix\n\nPreview\n4J9TT4TN9\n#25\n\nk2jimzonwebsite\n\n1d ago\n\ncodex/cabinet-production-budget\n\nPreview\nV2szpbdmj\n#24\n\nk2jimzonwebsite\n\n2d ago\n\ncodex/cabinet-drag\n\nPreview\nEPtkU7twC\n#23\n\nk2jimzonwebsite\n\n2d ago\n\ncodex/storefront-pack-size\n\nPreview\nGTx6dTLZf\n#22\n\nk2jimzonwebsite\n\n2d ago\n\ncodex/inve",
+    "links": [
+      {
+        "label": "Deployment",
+        "links": [
+          {
+            "href": "https://vercel.com/k2-jimzon/k2-jimzon/6TqmsnFVYUjPR8gFfzAUDvergvAA",
+            "text": "k2-jimzon-2ssiddl8g-k2-jimzon.vercel.app"
+          }
+        ],
+        "value": "k2-jimzon-2ssiddl8g-k2-jimzon.vercel.app"
+      },
+      {
+        "label": "Domains",
+        "links": [
+          {
+            "href": "https://www.k2jimzon.com/",
+            "text": "www.k2jimzon.com"
+          },
+          {
+            "href": "https://k2-jimzon-vert.vercel.app/",
+            "text": "k2-jimzon-vert.vercel.app"
+          }
+        ],
+        "value": "www.k2jimzon.com\nk2-jimzon-vert.vercel.app"
+      },
+      {
+        "label": "Status",
+        "links": [],
+        "value": "Ready"
+      },
+      {
+        "label": "Created",
+        "links": [],
+        "value": "18m ago by k2jimzonwebsite"
+      },
+      {
+        "label": "Source",
+        "links": [
+          {
+            "href": "https://github.com/k2jimzonwebsite/K2-Jimzon/tree/main",
+            "text": "main"
+          },
+          {
+            "href": "https://github.com/k2jimzonwebsite/K2-Jimzon/commit/b3f9dc67437bc3a351a5a3dd4ddc94df36a3168b",
+            "text": "b3f9dc6\ndocs(release): Pin normalized evidence checksums"
+          }
+        ],
+        "value": "main\nb3f9dc6\ndocs(release): Pin normalized evidence checksums"
+      }
+    ]
+  },
+  "baselineAdmin": {
+    "observedAt": "2026-10-25T02:56:58.339Z",
+    "url": "https://vercel.com/k2-jimzon/k2-jimzon-admin",
+    "text": "K2 Jimzon\nHobby\nFind\nF\nOverview\nDeployments\nLogs\nAnalytics\nSpeed Insights\nObservability\nFirewall\nCDN\nEnvironment Variables\n1\nDomains\nConnect\nIntegrations\nStorage\nFlags\nAgent\nAI Gateway\nSandboxes\nWorkflows\nImages\nDaemons\nUsage\nSupport\nSettings\nk2jimzonwebsite\nk2-jimzon-admin\nOverview\nCreate New\nAgent\nProduction Deployment\nOpen in\nInstant Rollback\nVisit\nDeployment\nk2-jimzon-admin-3gwzybupc-k2-jimzon.vercel.app\nDomains\nadmin.k2jimzon.com\nk2-jimzon-admin-seven.vercel.app\nStatus\nReady\nCreated\n\n22m ago by k2jimzonwebsite\n\nSource\nmain\nb3f9dc6\ndocs(release): Pin normalized evidence checksums\nDeployment Settings\n2 Recommendations\nTo update your Production Deployment, push to the main branch.\nDeployments\n\nProduction Checklist\n\n2/5\nConnect Git Repository\nAdd Custom Domain\nPreview Deployment\nEnable Web Analytics\nUpgrade to Speed Insights Plus\n\nObservability\n\n6h\nCDN Requests\n254\nFunction Invocations\n182\nError Rate\n0%\n\nAnalytics\n\nTrack Visitors and Page Views\n\nSee real-time traffic, top pages, and audience trends.\n\nEnable Analytics\n\nActive Branches\n\nPress slash to focus search\n/\nStatus\n6/7\n\ndepend",
+    "fields": [
+      {
+        "label": "Deployment",
+        "links": [
+          {
+            "href": "https://vercel.com/k2-jimzon/k2-jimzon-admin/Di4RUvqvTAdqvqj98V49CajQywDh",
+            "text": "k2-jimzon-admin-3gwzybupc-k2-jimzon.vercel.app"
+          }
+        ],
+        "value": "k2-jimzon-admin-3gwzybupc-k2-jimzon.vercel.app"
+      },
+      {
+        "label": "Domains",
+        "links": [
+          {
+            "href": "https://admin.k2jimzon.com/",
+            "text": "admin.k2jimzon.com"
+          },
+          {
+            "href": "https://k2-jimzon-admin-seven.vercel.app/",
+            "text": "k2-jimzon-admin-seven.vercel.app"
+          }
+        ],
+        "value": "admin.k2jimzon.com\nk2-jimzon-admin-seven.vercel.app"
+      },
+      {
+        "label": "Status",
+        "links": [],
+        "value": "Ready"
+      },
+      {
+        "label": "Created",
+        "links": [],
+        "value": "22m ago by k2jimzonwebsite"
+      },
+      {
+        "label": "Source",
+        "links": [
+          {
+            "href": "https://github.com/k2jimzonwebsite/K2-Jimzon/tree/main",
+            "text": "main"
+          },
+          {
+            "href": "https://github.com/k2jimzonwebsite/K2-Jimzon/commit/b3f9dc67437bc3a351a5a3dd4ddc94df36a3168b",
+            "text": "b3f9dc6\ndocs(release): Pin normalized evidence checksums"
+          }
+        ],
+        "value": "main\nb3f9dc6\ndocs(release): Pin normalized evidence checksums"
+      }
+    ]
+  },
+  "storefront": {
+    "observedAt": "2026-10-25T03:13:30.306Z",
+    "url": "https://vercel.com/k2-jimzon/k2-jimzon",
+    "text": "k2-jimzon\nOverview\nCreate New\nProduction Deployment\nRollback\nVisit\nDeployment\nk2-jimzon-k1leeyvdx-k2-jimzon.vercel.app\nDomains\nwww.k2jimzon.com\nk2-jimzon-vert.vercel.app\nStatus\nReady\nCreated\n\n1m ago by dependabot[bot]\n\nSource\nmain\n280efb4\nbuild(deps): Qualify Motion 14 and compatible updates (#18)\nDeployment Settings\n2 Recommendations\nTo update your Production Deployment, push to the main branch.\nDeployments\n\nProduction Checklist\n\n2/5\nConnect Git Repository\nAdd Custom Domain\nPreview Deployment\nE",
+    "fields": [
+      {
+        "label": "Deployment",
+        "links": [
+          {
+            "href": "https://vercel.com/k2-jimzon/k2-jimzon/AU8WxKyc32ArBtQvxQnWEBV3zwB8",
+            "text": "k2-jimzon-k1leeyvdx-k2-jimzon.vercel.app"
+          }
+        ],
+        "value": "k2-jimzon-k1leeyvdx-k2-jimzon.vercel.app"
+      },
+      {
+        "label": "Domains",
+        "links": [
+          {
+            "href": "https://www.k2jimzon.com/",
+            "text": "www.k2jimzon.com"
+          },
+          {
+            "href": "https://k2-jimzon-vert.vercel.app/",
+            "text": "k2-jimzon-vert.vercel.app"
+          }
+        ],
+        "value": "www.k2jimzon.com\nk2-jimzon-vert.vercel.app"
+      },
+      {
+        "label": "Status",
+        "links": [],
+        "value": "Ready"
+      },
+      {
+        "label": "Created",
+        "links": [],
+        "value": "1m ago by dependabot[bot]"
+      },
+      {
+        "label": "Source",
+        "links": [
+          {
+            "href": "https://github.com/k2jimzonwebsite/K2-Jimzon/tree/main",
+            "text": "main"
+          },
+          {
+            "href": "https://github.com/k2jimzonwebsite/K2-Jimzon/commit/280efb49a7d142ad05ab5c9ea7c8389150f374c3",
+            "text": "280efb4\nbuild(deps): Qualify Motion 14 and compatible updates (#18)"
+          }
+        ],
+        "value": "main\n280efb4\nbuild(deps): Qualify Motion 14 and compatible updates (#18)"
+      }
+    ]
+  },
+  "admin": {
+    "observedAt": "2026-10-25T03:14:35.689Z",
+    "url": "https://vercel.com/k2-jimzon/k2-jimzon-admin/9tpfVLXGE6a8Jnm2787FVzY6JMea",
+    "text": "k2-jimzon-admin\nDeployments\n9tpfVLXGE\nCreate New\nDeployment\nLogs\nResources\nSource\nOpen Graph\nDeployment Details\nShare\nLogs\nVisit\nCreated\ndependabot[bot]\n2m ago\nStatus\nReady\nLatest\nDuration\n45s\n50s ago\nEnvironment\nProduction\nDomains\nadmin.k2jimzon.com\n+2\nk2-jimzon-admin-git-main-k2-jimzon.vercel.app\nk2-jimzon-admin-n76ico197-k2-jimzon.vercel.app\nSource\nmain\n280efb4\nbuild(deps): Qualify Motion 14 and compatible updates (#18)\nDeployment Settings\n2 Recommendations\nDeploy Logs\n16\n42s\nDeployment Summary\nResources\nDeployment Checks\nAssigning Custom Domains\n\nRuntime Logs\n\nView and debug runtime logs & errors\n\nObservability\n\nMonitor app health & performance\n\nSpeed Insights\n\nNot Enabled\n\nPerformance metrics from real users\n\nWeb Analytics\n\nNot Enabled",
+    "fields": []
+  }
+}

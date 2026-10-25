@@ -1,0 +1,275 @@
+- link "Skip to content":
+  - /url: "#start-of-content"
+- banner "Global navigation menu":
+  - button "Open menu":
+  - link "Homepage (g then d)":
+    - /url: /
+  - navigation "Breadcrumbs":
+    - list:
+      - link "k2jimzonwebsite":
+        - /url: /k2jimzonwebsite
+        - generic: k2jimzonwebsite
+      - link "K2-Jimzon":
+        - /url: /k2jimzonwebsite/K2-Jimzon
+      - button "Switch repository (alt shift r)":
+  - button "Open quick search dialog, type / to search":
+    - text: Type
+    - generic: /
+    - text: to search
+  - link "Chat with Copilot":
+    - /url: /copilot
+  - button "Open Copilot…":
+  - button "Create new...":
+  - link "All issues":
+    - /url: /issues
+  - link "All pull requests":
+    - /url: /pulls
+  - link "All repositories":
+    - /url: /repos
+  - link "You have no unread notifications (g then n)":
+    - /url: /notifications
+  - button "Open user navigation menu":
+    - img "User avatar"
+  - heading "Repository navigation" [level=2]
+  - navigation "Repository":
+    - list:
+      - link "Code":
+        - /url: /k2jimzonwebsite/K2-Jimzon
+        - generic: Code
+      - link "Issues":
+        - /url: /k2jimzonwebsite/K2-Jimzon/issues
+        - generic: Issues
+      - link "Pull requests (2)":
+        - /url: /k2jimzonwebsite/K2-Jimzon/pulls
+        - generic: Pull requests
+        - generic: "2"
+        - generic: (2)
+      - link "Actions":
+        - /url: /k2jimzonwebsite/K2-Jimzon/actions
+        - generic: Actions
+      - link "Projects":
+        - /url: /k2jimzonwebsite/K2-Jimzon/projects
+        - generic: Projects
+      - link "Wiki":
+        - /url: /k2jimzonwebsite/K2-Jimzon/wiki
+        - generic: Wiki
+      - link "Security and quality":
+        - /url: /k2jimzonwebsite/K2-Jimzon/security
+        - generic: Security and quality
+      - link "Insights":
+        - /url: /k2jimzonwebsite/K2-Jimzon/pulse
+        - generic: Insights
+      - link "Settings":
+        - /url: /k2jimzonwebsite/K2-Jimzon/settings
+        - generic: Settings
+- button "Dismiss this message" [active]:
+- alert: Repository settings saved.
+- main:
+  - 'heading "Settings: k2jimzonwebsite/K2-Jimzon" [level=1]'
+  - navigation "General settings":
+    - list:
+      - link "General":
+        - /url: /k2jimzonwebsite/K2-Jimzon/settings
+        - generic: General
+      - heading "Access" [level=2]
+      - list "Access":
+        - link "Collaborators":
+          - /url: /k2jimzonwebsite/K2-Jimzon/settings/access
+          - generic: Collaborators
+        - button "Moderation":
+          - generic: Moderation
+      - heading "Code, planning, and automation" [level=2]
+      - list "Code, planning, and automation":
+        - button "Rulesets":
+          - generic: Rulesets
+        - link "Branches":
+          - /url: /k2jimzonwebsite/K2-Jimzon/settings/branches
+          - generic: Branches
+        - link "Tags":
+          - /url: /k2jimzonwebsite/K2-Jimzon/settings/tag_protection
+          - generic: Tags
+        - button "Actions":
+          - generic: Actions
+        - link "Webhooks":
+          - /url: /k2jimzonwebsite/K2-Jimzon/settings/hooks
+          - generic: Webhooks
+        - button "Copilot":
+          - generic: Copilot
+        - button "Planning":
+          - generic: Planning
+        - link "Environments":
+          - /url: /k2jimzonwebsite/K2-Jimzon/settings/environments
+          - generic: Environments
+        - link "Codespaces":
+          - /url: /k2jimzonwebsite/K2-Jimzon/settings/codespaces
+          - generic: Codespaces
+        - link "Pages":
+          - /url: /k2jimzonwebsite/K2-Jimzon/settings/pages
+          - generic: Pages
+      - heading "Security and quality" [level=2]
+      - list "Security and quality":
+        - link "Advanced Security":
+          - /url: /k2jimzonwebsite/K2-Jimzon/settings/security_analysis
+          - generic: Advanced Security
+        - link "Deploy keys":
+          - /url: /k2jimzonwebsite/K2-Jimzon/settings/keys
+          - generic: Deploy keys
+        - button "Secrets and variables":
+          - generic: Secrets and variables
+      - heading "Integrations" [level=2]
+      - list "Integrations":
+        - link "GitHub Apps":
+          - /url: /k2jimzonwebsite/K2-Jimzon/settings/installations
+          - generic: GitHub Apps
+  - heading "Advanced Security" [level=2]
+  - paragraph: Advanced Security features help keep your repository secure and updated. By enabling these features, you're granting us permission to perform read-only analysis on your repository.
+  - paragraph: Private vulnerability reporting
+  - paragraph:
+    - text: Allow your community to privately report potential security vulnerabilities to maintainers and repository owners.
+    - link "Learn more about private vulnerability reporting":
+      - /url: https://docs.github.com/code-security/security-advisories/guidance-on-reporting-and-writing-information-about-vulnerabilities/privately-reporting-a-security-vulnerability
+    - text: .
+  - button "Enable private vulnerability reporting":
+    - generic: Enable
+  - heading "Dependency Scanning" [level=3]
+  - text: Understand the packages this repository depends on and secure its
+  - link "Learn more about software supply chain security (opens in a new tab)":
+    - /url: https://docs.github.com/code-security/concepts/supply-chain-security/supply-chain-security#what-is-dependabot
+    - text: software supply chain
+  - text: .
+  - paragraph:
+    - generic: Dependency graph
+  - paragraph: Identify and understand your project's dependencies.
+  - generic: "On"
+  - button "Dependency graph" [pressed]:
+  - paragraph: Automatic dependency submission
+  - paragraph: Automatically detect and report build-time dependencies for select ecosystems.
+  - button "Disabled":
+    - generic: Disabled
+  - heading "Dependabot" [level=3]
+  - paragraph:
+    - text: Keep your dependencies secure and up-to-date with
+    - link "Learn more about Dependabot (opens in a new tab)":
+      - /url: https://docs.github.com/code-security/concepts/supply-chain-security/supply-chain-security#what-is-dependabot
+      - text: Dependabot
+    - text: .
+  - paragraph:
+    - generic: Dependabot alerts
+  - paragraph: Receive alerts when vulnerabilities are detected in your dependencies.
+  - generic: "On"
+  - button "Dependabot alerts" [pressed]:
+  - paragraph:
+    - generic: Malware alerts
+  - paragraph: Receive alerts when malware is detected in your dependencies.
+  - generic: "Off"
+  - button "Malware alerts":
+  - link "Dependabot auto-triage rules":
+    - /url: /k2jimzonwebsite/K2-Jimzon/settings/dependabot_rules
+  - paragraph: Define rules for security updates and auto-dismissals on Dependabot alerts.
+  - generic: 1 rule enabled
+  - paragraph:
+    - generic: Dependabot security updates
+  - paragraph:
+    - text: Automatically open pull requests for alerts with a patch. For advanced configuration, disable this setting and use
+    - link "Dependabot rules":
+      - /url: /k2jimzonwebsite/K2-Jimzon/settings/dependabot_rules
+    - text: .
+  - generic: "On"
+  - button "Dependabot security updates" [pressed]:
+  - paragraph:
+    - generic: Grouped security updates
+  - paragraph: Group security updates into one pull request per package manager and manifest directory. For advanced configuration, disable this setting and use dependabot.yml.
+  - generic: "Off"
+  - button "Grouped security updates":
+  - paragraph:
+    - generic: Dependabot version updates
+  - paragraph:
+    - text: Automatically open dependency update pull requests by
+    - link "configuring dependabot.yml":
+      - /url: https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates
+    - text: .
+  - link "Edit dependabot.yml":
+    - /url: /k2jimzonwebsite/K2-Jimzon/edit/main/.github/dependabot.yml
+    - generic: Edit dependabot.yml
+  - heading "Code Security" [level=3]
+  - generic: Automatically detect common vulnerabilities and coding errors.
+  - heading "Tools" [level=4]
+  - heading "CodeQL analysis" [level=5]
+  - paragraph:
+    - text: Identify vulnerabilities and errors with
+    - link "CodeQL":
+      - /url: https://docs.github.com/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning-with-codeql
+    - text: for
+    - link "eligible":
+      - /url: https://docs.github.com/code-security/code-scanning/enabling-code-scanning/configuring-default-setup-for-code-scanning-at-scale#eligible-repositories-for-codeql-default-setup-at-scale
+    - text: repositories.
+  - button "Set up":
+    - generic: Set up
+  - heading "Other tools" [level=5]
+  - paragraph: Add any third-party code scanning tool.
+  - link "Explore workflows":
+    - /url: /k2jimzonwebsite/K2-Jimzon/actions/new?category=security&query=code+scanning
+    - generic: Explore workflows
+  - heading "AI Scan" [level=4]
+  - paragraph:
+    - text: Identify code security findings using AI.
+    - link "Learn more about AI scan":
+      - /url: https://docs.github.com/code-security/concepts/code-scanning/ai-powered-security-detections
+    - text: .
+  - heading "AI Scan for pull requests" [level=5]
+  - paragraph: Generate security findings for non-CodeQL languages using AI.
+  - generic: "Off"
+  - button "AI Scan for pull requests enablement":
+  - heading "Copilot Autofix" [level=5]
+  - paragraph:
+    - text: Suggest fixes for CodeQL alerts using AI. CodeQL default or advanced setup must be enabled for this feature to work. Learn more about the
+    - link "limitations of autofix code suggestions":
+      - /url: https://docs.github.com/code-security/code-scanning/managing-code-scanning-alerts/about-autofix-for-codeql-code-scanning#limitations-of-suggestions
+  - generic: "On"
+  - button "Copilot Autofix enablement" [pressed]:
+  - heading "Agentic autofix" [level=5]
+  - paragraph: Assign code scanning alerts to Copilot to create a fix and open a pull request. This feature consumes AI credits.
+  - generic: "Off"
+  - button "Agentic autofix enablement":
+  - heading "Protection rules" [level=4]
+  - heading "Check runs failure threshold" [level=5]
+  - paragraph:
+    - text: Select the alert severity level for code scanning check runs to fail.
+    - link "Create a branch ruleset":
+      - /url: /k2jimzonwebsite/K2-Jimzon/settings/rules/new?enforcement=disabled&target=branch
+    - text: to prevent a branch from merging when these checks fail.
+  - 'button "Security alert severity level: High or higher"':
+    - generic: "Security alert severity level: High or higher"
+  - 'button "Standard alert severity level: Only errors"':
+    - generic: "Standard alert severity level: Only errors"
+  - heading "Secret Protection" [level=3]
+  - text: Continuously monitor this repository to prevent secret exposures and protect credentials. GitHub will always send alerts to partners for detected secrets in public repositories.
+  - link "Learn more about partner patterns":
+    - /url: https://docs.github.com/enterprise-cloud@latest/code-security/secret-scanning/about-secret-scanning#about-secret-scanning-for-partner-patterns
+  - text: .
+  - button "Enable":
+    - generic: Enable
+- contentinfo:
+  - heading "Footer" [level=2]
+  - link "GitHub Homepage":
+    - /url: https://github.com
+  - generic: © 2026 GitHub, Inc.
+  - navigation "Footer":
+    - heading "Footer navigation" [level=3]
+    - list "Footer navigation":
+      - link "Terms":
+        - /url: https://docs.github.com/site-policy/github-terms/github-terms-of-service
+      - link "Privacy":
+        - /url: https://docs.github.com/site-policy/privacy-policies/github-privacy-statement
+      - link "Security":
+        - /url: https://github.com/security
+      - link "Status":
+        - /url: https://www.githubstatus.com/
+      - link "Community":
+        - /url: https://github.community/
+      - link "Docs":
+        - /url: https://docs.github.com/
+      - link "Contact":
+        - /url: https://support.github.com?tags=dotcom-footer
+      - button "Manage cookies"
+      - button "Do not share my personal information"

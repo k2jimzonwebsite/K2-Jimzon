@@ -1,3 +1,5 @@
+25October2026 / MAP-021 / IDEA-20261025-01 — verified live8d210c6f: Motion14.5 with deferred GlobeSection provider and identical isolated peso formatting, preserving public/Admin separation and existing K2 design/interaction. Actual globe/search/390dark-light checkout/375authenticated workflow acceptance passes; production landing142.51/150.50kB. Complete evidence, original failures, review and recovery: docs/acceptance/DEPENDABOT_REMEDIATION_20261025.md. This supersedes earlier local-only dependency states below.
+
 25October2026 / MAP-021 / IDEA-20261025-01 — local performance preservation
 
 All four required design skills preserve K2 storefront wood/editorial identity, accessible interactions, reduced motion and existing Motion features. No typography/color/layout/content change. Existing budgets retained; module-network and rendered regressions pass. Full release and hosted acceptance pending.

@@ -1,0 +1,344 @@
+build-and-smoke	Build isolated storefront production	﻿2026-10-25T03:15:42.5168237Z ##[group]Run npm run build:storefront
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.5168440Z ^[[36;1mnpm run build:storefront^[[0m
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.5218851Z shell: /usr/bin/bash -e {0}
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.5218986Z env:
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.5219154Z   VITE_SUPABASE_URL: https://pixplcjqivlfflickobf.supabase.co
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.5219498Z   VITE_GUEST_BFF_ENABLED: true
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.5219631Z   VITE_CUSTOMER_ACCOUNT_ENABLED: true
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.5219907Z ##[endgroup]
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.5845250Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.5845826Z > k2-jimzon-prototype@0.1.0 prebuild:storefront
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.5846081Z > npm run prebuild
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.5846163Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.6442844Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.6443421Z > k2-jimzon-prototype@0.1.0 prebuild
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.6444548Z > npm run security:test && npm run security:test-admin-session && npm run security:test-env-contract && npm run security:test-k2-project && npm run security:test-live-readiness && npm run security:test-files && npm run security:files && npm run security:test-env-source && npm run security:env-source && npm run security:dependency-policy && npm run security:surfaces && npm run security:secrets && node scripts/check-imports.mjs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.6445345Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.7040017Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.7040623Z > k2-jimzon-prototype@0.1.0 security:test
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.7040979Z > node scripts/test-secret-scan.mjs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.7041087Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.7371108Z Secret scanner tests passed (fabricated values only).
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.8019492Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.8019929Z > k2-jimzon-prototype@0.1.0 security:test-admin-session
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.8021636Z > node --test tests/admin-mfa-sdk-qr.test.mjs tests/admin-bff-refresh-token.test.mjs tests/admin-product-read-taxonomy.test.mjs tests/admin-product-stock-read.test.mjs tests/admin-reference-command.test.mjs tests/admin-reference-handler.test.mjs tests/admin-lot-snapshot-read.test.mjs tests/product-master-command-recovery.test.mjs tests/admin-product-master-recovery-client.test.mjs tests/admin-product-master-actor.test.mjs tests/website-assignment-recovery.test.mjs tests/admin-website-assignment-actor.test.mjs tests/admin-google-bff.test.mjs tests/turnstile-loader-recovery.test.mjs tests/photo-csv-batch.test.mjs tests/admin-photo-batch-actor.test.mjs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.8022940Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.8675000Z ✔ protocol-valid 12-character refresh token survives all Admin encrypted session boundaries (3.900649ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:42.8700877Z ✔ refresh lower/upper bounds and access-token lower bound still refuse malformed sessions (0.299441ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0077125Z ✔ actual Supabase SDK generates PKCE with encrypted browser-bound verifier and exact K2 return route (24.837902ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0171925Z ✔ Google callback rejects wrong-origin before provider exchange (2.828675ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0200451Z ✔ Google callback rejects no-cookie before provider exchange (8.91054ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0246745Z ✔ Google callback rejects altered-cookie before provider exchange (5.587826ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0270975Z ✔ Google callback rejects wrong-state before provider exchange (1.718235ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0277967Z ✔ Google callback rejects expired before provider exchange (1.582691ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0291589Z ✔ Google callback rejects extra-fields before provider exchange (1.220917ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0314988Z ✔ Google AAL1 session stays pending for the existing authenticator challenge without active session registration (1.949402ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0332517Z ✔ Google callback non-staff retains staff/AAL2/registry authority (1.963775ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0344198Z ✔ Google callback unverified-email retains staff/AAL2/registry authority (1.400407ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0355649Z ✔ Google callback enrollment retains staff/AAL2/registry authority (1.191252ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0375249Z ✔ Google callback aal2 retains staff/AAL2/registry authority (1.481408ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0392340Z ✔ Google callback registry-failed retains staff/AAL2/registry authority (1.320927ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0420815Z ✔ Google start fails closed for missing bot verification or unavailable durable budget (0.815027ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0421837Z ✔ consolidated router advertises both Google routes with origin, PKCE/bot and durable budget guards (0.077216ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0492677Z ✔ lot read derives physical and allocations from one coherent snapshot (2.187071ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0493577Z ✔ complete empty snapshot is a verified empty lot read (0.136936ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0494312Z ✔ partial, malformed, over-bound and refused snapshots cannot produce healthy totals (0.826093ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0495000Z ✔ pending enrollment accepts the installed Supabase SDK QR format without cancelling the factor (36.019235ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0495643Z ✔ pending enrollment bounds oversized SVG data and cancels only the new unverified factor (0.447543ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0496349Z ✔ pending enrollment preserves an already verified authenticator without creating or deleting factors (0.124327ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0497028Z ✔ pending enrollment still rejects a non-SVG QR response and cancels its unverified factor (0.122484ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0497668Z ✔ installed SDK completes password, enrollment, challenge and AAL2 verification against the provider protocol fixture (6.076312ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0801244Z ✔ photo upload and assignment actor mismatch refuse before Storage or command dispatch (63.760646ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.0802309Z ✔ existing and actor-bound assignment clients retain current staff command behavior (6.045631ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.1183012Z ✔ saved Product Master actor mismatch refuses before command RPC (43.017178ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.1200920Z ✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (6.085375ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.1230666Z ✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (9.733904ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.1231384Z ✔ existing clients without actor header retain current authenticated actor behavior (3.281777ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8674195Z ✔ Product Master recovery has a literal-body actor-bound browser client (0.578971ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8674970Z ✔ lost HTTP reply and later auth refusal preserve same literal request key and current CSRF (49.960954ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8675693Z ✔ protected catalog preserves canonical assigned and nullable unassigned taxonomy (2.859292ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8676162Z ✔ category filters can use the canonical name when no store label is assigned (0.191388ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8676547Z ✔ stock failure preserves canonical taxonomy while reporting unknown stock (0.363998ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8676942Z ✔ protected catalog retains every saved photo slot for reopening the photo manager (0.200501ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8677313Z ✔ stock failure does not hide saved after-use or supporting photos (0.183235ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8677687Z ✔ internal Draft receives canonical staff stock even when public offer is absent (1.253956ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8678111Z ✔ a complete no-lot staff row proves zero without inferring it from an absent public offer (0.128283ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8678510Z ✔ missing row preserves product discovery and explicit unknown stock (0.177137ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8678879Z ✔ unreadable taxonomy preserves product discovery and explicit unknown stock (0.121583ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8679266Z ✔ fractional quantity preserves product discovery and explicit unknown stock (0.116766ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8679629Z ✔ duplicate row preserves product discovery and explicit unknown stock (0.071758ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8680109Z ✔ query failure preserves product discovery and explicit unknown stock (0.11309ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8680496Z ✔ creation preserves raw command strings and property order for saved retry identity (1.01696ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8680879Z ✔ name bound counts Unicode characters after printable whitespace cleanup (0.643729ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8681263Z ✔ endpoint refuses unsupported methods and missing command keys before dispatch (0.468454ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8681883Z ✔ endpoint cannot be used on the storefront deployment (0.619843ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8682205Z ✔ reference route advertises protected POST and a read-only GET (65.535596ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8682583Z ✔ controls are refused before cleanup and malformed strings never reach SQL (0.149775ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8683176Z ✔ creation rejects extra fields, coerced values and ambiguous category parent (0.240212ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8683549Z ✔ protected options retain category hierarchy and permit an empty catalog (0.296917ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:43.8683906Z ✔ partial, unavailable, over-limit or malformed options fail closed (0.311238ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.3413409Z ✔ current Staff role cannot create even when cookie claims Admin (22.31371ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.3414093Z ✔ saved-request actor mismatch refuses before reference dispatch (2.12701ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.3414658Z ✔ Admin and SuperAdmin send one correctly signed exact command (5.327415ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.3415242Z ✔ CSRF, current AAL2 and registry refusal prevent creation dispatch (4.093418ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.3415927Z ✔ historical receipt is shown separately from changed or missing current reference (3.457442ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.3416519Z ✔ committed receipt survives unavailable current readback (7008.923181ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.3417175Z ✔ unknown command failure hides provider details and retains retry classification (1.924034ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4296786Z ✔ saved Website assignment actor mismatch refuses before command RPC (22.681533ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4297231Z ✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (3.126154ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4297772Z ✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (4.649245ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4298523Z ✔ existing clients without actor header retain current authenticated actor behavior (1.321107ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4301632Z ✔ bounded Website read distinguishes absent, paused and active existing rows (5.088385ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4302345Z ✔ Website read refuses duplicate partial malformed failed or missing product evidence (7017.782521ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4303110Z ✔ current Staff and invalid SKU refuse per-product read before data lookup; aggregate contract stays (3.004219ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4369848Z ✔ mapping resolves exact existing Draft and retains untouched photo slots (6.167418ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4370537Z ✔ invalid identities, duplicate files/SKUs, missing files, existing slots and live targets refuse before upload (1.647889ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4371196Z ✔ lost assignment reply survives reload and retries original payload/key without uploading twice (2.113039ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4371776Z ✔ actor change, byte substitution and current-media drift stop before mutation (0.993795ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4372308Z ✔ storage failure refuses dispatch and malformed recovery is retained (0.673864ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4372851Z ✔ multi-product batch resumes at failed row and never replays completed rows (4.528032ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4373392Z ✔ account changes after upload or media drift during upload refuse assignment (1.321879ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4373899Z ✔ recovery refuses a changed literal command and a competing batch (0.559942ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4374434Z ✔ saved but unconfirmed command cannot overwrite later media or a non-Draft target (0.991442ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4374942Z ✔ Product Master updates have durable actor-scoped recovery (0.470577ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4375485Z ✔ reload preserves literal bytes version reason and original key (1.337092ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4379541Z ✔ changed key payload version or review decision cannot replace unknown request (0.59772ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4380234Z ✔ actor and operation identity isolate reading and acknowledgement (0.190897ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4380836Z ✔ corruption foreign actor secret field and oversize storage remain untouched (0.408254ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4381282Z ✔ malformed or non-update commands cannot be held or sent (0.451339ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4381949Z ✔ failed Turnstile download releases the cached failure for the next attempt (3.120404ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4382315Z ✔ Website has its own durable actor-scoped original request recovery (0.412921ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4382660Z ✔ Website literal body and key survive reload and cannot be replaced (1.025473ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4383127Z ✔ corrupt Website records remain untouched and invalid bodies never persist (0.842277ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4383552Z ✔ existing unassigned Website listing keeps a real version; only absent row has null identity (0.172469ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4383817Z ℹ tests 88
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4383933Z ℹ suites 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4384045Z ℹ pass 88
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4384153Z ℹ fail 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4384263Z ℹ cancelled 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4384379Z ℹ skipped 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4384486Z ℹ todo 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.4384619Z ℹ duration_ms 7612.493291
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.5065084Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.5065590Z > k2-jimzon-prototype@0.1.0 security:test-env-contract
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.5065998Z > node scripts/verify-deployment-environment-contract.mjs --self-test
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.5066174Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.5277449Z Deployment environment contract self-test passed (5 fixtures).
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.5909244Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.5910050Z > k2-jimzon-prototype@0.1.0 security:test-k2-project
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.5910567Z > node --test tests/k2-supabase-project-identity.test.mjs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.5910792Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.6579061Z ✔ accepts the exact K2 URL only when the management token sees K2 (14.578824ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.6582411Z ✔ rejects a ScoutIT-only management token (0.508375ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.6582727Z ✔ rejects a ScoutIT URL before sending the token (0.168954ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.6583193Z ✔ rejects missing token and management access failure without logging secrets (0.301874ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.6647593Z ℹ tests 4
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.6647813Z ℹ suites 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.6647989Z ℹ pass 4
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.6648155Z ℹ fail 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.6648617Z ℹ cancelled 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.6648745Z ℹ skipped 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.6648856Z ℹ todo 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.7270183Z ℹ duration_ms 51.359168
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.7270400Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.7270602Z > k2-jimzon-prototype@0.1.0 security:test-live-readiness
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.7271137Z > node --test tests/k2-live-readiness-contract.test.mjs tests/k2-installed-readiness.test.mjs tests/admin-preauth-dependency-readiness.test.mjs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.7271437Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.7986685Z ✔ only the approved signed pre-auth rate RPC may extend the installed permission profile (9.094272ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8000609Z ✔ normal readiness blocks the completely missing login dependency (0.282275ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8008755Z ✔ preparation mode cannot admit partial installation or grant/body drift (0.249666ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8012021Z ✔ only exact installed rate authority and private forced RLS classify verified (0.184928ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8022741Z ✔ incomplete metadata and invalid source hashes do not pass (0.125619ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8100335Z ✔ exact installed source receipt and all required relations classify installed, never permission to reapply (1.512165ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8101104Z ✔ empty legacy baseline is first apply only when every chain relation is absent (0.121423ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8101781Z ✔ changed complete-source receipt, duplicate or old controlled receipt refuse (0.183296ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8102360Z ✔ partial installed schema and malformed relation evidence refuse (0.155644ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8103055Z ✔ installed permission classification names exact reviewed signatures and invoker trigger exceptions (4.867082ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8103694Z ✔ extra overload or altered authority cannot hide behind a function name (1.520557ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8104250Z ✔ extra PUBLIC execute and trigger SECURITY DEFINER drift refuse (0.514334ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8104793Z ✔ two arbitrary triggers do not inherit the named PUBLIC exception (0.446842ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8106042Z ✔ same-named private trigger cannot replace PUBLIC schema exception (0.229595ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8106743Z ✔ approved order-chat adapter extends the exact installed catalog without admitting other grants (0.350147ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8107436Z ✔ backup must match encrypted bytes/hash and actual restored current migration (0.477849ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8108252Z ✔ missing proof and impossible/future creation or restoration evidence refuse (0.150155ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8108893Z ✔ unknown backup creation metadata cannot be bypassed by a valid candidate (1.168568ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8109307Z ✔ backup chronology requires real UTC ISO strings rather than Date.parse coercion (0.154122ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8109653Z ✔ the gate keeps the read-only guard in front of every query (0.838792ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8110096Z ✔ the production query is declared read_only (0.141072ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8110381Z ✔ every SQL template literal is a SELECT with no write verb (1.562411ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8110725Z ✔ the gate reports provider surfaces as blocked instead of assuming them (0.145509ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8111051Z ✔ the gate refuses to send a query before identity passes (0.114822ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8111382Z ✔ documented K2 gates load the owner-controlled local environment file (0.250037ms)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8111621Z ℹ tests 25
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8111737Z ℹ suites 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8111846Z ℹ pass 25
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8111955Z ℹ fail 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8112068Z ℹ cancelled 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8112186Z ℹ skipped 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8112324Z ℹ todo 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8112446Z ℹ duration_ms 60.08798
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8749165Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8749875Z > k2-jimzon-prototype@0.1.0 security:test-files
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8750308Z > node scripts/test-sensitive-file-policy.mjs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8750505Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.8971336Z Sensitive-file policy tests passed (13 blocked, 4 allowed, and the source inventory).
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.9593413Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.9593899Z > k2-jimzon-prototype@0.1.0 security:files
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.9594309Z > node scripts/verify-tracked-sensitive-files.mjs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.9594511Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:50.9889906Z Sensitive-file policy passed in git mode (2670 files checked).
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.0539589Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.0540338Z > k2-jimzon-prototype@0.1.0 security:test-env-source
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.0540756Z > node scripts/test-environment-source-boundary.mjs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.0540952Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.0732702Z Environment source-boundary tests passed (8 fixtures).
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.1369181Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.1369869Z > k2-jimzon-prototype@0.1.0 security:env-source
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.1370206Z > node scripts/verify-environment-source-boundary.mjs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.1370346Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.1699285Z Environment source boundary passed (256 browser and 192 server/Edge files checked).
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.2328942Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.2329639Z > k2-jimzon-prototype@0.1.0 security:dependency-policy
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.2330259Z > node scripts/verify-dependency-policy.mjs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.2330448Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.2532771Z Dependency policy passed (20 direct, 246 locked packages, 2 reviewed install scripts).
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.2582339Z Reviewed licenses: 0BSD=2, Apache-2.0=25, Apache-2.0 AND LGPL-3.0-or-later=3, Apache-2.0 AND LGPL-3.0-or-later AND MIT=1, BSD-2-Clause=1, BSD-3-Clause=2, ISC=7, LGPL-3.0-or-later=10, MIT=170, MPL-2.0=24, UNKNOWN=1
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.3204366Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.3204883Z > k2-jimzon-prototype@0.1.0 security:surfaces
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.3205241Z > node scripts/audit-security-surfaces.mjs --fail-on-gaps
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.3205382Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5416428Z # MAP-020 Security Surface Inventory
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5416899Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5417075Z Generated: 2026-10-25T03:15:51.540Z
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5417244Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5417352Z - Prepared Admin routes: 104
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5417652Z - Prepared Storefront routes: 21
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5418010Z - Supabase Edge Functions: 2 (invite-staff, shopee-webhook)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5419040Z - api_request: 69 source operations
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5419286Z - auth: 45 source operations
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5419543Z - realtime: 12 source operations
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5419945Z - rpc: 143 source operations
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5420327Z - storage: 16 source operations
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5420566Z - table: 141 source operations
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5420837Z - SQL functionDefinitionOccurrences: 246
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5421122Z - SQL uniqueFunctionSignatures: 188
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5421373Z - SQL functionGrantEvents: 181
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5421608Z - SQL functionRevokeEvents: 265
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5421868Z - SQL functionSearchPathHardeningEvents: 6
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5422217Z - SQL effectiveSecurityDefinerWithoutFixedSearchPath: 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5422571Z - SQL effectiveFunctionsWithPublicExecute: 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5422883Z - SQL effectiveFunctionsWithAnonExecute: 20
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5423209Z - SQL effectiveFunctionsWithAuthenticatedExecute: 104
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5423561Z - SQL effectiveFunctionsWithServiceRoleExecute: 13
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5423820Z - SQL scheduledJobs: 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5424017Z - SQL publicationChanges: 16
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5424252Z - SQL policyDefinitions: 156
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5424505Z - SQL storagePolicyDefinitions: 15
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5424814Z - Dynamic operations requiring explicit review: 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5425149Z - Exact expected anonymous function grants: 20
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5425447Z - Unexpected PUBLIC function grants: 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5425739Z - Unexpected anonymous function grants: 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5426052Z - Missing expected anonymous function grants: 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5426363Z - BFF route-control classification gaps: 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5426651Z - Wildcard CORS production sources: 0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5426801Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.5427087Z This is a source inventory, not deployment or authorization evidence.
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.6104703Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.6105256Z > k2-jimzon-prototype@0.1.0 security:secrets
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.6105505Z > node scripts/scan-secrets.mjs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:51.6105608Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:53.7119646Z Secret scan passed (2670 files checked; secret values are never printed).
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:53.7786534Z ✓ Import-integrity check passed — all hooks and supabase usages are imported.
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:53.7885861Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:53.7886173Z > k2-jimzon-prototype@0.1.0 build:storefront
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:53.7887093Z > vite build --mode storefront --configLoader runner && node scripts/emit-static-404.mjs storefront && node scripts/emit-storefront-sitemap.mjs && node scripts/verify-build-boundary.mjs storefront && node scripts/verify-bundle-budgets.mjs storefront && node scripts/scan-secrets.mjs dist
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:53.7887635Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:53.9791437Z ^[[36mvite v8.3.5 ^[[32mbuilding client environment for storefront...^[[36m^[[39m
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:53.9872214Z transforming...
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.3876425Z ✓ 1147 modules transformed.
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.4535398Z rendering chunks...
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5410776Z computing gzip size...
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5502188Z dist/k2-build-target.json                             0.02 kB │ gzip:   0.04 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5502747Z dist/manifest.json                                    0.73 kB │ gzip:   0.29 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5503279Z dist/index.html                                       3.30 kB │ gzip:   1.01 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5503776Z dist/.vite/manifest.json                             17.12 kB │ gzip:   2.05 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5504316Z dist/assets/StoreChatPanel-DeMF7Ywq.css               0.67 kB │ gzip:   0.30 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5504870Z dist/assets/Home-Bkbl-Q5X.css                         1.48 kB │ gzip:   0.62 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5505413Z dist/assets/InteractiveShop-DcxJhXz4.css             29.24 kB │ gzip:   6.34 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5505979Z dist/assets/index-t0vfNlnE.css                      200.05 kB │ gzip:  29.47 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5506545Z dist/assets/is-html-element-DvgHo_1h.js               0.12 kB │ gzip:   0.12 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5507399Z dist/assets/productFamilyPresentation-BfDfEwQt.js     0.52 kB │ gzip:   0.33 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5508003Z dist/assets/supabaseClient-BWMhYzRq.js                0.53 kB │ gzip:   0.40 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5508590Z dist/assets/rolldown-runtime-XKyaHtl9.js              0.72 kB │ gzip:   0.42 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5509304Z dist/assets/NotFound-gQe2EoeH.js                      0.94 kB │ gzip:   0.52 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5510036Z dist/assets/useProductKnowledgeVersion-B8SITVfC.js    0.96 kB │ gzip:   0.48 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5510626Z dist/assets/StorefrontChatButton-_GV6jhw8.js          1.23 kB │ gzip:   0.69 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5510971Z dist/assets/TurnstileChallenge-dzD4kXU4.js            1.26 kB │ gzip:   0.70 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5511307Z dist/assets/HeroVideo-CStvc6Hq.js                     1.70 kB │ gzip:   0.74 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5511649Z dist/assets/productStructuredData-BLGX6pne.js         2.18 kB │ gzip:   1.13 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5511995Z dist/assets/ProductVisual-0hSH120J.js                 2.35 kB │ gzip:   1.08 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5512335Z dist/assets/productFamilies-IcD6hfE0.js               2.66 kB │ gzip:   1.29 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5512669Z dist/assets/StoreChatDrawer-B258xW_U.js               2.75 kB │ gzip:   1.22 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5513011Z dist/assets/StorefrontMetadata-DDbO0bO8.js            2.93 kB │ gzip:   1.32 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5513433Z dist/assets/icons-Cz-dnZW0.js                         2.97 kB │ gzip:   1.31 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5513751Z dist/assets/site-CPesnmLU.js                          3.24 kB │ gzip:   1.59 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5514078Z dist/assets/InteractiveReveal-DiCRIX2-.js             3.45 kB │ gzip:   1.42 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5514525Z dist/assets/CustomerAccountProvider-BEjT2Wad.js       4.07 kB │ gzip:   1.42 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5514910Z dist/assets/Footer-DAdIdjKs.js                        5.87 kB │ gzip:   1.84 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5515331Z dist/assets/StorySection-CyS7-Y4n.js                  6.38 kB │ gzip:   2.63 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5515770Z dist/assets/FaqSection-VYhh5SmE.js                    6.40 kB │ gzip:   2.43 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5516204Z dist/assets/CartDrawer-4XN7dt8b.js                    7.23 kB │ gzip:   2.46 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5516631Z dist/assets/ProductCard-DpEOkr2I.js                   7.74 kB │ gzip:   2.29 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5517165Z dist/assets/ExpressDeliveryApproval-BK30OQDy.js       8.41 kB │ gzip:   3.35 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5517698Z dist/assets/Policy-D2VfGBiZ.js                        9.13 kB │ gzip:   3.64 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5518221Z dist/assets/Contact-C6oGxK4r.js                       9.54 kB │ gzip:   2.73 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5518759Z dist/assets/Pasabuy-JbDrjnTx.js                       9.71 kB │ gzip:   3.29 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5519316Z dist/assets/Catalog-CXErALsG.js                      10.15 kB │ gzip:   3.73 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5519888Z dist/assets/StoreChatPanel-nqSf2ZaO.js               10.23 kB │ gzip:   3.42 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5520357Z dist/assets/motion-DjovyMO9.js                       11.56 kB │ gzip:   4.78 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5520922Z dist/assets/customerAccountService-CPxmMg2G.js       11.77 kB │ gzip:   4.22 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5521490Z dist/assets/GuestMessages-CwDVIgll.js                12.01 kB │ gzip:   3.96 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5522059Z dist/assets/GlobeSection-CYoTKLNZ.js                 13.41 kB │ gzip:   5.06 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5522516Z dist/assets/Confirmation-D027b77T.js                 14.93 kB │ gzip:   5.01 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5522945Z dist/assets/Wholesale-DOMQZ0sQ.js                    20.06 kB │ gzip:   5.50 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5523362Z dist/assets/Checkout-poz_8ymO.js                     21.25 kB │ gzip:   6.67 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5523826Z dist/assets/products-CaVWjkz6.js                     21.93 kB │ gzip:   7.82 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5524263Z dist/assets/CustomerAccount-fLFH4dE9.js              26.16 kB │ gzip:   7.05 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5524881Z dist/assets/MasterProduct-CDbiEqKr.js                30.02 kB │ gzip:   8.28 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5525444Z dist/assets/Home-REzgEP4q.js                         30.87 kB │ gzip:   9.21 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5526022Z dist/assets/is-svg-component-BAHRpiy1.js             31.93 kB │ gzip:  11.57 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5526744Z dist/assets/InteractiveShop-B3claQqG.js              43.73 kB │ gzip:  13.20 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5527310Z dist/assets/react-CWJW3ldc.js                        47.78 kB │ gzip:  14.51 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5527825Z dist/assets/index-Bb6l_s-8.js                       124.13 kB │ gzip:  43.26 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5528202Z dist/assets/ShelfScene3D-CYVJmwGP.js                126.77 kB │ gzip:  38.16 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5528632Z dist/assets/vendor-supabase-Bwm3Z89P.js             214.38 kB │ gzip:  55.16 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5529186Z dist/assets/vendor-react-C2ZZQvfb.js                218.75 kB │ gzip:  68.27 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5529848Z dist/assets/react-three-fiber.esm-DO_wltZG.js       914.30 kB │ gzip: 242.70 kB
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5530117Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5530372Z ^[[33m[plugin builtin:vite-reporter] 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5530758Z (!) Some chunks are larger than 500 kB after minification. Consider:
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5531164Z - Using dynamic import() to code-split the application
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5531831Z - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5532576Z - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.^[[39m
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.5540502Z ^[[32m✓ built in 574ms^[[39m
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6010284Z Emitted storefront static 404 recovery page.
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6242376Z [sitemap] dist/sitemap.xml written with 4 stable routes and 0 product URLs
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6243062Z [metadata] 1 product page prerendered
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6243385Z [metadata] 3 marketing pages prerendered
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6243769Z [sitemap] NOTE: the pre-launch indexing gate is ON, so no product URL is
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6244265Z [sitemap] listed and /product/* is served noindex. This is deliberate while
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6244563Z [sitemap] products have no photographs or descriptions. To launch product
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6244848Z [sitemap] pages into search, follow docs/PRELAUNCH_INDEXING.md.
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6619913Z Verified storefront production boundary (49 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker).
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6935801Z file:///home/runner/work/K2-Jimzon/K2-Jimzon/scripts/verify-bundle-budgets.mjs:60
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6936326Z     throw new Error(`Storefront landing budget exceeded: JS ${format(js)}/150.50 kB gzip; CSS ${format(css)}/30.00 kB gzip.`)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6936604Z           ^
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6936675Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6936876Z Error: Storefront landing budget exceeded: JS 153.49 kB/150.50 kB gzip; CSS 29.98 kB/30.00 kB gzip.
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6937236Z     at file:///home/runner/work/K2-Jimzon/K2-Jimzon/scripts/verify-bundle-budgets.mjs:60:11
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6937559Z     at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6937778Z     at async node:internal/modules/esm/loader:647:26
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6938032Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6938257Z 
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.6938307Z Node.js v24.21.0
+build-and-smoke	Build isolated storefront production	2026-10-25T03:15:54.7020569Z ##[error]Process completed with exit code 1.

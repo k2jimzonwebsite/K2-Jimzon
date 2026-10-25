@@ -1,0 +1,40 @@
+[
+  {
+    "target": "storefront",
+    "host": "https://www.k2jimzon.com",
+    "observedAt": "2026-10-25T03:13:53.819Z",
+    "pageStatus": 200,
+    "finalUrl": "https://www.k2jimzon.com/",
+    "markerStatus": 200,
+    "marker": {
+      "target": "storefront"
+    },
+    "security": {
+      "content-security-policy": null,
+      "strict-transport-security": "max-age=63072000",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "strict-origin-when-cross-origin",
+      "x-frame-options": "DENY"
+    },
+    "pass": false
+  },
+  {
+    "target": "admin",
+    "host": "https://admin.k2jimzon.com",
+    "observedAt": "2026-10-25T03:13:55.128Z",
+    "pageStatus": 200,
+    "finalUrl": "https://admin.k2jimzon.com/",
+    "markerStatus": 200,
+    "marker": {
+      "target": "admin"
+    },
+    "security": {
+      "content-security-policy": null,
+      "strict-transport-security": "max-age=63072000",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "strict-origin-when-cross-origin",
+      "x-frame-options": "DENY"
+    },
+    "pass": false
+  }
+]

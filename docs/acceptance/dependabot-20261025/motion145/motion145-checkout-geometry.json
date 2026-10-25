@@ -1,0 +1,27 @@
+{
+  "dark": {
+    "documentWidth": 375,
+    "help": {
+      "height": 50,
+      "width": 148,
+      "x": 16,
+      "y": 490.46875
+    },
+    "overlap": 0,
+    "submit": {
+      "height": 52,
+      "width": 301,
+      "x": 37,
+      "y": 2969.21875
+    },
+    "width": 390
+  },
+  "light": {
+    "documentWidth": 390,
+    "overlap": 0,
+    "width": 390
+  },
+  "keyboardChatOpened": true,
+  "escapeReturnedFocusTo": "Chat with K2 staff",
+  "observedAt": "2026-10-25T04:15:46.603Z"
+}

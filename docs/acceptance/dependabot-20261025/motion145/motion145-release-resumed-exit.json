@@ -1,0 +1,53 @@
+{
+  "source": "97521c4e2ee1e282db3453936481f68bfeb2c2a2",
+  "stages": [
+    {
+      "stage": "test:mobile-moderation",
+      "finishedAt": "2026-10-25T03:53:42.0087279Z",
+      "startedAt": "2026-10-25T03:53:39.8556012Z",
+      "exitCode": 0
+    },
+    {
+      "stage": "test:store-orientation",
+      "finishedAt": "2026-10-25T03:55:00.8649206Z",
+      "startedAt": "2026-10-25T03:53:42.0724824Z",
+      "exitCode": 0
+    },
+    {
+      "stage": "test:storefront-ui",
+      "finishedAt": "2026-10-25T03:56:36.4576565Z",
+      "startedAt": "2026-10-25T03:55:00.9140353Z",
+      "exitCode": 0
+    },
+    {
+      "stage": "test:storefront-recovery",
+      "finishedAt": "2026-10-25T03:58:39.1164450Z",
+      "startedAt": "2026-10-25T03:56:36.5024024Z",
+      "exitCode": 0
+    },
+    {
+      "stage": "test:admin-ui",
+      "finishedAt": "2026-10-25T04:00:28.6683508Z",
+      "startedAt": "2026-10-25T03:58:39.1641228Z",
+      "exitCode": 0
+    },
+    {
+      "stage": "test:payment-ui",
+      "finishedAt": "2026-10-25T04:01:26.0762683Z",
+      "startedAt": "2026-10-25T04:00:28.7088464Z",
+      "exitCode": 0
+    },
+    {
+      "stage": "test:inbox-ui",
+      "finishedAt": "2026-10-25T04:02:02.6134922Z",
+      "startedAt": "2026-10-25T04:01:26.1260783Z",
+      "exitCode": 0
+    },
+    {
+      "stage": "test:admin-product-master-ui",
+      "finishedAt": "2026-10-25T04:03:38.8308915Z",
+      "startedAt": "2026-10-25T04:02:02.6591222Z",
+      "exitCode": 1
+    }
+  ]
+}

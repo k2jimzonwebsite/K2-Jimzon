@@ -1,0 +1,181 @@
+K2 Jimzon
+Hobby
+Find
+F
+Overview
+Deployments
+Logs
+Analytics
+Speed Insights
+Observability
+Firewall
+CDN
+Environment Variables
+Domains
+Connect
+Integrations
+Storage
+Flags
+Agent
+AI Gateway
+Sandboxes
+Workflows
+Images
+Daemons
+Usage
+Support
+Settings
+k2jimzonwebsite
+k2-jimzon
+Overview
+Create New
+Agent
+Production Deployment
+Open in
+Instant Rollback
+Visit
+Deployment
+k2-jimzon-1fx4jnnbj-k2-jimzon.vercel.app
+Domains
+www.k2jimzon.com
+k2-jimzon-vert.vercel.app
+Status
+Ready
+Created
+
+7m ago by EdgerzXc
+
+Source
+main
+8d210c6
+Merge pull request #27 from k2jimzonwebsite/dependabot/npm_and_yarn/co…
+Deployment Settings
+2 Recommendations
+To update your Production Deployment, push to the main branch.
+Deployments
+
+Production Checklist
+
+2/5
+Connect Git Repository
+Add Custom Domain
+Preview Deployment
+Enable Web Analytics
+Upgrade to Speed Insights Plus
+
+Observability
+
+6h
+CDN Requests
+838
+Function Invocations
+4
+Error Rate
+0%
+
+Analytics
+
+Track Visitors and Page Views
+
+See real-time traffic, top pages, and audience trends.
+
+Enable Analytics
+
+Active Branches
+
+Press slash to focus search
+/
+Status
+6/7
+
+codex/shopper-fixes-production
+
+Preview
+51bs9oXF1
+#26
+
+k2jimzonwebsite
+
+14h ago
+
+codex/mobile-homepage-fixes
+
+Preview
+9KjwfqhxG
+Source
+
+k2jimzonwebsite
+
+22h ago
+
+codex/listing-detail-image-fix
+
+Preview
+4J9TT4TN9
+#25
+
+k2jimzonwebsite
+
+1d ago
+
+codex/cabinet-production-budget
+
+Preview
+V2szpbdmj
+#24
+
+k2jimzonwebsite
+
+2d ago
+
+codex/cabinet-drag
+
+Preview
+EPtkU7twC
+#23
+
+k2jimzonwebsite
+
+2d ago
+
+codex/storefront-pack-size
+
+Preview
+GTx6dTLZf
+#22
+
+k2jimzonwebsite
+
+2d ago
+
+codex/inventory-variations
+
+Preview
+5H6MtVWry
+#21
+
+k2jimzonwebsite
+
+3d ago
+
+codex/category-production-release
+
+Preview
+HduhTcu31
+Source
+
+k2jimzonwebsite
+
+3d ago
+
+codex/inventory-categories
+
+Preview
+AUxfMgPBJ
+Source
+
+k2jimzonwebsite
+
+3d ago
+
+Load More

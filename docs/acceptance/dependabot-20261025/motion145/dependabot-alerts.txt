@@ -1,0 +1,167 @@
+- link "Skip to content":
+  - /url: "#start-of-content"
+- banner "Global navigation menu":
+  - button "Open menu":
+  - link "Homepage (g then d)":
+    - /url: /
+  - navigation "Breadcrumbs":
+    - list:
+      - link "k2jimzonwebsite":
+        - /url: /k2jimzonwebsite
+        - generic: k2jimzonwebsite
+      - link "K2-Jimzon":
+        - /url: /k2jimzonwebsite/K2-Jimzon
+      - button "Switch repository (alt shift r)":
+  - button "Open quick search dialog, type / to search":
+    - text: Type
+    - generic: /
+    - text: to search
+  - link "Chat with Copilot":
+    - /url: /copilot
+  - button "Open Copilot…":
+  - button "Create new...":
+  - link "All issues":
+    - /url: /issues
+  - link "All pull requests":
+    - /url: /pulls
+  - link "All repositories":
+    - /url: /repos
+  - link "You have no unread notifications (g then n)":
+    - /url: /notifications
+  - button "Open user navigation menu":
+    - img "User avatar"
+  - heading "Repository navigation" [level=2]
+  - navigation "Repository":
+    - list:
+      - link "Code":
+        - /url: /k2jimzonwebsite/K2-Jimzon
+        - generic: Code
+      - link "Issues":
+        - /url: /k2jimzonwebsite/K2-Jimzon/issues
+        - generic: Issues
+      - link "Pull requests (2)":
+        - /url: /k2jimzonwebsite/K2-Jimzon/pulls
+        - generic: Pull requests
+        - generic: "2"
+        - generic: (2)
+      - link "Actions":
+        - /url: /k2jimzonwebsite/K2-Jimzon/actions
+        - generic: Actions
+      - link "Projects":
+        - /url: /k2jimzonwebsite/K2-Jimzon/projects
+        - generic: Projects
+      - link "Wiki":
+        - /url: /k2jimzonwebsite/K2-Jimzon/wiki
+        - generic: Wiki
+      - link "Security and quality":
+        - /url: /k2jimzonwebsite/K2-Jimzon/security
+        - generic: Security and quality
+      - link "Insights":
+        - /url: /k2jimzonwebsite/K2-Jimzon/pulse
+        - generic: Insights
+      - link "Settings":
+        - /url: /k2jimzonwebsite/K2-Jimzon/settings
+        - generic: Settings
+- main:
+  - 'heading "Security: k2jimzonwebsite/K2-Jimzon" [level=1]'
+  - navigation "Security and quality":
+    - heading "Security and quality" [level=2]
+    - list:
+      - link "Overview":
+        - /url: /k2jimzonwebsite/K2-Jimzon/security
+        - generic: Overview
+      - heading "Findings" [level=3]
+      - list "Findings":
+        - button "Dependabot" [expanded]:
+          - generic: Dependabot
+        - list "Dependabot":
+          - link "Malware":
+            - /url: /k2jimzonwebsite/K2-Jimzon/security/malware
+            - generic: Malware
+          - link "Vulnerabilities":
+            - /url: /k2jimzonwebsite/K2-Jimzon/security/dependabot
+            - generic: Vulnerabilities
+        - link "Code scanning":
+          - /url: /k2jimzonwebsite/K2-Jimzon/security/code-scanning
+          - generic: Code scanning
+        - link "Secret scanning":
+          - /url: /k2jimzonwebsite/K2-Jimzon/security/secret-scanning
+          - generic: Secret scanning
+      - heading "Reporting" [level=3]
+      - list "Reporting":
+        - link "Security policy":
+          - /url: /k2jimzonwebsite/K2-Jimzon/security/policy
+          - generic: Security policy
+        - link "Advisories":
+          - /url: /k2jimzonwebsite/K2-Jimzon/security/advisories
+          - generic: Advisories
+  - heading "Dependabot alerts" [level=2]
+  - paragraph: Dependency files checked Oct 25, 20261 minute ago
+  - button "More Dependabot options":
+  - search "Filter alerts":
+    - form "Filter alerts":
+      - generic: Filter alerts
+      - 'button "Advanced filter dialog: 1 valid filter"':
+        - generic: Filter
+        - generic: "1"
+        - generic: (1)
+      - text: "is:"
+      - generic: open
+      - combobox "Filter alerts": is:open
+      - button "Clear filter":
+      - button "Search":
+  - group "Filter alerts by state":
+    - link "Open (0)":
+      - /url: /k2jimzonwebsite/K2-Jimzon/security/dependabot?q=is%3Aopen
+      - generic: Open
+      - generic: "0"
+      - generic: (0)
+    - link "Closed (0)":
+      - /url: /k2jimzonwebsite/K2-Jimzon/security/dependabot?q=is%3Aclosed
+      - generic: Closed
+      - generic: "0"
+      - generic: (0)
+  - group "Filter and sort alerts":
+    - button "Package":
+      - generic: Package
+    - button "Ecosystem":
+      - generic: Ecosystem
+    - button "Manifest":
+      - generic: Manifest
+    - button "Severity":
+      - generic: Severity
+    - button "Sort by":
+      - generic: Sort
+  - region "open alerts":
+    - heading "No open alerts" [level=3]
+    - paragraph: There are no open Dependabot alerts for this repository.
+  - paragraph:
+    - strong: ProTip!
+    - text: See auto-dismissed alerts with
+    - link "resolution:auto-dismissed":
+      - /url: /k2jimzonwebsite/K2-Jimzon/security/dependabot?q=is%3Aopen+resolution%3Aauto-dismissed
+    - text: .
+- contentinfo:
+  - heading "Footer" [level=2]
+  - link "GitHub Homepage":
+    - /url: https://github.com
+  - generic: © 2026 GitHub, Inc.
+  - navigation "Footer":
+    - heading "Footer navigation" [level=3]
+    - list "Footer navigation":
+      - link "Terms":
+        - /url: https://docs.github.com/site-policy/github-terms/github-terms-of-service
+      - link "Privacy":
+        - /url: https://docs.github.com/site-policy/privacy-policies/github-privacy-statement
+      - link "Security":
+        - /url: https://github.com/security
+      - link "Status":
+        - /url: https://www.githubstatus.com/
+      - link "Community":
+        - /url: https://github.community/
+      - link "Docs":
+        - /url: https://docs.github.com/
+      - link "Contact":
+        - /url: https://support.github.com?tags=dotcom-footer
+      - button "Manage cookies"
+      - button "Do not share my personal information"

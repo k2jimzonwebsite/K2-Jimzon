@@ -1,0 +1,215 @@
+Product Catalog & Stock
+?
+Scan
+Alt S
+Workflow Map
+Guided Tours
+Start here
+Alerts
+Operations guide
+Search
+Ctrl K
+Add inventory
+Upload CSV
+Sheet mode
+
+CATALOG AND STOCK CONTROL
+
+Inventory & stock checks
+?
+196 SKUs loaded
+Add inventory
+Scan box
+Unused uploads
+Add product
+ACTIVE SKUS
+130
+
+196 total product records
+
+AVAILABLE UNITS
+273
+
+Product master available stock
+
+OUT OF STOCK
+152
+
+Immediate replenishment review
+
+LOW STOCK
+33
+
+At or below reorder level
+
+EXPIRY RISK
+0
+
+Expired or within 90 days
+
+Products
+196
+?
+Search inventory
+All 196
+Out 152
+Low 33
+Expiry 0
+Drafts 66
+Store category filter
+All categories
+No custom store category
+Beverages (2)
+Biscuits (1)
+Biscuits and wafers (9)
+Chocolate (14)
+Clothing (2)
+Coffee and drink preparations (22)
+Cooking oils (3)
+Filled pasta (3)
+Fragrances (19)
+Pasta (21)
+Pasta sauces (6)
+Personal care (9)
+Pesto and sauces (18)
+Spaghetti (1)
+Sweet spreads (7)
+Sweets (5)
+Sweets and confectionery (3)
+Tinned fish (19)
+Tinned meat (1)
+Select visible (196)
+K2-SKU-001189
+LIVE
+Francesco Moretti Tuna in Sunflower Oil 3 x 80 g
+
+STOCK
+
+0
+
+RETAIL SRP
+
+₱297
+
+Batches (0)
+Enrich product specs
+Website assignment
+Draft
+Review
+Live
+Unlisted
+Discontinued
+Delete product
+Photos
+Edit
+K2-SKU-001191
+LIVE
+Vidal Jelly Teeth 90 g
+
+STOCK
+
+0
+
+RETAIL SRP
+
+₱175
+
+Batches (0)
+Enrich product specs
+Website assignment
+Draft
+Review
+Live
+Unlisted
+Discontinued
+Delete product
+Photos
+Edit
+419d left
+K2-SKU-001180
+LIVE
+Tigullio Peperoni E Noci
+
+STOCK
+
+9
+
+RETAIL SRP
+
+₱297
+
+9 PCS IN 1 LOT
+
+Owned: 9 pcs
+LOCATION
+HUB-MNL-CENTRAL 9
+CHANNEL
+Unassigned 9
+HOLDER
+CUST-JENNA-MAE-GUERRA 9
+Batches (1)
+Enrich product specs
+Website assignment
+Draft
+Review
+Live
+Unlisted
+Discontinued
+Delete product
+Photos
+Edit
+355d left
+K2-SKU-001184
+LIVE
+Tigullio Ricotta e Noci
+
+STOCK
+
+2
+
+RETAIL SRP
+
+₱297
+
+2 PCS IN 1 LOT
+
+Owned: 2 pcs
+LOCATION
+HUB-MNL-CENTRAL 2
+CHANNEL
+Unassigned 2
+HOLDER
+CUST-JENNA-MAE-GUERRA 2
+Batches (1)
+Enrich product specs
+Website assignment
+Draft
+Review
+Live
+Unlisted
+Discontinued
+Delete product
+Photos
+Edit
+447d left
+K2-SKU-001177
+LIVE
+Tigullio Carciofi E Noci
+
+STOCK
+
+2
+
+RETAIL SRP
+
+₱297
+
+2 PCS IN 1 LOT
+
+Owned: 2 pcs
+LOCATION
+HUB-MNL-CENTRAL 2
+CHANNEL
+Unassigned 2
+HOLDER
+CUST-JENNA-MAE-

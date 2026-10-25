@@ -1,0 +1,94 @@
+{
+  "admin": {
+    "observedAt": "2026-10-25T03:15:36.827Z",
+    "inventory": {
+      "records": 196,
+      "active": 130,
+      "drafts": 66,
+      "displayedUnits": 273
+    },
+    "workflowPhone": {
+      "documentWidth": 360,
+      "heading": "Workflow map",
+      "loaded": true,
+      "width": 375
+    }
+  },
+  "storefront": {
+    "english": [
+      "Gusto Etna Pistachio Spread 20% 600 g",
+      "Siciliani Pistacchio Crema 200 g",
+      "Siciliani Pistacchio Crunchy 200 g",
+      "Tigullio Pomodori Secchi Pistacchio",
+      "Dulciar Bar Pistacchio"
+    ],
+    "partialSku": [
+      "Siciliani Pistacchio Crunchy 200 g"
+    ],
+    "darkCheckout": {
+      "documentWidth": 375,
+      "height": 844,
+      "help": {
+        "bottom": -1732.53125,
+        "height": 50,
+        "right": 164,
+        "width": 148,
+        "x": 16,
+        "y": -1782.53125
+      },
+      "helpCount": 1,
+      "helpPosition": "static",
+      "overlap": 0,
+      "submit": {
+        "bottom": 748.21875,
+        "height": 52,
+        "right": 338,
+        "width": 301,
+        "x": 37,
+        "y": 696.21875
+      },
+      "width": 390
+    },
+    "lightCheckout": {
+      "documentWidth": 375,
+      "height": 844,
+      "help": {
+        "bottom": -1732.53125,
+        "height": 50,
+        "right": 164,
+        "width": 148,
+        "x": 16,
+        "y": -1782.53125
+      },
+      "helpCount": 1,
+      "helpPosition": "static",
+      "overlap": 0,
+      "submit": {
+        "bottom": 748.21875,
+        "height": 52,
+        "right": 338,
+        "width": 301,
+        "x": 37,
+        "y": 696.21875
+      },
+      "width": 390
+    },
+    "keyboard": {
+      "dialogCount": 0,
+      "focusAfterEscape": "Chat with K2 staff"
+    },
+    "cleanup": {
+      "emptyBasket": true,
+      "darkRestored": true,
+      "submitted": false
+    },
+    "italian": [
+      "Siciliani Pistacchio Crema 200 g",
+      "Siciliani Pistacchio Crunchy 200 g",
+      "Tigullio Pomodori Secchi Pistacchio",
+      "Dulciar Bar Pistacchio",
+      "Gusto Etna Pistachio Spread 20% 600 g"
+    ]
+  },
+  "completedAt": "2026-10-25T03:17:45.988Z"
+}

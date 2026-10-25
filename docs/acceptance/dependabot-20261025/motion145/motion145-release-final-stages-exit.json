@@ -1,0 +1,71 @@
+{
+  "source": "97521c4e2ee1e282db3453936481f68bfeb2c2a2",
+  "stages": [
+    {
+      "startedAt": "2026-10-25T04:04:50.4976548Z",
+      "exitCode": 0,
+      "finishedAt": "2026-10-25T04:04:58.5664017Z",
+      "stage": "test:admin-product-master-ui/sheet-reference"
+    },
+    {
+      "startedAt": "2026-10-25T04:04:58.6401505Z",
+      "exitCode": 0,
+      "finishedAt": "2026-10-25T04:05:20.4425542Z",
+      "stage": "test:admin-website-assignment-ui"
+    },
+    {
+      "startedAt": "2026-10-25T04:05:20.4890187Z",
+      "exitCode": 0,
+      "finishedAt": "2026-10-25T04:05:32.8870251Z",
+      "stage": "test:owner-count-close-ui"
+    },
+    {
+      "startedAt": "2026-10-25T04:05:32.9331031Z",
+      "exitCode": 0,
+      "finishedAt": "2026-10-25T04:05:47.4377808Z",
+      "stage": "test:customer-account-ui"
+    },
+    {
+      "startedAt": "2026-10-25T04:05:47.4749821Z",
+      "exitCode": 0,
+      "finishedAt": "2026-10-25T04:06:53.2952086Z",
+      "stage": "test:selling-surfaces"
+    },
+    {
+      "startedAt": "2026-10-25T04:06:53.3359820Z",
+      "exitCode": 0,
+      "finishedAt": "2026-10-25T04:07:08.4875248Z",
+      "stage": "test:order-receipt-direct"
+    },
+    {
+      "startedAt": "2026-10-25T04:07:08.5250033Z",
+      "exitCode": 0,
+      "finishedAt": "2026-10-25T04:07:34.0859006Z",
+      "stage": "test:workflow-api"
+    },
+    {
+      "startedAt": "2026-10-25T04:07:34.1326688Z",
+      "exitCode": 0,
+      "finishedAt": "2026-10-25T04:08:02.0944036Z",
+      "stage": "test:intake-ai-ui"
+    },
+    {
+      "startedAt": "2026-10-25T04:08:02.1356083Z",
+      "exitCode": 0,
+      "finishedAt": "2026-10-25T04:08:04.2607130Z",
+      "stage": "test:vercel-output"
+    },
+    {
+      "startedAt": "2026-10-25T04:08:04.3064377Z",
+      "exitCode": 0,
+      "finishedAt": "2026-10-25T04:08:28.5354611Z",
+      "stage": "build:storefront"
+    },
+    {
+      "startedAt": "2026-10-25T04:08:28.5726296Z",
+      "exitCode": 0,
+      "finishedAt": "2026-10-25T04:08:52.8326158Z",
+      "stage": "build:admin"
+    }
+  ]
+}

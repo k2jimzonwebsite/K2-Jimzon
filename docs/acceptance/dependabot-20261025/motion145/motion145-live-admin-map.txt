@@ -1,0 +1,401 @@
+- main:
+  - heading "Workflow map" [active] [level=1]
+  - button "Open scan center":
+  - button "Search dashboard":
+  - button "Open navigation menu":
+  - heading "Workflow map" [level=2]
+  - 'button "About: Using the workflow map"':
+    - generic: "?"
+  - paragraph: Choose a work area, then a step to see what to do and where to do it.
+  - paragraph: "Draft guide · Version 2026-10-02-reviewed-source.1 · Source: K2 operations rulebook"
+  - generic: "Staff Role:"
+  - combobox "Staff Role:":
+    - option "All Roles" [selected]
+    - option "Admin"
+    - option "Air Freight Forwarder"
+    - option "Any authorized staff member"
+    - option "Audit Counter (Staff A)"
+    - option "Catalog Lead"
+    - option "Catalog Lead / Manager"
+    - option "Channel Staff"
+    - option "Content Designer"
+    - option "Customer / Finance Lead"
+    - option "Customer Care Staff"
+    - option "Dispatch Coordinator"
+    - option "Finance / Shift Lead"
+    - option "Fulfillment Staff"
+    - option "Hub Manager"
+    - option "Intake Staff"
+    - option "Internal Courier / Staff"
+    - option "Inventory Manager"
+    - option "Inventory Manager / Owner"
+    - option "Manila Hub Coordinator"
+    - option "Manila Intake Staff"
+    - option "Milan Buyer (Cousin)"
+    - option "Milan Sourcing Lead (Cousin)"
+    - option "Owner / Account Holder"
+    - option "Owner / Admin"
+    - option "Pasabuy Coordinator"
+    - option "Pricing Lead / Owner"
+    - option "Receiver"
+    - option "Receiver (Designated Staff)"
+    - option "Sender"
+    - option "Sender (Current Custodian)"
+    - option "Shift Lead (Staff B)"
+    - option "System / Staff"
+    - option "Warehouse Custodian"
+  - textbox "Search workflow steps":
+    - /placeholder: Search steps, barcodes, roles...
+  - button "All Workflows"
+  - button "Italy & Cross-Border"
+  - button "Manila Intake & Catalog"
+  - button "Warehouse & Custody"
+  - button "Orders & Fulfillment"
+  - button "Channels & Integrations"
+  - button "Buying in Italy to receiving in Manila 7 steps":
+    - generic: Buying in Italy to receiving in Manila
+    - generic: 7 steps
+  - button "Quick Intake (Adding Stock to Existing SKU) 5 steps":
+    - generic: Quick Intake (Adding Stock to Existing SKU)
+    - generic: 5 steps
+  - button "New Product Intake & Catalog Creation 6 steps":
+    - generic: New Product Intake & Catalog Creation
+    - generic: 6 steps
+  - button "Two-Party Inventory Custody Handshake 5 steps":
+    - generic: Two-Party Inventory Custody Handshake
+    - generic: 5 steps
+  - button "Monthly Cycle Count & Inventory Audit 5 steps":
+    - generic: Monthly Cycle Count & Inventory Audit
+    - generic: 5 steps
+  - button "Order Fulfillment & Packing Workflow 6 steps":
+    - generic: Order Fulfillment & Packing Workflow
+    - generic: 6 steps
+  - button "Pasabuy Custom Sourcing Workflow 6 steps":
+    - generic: Pasabuy Custom Sourcing Workflow
+    - generic: 6 steps
+  - button "Marketplace & Social Channel Connection Lifecycle 8 steps":
+    - generic: Marketplace & Social Channel Connection Lifecycle
+    - generic: 8 steps
+  - generic: "Domain: All Workflows"
+  - generic: Follow the steps for buying, stock, orders, and customer requests.
+  - note: This map is a guide. Checkmarks only track your review while it is open. Complete real work in the named Admin screen and check that it saved.
+  - generic: Cross-Border Supply Chain
+  - generic: Italy & Cross-Border
+  - heading "Buying in Italy to receiving in Manila" [level=3]
+  - paragraph: Buy in Milan, pack and record flight boxes, then receive and check them in Manila. Add stock to an existing product or create a new one.
+  - text: Guide rehearsal
+  - 'button "About: Guide rehearsal"':
+    - generic: "?"
+  - generic: 0%
+  - generic: Scans Required
+  - text: "3"
+  - generic: Est. Time
+  - text: 3-7 days transit
+  - region "Workflow Mission and Sequential Step Roadmap":
+    - heading "Goal and completion checks" [level=4]
+    - button "Play Guided Walkthrough":
+      - generic: Play Guided Walkthrough
+    - generic: Operational Objective
+    - paragraph: Source authentic Italian provisions in Milan, pack and seal flight cargo boxes, coordinate international air freight transit to Manila, verify customs clearance and seal integrity, perform 100% item QC unboxing, and intake verified inventory into the K2 system.
+    - generic: Starting Point / Trigger
+    - paragraph: Italy Purchasing Kanban & Consignment Manager
+    - generic: Before finishing
+    - paragraph: Flight cargo manifest pre-tagged with items, EAN barcodes, and numbered tamper sealAir cargo transit tracked and Manila customs clearance verifiedManila receiving dock verifies physical box and tamper seal against Milan manifestPhysical unboxing and 100% item count completed with damaged units quarantinedItems routed to Existing SKU stock addition or New Product catalog creationFinal receipt submitted and canonical inventory lots verified in Manila hub
+    - heading "Steps and handoffs (7 Steps)" [level=4]
+    - generic: Select a step for instructions and its Admin screen.
+    - button "1 Milan Sourcing & Store Purchase Purchasing":
+      - generic: "1"
+      - generic: Milan Sourcing & Store Purchase
+      - generic: Purchasing
+    - button "2 Milan Box Packing & Manifest Pre-Tagging Flight Consignments":
+      - generic: "2"
+      - generic: Milan Box Packing & Manifest Pre-Tagging
+      - generic: Flight Consignments
+    - button "3 Air Cargo International Transit Flight Consignments":
+      - generic: "3"
+      - generic: Air Cargo International Transit
+      - generic: Flight Consignments
+    - button "4 Manila Airport Receipt & Seal Verification Flight Consignments":
+      - generic: "4"
+      - generic: Manila Airport Receipt & Seal Verification
+      - generic: Flight Consignments
+    - button "5 Physical Box Opening & Item Quality Check Flight Consignments":
+      - generic: "5"
+      - generic: Physical Box Opening & Item Quality Check
+      - generic: Flight Consignments
+    - 'button "6 Decision Branch: Existing SKU vs New Product Inventory Management"':
+      - generic: "6"
+      - generic: "Decision Branch: Existing SKU vs New Product"
+      - generic: Inventory Management
+    - button "7 Finalize Manila Receipt & Verify Stock Inventory Management":
+      - generic: "7"
+      - generic: Finalize Manila Receipt & Verify Stock
+      - generic: Inventory Management
+  - region "Workflow path tracer":
+    - heading "Trace a route" [level=3]
+    - paragraph: Choose a start and finish to highlight one route. Return steps remain on the full map but are left out of this route.
+    - text: From
+    - combobox "From":
+      - option "Open Admin BOS" [selected]
+      - option "Milan Sourcing & Store Purchase"
+      - option "Milan Box Packing & Manifest Pre-Tagging"
+      - option "Air Cargo International Transit"
+      - option "Manila Airport Receipt & Seal Verification"
+      - option "Physical Box Opening & Item Quality Check"
+      - 'option "Decision Branch: Existing SKU vs New Product"'
+      - option "Finalize Manila Receipt & Verify Stock"
+      - option "Barcode Scan & Existing SKU Match"
+      - option "New FEFO Batch Lot & Expiry Registration"
+      - option "Physical Lot Identification"
+      - option "Shelf Bin Placement (Physical FEFO)"
+      - option "Finalize Added Stock"
+      - option "Master SKU Registration & Sourcing Passport"
+      - option "Owner Pricing Review"
+      - option "Manual Product Content & Image Projects"
+      - option "Before/After Unboxing Experience Setup"
+      - option "Ingredients, Allergens & Preparation Guide"
+      - option "Review product and Website eligibility"
+      - option "Transfer Request Initiation"
+      - option "Pre-Transit Physical Count & QC"
+      - option "Secure Physical Transit"
+      - option "Physical Receipt & Independent Recount"
+      - option "Electronic Handshake & Ownership Transfer"
+      - option "Define Count Boundary & Pause Movements"
+      - option "Independent Physical Recount"
+      - option "Compare Count With Canonical Lots"
+      - option "Secondary Recount & Discrepancy Classification"
+      - option "Manager Authorization & Ledger Adjustment"
+      - option "Order Intake & Stock Reservation"
+      - option "Customer Contact & Total Confirmation"
+      - option "Payment Verification & Release to Queue"
+      - option "FEFO Shelf Picking & Barcode Verification"
+      - option "Secure Packing & Courier Booking"
+      - option "Courier Handover & Customer Update"
+      - option "Customer Request Intake & Triage"
+      - option "Milan Sourcing & Cost Calculation"
+      - option "Official Itemized Quote Generation"
+      - option "Customer Approval & Downpayment"
+      - option "Milan Purchase & Flight Cargo Tagging"
+      - option "Manila Receiving & Final Dispatch"
+      - option "Obtain Seller Portal Access"
+      - option "Store Secrets Server-Side"
+      - option "Verify the Webhook Signature Path"
+      - option "Verify canonical channel and shop identity"
+      - option "Map SKUs to Channel Listings"
+      - option "Verify eligible stock and per-shop offers"
+      - option "Social & Messaging Inboxes — NOT BUILT"
+      - option "Record Only Verified Channel Status"
+    - text: Terminal outcome
+    - combobox "Terminal outcome":
+      - option "Electronic Handshake & Ownership Transfer" [selected]
+      - option "Manager Authorization & Ledger Adjustment"
+      - option "Courier Handover & Customer Update"
+    - button "Trace path"
+  - generic: Full map · 49 steps · 60 connections
+  - generic: "Current: Open Admin BOS"
+  - region "Connected operations workflow canvas":
+    - generic "Map scope":
+      - button "This workflow" [pressed]
+      - button "Full map"
+    - generic "Step types":
+      - button "All types" [pressed]
+      - button "Scans"
+      - button "Decisions"
+      - button "Actions"
+      - button "Outcomes"
+    - button "Focus Active Node"
+    - button "Zoom out": −
+    - generic: 100%
+    - button "Zoom in": +
+    - button "Reset view"
+    - generic "Edge legend":
+      - generic: Sequence
+      - generic: Decision
+      - generic: Converge
+      - generic: Enables
+      - generic: Recovery
+      - status: 8 steps shown
+    - region "Pan and zoom workflow map":
+      - button "entry Start Open Admin BOS Any authorized staff member Every operational path in the business starts here." [pressed]:
+        - generic: entry
+        - generic: Start
+        - strong: Open Admin BOS
+        - generic: Any authorized staff member
+        - generic: Every operational path in the business starts here.
+      - button "intake 1 Milan Sourcing & Store Purchase Milan Sourcing Lead (Cousin) Cousin purchases authentic Italian goods, collects store receipts, and checks shelf expiry.":
+        - generic: intake
+        - generic: "1"
+        - strong: Milan Sourcing & Store Purchase
+        - generic: Milan Sourcing Lead (Cousin)
+        - generic: Cousin purchases authentic Italian goods, collects store receipts, and checks shelf expiry.
+      - button "action 2 Milan Box Packing & Manifest Pre-Tagging Milan Sourcing Lead (Cousin) Cousin creates Flight Cargo Box in Admin BOS, packs goods, and applies tamper seal.":
+        - generic: action
+        - generic: "2"
+        - strong: Milan Box Packing & Manifest Pre-Tagging
+        - generic: Milan Sourcing Lead (Cousin)
+        - generic: Cousin creates Flight Cargo Box in Admin BOS, packs goods, and applies tamper seal.
+      - button "action 3 Air Cargo International Transit Air Freight Forwarder Cargo box flies via air freight to Manila; stock status locked as In Transit.":
+        - generic: action
+        - generic: "3"
+        - strong: Air Cargo International Transit
+        - generic: Air Freight Forwarder
+        - generic: Cargo box flies via air freight to Manila; stock status locked as In Transit.
+      - button "scan 4 Manila Airport Receipt & Seal Verification Manila Intake Staff Box arrives in Manila; staff verifies tamper seal against Milan manifest.":
+        - generic: scan
+        - generic: "4"
+        - strong: Manila Airport Receipt & Seal Verification
+        - generic: Manila Intake Staff
+        - generic: Box arrives in Manila; staff verifies tamper seal against Milan manifest.
+      - button "action 5 Physical Box Opening & Item Quality Check Manila Intake Staff Cut seal, unpack items under bright lighting, and inspect physical condition.":
+        - generic: action
+        - generic: "5"
+        - strong: Physical Box Opening & Item Quality Check
+        - generic: Manila Intake Staff
+        - generic: Cut seal, unpack items under bright lighting, and inspect physical condition.
+      - 'button "decision 6 Decision Branch: Existing SKU vs New Product Manila Intake Staff Scan barcode: If item exists in catalog -> Add Stock. If new -> Create SKU."':
+        - generic: decision
+        - generic: "6"
+        - strong: "Decision Branch: Existing SKU vs New Product"
+        - generic: Manila Intake Staff
+        - generic: "Scan barcode: If item exists in catalog -> Add Stock. If new -> Create SKU."
+      - button "Outcome 7 Finalize Manila Receipt & Verify Stock Hub Manager Finalize the verified receipt, then check the canonical lot and sellable-stock result.":
+        - generic: Outcome
+        - generic: "7"
+        - strong: Finalize Manila Receipt & Verify Stock
+        - generic: Hub Manager
+        - generic: Finalize the verified receipt, then check the canonical lot and sellable-stock result.
+    - paragraph: Scroll or drag to explore. On touch, swipe the map. Focus the map and use arrow keys to pan. Select a step for full instructions below; use 100% to read the map.
+  - region "Selected step details":
+    - generic: •
+    - generic: Graph entry · Connected operations
+    - generic: ·
+    - generic: Admin dashboard, after sign-in
+    - heading "Open Admin BOS" [level=3]
+    - button "Mark guide step reviewed":
+      - generic: Mark guide step reviewed
+    - button "Open Admin Overview":
+      - generic: Open Admin Overview
+    - button "Play Guided Walkthrough":
+      - generic: Play Guided Walkthrough
+    - paragraph: Signing in to Admin BOS is the single entrance to every workflow below. What an operator can reach from here depends on their role, hub, and assignment — the graph shows the whole system, not the subset any one person may act on.
+    - paragraph: "Guide only: checking this step does not save or verify real work. Use the named Admin screen and confirm the saved record there."
+    - region "Staff Action Directive":
+      - generic: What to do
+      - heading "Follow these steps" [level=4]
+      - button "Start Spotlight Tour":
+        - generic: Start Spotlight Tour
+      - button "Jump to Admin Overview Dashboard":
+        - generic: Jump to Admin Overview Dashboard
+        - generic: ↗
+      - generic: Start of flow
+      - generic: →
+      - generic: "Active: Entry"
+      - generic: →
+      - 'button "Next: Step 1"':
+        - generic: "Next: Step 1"
+        - generic: →
+      - generic: 1. Open the right screen
+      - generic: "Screen: Admin Overview Dashboard"
+      - generic: What to click in Admin
+      - button "Copy target":
+        - generic: Copy target
+      - paragraph: Select an operational section from the sidebar or click a workflow pill above
+      - generic: 2. Do the work
+      - button "Copy SOP":
+        - generic: Copy SOP
+      - paragraph: Sign in to Admin BOS with authorized staff credentials. Review current operational priority alerts and queues on the overview dashboard. Match the physical operational situation in front of you with the corresponding workflow.
+      - generic: 3. Next step
+      - paragraph: Select the corresponding workflow from the domain section tabs above and begin at Step 1.
+      - 'button "Advance to Step 1: Milan Sourcing & Store Purchase"':
+        - generic: "Advance to Step 1: Milan Sourcing & Store Purchase"
+        - generic: →
+      - generic: 4. Before moving on
+      - paragraph: Staff authentication confirmed and matching operational workflow identified.
+    - heading "Where did this come from?" [level=4]
+    - paragraph: This is the single graph entry.
+    - heading "What can you do here?" [level=4]
+    - button "Milan Sourcing & Store Purchase Start a Milan consignment · A new monthly buying trip is beginning":
+      - generic: Milan Sourcing & Store Purchase
+      - generic: Start a Milan consignment · A new monthly buying trip is beginning
+    - button "Order Intake & Stock Reservation Handle an order · A customer order request has arrived":
+      - generic: Order Intake & Stock Reservation
+      - generic: Handle an order · A customer order request has arrived
+    - button "Customer Request Intake & Triage Handle a pasabuy request · A customer asked for something not in stock":
+      - generic: Customer Request Intake & Triage
+      - generic: Handle a pasabuy request · A customer asked for something not in stock
+    - button "Define Count Boundary & Pause Movements Run a stock count · A scheduled audit is due":
+      - generic: Define Count Boundary & Pause Movements
+      - generic: Run a stock count · A scheduled audit is due
+    - button "Transfer Request Initiation Move custody · Stock must change hands or hub":
+      - generic: Transfer Request Initiation
+      - generic: Move custody · Stock must change hands or hub
+    - button "Obtain Seller Portal Access Connect a sales channel · A marketplace or social channel is being brought online":
+      - generic: Obtain Seller Portal Access
+      - generic: Connect a sales channel · A marketplace or social channel is being brought online
+    - heading "Supporting records" [level=4]
+    - list:
+      - generic: route
+      - code: /admin-portal-k2-secure
+      - generic: component
+      - code: src/views/admin/Admin.jsx
+      - generic: component
+      - code: src/views/admin/Overview.jsx
+    - button "Jump to real screen ↗"
+    - heading "Guide rehearsal checklist (0/2)" [level=4]
+    - checkbox "Confirm you are signed in as the correct staff identity before acting."
+    - generic: Confirm you are signed in as the correct staff identity before acting.
+    - checkbox "Pick the workflow that matches the physical situation in front of you, not the one you ran last time."
+    - generic: Pick the workflow that matches the physical situation in front of you, not the one you ran last time.
+    - heading "Rules to follow" [level=4]
+    - list:
+      - generic: •
+      - generic: Role, hub, and assignment decide what is permitted. Seeing a step in this map is not authorization to perform it.
+    - button "← Previous Step" [disabled]
+    - generic: "Actor: Any authorized staff member"
+    - button "Next Step →"
+  - region "AI Image Studio and Prompt Engineering":
+    - heading "AI Image Studio & Prompt Engineering" [level=3]
+    - paragraph: Tested prompt formulas for ChatGPT, DALL-E 3, Midjourney v6 & FLUX.1.
+    - generic: K2 Tuscan Editorial Style
+    - generic: Select Product Category Template
+    - button "Italian Bakery & Biscuits" [pressed]:
+      - generic: Italian Bakery & Biscuits
+    - button "Artisanal Olive Oil & Vinegar":
+      - generic: Artisanal Olive Oil & Vinegar
+    - button "Italian Espresso & Coffee":
+      - generic: Italian Espresso & Coffee
+    - button "Bronze-Die Pasta & Sauces":
+      - generic: Bronze-Die Pasta & Sauces
+    - button "Italian Bath, Scents & Wellness":
+      - generic: Italian Bath, Scents & Wellness
+    - generic: Italian Product Name / Variant
+    - textbox "Italian Product Name / Variant":
+      - /placeholder: e.g. Mulino Bianco Baiocchi / Pan di Stelle
+    - paragraph: "Tip: Include specific Italian descriptors (e.g. \"con nocciole e cacao\", \"al tartufo estivo\", \"spremitura a freddo\")."
+    - generic: Primary Photorealistic Prompt
+    - button "Copy primary photorealistic prompt":
+      - generic: Copy Prompt
+    - generic: Commercial luxury editorial product photograph of Mulino Bianco Baiocchi / Pan di Stelle in its authentic Italian matte paper packaging, placed elegantly on a rustic reclaimed Tuscan wood surface. A few loose golden baked cookies and delicate chocolate hazelnuts sit artfully beside the open package on a vintage handmade ceramic saucer. Soft natural morning window sunlight streaming from the left, warm amber and olive undertones, shallow depth of field (f/2.8, 85mm lens), ultra-sharp packaging typography, photorealistic textures, 8k resolution, quiet luxury gourmet atmosphere.
+    - generic: Mandatory Negative Prompt
+    - button "Copy mandatory negative prompt":
+      - generic: Copy Negative Prompt
+    - generic: plastic glare, neon lighting, oversaturated colors, distorted letters, blurry text, cartoon, 3D render, CGI, watermark, stock photo watermark, artificial studio flash, sterile white background.
+    - generic: Aspect Ratio Target
+    - text: 1:1 (Catalog) or 4:3 (Spotlight)
+    - generic: Pro Studio Tips
+    - list:
+      - listitem: • Replace [PRODUCT NAME] with the exact Italian product name (e.g. Mulino Bianco Baiocchi con crema di nocciole e cacao).
+      - listitem: "• For the After shot: specify \"the package open with three cookies arranged on a linen napkin\"."
+      - listitem: • For Storefront consistency, always specify warm morning sunlight and matte wooden background.
+- navigation:
+  - button "Home":
+    - generic: Home
+  - button "Inventory":
+    - generic: Inventory
+  - button "Fulfil":
+    - generic: Fulfil
+  - button "Messages":
+    - generic: Messages
+  - button "More":
+    - generic: More
+- button "Open Admin tools":

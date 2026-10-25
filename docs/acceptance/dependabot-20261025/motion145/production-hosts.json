@@ -1,0 +1,40 @@
+[
+  {
+    "target": "storefront",
+    "host": "https://www.k2jimzon.com",
+    "observedAt": "2026-10-25T04:12:40.839Z",
+    "pageStatus": 200,
+    "markerStatus": 200,
+    "marker": {
+      "target": "storefront"
+    },
+    "security": {
+      "content-security-policy-report-only": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests",
+      "strict-transport-security": "max-age=63072000",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "cspMatchesSource": true,
+    "pass": true
+  },
+  {
+    "target": "admin",
+    "host": "https://admin.k2jimzon.com",
+    "observedAt": "2026-10-25T04:12:41.627Z",
+    "pageStatus": 200,
+    "markerStatus": 200,
+    "marker": {
+      "target": "admin"
+    },
+    "security": {
+      "content-security-policy-report-only": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests",
+      "strict-transport-security": "max-age=63072000",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "cspMatchesSource": true,
+    "pass": true
+  }
+]

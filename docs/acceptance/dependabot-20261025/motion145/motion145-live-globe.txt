@@ -1,0 +1,9 @@
+INTERACTIVE REVIEW GLOBE
+
+Reviews, mapped to the products.
+
+Spin the product globe and open an item to read its published customer feedback.
+
+Drag to spin · Tap any item for verified reviews
+
+No published customer reviews are available yet.

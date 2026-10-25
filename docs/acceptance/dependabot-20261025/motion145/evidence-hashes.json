@@ -1,0 +1,314 @@
+[
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/continuation-audit.json",
+    "bytes": 365,
+    "sha256": "8f14a6e3a2deff55e2a465d069f6f9514ff5da6db2f4bb49716402b8cd252e96",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/continuation-design-detector.json",
+    "bytes": 3,
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/continuation-install.log",
+    "bytes": 78,
+    "sha256": "4c3adfd9277889e00d8a36bd2b37441cf6da4197b5b83c1b51f19cc236bbd817",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/continuation-motion.log",
+    "bytes": 1471,
+    "sha256": "be527bc311b74b8a30c979371f4511482fd6a5b72e991e4b4e30be61089b936e",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/continuation-ui-guidance.log",
+    "bytes": 542,
+    "sha256": "3e292dab3e63b00990722f90a441f7bc21ab6d260b85bf50a4caccfc3b94aa4a",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/customer-rate-initial-timeout.md",
+    "bytes": 15934,
+    "sha256": "467141c06e79fb89a03939846693f122bfa4359123a405f53d1bf2aaf99c5905",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/dependabot-alerts.txt",
+    "bytes": 5739,
+    "sha256": "5c91bdae26e2be09b8e97dda3fab7913a182fdad6dee591668b158782109d817",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/dependabot-no-open-alerts.png",
+    "bytes": 55282,
+    "sha256": "269f18fd2375ff7583d83f4d3f7449a205467eb82c0356f0fc3a35de90c8904d",
+    "normalization": "none"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/independent-review.md",
+    "bytes": 965,
+    "sha256": "9e9644eeb4342e21f95116d710035267b252dd3ba6b5b2bfca851e942ba12887",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/monitoring-settings.png",
+    "bytes": 236592,
+    "sha256": "1f0fa96133c831164e182b42c95b66b022071ff4bb7b1673cf43fe7c032ba7f6",
+    "normalization": "none"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/monitoring-settings.txt",
+    "bytes": 11964,
+    "sha256": "118751be18f2fdf4cd80446e40efacd0383ce9e3a55ef1dd2f28b2213af19f61",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/monitoring-state.json",
+    "bytes": 380,
+    "sha256": "272f4f5f9f64a07fd0b4da87d66b38ac8c9b4ad10987efedcb53410c67d57526",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-admin-geometry.json",
+    "bytes": 63,
+    "sha256": "f7875cd07733b8a0235d1c7064710a8cf9820a59e124bc3bf96842d7926b73b5",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-boundary-fix.log",
+    "bytes": 744,
+    "sha256": "3b9609f4cc1e26ad0628412f0c66fb3d747e5c2a75c65375c229fbfb3d6dbd6a",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-checkout-geometry.json",
+    "bytes": 479,
+    "sha256": "d488a91b1b77d3b5adfc789e26489e72918fd28c55efc07423e95f73b5e6c903",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-ci-success.json",
+    "bytes": 13232,
+    "sha256": "6da64a747e31e71c071115247de29064f25278c85c6e5cb490a4f48292e9cb27",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-customer-rate-focused.log",
+    "bytes": 7500,
+    "sha256": "54dfcfd10888199b692316a8455653754c558c00dabb790f43e452729c2a7677",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-deferred-budget.log",
+    "bytes": 91,
+    "sha256": "4030944d867f68400270e7d508f8923e82c120e8d39050509edf13d7c2b4fd94",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-deferred-build.log",
+    "bytes": 5037,
+    "sha256": "686d7436e89a68bf3f84b2cb00ea0e3baf2efce75b09a6c2920bddf4da41ed37",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-development-final.log",
+    "bytes": 15434,
+    "sha256": "91de3174d47397616577cb8d8ef444305a304fa0cad660bdbe09f74111cccbc0",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-development.log",
+    "bytes": 15434,
+    "sha256": "d088065932982d4e5c518bc260cab2bd83f606a938fd11887592e01df84dcca9",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-live-admin-inventory.png",
+    "bytes": 81824,
+    "sha256": "4042f10ba6b636172d822eb5f22cd6b12ce41ff0ed1831c4586568c0da7fd260",
+    "normalization": "none"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-live-admin-map-375.png",
+    "bytes": 41492,
+    "sha256": "13c6e165a1a5ea46471690ab9222dddfc3da27d588fae993a88dbfeded9ffa48",
+    "normalization": "none"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-live-admin-map.txt",
+    "bytes": 21668,
+    "sha256": "dccc3276a03744e889b1431cc8961747ccd50fb04614bf6581b5b39f655baa0e",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-live-checkout-dark.png",
+    "bytes": 242354,
+    "sha256": "18145e14e798a7563a9009fa27f5dec26649394296c9c23c6f09d955c5c708bc",
+    "normalization": "none"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-live-checkout-light.png",
+    "bytes": 234237,
+    "sha256": "a0b25ea5d041da4fa422a7f423261153cc2769eb65d2567c64255fa4cf179f78",
+    "normalization": "none"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-live-globe.png",
+    "bytes": 59803,
+    "sha256": "4fea2e0ae18364020fab90a14e418d3499106fb424e02d040f70f67fcc0be1e9",
+    "normalization": "none"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-live-globe.txt",
+    "bytes": 241,
+    "sha256": "3389260dd67397331c7393057ff639d4caf310b9a303351399af5eefe3f2edb2",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-live-inventory-summary.txt",
+    "bytes": 2210,
+    "sha256": "dcda55e56209bd170dd62ff227c9c323471a6d7fbdf22a22c2060b908df3957d",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-motion-after.log",
+    "bytes": 1604,
+    "sha256": "c5c3c1380d672b2a8f79c465a4b7d9b1ad5493ba99bc507a31156b97ca863ccb",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-network-before.log",
+    "bytes": 1949,
+    "sha256": "96c8e6d0fd7e54089a3a1a904bdbe19f30a18b8a2220bfb8785b7062337b7bbe",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-pr27-merged.json",
+    "bytes": 235,
+    "sha256": "a28aea47917efa1c099868a2c0611cb7295fc26b7c86ab7943e409899ce31c25",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-preflight-before-merge.log",
+    "bytes": 171,
+    "sha256": "863b38bfdd924891810fade78cab2e60db566af04a7e03cbcf22880289d83d17",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-preflight.log",
+    "bytes": 171,
+    "sha256": "863b38bfdd924891810fade78cab2e60db566af04a7e03cbcf22880289d83d17",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-readiness-before-merge.log",
+    "bytes": 2354,
+    "sha256": "84a30fa3d74ced8c339aae8d57ba8f1ddfa6582ff3e0c0efb78292fea0fe229c",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-readiness-missing-local-env.log",
+    "bytes": 897,
+    "sha256": "6648493edfc03e0152043e47f7cc24126f04e8143ae05f4a310ed248d0fbbe2b",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-readiness.log",
+    "bytes": 2354,
+    "sha256": "84a30fa3d74ced8c339aae8d57ba8f1ddfa6582ff3e0c0efb78292fea0fe229c",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-release-final-stages-exit.json",
+    "bytes": 2032,
+    "sha256": "67687a6f80bcc96700085ea1d9dfd70864120d958bdf56a44a29786d81869c97",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-release-final-stages.log",
+    "bytes": 80147,
+    "sha256": "ff14f9f2520e09291754a2a35928dab26d2c6e475007e1e0b9951d16d86b4c95",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-release-initial-failed-exit.json",
+    "bytes": 210,
+    "sha256": "a078384f200fc739eb1dc1e2e0b96b382724fdaccdbab9a25dc47d383afc1df1",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-release-initial-failed.log",
+    "bytes": 233204,
+    "sha256": "f19aec5149c8fe0e2900cd109bee72c3c097ac47635cdf48428f3f078e404776",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-release-resumed-exit.json",
+    "bytes": 1472,
+    "sha256": "db1207d8bdec3a3b577bb66550b6371b428ae3e666a9cb8074ba462bbd1697a6",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-release-resumed.log",
+    "bytes": 90765,
+    "sha256": "e4cfa32902e2a17eec9e010e99415895a2163e8f3df63ac3e004cc194465dca6",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-shopper-after.log",
+    "bytes": 3946,
+    "sha256": "9fed8363260df2e41f3eb891bbbc8716f5eb643e8b54c60306507a2fe46b38ed",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/motion145-vercel-storefront.txt",
+    "bytes": 1803,
+    "sha256": "ef1c08fc2185f4c3014674fb3d958662dd318f3808388e9f5f53b300b3f3304a",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/open-dependabot-final.json",
+    "bytes": 3,
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/production-deployments.json",
+    "bytes": 1592,
+    "sha256": "c1f4eee51417702a18f12b2bae246900eaa361819cb1b4b724a35b5ecc93d025",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/production-hosts.json",
+    "bytes": 2137,
+    "sha256": "5e672c32acf605334051ec2fe3a95e1f9b864129d7d82c5a0f53e22ca59d301d",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/release-coverage.json",
+    "bytes": 1264,
+    "sha256": "5fa5c68f081190c8bda1c5bd8263b3b3fc92e7793465c726567d811641976755",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/source-pins.json",
+    "bytes": 1101,
+    "sha256": "7d514ec425fdfcb4c0eea0e1405d6cb9d7d6508d71e9a0a05b13eda1e06e4a6a",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/verify-hosts.mjs",
+    "bytes": 1601,
+    "sha256": "29b3c2709d54241a58ee8248b5de0dd09965c0383dceb3266c6918d318928553",
+    "normalization": "LF"
+  },
+  {
+    "path": "docs/acceptance/dependabot-20261025/motion145/versions-final.json",
+    "bytes": 276,
+    "sha256": "9dc43ef336d69e6fbe586cb176325c5eaa494811c67b601c8d5d597d7f979742",
+    "normalization": "LF"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "observedAt": "2026-10-25T04:02:30.717Z",
+  "account": "k2jimzonwebsite",
+  "repository": "k2jimzonwebsite/K2-Jimzon",
+  "dependencyGraph": true,
+  "dependabotAlerts": true,
+  "dependabotSecurityUpdates": true,
+  "openAlerts": 0,
+  "closedAlerts": 0,
+  "dependencyFilesChecked": "2026-10-25",
+  "changedVia": "existing signed-in Codex browser",
+  "manualMergeRequired": true
+}

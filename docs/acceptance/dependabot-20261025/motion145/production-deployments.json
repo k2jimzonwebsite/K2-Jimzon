@@ -1,0 +1,52 @@
+{
+  "observedAt": "2026-10-25T04:18:13.289Z",
+  "deployments": [
+    {
+      "id": "dpl_ERpVAPXXTpq8pNtWGeL5GykrcVd2",
+      "name": "k2-jimzon",
+      "state": "READY",
+      "readyState": "READY",
+      "target": "production",
+      "source": "8d210c6fd76841c9a5bafe63b8c6375f288f393c",
+      "alias": [
+        "www.k2jimzon.com",
+        "k2-jimzon-vert.vercel.app",
+        "k2jimzon.com",
+        "k2-jimzon-k2-jimzon.vercel.app",
+        "k2-jimzon-git-main-k2-jimzon.vercel.app"
+      ],
+      "url": "k2-jimzon-1fx4jnnbj-k2-jimzon.vercel.app",
+      "ready": 1792901444082
+    },
+    {
+      "id": "dpl_5dkYVQAKksvBHZNZ9v6s7WeTQWv1",
+      "name": "k2-jimzon-admin",
+      "state": "READY",
+      "readyState": "READY",
+      "target": "production",
+      "source": "8d210c6fd76841c9a5bafe63b8c6375f288f393c",
+      "alias": [
+        "admin.k2jimzon.com",
+        "k2-jimzon-admin-seven.vercel.app",
+        "k2-jimzon-admin-k2-jimzon.vercel.app",
+        "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+      ],
+      "url": "k2-jimzon-admin-1nkoi825b-k2-jimzon.vercel.app",
+      "ready": 1792901489097
+    }
+  ],
+  "storefrontBuild": [
+    {
+      "created": 1792901444238,
+      "text": "Deployment completed"
+    },
+    {
+      "created": 1792901434285,
+      "text": "Storefront landing budget passed: JS 142.51 kB/150.50 kB gzip; CSS 29.98 kB/30.00 kB gzip."
+    },
+    {
+      "created": 1792901434206,
+      "text": "Verified storefront production boundary (48 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker)."
+    }
+  ]
+}
