@@ -8,7 +8,7 @@ export function PendingProductDecision({ recovery, onReview }) {
     <h2 className="text-lg font-semibold text-white">Pending product decision</h2>
     {recovery.error && !body && <p role="alert" className="break-words text-base text-crimson">{recovery.error}</p>}
     {body && <><p className="text-base text-white/80">A product save is awaiting confirmation. Closing or reloading keeps its exact request. Review it before saving another product.</p>
-      <button type="button" className={`${secondaryButton} max-w-full break-words`} onClick={onReview}>Review pending product decision {body.payload.sku}</button></>}
+      <button type="button" className={`${secondaryButton} max-w-full break-words`} onClick={onReview}>Review pending product decision {body.payload.sku || body.payload.groupId}</button></>}
   </section>
 }
 
@@ -20,11 +20,17 @@ export default function ProductMasterRecovery({ recovery, canManageProducts, onC
         <div className="flex items-start justify-between gap-4"><h2 id="product-recovery-title" className="text-xl font-semibold">Saved product decision</h2><button type="button" disabled={recovery.working} className={secondaryButton} onClick={onClose}>Close</button></div>
         <p className="text-base text-white/80">These are the saved request details, not a current product read. Retry confirms the original decision; current product facts refresh separately.</p>
         {body && <div className="space-y-3 break-words">
-          <p className="text-base font-semibold">{body.payload.sku}</p>
+          <p className="text-base font-semibold">{body.action === 'merge' ? `Duplicate SKU merge: ${body.payload.groupId}` : body.payload.sku}</p>
           <p className="text-base text-white/90">{body.payload.reason}</p>
-          <p className="text-sm text-white/70">Original version: {body.payload.expectedUpdatedAt}</p>
-          <p className="text-base">Human review in this request: {body.payload.patch.is_human_reviewed === true ? 'Reviewed' : body.payload.patch.is_human_reviewed === false ? 'Needs review' : 'Unchanged'}</p>
-          <details><summary className="min-h-11 cursor-pointer py-3 text-base">All saved changes</summary><pre className="whitespace-pre-wrap break-all text-sm text-white/80">{JSON.stringify(body.payload.patch, null, 2)}</pre></details>
+          {body.action === 'merge' ? (
+            <p className="text-sm text-white/70">Expected state hash: {body.payload.expectedStateHash.slice(0, 16)}…</p>
+          ) : (
+            <>
+              <p className="text-sm text-white/70">Original version: {body.payload.expectedUpdatedAt}</p>
+              <p className="text-base">Human review in this request: {body.payload.patch?.is_human_reviewed === true ? 'Reviewed' : body.payload.patch?.is_human_reviewed === false ? 'Needs review' : 'Unchanged'}</p>
+              {body.payload.patch && <details><summary className="min-h-11 cursor-pointer py-3 text-base">All saved changes</summary><pre className="whitespace-pre-wrap break-all text-sm text-white/80">{JSON.stringify(body.payload.patch, null, 2)}</pre></details>}
+            </>
+          )}
         </div>}
         {!canManageProducts && <p role="alert" className="text-base text-crimson">Only the original Admin or SuperAdmin can resolve this decision. The request stays saved.</p>}
         {recovery.error && <p role="alert" className="break-words text-base text-crimson">{recovery.error}</p>}

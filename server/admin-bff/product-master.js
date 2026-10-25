@@ -5,6 +5,7 @@ import { isAdminRole } from './supabase.js'
 import { strictInteger } from '../shared-numeric.js'
 import { isReadableReferenceName } from '../../src/lib/referenceCommandRecovery.js'
 import { readAdminProductStock } from './product-stock.js'
+import { PRODUCT_SKU_MERGE_GROUPS, validateProductSkuMergePayload } from '../../src/lib/productSkuMerge.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const SKU = /^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$/
@@ -63,6 +64,7 @@ function isCompleteTaxonomyOptions(result) {
 
 export function validateProductMasterCommand(body) {
   exactObject(body, ['action', 'payload'])
+  if (body.action === 'merge') return { action: 'product_sku_merge', payload: validateProductSkuMergePayload(body.payload) }
   if (body.action === 'category_policy_set' || body.action === 'category_policy_clear') {
     const setting = body.action === 'category_policy_set'
     exactObject(body.payload, setting
@@ -115,7 +117,11 @@ function commandError(res, error, action) {
   if (raw.includes('K2_ADMIN_RATE_LIMITED')) return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': '60' })
   if (raw.includes('K2_ADMIN_IDEMPOTENCY_CONFLICT')) return safeJson(res, 409, { error: { code: 'IDEMPOTENCY_CONFLICT' } })
   if (raw.includes('K2_ADMIN_COMMAND_IN_PROGRESS')) return safeJson(res, 409, { error: { code: 'COMMAND_IN_PROGRESS' } }, { 'Retry-After': '1' })
-  if (raw.includes('K2_ADMIN_PRODUCT_VERSION_CONFLICT')) return safeJson(res, 409, { error: { code: 'PRODUCT_VERSION_CONFLICT' } })
+  if (raw.includes('K2_ADMIN_PRODUCT_VERSION_CONFLICT') || raw.includes('K2_SKU_MERGE_VERSION_CONFLICT')) return safeJson(res, 409, { error: { code: 'PRODUCT_VERSION_CONFLICT' } })
+  if (raw.includes('K2_SKU_MERGE_BLOCKED')) return safeJson(res, 409, { error: { code: 'PRODUCT_MERGE_BLOCKED' } })
+  if (raw.includes('K2_SKU_MERGE_ALREADY_RECORDED')) return safeJson(res, 409, { error: { code: 'PRODUCT_MERGE_ALREADY_RECORDED' } })
+  if (raw.includes('K2_SKU_MERGE_LOT_CONSERVATION')) return safeJson(res, 409, { error: { code: 'PRODUCT_MERGE_LOT_CONSERVATION' } })
+  if (raw.includes('K2_SKU_MERGE_INVALID')) return safeJson(res, 400, { error: { code: 'PRODUCT_COMMAND_INVALID' } })
   if (raw.includes('K2_PRODUCT_TAXONOMY_INITIAL_ONLY')) return safeJson(res, 409, { error: { code: 'PRODUCT_TAXONOMY_INITIAL_ONLY' } })
   if (raw.includes('K2_PUBLICATION_NOT_READY')) return safeJson(res, 409, { error: { code: 'PUBLICATION_NOT_READY' } })
   if (raw.includes('K2_PUBLICATION_TRANSITION_INVALID')) return safeJson(res, 409, { error: { code: 'PUBLICATION_TRANSITION_INVALID' } })
@@ -136,6 +142,13 @@ export default async function handleProductMaster(req, res) {
     return safeJson(res, 403, { error: { code: 'PRODUCT_ACTOR_CHANGED' } })
   }
   if (req.method === 'GET') {
+    const group = String(req.query?.group || '').trim()
+    if (group) {
+      if (!Object.hasOwn(PRODUCT_SKU_MERGE_GROUPS, group)) return safeJson(res, 400, { error: { code: 'PRODUCT_COMMAND_INVALID' } })
+      const { data, error } = await authorized.client.rpc('read_admin_product_sku_merge_v1', { p_group: group })
+      if (error) return safeJson(res, 503, { error: { code: 'PRODUCT_COMMAND_UNAVAILABLE' } })
+      return safeJson(res, 200, { ok: true, preview: data })
+    }
     const sku = String(req.query?.sku || '').trim()
     if (!SKU.test(sku)) return safeJson(res, 400, { error: { code: 'PRODUCT_COMMAND_INVALID' } })
     const { data, error } = await authorized.client.from('products').select(MASTER_FIELDS).eq('sku', sku).maybeSingle()

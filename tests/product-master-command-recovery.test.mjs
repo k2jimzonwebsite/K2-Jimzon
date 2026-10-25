@@ -60,3 +60,14 @@ test('malformed or non-update commands cannot be held or sent', { skip: !recover
   assert.throws(() => recovery.holdPendingProductMaster(actor,'',payloadText,store))
   assert.throws(() => recovery.readPendingProductMaster('',store))
 })
+
+test('approved merge commands have durable actor-scoped recovery', { skip: !recovery }, () => {
+  const store = storage()
+  const mergeBody = { action: 'merge', payload: { groupId: 'borella-prosciutto', expectedStateHash: 'a'.repeat(64), reason: 'Owner-confirmed same sellable item' } }
+  const text = JSON.stringify(mergeBody)
+  const held = recovery.holdPendingProductMaster(actor, key, text, store)
+  assert.deepEqual(recovery.readPendingProductMaster(actor, store), held)
+  assert.equal(held.payloadText, text)
+  assert.equal(held.key, key)
+  assert.equal(held.state, 'pending')
+})
