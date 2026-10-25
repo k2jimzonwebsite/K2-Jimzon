@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AnimatePresence } from 'motion/react'
-import { useGlobeCms } from '../../data/globeCms'
+import { GlobeCmsProvider, useGlobeCms } from '../../data/globeCms'
 import ProductGlobe from '../globe/ProductGlobe'
 import GlobeOverlay from '../globe/GlobeOverlay'
 import { Kicker } from '../ui/bits'
@@ -8,6 +8,14 @@ import { StarIcon } from '../ui/icons'
 
 // Dedicated, mobile-first "spin the globe to read reviews" trust section.
 export default function GlobeSection() {
+  // Review data follows this deferred section. The combined entry already
+  // supplies the provider, so reuse it instead of starting duplicate reads.
+  const cms = useGlobeCms()
+  if (cms) return <GlobeSectionContent />
+  return <GlobeCmsProvider><GlobeSectionContent /></GlobeCmsProvider>
+}
+
+function GlobeSectionContent() {
   const { enabledGlobeProducts, reviews, isLoading, reviewsUnavailable } = useGlobeCms()
   const [selected, setSelected] = useState(null)
   const hasProducts = enabledGlobeProducts?.length > 0

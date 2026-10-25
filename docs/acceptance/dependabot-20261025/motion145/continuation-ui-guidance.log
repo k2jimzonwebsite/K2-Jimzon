@@ -1,0 +1,15 @@
+## UI Pro Max Stack Guidelines
+**Stack:** react | **Query:** lazy loading reduced motion
+**Source:** stacks/react.csv | **Found:** 1 results
+
+### Result 1
+- **Category:** Performance
+- **Guideline:** Lazy load components
+- **Description:** Use React.lazy for code splitting
+- **Do:** lazy() for routes and heavy components
+- **Don't:** Import everything upfront
+- **Code Good:** const Page = lazy(() => import('./Page'))
+- **Code Bad:** import Page from './Page'
+- **Severity:** Medium
+- **Docs URL:** https://react.dev/reference/react/lazy
+

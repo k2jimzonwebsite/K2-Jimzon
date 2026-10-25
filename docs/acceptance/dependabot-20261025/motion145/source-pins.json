@@ -1,0 +1,12 @@
+{
+  "package.json": "a096cdf94fe2ed5e56bca9837e0847662627fba5956bfca4b0f4f17f08bcda90",
+  "package-lock.json": "2449d9f73bb35f2df31f08493bde49682b7902e05befa530a6edf360bb03bdb7",
+  "src/StorefrontApp.jsx": "7942fd8ee8b7aff43c95e0c5d078cf7837c33b81116e39f0ae5245dd75d3b8cf",
+  "src/components/ProductCard.jsx": "7f0b995eeb83bd13cbd892d056a1f390435661ebe025e432b0b5d26c3077a4ae",
+  "src/components/home/GlobeSection.jsx": "66822edc91ed7a554708f9e51a7f9fec0f4d8d15f7efd12575370357676dcdec",
+  "src/components/home/Hero.jsx": "4c706ef44d1f8ba56c4df0ca3f13e7448c8debca754917d4cae8a1f068ddd635",
+  "src/components/home/NewArrivals.jsx": "47a503d1a78c1f8ea3a72685fe708678c72ece72e76ef138d7c6ce065f18b55d",
+  "src/data/products.js": "678f378bf23697dc8c5e22c3aeabf71345e54a97c66b2039492c9f32882471bd",
+  "src/lib/formatMoney.js": "b9a074dccac8308461e2c2f33602147ff1f50b83c6720546a003918ae0c76dfb",
+  "tests/storefront-motion.spec.js": "19883cfeb59a56d7a109276c2fb8d6b730f2a9169c619af5282e5c9663e54b93"
+}

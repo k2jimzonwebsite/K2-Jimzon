@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { useStore } from '../context/StoreContext'
-import { peso } from '../data/products'
+import { peso } from '../lib/formatMoney'
 import ProductVisual from './ProductVisual'
 import { StockPill } from './ui/bits'
 import { PlusIcon } from './ui/icons'

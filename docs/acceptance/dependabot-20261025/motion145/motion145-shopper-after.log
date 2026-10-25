@@ -1,0 +1,30 @@
+[WebServer] (node:3300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:1108) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 1 worker
+
+(node:12520) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 11:29:45 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 320px light (3.5s)
+[WebServer] 11:29:48 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 320px dark (2.6s)
+[WebServer] 11:29:51 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 390px light (2.6s)
+[WebServer] 11:29:53 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 390px dark (2.4s)
+[WebServer] 11:29:56 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 430px light (2.5s)
+[WebServer] 11:29:58 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 430px dark (2.3s)
+[WebServer] 11:30:01 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 1440px light (3.3s)
+[WebServer] 11:30:04 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  8 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 1440px dark (2.7s)
+  ok  9 tests\checkout-chat-ui.spec.js:53:1 › empty checkout retains accessible chat help (1.3s)
+[WebServer] 11:30:08 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\checkout-chat-ui.spec.js:63:1 › English pistachio finds the Italian listing in the rendered catalog (981ms)
+
+  10 passed (29.6s)

@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { LazyMotion, domAnimation } from 'motion/react'
 import { StoreProvider, useStore } from './context/StoreContext'
-import { GlobeCmsProvider } from './data/globeCms'
 import MobileNavBar from './components/nav/MobileNavBar'
 import StoreHeader from './components/StoreHeader'
 import ErrorBoundary from './components/ui/ErrorBoundary'
@@ -94,12 +93,10 @@ export default function StorefrontApp() {
   return (
     <ErrorBoundary>
       <LazyMotion features={domAnimation}>
-        <GlobeCmsProvider>
-          <StoreProvider>
-            <Suspense fallback={null}><StorefrontMetadata /></Suspense>
-            <StorefrontCustomerRuntime><StorefrontShell /></StorefrontCustomerRuntime>
-          </StoreProvider>
-        </GlobeCmsProvider>
+        <StoreProvider>
+          <Suspense fallback={null}><StorefrontMetadata /></Suspense>
+          <StorefrontCustomerRuntime><StorefrontShell /></StorefrontCustomerRuntime>
+        </StoreProvider>
       </LazyMotion>
     </ErrorBoundary>
   )

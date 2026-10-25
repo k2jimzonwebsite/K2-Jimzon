@@ -5,7 +5,7 @@ import { useStore } from '../../context/StoreContext'
 import ProductCard from '../ProductCard'
 import ProductVisual from '../ProductVisual'
 import { ArrowIcon } from '../ui/icons'
-import { peso } from '../../data/products'
+import { peso } from '../../lib/formatMoney'
 import { groupFamilyResults, familyPriceRange } from '../../lib/productFamilyPresentation'
 
 export default function NewArrivals() {
