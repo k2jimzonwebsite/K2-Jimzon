@@ -1743,7 +1743,9 @@ test('staff access reads are fixed and role/PIN changes are signed, reasoned, an
   expect(ui).toContain('commandAdminStaffAccessBff')
   expect(ui).toContain('Role updated with the reason you entered.')
   expect(ui).toContain('Reason for this invitation')
-  expect(ui).toContain('inviteStaff(inviteEmail.trim(), inviteRole, inviteReason.trim())')
+  expect(ui).toContain('inviteStaff(inviteEmail.trim(), inviteRole, effectiveReason)')
+  expect(ui).toContain('Staff invitation sent by admin')
+  expect(ui).toContain('trimmed.length >= 3')
 })
 
 test('staff invitations cross one exact reason-bound BFF route without exposing the provider session', async () => {

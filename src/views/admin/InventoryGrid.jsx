@@ -743,7 +743,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
           <label className="relative min-w-0 flex-1">
             <span className="sr-only">Search inventory</span>
             <SearchIcon size={16} className="pointer-events-none absolute left-3 top-3.5 text-white/35" />
-            <input data-tour="search-input" type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search SKU, product, category, barcode, or origin" className="adm-input min-h-11 pl-9 text-base sm:text-sm" />
+            <input data-tour="search-input" type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search SKU, product, barcode, or origin" className="adm-input min-h-11 pl-9 text-base sm:text-sm" />
           </label>
           <div className="flex gap-1 overflow-x-auto" aria-label="Filter inventory exceptions">
             {[

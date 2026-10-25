@@ -163,9 +163,10 @@ test('consignment manager UI enforces atomic custody and audit requirements', as
   // Manifest creation starts in Packing_Italy
   expect(managerSource).toContain('Manifest created in Packing Italy state.')
 
-  // Advancing requires reason of at least 10 characters
+  // Blank or short audit explanations receive a contextual reason; physical scanning guards remain.
   expect(managerSource).toContain('advanceReason.trim().length < 10')
-  expect(managerSource).toContain('Record a specific reason of at least 10 characters before changing custody state.')
+  expect(managerSource).toContain('Custody updated to ${advanceTarget} by admin')
+  expect(managerSource).toContain('await advance(advanceTarget, effectiveReason)')
 
   // Finalizing requires descriptive notes if discrepancy exists
   expect(managerSource).toContain('finalNotes.length < 10')
