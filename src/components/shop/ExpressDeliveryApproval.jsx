@@ -73,7 +73,7 @@ export default function ExpressDeliveryApproval({ reference, quote, identity, on
   }
   return <section className="mt-5 border-t border-line pt-5 text-left" aria-label={`Express delivery review for ${reference}`}>
     <h2 className="font-serif text-xl font-semibold text-navy">Review express delivery</h2>
-    {resolved || (safe && quote.accepted && !pending) ? <p className="mt-2 text-base text-navy" role="status">Delivery accepted. Final total {peso(resolved ? record.receipt.totalAmount : quote.proposedTotal)}. Wait for staff payment instructions.</p>
+    {resolved || (safe && quote.accepted && !pending) ? <p className="mt-2 text-base text-navy" role="status">Delivery accepted. Final total {peso(resolved ? record.receipt.totalAmount : quote.proposedTotal)}. Follow your order payment details when available.</p>
       : safe ? <><dl className="mt-3 space-y-2 text-base text-navy">
         {[['Courier', quote.courier], ['Items', peso(quote.subtotal)], ['Discount', peso(quote.discountAmount)], ['Delivery', peso(quote.feeMinor / 100)], ['Complete total', peso(quote.proposedTotal)], ['Quote expires', new Intl.DateTimeFormat('en-PH', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Manila' }).format(new Date(quote.expiresAt))]].map(([label, value]) => <div key={label} className="flex flex-wrap justify-between gap-x-5 gap-y-1"><dt>{label}</dt><dd className={label === 'Complete total' ? 'font-bold tabular-nums' : 'tabular-nums'}>{value}</dd></div>)}
       </dl><p className="mt-3 break-words text-sm leading-6 text-navy-soft">{quote.availabilityNote}</p><p className="mt-2 text-sm leading-6 text-navy-soft">Accepting confirms this bill. It does not book the courier or guarantee dispatch.</p></>

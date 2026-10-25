@@ -149,7 +149,7 @@ export default function Confirmation() {
           <InboxIcon size={16} /> Saved for staff review
         </p>
         <p className="mt-2 text-sm leading-relaxed text-navy-soft">
-          {reviewRequired ? 'This order needs staff review before its total can be confirmed. Your recorded payment history is kept. Message K2 staff before transferring money.' : 'No payment was charged. Our staff will verify inventory in Manila, review your order and total, and contact you before you transfer.'}
+          {reviewRequired ? 'This order needs staff review before its total can be confirmed. Your recorded payment history is kept. Message K2 staff before transferring money.' : 'Review your order status and payment updates here. GCash and MariBank orders are dispatched after staff verify the funds.'}
         </p>
         <p className="mt-3 text-sm leading-relaxed text-navy-soft">
           There is no self-service cancellation or return. Message K2 staff; each request is reviewed case by case.
@@ -157,8 +157,8 @@ export default function Confirmation() {
         <ol className="mt-6 space-y-4">
           {[
             ['Request submitted', 'Received'],
-            ['Stock and order review', 'Next step'],
-            ['Payment instructions', 'After confirmation'],
+            ['Payment before dispatch', 'Use the final total and receiving details'],
+            ['Receipt and funds review', 'Staff verify your transfer'],
             ['Packing and courier handoff', 'After payment verification'],
           ].map(([label, state], index) => (
             <li key={label} className="flex gap-3">
@@ -174,12 +174,12 @@ export default function Confirmation() {
       {!pendingDelivery && ['submitted', 'confirmed'].includes(currentOrder.status) && paymentStatus === 'awaiting_instructions' && currentOrder.paymentMethod !== 'cod' && (
         <section aria-labelledby="payment-qr-title" className="mt-6 rounded-2xl border border-line bg-paper p-5 text-left shadow-sm sm:p-7">
           <h2 id="payment-qr-title" className="font-serif text-xl font-semibold">Pay by QR transfer</h2>
-          <p className="mt-2 text-base text-navy-soft">Wait for K2 staff to confirm your order and exact total before sending money. Include reference <strong className="text-navy">{currentOrder.id}</strong> when you send your receipt to staff.</p>
+          <p className="mt-2 text-base text-navy-soft">Use the final total shown for this order and check the receiving account before transferring. Include reference <strong className="text-navy">{currentOrder.id}</strong> when you send your receipt to staff.</p>
           {hasReceivingMethod ? <>
             <p className="mt-5 text-sm font-semibold text-navy">Selected at checkout: {paymentMethod === 'maribank' ? 'MariBank' : 'GCash'}</p>
             <img className="mx-auto mt-5 h-auto w-full max-w-[360px] rounded-xl border border-line bg-white" src={`/payment/${paymentMethod}-receive-crop.png`} alt={`${paymentMethod === 'maribank' ? 'MariBank' : 'GCash'} receiving QR code and account details`} width={paymentMethod === 'maribank' ? 699 : 541} height={paymentMethod === 'maribank' ? 840 : 811} />
             <a className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-crimson underline underline-offset-4" href={`/payment/${paymentMethod}-receive-crop.png`} target="_blank" rel="noopener noreferrer">Open larger QR image</a>
-          </> : <p className="mt-5 rounded-xl border border-amber-600/30 bg-amber-50 p-4 text-sm leading-6 text-navy" role="status"><strong>Payment method unavailable.</strong> Ask K2 staff to confirm the receiving account before transferring. Your order request is still saved.</p>}
+          </> : <p className="mt-5 rounded-xl border border-gold/30 bg-shell p-4 text-sm leading-6 text-navy" role="status"><strong>Payment method unavailable.</strong> Ask K2 staff to confirm the receiving account before transferring. Your order request is still saved.</p>}
           <p className="mt-3 text-sm text-navy-soft">After transferring, upload your e-receipt and payment reference below. Payment remains pending until a separate staff reviewer confirms the funds in the receiving account.</p>
         </section>
       )}

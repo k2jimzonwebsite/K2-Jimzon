@@ -1,3 +1,5 @@
+25 October2026 / MAP-023 mobile reconciliation: all four mandatory design skills preserve K2 wood/editorial identity and existing tokens. Recover original compact mobile composition,named44px rails/route controls,80px zero-pad arrival trays,measured bottom navigation clearance,inline Home/checkout help and drawer focus containment.375dark/1440light fixtures inspected; source-only46mobile+10checkout/search/development0,detector[]. Real-host/physical acceptance not implied. Evidence/recovery: docs/acceptance/MOBILE_PRODUCTION_RECONCILIATION_20261025.md.
+
 25October2026 / MAP-021 / IDEA-20261025-01 — verified live8d210c6f: Motion14.5 with deferred GlobeSection provider and identical isolated peso formatting, preserving public/Admin separation and existing K2 design/interaction. Actual globe/search/390dark-light checkout/375authenticated workflow acceptance passes; production landing142.51/150.50kB. Complete evidence, original failures, review and recovery: docs/acceptance/DEPENDABOT_REMEDIATION_20261025.md. This supersedes earlier local-only dependency states below.
 
 25October2026 / MAP-021 / IDEA-20261025-01 — local performance preservation

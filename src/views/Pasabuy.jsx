@@ -161,7 +161,7 @@ export default function Pasabuy() {
               {submitting ? 'Submitting request…' : 'Submit Pasabuy request'}
             </RedButton>
             <p className="mt-3 text-center text-xs text-navy-soft">
-              Submitting requests a custom quote with no upfront payment. Contact details are protected under our{' '}
+              Submitting requests a custom quote. Follow the agreed payment terms for your accepted quote. Contact details are protected under our{' '}
               <button type="button" onClick={() => go('privacy')} className="underline hover:text-crimson font-medium">Privacy Policy</button>
               {' '}and{' '}
               <button type="button" onClick={() => go('terms')} className="underline hover:text-crimson font-medium">Terms</button>.

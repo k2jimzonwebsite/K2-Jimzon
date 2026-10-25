@@ -1,3 +1,5 @@
+25 October2026 / MAP-023 mobile reconciliation locally verified: mobile shopping actions remain reachable,featured/arrival photos have usable space,route/rail controls support keyboard,tablet/bottom navigation clears content,and cart/chat recover focus. Existing inline checkout help remains; source is not live yet.46mobile+10checkout/search/development0. No business-data/payment workflow mutation. Evidence/recovery: docs/acceptance/MOBILE_PRODUCTION_RECONCILIATION_20261025.md.
+
 25October2026 / MAP-021 / IDEA-20261025-01 — verified live8d210c6f: Motion14.5 with deferred GlobeSection provider and identical isolated peso formatting, preserving public/Admin separation and existing K2 design/interaction. Actual globe/search/390dark-light checkout/375authenticated workflow acceptance passes; production landing142.51/150.50kB. Complete evidence, original failures, review and recovery: docs/acceptance/DEPENDABOT_REMEDIATION_20261025.md. This supersedes earlier local-only dependency states below.
 
 25 October2026 / MAP-023 / IDEA-20261024-07 — VERIFIED LIVE shopper source release

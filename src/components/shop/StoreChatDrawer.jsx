@@ -1,3 +1,4 @@
+import { useStorefrontDialog } from '../../hooks/useStorefrontDialog'
 import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useStore } from '../../context/StoreContext'
@@ -7,6 +8,8 @@ import { ChatIcon, XIcon } from '../ui/icons'
 
 export default function StoreChatDrawer() {
   const { chatOpen, setChatOpen, chatSeed, clearChatSeed } = useStore()
+  const panelRef = useRef(null)
+  useStorefrontDialog(chatOpen, panelRef)
   const headingRef = useRef(null)
   const openerRef = useRef(null)
 
@@ -23,7 +26,16 @@ export default function StoreChatDrawer() {
         document.body.style.overflow = ''
         window.removeEventListener('keydown', closeOnEscape)
         window.clearTimeout(focusTimer)
-        openerRef.current?.focus({ preventScroll: true })
+        const opener = openerRef.current
+        window.requestAnimationFrame(() => {
+          const visible = element => element?.isConnected && element !== document.body
+            && element.getClientRects().length && getComputedStyle(element).visibility !== 'hidden'
+          const target = visible(opener) ? opener
+            : [...document.querySelectorAll('button[aria-label="Chat with K2 staff"]')].find(visible)
+              || document.querySelector('main h1')
+          if (target && target.tabIndex < 0) target.tabIndex = -1
+          target?.focus({ preventScroll: true })
+        })
         openerRef.current = null
       }
     }
@@ -43,6 +55,7 @@ export default function StoreChatDrawer() {
             className="absolute inset-0 bg-navy/35 backdrop-blur-[2px] cursor-pointer"
           />
           <motion.aside
+            ref={panelRef}
             initial={{ transform: 'translateX(100%)' }}
             animate={{ transform: 'translateX(0)' }}
             exit={{ transform: 'translateX(100%)' }}
@@ -50,7 +63,7 @@ export default function StoreChatDrawer() {
             className="absolute right-0 top-0 flex h-[100dvh] w-full max-w-md flex-col overflow-hidden border-l border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-float"
           >
             <Tricolor />
-            <header className="flex items-center justify-between px-5 py-4 border-b border-[var(--store-surface-border)]">
+            <header style={{ paddingTop: 'calc(1rem + var(--k2-safe-top, env(safe-area-inset-top, 0px)))' }} className="flex items-center justify-between px-5 py-4 border-b border-[var(--store-surface-border)]">
               <div className="flex items-center gap-2.5">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-crimson/10 text-crimson">
                   <ChatIcon size={18} />
@@ -72,7 +85,7 @@ export default function StoreChatDrawer() {
               </button>
             </header>
 
-            <div className="flex-1 overflow-y-auto p-4 sm:p-5">
+            <div style={{ paddingBottom: 'calc(1.25rem + var(--k2-safe-bottom, env(safe-area-inset-bottom, 0px)))' }} className="flex-1 overflow-y-auto p-4 sm:p-5">
               <StoreChatPanel
                 seed={chatSeed}
                 onSeedConsumed={clearChatSeed}

@@ -24,7 +24,7 @@ test('additive hero preserves the original content and supports keyboard shoppin
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   const hero = page.locator('section').filter({ has: page.locator('h1') }).first()
   await expect(hero.getByRole('heading', { level: 1 })).toContainText('Italy, chosen well.', { timeout: 60000 })
-  for (const text of ['Delivered to Manila.', 'Milano to Manila', 'Genuine catalog', 'Personal confirmation', 'No payment required at checkout. We verify stock first.']) {
+  for (const text of ['Delivered to Manila.', 'Milano to Manila', 'Genuine catalog', 'Personal confirmation']) {
     await expect(hero.getByText(text, { exact: false }).first()).toBeVisible()
   }
   await expect(hero.getByRole('button', { name: 'Shop the Collection' })).toBeVisible()

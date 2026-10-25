@@ -33,11 +33,13 @@ test('customer-facing policies adhere strictly to manual launch facts', async ()
   expect(policiesSource).toContain('courier')
   expect(policiesSource).toContain('stock')
 
-  // Terms: manual order request model, no upfront payment, manual GCash/QR, no false SLAs
+  // Terms: manual order request, payment before dispatch, manual QR verification, no false SLAs
   expect(policiesSource).toContain('TERMS_POLICY')
   expect(policiesSource).toContain('order request')
   expect(policiesSource).not.toMatch(/1–2 business day|2–3 week/i)
   expect(policiesSource).toContain('GCash')
+  expect(policiesSource).toContain('before dispatch')
+  expect(policiesSource).not.toMatch(/no upfront|does not collect upfront|confirmed by staff before payment/i)
 
   // Returns: case-by-case inspection, no self-service returns
   expect(policiesSource).toContain('RETURNS_POLICY')

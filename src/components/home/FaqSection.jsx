@@ -46,7 +46,7 @@ export default function FaqSection() {
             Questions, answered honestly.
           </h2>
           <p className="mt-4 text-sm leading-7 text-navy-soft">
-            Clear expectations on stock reconciliation, expiry dates, delivery rates, and Italian sourcing before you pay.
+            Clear information on stock, payment, expiry dates, delivery, and Italian sourcing.
           </p>
 
           {/* Search filter input */}
@@ -108,7 +108,7 @@ export default function FaqSection() {
                   }}
                   className={`min-h-11 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors active:scale-[0.98] ${
                     isActive
-                      ? 'bg-navy text-white shadow-sm'
+                      ? 'bg-crimson text-white shadow-sm'
                       : 'border border-line bg-[var(--store-surface-bg)] text-navy-soft hover:text-navy hover:border-navy/30'
                   }`}
                 >
@@ -132,7 +132,7 @@ export default function FaqSection() {
                       aria-controls={`faq-answer-${index}`}
                       className="faq-trigger flex min-h-16 w-full items-start justify-between gap-4 py-4 text-left transition-colors hover:text-crimson focus-visible:outline-2 focus-visible:outline-crimson"
                     >
-                      <div className="pr-2">
+                      <div className="min-w-0 flex-1 pr-2">
                         {faq.cat && (
                           <span className="mb-1.5 inline-block rounded border border-crimson/20 bg-crimson-wash px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-crimson">
                             {faq.cat}
@@ -144,11 +144,11 @@ export default function FaqSection() {
                       </div>
                       <span
                         className={`faq-icon mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-navy-soft transition-transform duration-200 ease-out ${
-                          isOpen ? 'rotate-45 bg-crimson/10 text-crimson border-crimson/30' : ''
+                          isOpen ? 'bg-crimson/10 text-crimson border-crimson/30' : ''
                         }`}
                         aria-hidden="true"
                       >
-                        <PlusIcon size={14} />
+                        <PlusIcon size={14} className={`transition-transform duration-200 ease-out ${isOpen ? 'rotate-45' : ''}`} />
                       </span>
                     </button>
                     <div
@@ -178,7 +178,7 @@ export default function FaqSection() {
                     setSearchQuery('')
                     setActiveCategory('All')
                   }}
-                  className="mt-4 rounded-lg border border-line px-4 py-2 text-xs font-bold text-navy hover:bg-shell/80"
+                  className="mt-4 inline-flex min-h-11 items-center justify-center rounded-lg border border-line px-4 py-2 text-xs font-bold text-navy hover:bg-shell/80"
                 >
                   Clear search filters
                 </button>

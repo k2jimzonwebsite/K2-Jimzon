@@ -27,23 +27,26 @@ test('storefront promises reconcile with manual launch facts without false SLAs 
   expect(site).not.toMatch(/\b(?:Maya|COD)\b|Cash on delivery|bank transfer/i)
   // No false delivery SLA promises
   expect(site).not.toMatch(/1–2 business-day|2–3 week|guaranteed delivery/i)
-  // Explicit manual check requirement before payment
-  expect(site).toContain('Wait for K2 staff to confirm your stock')
+  // Payment precedes dispatch; final totals and receiving details remain required
+  expect(site).toContain('before dispatch')
+  expect(site).not.toContain('Wait for K2 staff to confirm your stock')
   expect(site).toContain('Submitting a request does not confirm a delivery date')
 
   const hero = await readFile(new URL('../src/components/home/Hero.jsx', import.meta.url), 'utf8')
-  expect(hero).toContain('No payment required at checkout')
-  expect(hero).toContain('Staff checks before you pay')
+  expect(hero).not.toContain('No payment required at checkout')
+  expect(hero).not.toMatch(/before you pay|before payment|We verify stock first/)
 
   const confirmation = await readFile(new URL('../src/views/Confirmation.jsx', import.meta.url), 'utf8')
-  expect(confirmation).toContain('No payment was charged')
+  expect(confirmation).not.toContain('No payment was charged')
+  expect(confirmation).toContain('Payment before dispatch')
   expect(confirmation).toContain('Saved for staff review')
   expect(confirmation).toContain('There is no self-service cancellation or return')
 
   const checkout = await readFile(new URL('../src/views/Checkout.jsx', import.meta.url), 'utf8')
   expect(checkout).not.toContain('GCash / Maya / Bank')
-  expect(checkout).toContain('GCash QR after staff confirms your order')
-  expect(checkout).toContain('MariBank QR after staff confirms your order')
+  expect(checkout).toContain('GCash QR payment details')
+  expect(checkout).toContain('MariBank QR payment details')
+  expect(checkout).not.toMatch(/No upfront payment|require immediate payment|tell you when to pay/)
 })
 
 test('the receipt never offers a QR that differs from the recorded checkout method', async () => {
