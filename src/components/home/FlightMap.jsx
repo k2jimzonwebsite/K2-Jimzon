@@ -38,7 +38,7 @@ export default function FlightMap() {
 
   return (
     <div className="relative">
-      <svg viewBox="0 0 600 300" className="h-auto w-full text-navy" role="img" aria-label="Sourcing route from Milano, Italy to Manila, Philippines">
+      <svg viewBox="0 0 600 300" className="hidden h-auto w-full text-navy sm:block" role="img" aria-label="Sourcing route from Milano, Italy to Manila, Philippines">
         <g fill="none" stroke="currentColor" strokeOpacity="0.08" strokeWidth="1">
           <path d="M20 75h560M20 150h560M20 225h560" />
           <path d="M110 24v252M220 24v252M330 24v252M440 24v252M550 24v252" />
@@ -116,16 +116,31 @@ export default function FlightMap() {
         />
       </svg>
 
+      <div role="group" aria-label="Sourcing route stops" className="mt-3 flex flex-wrap gap-2">
+        {Object.values(WAYPOINTS).map(point => (
+          <button
+            key={point.id}
+            type="button"
+            aria-label={point.title}
+            aria-pressed={activePoint === point.id}
+            onClick={() => setActivePoint(point.id)}
+            className={`min-h-11 min-w-16 flex-1 rounded-lg border px-2 text-sm font-semibold transition-colors ${activePoint === point.id ? 'border-crimson bg-crimson text-white' : 'border-line text-navy hover:border-crimson'}`}
+          >
+            {point.id === 'milano' ? 'Milano' : point.id === 'transit' ? 'In transit' : 'Manila'}
+          </button>
+        ))}
+      </div>
+
       {/* Interactive Waypoint Info Drawer */}
       <div className="mt-3 rounded-lg border border-[var(--store-surface-border)] bg-shell/50 p-3 text-xs">
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
-            initial={{ opacity: 0, y: 4 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
-            className="flex items-start justify-between gap-3"
+            className="flex flex-col items-start gap-2 sm:flex-row sm:justify-between sm:gap-3"
           >
             <div>
               <p className="font-semibold text-navy">

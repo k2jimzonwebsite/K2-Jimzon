@@ -76,7 +76,7 @@ function StorefrontShell() {
           <Suspense fallback={null}>
             <Footer />
           </Suspense>
-          <div className="h-16 md:hidden" aria-hidden />
+          <div style={{ height: 'var(--k2-mobile-nav-height, 5rem)' }} className="lg:hidden" aria-hidden />
           <MobileNavBar />
         </>
       )}

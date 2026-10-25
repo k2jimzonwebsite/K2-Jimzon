@@ -1,0 +1,44 @@
+[WebServer] (node:24916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23528) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:25164) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\buyer.spec.js:4:3 › Pasabuy and wholesale truthfulness › Pasabuy validates contact and explains attachment limitation (1.8s)
+[WebServer] 8:53:11 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 2 tests\smoke.spec.js:119:3 › launch-critical storefront › checkout cannot submit while qualified commerce is inactive (3.1s)
+  ok 3 tests\smoke.spec.js:130:3 › launch-critical storefront › wholesale inquiry never fabricates a receipt, approval, or response promise (1.9s)
+  x  4 tests\storefront-mobile.spec.js:61:3 › mobile storefront contract › accessible mobile route and interactive review globe remain present (5.8s)
+
+
+  1) tests\storefront-mobile.spec.js:61:3 › mobile storefront contract › accessible mobile route and interactive review globe remain present 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('img', { name: 'Sourcing route from Milano, Italy to Manila, Philippines' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('img', { name: 'Sourcing route from Milano, Italy to Manila, Philippines' }) with timeout 5000ms
+      - waiting for getByRole('img', { name: 'Sourcing route from Milano, Italy to Manila, Philippines' })
+
+
+      64 |
+      65 |     const routeMap = page.getByRole('img', { name: 'Sourcing route from Milano, Italy to Manila, Philippines' })
+    > 66 |     await expect(routeMap).toBeVisible()
+         |                            ^
+      67 |     await expect(routeMap.getByTestId('animated-flight-plane')).toHaveCount(1)
+      68 |     if (process.env.K2_CAPTURE_MOBILE === '1') {
+      69 |       await routeMap.screenshot({ path: 'test-results/storefront-mobile-route.png' })
+        at C:\Users\jerze\.codex\worktrees\mobile-production-reconcile\K2 JImzon\tests\storefront-mobile.spec.js:66:28
+
+    Error Context: test-results\storefront-mobile-mobile-s-ada8f-review-globe-remain-present\error-context.md
+
+  1 failed
+    tests\storefront-mobile.spec.js:61:3 › mobile storefront contract › accessible mobile route and interactive review globe remain present 
+  3 passed (20.5s)

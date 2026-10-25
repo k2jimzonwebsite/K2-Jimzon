@@ -108,12 +108,10 @@ test.describe('launch-critical storefront', () => {
     await expect(cart).toBeVisible()
     await cart.getByRole('button', { name: /Review order request/i }).click()
     await expect(cart).toBeHidden()
-    // Checkout's h1 is now "Review order request" and the no-charge wording was
-    // rephrased. The guarantee is unchanged and must stay explicit on the page:
-    // submitting collects nothing.
+    // Submitting records the request; QR payment is separate and precedes dispatch.
     await expect(page.getByRole('heading', { name: /Review order request/i })).toBeVisible({ timeout: 60000 })
-    await expect(page.getByText(/does not charge you or require immediate payment/i)).toBeVisible()
-    await expect(page.getByText(/No upfront payment is required/i)).toBeVisible()
+    await expect(page.getByText(/Submitting saves your order. QR transfers are made separately/i)).toBeVisible()
+    await expect(page.getByRole('main').getByText(/GCash and MariBank orders are paid before dispatch/i)).toBeVisible()
     await expect(page.getByRole('button', { name: /Submit order request/i })).toBeVisible()
     await expect(page.getByText(/Confirm payment|Scan with any QR/i)).toHaveCount(0)
   })

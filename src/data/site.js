@@ -83,12 +83,12 @@ export const FAQS = [
   {
     cat: 'Ordering & Stock',
     q: 'How does your Single Master Inventory work?',
-    a: 'K2 staff manage products and stock in one master inventory. Only products assigned to Website and eligible for sale appear in our catalog. Marketplace connectors are not yet live, so staff reconcile those sales manually. Wait for K2 staff to confirm your stock and final total before paying.',
+    a: 'K2 staff manage products and stock in one master inventory. Only products assigned to Website and eligible for sale appear in our catalog. Marketplace connectors are not yet live, so staff reconcile those sales manually.',
   },
   {
     cat: 'Ordering & Stock',
     q: 'How do payments work and why is confirmation not instant?',
-    a: 'Checkout submits an order request without charging you immediately. Once staff confirm your stock, package details, and final total, you can pay instantly via our verified GCash or MariBank QR codes. Confirmation is completed manually by staff rather than an automated gateway.',
+    a: 'Pay by GCash or MariBank QR before dispatch. Use your order payment details once the final total is ready. Upload your receipt and reference; staff verify the funds. A receipt alone does not confirm payment.',
   },
   {
     cat: 'Freshness & Dates',
@@ -108,7 +108,7 @@ export const FAQS = [
   {
     cat: 'Delivery & Pickup',
     q: 'How are delivery rates calculated?',
-    a: 'Standard delivery uses K2’s published regional and package-weight rates. Express delivery requires a staff quote for your actual route and parcel. Staff confirm any pending fee and your final total before payment; a courier estimate is not a confirmed delivery booking.',
+    a: 'Standard delivery uses K2’s published regional and package-weight rates. Express delivery requires a staff quote for your actual route and parcel. Any pending delivery fee must be included in your final total before you transfer; a courier estimate is not a confirmed delivery booking.',
   },
   {
     cat: 'Pasabuy & Flights',

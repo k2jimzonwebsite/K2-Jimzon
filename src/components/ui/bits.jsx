@@ -41,14 +41,14 @@ export function Wordmark({ size = 'text-2xl', onClick, light = false }) {
     <button
       onClick={onClick}
       aria-label={onClick ? 'K2 Jimzon home' : undefined}
-      className={'group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 ' + (onClick ? 'cursor-pointer' : 'cursor-default')}
+      className={'group min-h-11 text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 ' + (onClick ? 'cursor-pointer' : 'cursor-default')}
     >
       <span className={'font-serif font-semibold tracking-tight text-crimson ' + size}>
         K2 Jimzon
       </span>
       <span
         className={
-          'mt-1 block text-xs font-medium uppercase tracking-[0.32em] ' +
+          'wordmark-tagline mt-1 block text-xs font-medium uppercase tracking-[0.32em] ' +
           (light ? 'text-white/60' : 'text-navy-soft')
         }
       >

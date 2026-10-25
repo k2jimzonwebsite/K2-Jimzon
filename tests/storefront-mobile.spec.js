@@ -58,13 +58,16 @@ test.describe('mobile storefront contract', () => {
     }
   })
 
-  test('animated route and interactive review globe remain present', async ({ page }) => {
+  test('accessible mobile route and interactive review globe remain present', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('button', { name: /Shop the Collection/i })).toBeVisible({ timeout: 45000 })
 
-    const routeMap = page.getByRole('img', { name: 'Sourcing route from Milano, Italy to Manila, Philippines' })
+    const routeMap = page.getByRole('group', { name: 'Sourcing route stops' })
     await expect(routeMap).toBeVisible()
-    await expect(routeMap.getByTestId('animated-flight-plane')).toHaveCount(1)
+    await expect(routeMap.getByRole('button')).toHaveCount(3)
+    const milano = routeMap.getByRole('button', { name: 'Milano Sourcing', exact: true })
+    await milano.press('Enter')
+    await expect(milano).toHaveAttribute('aria-pressed', 'true')
     if (process.env.K2_CAPTURE_MOBILE === '1') {
       await routeMap.screenshot({ path: 'test-results/storefront-mobile-route.png' })
     }

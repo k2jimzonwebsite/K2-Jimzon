@@ -23,6 +23,7 @@ export default defineConfig({
       VITE_SUPABASE_URL: baseURL,
       VITE_SUPABASE_PUBLISHABLE_KEY: 'selling-surface-public-key',
       VITE_GUEST_BFF_ENABLED: 'true',
+      VITE_CUSTOMER_ACCOUNT_ENABLED: 'true',
       VITE_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
     },
     // The HTML shell returns before the cold Tailwind transform finishes.

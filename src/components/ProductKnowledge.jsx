@@ -64,7 +64,7 @@ export default function ProductKnowledge({ product, onAskStaff }) {
 
       {!knowledge.hasFields && (
         <p className="mt-3 text-sm leading-7 text-navy-soft">
-          {UNAVAILABLE_TEXT} Staff confirm product details before payment instructions are provided.
+          {UNAVAILABLE_TEXT} Ask staff to clarify missing product details before ordering.
         </p>
       )}
 

@@ -42,6 +42,8 @@ test('direct saved order conversation accepts a private receipt after fresh inst
 
   await page.goto('/confirmation', { waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('heading', { name: 'Order request received' })).toBeVisible()
+  await expect(page.getByText('Payment before dispatch', { exact: true })).toBeVisible()
+  await expect(page.getByText(/No payment was charged|contact you before you transfer/)).toHaveCount(0)
   await expect(page.getByRole('heading', { name: 'Your order conversation' })).toBeVisible()
   await expect(page.getByLabel('Message K2 about this order')).toBeVisible()
   await expect(page.getByLabel('Your name')).toHaveCount(0)
@@ -52,6 +54,7 @@ test('direct saved order conversation accepts a private receipt after fresh inst
   await page.getByRole('button', { name: 'Send order message' }).click()
   await expect.poll(() => sentMessage).toMatchObject({ p_order_id: orderId, p_message: 'Please confirm the exact total before I transfer.' })
 
+  await expect(page.getByText('After transferring the final order total, upload your receipt here. Staff verify the funds before dispatch.')).toBeVisible()
   await page.getByLabel('Payment reference').fill('GC-123456')
   await page.getByLabel('Upload e-receipt').setInputFiles({ name: 'receipt.png', mimeType: 'image/png', buffer: Buffer.from('89504e470d0a1a0a0000000000000000', 'hex') })
   await page.getByRole('button', { name: 'Submit receipt for staff review' }).click()

@@ -2,9 +2,9 @@
  * Authoritative customer policies for K2 Jimzon.
  * Reconciled with manual launch operating facts:
  * - Direct Italian import verification.
- * - Manual order request model (no upfront charge).
+ * - Order requests with QR payment before dispatch.
  * - Staff stock confirmation & courier delivery quotation.
- * - Manual GCash/MariBank QR payment instructions after staff review.
+ * - Manual GCash/MariBank QR transfers and independent funds verification.
  * - Case-by-case inspection & resolution for damaged/incorrect items within 48 hours.
  * - Zero selling or sharing of customer data with advertisers or data brokers.
  */
@@ -41,20 +41,20 @@ export const PRIVACY_POLICY = {
 export const TERMS_POLICY = {
   id: 'terms',
   title: 'Terms of Service & Order Requests',
-  lastUpdated: '15 September 2026',
-  summary: 'Placing a request on K2 Jimzon is an order request, not an automated transaction. Stock and delivery fees are confirmed by staff before payment.',
+  lastUpdated: '24 October 2026',
+  summary: 'GCash and MariBank orders are paid before dispatch. Checkout records an order request; payment is a separate QR transfer and remains subject to staff verification.',
   sections: [
     {
       heading: 'Order Request Model',
-      content: 'Submitting an order request on our website, Pasabuy form, or wholesale form does not collect upfront payment or guarantee immediate dispatch. It registers your requested items for review by K2 staff in Manila.',
+      content: 'Website checkout records your order and selected payment method. Follow the order payment details when its final total is available. Pasabuy and wholesale forms request a quote; follow the payment terms agreed for the accepted quote. Submitting a form does not guarantee immediate dispatch.',
     },
     {
       heading: 'Stock & Price Verification',
-      content: 'All products are authentic Italian imports. While our catalog reflects available inventory, staff manually verifies physical item condition, batch expiry dates, and actual on-hand quantity before issuing a confirmed payment total.',
+      content: 'All products are authentic Italian imports. The catalog shows eligible products and recorded availability. Staff review item condition, batch dates and order details. Transfer only the final order total, including any pending delivery quote; contact staff if the amount or availability needs clarification.',
     },
     {
       heading: 'Payment Instructions',
-      content: 'You may choose GCash or MariBank QR transfer for an order request. Do not send payment until K2 staff contacts you with confirmed stock availability, exact courier delivery fees, and verified recipient account details. Submitted payments are manually verified by staff.',
+      content: 'Choose GCash or MariBank and use the matching receiving details shown for your order when available. Check the final total and recipient before transferring, then upload your receipt and payment reference. Payment is required before dispatch for QR orders. Staff verify funds in the receiving account; uploading a receipt alone does not confirm payment.',
     },
     {
       heading: 'Courier Delivery & Timelines',

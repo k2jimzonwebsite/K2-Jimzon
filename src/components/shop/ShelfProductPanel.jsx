@@ -184,7 +184,7 @@ export default function ShelfProductPanel({
 
       {basketError && <p role="alert" className="mt-3 text-sm font-semibold text-crimson">{basketError}</p>}
       <p className="mt-3 text-xs leading-5 text-navy-soft">
-        Adding to your basket saves your selection. Review it at checkout, then submit an order request. K2 confirms availability before payment instructions.
+        Adding to your basket saves your selection. Review it at checkout, then follow your order payment details. QR payments are verified before dispatch.
       </p>
     </section>
   )
