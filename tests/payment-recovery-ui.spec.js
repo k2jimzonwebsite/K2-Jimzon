@@ -157,7 +157,7 @@ for (const kind of ['handover', 'delivery', 'custody', 'supplier']) {
     if (kind === 'custody') {
       await expect(dialog).toContainText('BOX-123 · LOT-ABC')
       await expect(dialog).toContainText('3 × SKU-123 to Receiving staff')
-      await expect(dialog.getByRole('button', { name: 'Confirm command' })).toBeDisabled()
+      await expect(dialog.getByRole('button', { name: 'Confirm command' })).toBeEnabled()
       await dialog.getByLabel('Reason (audit record)').fill('Verified physical transfer to receiving staff')
     }
     await dialog.getByRole('button', { name: kind === 'handover' ? 'Confirm handover' : kind === 'delivery' ? 'Save delivery details' : kind === 'supplier' ? 'Save supplier' : 'Confirm command' }).click()
@@ -228,3 +228,18 @@ for (const kind of ['handover', 'delivery']) {
     await expect(dialog).toHaveCount(0)
   })
 }
+
+test('blank custody audit note records a default and retains the exact uncertain command', async ({ page }) => {
+  await page.goto('/tests/fixtures/payment-harness.html?fulfillment=custody')
+  await page.getByRole('button', { name: 'Review local command' }).click()
+  const dialog = page.getByRole('dialog')
+  await dialog.getByRole('button', { name: 'Confirm command' }).click()
+  const first = await page.evaluate(() => window.commands[0])
+  expect(first.payload.reason).toBe('Custody updated by admin')
+  await page.evaluate(() => window.finishCommand({ ok: false, code: 'REQUEST_TIMEOUT', error: 'Timed out' }))
+  await expect(dialog.getByRole('textbox')).toBeDisabled()
+  await dialog.getByRole('button', { name: 'Retry same command' }).click()
+  expect(await page.evaluate(() => window.commands)).toEqual([first, first])
+  await page.evaluate(() => window.finishCommand({ ok: true }))
+  await expect(dialog).toHaveCount(0)
+})
