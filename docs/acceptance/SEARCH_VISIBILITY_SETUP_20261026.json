@@ -1,0 +1,500 @@
+{
+  "recordedAt": "2026-10-26T11:23:54.696Z",
+  "map": "MAP-024",
+  "ideas": [
+    "IDEA-20261026-03",
+    "IDEA-20261026-04"
+  ],
+  "branch": "codex/search-visibility-20261026",
+  "base": "a3aca9f2f60c647089d1bea52398e419fc37da77",
+  "state": {
+    "provider": "Applied and observed as described in companion MD",
+    "source": "Owner-approved candidate; complete release-stage union qualified after focused recovery; promotion pending",
+    "deployed": false,
+    "productGlobalGate": "OFF by explicit owner approval; exact107 ready /9 held",
+    "livePasabuy": "Google Soft404 not yet repaired in production",
+    "liveAnalytics": "No ingestion verified",
+    "admin": "Read-only qualification; owner stops further Admin work"
+  },
+  "catalog": {
+    "shopperListings": 116,
+    "searchReady": 107,
+    "held": [
+      "K2-SKU-001028",
+      "K2-SKU-001029",
+      "K2-SKU-001038",
+      "K2-SKU-001039",
+      "K2-SKU-001064",
+      "K2-SKU-001065",
+      "K2-SKU-001162",
+      "K2-SKU-001163",
+      "K2-SKU-001164"
+    ]
+  },
+  "checks": [
+    {
+      "command": "npm run verify:release",
+      "result": "Initial literal runs exit1 retained; all constituent stages subsequently passed with focused recovery. See companion MD.",
+      "exitCode": 1,
+      "composedQualification": true
+    },
+    {
+      "command": "npm run test:selling-surfaces",
+      "result": "86 passed on final source",
+      "exitCode": 0,
+      "log": ".tools/search-visibility-20261026/selling-qualified.log"
+    },
+    {
+      "command": "npx playwright test --config=playwright.selling.config.js tests/search-visibility-ui.spec.js",
+      "result": "14 passed on final source",
+      "exitCode": 0,
+      "log": ".tools/search-visibility-20261026/consent-layout-final.log"
+    },
+    {
+      "command": "focused discovery contracts",
+      "result": "34 passed with product gate OFF",
+      "exitCode": 0,
+      "log": ".tools/search-visibility-20261026/discovery-gate-open.log"
+    },
+    {
+      "command": "npm run verify:development",
+      "result": "passed on final source",
+      "exitCode": 0,
+      "log": ".tools/search-visibility-20261026/development-ship.log"
+    },
+    {
+      "command": "remaining release stages: order-receipt-direct, workflow-api (including workflow-map), intake-ai-ui, vercel-output, build:storefront, build:admin",
+      "result": "2+4+11+26 tests, output verification and both final builds passed",
+      "exitCode": 0,
+      "log": ".tools/search-visibility-20261026/release-ship.log"
+    },
+    {
+      "command": "npm run preflight:k2-project && npm run readiness:k2-live",
+      "result": "ExactK2;8verified/2owner/3connector/0blocked",
+      "exitCode": 0,
+      "log": ".tools/search-visibility-20261026/readiness-ship.log"
+    },
+    {
+      "command": "Final icon correction: consent14, verify:development, build:storefront, build:admin",
+      "result": "All exit0; literal command completed. Final107product XML and unchanged private/Admin boundaries.",
+      "exitCode": 0
+    }
+  ],
+  "reviews": {
+    "code": "No remaining Critical/Important findings after optional-module and expiry fixes",
+    "designConsent": "ship after elevation removal; five variants",
+    "designPasabuy": "ship after air-only badge correction; five refreshed variants",
+    "documenter": "Ordinary extension; no design-system change; existing drift left untouched",
+    "latestConsent": "Independent Impeccable verdict pass: ship; only close-icon finding scored resolved. Primary all seven captures checked. Detector [] from prior single run."
+  },
+  "limits": [
+    "Not full release-gate evidence",
+    "Google vendor isolated in local tests",
+    "No actual GA collection/automatic-event proof",
+    "No repaired production Google render or rank guarantee",
+    "Screenshots/logs are ignored local evidence, may be absent in fresh clone"
+  ],
+  "sources": [
+    {
+      "path": "scripts/prelaunch-indexing.mjs",
+      "bytes": 3200,
+      "sha256": "209246a32a36f3a48837bd13ef1a5556c6ff9a3352324d788326c413f95b248b"
+    },
+    {
+      "path": "vercel.storefront.json",
+      "bytes": 4126,
+      "sha256": "579be0507265979b6fa5bdd05de815e4f314a2b325384cb6dbdb5dc7d67919b8"
+    },
+    {
+      "path": "scripts/map024-evidence/read-published-catalog.mjs",
+      "bytes": 7611,
+      "sha256": "b64fb6ad5d56fecca7dc89695bd58a6fbaebacf5c28dc27556e52ad7711066b9"
+    },
+    {
+      "path": "scripts/map024-evidence/published-catalog.json",
+      "bytes": 123483,
+      "sha256": "97c2a6fa5a4f8285812edbce1f1b03a7cb3e92db70ba76f7448e7559f78137bc"
+    },
+    {
+      "path": "scripts/map024-evidence/generate-sitemap.mjs",
+      "bytes": 7896,
+      "sha256": "2d5267656ba9a73d4c2cff0585974c665aa6a49c91548e106b2d267d06a968c8"
+    },
+    {
+      "path": "scripts/map024-evidence/generate-product-pages.mjs",
+      "bytes": 4785,
+      "sha256": "7d42363cfd10a1b8e2d8ba4da9e168ac8f829a9e4ef0825bfe11bd47850c60f2"
+    },
+    {
+      "path": "src/StorefrontApp.jsx",
+      "bytes": 4349,
+      "sha256": "30f0647ca505f13a53f2bd826716a9c6e3c31847e71cd8d2bb47892199c903f1"
+    },
+    {
+      "path": "src/components/StorefrontAnalytics.jsx",
+      "bytes": 5360,
+      "sha256": "15c5cc966bf4cc750cfe0eeede716000040c36ebbe98ef0fa97f8a65a645c45e"
+    },
+    {
+      "path": "src/lib/storefrontAnalytics.js",
+      "bytes": 3966,
+      "sha256": "e0bcc5d3f075200a084b1728c1b01278ac36aa127c91c7c4d3cd601692410987"
+    },
+    {
+      "path": "src/components/ProductCard.jsx",
+      "bytes": 9264,
+      "sha256": "79e3e0c115a98452900605c2aebd78c9d0dca859f9339f2adfb95fda5132853b"
+    },
+    {
+      "path": "src/components/StorefrontMetadata.jsx",
+      "bytes": 5297,
+      "sha256": "83459230d659325d2f789aebb9d61a68aecff7c634d83c4dd0933d44079a66bb"
+    },
+    {
+      "path": "src/context/StoreContext.jsx",
+      "bytes": 45372,
+      "sha256": "c115a0a5702158c1e0be70eabb2eb5db55bc8d8c362c08af11b725fdf0f5a954"
+    },
+    {
+      "path": "src/components/Footer.jsx",
+      "bytes": 7320,
+      "sha256": "f6603ee053b878b722c74aedaf6627bddd69b2c0f4a3840e55be3e846c963f81"
+    },
+    {
+      "path": "src/views/Pasabuy.jsx",
+      "bytes": 12129,
+      "sha256": "1df65911ae4ddeddc6fa60c9ad7dd81f9673c6a100ece39010cf334c27d5b7a5"
+    },
+    {
+      "path": "src/lib/storefrontSeoPages.js",
+      "bytes": 1018,
+      "sha256": "6e7988b9284df390d9fe526cfb33fbfe3ab5213a5daeeb209d75a3636be02f51"
+    },
+    {
+      "path": "src/data/policies.js",
+      "bytes": 7832,
+      "sha256": "2bd9b20db9928134f32ca4f1c8fc4a669bf0d68c476f826b524d13c03bf11bb8"
+    },
+    {
+      "path": "src/views/Policy.jsx",
+      "bytes": 4913,
+      "sha256": "2d8b9b5b04ef4fe6f9a6ce9aa814569e72fa8165e06d5a5d066df9a1197d378a"
+    },
+    {
+      "path": "tests/search-visibility-ui.spec.js",
+      "bytes": 8842,
+      "sha256": "9320fd23bd90a671a63104a87afbb2900333852ca5fb85031c0db69ba9606efc"
+    },
+    {
+      "path": "tests/map024-sitemap.spec.js",
+      "bytes": 13028,
+      "sha256": "ee9bb47a3cce59a622c9fee586648af985bfa4f3b4f8c23b91a02178a27608b8"
+    },
+    {
+      "path": "vite.config.js",
+      "bytes": 9443,
+      "sha256": "a9fc30efbc9069fc1ed343840a604ea7d6f00482556df897ec9926c5c9db5840"
+    },
+    {
+      "path": "playwright.config.js",
+      "bytes": 3415,
+      "sha256": "b9e392bf4d7008fe9373cc18669df11d7192f9f0fb64e272c8d6c3d3d266a01f"
+    },
+    {
+      "path": "tests/brand-logo.spec.js",
+      "bytes": 4741,
+      "sha256": "7610b77ba52125b6f4a4fd9bd03638217000ea067f2f28a879b42badbc9cafe4"
+    },
+    {
+      "path": "tests/buyer.spec.js",
+      "bytes": 1884,
+      "sha256": "ba7107a7270d610f4a8db37b0dc3dc1cbd3a3b0dc0b159c653260b2b6fa45dc7"
+    },
+    {
+      "path": "tests/homepage-mobile-fixes.spec.js",
+      "bytes": 9307,
+      "sha256": "92a27409889c07ab764104666ebaf413dd08310e20583214bb51387c6326981e"
+    }
+  ],
+  "logs": [
+    {
+      "path": ".tools/search-visibility-20261026/ui-final.log",
+      "bytes": 4767,
+      "sha256": "ac4575e15ccd2cb31fb55eee22d2bf7ee57e595421a53132334a95cf18b4da29"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/discovery-final.log",
+      "bytes": 4934,
+      "sha256": "2e69c711d0493cba9f15644284cddea28e41edaf4b891d00284abe681fa28015"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/development-final-reviewed.log",
+      "bytes": 18808,
+      "sha256": "2c6ac6b0fe75ad148f21c26e5fb73e39559767a3cd17d39324ee7aefa34edd9c"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/build-storefront-final.log",
+      "bytes": 25429,
+      "sha256": "11458c8ece03bdf84dae33d9d63e16762881fd07cb3aeb4f6a99165cdbfd5a28"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/build-admin-final.log",
+      "bytes": 24544,
+      "sha256": "d0c6976e7add58ae0a49a2c2d8b9e770d1f55c609360d90e3e20d6a31f397676"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/release.log",
+      "bytes": 205606,
+      "sha256": "ab9e903a8ada91870a15b0a67d0edb4b906ece80491829f47a59639df94d211f"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/release-reviewed.log",
+      "bytes": 237304,
+      "sha256": "505e5c4d85330492c246fe404a85bd7cc00a820751392e270196882de440d91e"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/release-resumed.log",
+      "bytes": 20514,
+      "sha256": "69c430d68f05831d43dc73b5c48f8ca28f301fae95c80d9499441594d6838c33"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/release-final-stages.log",
+      "bytes": 13767,
+      "sha256": "0cfbf5797fed791d9ed9c6c0c72aa25ac9ef53f49222a0d7ebf017611415f2dc"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/release-remaining-final.log",
+      "bytes": 37687,
+      "sha256": "e6824bbbe7cf1ebc516f98bdcdfbe71b4e39fcf701136cf1cf8623718a37899d"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/release-post-admin.log",
+      "bytes": 83749,
+      "sha256": "dd4c586633d137bc64b465e437e0a1ab8617e312c9fb7cd83a8054794703b0cd"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/footer-resource-retry.log",
+      "bytes": 961,
+      "sha256": "afe78dee5c127a8984e28da196195b890c60c865c84f2e266f14edde1ebad746"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/admin-connection-retry.log",
+      "bytes": 794,
+      "sha256": "8213f691a6d41a709fa5c092b7ed8f3408e673a83f98a7ec6020d4445a537da5"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/theme-settled.log",
+      "bytes": 10726,
+      "sha256": "e186209622381f4ca3719afb907337df736348bc00ab1c067af7f1d7dce89c3c"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/consent-200-red.log",
+      "bytes": 1801,
+      "sha256": "786a9a19913ab3a18c5ada1c9f0cbed41ff00341b82148f9ae8adbf526437781"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/consent-layout-green.log",
+      "bytes": 1625,
+      "sha256": "765d92afd6f7547b898cc9b915fddab20bcc885ab8703ebdbbefb9f614fd0aef"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/consent-layout-final.log",
+      "bytes": 5280,
+      "sha256": "bb731fb59d0310011dae61fc5e1d44bcd5071b47f10192fca64676460a3ab474"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/selling-qualified.log",
+      "bytes": 32794,
+      "sha256": "cdffbe9de3121485549797de7c2b8a69c26e2b17c958327ff70beccc51941e9f"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/development-ship.log",
+      "bytes": 18814,
+      "sha256": "5b24d88afca3ece82b322e8963a1c16844b74d18f6a40102c974a260a174b266"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/release-ship.log",
+      "bytes": 59049,
+      "sha256": "9037aaa024b8432472f65cb7e83d27e7f3abafe8f49f3088423ea74fb506ae7b"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/preflight-ship.log",
+      "bytes": 176,
+      "sha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/readiness-ship.log",
+      "bytes": 2154,
+      "sha256": "76b0fdf984d2b71b3b7190a22bb6d837648e322028c1c879bbfecb49d00d26e7"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/icon-final.log",
+      "bytes": 5279,
+      "sha256": "35e8dff054316a8200d46cce68874ac6f200f031f976765b87d2da2dcb7e3f60"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/development-icon.log",
+      "bytes": 18822,
+      "sha256": "bb181194f15bd7dbe1f5e952c032e1a78ce7c876df99c3d5b45cc3eeb06f63cb"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/build-storefront-final.log",
+      "bytes": 25429,
+      "sha256": "11458c8ece03bdf84dae33d9d63e16762881fd07cb3aeb4f6a99165cdbfd5a28"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/build-admin-final.log",
+      "bytes": 24544,
+      "sha256": "d0c6976e7add58ae0a49a2c2d8b9e770d1f55c609360d90e3e20d6a31f397676"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": ".impeccable/review/mobile.png",
+      "bytes": 112232,
+      "sha256": "311162e814d480e4f5a4cd989aef76f2b0be003543705a9bde2f67644110eb17"
+    },
+    {
+      "path": ".impeccable/review/mobile-dark.png",
+      "bytes": 81590,
+      "sha256": "3171067bf94bc9b6ead9a568c6cda5e99d0f90dabe85ba8c1a58cac6055c1a04"
+    },
+    {
+      "path": ".impeccable/review/desktop.png",
+      "bytes": 873561,
+      "sha256": "d6fcbebb373f51a5af2bf5455de7fd17f2832d71f22fccd64a95b582f21fd887"
+    },
+    {
+      "path": ".impeccable/review/desktop-dark.png",
+      "bytes": 85369,
+      "sha256": "b5b21ac435a9daa03f3c927a11d05fdd56f786e2c673a4f7f5a775c97d79486d"
+    },
+    {
+      "path": ".impeccable/review/user-777.png",
+      "bytes": 286946,
+      "sha256": "ffb56b7503281a2f94e1962a235d62ae13ffaa21c860f32fdda0450e6130fa20"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/pasabuy-review/mobile.png",
+      "bytes": 255795,
+      "sha256": "927a637ba960ea0dca75378de776f34476954e9f7e9c1835ea85187a057631d7"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/pasabuy-review/mobile-dark.png",
+      "bytes": 188666,
+      "sha256": "761bbbe216036c35982531abb8791e6d6a6034edcae95585fabfb44a445ce76d"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/pasabuy-review/desktop.png",
+      "bytes": 1138149,
+      "sha256": "dc7d36de8aa5b560baf217d9209eded0c08cf61dc54d1ae0ef7ef01b233509f4"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/pasabuy-review/desktop-dark.png",
+      "bytes": 538310,
+      "sha256": "fc4af253bb0e214fdcecf2266e461b34de0655d1679cecc3e4193f23f34af20a"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/pasabuy-review/user-777.png",
+      "bytes": 591121,
+      "sha256": "5d081421dc46994585d44ddc19700870be4f4d9bfd469ae992a360649d9ecad5"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/admin-root-not-indexed.png",
+      "bytes": 59806,
+      "sha256": "443038f48e24c58f518126bbbaf25f381ccc9c2ae840968b16c532f73e68d616"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/admin-route-not-indexed.png",
+      "bytes": 59444,
+      "sha256": "d064a9a90a1ebea9f91e0e52e5da82e8f3cc8ae8b48f99da1e709100b9a5ba49"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/catalog-indexing-requested.png",
+      "bytes": 66976,
+      "sha256": "f028cdc1595c11772dca6ff0c9d52b18a6241816fe2f17e197bb1bb27197015a"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/ga4-collection-minimized.png",
+      "bytes": 137477,
+      "sha256": "31a5f6124ed8be7e50576ecf90e730b5b02e9f0407d8f32295f2621b235dbb8e"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/ga4-search-console-linked.png",
+      "bytes": 26531,
+      "sha256": "b936ee568cc8e461a0b2dff68b025999cec2904056d382ba239d2731edbe15e1"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/ga4-terms-pending.png",
+      "bytes": 86568,
+      "sha256": "47ec838c9c48493be18aed5137c9c356f9dc3c51d43c71ace89ed20fa057669d"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/homepage-indexed-google.png",
+      "bytes": 63185,
+      "sha256": "ac19890e1195d3f0a7270e7b4502b30a4fafb8b93ce4931db3fafe18ae8417cd"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/pasabuy-google-render.png",
+      "bytes": 66843,
+      "sha256": "fba65e0959f808468e5da01188f91ebd5c61e521d9a8c87975d3057469f85991"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/pasabuy-google-soft404.png",
+      "bytes": 68668,
+      "sha256": "4f29eca509664a680d20527bce609d5f2eab6bfee6161c9e9ac1f2e0d5e31f27"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/search-console-ownership-verified.png",
+      "bytes": 40874,
+      "sha256": "e5f2c9be6a921b347d49076f50da709f905d63186fc35de2f2d116e9be377c35"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/sitemap-success.png",
+      "bytes": 71796,
+      "sha256": "fc61007b5c19d1dfe4f0c73663ae850fb8d95f628855b57dfa81bf9b5f5d830c"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/trade-indexing-requested.png",
+      "bytes": 82054,
+      "sha256": "9b1c5959a51084a4f51e9442aebb96f7856b833f56550e68a4a4538c19109039"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/pasabuy-local-preview.png",
+      "bytes": 816397,
+      "sha256": "084fd4c20e2c6fcbcec0227cbe843f90552d8ea8c3ec8e8ea1659234ff14615c"
+    },
+    {
+      "path": ".impeccable/review/mobile-320.png",
+      "bytes": 111084,
+      "sha256": "596aabc06f73594da66d50be18e3b7892ec54dfbfd8c9fadabe780cef7d2c59a"
+    },
+    {
+      "path": ".impeccable/review/mobile-200.png",
+      "bytes": 130943,
+      "sha256": "c34e5505aeb6b57d83ab0503a5c5e65ed466f39818d4a4018256413289e91476"
+    }
+  ],
+  "publicReadReceipts": [
+    {
+      "path": "docs/evidence/20261026-search-visibility/live-discovery.json",
+      "bytes": 722,
+      "sha256": "e350f44338a67fd6cb6db85e4a576d1a3e4abe11384b144d6f5859bfebb3a8f1"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/product-metadata-before-release.json",
+      "bytes": 1822,
+      "sha256": "1676110fa6b966162bb0ff620dd15a90e14e708c16aefe34b4365a91a281fd69"
+    }
+  ],
+  "adminReadReceipt": {
+    "path": ".tools/search-visibility-20261026/admin-anonymous-host-check.json",
+    "bytes": 1876,
+    "sha256": "62db25d29966c7ab1a5edac48e25de36a042faf64315e9980be5938e40bc0511"
+  },
+  "pasabuyDom": {
+    "path": ".tools/search-visibility-20261026/pasabuy-review/dom.json",
+    "bytes": 2076,
+    "sha256": "ebf3d1de25f0668b48b7376b38a9f5ff52c02ca6b72c1de9218a57e7ae4e09b3"
+  }
+}

@@ -1,11 +1,11 @@
 # Pre-launch indexing gate — how to undo it
 
-**Status: ON as of 2 September 2026.**
+**Status: owner approved removal on26October2026; source gate OFF, production pending verification.** The owner explicitly authorized107reviewed search-ready products while retaining9row-level noindex holds. Fresh read-only116row projection matches the exact approved107-SKU set; shopper publication is unchanged. Both global halves are changed together. Current evidence: `docs/acceptance/SEARCH_VISIBILITY_SETUP_20261026.md/json`; unfinished release/postflight only MAP-024.
 
 While this gate is on, `https://www.k2jimzon.com/product/*` is served
 `X-Robots-Tag: noindex, nofollow` and no product URL appears in `sitemap.xml`.
 Every other page — home, catalog, store, Pasabuy, Wholesale, Contact — is
-indexed normally.
+eligible for indexing. Eligibility is not proof that Google has indexed a page.
 
 **The product pages still work.** Anyone with a link can open one, share it, and
 buy from it. The gate is an instruction to search engines, not a restriction on
@@ -64,9 +64,11 @@ Do not open this gate on a schedule. Open it when the content is real:
 - [ ] Spot-check three product pages in a browser and confirm the `og:image` and
       meta description differ per product.
 
-If some products qualify and others do not, publish only the ready ones and
-leave the rest unpublished. The gate is all-or-nothing by route; product
-readiness is controlled per row by `published`.
+If some products qualify and others do not, preserve genuine shopper publication.
+The reviewed projection's `search_indexable:false` excludes held rows from XML,
+keeps their generated share pages noindex, and supplies runtime eligibility.
+The global gate is all-or-nothing by route; row-level search eligibility remains
+separate from `published`. Refresh the projection when product facts change.
 
 ### 1. Turn the switch off
 
@@ -110,11 +112,15 @@ the projection was generated.
 ### 4. Verify after deploying
 
 ```bash
-curl -sI https://www.k2jimzon.com/product/rio-mare | grep -i x-robots-tag
+curl -sI https://www.k2jimzon.com/product/K2-SKU-001001 | grep -i x-robots-tag
 ```
 
-Expect **no output**. Any `noindex` still present means the header survived —
+For an approved search-ready SKU expect **no output**. Any `noindex` header still present means the global header survived —
 check that Vercel picked up the config change.
+
+Also inspect raw and hydrated robots metadata: ready rows must be indexable;
+held rows must retain noindex and remain absent from XML. Do not remove their
+per-row protection just to increase the sitemap count.
 
 Then confirm the sitemap lists products:
 

@@ -1,4 +1,5 @@
 import BrandMark from './ui/BrandMark'
+import { ANALYTICS_CHOICE_EVENT } from '../lib/storefrontAnalytics'
 import { useStore } from '../context/StoreContext'
 import { Wordmark } from './ui/bits'
 import { ArrowIcon, FacebookIcon, InboxIcon, InstagramIcon, MapIcon, PhoneIcon } from './ui/icons'
@@ -116,6 +117,7 @@ export default function Footer() {
           <button onClick={() => go('privacy')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Privacy &amp; Data</button>
           <button onClick={() => go('terms')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Terms of Service</button>
           <button onClick={() => go('returns')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Returns &amp; Replacements</button>
+          <button onClick={() => window.dispatchEvent(new Event(ANALYTICS_CHOICE_EVENT))} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Analytics choices</button>
         </div>
 
         <div className="mt-4 grid grid-cols-1 gap-3 border-t border-[var(--store-surface-border)]/60 pt-4 text-xs leading-relaxed text-navy-faint md:grid-cols-[1fr_auto] md:items-end">

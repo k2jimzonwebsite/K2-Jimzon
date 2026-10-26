@@ -1,326 +1,1972 @@
 [
   {
-    "sku": "baiocchi",
-    "name": "Mulino Bianco Baiocchi hazelnut 260g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "249",
-    "updated_at": "2026-08-10 09:51:16.467609+00"
-  },
-  {
-    "sku": "barilla-pesto",
-    "name": "Barilla pesto alla Genovese",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "329",
-    "updated_at": "2026-08-10 09:51:15.716327+00"
-  },
-  {
-    "sku": "barilla-spaghetti",
-    "name": "Barilla Spaghetti N5",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "149",
-    "updated_at": "2026-08-10 09:51:15.818089+00"
-  },
-  {
-    "sku": "caffe-milano-gold",
-    "name": "Caffe Milano Special Reserve 1kg Whole Beans",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "1899",
-    "updated_at": "2026-08-10 09:51:14.621983+00"
-  },
-  {
-    "sku": "kinder-bueno",
-    "name": "Kinder Bueno EU batch 43g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "89",
-    "updated_at": "2026-08-10 09:51:16.571422+00"
-  },
-  {
-    "sku": "LAV-ORO-1KG",
-    "name": "Lavazza Oro Whole Beans 1kg",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "1299",
-    "updated_at": "2026-07-24 07:39:52.518718+00"
-  },
-  {
-    "sku": "lavazza-dek",
-    "name": "Lavazza Dek Decaf Ground Coffee 250g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "589",
-    "updated_at": "2026-08-10 09:51:17.385888+00"
-  },
-  {
-    "sku": "lavazza-oro",
-    "name": "Lavazza Qualita Oro whole beans",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "1299",
-    "updated_at": "2026-08-10 09:51:15.202706+00"
-  },
-  {
-    "sku": "lindt-bianco",
-    "name": "Lindt Bianco White Chocolate 100g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "199",
-    "updated_at": "2026-08-10 09:51:17.179386+00"
-  },
-  {
-    "sku": "loacker",
-    "name": "Loacker Classic Napolitaner wafers 90g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "129",
-    "updated_at": "2026-08-10 09:51:16.764445+00"
-  },
-  {
-    "sku": "lotus-biscoff",
-    "name": "Lotus Biscoff crunchy spread 390g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "399",
-    "updated_at": "2026-08-10 09:51:16.868308+00"
-  },
-  {
-    "sku": "milano-21",
-    "name": "Milano No 21 eau de parfum inspired scent 85ml",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "549",
-    "updated_at": "2026-08-10 09:51:16.971075+00"
-  },
-  {
-    "sku": "MUT-PAS-400",
-    "name": "Mutti Passata 400g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "179",
-    "updated_at": "2026-07-20 02:10:24.583903+00"
-  },
-  {
-    "sku": "mutti-passata",
-    "name": "Mutti passata di pomodoro",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "179",
-    "updated_at": "2026-08-10 09:51:16.01526+00"
-  },
-  {
-    "sku": "NUT-BIS-304",
-    "name": "Nutella Biscuits 304g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "499",
-    "updated_at": "2026-07-20 02:10:24.583903+00"
-  },
-  {
-    "sku": "nutella-biscuits",
-    "name": "Nutella Biscuits resealable pouch",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "499",
-    "updated_at": "2026-08-10 09:51:15.399442+00"
-  },
-  {
-    "sku": "nutella-jar",
-    "name": "Nutella hazelnut spread 400g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "379",
-    "updated_at": "2026-08-10 09:51:15.504039+00"
-  },
-  {
-    "sku": "pan-di-stelle",
-    "name": "Mulino Bianco Pan di Stelle 350g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "349",
-    "updated_at": "2026-08-10 09:51:16.287211+00"
-  },
-  {
-    "sku": "perlier-honey",
-    "name": "Perlier white honey bath cream 500ml",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "399",
-    "updated_at": "2026-08-10 09:51:17.075374+00"
-  },
-  {
-    "sku": "pistachio-cream",
-    "name": "Pisti spreadable pistachio cream",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "1499",
-    "updated_at": "2026-08-10 09:51:15.008062+00"
-  },
-  {
-    "sku": "pringles-paprika",
-    "name": "Pringles Paprika 165g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "349",
-    "updated_at": "2026-08-10 09:51:17.484915+00"
-  },
-  {
-    "sku": "PST-GEN-190",
-    "name": "Barilla Pesto Genovese 190g",
-    "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "329",
-    "updated_at": "2026-07-20 02:10:24.583903+00"
-  },
-  {
-    "sku": "rana-sfogliavelo",
-    "name": "Giovanni Rana Sfogliavelo prosciutto crudo 250g",
+    "sku": "K2-SKU-001001",
+    "name": "Combino Spaghetti No. 5 1kg",
+    "description": "Combino Spaghetti No. 5 in a 1kg bag. Sold by the bag at ₱349. See available stock and delivery options when ordering.",
+    "short_description": null,
     "status": "Live",
     "published": true,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "385",
-    "updated_at": "2026-09-02 15:08:56.42855+00"
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/178b5d63-0112-4b90-83a4-6e7bfe5a86f5-10eff3b03c25f453.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/178b5d63-0112-4b90-83a4-6e7bfe5a86f5-10eff3b03c25f453.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2e60aa37-961c-4cbb-a3e1-fe4b40b951f5-17b5a18869b3a4f9.jpg"
+    ],
+    "srp": "349",
+    "updated_at": "2026-10-18 07:45:01.138528+00",
+    "search_indexable": true
   },
   {
-    "sku": "rio-mare",
-    "name": "Rio Mare tuna in olive oil 2x80g",
+    "sku": "K2-SKU-001002",
+    "name": "Amalfi Lotion Argan",
+    "description": "Amalfi Argan lotion for your personal care routine.",
+    "short_description": null,
     "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9bb0633f-2e86-49a8-9f77-ebd549bdc6dc-e5d8320571a1dc66.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9bb0633f-2e86-49a8-9f77-ebd549bdc6dc-e5d8320571a1dc66.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/bd6b4813-2a39-4af4-a9cb-81cd0b2447dc-05aac69c3dbb33d6.png"
+    ],
+    "srp": "404",
+    "updated_at": "2026-10-18 09:47:25.551251+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001003",
+    "name": "Amalfi Lotion Coco",
+    "description": "Amalfi Coco lotion for your personal care routine.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f053b7fb-4ee9-4bed-a6ed-48012019fd7c-60c7da29ffae79d8.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f053b7fb-4ee9-4bed-a6ed-48012019fd7c-60c7da29ffae79d8.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e2c28f2f-68a9-41f6-8273-8944a56feebe-4d89ffa192d991cf.png"
+    ],
+    "srp": "404",
+    "updated_at": "2026-10-18 10:07:21.268324+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001004",
+    "name": "Astratto Vino Rosso 10% vol. 750 ml",
+    "description": "Astratto Vino Rosso in a 750 ml bottle. Listed at 10% alcohol by volume. Product packaging may vary.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c17d740e-c1ea-4863-9d29-3dc2d38ab070-27c831f0419a5f60.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c17d740e-c1ea-4863-9d29-3dc2d38ab070-27c831f0419a5f60.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/5921a147-7d9e-4cee-9fd8-562845f5d605-9ab38f341bec9002.png"
+    ],
+    "srp": "249",
+    "updated_at": "2026-10-25 09:44:22.617336+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001006",
+    "name": "Baresa Pesto Calabrese",
+    "description": "Baresa Pesto Calabrese for pasta and other savoury dishes.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3117fcad-b26d-4b08-bea6-915015319b9f-086a52ac9f472e4b.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3117fcad-b26d-4b08-bea6-915015319b9f-086a52ac9f472e4b.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d9808928-840a-49b0-a556-f46dd0d4dd34-38ebfb634c6fba52.png"
+    ],
+    "srp": "249",
+    "updated_at": "2026-10-22 11:07:42.768802+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001007",
+    "name": "Baresa Pesto Genovese 290 g",
+    "description": "Baresa Pesto Genovese for pasta and other savoury dishes.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f8ea9fa6-de39-4414-8722-79cb2ed60b60-ba99be7800efd865.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f8ea9fa6-de39-4414-8722-79cb2ed60b60-ba99be7800efd865.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f9d9c98b-fbcc-439b-89a5-905f2a9ad2f6-ec151e70c49f5977.png"
+    ],
+    "srp": "289",
+    "updated_at": "2026-10-23 07:40:56.145252+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001009",
+    "name": "Baresa Pesto Ricotta E Noci",
+    "description": "Baresa Pesto Ricotta E Noci for pasta and other savoury dishes.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/56876620-a987-47e1-87a8-8963abccae23-329627b6013afb92.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/56876620-a987-47e1-87a8-8963abccae23-329627b6013afb92.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/becbd31a-cfc7-4709-a60a-3b89737c5dde-18209d0c26402a7c.png"
+    ],
+    "srp": "249",
+    "updated_at": "2026-10-23 07:44:00.242997+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001010",
+    "name": "Baresa Pesto Without Garlic",
+    "description": "Baresa Pesto Without Garlic for pasta and other savoury dishes.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c06ba1ec-fa20-4d36-9608-605c35e1244d-76beeae193d65205.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c06ba1ec-fa20-4d36-9608-605c35e1244d-76beeae193d65205.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/eedb0062-b6c5-4acf-a095-f11c5cb5fb1e-03451865f588a05b.png"
+    ],
+    "srp": "255",
+    "updated_at": "2026-10-23 07:45:33.005003+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001011",
+    "name": "Barilla Ragu Bolognese",
+    "description": "Barilla describes Ragù alla Bolognese as a slowly cooked sauce with beef and pork, for serving over pasta.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9fde9bdb-da2f-49fd-85c5-c65a1626f417-b486e417b77441de.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9fde9bdb-da2f-49fd-85c5-c65a1626f417-b486e417b77441de.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a3c8c6ff-d01e-4346-9548-b00e40a760be-cc98bcb0ecf1ff0a.png"
+    ],
+    "srp": "379",
+    "updated_at": "2026-10-22 11:11:05.103629+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001012",
+    "name": "Barissimo Orzo Barley",
+    "description": "Barissimo Orzo Barley is listed as an instant coffee substitute made from roasted barley. Check the package for ingredients, preparation directions and net content.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/41beea3c-c8d6-455f-820d-ed4ea3cbb822-2066a5529acb7945.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/41beea3c-c8d6-455f-820d-ed4ea3cbb822-2066a5529acb7945.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a3972484-3fbc-4c97-936c-346e0ff3f34f-50864d1184a0c6f6.png"
+    ],
+    "srp": "499",
+    "updated_at": "2026-10-25 09:44:38.760869+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001013",
+    "name": "Bellarum Orzo",
+    "description": "Bellarum Orzo drink preparation.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e0ea7ec4-71f7-48b6-a710-8305a800a9d2-69bdc060cb8ec757.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e0ea7ec4-71f7-48b6-a710-8305a800a9d2-69bdc060cb8ec757.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3adcbb35-a837-41de-a2dd-99ed720667bc-b0a97378a625617c.png"
+    ],
+    "srp": "499",
+    "updated_at": "2026-10-20 10:22:03.71223+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001017",
+    "name": "Borella Carne",
+    "description": "Pasta Borella Carne is tortellini with a meat filling. Check the pack for ingredients, allergens, cooking directions and net content.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2a04581c-1be8-4165-be39-2007a47320a8-d913436d189702ea.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2a04581c-1be8-4165-be39-2007a47320a8-d913436d189702ea.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/242749fd-238a-4679-9185-ff9a86085b66-ac58845b55695527.png"
+    ],
+    "srp": "259",
+    "updated_at": "2026-10-26 06:31:51.469126+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001020",
+    "name": "Borella Prosciutto",
+    "description": "Pasta Borella Prosciutto is tortellini with cured ham. Check the pack for ingredients, allergens, cooking directions and net content.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/26a43038-b70a-4c90-9aba-7677767f74c8-ba836d48463b0add.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/26a43038-b70a-4c90-9aba-7677767f74c8-ba836d48463b0add.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3bce9775-da62-4c7f-ba31-d7a120d57849-b3fd7a222988f0e7.png"
+    ],
+    "srp": "259",
+    "updated_at": "2026-10-26 06:33:32.23962+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001022",
+    "name": "Caffé Poli Nespresso Gold 10S",
+    "description": "Caffé Poli Nespresso Gold 10S for your home drinks selection.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3a16528c-e91b-4e80-9529-c6182d7c18cc-e11a4540e9918816.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3a16528c-e91b-4e80-9529-c6182d7c18cc-e11a4540e9918816.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/6e1e3403-20de-4ae6-9d11-bfcf6ea860df-95b428c97e65bba0.png"
+    ],
     "srp": "299",
-    "updated_at": "2026-08-10 09:51:15.609819+00"
+    "updated_at": "2026-10-23 07:50:52.177476+00",
+    "search_indexable": true
   },
   {
-    "sku": "suddenly-fragrance",
-    "name": "Suddenly Fragrances Jolie Femelle 75ml",
+    "sku": "K2-SKU-001024",
+    "name": "Chalou",
+    "description": "Chalou fragrance from the Suddenly range.",
+    "short_description": null,
     "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/652c9398-7cd6-43c2-a843-6e984a772feb-5b4a06effff3b3bb.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/652c9398-7cd6-43c2-a843-6e984a772feb-5b4a06effff3b3bb.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7d301bf2-5fb5-40e2-a933-48b0e6f0ba78-5f219db1768ee4d1.jpg"
+    ],
+    "srp": "649",
+    "updated_at": "2026-10-19 06:31:57.369741+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001026",
+    "name": "Cien Cream Soap Honey And Milk 2-Pack",
+    "description": "Cien honey and milk cream soap in a two-pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c2b5de37-8961-405f-8159-afcc7722842b-f6ec7359bccc5341.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c2b5de37-8961-405f-8159-afcc7722842b-f6ec7359bccc5341.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0088b731-87f4-4587-9573-29ac19913f04-88b6d60e89ce2247.png"
+    ],
+    "srp": "105",
+    "updated_at": "2026-10-19 06:10:39.11186+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001027",
+    "name": "Cien Cream Soap Honey and Milk 2 x 150 g",
+    "description": "Cien milk and honey cream soap. Two bars of 150 g each. Product packaging may vary.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/24e5afcd-929d-4e25-b1ab-d42f82b97b3e-4f59870b87155c75.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/24e5afcd-929d-4e25-b1ab-d42f82b97b3e-4f59870b87155c75.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/23eeacc8-77f4-4254-8345-7cca8dbf2e23-88b6d60e89ce2247.png"
+    ],
+    "srp": "105",
+    "updated_at": "2026-10-25 09:44:49.935815+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001028",
+    "name": "Cien Cream Soap Olive 2-Pack",
+    "description": "Cien olive cream soap in a two-pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/87bcaab2-d482-44ed-9056-d218971eacc1-842e501074331e25.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/87bcaab2-d482-44ed-9056-d218971eacc1-842e501074331e25.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c7f526b7-8e22-4999-a139-6498f3740a21-3b4c11dfb8b38c40.png"
+    ],
+    "srp": "100",
+    "updated_at": "2026-10-19 07:13:56.227536+00",
+    "search_indexable": false
+  },
+  {
+    "sku": "K2-SKU-001029",
+    "name": "Cien Cream Soap Olive 2 x 150 g",
+    "description": "Cien olive cream soap in a two-pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f2851ed6-1646-486e-bb3b-33db3aa46808-ecdf3c7a8adfbed5.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f2851ed6-1646-486e-bb3b-33db3aa46808-ecdf3c7a8adfbed5.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/b4a5743f-06cb-47a0-966e-59e886bcdbc9-3b4c11dfb8b38c40.png"
+    ],
+    "srp": "100",
+    "updated_at": "2026-10-25 09:45:03.38775+00",
+    "search_indexable": false
+  },
+  {
+    "sku": "K2-SKU-001030",
+    "name": "Cien Keratin Conditioner",
+    "description": "Cien Keratin conditioner. Follow the directions on the bottle when applying and rinsing.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/708d9eba-c189-451e-b8c7-0b3797f5f577-a4f23f8415c69086.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/708d9eba-c189-451e-b8c7-0b3797f5f577-a4f23f8415c69086.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/ecd6515b-e0dc-4183-8799-6c2efcd07fe5-bf1b15facf963f94.png"
+    ],
     "srp": "599",
-    "updated_at": "2026-08-10 09:51:17.285999+00"
+    "updated_at": "2026-10-19 02:18:47.386302+00",
+    "search_indexable": true
   },
   {
-    "sku": "taralli",
-    "name": "Fiorfiore taralli pugliesi olive oil",
+    "sku": "K2-SKU-001031",
+    "name": "Cien Professional Macadamia Oil Care Conditioner 200 ml",
+    "description": "Cien Macadamia conditioner. Follow the directions on the bottle when applying and rinsing.",
+    "short_description": null,
     "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
-    "srp": "329",
-    "updated_at": "2026-08-10 09:51:16.189817+00"
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/553c3826-6c2c-49a0-8b12-8917f27c429f-9e2bf458696c204a.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/553c3826-6c2c-49a0-8b12-8917f27c429f-9e2bf458696c204a.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/08efbf47-5137-4c75-b7d7-29cc69dddc6a-5840c076dc536d9f.png"
+    ],
+    "srp": "599",
+    "updated_at": "2026-10-25 09:45:52.696824+00",
+    "search_indexable": true
   },
   {
-    "sku": "TRF-OIL-500",
-    "name": "Truffle Oil 500ml",
+    "sku": "K2-SKU-001032",
+    "name": "Cien Argan Hair Oil",
+    "description": "Cien argan hair oil. Confirm the bottle volume and packaging before ordering, and follow the directions on the bottle.",
+    "short_description": null,
     "status": "Live",
-    "published": false,
-    "primary_image_url": null,
-    "image_url": null,
-    "secondary_images": null,
-    "lifestyle_images": null,
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/1407a530-7c36-41e2-9a02-d5af25feb8e9-c719dc99dad2fd04.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/1407a530-7c36-41e2-9a02-d5af25feb8e9-c719dc99dad2fd04.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/5081a3c3-df36-43ad-bab6-de4cad41610d-9abb4a5000d22405.jpg"
+    ],
+    "srp": "404",
+    "updated_at": "2026-10-19 07:41:12.874153+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001034",
+    "name": "Combino Farfalle 500 g",
+    "description": "Combino Farfalle 500 g for your next pasta meal.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2f8a04d8-7a5b-41b9-a786-25b3f2f3df10-e2d1d433946692a9.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2f8a04d8-7a5b-41b9-a786-25b3f2f3df10-e2d1d433946692a9.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/befca0a9-7c0b-422a-8806-3c5ed741938c-893df0e405d6eba4.png"
+    ],
+    "srp": "199",
+    "updated_at": "2026-10-23 06:50:51.185877+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001035",
+    "name": "Combino Spaghetti Bio Di Semola Di Grano 500 g",
+    "description": "Combino Spaghetti Bio Di Semola Di Grano 500 g for your next pasta meal.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7af4f669-6dba-42d0-9126-145fc274e915-0bbce939f242ea7a.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7af4f669-6dba-42d0-9126-145fc274e915-0bbce939f242ea7a.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f43a443f-fd2f-459c-b7cf-1be9233d352e-6bc6d94157422120.png"
+    ],
+    "srp": "249",
+    "updated_at": "2026-10-23 06:56:10.142409+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001036",
+    "name": "Combino Spaghetti No. 5 500 g",
+    "description": "Combino Spaghetti No. 5 500 g for your next pasta meal.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/609f4f39-755a-42ee-b436-3b47bc89f978-f28d0afa00319b33.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/609f4f39-755a-42ee-b436-3b47bc89f978-f28d0afa00319b33.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/45a3857d-50ca-44e7-88cf-a01e6617357c-b3fe1b9ab61e853e.png"
+    ],
+    "srp": "199",
+    "updated_at": "2026-10-23 15:42:33.102837+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001038",
+    "name": "Dante Extra Virgin Olive 1 Liter",
+    "description": "Dante extra virgin olive oil for salads and everyday cooking.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3bca4583-8be3-4c9b-9a28-1c654608a791-c209192766f7be76.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3bca4583-8be3-4c9b-9a28-1c654608a791-c209192766f7be76.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f42a1220-9dc3-4893-b1da-33ebc5a7f0f8-fded7c59c6bb0549.png"
+    ],
+    "srp": "1199",
+    "updated_at": "2026-10-22 17:02:21.135319+00",
+    "search_indexable": false
+  },
+  {
+    "sku": "K2-SKU-001039",
+    "name": "Dante Extra Virgin Olive Oil 750 ml",
+    "description": "Dante extra virgin olive oil for salads and everyday cooking.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d85895db-e768-4d56-b0aa-110db0f77e01-5a3742f49f5397f2.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d85895db-e768-4d56-b0aa-110db0f77e01-5a3742f49f5397f2.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/8b243d82-dd91-41cf-833c-10cb5541003f-fded7c59c6bb0549.png"
+    ],
+    "srp": "949",
+    "updated_at": "2026-10-22 17:04:45.394524+00",
+    "search_indexable": false
+  },
+  {
+    "sku": "K2-SKU-001043",
+    "name": "Delverde Lasagne Pasta 500 g",
+    "description": "Delverde Lasagne Pasta 500 g for your next pasta meal.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9b39d714-731f-4354-9496-2dd00b1cd46b-0b847ecb96c815f8.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9b39d714-731f-4354-9496-2dd00b1cd46b-0b847ecb96c815f8.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/51af18ae-9c2e-4099-b9ed-50b86695818b-9fb62c8aad9d5b28.png"
+    ],
+    "srp": "345",
+    "updated_at": "2026-10-25 09:34:11.042456+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001045",
+    "name": "Divella Spaghetti Pasta 1 kg",
+    "description": "Divella Spaghetti Pasta 1 kg for your next pasta meal.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/245f8c92-1d7f-40f5-ae60-dc15ed588dfb-eaf87ed4bf0aedfe.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/245f8c92-1d7f-40f5-ae60-dc15ed588dfb-eaf87ed4bf0aedfe.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/79346aa5-5126-4418-a3bc-efb601c806a6-1a09f54358f496c6.png"
+    ],
+    "srp": "299",
+    "updated_at": "2026-10-23 07:54:42.176155+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001050",
+    "name": "Dulciar Dolce Amaro Dark Chocolate",
+    "description": "Dulciar Dolce Amaro dark chocolate bar. Packaging may vary. Ask K2 staff to confirm the pack weight before ordering.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/b0768473-86b2-4064-bc89-380952aa6ad7-25cc17cb18446553.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/b0768473-86b2-4064-bc89-380952aa6ad7-25cc17cb18446553.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/5e98eb9d-de2d-4479-9b4c-bc087c6f34a3-68cf7f6ee41afc31.png"
+    ],
+    "srp": "199",
+    "updated_at": "2026-10-25 10:35:28.044157+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001051",
+    "name": "Dulciar Bar Fragola",
+    "description": "Dulciar Bar Fragola for a sweet break or dessert plate.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/03893f89-3425-41f6-852b-10187e7126cc-62557b9bd6a5a14b.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/03893f89-3425-41f6-852b-10187e7126cc-62557b9bd6a5a14b.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d3f2bc1c-433c-4ee0-9117-58f0906f6f3a-7b477831574fe843.png"
+    ],
+    "srp": "199",
+    "updated_at": "2026-10-22 11:14:52.420618+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001052",
+    "name": "Dulciar Bar Gianduia",
+    "description": "Dulciar Bar Gianduia for a sweet break or dessert plate.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e440d336-d138-41b2-ab5a-8eaf9962e4f9-50bcbd1c8a395d46.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e440d336-d138-41b2-ab5a-8eaf9962e4f9-50bcbd1c8a395d46.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/fb3fc224-a29a-43a9-96cd-4385c4e79f45-2614567e29e333f7.png"
+    ],
+    "srp": "199",
+    "updated_at": "2026-10-22 11:15:32.582164+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001053",
+    "name": "Dulciar Bar Pistacchio",
+    "description": "Dulciar Bar Pistacchio for a sweet break or dessert plate.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c7d05d86-eb2b-4d26-96f8-d0d60205fb26-78312a30bf9da58d.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c7d05d86-eb2b-4d26-96f8-d0d60205fb26-78312a30bf9da58d.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/87bd82e0-35c5-4b8d-99d0-8fdd2c176b7c-8d515d3197f4d74a.png"
+    ],
+    "srp": "199",
+    "updated_at": "2026-10-22 11:16:14.572723+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001058",
+    "name": "Fin Carré 50%",
+    "description": "Fin Carré 50% for a sweet break or dessert plate.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/de49e250-720f-46cb-b855-da610784a510-2c6de581ecc87f5d.webp",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/de49e250-720f-46cb-b855-da610784a510-2c6de581ecc87f5d.webp",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/17b24bfe-4b14-4d40-96cf-7a0726ec6ea7-593e3787b101a38d.png"
+    ],
+    "srp": "199",
+    "updated_at": "2026-10-18 12:28:42.538601+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001059",
+    "name": "Fin Carré Milk Choc",
+    "description": "Fin Carré Milk Choc for a sweet break or dessert plate.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/778148e8-0ded-4514-be3b-20fa05d414a2-88942798b03d663a.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/778148e8-0ded-4514-be3b-20fa05d414a2-88942798b03d663a.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e100cfb0-7d59-4579-8418-2d92fe2c8241-e2ad8163f0a3ce1d.png"
+    ],
+    "srp": "199",
+    "updated_at": "2026-10-18 12:28:50.173463+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001060",
+    "name": "Fin Carré White Chocolate",
+    "description": "Fin Carré White Chocolate for a sweet break or dessert plate.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0518fc62-f525-4477-9b8d-12ab386932d5-258005b724dd31f9.webp",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0518fc62-f525-4477-9b8d-12ab386932d5-258005b724dd31f9.webp",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f51c0d79-df35-413d-a411-e75c152d23e6-305a3a48199a5942.png"
+    ],
+    "srp": "199",
+    "updated_at": "2026-10-18 12:29:06.60439+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001061",
+    "name": "Fini Fried Egg 90 g",
+    "description": "Fini Fried Eggs are gummy sweets shaped like fried eggs. Fini’s export catalogue lists Fried Eggs in a 90 g format. Check the package for ingredients and allergen information.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7221fb89-ce12-4f5a-ab17-42e7fa733be9-e882d2fa71e2d6a6.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7221fb89-ce12-4f5a-ab17-42e7fa733be9-e882d2fa71e2d6a6.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/20d021d7-980f-4bed-af0e-54bad8653f2e-a873dea1aeffe0de.png"
+    ],
+    "srp": "135",
+    "updated_at": "2026-10-23 15:44:34.295129+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001062",
+    "name": "Fini Smile 90 g",
+    "description": "Fini Smile 90 g for your sweets selection.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/eb1f4e64-28bc-438d-abb0-d03f9352f850-dfcbe4ff21664510.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/eb1f4e64-28bc-438d-abb0-d03f9352f850-dfcbe4ff21664510.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2abca5da-7bf8-4a32-bfd6-6befcf1e4cd3-6b626a86f2ffbd0f.png"
+    ],
+    "srp": "135",
+    "updated_at": "2026-10-23 15:46:03.975593+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001063",
+    "name": "Galatine Blue",
+    "description": "Galatine milk sweets.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e74dcfb8-2b7b-43bd-ba8d-3236a9112d86-c5c2e99ff781429e.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e74dcfb8-2b7b-43bd-ba8d-3236a9112d86-c5c2e99ff781429e.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/19ddf4b1-977d-4539-b4e6-d9cbe6d98ee6-8103bdffd4c190d9.png"
+    ],
+    "srp": "439",
+    "updated_at": "2026-10-22 08:15:54.393999+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001064",
+    "name": "Galatine Blue 125 g",
+    "description": "Galatine milk tablets are candies made with milk. The brand's FAQ lists pouch and stick formats. Check your wrapper for current ingredients, allergens and storage details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/73fe1ea5-d865-4f94-8d4f-f39ba5af0759-4cf5e5e93414697d.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/73fe1ea5-d865-4f94-8d4f-f39ba5af0759-4cf5e5e93414697d.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d0d2183b-09e5-40a8-9f22-af5ee5f79c2f-8103bdffd4c190d9.png"
+    ],
+    "srp": "439",
+    "updated_at": "2026-10-23 08:42:26.540719+00",
+    "search_indexable": false
+  },
+  {
+    "sku": "K2-SKU-001065",
+    "name": "Galatine Blue 150 g",
+    "description": "Galatine milk tablets are candies made with milk. The brand's FAQ lists pouch and stick formats. Check your wrapper for current ingredients, allergens and storage details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a121b26c-8d1c-4181-bf32-1e57d307e1e9-4cf5e5e93414697d.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a121b26c-8d1c-4181-bf32-1e57d307e1e9-4cf5e5e93414697d.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3462f517-465c-4316-88b7-c9e13352b0ac-8103bdffd4c190d9.png"
+    ],
+    "srp": "469",
+    "updated_at": "2026-10-22 13:10:37.762321+00",
+    "search_indexable": false
+  },
+  {
+    "sku": "K2-SKU-001066",
+    "name": "Giglio Lasagne Pasta 500 g",
+    "description": "Giglio Lasagne Pasta 500 g for your next pasta meal.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9d621742-3f4d-4a77-90f5-fe148c2ace01-e165a8333807bcd2.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9d621742-3f4d-4a77-90f5-fe148c2ace01-e165a8333807bcd2.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/8da53a5f-cbc3-4a35-9a53-e8a52e13fa10-faaed64ae7d355db.png"
+    ],
+    "srp": "349",
+    "updated_at": "2026-10-23 15:47:06.324283+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001067",
+    "name": "Gimoka Nespresso Aluminum Forte",
+    "description": "Gimoka Forte coffee capsules, listed in the source as aluminium capsules for Nespresso.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9a24927c-a169-40c1-9080-31dd6dca6d65-a20063067676da71.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9a24927c-a169-40c1-9080-31dd6dca6d65-a20063067676da71.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/243b1b1c-fd5f-494a-8caf-4e3119bd338e-c36afd7df027318d.png"
+    ],
+    "srp": "374",
+    "updated_at": "2026-10-23 07:56:10.317681+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001068",
+    "name": "Gimoka Nespresso Aluminum Gran Crema Ciocolatto",
+    "description": "Gimoka Gran Crema capsule selection for the Nespresso system.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f4405aef-2769-49bf-8149-80833d205d7f-8132b4b52472ae1f.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f4405aef-2769-49bf-8149-80833d205d7f-8132b4b52472ae1f.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/4a27238d-6b17-4701-852d-9b48af344f99-8a5ee867996133af.png"
+    ],
+    "srp": "374",
+    "updated_at": "2026-10-18 13:16:05.641909+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001070",
+    "name": "Gullon Savoiardi Lady Finger 300",
+    "description": "Gullon Savoiardi Lady Finger 300 to enjoy with a drink or serve alongside dessert.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/acb740a4-574e-472e-b642-deeeb9209d3e-4e8bbb60ca7d5b11.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/acb740a4-574e-472e-b642-deeeb9209d3e-4e8bbb60ca7d5b11.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a3d3db0b-f5a4-41f5-9e26-8ab9856a0f6b-44b955c6c650c66b.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-23 07:38:28.196306+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001071",
+    "name": "Gusto Etna Pistachio Spread 20% 600 g",
+    "description": "Gusto Etna pistachio spread with 20% pistachio in a 600 g jar. Serve on toast or use as a pastry and dessert filling. Packaging may vary; follow the supplied label for ingredients, allergens and storage.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0585ffe0-cbad-4f28-b626-01a7ac265790-fa5d2308b75d545c.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0585ffe0-cbad-4f28-b626-01a7ac265790-fa5d2308b75d545c.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/fd84a28f-5129-4531-8596-fae28f450320-45e72dd8886b5fa1.png"
+    ],
     "srp": "1200",
-    "updated_at": "2026-07-20 02:10:24.583903+00"
+    "updated_at": "2026-10-25 09:43:23.497269+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001072",
+    "name": "G. Bellini Homme Paris Eau de Parfum 75 ml",
+    "description": "G. Bellini Homme Paris fragrance.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3452cc73-9e72-4eb3-9976-e00a7a89510f-ecee69153ed3c560.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3452cc73-9e72-4eb3-9976-e00a7a89510f-ecee69153ed3c560.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/bf8defdd-9e88-4e92-86bb-4b06fbfe7e5d-bb0f06e414c0d117.png"
+    ],
+    "srp": "649",
+    "updated_at": "2026-10-24 08:45:07.807502+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001074",
+    "name": "G. Bellini Homme Sport Eau de Parfum 75 ml",
+    "description": "G. Bellini Homme Sport fragrance.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/de3d9a08-11d4-407a-b128-dc9bebfde874-bdd54f68c0737eed.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/de3d9a08-11d4-407a-b128-dc9bebfde874-bdd54f68c0737eed.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/acc19949-f525-499d-8ec8-6415aa3ab844-bb0f06e414c0d117.png"
+    ],
+    "srp": "649",
+    "updated_at": "2026-10-24 08:46:40.026304+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001077",
+    "name": "Italiamo 500 g Di Gragnano Linguine",
+    "description": "Italiamo 500 g Di Gragnano Linguine for your next pasta meal.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/031e9ca0-a30e-4c12-a98c-c96f546ae240-e0696e6166140667.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/031e9ca0-a30e-4c12-a98c-c96f546ae240-e0696e6166140667.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3d74625a-a42f-47ec-9c1b-78bbcecd093c-06e5d2aaadb6d83d.png"
+    ],
+    "srp": "249",
+    "updated_at": "2026-10-23 15:48:08.639782+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001078",
+    "name": "Italiamo 500 g Di Gragnano Spaghetti",
+    "description": "Italiamo 500 g Di Gragnano Spaghetti for your next pasta meal.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2d09f670-2f33-4751-9bb9-f6fda64c0843-142ea33e5f793fb6.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2d09f670-2f33-4751-9bb9-f6fda64c0843-142ea33e5f793fb6.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9b8cd828-77be-47fe-a08c-589822791901-ac5d1ba9cd0f2c30.png"
+    ],
+    "srp": "249",
+    "updated_at": "2026-10-23 07:57:27.944474+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001079",
+    "name": "Italiamo Bottle 400 g Amatriciana",
+    "description": "Italiamo Bottle 400 g Amatriciana to pair with pasta.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/35128202-9d00-45fa-a62a-cd367ae2d4f1-6a3528bcd71cdadd.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/35128202-9d00-45fa-a62a-cd367ae2d4f1-6a3528bcd71cdadd.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/61b6a642-8faa-473d-b75f-120998c0a9d4-acc8cb45b7014078.png"
+    ],
+    "srp": "349",
+    "updated_at": "2026-10-23 15:49:22.42047+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001080",
+    "name": "Italiamo Bottle 400 g Ricotta",
+    "description": "Italiamo Bottle 400 g Ricotta to pair with pasta.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3e894fbf-8eaf-44cb-b921-817441a7728c-01e789dd5b136411.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3e894fbf-8eaf-44cb-b921-817441a7728c-01e789dd5b136411.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/ddcfe310-dd34-443c-bb07-64e502debbf8-6b765122dd8386e3.png"
+    ],
+    "srp": "349",
+    "updated_at": "2026-10-23 07:58:32.036692+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001081",
+    "name": "Italiamo In Can 2 x 180 g Ragu",
+    "description": "Italiamo In Can 2 x 180 g Ragu to pair with pasta.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/afd12f6d-b62a-45c8-a12e-a079dfdf0475-9f81f91ce5193132.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/afd12f6d-b62a-45c8-a12e-a079dfdf0475-9f81f91ce5193132.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0ef0edc1-5018-41f1-8eeb-262eb1bf94fc-39a7142286eb69eb.png"
+    ],
+    "srp": "345",
+    "updated_at": "2026-10-23 08:00:49.233234+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001083",
+    "name": "Italiamo Pesto Lemon",
+    "description": "Italiamo Pesto Lemon for pasta and other savoury dishes.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/8cb1812e-e322-4327-87eb-0ff38a0ded03-ac5e73a78482d1f8.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/8cb1812e-e322-4327-87eb-0ff38a0ded03-ac5e73a78482d1f8.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3eb601b3-abab-497b-9e8a-275413da7969-d03594dcc55549eb.png"
+    ],
+    "srp": "259",
+    "updated_at": "2026-10-19 01:43:50.663464+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001085",
+    "name": "Italian Coffee Nespresso Aluminio Ristretto Torino",
+    "description": "Italian Coffee Nespresso Aluminio Ristretto Torino for your home drinks selection.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f36922ba-1367-4f94-a7ac-3580d1f5c279-0620ac243078185b.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f36922ba-1367-4f94-a7ac-3580d1f5c279-0620ac243078185b.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/cc32d6c1-5830-4101-b391-736f9da2cadc-60c0affe776ea2b5.png"
+    ],
+    "srp": "349",
+    "updated_at": "2026-10-23 06:41:24.32327+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001086",
+    "name": "Italian Coffee Nespresso Aluminio Venezia Arabica",
+    "description": "Italian Coffee Nespresso Aluminio Venezia Arabica for your home drinks selection.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/ddec91de-f749-4724-beee-de30ffbee72f-355c63825033af91.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/ddec91de-f749-4724-beee-de30ffbee72f-355c63825033af91.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/06e009fa-2d04-4989-9068-1b193cee3fa1-60d57cf6fbf1a4a4.png"
+    ],
+    "srp": "349",
+    "updated_at": "2026-10-23 06:42:22.970886+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001088",
+    "name": "Italian Coffee Nespresso Orzo Bio",
+    "description": "Italian Coffee Nespresso Orzo Bio for your home drinks selection.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/1518f854-42e1-4b45-a275-8204e5441f7f-4a2cfec8be1e6ca7.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/1518f854-42e1-4b45-a275-8204e5441f7f-4a2cfec8be1e6ca7.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/fec80942-9ea4-4396-8d4f-968537b8fc30-d6113759c6f69f8d.png"
+    ],
+    "srp": "249",
+    "updated_at": "2026-10-23 06:43:26.235913+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001089",
+    "name": "Italian Nespresso Padova",
+    "description": "Italian Coffee capsule selection.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/36c8749a-79e2-4b13-b264-7aeff20c6930-506c3c39a8594c5e.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/36c8749a-79e2-4b13-b264-7aeff20c6930-506c3c39a8594c5e.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/63592571-8ab2-441b-9729-fc0f961c3c2c-e646ae06687dcdd8.png"
+    ],
+    "srp": "349",
+    "updated_at": "2026-10-18 13:16:11.624849+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001099",
+    "name": "Jolie Perfume",
+    "description": "Listed in the inventory as JOLIE (DISPLAY). The display contents and whether this unit is intended for sale are awaiting confirmation.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/b3114ef1-99b5-4ad4-a6b2-7da72ba4f9aa-f3a96508867a50c2.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/b3114ef1-99b5-4ad4-a6b2-7da72ba4f9aa-f3a96508867a50c2.png",
+    "secondary_images": [],
+    "lifestyle_images": [],
+    "srp": "689",
+    "updated_at": "2026-10-19 07:01:48.427024+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001101",
+    "name": "La Suissa Tre Strati Caffe Chocolate 150 g",
+    "description": "La Suissa Tre Strati Caffè chocolates to enjoy with coffee or dessert.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e1fc4e67-9f2f-4a30-b9ab-84ceaf9dbd7e-16d91ac234c70ff2.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e1fc4e67-9f2f-4a30-b9ab-84ceaf9dbd7e-16d91ac234c70ff2.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7d30bba2-d37f-438a-91f5-5fd73a264077-264aa28c142de522.png"
+    ],
+    "srp": "249",
+    "updated_at": "2026-10-23 08:32:39.533653+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001104",
+    "name": "Laica Bar Di Latte",
+    "description": "Laica Bar Di Latte for a sweet break or dessert plate.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d2ef2994-de3d-4196-a2a0-23be78eba32b-9cb7c3e58c85d33f.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d2ef2994-de3d-4196-a2a0-23be78eba32b-9cb7c3e58c85d33f.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9b95b0a3-e956-46c6-a21f-59e56a1d1ba7-105108ebbb8a8f25.png"
+    ],
+    "srp": "175",
+    "updated_at": "2026-10-19 01:27:32.224088+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001105",
+    "name": "Laica Bar Nocciola",
+    "description": "Laica Bar Nocciola for a sweet break or dessert plate.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/cd7ad60f-dca7-45c2-a2ca-c39656d43b6e-a07110fae44859e0.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/cd7ad60f-dca7-45c2-a2ca-c39656d43b6e-a07110fae44859e0.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/36d45fa3-3a01-412e-be7e-e45d7c1b65e0-720279a6d98146e9.png"
+    ],
+    "srp": "175",
+    "updated_at": "2026-10-18 12:48:22.669405+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001106",
+    "name": "Lavazza Crema Gusto 3 x 250 g",
+    "description": "Lavazza Crema Gusto 3 x 250 g. Choose the brewing method shown on the pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2e502bee-c182-44ed-98a3-7295c0c7f073-0d57e0a7506111ea.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2e502bee-c182-44ed-98a3-7295c0c7f073-0d57e0a7506111ea.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/09d90b4b-8078-425d-942a-ab57652836e1-f8826273879caff1.png"
+    ],
+    "srp": "549",
+    "updated_at": "2026-10-23 08:03:44.732597+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001107",
+    "name": "Lavazza Crema Gusto 6 x 250 g",
+    "description": "Lavazza Crema Gusto 6 x 250 g. Choose the brewing method shown on the pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/fb73d838-bd9c-4f60-ab6f-28d11b24e908-c04a787e33124b70.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/fb73d838-bd9c-4f60-ab6f-28d11b24e908-c04a787e33124b70.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3f002581-ab17-4af8-aa90-9dc27bf0d682-f8826273879caff1.png"
+    ],
+    "srp": "549",
+    "updated_at": "2026-10-23 08:41:40.099926+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001108",
+    "name": "Lavazza Crema Gusto Forte 4 x 250 g",
+    "description": "Lavazza Crema Gusto Forte 4 x 250 g. Choose the brewing method shown on the pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c7d87b74-24d3-4edd-9b93-4c0c51c3ee09-a647a9d786fbaab1.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c7d87b74-24d3-4edd-9b93-4c0c51c3ee09-a647a9d786fbaab1.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/66d925e7-e807-4687-8cb4-3133e36e2748-47ea764e309a446b.png"
+    ],
+    "srp": "559",
+    "updated_at": "2026-10-23 08:33:54.995636+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001109",
+    "name": "Lavazza Dek 250Gx2",
+    "description": "Lavazza Dek 250Gx2. Choose the brewing method shown on the pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3a70769f-6ddc-4756-9609-2dc4ae47517c-844807f797d928aa.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3a70769f-6ddc-4756-9609-2dc4ae47517c-844807f797d928aa.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c011e8a5-220e-4b62-93d5-205a8f62cd42-8c808b5aed2ef1f3.png"
+    ],
+    "srp": "585",
+    "updated_at": "2026-10-23 08:43:20.394851+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001110",
+    "name": "Lavazza Oro 3 x 250 g",
+    "description": "Lavazza Oro 3 x 250 g. Choose the brewing method shown on the pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/22958325-ca2a-4d04-a1ca-31853f3a577a-2de0b6a694bb52cf.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/22958325-ca2a-4d04-a1ca-31853f3a577a-2de0b6a694bb52cf.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/1586c02a-7392-4112-b46e-05539e9015fb-3b4b790ea80f7025.png"
+    ],
+    "srp": "789",
+    "updated_at": "2026-10-23 08:44:11.481837+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001111",
+    "name": "Lavazza Qualità Rossa Whole Bean Coffee 1 kg",
+    "description": "Lavazza Rossa 1 kg. Choose the brewing method shown on the pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3c2d0199-4987-46af-954b-fea1cc01ccd1-188f1a9bd98c47bb.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3c2d0199-4987-46af-954b-fea1cc01ccd1-188f1a9bd98c47bb.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/fc53da97-0e94-4c2a-b956-618d0a914df0-e7780ecd51a003d2.png"
+    ],
+    "srp": "1790",
+    "updated_at": "2026-10-25 09:38:20.428995+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001112",
+    "name": "Lavazza Rossa 4 x 250 g",
+    "description": "Lavazza Rossa 4 x 250 g. Choose the brewing method shown on the pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/6140b8a9-f98f-4b06-a70d-9c1bcc41318d-95cc0ebbfaa7c507.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/6140b8a9-f98f-4b06-a70d-9c1bcc41318d-95cc0ebbfaa7c507.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/78fbeda7-1f6c-4a42-9c30-b9ebb478b577-e7780ecd51a003d2.png"
+    ],
+    "srp": "579",
+    "updated_at": "2026-10-23 08:35:25.059614+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001113",
+    "name": "Lavazza Qualità Rossa Ground Coffee 6 x 250 g",
+    "description": "Lavazza Rossa 6 x 250 g. Choose the brewing method shown on the pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/040cada1-e3d9-4132-907b-19a1e2c633b1-410636081e8dac66.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/040cada1-e3d9-4132-907b-19a1e2c633b1-410636081e8dac66.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/bacca367-c6fe-4ded-9922-8af88a60ee92-e7780ecd51a003d2.png"
+    ],
+    "srp": "579",
+    "updated_at": "2026-10-25 09:38:39.044198+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001114",
+    "name": "Lavazza Suerte 4 x 250 g",
+    "description": "Lavazza Suerte 4 x 250 g. Choose the brewing method shown on the pack.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2b3002ce-3922-45d8-9e1c-150ac193e0c8-cbb70f76f56a28af.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2b3002ce-3922-45d8-9e1c-150ac193e0c8-cbb70f76f56a28af.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/31d43d51-dd70-432a-8f25-bd171c91c07e-5e1a70ca488a2be7.png"
+    ],
+    "srp": "549",
+    "updated_at": "2026-10-23 08:45:09.600628+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001116",
+    "name": "Loacker Quadratini Raspberry-Yogurt Wafer Cubes 220 g",
+    "description": "Loacker raspberry wafers to enjoy with a drink or serve alongside dessert.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3e74de0a-b6ca-473a-8386-e3590f90122a-f6b9bc9833b7a786.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3e74de0a-b6ca-473a-8386-e3590f90122a-f6b9bc9833b7a786.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/6628c405-7ab4-44b6-ad4f-af195469f5f6-63abb543e93d9ed3.png"
+    ],
+    "srp": "299",
+    "updated_at": "2026-10-25 09:38:54.184466+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001117",
+    "name": "Luxury Charm Eau de Parfum",
+    "description": "Luxury Charm eau de parfum. Packaging may vary. Ask K2 staff to confirm the bottle volume before ordering.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/18827fd8-f55a-4383-9b27-c7ca5b441206-de45225e50b29d67.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/18827fd8-f55a-4383-9b27-c7ca5b441206-de45225e50b29d67.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3b954ca6-c18b-458a-9bb0-f74e16a0b0ec-bb0f06e414c0d117.png"
+    ],
+    "srp": "849",
+    "updated_at": "2026-10-25 09:39:13.250284+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001118",
+    "name": "Madame Perfume",
+    "description": "Madame Perfume is listed in the inventory as a display item. Staff must confirm whether the display unit is intended for sale, its contents, bottle volume and concentration before ordering. The catalog photo does not confirm the held unit’s packaging revision or condition.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f6b923f4-0af8-4d69-9258-ed96827582c0-f524eb4b711a8f80.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f6b923f4-0af8-4d69-9258-ed96827582c0-f524eb4b711a8f80.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/032e2761-5819-420d-ab6d-f1f709f601a0-bb0f06e414c0d117.png"
+    ],
+    "srp": "599",
+    "updated_at": "2026-10-19 07:09:35.191247+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001119",
+    "name": "Mareblu Tuna in Olive Oil 12 x 60 g",
+    "description": "Mareblu 12 x 60 g. A pantry option for sandwiches, salads or a pasta dish.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e0d4ca49-9003-4fba-b089-5dd1a096d7f7-14553f4bee1fdf44.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/e0d4ca49-9003-4fba-b089-5dd1a096d7f7-14553f4bee1fdf44.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/752f3b81-898f-4a85-9105-7d4562bd6f43-16fc7545a74f796e.png"
+    ],
+    "srp": "1415",
+    "updated_at": "2026-10-25 09:39:29.500142+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001121",
+    "name": "Maruzzella Goccia Tuna in Olive Oil 6 x 60 g",
+    "description": "Maruzella 6 x 60 g. A pantry option for sandwiches, salads or a pasta dish.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/b4e21d28-5fda-4f0f-a814-68168c17f74c-588541a5f29dc05b.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/b4e21d28-5fda-4f0f-a814-68168c17f74c-588541a5f29dc05b.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/99ca9da0-ce5a-4648-8181-4f28cfb26407-ff44b354b33df18f.png"
+    ],
+    "srp": "735",
+    "updated_at": "2026-10-23 11:58:39.413426+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001122",
+    "name": "Marysol Tuna in Olive Oil 160 g",
+    "description": "Marysol Tuna. A pantry option for sandwiches, salads or a pasta dish.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0a95a7ea-350f-47a2-a90b-0a892b79a468-e1a1726bb8dcc572.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0a95a7ea-350f-47a2-a90b-0a892b79a468-e1a1726bb8dcc572.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/596393a2-1e71-4b97-a1c6-ac8d6840b8e1-65bd517710e014e1.png"
+    ],
+    "srp": "345",
+    "updated_at": "2026-10-23 14:19:42.918423+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001123",
+    "name": "Marysol Tuna in Olive Oil 3 x 70 g",
+    "description": "Marysol Tuna 3 x 70 g. A pantry option for sandwiches, salads or a pasta dish.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/ac0aec52-8fb5-4949-8243-33d27f1f0439-9c9ba1d08122f1ce.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/ac0aec52-8fb5-4949-8243-33d27f1f0439-9c9ba1d08122f1ce.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/115ae262-6281-4c98-8ee9-f017ea17a297-65bd517710e014e1.png"
+    ],
+    "srp": "590",
+    "updated_at": "2026-10-25 09:39:48.740351+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001124",
+    "name": "Mckennedy Cookie Crème Choco Cookie",
+    "description": "McKennedy Choco Cookie biscuit spread for toast or dessert.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d9c2a1cd-0cec-48c8-9dd2-bd43fbe8cc91-1007cccc747b4764.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d9c2a1cd-0cec-48c8-9dd2-bd43fbe8cc91-1007cccc747b4764.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/593ac758-f016-486b-bae1-224bfd52c510-4c405482cd05aeb8.png"
+    ],
+    "srp": "399",
+    "updated_at": "2026-10-18 12:29:22.516433+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001125",
+    "name": "McKennedy Cookie Creme Duo Cookie",
+    "description": "McKennedy Duo Cookie biscuit spread for toast or dessert.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/45d67b19-8768-4272-b40a-65dd44f9a4c2-b406aac42897e82c.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/45d67b19-8768-4272-b40a-65dd44f9a4c2-b406aac42897e82c.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/6c3ad7cd-cf51-4c5f-b7b1-4570a1f66287-b8d2f98536b31648.png"
+    ],
+    "srp": "399",
+    "updated_at": "2026-10-18 12:29:29.901322+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001131",
+    "name": "Montegrappa Tortellini Carne",
+    "description": "Montegrappa Tortellini Carne are dry filled egg pasta with a meat filling. The manufacturer presents them for shared meals and holiday occasions. Check the package for ingredients, allergens and cooking directions.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a9fc7215-99f6-4bc8-9ce2-8716c67eeb21-79113ea001fd10d7.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a9fc7215-99f6-4bc8-9ce2-8716c67eeb21-79113ea001fd10d7.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/66723e05-a89e-49e3-ba02-f8b789ab7a32-ed52f717c69d02e7.png"
+    ],
+    "srp": "274",
+    "updated_at": "2026-10-21 11:59:07.230698+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001132",
+    "name": "Montegrappa Tortellini Prosciutto",
+    "description": "Montegrappa lists its Tortellini al Prosciutto Crudo as filled pasta for serving in broth or dry.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/b06c406c-98df-4e77-bdc4-ee1f4dca03c5-11e4288731178371.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/b06c406c-98df-4e77-bdc4-ee1f4dca03c5-11e4288731178371.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7ab9f923-c354-431f-9002-3de95ce4bf84-b1489c67f094b1d7.png"
+    ],
+    "srp": "274",
+    "updated_at": "2026-10-22 11:12:40.518098+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001137",
+    "name": "Nixe Tuna in Olive Oil 4 x 70 g",
+    "description": "Nixe Tuna With Olive Oil 4 x 70 g. A pantry option for sandwiches, salads or a pasta dish.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0aab476c-b580-4ddd-98f2-d717a5d85c76-4a46263d753c1d62.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0aab476c-b580-4ddd-98f2-d717a5d85c76-4a46263d753c1d62.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/451c30c5-3738-4cc1-bf63-8dbb5c400e58-e298539b4f3935b6.png"
+    ],
+    "srp": "599",
+    "updated_at": "2026-10-25 09:40:05.064324+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001138",
+    "name": "Nostromo Tuna in Olive Oil 12 x 60 g",
+    "description": "Nostromo 12 x 60 g. A pantry option for sandwiches, salads or a pasta dish.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/83ba30a4-b472-4946-b605-9a42515e2199-0d8c8bd62584efd7.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/83ba30a4-b472-4946-b605-9a42515e2199-0d8c8bd62584efd7.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/925a75a7-4632-4c43-b915-1460decc4497-faf6604391b9da6e.png"
+    ],
+    "srp": "1299",
+    "updated_at": "2026-10-25 09:41:36.418046+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001140",
+    "name": "Nostromo Tuna in Olive Oil 6 x 70 g",
+    "description": "Nostromo Tuna 6 x 70 g. A pantry option for sandwiches, salads or a pasta dish.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0107b3df-d119-418e-83b9-386ffaf1962d-81787eb01c8232d9.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0107b3df-d119-418e-83b9-386ffaf1962d-81787eb01c8232d9.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/cf2ff405-f855-4803-aea5-bc2c657938e7-faf6604391b9da6e.png"
+    ],
+    "srp": "990",
+    "updated_at": "2026-10-25 09:42:44.389911+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001144",
+    "name": "Nutella Biscuit",
+    "description": "Nutella Biscuits pair a crisp biscuit with a creamy Nutella center. The brand presents them as a snack made to share. Check the pack for current ingredients, allergens and biscuit count.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7a86811e-9e70-478d-9553-f4345d1643c3-6ee84fbc05e87e9f.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7a86811e-9e70-478d-9553-f4345d1643c3-6ee84fbc05e87e9f.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7bfd9231-6cb1-4b66-b158-915ca4ccbf7a-a6a245a4653e44cb.png"
+    ],
+    "srp": "399",
+    "updated_at": "2026-10-21 12:14:14.1536+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001145",
+    "name": "G. Bellini One Fragrance Eau de Parfum 75 ml",
+    "description": "G. Bellini One Fragrance.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9662adc5-1cad-41ef-b8db-a6a19f020320-2f7ce99d96e8d68d.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9662adc5-1cad-41ef-b8db-a6a19f020320-2f7ce99d96e8d68d.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/cec3b5d4-50c6-4a4a-af59-ff3cf6ee103d-bb0f06e414c0d117.png"
+    ],
+    "srp": "649",
+    "updated_at": "2026-10-24 08:48:53.280481+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001153",
+    "name": "Pellini No. 42 Tradizionale Ground Coffee 4 x 250 g",
+    "description": "Pellini Ground Coffee 4 x 250 g for your home drinks selection.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/75e22efa-395c-42c3-b73b-f1f34b5930fc-43081f334ffce831.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/75e22efa-395c-42c3-b73b-f1f34b5930fc-43081f334ffce831.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/bbe9b463-6499-4fe7-8065-d6435d2db610-2520774653c508f2.png"
+    ],
+    "srp": "499",
+    "updated_at": "2026-10-23 11:58:39.413426+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001154",
+    "name": "Perfume Rebile",
+    "description": "Rebile fragrance from the Suddenly range.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9817dae5-1a2b-4d65-9d4f-e3b47523ba3e-e562685cf04ea147.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9817dae5-1a2b-4d65-9d4f-e3b47523ba3e-e562685cf04ea147.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d3f2077a-754f-488c-a479-23be0e930ac7-bb0f06e414c0d117.png"
+    ],
+    "srp": "604",
+    "updated_at": "2026-10-19 06:37:29.568993+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001157",
+    "name": "Poppies Caramel Biscuit",
+    "description": "Poppies caramelised biscuits, also known as speculoos, have a sweet flavour. Enjoy them with coffee or tea or on their own. Check the package for exact size, ingredients and allergen details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/30343e06-c028-4d72-a62b-d01bf4afd812-966ca9944e9b35e8.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/30343e06-c028-4d72-a62b-d01bf4afd812-966ca9944e9b35e8.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/b7514920-2fd5-4157-938a-238f018fa0d7-0c582d9eeac1d1d0.png"
+    ],
+    "srp": "299",
+    "updated_at": "2026-10-21 12:22:41.779179+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001158",
+    "name": "Laica Praline Assortite 150 g",
+    "description": "Laica's assorted pralines are offered in different flavour combinations and formats. Serve them with coffee or arrange a few on a dessert plate. Check the packaging for the exact assortment, ingredients, allergens and net weight.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3318e610-9928-45e2-a3ae-78862423b3a1-dc85f7cecb37dcb7.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/3318e610-9928-45e2-a3ae-78862423b3a1-dc85f7cecb37dcb7.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/6510ec36-1e73-47b7-9b1b-6e690a099d29-a339ee76c94dfafe.jpg"
+    ],
+    "srp": "399",
+    "updated_at": "2026-10-23 08:37:35.998604+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001161",
+    "name": "Rio Mare Tuna in Olive Oil 14 x 80 g",
+    "description": "Rio Mare's official range includes an olive-oil tuna line; its product page lists tuna, olive oil and salt. Use canned tuna in salads, sandwiches or pasta. Check the tins for the exact variety, packing medium, ingredients, allergens, net weight and storage directions.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c2c3a497-2607-4e8a-8516-827e65160d67-22ac364aa5d58359.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c2c3a497-2607-4e8a-8516-827e65160d67-22ac364aa5d58359.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2c2100c5-f4eb-4959-8f4e-5a65004fc7e7-53d0dd2fa92bcbde.png"
+    ],
+    "srp": "2200",
+    "updated_at": "2026-10-25 09:10:13.34807+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001162",
+    "name": "Rio Mare 6 x 120 g",
+    "description": "Rio Mare tuna is a practical option for quick meals. Use it in a salad, sandwich or pasta dish. Check the tins for the exact preparation, ingredients and allergen details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0965301b-9add-46ef-bf33-638c93a48e17-ebd990aec07a990b.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0965301b-9add-46ef-bf33-638c93a48e17-ebd990aec07a990b.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/184993c1-878f-4b80-a866-8ab61e0f0b3a-53d0dd2fa92bcbde.png"
+    ],
+    "srp": "1700",
+    "updated_at": "2026-10-23 08:46:52.341021+00",
+    "search_indexable": false
+  },
+  {
+    "sku": "K2-SKU-001163",
+    "name": "Rio Mare 6 x 80 g",
+    "description": "Rio Mare tuna is a practical option for quick meals. Use it in a salad, sandwich or pasta dish. Check the tins for the exact preparation, ingredients and allergen details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9419f968-e5c6-4cdd-a15f-7ab6e0b9b5a7-eb931338b1295298.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9419f968-e5c6-4cdd-a15f-7ab6e0b9b5a7-eb931338b1295298.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a95c6c97-5281-4d93-b5a7-38a05b24e96e-53d0dd2fa92bcbde.png"
+    ],
+    "srp": "1439",
+    "updated_at": "2026-10-23 05:49:44.298534+00",
+    "search_indexable": false
+  },
+  {
+    "sku": "K2-SKU-001164",
+    "name": "Rio Mare 7 x 80 g",
+    "description": "Rio Mare tuna is a practical option for quick meals. Use it in a salad, sandwich or pasta dish. Check the tins for the exact preparation, ingredients and allergen details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/ccb794f5-4e70-4e36-a8c3-7d94aad0cd95-4d04a52271f4c6e7.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/ccb794f5-4e70-4e36-a8c3-7d94aad0cd95-4d04a52271f4c6e7.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/210fe972-46dd-41bb-a667-7081512c13bb-53d0dd2fa92bcbde.png"
+    ],
+    "srp": "1550",
+    "updated_at": "2026-10-23 05:50:59.576406+00",
+    "search_indexable": false
+  },
+  {
+    "sku": "K2-SKU-001165",
+    "name": "Rio Mare 8 x 80 g",
+    "description": "Rio Mare describes its Tonno all’Olio di Oliva as tuna with olive oil and salt.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/6bb962d3-390b-4728-8c2a-33b4c99830ba-52a0573588717c89.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/6bb962d3-390b-4728-8c2a-33b4c99830ba-52a0573588717c89.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d0c80245-eec7-477d-94d6-485316a2ccf4-53d0dd2fa92bcbde.png"
+    ],
+    "srp": "1650",
+    "updated_at": "2026-10-23 08:47:32.966546+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001166",
+    "name": "Suddenly Fragrances Rosa Eau de Parfum 75 ml",
+    "description": "Suddenly Fragrances Rosa is an Eau de Parfum in a 75 ml bottle. Check the ingredient list and directions on the package before use.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/1e373b78-062b-4032-9caa-99a59f6ee829-bc5b7fe2579a2a17.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/1e373b78-062b-4032-9caa-99a59f6ee829-bc5b7fe2579a2a17.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/772549db-33f5-4f22-b4d8-f0697bf1b03d-bb0f06e414c0d117.png"
+    ],
+    "srp": "599",
+    "updated_at": "2026-10-21 13:23:26.166271+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001169",
+    "name": "Segafredo Intermezzo Ground Coffee 4 x 250 g",
+    "description": "Segafredo 250Gx4 for your home drinks selection.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/068ed8bd-68c1-432c-9417-d9dc7d1959aa-14503c03b96579d2.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/068ed8bd-68c1-432c-9417-d9dc7d1959aa-14503c03b96579d2.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/8abecee5-f2a7-405f-8689-4b1bb92347c9-f0823917c363def6.png"
+    ],
+    "srp": "529",
+    "updated_at": "2026-10-25 09:11:17.15038+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001172",
+    "name": "Siciliani Pistacchio Crema 200 g",
+    "description": "I Siciliani Pistacchio Crema is a spreadable pistachio cream in a 200 g jar. Check the jar for ingredient and allergen information.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/11829dbc-3557-4499-bc33-eee2d66858fd-fce222b05657e06b.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/11829dbc-3557-4499-bc33-eee2d66858fd-fce222b05657e06b.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/276c3e01-81c8-4e7b-8121-6ed336378d6c-3341acd8801c2c98.png"
+    ],
+    "srp": "499",
+    "updated_at": "2026-10-23 08:49:24.877384+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001173",
+    "name": "Siciliani Pistacchio Crunchy 200 g",
+    "description": "Siciliani Pistacchio Crunchy is a pistachio spread in a 200 g jar. Check the jar for ingredients, allergens and serving details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a065bdd5-0497-451d-938c-8e6be2389adf-b98912e4b7d5266b.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a065bdd5-0497-451d-938c-8e6be2389adf-b98912e4b7d5266b.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/b064e6df-ebf3-48e4-aca3-b72b164cfd33-458cc285b76ec639.png"
+    ],
+    "srp": "499",
+    "updated_at": "2026-10-23 07:47:43.078487+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001175",
+    "name": "Sondey Savoiardi Lady Finger 400 g",
+    "description": "Sondey Savoiardi Lady Finger 400 g to enjoy with a drink or serve alongside dessert.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/028d3bf9-fcee-4304-85f1-45a84c30f64c-8d5c7feeb4794dc7.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/028d3bf9-fcee-4304-85f1-45a84c30f64c-8d5c7feeb4794dc7.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/f62210ac-3174-4359-a112-7cdc124f9315-58a0605fb5e77c6e.png"
+    ],
+    "srp": "409",
+    "updated_at": "2026-10-23 07:48:52.729555+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001177",
+    "name": "Tigullio Carciofi E Noci",
+    "description": "Tigullio Carciofi e Noci combines tender artichoke hearts with crunchy walnuts for a smooth, fragrant pesto. For pasta, lightly salt the cooking water and stir a spoonful into each portion of pesto before mixing it through. Check your jar for current ingredients, allergens and storage details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/61a408aa-2bcd-41de-982a-3ca269af2aac-b2f60a2bc754bb73.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/61a408aa-2bcd-41de-982a-3ca269af2aac-b2f60a2bc754bb73.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9533c56c-1611-4a6a-bb8f-9de070ee6ecf-94bbb2896f1aa9f8.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-21 05:22:06.459824+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001178",
+    "name": "Tigullio Genovese Plain",
+    "description": "Tigullio Gran Pesto alla Genovese combines fresh basil flavour with a rustic texture. The manufacturer recommends loosening each portion with a spoonful of lightly salted pasta cooking water before mixing it through pasta. Check your jar for current ingredients, allergens and storage details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/8a38bb30-dbe6-4f88-87c7-d1a8052755be-38a387e39c5fca0b.webp",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/8a38bb30-dbe6-4f88-87c7-d1a8052755be-38a387e39c5fca0b.webp",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/9f3233e6-092a-4b15-bb89-0230e5f6fc6e-408bdc2bcc1d8990.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-21 05:16:25.750068+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001179",
+    "name": "Tigullio Olive E Capperi",
+    "description": "Tigullio describes Olive e Capperi as a pesto combining olives and capers.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7aa59ac8-42da-4fbd-924e-202209451476-fd9c58189c87b850.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/7aa59ac8-42da-4fbd-924e-202209451476-fd9c58189c87b850.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c2d07a55-8646-41be-a8b7-1e56d352f10a-fa1d5b09745cc7f8.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-22 11:14:09.70392+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001180",
+    "name": "Tigullio Peperoni E Noci",
+    "description": "Tigullio Peperoni e Noci combines grilled red peppers with walnuts for a fresh, bold pesto. For pasta, lightly salt the cooking water and stir a spoonful into each portion of pesto before mixing it through. Check your jar for current ingredients, allergens and storage details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d6374989-4330-4966-aab0-f5a0e8368b60-86df607bbe0ceece.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d6374989-4330-4966-aab0-f5a0e8368b60-86df607bbe0ceece.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2b8dc782-1345-43b2-a00e-e6abcd4c9c76-c1b47d651f1219cd.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-21 05:27:23.579813+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001181",
+    "name": "Tigullio Pesto Plain",
+    "description": "Tigullio describes Gran Pesto alla Genovese as a rich, fresh pesto with a rustic texture. Its pasta method uses lightly salted cooking water to loosen each portion before it is mixed through the pasta. Check the jar for its exact variant and current label details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c9555547-6dce-4d28-8ca5-70ae57d93cd4-44757cdc1a717767.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/c9555547-6dce-4d28-8ca5-70ae57d93cd4-44757cdc1a717767.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/67864cbb-09f0-4199-9508-552b9dca81c3-c163d23eaa1817c5.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-21 07:52:29.568888+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001182",
+    "name": "Tigullio Pomodori Secchi Pistacchio",
+    "description": "Tigullio Pomodori Secchi e Pistacchi brings together the savory taste of sun-dried tomatoes and the mellow sweetness of pistachios. For pasta, lightly salt the cooking water and stir a spoonful into each portion of pesto before mixing it through. Check your jar for current ingredients and allergen details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2ddfcc9e-4279-4517-8abd-36703d4debbb-142e2614073a1d27.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/2ddfcc9e-4279-4517-8abd-36703d4debbb-142e2614073a1d27.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/63c0464c-9634-446d-88ae-677f36cfde0c-48bfb9c4d0ae67af.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-21 05:34:02.698473+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001183",
+    "name": "Tigullio Radicchio e Speck",
+    "description": "Tigullio Radicchio e Speck pairs the delicate taste of red radicchio with the intense aroma of speck smoked with beech wood. For pasta, lightly salt the cooking water and stir a spoonful into each portion of pesto before mixing it through. Check the jar for current ingredients and allergen details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d7fd75c4-705f-4f19-9b79-6756f47121b6-7decae04bd9aeb53.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/d7fd75c4-705f-4f19-9b79-6756f47121b6-7decae04bd9aeb53.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/555cd641-2f0e-4d55-9bff-6b62d64f8f02-894829940bed1235.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-22 03:53:48.980843+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001184",
+    "name": "Tigullio Ricotta e Noci",
+    "description": "Tigullio Ricotta e Noci brings the freshness of ricotta together with the full character of walnuts in a rustic, crunchy pesto. For pasta, lightly salt the cooking water and use a spoonful to loosen each portion before mixing it through. Check the jar for current ingredients and allergen details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/62eb0aa1-f09d-49ff-84bb-033bca734e89-88a618a4c281425e.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/62eb0aa1-f09d-49ff-84bb-033bca734e89-88a618a4c281425e.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/bf47772f-4ca2-4622-b146-2d802ca09d58-05ea36007c6539eb.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-22 04:00:41.140803+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001185",
+    "name": "Tigullio Zafferano",
+    "description": "Tigullio Zafferano for pasta and other savoury dishes.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/26903dd2-a202-4884-8f23-6852ae09ee19-7ab8451bd1b70320.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/26903dd2-a202-4884-8f23-6852ae09ee19-7ab8451bd1b70320.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/13790ccb-2674-423c-9244-8bd53254c4bc-9a5380ce19eda42f.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-19 01:39:14.923619+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001186",
+    "name": "Tigullio Gran Pesto Cremoso",
+    "description": "Tigullio Gran Pesto Cremoso brings the full flavor of Tigullio pesto with a smooth, creamy texture. For pasta, lightly salt the cooking water and use a spoonful to loosen each portion before mixing it through. Check the jar for current ingredients and allergen details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/fd4933c8-5f14-4cbf-a614-a4eb67df6630-dc2d732daa89cf23.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/fd4933c8-5f14-4cbf-a614-a4eb67df6630-dc2d732daa89cf23.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/edb7788b-fc0c-4f6c-bcde-fb0b090d9850-d4645f0becbd5248.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-21 05:59:10.70169+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001187",
+    "name": "Tortina White",
+    "description": "Loacker Tortina White has hazelnut cream between two crisp wafers, covered in white chocolate. Check the wrapper for the exact pack weight, current ingredients and allergen details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/409867ab-a540-41d2-a3d4-d23cffe1ab98-fc9914139692fcb8.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/409867ab-a540-41d2-a3d4-d23cffe1ab98-fc9914139692fcb8.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/cdd3069c-81eb-463a-8a37-a8484954d0b5-6c736ea7b62567e1.png"
+    ],
+    "srp": "429",
+    "updated_at": "2026-10-21 06:02:25.854435+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001189",
+    "name": "Francesco Moretti Tuna in Sunflower Oil 3 x 80 g",
+    "description": "Francesco Moretti tuna is listed in a 3 x 80 g can format. Check the held pack for its exact variant, packing medium, ingredients and allergen details.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/aa25fb00-8b98-4a25-b55e-63e081ecb912-ad186ffb02cd778b.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/aa25fb00-8b98-4a25-b55e-63e081ecb912-ad186ffb02cd778b.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/00fcf80e-3acf-4232-ac61-4f227a49540f-ab4e2711c709629e.png"
+    ],
+    "srp": "297",
+    "updated_at": "2026-10-25 09:36:40.766961+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001191",
+    "name": "Vidal Jelly Teeth 90 g",
+    "description": "Vidal Jelly Teeth 90 g for your sweets selection.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0cb85ef5-9817-4951-b146-b6ba939599a3-439138c85aa923b5.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0cb85ef5-9817-4951-b146-b6ba939599a3-439138c85aa923b5.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a9772894-69bf-49a5-ba71-1b5d7944a970-cc4da24ae75be056.png"
+    ],
+    "srp": "175",
+    "updated_at": "2026-10-23 08:39:10.278044+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001192",
+    "name": "Vidal Unicorns 90 g",
+    "description": "Vidal Unicorns 90 g for your sweets selection.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/1650291b-2f83-427e-9e1c-57a8e2c2df7f-e0904fcda9ea3ad4.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/1650291b-2f83-427e-9e1c-57a8e2c2df7f-e0904fcda9ea3ad4.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/0861ba95-aad6-43de-b881-71f33975a357-537e155fa57e7c15.png"
+    ],
+    "srp": "175",
+    "updated_at": "2026-10-23 08:04:45.359227+00",
+    "search_indexable": true
+  },
+  {
+    "sku": "K2-SKU-001193",
+    "name": "G. Bellini X-Bolt Eau de Parfum 75 ml",
+    "description": "G. Bellini X-Bolt fragrance.",
+    "short_description": null,
+    "status": "Live",
+    "published": true,
+    "primary_image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/55ae6e3e-9b71-4e89-8ccc-388f1302e6de-94fd6df4651ac946.png",
+    "image_url": "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/55ae6e3e-9b71-4e89-8ccc-388f1302e6de-94fd6df4651ac946.png",
+    "secondary_images": [],
+    "lifestyle_images": [
+      "https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/a50057cb-ef36-4ab1-8126-3fdc5fe59425-bb0f06e414c0d117.png"
+    ],
+    "srp": "649",
+    "updated_at": "2026-10-24 08:41:11.4598+00",
+    "search_indexable": true
   }
 ]

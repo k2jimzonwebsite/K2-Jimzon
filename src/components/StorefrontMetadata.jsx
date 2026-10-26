@@ -76,7 +76,8 @@ export default function StorefrontMetadata() {
     canonical.setAttribute('href', canonicalUrl)
 
     setMeta('name', 'description', description)
-    setMeta('name', 'robots', unavailableSurface || scopedSurface || (view === 'master_product' && __K2_PRODUCT_NOINDEX__) ? 'noindex, nofollow' : 'index, follow')
+    const productHeld = view === 'master_product' && !__K2_INDEXABLE_PRODUCT_SKUS__.includes(product?.sku)
+    setMeta('name', 'robots', unavailableSurface || scopedSurface || (view === 'master_product' && __K2_PRODUCT_NOINDEX__) ? 'noindex, nofollow' : productHeld ? 'noindex, follow' : 'index, follow')
     setMeta('property', 'og:type', product ? 'product' : 'website')
     setMeta('property', 'og:site_name', 'K2 Jimzon')
     setMeta('property', 'og:title', title)

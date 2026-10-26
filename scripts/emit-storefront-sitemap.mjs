@@ -103,9 +103,9 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
       // Said unconditionally, because a sitemap with no product URLs otherwise
       // reads as a broken catalog projection rather than a deliberate gate.
       console.log('[sitemap] NOTE: the pre-launch indexing gate is ON, so no product URL is')
-      console.log('[sitemap] listed and /product/* is served noindex. This is deliberate while')
-      console.log('[sitemap] products have no photographs or descriptions. To launch product')
-      console.log('[sitemap] pages into search, follow docs/PRELAUNCH_INDEXING.md.')
+      console.log('[sitemap] listed and /product/* is served noindex pending explicit owner approval.')
+      console.log('[sitemap] Reviewed search-ready products may exist in the current projection.')
+      console.log('[sitemap] To launch them into search, follow docs/PRELAUNCH_INDEXING.md.')
     } else if (result.products > 0 && result.productUrls === 0) {
       console.log('[sitemap] NOTE: the catalog projection contains no product marked published=true,')
       console.log('[sitemap] so only the stable public routes are listed. Publish products, re-run')

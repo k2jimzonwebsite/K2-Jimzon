@@ -1,5 +1,7 @@
 # Owner action handoff — things Claude cannot do from this workstation
 
+26 October2026 / MAP-024: connected-browser Search Console/GA4 setup is verified; Pasabuy recovery, Italy-to-Philippines copy and consent-first measurement are qualified locally on codex/search-visibility-20261026. No live promotion or product-gate approval is implied. The owning MAP item contains exact unresolved approval/release/Google/vendor actions; docs/acceptance/SEARCH_VISIBILITY_SETUP_20261026.md/json names systems/files, commands, outcomes, limitations and rollback. Do not repeat account creation, successful sitemap submission or catalog/trade indexing requests. Admin is outside further work at the owner's direction.
+
 **Latest dummy-testing status,9October:** Source release is deployed separately to
 Storefront/Admin. Full operational database activation is still unverified. A
 phone role-selector defect is fixed locally;11 focused tests and development checks

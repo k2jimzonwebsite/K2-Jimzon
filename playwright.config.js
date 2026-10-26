@@ -47,6 +47,7 @@ export default defineConfig({
     'storefront-mobile.spec.js',
     'storefront-motion.spec.js',
     'storefront-selling-surfaces.spec.js',
+    'search-visibility-ui.spec.js',
     'homepage-mobile-fixes.spec.js',
     'storefront-mobile-audit.spec.js',
     'order-receipt-direct-ui.spec.js',

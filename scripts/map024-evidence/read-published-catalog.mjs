@@ -46,9 +46,9 @@ function readEnv(path = ENV_PATH) {
 }
 
 function buildQuery() {
-  const columns = PROJECTION_COLUMNS.join(', ')
+  const columns = PROJECTION_COLUMNS.map(column => `p.${column}`).join(', ')
   const statuses = SITEMAP_STATUSES.map(status => `'${status}'`).join(', ')
-  return `select ${columns} from public.products where status in (${statuses}) order by sku`
+  return `select ${columns} from public.products p where p.status in (${statuses}) and p.published is true and p.is_human_reviewed is true and exists (select 1 from public.v_storefront_visible_skus v where v.sku = p.sku) order by p.sku`
 }
 
 // Fail closed. This script must never become a general SQL executor against
@@ -86,7 +86,27 @@ export async function readPublishedCatalog({ env = readEnv(), fetchImpl = fetch 
 
   const rows = await response.json()
   if (!Array.isArray(rows)) throw new Error('MAP024_CATALOG_REFUSAL: unexpected response shape')
-  return rows
+  return annotateSearchReadiness(rows)
+}
+
+// Search eligibility is separate from selling/publication. Never unpublish a
+// genuine package variant just because its copy still matches another variant.
+export function annotateSearchReadiness(rows) {
+  const description = row => String(row.description || row.short_description || '').trim()
+  const counts = new Map()
+  for (const row of rows) {
+    const key = description(row).toLowerCase().replace(/\s+/g, ' ')
+    counts.set(key, (counts.get(key) || 0) + 1)
+  }
+  return rows.map(row => {
+    let genuineImage = false
+    try {
+      const image = new URL(row.primary_image_url)
+      genuineImage = image.protocol === 'https:' && !image.username && !image.password && !image.hash
+    } catch { /* Missing/invalid primary photos remain held. */ }
+    const copy = description(row).toLowerCase().replace(/\s+/g, ' ')
+    return { ...row, search_indexable: genuineImage && Boolean(copy) && counts.get(copy) === 1 }
+  })
 }
 
 function firstImage(row) {

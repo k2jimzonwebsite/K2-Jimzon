@@ -163,7 +163,7 @@ export function generateSitemap({ products = [], origin = K2_STOREFRONT_ORIGIN }
 
   const entries = [
     ...Object.values(STOREFRONT_SEO_PAGES).map(page => urlEntry({ loc: `${canonical}${page.path}` })),
-    ...visible.map(urlEntry),
+    ...visible.filter(entry => entry.product.search_indexable !== false).map(urlEntry),
   ]
 
   return [
