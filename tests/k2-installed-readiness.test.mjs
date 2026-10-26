@@ -1,5 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { ADMIN_PREAUTH_PERMISSION } from '../scripts/admin-preauth-readiness.mjs';
 import {classifyInstalledReadiness,classifyInstalledPermissions,classifyBackupProof,selectBackupEvidence,PHASED_RECEIPT} from '../scripts/k2-installed-readiness.mjs';
 const present={intake_sessions:1,sku_seq:1,channels:1,channel_shops:1};
 const receipt={...PHASED_RECEIPT,statementCount:1,statementBytes:10588727};
@@ -9,6 +10,18 @@ test('changed complete-source receipt, duplicate or old controlled receipt refus
 test('partial installed schema and malformed relation evidence refuse',()=>{for(const key of Object.keys(present))for(const v of [0,null,2,'1'])assert.equal(classifyInstalledReadiness([receipt],{...present,[key]:v}).state,'blocked');assert.equal(classifyInstalledReadiness([receipt],null).state,'blocked')});
 const expected=JSON.parse(fs.readFileSync(new URL('../docs/evidence/20261013-installed-readiness-permissions.json',import.meta.url))).functions;
 const triggers=expected.filter(r=>r.publicExecute);
+
+test('approved family reader profile passes while every changed authority field refuses',()=>{
+ const prior=[...JSON.parse(fs.readFileSync(new URL('../docs/evidence/20261014-installed-readiness-permissions.json',import.meta.url))).functions,ADMIN_PREAUTH_PERMISSION];
+ const family={signature:'public.read_storefront_product_families_v1(p_skus text[])',owner:'postgres',definer:true,result:'TABLE(family_id uuid, family_name text, axes text[], sku text, options jsonb)',publicExecute:false};
+ const current=[...prior,family];
+ assert.equal(classifyInstalledPermissions(current,triggers,current).state,'verified');
+ for(const drift of [{signature:family.signature+' changed'},{owner:'anon'},{definer:false},{result:'jsonb'},{publicExecute:true}]) {
+  const changed=[...prior,{...family,...drift}];
+  assert.equal(classifyInstalledPermissions(changed,triggers,changed).state,'blocked');
+ }
+ assert.equal(classifyInstalledPermissions([...current,{...family,signature:'public.unreviewed()'}],triggers,current).state,'blocked');
+});
 test('installed permission classification names exact reviewed signatures and invoker trigger exceptions',()=>assert.equal(classifyInstalledPermissions(expected,triggers,expected).state,'verified'));
 test('extra overload or altered authority cannot hide behind a function name',()=>{for(const drift of [{signature:expected[0].signature+' overload'},{owner:'other'},{definer:false},{publicExecute:true},{result:'k2_private.order_requests'}]){const live=expected.map((r,i)=>i===0?{...r,...drift}:r);assert.equal(classifyInstalledPermissions(live,triggers,expected).state,'blocked')}assert.equal(classifyInstalledPermissions([...expected,expected[0]],triggers,expected).state,'blocked');assert.equal(classifyInstalledPermissions(expected.slice(1),triggers,expected).state,'blocked')});
 test('extra PUBLIC execute and trigger SECURITY DEFINER drift refuse',()=>{assert.equal(classifyInstalledPermissions(expected,[...triggers,{...expected[0],publicExecute:true}],expected).state,'blocked');assert.equal(classifyInstalledPermissions(expected,triggers.map(r=>({...r,definer:true})),expected).state,'blocked')});

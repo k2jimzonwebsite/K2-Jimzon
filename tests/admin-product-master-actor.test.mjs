@@ -29,12 +29,13 @@ async function run(options={}) {
       else if(url.pathname==='/rest/v1/user_profiles') data={role:options.role||'Admin'}
       else if(url.pathname==='/rest/v1/rpc/execute_admin_session_command_v1') data={active:options.active!==false}
       else if(url.pathname==='/rest/v1/rpc/execute_admin_product_master_command_v1') data={sku:'DUMMY-REVIEW'}
+      else if(url.pathname==='/rest/v1/rpc/read_admin_product_sku_merge_v1') data={groupId:init?.body?JSON.parse(init.body)?.p_group:'borella-prosciutto'}
       else if(url.pathname==='/rest/v1/rpc/record_security_event_v1') data={}
       else throw Error(`Unexpected transport ${url.pathname}`)
       return new Response(JSON.stringify(data),{status:200,headers:{'content-type':'application/json'}})
     }
     const res=response()
-    await handleProductMaster({method:'POST',body,headers:{origin:'https://admin.example.test',cookie,'content-type':'application/json','x-k2-csrf':options.csrf===false?'wrong':csrf,'x-k2-idempotency-key':key,...(options.expectedActor!==undefined?{'x-k2-actor-id':options.expectedActor}:{})}},res)
+    await handleProductMaster({method:options.method||'POST',query:options.query,body:options.body||body,headers:{origin:'https://admin.example.test',cookie,'content-type':'application/json','x-k2-csrf':options.csrf===false?'wrong':csrf,'x-k2-idempotency-key':key,...(options.expectedActor!==undefined?{'x-k2-actor-id':options.expectedActor}:{})}},res)
     return {res,calls}
   } finally {
     globalThis.fetch=fetchOriginal
@@ -71,4 +72,32 @@ test('current Staff, CSRF, AAL2 and registry still refuse before update dispatch
 })
 test('existing clients without actor header retain current authenticated actor behavior',async()=>{
   assert.equal((await run()).res.statusCode,200)
+})
+
+test('approved merge uses the existing Admin AAL2 actor-bound signed Product Master RPC', async () => {
+  const request = {
+    action: 'merge',
+    payload: {
+      groupId: 'borella-prosciutto',
+      expectedStateHash: 'a'.repeat(64),
+      reason: 'Owner-confirmed same sellable item',
+    },
+  }
+  const { res, calls } = await run({ body: request, expectedActor: actor })
+  assert.equal(res.statusCode, 200)
+  const sent = calls.find(call => call.path.endsWith('execute_admin_product_master_command_v1'))?.body
+  assert.ok(sent)
+  assert.equal(sent.p_action, 'product_sku_merge')
+  assert.equal(sent.p_idempotency_key, key)
+  assert.equal(sent.p_payload_text, JSON.stringify(request.payload))
+  const digest = createHash('sha256').update(sent.p_payload_text).digest('hex')
+  assert.equal(sent.p_signature, createHmac('sha256', secret)
+    .update([sent.p_action, sent.p_timestamp, sent.p_nonce, actor, key, digest].join('\n')).digest('hex'))
+})
+
+test('approved group preview reads through read_admin_product_sku_merge_v1', async () => {
+  const { res, calls } = await run({ method: 'GET', query: { group: 'borella-prosciutto' } })
+  assert.equal(res.statusCode, 200)
+  assert.equal(res.body.preview.groupId, 'borella-prosciutto')
+  assert.ok(calls.some(c => c.path.endsWith('read_admin_product_sku_merge_v1')))
 })

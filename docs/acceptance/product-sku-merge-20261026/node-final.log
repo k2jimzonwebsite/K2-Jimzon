@@ -1,0 +1,44 @@
+
+> k2-jimzon-prototype@0.1.0 test:product-sku-merge
+> node --test tests/admin-product-sku-merge.test.mjs tests/admin-product-master-actor.test.mjs tests/product-master-command-recovery.test.mjs tests/admin-product-master-recovery-client.test.mjs tests/k2-installed-readiness.test.mjs
+
+✔ saved Product Master actor mismatch refuses before command RPC (50.2951ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (5.2371ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (7.3118ms)
+✔ existing clients without actor header retain current authenticated actor behavior (2.0692ms)
+✔ approved merge uses the existing Admin AAL2 actor-bound signed Product Master RPC (3.0351ms)
+✔ approved group preview reads through read_admin_product_sku_merge_v1 (1.6793ms)
+✔ Product Master recovery has a literal-body actor-bound browser client (1.6ms)
+✔ lost HTTP reply and later auth refusal preserve same literal request key and current CSRF (71.6126ms)
+✔ only the three approved groups enter the signed Product Master merge command (1.7777ms)
+✔ merge refuses arbitrary groups, missing snapshots and extra stock or SKU authority (0.5942ms)
+✔ exact installed source receipt and all required relations classify installed, never permission to reapply (1.2635ms)
+✔ empty legacy baseline is first apply only when every chain relation is absent (0.3843ms)
+✔ changed complete-source receipt, duplicate or old controlled receipt refuse (0.3219ms)
+✔ partial installed schema and malformed relation evidence refuse (0.2924ms)
+✔ approved family reader profile passes while every changed authority field refuses (18.8666ms)
+✔ installed permission classification names exact reviewed signatures and invoker trigger exceptions (0.3971ms)
+✔ extra overload or altered authority cannot hide behind a function name (2.4675ms)
+✔ extra PUBLIC execute and trigger SECURITY DEFINER drift refuse (0.9835ms)
+✔ two arbitrary triggers do not inherit the named PUBLIC exception (0.4729ms)
+✔ same-named private trigger cannot replace PUBLIC schema exception (0.5801ms)
+✔ approved order-chat adapter extends the exact installed catalog without admitting other grants (0.4522ms)
+✔ backup must match encrypted bytes/hash and actual restored current migration (1.5757ms)
+✔ missing proof and impossible/future creation or restoration evidence refuse (0.2825ms)
+✔ unknown backup creation metadata cannot be bypassed by a valid candidate (0.3139ms)
+✔ backup chronology requires real UTC ISO strings rather than Date.parse coercion (0.1989ms)
+✔ Product Master updates have durable actor-scoped recovery (2.9489ms)
+✔ reload preserves literal bytes version reason and original key (1.8489ms)
+✔ changed key payload version or review decision cannot replace unknown request (1.2538ms)
+✔ actor and operation identity isolate reading and acknowledgement (0.424ms)
+✔ corruption foreign actor secret field and oversize storage remain untouched (1.1202ms)
+✔ malformed or non-update commands cannot be held or sent (1.1445ms)
+✔ approved merge commands have durable actor-scoped recovery (0.9853ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1008.1093

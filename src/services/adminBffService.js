@@ -846,6 +846,10 @@ export function getAdminProductMasterBff(sku, signal) {
   return adminRequest(`/api/admin/product-master?sku=${encodeURIComponent(sku)}`, { signal })
 }
 
+export function getAdminProductSkuMergeBff(group, signal) {
+  return adminRequest(`/api/admin/product-master?group=${encodeURIComponent(group)}`, { signal })
+}
+
 export function getAdminProductFamiliesBff(skus = [], familyId = null, signal) {
   const query = new URLSearchParams()
   if (familyId) query.set('familyId', familyId)

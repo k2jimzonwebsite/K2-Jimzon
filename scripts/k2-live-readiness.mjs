@@ -188,7 +188,7 @@ const publicFunctions = await queryRows(
 )
 let installedPermissions = null
 if (installation.mode === 'installed') {
-  const profile=JSON.parse(fs.readFileSync(path.join(root,'docs/evidence/20261014-installed-readiness-permissions.json'),'utf8'))
+  const profile=JSON.parse(fs.readFileSync(path.join(root,'docs/acceptance/20261025-installed-readiness-permissions.json'),'utf8'))
   if (liveAnon.some(row => row.signature === ADMIN_PREAUTH_PERMISSION.signature)) profile.functions.push(ADMIN_PREAUTH_PERMISSION)
   installedPermissions=classifyInstalledPermissions(liveAnon,publicFunctions,profile.functions)
   gate('installed-permission-catalog','none',installedPermissions.state,installedPermissions.detail)

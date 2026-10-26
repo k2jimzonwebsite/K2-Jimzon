@@ -23,6 +23,7 @@ import useWebsiteAssignmentRecovery from '../../hooks/useWebsiteAssignmentRecove
 import WebsiteAssignmentDialog,{PendingWebsiteDecision} from './WebsiteAssignmentDialog'
 import useProductFamilyRecovery from '../../hooks/useProductFamilyRecovery'
 import ProductFamilyEditor, { PendingProductFamilyDecision } from './ProductFamilyEditor'
+import ProductSkuMergeDialog from './ProductSkuMergeDialog'
 import BulkStoreCategoryDialog from './BulkStoreCategoryDialog'
 import { getStoreCategory, storeCategoryEntries } from '../../lib/storeCategories'
 import {
@@ -256,6 +257,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   const [showStoreCategories, setShowStoreCategories] = useState(false)
   const [categoryFilter, setCategoryFilter] = useState('All')
   const [showFamilyEditor, setShowFamilyEditor] = useState(false)
+  const [showSkuMerge, setShowSkuMerge] = useState(false)
   const familyRecovery = useProductFamilyRecovery({ actorId, enabled: secure, canManageProducts })
   const [deleteTargets, setDeleteTargets] = useState(null)
   const [statusBusy, setStatusBusy] = useState(null)
@@ -768,7 +770,9 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
 
       {/* Select-all row */}
       {secure && actorId && <PendingReferenceCreation actorId={actorId} onReview={setReferenceKind} />}
-      {secure && <PendingProductDecision recovery={recovery} onReview={() => setShowProductRecovery(true)} />}
+      {secure && canManageProducts && <button type="button" className={secondaryButton} disabled={recovery.working||recovery.storageBlocked||!!recovery.pending} onClick={()=>setShowSkuMerge(true)}>Combine approved duplicates</button>}
+      {secure && <PendingProductDecision recovery={recovery} onReview={() => recovery.pending&&JSON.parse(recovery.pending.payloadText).action==='merge'?setShowSkuMerge(true):setShowProductRecovery(true)} />}
+      {secure && showSkuMerge && <ProductSkuMergeDialog key={actorId} actorId={actorId} canManageProducts={canManageProducts} recovery={recovery} onClose={()=>setShowSkuMerge(false)} onSaved={()=>{void fetchProducts();flash('Duplicate merge recorded. Refreshing inventory…')}} />}
       {secure&&<PendingWebsiteDecision recovery={websiteRecovery} onReview={setWebsiteSku}/>}
       {secure && <PendingProductFamilyDecision recovery={familyRecovery} onReview={() => setShowFamilyEditor(true)} />}
       {secure && showFamilyEditor && <ProductFamilyEditor key={actorId} selectedSkus={[...selected]} actorId={actorId} canManageProducts={canManageProducts} recovery={familyRecovery} onClose={() => setShowFamilyEditor(false)} onSaved={() => { flash('Product variations recorded.'); void fetchProducts() }} />}
