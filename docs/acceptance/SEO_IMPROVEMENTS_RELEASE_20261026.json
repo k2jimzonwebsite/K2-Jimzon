@@ -13,14 +13,17 @@
   "source": {
     "prepared": "f0d8f12e1ececbcc9ad0eee24bb674b9764775f6",
     "priorPrHead": "2845581736cbfb04d53277b3984575d957b72941",
-    "newBehavioralDiff": "None; restore only the erroneous recovery-test selector to its original button semantics"
+    "newBehavioralDiff": "None; restore only the erroneous recovery-test selector to its original button semantics",
+    "correctionCommit": "e3f7b96c58b57290bbaf0771414cbb9bf6d04246",
+    "additionalTestDiff": "Two legacy role expectations: customer navigation5links, Wholesale link; no app behavior edit"
   },
   "gate": {
     "initial": "verify:release exits1 solely at Catalog-link selector; all prior stages pass, recovery38otherspass",
     "focused": "Stock recovery1/1pass, all assertions retained",
-    "development": "exit0 after final test edit",
-    "remaining": "Exact remaining npm test scripts followed by test:vercel-output,build:storefront,build:admin are running; not claimed green",
-    "ci": "Existing source CI pending, new corrected-head CI will be separate"
+    "development": "Final development after2test-role corrections exits0",
+    "remaining": "Prior continuation passes AdminUI/payment/inbox/ProductMaster/WebsiteAssignment/OwnerCount, customer6pass/2legacy rolefailures. Corrected focused2/2pass via maintained wrapper; selling and later exact stages are running.",
+    "ci": "Existing source CI pending, new corrected-head CI will be separate",
+    "correctionReview": "Independent correction review retry after capacity interruption approved; count5 and all auth/receipt/security/commercial assertions unchanged"
   },
   "provider": {
     "k2": "Exact pixplcjqivlfflickobf preflight;readiness8verified2owner3connector0failed",
@@ -89,6 +92,54 @@
       "bytes": 85437,
       "sha256": "25c1dbbec55581018c27fcd388cdce0c920b52099f177b8e1833ff289b77e63e",
       "originalSha256": "25c1dbbec55581018c27fcd388cdce0c920b52099f177b8e1833ff289b77e63e"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/customer-nav-red-context.md",
+      "bytes": 23493,
+      "sha256": "80ad6b28de9c921e50d9936bf376877f44a545db430904cfe26195ffce30cad9",
+      "originalSha256": "ae5c7f187d6fe0db2c1cd3ca1653fdac57f607b4ed39e70829e870733acf395a"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/wholesale-nav-red-context.md",
+      "bytes": 25679,
+      "sha256": "2fad81a13762cb9bf2b4535425900bb8bd055245f88595d0ec6a949e8d5e7367",
+      "originalSha256": "f785513a2444f735a45299d332c18d5a155a0d2dbc3e39deccd129cd2268866d"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/customer-nav-focused-green.log",
+      "bytes": 3373,
+      "sha256": "4e0325376db19edcb755b4a853fd52df381801f35116c7b2aed29c97e672b35b",
+      "originalSha256": "199214ada75ba6606cfcc9b4bd7c5533967f0035cb2e71a1006b8bc1692a1468"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/customer-nav-wrapper-green.log",
+      "bytes": 521,
+      "sha256": "acd4bc059fffc0f223d012ceb7839cf1d78f9b7f361615be442810987acd9ad4",
+      "originalSha256": "8c1693f2695992ba02f650e5e5207a29d35be3881d585d29ebc5d4e29b53430f"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/development-nav-final.log",
+      "bytes": 18535,
+      "sha256": "e9a78b87c69e0ca1e42666b6f5d3baf9ab53524c1fdaba9a4295ffdf4b2099a2",
+      "originalSha256": "23b007240dcb325028753e4ef0722142d4fb88fbf2a4ac5df393472f62f1e123"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/remaining-release.log",
+      "bytes": 62880,
+      "sha256": "c919a7e192c4d155a2e8f430ff7a08d58cf9374e4bc7619181cfc8ab2d2d02c7",
+      "originalSha256": "b0a64073f519e37d080ae69e5e866b5c96e832399968668f20724351ba674b5b"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/remaining-result-first.json",
+      "bytes": 818,
+      "sha256": "33aba3e1e64f4de4473663d5433d1385548afc651e1c6cfcd0f783cb8963c408",
+      "originalSha256": "33aba3e1e64f4de4473663d5433d1385548afc651e1c6cfcd0f783cb8963c408"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/index-lock-recovery.json",
+      "bytes": 331,
+      "sha256": "9aca780607448c99b4643313a4e1554dc128e1d4b374f9e440c1454a1d82c30f",
+      "originalSha256": "aff700e7d91431621e346d2da19cbaf98b96fd2086498f26a8dbeaa558e98530"
     }
   ]
 }
