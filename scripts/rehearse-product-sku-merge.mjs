@@ -54,8 +54,8 @@ try {
     create table k2_private.admin_request_rate_buckets(scope text,subject text,bucket_start timestamptz,hit_count int,primary key(scope,subject,bucket_start));
     create table k2_private.admin_request_nonces(actor_id uuid,action text,nonce uuid,expires_at timestamptz,verified_backend_pid int,verified_transaction_id xid8,primary key(actor_id,action,nonce));
     create table k2_private.admin_command_receipts(actor_id uuid,action text,idempotency_key uuid,payload_hash text,result jsonb,created_at timestamptz default now(),completed_at timestamptz,primary key(actor_id,action,idempotency_key));
-    create table k2_private.product_master_events(id bigint generated always as identity,actor_id uuid,action text,request_id uuid,sku text,reason text,before_state jsonb,after_state jsonb,created_at timestamptz default now());
-    create table k2_private.website_listing_events(id bigint generated always as identity,actor_id uuid,request_id uuid,sku text,assigned boolean,reason text,before_state jsonb,after_state jsonb,created_at timestamptz default now());
+    create table k2_private.product_master_events(id bigint generated always as identity primary key,actor_id uuid not null,action text not null check(action in ('product_master_update','product_master_status')),request_id uuid not null,sku text not null,reason text not null,before_state jsonb not null,after_state jsonb not null,created_at timestamptz not null default now(),unique(actor_id,action,request_id,sku));
+    create table k2_private.website_listing_events(id bigint generated always as identity primary key,actor_id uuid not null,request_id uuid not null,sku text not null,assigned boolean not null,reason text not null,before_state jsonb not null,after_state jsonb not null,created_at timestamptz not null default now(),unique(actor_id,request_id));
     create table k2_private.category_policy_command_config(singleton boolean primary key,maximum_depth int);insert into k2_private.category_policy_command_config values(true,10);
     create table k2_private.category_lot_command_context(backend_pid int,transaction_id xid8,actor_id uuid,maximum_depth int,evaluation_instant timestamptz,authority_kind text,guest_nonce uuid,primary key(backend_pid,transaction_id));
     create table k2_private.category_shelf_life_policy(category_id uuid,minimum_days int);
@@ -89,6 +89,23 @@ try {
     select k2_private.clear_category_lot_context_v1();commit;`)
   sql("update public.products set is_human_reviewed=true,primary_image_url='https://example.test/synthetic.webp',srp=99;update public.channel_listings set validation_errors='[]'::jsonb;")
   const before = sql('select jsonb_agg(to_jsonb(b)-\'sku\'-\'updated_at\' order by id) from public.product_batches b;')
+  const migrationBody = fs.readFileSync(migration,'utf8').replace(/^[\s\S]*?\bbegin;/i,'').replace(/commit;\s*$/i,'')
+  assert.throws(()=>sql(`begin;alter table k2_private.website_listing_events drop constraint website_listing_events_actor_id_request_id_key;${migrationBody};rollback;`),/K2_SKU_MERGE_WEBSITE_AUDIT_DRIFT/)
+  checks.push('missing original Website audit uniqueness refuses the whole migration')
+  const auditHolderName='sku-audit-ddl-holder-'+randomUUID()
+  const auditHolder=spawn(path.join(bin,'psql.exe'),['-X','-q','-v','ON_ERROR_STOP=1','-c',`begin;lock table k2_private.website_listing_events in access exclusive mode;select pg_sleep(5);rollback;`],{cwd:root,env:{...env,PGAPPNAME:auditHolderName},windowsHide:true,stdio:'pipe'})
+  let auditHolderOutput='';auditHolder.stderr.on('data',x=>{auditHolderOutput+=x})
+  holderCompletion=new Promise(resolve=>{auditHolder.on('error',error=>resolve({code:-1,error:error.message}));auditHolder.on('exit',code=>resolve({code,error:auditHolderOutput}))})
+  let auditLocked=false
+  for(let attempt=0;attempt<60;attempt++){
+    auditLocked=sql(`select exists(select 1 from pg_locks l join pg_stat_activity a on a.pid=l.pid where a.application_name=${literal(auditHolderName)} and l.relation='k2_private.website_listing_events'::regclass and l.mode='AccessExclusiveLock' and l.granted);`)==='t'
+    if(auditLocked)break
+    await new Promise(resolve=>setTimeout(resolve,25))
+  }
+  assert.ok(auditLocked,'competing audit DDL lock must be observed')
+  assert.throws(()=>sql(`begin;set local lock_timeout='2s';set local statement_timeout='10s';${migrationBody};rollback;`),/could not obtain lock/)
+  const auditHolderResult=await holderCompletion;assert.equal(auditHolderResult.code,0,auditHolderResult.error)
+  check('competing audit DDL refuses before inspecting or replacing its constraint',"select count(*)=1 from pg_constraint where conrelid='k2_private.website_listing_events'::regclass and conname='website_listing_events_actor_id_request_id_key' and pg_get_constraintdef(oid)='UNIQUE (actor_id, request_id)';")
   run('psql', ['-X','-q','-v','ON_ERROR_STOP=1','-f',migration])
   const initial = preview(); assert.equal(initial.blocker, null)
   check('unready canonical website listing refuses', `begin;update public.channel_listings set publication_status='error' where sku='${canonical}';` + session + refusal(signed(payload(initial)), 'K2_SKU_MERGE_BLOCKED') + 'rollback;')
@@ -127,6 +144,8 @@ try {
   const key = randomUUID(), call = signed(payload(initial), key)
   check('signed merge conserves 64 units in canonical SKU', session + `select (${call}->>'quantity')::int=64;`)
   check('exact lost-reply retry returns the original receipt', session + `select (${signed(payload(initial), key)}->>'quantity')::int=64;`)
+  check('one Website audit per source retains the real shared request without retry duplicates', `select count(*)=2 and count(distinct sku)=2 and bool_and(request_id='${key}') from k2_private.website_listing_events;`)
+  check('same request and same SKU cannot duplicate a Website audit', `do $$begin insert into k2_private.website_listing_events(actor_id,request_id,sku,assigned,reason,before_state,after_state,created_at) select actor_id,request_id,sku,assigned,reason,before_state,after_state,created_at from k2_private.website_listing_events limit 1;raise exception 'UNEXPECTED_SUCCESS';exception when unique_violation then null;end $$;select true;`)
   check('same key with altered body refuses', session + refusal(signed({ ...payload(initial), reason: 'Different decision bytes' }, key), 'K2_ADMIN_IDEMPOTENCY_CONFLICT'))
   assert.equal(sql('select jsonb_agg(to_jsonb(b)-\'sku\'-\'updated_at\' order by id) from public.product_batches b;'), before)
   check('all original lot IDs and metadata remain', `select count(*)=2 and sum(quantity)=64 and bool_and(sku='${canonical}') from public.product_batches;`)

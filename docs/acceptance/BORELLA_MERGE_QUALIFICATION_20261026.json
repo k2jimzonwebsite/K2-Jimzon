@@ -1,0 +1,457 @@
+{
+  "idea": "IDEA-20261025-04",
+  "map": "MAP-023",
+  "scope": "Prepared source/local qualification only; no real merges or schema installation",
+  "source": "supabase/migrations/20261025_product_sku_merge.sql",
+  "sourceSha256": "d9f3ab51dbc62a76cdc14ebc168c32b4a6a8b8a1c228c55d539d31b25120cc8b",
+  "rehearsal": "scripts/rehearse-product-sku-merge.mjs",
+  "rehearsalSha256": "25c77fd23106f7aace9288ce5df2668392277eb981ac158bac171a131873891a",
+  "focused": {
+    "passed": 27,
+    "receipt": ".tools/sku-merge-rehearsals/defd067e-44e6-4224-affe-33a8188daa87/receipt.json"
+  },
+  "populated": {
+    "observedAt": "2026-10-26T02:56:34.474Z",
+    "boundary": "Owned isolated restored application database only; no production SQL or managed provider proof",
+    "installationInTransaction": true,
+    "postMergeEligibility": {
+      "borella-carne": "WEBSITE_ASSIGNMENT",
+      "one-fragrance": "PACKAGE_IDENTITY",
+      "borella-prosciutto": "WEBSITE_ASSIGNMENT"
+    },
+    "signedMergeResults": [
+      {
+        "groupId": "borella-carne",
+        "lotCount": 1,
+        "quantity": 45,
+        "available": 45,
+        "sourceSkus": [
+          "K2-SKU-001016",
+          "K2-SKU-001018"
+        ],
+        "canonicalSku": "K2-SKU-001017"
+      },
+      {
+        "groupId": "borella-prosciutto",
+        "lotCount": 2,
+        "quantity": 64,
+        "available": 64,
+        "sourceSkus": [
+          "K2-SKU-001019",
+          "K2-SKU-001021"
+        ],
+        "canonicalSku": "K2-SKU-001020"
+      }
+    ],
+    "exactRetryAndHistoryChecks": true,
+    "authBoundary": "Restored functions/data with local authenticated claims and narrow execute/schema grants; not a hosted Auth or original ACL restoration proof",
+    "rollbackConservation": true,
+    "before": {
+      "lots": "f39b16288660e313508ee1206019c602",
+      "balances": "a8b77ca535cd72b328aeeac9bae38ce7",
+      "listings": "77b21b36835c464ed7b82c6e082197d6",
+      "products": "eca219bd98c4eb24062a49e923b0f21a",
+      "mergeAbsent": true
+    },
+    "after": {
+      "lots": "f39b16288660e313508ee1206019c602",
+      "balances": "a8b77ca535cd72b328aeeac9bae38ce7",
+      "listings": "77b21b36835c464ed7b82c6e082197d6",
+      "products": "eca219bd98c4eb24062a49e923b0f21a",
+      "mergeAbsent": true
+    },
+    "source": "supabase/migrations/20261025_product_sku_merge.sql"
+  },
+  "preparedInstall": {
+    "authorization": "MAP-023 / IDEA-20261025-04",
+    "project": "pixplcjqivlfflickobf",
+    "source": "supabase/migrations/20261025_product_sku_merge.sql",
+    "sourceSha256": "d9f3ab51dbc62a76cdc14ebc168c32b4a6a8b8a1c228c55d539d31b25120cc8b",
+    "packetSha256": "2f2d74eb291eacee467493a88f827d870e5da6d0299f4851d84519cc9341a170",
+    "version": "20261025",
+    "preparedOnly": true
+  },
+  "preparedInstallLocalProof": {
+    "observedAt": "2026-10-26T03:02:50.453Z",
+    "boundary": "Owned isolated restored application database only; no production SQL or managed provider proof",
+    "installationInTransaction": true,
+    "packetReceipt": {
+      "version": "20261025",
+      "installed": true,
+      "sourceSha256": "d9f3ab51dbc62a76cdc14ebc168c32b4a6a8b8a1c228c55d539d31b25120cc8b",
+      "businessRowsUnchanged": true,
+      "websiteAuditHistoryUnchanged": true
+    },
+    "preparedPacketOnly": true,
+    "rollbackConservation": true,
+    "before": {
+      "lots": "f39b16288660e313508ee1206019c602",
+      "balances": "a8b77ca535cd72b328aeeac9bae38ce7",
+      "listings": "77b21b36835c464ed7b82c6e082197d6",
+      "products": "eca219bd98c4eb24062a49e923b0f21a",
+      "mergeAbsent": true
+    },
+    "after": {
+      "lots": "f39b16288660e313508ee1206019c602",
+      "balances": "a8b77ca535cd72b328aeeac9bae38ce7",
+      "listings": "77b21b36835c464ed7b82c6e082197d6",
+      "products": "eca219bd98c4eb24062a49e923b0f21a",
+      "mergeAbsent": true
+    },
+    "source": "supabase/migrations/20261025_product_sku_merge.sql"
+  },
+  "freshBackupRestore": {
+    "backupId": "current-pixplcjqivlfflickobf-2026-10-26T025451688Z-cf0f83e242e0",
+    "verifiedAt": "2026-10-26T02:58:41.781Z",
+    "restoreVerified": true,
+    "publicRelations": 75,
+    "latestMigrationVersion": "20261013110000",
+    "excludedManagedEntries": 10,
+    "evidenceBoundary": "Application database in isolated PostgreSQL; managed Vault, Storage objects and provider settings are excluded."
+  },
+  "development": {
+    "exitCode": 0,
+    "log": ".tools/duplicate-products-20261026/merge-development-final.log"
+  },
+  "release": {
+    "status": "Complete manifest reconciled; original aggregate exits1 retained",
+    "initialLog": ".tools/duplicate-products-20261026/borella-release-final.log",
+    "base": {
+      "passed": 1115,
+      "failedNavigation": 3
+    },
+    "comparisonFocused": {
+      "passed": 12,
+      "exit": 0,
+      "log": ".tools/duplicate-products-20261026/comparison-focused-no-watch.log"
+    },
+    "logoFocused": {
+      "passed": 1,
+      "exit": 0,
+      "log": ".tools/duplicate-products-20261026/logo-320-focused-direct.log"
+    },
+    "authRepair": {
+      "passed": 6,
+      "exit": 0,
+      "log": ".tools/duplicate-products-20261026/admin-auth-final-focused.log",
+      "reason": "detached parent during viewport widget replacement; poll waits attached node, assertions unchanged"
+    },
+    "stages": [
+      {
+        "command": "npm run test:mobile-moderation",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-0.log"
+      },
+      {
+        "command": "npm run test:store-orientation",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-1.log"
+      },
+      {
+        "command": "npm run test:storefront-ui",
+        "exit": 1,
+        "log": ".tools/duplicate-products-20261026/release-resumed-2.log"
+      },
+      {
+        "command": "npm run test:storefront-recovery",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-3.log"
+      },
+      {
+        "command": "npm run test:admin-ui",
+        "exit": 1,
+        "log": ".tools/duplicate-products-20261026/release-resumed-4.log"
+      },
+      {
+        "command": "npm run test:payment-ui",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-5.log"
+      },
+      {
+        "command": "npm run test:inbox-ui",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-6.log"
+      },
+      {
+        "command": "npm run test:admin-product-master-ui",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-7.log"
+      },
+      {
+        "command": "npm run test:admin-website-assignment-ui",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-8.log"
+      },
+      {
+        "command": "npm run test:owner-count-close-ui",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-9.log"
+      },
+      {
+        "command": "npm run test:customer-account-ui",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-10.log"
+      },
+      {
+        "command": "npm run test:selling-surfaces",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-11.log"
+      },
+      {
+        "command": "npm run test:order-receipt-direct",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-12.log"
+      },
+      {
+        "command": "npm run test:workflow-api",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-13.log"
+      },
+      {
+        "command": "npm run test:intake-ai-ui",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-14.log"
+      },
+      {
+        "command": "npm run test:vercel-output",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-15.log"
+      },
+      {
+        "command": "npm run build:storefront",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-16.log"
+      },
+      {
+        "command": "npm run build:admin",
+        "exit": 0,
+        "log": ".tools/duplicate-products-20261026/release-resumed-17.log"
+      }
+    ],
+    "development": {
+      "exit": 0,
+      "log": ".tools/duplicate-products-20261026/merge-development-after-auth.log"
+    }
+  },
+  "review": "Final independent review: no Critical/Important issues after acquiring audit DDL lock before metadata validation",
+  "privateEvidence": [
+    {
+      "path": ".tools/duplicate-products-20261026/remaining-audit.json",
+      "sha256": "d01e0aed06c5cf1e3b243a78976118de35fb8461a840d36071c43fb2c3aefebe"
+    },
+    {
+      "path": ".tools/duplicate-products-20261026/provider-preflight.json",
+      "sha256": "ff77a5a6aba09749c44e8828e9b2663dacd0c413d2cd7503a9af37c607cae2f9"
+    },
+    {
+      "path": ".tools/duplicate-products-20261026/restored-signed-merge-probe.json",
+      "sha256": "fb0f320a3e74a125fb4b2094c4dccd0cb78f1445716cd9aab2d18c496c25a9f8"
+    },
+    {
+      "path": ".tools/duplicate-products-20261026/prepared-install-local-proof.json",
+      "sha256": "75d03f20865fd3e925a07917b2963e3e4081778804b0b75fe4b0f1115b211488"
+    },
+    {
+      "path": ".tools/duplicate-products-20261026/borella-backup-restore-receipt.json",
+      "sha256": "4ec4c1b007d93512c1b1b5ee6a83e2ca21d82089cad6075a47224b3feeb58c91"
+    }
+  ],
+  "livePackageCorrection": {
+    "observedAt": "2026-10-26T03:22:06.998Z",
+    "changed": [
+      {
+        "sku": "K2-SKU-001016",
+        "fields": [
+          "updated_at",
+          "package_type",
+          "catalog_record_version"
+        ]
+      },
+      {
+        "sku": "K2-SKU-001017",
+        "fields": [
+          "size",
+          "net_weight",
+          "updated_at",
+          "package_type",
+          "catalog_record_version"
+        ]
+      },
+      {
+        "sku": "K2-SKU-001018",
+        "fields": [
+          "size",
+          "net_weight",
+          "updated_at",
+          "package_type",
+          "catalog_record_version"
+        ]
+      },
+      {
+        "sku": "K2-SKU-001019",
+        "fields": [
+          "updated_at",
+          "package_type",
+          "catalog_record_version"
+        ]
+      },
+      {
+        "sku": "K2-SKU-001020",
+        "fields": [
+          "size",
+          "net_weight",
+          "updated_at",
+          "package_type",
+          "catalog_record_version"
+        ]
+      },
+      {
+        "sku": "K2-SKU-001021",
+        "fields": [
+          "size",
+          "net_weight",
+          "updated_at",
+          "package_type",
+          "catalog_record_version"
+        ]
+      }
+    ],
+    "onlyExpectedFields": true,
+    "allSixPackageFacts": true,
+    "lotsUnchanged": true,
+    "balancesUnchanged": true,
+    "listingsUnchanged": true,
+    "stock": [
+      {
+        "sku": "K2-SKU-001016",
+        "units": 0
+      },
+      {
+        "sku": "K2-SKU-001017",
+        "units": 45
+      },
+      {
+        "sku": "K2-SKU-001018",
+        "units": 0
+      },
+      {
+        "sku": "K2-SKU-001019",
+        "units": 0
+      },
+      {
+        "sku": "K2-SKU-001020",
+        "units": 42
+      },
+      {
+        "sku": "K2-SKU-001021",
+        "units": 22
+      }
+    ]
+  },
+  "expectedInstalledMetadata": {
+    "functions": [
+      {
+        "acl": "{postgres=X/postgres}",
+        "name": "execute_product_sku_merge_v1",
+        "owner": "postgres",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "k2_private",
+        "sha256": "79678dca59ce81e7c8eb507b8eb43f9a58189c48cb9419359e0111c627c6c268",
+        "definer": true,
+        "signature": "k2_private.execute_product_sku_merge_v1(jsonb, uuid)"
+      },
+      {
+        "acl": "{postgres=X/postgres}",
+        "name": "product_sku_merge_group_v1",
+        "owner": "postgres",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "k2_private",
+        "sha256": "5b6b38ed3abc80ff622d522835c56b082bb285e145bcd4a78c61875e75e7a106",
+        "definer": false,
+        "signature": "k2_private.product_sku_merge_group_v1(text)"
+      },
+      {
+        "acl": "{postgres=X/postgres}",
+        "name": "product_sku_merge_state_v1",
+        "owner": "postgres",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "k2_private",
+        "sha256": "013eeb190abb85c9e7c5842290c161c3f89b1a6ad0d53d5859389bce76f3f099",
+        "definer": true,
+        "signature": "k2_private.product_sku_merge_state_v1(text)"
+      },
+      {
+        "acl": "{postgres=X/postgres}",
+        "name": "verify_admin_bff_request",
+        "owner": "postgres",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "k2_private",
+        "sha256": "02375ce8b81857b78b96c8f467231fde4f4b7fc80b1bb2f8466235791f65e383",
+        "definer": true,
+        "signature": "k2_private.verify_admin_bff_request(text, bigint, uuid, uuid, text, text)"
+      },
+      {
+        "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+        "name": "execute_admin_product_master_command_v1",
+        "owner": "postgres",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "public",
+        "sha256": "fa730b65d64bddf52ff1162c6042d96caf272ce44d8acde914be604c2ba74a14",
+        "definer": true,
+        "signature": "public.execute_admin_product_master_command_v1(text, bigint, uuid, uuid, text, text)"
+      },
+      {
+        "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+        "name": "read_admin_product_sku_merge_v1",
+        "owner": "postgres",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "public",
+        "sha256": "cad7367a17981ce2ae5d679600d93107526b5bdf11a472f3907cd6248d423ec8",
+        "definer": true,
+        "signature": "public.read_admin_product_sku_merge_v1(text)"
+      }
+    ]
+  },
+  "livePaganiRetirement": {
+    "observedAt": "2026-10-26T05:55:43.131Z",
+    "changed": [
+      {
+        "sku": "K2-SKU-001151",
+        "fields": [
+          "status",
+          "updated_at",
+          "catalog_record_version"
+        ]
+      },
+      {
+        "sku": "K2-SKU-001152",
+        "fields": [
+          "status",
+          "updated_at",
+          "catalog_record_version"
+        ]
+      }
+    ],
+    "onlyExpectedChanges": true,
+    "sourcesRetained": true,
+    "canonicalDraft": true,
+    "notesPreserved": true,
+    "lotsUnchanged": true,
+    "balancesUnchanged": true,
+    "listingsUnchanged": true,
+    "productCount": 196,
+    "publicCount": 120
+  }
+}

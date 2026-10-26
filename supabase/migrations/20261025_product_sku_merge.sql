@@ -2,6 +2,25 @@
 -- Prepared source. Installation and each signed Admin decision are separate steps.
 begin;
 
+-- A merge has one signed request and a Website audit for each source SKU.
+-- Retain the real parent request ID; keep duplicate events for the same SKU
+-- impossible. The signed wrapper still binds each key to one exact command.
+do $website_audit$
+begin
+ lock table k2_private.website_listing_events in access exclusive mode nowait;
+ if not exists(select 1 from pg_constraint
+   where conrelid='k2_private.website_listing_events'::regclass
+    and conname='website_listing_events_actor_id_request_id_key'
+    and contype='u' and convalidated and not condeferrable
+    and pg_get_constraintdef(oid)='UNIQUE (actor_id, request_id)') then
+  raise exception 'K2_SKU_MERGE_WEBSITE_AUDIT_DRIFT';
+ end if;
+ alter table k2_private.website_listing_events
+  drop constraint website_listing_events_actor_id_request_id_key,
+  add constraint website_listing_events_actor_id_request_id_sku_key
+   unique(actor_id,request_id,sku);
+end $website_audit$;
+
 create function k2_private.product_sku_merge_group_v1(p_group text)
 returns text[] language sql immutable set search_path='' as $$
  select case p_group

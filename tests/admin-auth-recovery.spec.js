@@ -98,7 +98,9 @@ test('the visible provider widget fits the actual Admin form at phone and deskto
     const widget = page.getByTestId('provider-widget-geometry')
     await expect(widget).toBeVisible()
     await expect.poll(() => widget.evaluate(el => {
-      const box = el.getBoundingClientRect(), parent = el.parentElement.getBoundingClientRect()
+      const parentElement = el.parentElement
+      if (!el.isConnected || !parentElement) return false
+      const box = el.getBoundingClientRect(), parent = parentElement.getBoundingClientRect()
       return box.width <= parent.width && box.right <= parent.right
     })).toBe(true)
     await expect(page.getByRole('status', { name: 'Security check status' })).toContainText('complete')
