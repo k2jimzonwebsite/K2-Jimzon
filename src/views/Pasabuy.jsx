@@ -79,10 +79,10 @@ export default function Pasabuy() {
         <div>
           <Kicker className="flex items-center gap-2"><PlaneIcon size={14} /> Personal Shopping from Italy</Kicker>
           <h1 className="mt-3 font-serif text-3xl font-semibold leading-[1.06] tracking-tight text-navy sm:text-4xl md:text-5xl">
-            Pasabuy,<br /><em className="font-normal text-crimson">straight from Italy.</em>
+            Pasabuy,<br /><em className="font-normal text-crimson">from Italy to the Philippines.</em>
           </h1>
           <p className="mt-5 text-base leading-relaxed text-navy-soft">
-            Tell us the Italian goods you are looking for. We check availability across Italian shops and send you a clear, itemized quote to approve before we buy anything.
+            Tell us which Italian goods you want to bring to the Philippines. Send a product name or link, and we will check Italian shops and quote the item, shipping method, and timing for your approval before buying.
           </p>
 
           <form onSubmit={submit} className="mt-9 store-panel p-5 shadow-sm sm:p-7">
@@ -170,7 +170,7 @@ export default function Pasabuy() {
 
           <div className="mt-8 flex flex-wrap gap-2">
             <TrustBadge>Quote before purchase</TrustBadge>
-            <TrustBadge>Flown on scheduled cargo</TrustBadge>
+            <TrustBadge>Sea or air, as agreed</TrustBadge>
             <TrustBadge>No upfront fee to request</TrustBadge>
           </div>
         </div>
@@ -183,7 +183,7 @@ export default function Pasabuy() {
                 ['You submit a request', 'Tell us the product name, size, and your contact details.'],
                 ['We check Italian stores', 'Our team checks availability, pricing, and freight schedules.'],
                 ['You approve the quote', 'Nothing is purchased until you review and confirm the quote.'],
-                ['We purchase and deliver', 'Your items are packed in Italy, flown to Manila, and shipped to you.'],
+                ['We purchase and deliver', 'Your items are packed in Italy and sent to Manila by the agreed sea or air option, then delivered to you.'],
               ].map(([title, body], index) => (
                 <li key={title} className="flex gap-3.5"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-forest/10 text-sm font-semibold text-forest">{index + 1}</span><div><p className="font-semibold">{title}</p><p className="text-sm leading-relaxed text-navy-soft">{body}</p></div></li>
               ))}

@@ -21,6 +21,7 @@ const StoreChatDrawer = lazy(() => import('./components/shop/StoreChatDrawer'))
 const StorefrontChatButton = lazy(() => import('./components/shop/StorefrontChatButton'))
 const Footer = lazy(() => import('./components/Footer'))
 const StorefrontMetadata = lazy(() => import('./components/StorefrontMetadata'))
+const StorefrontAnalytics = lazy(() => import('./components/StorefrontAnalytics'))
 const CustomerAccountProvider = lazy(() => import('./context/CustomerAccountProvider'))
 // MAP-027: the Interactive Shop is opt-in. Lazy so its scene never loads on
 // landing, catalog, or product paths.
@@ -73,13 +74,18 @@ function StorefrontShell() {
           <Suspense fallback={null}>
             <StorefrontChatButton />
           </Suspense>
-          <Suspense fallback={null}>
-            <Footer />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={null}>
+              <Footer />
+            </Suspense>
+          </ErrorBoundary>
           <div style={{ height: 'var(--k2-mobile-nav-height, 5rem)' }} className="lg:hidden" aria-hidden />
           <MobileNavBar />
         </>
       )}
+      <ErrorBoundary fallback={() => null}>
+        <Suspense fallback={null}><StorefrontAnalytics /></Suspense>
+      </ErrorBoundary>
     </div>
   )
 }

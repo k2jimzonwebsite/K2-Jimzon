@@ -39,7 +39,9 @@
  * checklist in docs/PRELAUNCH_INDEXING.md, which must be worked through in the
  * same change.
  */
-export const PRELAUNCH_PRODUCT_NOINDEX = true
+// Owner approved search activation on 26 October 2026 for the 107 reviewed
+// search-ready products. Per-row holds remain separate from this global gate.
+export const PRELAUNCH_PRODUCT_NOINDEX = false
 
 /** The route pattern in `vercel.storefront.json` that carries the header. */
 export const PRODUCT_NOINDEX_SOURCE = '/product/(.*)'

@@ -17,6 +17,12 @@ export default function ProductCard({ product, compact = false, featured = false
   const range = multiple ? familyPriceRange(product, listedProducts || [], isWholesale) : null
   const priceLabel = multiple ? range ? `${range.min === range.max ? '' : 'From '}${peso(range.min)}` : 'Choose an option' : peso(price)
   const optionCount = multiple ? `${product.family.members.length} options` : ''
+  const productHref = `/product/${encodeURIComponent(product.sku)}`
+  const followProduct = event => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    event.preventDefault()
+    openProduct(product.sku)
+  }
   const stock = productStock(product)
   const stockUnknown = stock === null
   const soldOut = !stockUnknown && stock <= 0
@@ -49,9 +55,9 @@ export default function ProductCard({ product, compact = false, featured = false
 
         <div className="flex flex-col justify-center border-t border-[var(--store-surface-border)] p-6 md:border-l md:border-t-0 md:p-10">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson">Featured Import</p>
-          <button onClick={() => openProduct(product.sku)} className="group mt-3 text-left cursor-pointer">
+          <a href={productHref} onClick={followProduct} className="group mt-3 text-left cursor-pointer">
             <h3 className="font-serif text-2xl font-semibold leading-tight text-navy transition-colors duration-150 group-hover:text-crimson md:text-4xl">{name}</h3>
-          </button>
+          </a>
           {!multiple && product.short && <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-navy-soft">{product.short}</p>}
           <div className="product-card-stock mt-5">{multiple ? <span className="text-sm font-medium text-navy-soft">{optionCount}</span> : <StockPill stock={stock} />}</div>
           <div className="mt-7 flex items-end justify-between gap-4 border-t border-line pt-5">
@@ -86,16 +92,16 @@ export default function ProductCard({ product, compact = false, featured = false
 
   return (
     <article data-testid="product-card" className="product-card group flex h-full w-full flex-col overflow-hidden rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-[var(--store-surface-shadow)]">
-      <button onClick={() => openProduct(product.sku)} aria-label={`View ${name}`} data-testid="product-image-btn" className="product-img-surface relative aspect-[4/5] overflow-hidden text-left cursor-pointer">
+      <a href={productHref} onClick={followProduct} aria-label={`View ${name}`} data-testid="product-image-btn" className="product-img-surface relative aspect-[4/5] overflow-hidden text-left cursor-pointer">
         <ProductVisual product={product} className="product-card-visual h-full w-full object-contain drop-shadow-lg" pad="p-4 sm:p-6" />
         {product.tag && <span className="absolute left-2.5 top-2.5 rounded-md bg-navy/90 px-2 py-1 text-xs font-bold uppercase tracking-[0.1em] text-cream">{product.tag}</span>}
-      </button>
+      </a>
 
       <div className="flex flex-1 flex-col border-t border-[var(--store-surface-border)] p-3.5 sm:p-4">
         <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.12em] text-navy-faint">{product.category || 'Italian import'}</p>
-        <button onClick={() => openProduct(product.sku)} className="flex min-h-11 items-start text-left cursor-pointer">
+        <a href={productHref} onClick={followProduct} className="flex min-h-11 items-start text-left cursor-pointer">
           <h3 className="store-card-title line-clamp-2 min-h-10 font-sans font-bold text-navy transition-colors duration-150 group-hover:text-crimson">{name}</h3>
-        </button>
+        </a>
         {!multiple && !compact && product.short && <p className="mt-2 hidden text-sm leading-relaxed text-navy-soft sm:line-clamp-2">{product.short}</p>}
 
         <div className="mt-auto">

@@ -4,6 +4,9 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { PRELAUNCH_PRODUCT_NOINDEX } from './scripts/prelaunch-indexing.mjs'
 
+const searchIndexableSkus = JSON.parse(readFileSync(new URL('./scripts/map024-evidence/published-catalog.json', import.meta.url), 'utf8'))
+  .filter(product => product.search_indexable === true).map(product => product.sku)
+
 const projectRoot = process.cwd().replaceAll('\\', '/')
 const BROWSER_ENV_KEYS = [
   'VITE_ADMIN_BFF_ENABLED',
@@ -167,6 +170,7 @@ export default defineConfig(({ command, mode }) => {
       // transport (including its route string) from the Storefront artifact.
       __K2_ADMIN_BUILD__: JSON.stringify(target !== 'storefront'),
       __K2_PRODUCT_NOINDEX__: JSON.stringify(PRELAUNCH_PRODUCT_NOINDEX),
+      __K2_INDEXABLE_PRODUCT_SKUS__: JSON.stringify(searchIndexableSkus),
     },
     build: {
       manifest: true,

@@ -52,6 +52,9 @@ function productHtml({ template, product, loc, image, origin }) {
   const absoluteImage = image || new URL(SOCIAL_FALLBACK, origin).href
 
   let html = template
+  if (product.search_indexable === false) {
+    html = replaceRequired(html, /<\/head>/iu, '    <meta name="robots" content="noindex, follow" />\n  </head>', '</head>')
+  }
   html = replaceRequired(html, /<title>[\s\S]*?<\/title>/iu, `<title>${htmlEscape(title)}</title>`, '<title>')
   html = replaceRequired(html, metaPattern('name', 'description'), meta('name', 'description', description), 'description')
   html = replaceRequired(html, /<link\s+rel=["']canonical["'][^>]*>/iu,

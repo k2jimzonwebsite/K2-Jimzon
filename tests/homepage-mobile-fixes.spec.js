@@ -74,6 +74,10 @@ test('mobile homepage preserves layout with 200% text and ordinary motion', asyn
   await page.goto('/')
   await expect(page.locator('.hero-collection-item')).toHaveCount(3, { timeout: 60000 })
   await page.evaluate(() => { document.documentElement.style.fontSize = '200%' })
+  // Optional consent stays reachable at enlarged text and can be closed
+  // without a measurement decision before continuing the shopping task.
+  await page.getByRole('button', { name: 'Close analytics choices', exact: true }).click()
+  await expect(page.getByRole('region', { name: 'Optional analytics' })).toHaveCount(0)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await expect(page.getByRole('button', { name: 'Shop the Collection', exact: true })).toBeVisible()
   const stops = page.getByRole('group', { name: 'Sourcing route stops' })

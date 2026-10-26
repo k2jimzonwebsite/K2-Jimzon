@@ -79,6 +79,7 @@ export default function Policy() {
             <p className="mt-3 max-w-[70ch] text-base leading-relaxed text-navy-soft whitespace-pre-line">
               {section.content}
             </p>
+            {section.link && <a href={section.link.href} target="_blank" rel="noreferrer" className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4">{section.link.label}</a>}
           </section>
         ))}
       </div>

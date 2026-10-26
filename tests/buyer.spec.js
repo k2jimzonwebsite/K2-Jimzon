@@ -4,7 +4,7 @@ test.describe('Pasabuy and wholesale truthfulness', () => {
   test('Pasabuy validates contact and explains attachment limitation', async ({ page }) => {
     await page.goto('/')
     await page.getByRole('navigation', { name: 'Storefront' }).getByRole('button', { name: 'Pasabuy', exact: true }).click()
-    await expect(page.getByRole('heading', { level: 1, name: /Pasabuy, straight from Italy/i })).toBeVisible({ timeout: 60000 })
+    await expect(page.getByRole('heading', { level: 1, name: /Pasabuy, from Italy to the Philippines/i })).toBeVisible({ timeout: 60000 })
     await expect(page.getByLabel(/Product link or reference photo URL/i)).toBeVisible()
     await expect(page.locator('input[type="file"]')).toHaveCount(0)
     await page.getByLabel('Full name').fill('Pasabuy Test')

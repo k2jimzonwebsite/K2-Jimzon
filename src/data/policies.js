@@ -12,9 +12,14 @@
 export const PRIVACY_POLICY = {
   id: 'privacy',
   title: 'Privacy & Data Protection',
-  lastUpdated: '24 September 2026',
+  lastUpdated: '26 October 2026',
   summary: 'We use customer contact, delivery, and optional account details to manage requests, orders, and service updates. We never sell or share customer data with advertisers.',
   sections: [
+    {
+      heading: 'Optional Website Analytics',
+      link: { href: 'https://policies.google.com/technologies/partner-sites', label: 'How Google uses information from sites and apps' },
+      content: 'Google Analytics loads only after you choose Accept analytics. It measures public page visits using cookies and technical browser information. We exclude search terms, URL parameters, form contents, and private account, checkout, messages and confirmation pages. We do not enable advertising features or send customer contact or delivery details to Google Analytics. Declining keeps analytics off and does not affect shopping. You can change your choice using Analytics choices in the footer; withdrawal stops measurement and removes Analytics cookies. We remember your choice for up to 180 days and honor browser Do Not Track and Global Privacy Control signals. Google explains its processing at https://policies.google.com/technologies/partner-sites.',
+    },
     {
       heading: 'Information We Collect',
       content: 'When you submit an order request, Pasabuy sourcing request, wholesale inquiry, or customer service message, we collect your name, email address, Philippine mobile number, delivery address, and any optional delivery notes you provide. If you create a verified customer account, we also store the name, delivery address, and in-app notification preference you save, plus private references to service updates and whether you have read them. Anonymous session state may be retained locally in your browser to remember your shopping cart.',

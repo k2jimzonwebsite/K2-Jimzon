@@ -11,6 +11,12 @@ for (const width of [320, 375, 430, 768, 1024, 1440]) for (const dark of [false,
     await page.setViewportSize({ width, height: 812 })
     await page.goto('/')
     await page.evaluate(d => document.documentElement.classList.toggle('dark', d), dark)
+    // The theme fade can briefly create a 0.01ms inherited colour transition.
+    // Finish that paint before checking that the logo itself has no motion.
+    await page.locator('body').evaluate(async element => {
+      await Promise.all(element.getAnimations().map(animation => animation.finished.catch(() => {})))
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    })
     const home = page.getByRole('button', { name: 'K2 Jimzon home', exact: true })
     await expect(home.locator('[data-brand-mark="compact"]')).toBeVisible()
     const mark = await home.locator('svg').boundingBox()

@@ -13,7 +13,7 @@ export const STOREFRONT_SEO_PAGES = {
   pasabuy: {
     path: '/pasabuy',
     title: 'Pasabuy from Italy to the Philippines | K2 Jimzon',
-    description: 'Pasabuy from Italy: send an item or link and review your K2 Jimzon quote before we buy.',
+    description: 'Pasabuy from Italy to the Philippines. Request Italian goods and review an itemized product and shipping quote from K2 Jimzon before we buy.',
   },
   wholesale: {
     path: '/trade',

@@ -2,6 +2,8 @@
 
 This document records the foundational architectural decisions, rationale, and consequences governing the K2 Jimzon platform.
 
+26 October2026 / MAP-024 / IDEA-20261026-03/-04 — Owner decisions: accept GA4 Philippines Terms/Data Processing Terms; use explicit opt-in, equal decline, public sanitized pages only and no ads/private/customer details; focus storefront SEO on Pasabuy/Italy-to-Philippines imports. Reuse current canonical route, metadata, product projection and optional frontend boundary; preserve design identity and separate Admin. Product search readiness is distinct from published shopper visibility. Existing product noindex removal and live source promotion remain unapproved; an automatic approval rejection prevented gate removal. Actual provider facts, alternatives/tradeoffs, limits and recovery are recorded in docs/acceptance/SEARCH_VISIBILITY_SETUP_20261026.md. MAP-024 owns remaining execution; this decision record is not another backlog.
+
 ---
 
 ## ADR-001: Separate Production Deployments for Storefront and Admin BOS
@@ -103,3 +105,5 @@ This document records the foundational architectural decisions, rationale, and c
   recoverable. Implementation requires structured step contracts, a real-control
   target registry, bounded completion readers where available, and representative
   phone/laptop recovery testing before guide approval.
+
+26October2026 continuation / IDEA-20261026-03/-04: explicit owner approval authorizes live storefront fixes plus Google eligibility for the exact107ready SKUs, with9noindex holds. This resolves earlier gate/release approval pending state; actual deployed/indexed outcomes still require their own evidence.

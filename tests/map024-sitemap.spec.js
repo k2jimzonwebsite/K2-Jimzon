@@ -2,7 +2,54 @@ import { expect, test } from '@playwright/test'
 import { generateSitemap, K2_STOREFRONT_ORIGIN } from '../scripts/map024-evidence/generate-sitemap.mjs'
 import { generateProductPages } from '../scripts/map024-evidence/generate-product-pages.mjs'
 import { generateMarketingPages } from '../scripts/map024-evidence/generate-marketing-pages.mjs'
-import { auditProjection } from '../scripts/map024-evidence/read-published-catalog.mjs'
+import { auditProjection, readPublishedCatalog } from '../scripts/map024-evidence/read-published-catalog.mjs'
+import * as catalogProjection from '../scripts/map024-evidence/read-published-catalog.mjs'
+import { readFileSync } from 'node:fs'
+
+test('search readiness holds shared descriptions and missing genuine primary photos', () => {
+  expect(typeof catalogProjection.annotateSearchReadiness).toBe('function')
+  const rows = catalogProjection.annotateSearchReadiness([
+    { sku: 'A', description: 'Shared package description.', primary_image_url: 'https://example.test/a.jpg' },
+    { sku: 'B', description: 'Shared package description.', primary_image_url: 'https://example.test/b.jpg' },
+    { sku: 'C', description: 'A distinct reviewed package.', primary_image_url: 'https://example.test/c.jpg' },
+    { sku: 'D', description: 'Another reviewed package.', image_url: 'https://example.test/fallback.jpg' },
+  ])
+  expect(rows.map(row => row.search_indexable)).toEqual([false, false, true, false])
+  expect(rows.map(({ search_indexable, ...row }) => row)).toEqual([
+    { sku: 'A', description: 'Shared package description.', primary_image_url: 'https://example.test/a.jpg' },
+    { sku: 'B', description: 'Shared package description.', primary_image_url: 'https://example.test/b.jpg' },
+    { sku: 'C', description: 'A distinct reviewed package.', primary_image_url: 'https://example.test/c.jpg' },
+    { sku: 'D', description: 'Another reviewed package.', image_url: 'https://example.test/fallback.jpg' },
+  ])
+})
+
+test('search-held products keep share pages but stay out of the sitemap', () => {
+  const products = [
+    { sku: 'READY', name: 'Ready coffee', status: 'Live', published: true, search_indexable: true, description: 'Reviewed coffee.', primary_image_url: 'https://example.test/a.jpg' },
+    { sku: 'HELD', name: 'Held coffee', status: 'Live', published: true, search_indexable: false, description: 'Shared description.', primary_image_url: 'https://example.test/b.jpg' },
+  ]
+  const xml = generateSitemap({ products })
+  expect(xml).toContain('/product/READY')
+  expect(xml).not.toContain('/product/HELD')
+  const pages = generateProductPages({ template: readFileSync('index.html', 'utf8'), products })
+  expect(pages.size).toBe(2)
+  expect(pages.get('HELD')).toContain('<meta name="robots" content="noindex, follow"')
+  expect(pages.get('READY')).not.toContain('noindex')
+})
+
+test('catalog discovery reads only reviewed published Website members in read-only mode', async () => {
+  let request
+  await readPublishedCatalog({ env: { SUPABASE_ACCESS_TOKEN: 'test-only-token' }, fetchImpl: async (url, options) => {
+    request = { url, ...JSON.parse(options.body) }
+    return { status: 200, json: async () => [] }
+  } })
+  expect(request.url).toBe('https://api.supabase.com/v1/projects/pixplcjqivlfflickobf/database/query')
+  expect(request.read_only).toBe(true)
+  expect(request.query).toContain('v_storefront_visible_skus')
+  expect(request.query).toMatch(/published\s+is\s+true/i)
+  expect(request.query).toMatch(/is_human_reviewed\s+is\s+true/i)
+  expect(request.query).not.toContain('select *')
+})
 
 const visibleProducts = [
   {

@@ -485,6 +485,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     }
     try {
       if (window.location.pathname !== path && !window.location.search.includes('account=continue')) {
+        window.dispatchEvent(new Event('k2:analytics-suspend'))
         window.history.pushState({ view: nextView, productId: nextProductId }, '', path)
       }
     } catch {}
