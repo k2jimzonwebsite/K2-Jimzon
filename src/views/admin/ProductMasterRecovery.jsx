@@ -38,13 +38,13 @@ export default function ProductMasterRecovery({ recovery, canManageProducts, onC
           <p className="text-base text-white/80">Opens the latest product details. Your previous edits and reason will not carry over.</p>
           <button type="button" className={primaryButton} disabled={recovery.working || !canManageProducts || !body} onClick={async () => {
             const result = await recovery.reviewLatest()
-            if (result.nonApplied) onNotApplied(result.product, result.taxonomyReview)
-            else if (result.ok) onRecorded(result.result.sku)
+            if (result.nonApplied) body.action==='merge'?onClose():onNotApplied(result.product, result.taxonomyReview)
+            else if (result.ok) onRecorded(result.result.sku||result.result.canonicalSku)
           }}>{recovery.working ? 'Checking latest product…' : 'Review latest product'}</button>
         </div>}
         <button type="button" className={recovery.canReconcile ? secondaryButton : primaryButton} disabled={recovery.working || !canManageProducts || !body} onClick={async () => {
           const result = await recovery.retry()
-          if (result.ok) onRecorded(result.result.sku)
+          if (result.ok) onRecorded(result.result.sku||result.result.canonicalSku)
         }}>{recovery.working ? 'Confirming saved decision…' : 'Retry saved decision'}</button>
       </div>
     </AdminDialog>

@@ -1,0 +1,88 @@
+[WebServer] (node:13960) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:8884) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 24 tests using 1 worker
+
+(node:17388) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+  ok  1 [chromium] › tests\admin-product-master-recovery.spec.js:26:1 › proven non-applied decision opens fresh details only after explicit reconciliation (3.1s)
+  ok  2 [chromium] › tests\admin-product-master-recovery.spec.js:86:4 › non-applied reconciliation preserves saved evidence on unavailable current read (2.4s)
+  ok  3 [chromium] › tests\admin-product-master-recovery.spec.js:86:4 › non-applied reconciliation preserves saved evidence on wrong SKU current read (1.4s)
+  ok  4 [chromium] › tests\admin-product-master-recovery.spec.js:86:4 › non-applied reconciliation preserves saved evidence on invalid version current read (1.4s)
+  ok  5 [chromium] › tests\admin-product-master-recovery.spec.js:95:1 › reconciliation preserves request when current cookie actor changes during latest read (1.5s)
+  ok  6 [chromium] › tests\admin-product-master-recovery.spec.js:104:1 › role downgrade during reconciliation read retains original saved request (1.4s)
+  ok  7 [chromium] › tests\admin-product-master-recovery.spec.js:113:1 › actor switch away and back cannot consume pending evidence from a held latest read (1.5s)
+  ok  8 [chromium] › tests\admin-product-master-recovery.spec.js:127:1 › only canonical version refusal permits latest-review action (1.3s)
+  ok  9 [chromium] › tests\admin-product-master-recovery.spec.js:137:1 › storage remove and restore invalidates already admitted reconciliation (1.4s)
+  ok 10 [chromium] › tests\admin-product-master-recovery.spec.js:153:1 › historical receipt during explicit reconciliation confirms history instead of opening replacement (1.4s)
+  ok 11 [chromium] › tests\admin-product-master-recovery.spec.js:163:1 › reload forgets non-applied observation while retaining the exact pending request (1.8s)
+  ok 12 [chromium] › tests\admin-product-master-recovery.spec.js:169:1 › lost reply survives close reload missing product and refusal before exact retry confirms (2.0s)
+  ok 13 [chromium] › tests\admin-product-master-recovery.spec.js:201:1 › queued retry cannot become a fresh save after another tab resolves it (1.3s)
+  ok 14 [chromium] › tests\admin-product-master-recovery.spec.js:215:1 › late reply after actor switch preserves original request for original account (1.2s)
+  ok 15 [chromium] › tests\admin-product-master-recovery.spec.js:224:1 › changed cookie actor refuses retry before HTTP and retains request (1.2s)
+  ok 16 [chromium] › tests\admin-product-master-recovery.spec.js:232:1 › unusable storage or malformed saved command refuses before a fresh POST (1.8s)
+  ok 17 [chromium] › tests\admin-product-master-recovery.spec.js:240:1 › invalid successful reply cannot erase pending decision (1.0s)
+  ok 18 [chromium] › tests\admin-product-master-recovery.spec.js:247:1 › two tabs cannot submit different new decisions under one actor lock (1.8s)
+  ok 19 [chromium] › tests\admin-product-master-recovery.spec.js:269:1 › current role downgrade refuses before retry and retains the request (1.5s)
+  ok 20 [chromium] › tests\admin-product-master-recovery.spec.js:278:1 › changed session after a valid receipt cannot acknowledge the original request (1.0s)
+  ok 21 [chromium] › tests\admin-product-master-recovery.spec.js:286:1 › retained editor survives actor switch back while the old reply is still held (1.7s)
+  ok 22 [chromium] › tests\admin-sku-merge-ui.spec.js:21:1 › merge preview and exact lost-reply retry survive reload at mobile and desktop widths (2.1s)
+  x  23 [chromium] › tests\admin-sku-merge-ui.spec.js:39:1 › stale saved merge reconciles against group preview before a new decision (6.1s)
+(node:20084) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 24 [chromium] › tests\admin-sku-merge-ui.spec.js:54:1 › dependency refusal disables confirmation without a write (1.0s)
+
+
+  1) [chromium] › tests\admin-sku-merge-ui.spec.js:39:1 › stale saved merge reconciles against group preview before a new decision 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "previous merge did not apply"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      49 |  await page.getByRole('button',{name:'Review latest merge preview'}).click()
+      50 |  await expect(page.getByLabel('I reviewed the retained listing and all lots')).not.toBeChecked()
+    > 51 |  await expect(page.getByRole('alert')).toContainText('previous merge did not apply')
+         |                                        ^
+      52 |  expect(await page.evaluate(k=>localStorage.getItem(k),key)).toBeNull();expect(writes).toBe(3)
+      53 | })
+      54 | test('dependency refusal disables confirmation without a write',async({page})=>{
+        at C:\Users\jerze\K2 JImzon\tests\admin-sku-merge-ui.spec.js:51:40
+
+    Error Context: test-results\admin-sku-merge-ui-stale-s-a2c29-eview-before-a-new-decision-chromium\error-context.md
+
+  1 failed
+    [chromium] › tests\admin-sku-merge-ui.spec.js:39:1 › stale saved merge reconciles against group preview before a new decision 
+  23 passed (46.5s)

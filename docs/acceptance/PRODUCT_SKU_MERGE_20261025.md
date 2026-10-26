@@ -1,3 +1,52 @@
+# Product SKU merge — verified feature source, 26 October 2026
+
+Owner: MAP-023 / IDEA-20261025-04. This receipt supersedes the earlier local completion claims below. Owner commit37f33f59 was present on codex/sku-merge-completion; its worktree was clean. Verification found important gaps and corrected them before the requested source push. No production schema or business-data write has occurred.
+
+## What changed and why
+
+The existing Admin Inventory Grid now has Combine approved duplicates. The existing AdminDialog presents the retained listing, all approved product identities and lots, quantities and eligibility refusals, then requires explicit review before combining. The three fixed groups remain One Fragrance001145<-001146/47/48, Carne001017<-001016/18, Prosciutto001020<-001019/21; there is no arbitrary merge or product-family workaround.
+
+The existing Product Master recovery namespace, Web Lock, actor/current-session checks, CSRF, signed RPC and literal request/key are reused. Merge receipts validate their actual shape; stale reconciliation rereads the group rather than an undefined SKU. Lost reply/reload preserves the exact body/key; explicit canonical version refusal plus fresh complete group read is needed before replacing a decision. Existing update recovery remains verified. No stock edit, history deletion, lot recreation or new credential authority is introduced.
+
+SQL now requires the real canonical public-listing prerequisites (human review, name/image/price, lifecycle and active shop-null Website ready/published assignment without validation errors), refuses unknown lifecycle states and asserts discontinued/unpublished source outcomes. Deterministic actual dependency-writer contention proves the NOWAIT merge refuses without partial application and sees the committed reservation. Before/after snapshots and one-group receipt retain lineage and every original lot ID/quantity/metadata; original product/history rows remain. Clearance-dependent eligibility changes refuse rather than inventing replacement approval.
+
+Read-only captured schema and the exact installed permission profile now live in tracked docs/acceptance files. Previously they were ignored docs/evidence files, leaving clean clones unable to rehearse or run readiness. Readiness recognizes only the already-approved family reader; no grants changed.
+
+## Verification and practical limits
+
+Evidence directory: product-sku-merge-20261026/ (relative to this receipt).
+
+| Evidence | Result |
+| --- | --- |
+| npm run test:product-sku-merge | 32/32 Node checks, exit0; actor/allowlist/persistence/literal transport/readiness |
+| SQL rehearsal final sql-confirm.log + sql-receipt.json | 23 checks, exit0; synthetic64units/two preserved lots, signed real captured verifier/triggers, stale/dependency/role/refusal, exact replay, real concurrent reservation insertion; own PostgreSQL stopped |
+| Existing Product Master recovery browser suite | 21 passing; combined initial run23pass/1newnoticefailure retained in ui-final.log |
+| Final merge browser suite ui-confirm2.log | 3/3 exit0; mobile375/desktop1440, lost reply/reload/exact retry, stale reconciliation, active reservation disabled |
+| npm run verify:development | exit0 after final production edit; source/security/import checks |
+| Separate Admin production build | exit0; boundary/secrets pass,227.44/300.00kBminified; no budget change |
+| K2 preflight/readiness | correctpixplcjqivlfflickobf;8verified/2owner/3connector/0failed; no provider write |
+| Independent initial/follow-up review | Five important gaps corrected; no remaining Critical/Important blockers to feature-branch push |
+
+Browser images are synthetic fixture captures, not production observations. Only the Prosciutto-shaped synthetic stock example was executed in SQL; the three groups share the same fixed operation and all validator groups are tested. This is not full production/physical-stock acceptance or populated-provider rollback proof. Initial localhost-restricted transport failure, missing initiating UI red tests, missing publication-gate red, fixture-only permission cleanup failure, and stale-notice browser failure are retained locally; passing successor receipts do not rewrite those outcomes.
+
+## UI review
+
+| Before | After | Why |
+| --- | --- | --- |
+| Recovery-only dialog; no initiating workflow | Existing Inventory Grid opens a protected group/lot preview | Staff can review exactly which listing and stock remain |
+| Update-only receipt shape and undefined-SKU reconciliation | Merge-aware original-body retry and current group read | Unknown outcomes remain recoverable across reloads |
+| No rendered refusal or explicit confirmation | Textual refusal, disabled save, review checkbox, current preview refresh | Preserve operational clarity and mobile/keyboard use |
+
+The four required design skills preserve the existing dense Admin palette, type, buttons and accessible dialog. No decorative motion or design-system replacement was introduced. One batched375/1440 inspection and confirmation were performed.
+
+## Current state and recovery
+
+Locally qualified feature source only. Full release gate/exact-head CI, reviewed current provider packet, backup/restore safeguards, migration installation, and the actual approved one-group Admin application/readback remain owned by MAP-023. No claim that duplicates are already combined on the live store. Source rollback is a scoped revert; preserve existing recovery.git snapshot-11 and the detached old sku-merge checkout. Once any real merge applies, do not blindly revert data or replay SQL: use reviewed per-group lot/history recovery and preserve later operations.
+
+---
+
+Historical receipt (superseded where noted above):
+
 # Product SKU Merge — Local Implementation & Rehearsal Verification, 25-26 October 2026
 
 Owner: MAP-023 / IDEA-20261025-04. The owner confirmed that repeated cards for One Fragrance, Borella Carne, and Borella Prosciutto are identical sellable items rather than variants, directed consolidation in Admin, and authorized implementation, source release, and exact data merges.

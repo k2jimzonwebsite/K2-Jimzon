@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "checks": [
+    "unready canonical website listing refuses",
+    "unknown source lifecycle refuses",
+    "Staff cannot merge",
+    "AAL1 cannot merge",
+    "invalid signature refuses",
+    "unknown group refuses",
+    "stale preview refuses atomically",
+    "active reservation refuses without changing lots",
+    "stock allocation refuses without changing lots",
+    "family membership refuses without changing lots",
+    "active order refuses without changing lots",
+    "incomplete package identity refuses without changing lots",
+    "concurrent dependency insertion refuses without waiting or partial merge",
+    "committed concurrent reservation is observed and refused",
+    "signed merge conserves 64 units in canonical SKU",
+    "exact lost-reply retry returns the original receipt",
+    "same key with altered body refuses",
+    "all original lot IDs and metadata remain",
+    "source rows remain discontinued with no Website assignment",
+    "balances and product projections conserve physical and sellable totals",
+    "one audit and one receipt, original snapshots retained",
+    "a new request cannot merge the group twice",
+    "command context is cleared"
+  ],
+  "stopped": true,
+  "scope": "isolated synthetic rows/Auth; captured real verifier and product/lot triggers; no production or full provider claim"
+}

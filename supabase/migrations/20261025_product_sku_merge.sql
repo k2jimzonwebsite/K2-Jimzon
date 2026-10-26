@@ -41,6 +41,7 @@ begin
  ) into v;
  if jsonb_array_length(v->'products')<>cardinality(s) then b:='PRODUCTS_INCOMPLETE';
  elsif jsonb_array_length(v->'lots')>200 then b:='TOO_MANY_LOTS';
+ elsif exists(select 1 from public.products p where p.sku=any(s) and (p.status is null or p.status not in ('Draft','Under Review','Live','Active','Unlisted','Discontinued'))) then b:='UNKNOWN_LIFECYCLE';
  elsif exists(select 1 from public.products p join public.products c on c.sku=s[1]
     where p.sku=any(s) and (p.brand_id is distinct from c.brand_id or p.category_id is distinct from c.category_id
      or p.net_weight is distinct from c.net_weight or p.unit_of_measure is distinct from c.unit_of_measure
@@ -66,7 +67,13 @@ begin
     and l.status is distinct from 'Unlinked') then b:='CHANNEL_ASSIGNMENT';
  elsif exists(select 1 from unnest(s) requested(sku) where (select count(*) from public.channel_listings l
     where l.sku=requested.sku and l.channel_source='website' and l.status='Active')<>1) then b:='WEBSITE_ASSIGNMENT';
- elsif not exists(select 1 from public.products p where p.sku=s[1] and p.published and p.status in ('Live','Active','Unlisted')) then b:='CANONICAL_NOT_PUBLISHED';
+ elsif not exists(select 1 from public.products p where p.sku=s[1]
+    and p.is_human_reviewed is true and nullif(btrim(p.name),'') is not null
+    and nullif(btrim(p.primary_image_url),'') is not null and coalesce(p.srp,p.retail_price,0)>0
+    and (p.status='Unlisted' or p.status in ('Live','Active') and p.published is true)
+    and exists(select 1 from public.channel_listings l where l.sku=p.sku and l.channel_source='website'
+      and l.shop_id is null and l.status='Active' and l.publication_status in ('ready','published')
+      and l.validation_errors='[]'::jsonb)) then b:='CANONICAL_NOT_PUBLISHED';
  elsif exists(select 1 from public.product_batches l where l.sku=any(s) and (l.reserved_quantity is distinct from 0 or l.quantity is null or l.quantity<0))
     or exists(select 1 from public.inventory_balances x where x.sku=any(s) and (x.location_code<>'MANILA_MAIN'
      or x.reserved is distinct from 0 or x.in_transit is distinct from 0)) then b:='RESERVED_OR_TRANSIT_STOCK';
@@ -185,7 +192,9 @@ begin
  if (select jsonb_agg(x-'sku'-'updated_at' order by x->>'id') from jsonb_array_elements(v->'state'->'lots') x)
    is distinct from (select jsonb_agg(x-'sku'-'updated_at' order by x->>'id') from jsonb_array_elements(a->'state'->'lots') x)
   or (select coalesce(sum((x->>'on_hand')::bigint),0) from jsonb_array_elements(v->'state'->'balances') x)<>v_total
-  or exists(select 1 from public.product_batches where sku=any(s[2:cardinality(s)])) then raise exception 'K2_SKU_MERGE_LOT_CONSERVATION';end if;
+  or exists(select 1 from public.product_batches where sku=any(s[2:cardinality(s)]))
+  or exists(select 1 from public.products where sku=any(s[2:cardinality(s)]) and (status is distinct from 'Discontinued' or published is distinct from false))
+  then raise exception 'K2_SKU_MERGE_LOT_CONSERVATION';end if;
  r:=jsonb_build_object('groupId',p_payload->>'groupId','canonicalSku',s[1],'sourceSkus',to_jsonb(s[2:cardinality(s)]),
   'quantity',v_total,'available',v_available,'lotCount',jsonb_array_length(v->'state'->'lots'),'requestId',p_key);
  insert into k2_private.product_sku_merge_events(group_id,actor_id,request_id,reason,canonical_sku,source_skus,before_state,after_state,result,created_at)
@@ -204,7 +213,7 @@ begin
   oid_:=to_regprocedure(n||'(text,bigint,uuid,uuid,text,text)');
   before_def:=replace(pg_get_functiondef(oid_),E'\r\n',E'\n');
   expected:=case n when 'k2_private.verify_admin_bff_request' then '6472f0a39b9ca5949d86b52fbfdc2dfc57f41166328971cb153c23ba997c8687' else 'c7e9f53fe80c68ce99401caf10d31f4ee272bd506a0c0f3bc7f6363c97f38b94' end;
-  if encode(extensions.digest(convert_to(before_def,'UTF8'),'sha256'),'hex')<>expected then raise exception 'K2_SKU_MERGE_AUTHORITY_DRIFT';end if;
+  if encode(extensions.digest(convert_to(before_def,'UTF8'),'sha256'),'hex') is distinct from expected then raise exception 'K2_SKU_MERGE_AUTHORITY_DRIFT';end if;
   select to_jsonb(p)-'prosrc' into old_meta from pg_proc p where oid=oid_;
   if n='k2_private.verify_admin_bff_request' then
    after_def:=replace(before_def,'''product_master_update'', ''product_master_status'', ''product_master_delete'',',

@@ -2,14 +2,14 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import assert from 'node:assert/strict'
-import { spawnSync } from 'node:child_process'
+import { spawnSync, spawn } from 'node:child_process'
 import { createHash, createHmac, randomUUID } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 const migration = path.join(root, 'supabase/migrations/20261025_product_sku_merge.sql')
 assert.ok(fs.existsSync(migration), 'The signed lot-preserving merge migration is missing')
-const captured = JSON.parse(fs.readFileSync(path.join(root, 'docs/evidence/20261025-sku-merge-schema.json')))
+const captured = JSON.parse(fs.readFileSync(path.join(root, 'docs/acceptance/20261025-sku-merge-schema.json')))
 const work = path.join(root, '.tools/sku-merge-rehearsals', randomUUID())
 const bin = path.join(root, '.tools/postgresql-17.11/runtime/pgsql/bin')
 const env = { ...process.env, PGHOST: '127.0.0.1', PGPORT: '55329', PGUSER: 'postgres', PGDATABASE: 'postgres', PGPASSWORD: '', PGOPTIONS: '', PGSSLMODE: 'disable' }
@@ -17,7 +17,7 @@ const actor = '11111111-1111-4111-8111-111111111111', category = '22222222-2222-
 const canonical = 'K2-SKU-001020', source = 'K2-SKU-001021', secret = Buffer.alloc(32, 73), checks = []
 const literal = value => "'" + String(value).replaceAll("'", "''") + "'"
 fs.mkdirSync(work, { recursive: true })
-let started = false, failure
+let started = false, failure, holderCompletion
 function run(name, args, options = {}) {
   const r = spawnSync(path.join(bin, name + '.exe'), args, { cwd: root, env, encoding: 'utf8', windowsHide: true, timeout: 60000, ...options })
   if (r.error || r.status !== 0) throw Error(String(r.stderr || r.stdout || r.error?.message).slice(-4500))
@@ -87,9 +87,12 @@ try {
     insert into public.product_batches(id,sku,quantity,reserved_quantity,quantity_available,box_code,batch_code,expiry_date,best_before_date,hub,custodian,inventory_status,unit_cost,owner_code,source_type,created_at,updated_at)
       select gen_random_uuid(),sku,total_stock,0,total_stock,'SYNTHETIC-BOX','SYNTHETIC-BOX',current_date+365,current_date+365,'HUB-MNL-CENTRAL','owner','available',12.5,'owner','opening_balance',now(),now() from public.products where total_stock>0;
     select k2_private.clear_category_lot_context_v1();commit;`)
+  sql("update public.products set is_human_reviewed=true,primary_image_url='https://example.test/synthetic.webp',srp=99;update public.channel_listings set validation_errors='[]'::jsonb;")
   const before = sql('select jsonb_agg(to_jsonb(b)-\'sku\'-\'updated_at\' order by id) from public.product_batches b;')
   run('psql', ['-X','-q','-v','ON_ERROR_STOP=1','-f',migration])
   const initial = preview(); assert.equal(initial.blocker, null)
+  check('unready canonical website listing refuses', `begin;update public.channel_listings set publication_status='error' where sku='${canonical}';` + session + refusal(signed(payload(initial)), 'K2_SKU_MERGE_BLOCKED') + 'rollback;')
+  check('unknown source lifecycle refuses', `begin;update public.products set status='Unexpected' where sku='${source}';` + session + refusal(signed(payload(initial)), 'K2_SKU_MERGE_BLOCKED') + 'rollback;')
   check('Staff cannot merge', session + "set k2.admin='off';" + refusal(signed(payload(initial)), 'K2_ADMIN_REQUIRED'))
   check('AAL1 cannot merge', session + "set request.jwt.claim.aal='aal1';" + refusal(signed(payload(initial)), 'K2_ADMIN_REQUIRED'))
   check('invalid signature refuses', session + refusal(signed(payload(initial), randomUUID(), '0'.repeat(64)), 'K2_ADMIN_SIGNATURE_INVALID'))
@@ -102,6 +105,25 @@ try {
     ['active order', `with o as(insert into public.order_requests(id,status)values(gen_random_uuid(),'submitted')returning id)insert into public.order_request_items(id,sku,order_request_id)select gen_random_uuid(),'${source}',id from o;`],
     ['incomplete package identity', `update public.products set size=null where sku='${source}';`],
   ]) check(name + ' refuses without changing lots', 'begin;' + mutate + session + refusal(signed(payload(initial)), 'K2_SKU_MERGE_BLOCKED') + 'rollback;')
+  // Hold a real uncommitted dependency insertion. The merge must refuse its
+  // NOWAIT table lock, leave no receipt/stock changes, and observe the row after
+  // the other writer commits. No timing-only race assumption.
+  const holderName='sku-merge-holder-'+randomUUID()
+  const holder=spawn(path.join(bin,'psql.exe'),['-X','-q','-v','ON_ERROR_STOP=1','-c',`begin;insert into public.inventory_reservations(id,sku,status)values(gen_random_uuid(),'${source}','active');select pg_sleep(5);commit;`],{cwd:root,env:{...env,PGAPPNAME:holderName},windowsHide:true,stdio:'pipe'})
+  let holderOutput='';holder.stderr.on('data',x=>{holderOutput+=x})
+  holderCompletion=new Promise(resolve=>{holder.on('error',error=>resolve({code:-1,error:error.message}));holder.on('exit',code=>resolve({code,error:holderOutput}))})
+  let locked=false
+  for(let attempt=0;attempt<60;attempt++){
+    locked=sql(`select exists(select 1 from pg_locks l join pg_stat_activity a on a.pid=l.pid where a.application_name=${literal(holderName)} and l.relation='public.inventory_reservations'::regclass and l.mode='RowExclusiveLock' and l.granted);`)==='t'
+    if(locked)break
+    await new Promise(resolve=>setTimeout(resolve,25))
+  }
+  assert.ok(locked,'real dependency writer lock must be observed before merge')
+  check('concurrent dependency insertion refuses without waiting or partial merge',session+`do $$begin perform ${signed(payload(initial))};raise exception 'UNEXPECTED_SUCCESS';exception when lock_not_available then null;end $$;reset role;select not exists(select 1 from k2_private.admin_command_receipts where action='product_sku_merge');`)
+  const holderResult=await holderCompletion;assert.equal(holderResult.code,0,holderResult.error)
+  check('committed concurrent reservation is observed and refused',session+refusal(signed(payload(initial)),'K2_SKU_MERGE_BLOCKED'))
+  sql('delete from public.inventory_reservations;')
+  assert.equal(sql('select jsonb_agg(to_jsonb(b)-\'sku\'-\'updated_at\' order by id) from public.product_batches b;'),before)
   const key = randomUUID(), call = signed(payload(initial), key)
   check('signed merge conserves 64 units in canonical SKU', session + `select (${call}->>'quantity')::int=64;`)
   check('exact lost-reply retry returns the original receipt', session + `select (${signed(payload(initial), key)}->>'quantity')::int=64;`)
@@ -115,6 +137,7 @@ try {
   check('command context is cleared', 'select not exists(select 1 from k2_private.category_lot_command_context);')
 } catch (error) { failure = error; console.error(error.message); process.exitCode = 1 }
 finally {
+  if(holderCompletion)await holderCompletion
   if (started) run('pg_ctl', ['-D',path.join(work,'data'),'-m','fast','-w','stop'])
   fs.writeFileSync(path.join(work,'receipt.json'),JSON.stringify({ status: failure ? 'failed' : 'passed',checks,error:failure?.message,stopped:started,scope:'isolated synthetic rows/Auth; captured real verifier and product/lot triggers; no production or full provider claim' },null,2))
   console.log('Receipt:',path.join(work,'receipt.json'))

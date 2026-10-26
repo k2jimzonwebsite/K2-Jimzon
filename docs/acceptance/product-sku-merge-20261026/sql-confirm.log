@@ -1,0 +1,24 @@
+[ok] unready canonical website listing refuses
+[ok] unknown source lifecycle refuses
+[ok] Staff cannot merge
+[ok] AAL1 cannot merge
+[ok] invalid signature refuses
+[ok] unknown group refuses
+[ok] stale preview refuses atomically
+[ok] active reservation refuses without changing lots
+[ok] stock allocation refuses without changing lots
+[ok] family membership refuses without changing lots
+[ok] active order refuses without changing lots
+[ok] incomplete package identity refuses without changing lots
+[ok] concurrent dependency insertion refuses without waiting or partial merge
+[ok] committed concurrent reservation is observed and refused
+[ok] signed merge conserves 64 units in canonical SKU
+[ok] exact lost-reply retry returns the original receipt
+[ok] same key with altered body refuses
+[ok] all original lot IDs and metadata remain
+[ok] source rows remain discontinued with no Website assignment
+[ok] balances and product projections conserve physical and sellable totals
+[ok] one audit and one receipt, original snapshots retained
+[ok] a new request cannot merge the group twice
+[ok] command context is cleared
+Receipt: C:\Users\jerze\K2 JImzon\.tools\sku-merge-rehearsals\3ad8770a-906c-4c88-b13b-959b68d15d4f\receipt.json
