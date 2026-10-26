@@ -1,0 +1,63 @@
+{
+  "observedAt": "2026-10-26T01:52:38.873Z",
+  "expectedSource": "f6fc249ba2e4b85dd63fdd6079c4b0449451df7e",
+  "scope": "canonical actual-host HTTP/artifact/entry-asset reads; source attribution additionally requires Vercel deployment metadata",
+  "results": [
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com",
+      "status": 200,
+      "title": "K2 Jimzon — Italian imports, direct to the Philippines",
+      "marker": {
+        "target": "storefront"
+      },
+      "headers": {
+        "cspReportOnly": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests",
+        "frame": "DENY",
+        "contentType": "text/html; charset=utf-8"
+      },
+      "assets": [
+        {
+          "src": "/theme-init.js",
+          "status": 200,
+          "bytes": 539,
+          "sha256": "2db29b68cfbb15fde83533588ba9ff76dc9377b690def1b09cbe853505cd9753"
+        },
+        {
+          "src": "/assets/index-BJnvvkOt.js",
+          "status": 200,
+          "bytes": 131063,
+          "sha256": "e94af176bc5018a39a62bd5af31bf2fdb46530c584fe48cf1b2520d0f2b6d8fe"
+        }
+      ]
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com",
+      "status": 200,
+      "title": "K2 Jimzon Admin",
+      "marker": {
+        "target": "admin"
+      },
+      "headers": {
+        "cspReportOnly": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests",
+        "frame": "DENY",
+        "contentType": "text/html; charset=utf-8"
+      },
+      "assets": [
+        {
+          "src": "/theme-init.js",
+          "status": 200,
+          "bytes": 539,
+          "sha256": "2db29b68cfbb15fde83533588ba9ff76dc9377b690def1b09cbe853505cd9753"
+        },
+        {
+          "src": "/assets/index-BdviUakU.js",
+          "status": 200,
+          "bytes": 48301,
+          "sha256": "c81a6280838d40769bdd119fb6d12ec2e05e1d3e0cb945f0a3bacd665dec21f5"
+        }
+      ]
+    }
+  ]
+}

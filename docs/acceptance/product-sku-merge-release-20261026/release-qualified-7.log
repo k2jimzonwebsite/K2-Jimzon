@@ -1,0 +1,34 @@
+[WebServer] (node:18144) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:1596) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:21292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\admin-auth-recovery.spec.js:8:1 › secure Admin keeps Google available and routes the verified token through its BFF (1.6s)
+  ok 2 tests\admin-auth-recovery.spec.js:27:1 › a failed challenge script can be retried without reloading the login form (900ms)
+  ok 3 tests\admin-auth-recovery.spec.js:45:3 › Google return handles MFA_REQUIRED without a browser provider session (729ms)
+  ok 4 tests\admin-auth-recovery.spec.js:45:3 › Google return handles MFA_ENROLLMENT_REQUIRED without a browser provider session (1.3s)
+  ok 5 tests\admin-auth-recovery.spec.js:45:3 › Google return handles OAUTH_RETURN_INVALID without a browser provider session (677ms)
+  x  6 tests\admin-auth-recovery.spec.js:81:1 › the visible provider widget fits the actual Admin form at phone and desktop widths (806ms)
+
+
+  1) tests\admin-auth-recovery.spec.js:81:1 › the visible provider widget fits the actual Admin form at phone and desktop widths 
+
+    Error: locator.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')
+        at eval (eval at evaluate (:370:30), <anonymous>:3:35)
+        at UtilityScript.evaluate (<anonymous>:372:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at eval (eval at evaluate (:370:30), <anonymous>:3:35)
+        at UtilityScript.evaluate (<anonymous>:372:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at C:\Users\jerze\K2 JImzon\tests\admin-auth-recovery.spec.js:100:36
+        at C:\Users\jerze\K2 JImzon\tests\admin-auth-recovery.spec.js:100:5
+
+    Error Context: test-results\admin-auth-recovery-the-vi-8fbb6-at-phone-and-desktop-widths\error-context.md
+
+  1 failed
+    tests\admin-auth-recovery.spec.js:81:1 › the visible provider widget fits the actual Admin form at phone and desktop widths 
+  5 passed (11.1s)

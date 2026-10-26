@@ -1,0 +1,17 @@
+
+> k2-jimzon-prototype@0.1.0 test:order-receipt-direct
+> playwright test --config=playwright.order-receipt.config.js tests/order-receipt-direct-ui.spec.js
+
+[WebServer] (node:22484) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21240) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:21532) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\order-receipt-direct-ui.spec.js:13:1 › direct saved order conversation accepts a private receipt after fresh instructions without asking identity again (1.9s)
+  ok 2 tests\order-receipt-direct-ui.spec.js:71:1 › direct saved legacy receipt waits for fresh charge and keeps messages after review or refresh failure (9.3s)
+
+  2 passed (14.6s)

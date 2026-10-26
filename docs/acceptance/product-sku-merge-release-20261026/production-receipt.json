@@ -1,0 +1,30 @@
+{
+  "source": "f6fc249ba2e4b85dd63fdd6079c4b0449451df7e",
+  "qualifiedHead": "203cce6e8eebcbbc6f3682925def3ae4a60bc376",
+  "tree": "c06414b666a2131672ad179ffe645df7e0463565",
+  "pr": 32,
+  "ciRun": 40254143166,
+  "ci": "SUCCESS",
+  "sourceReleaseVerified": true,
+  "databaseMigrationApplied": false,
+  "businessGroupsMerged": false,
+  "actualBrowser": {
+    "storefrontHydrated": true,
+    "cart": 0,
+    "adminAuthenticated": true,
+    "inventoryLoaded": 196,
+    "active": 130,
+    "drafts": 66,
+    "displayedUnits": 273,
+    "mergeControlVisible": true,
+    "mergeControlClicked": false,
+    "physicalCountVerified": false
+  },
+  "rollback": {
+    "source": "5e828bb7c3ad35880d10696f4f51ac741604f57e",
+    "storefront": "dpl_8ir8NX5CiZbjirE25S3GE5LG6MdU",
+    "admin": "dpl_G8WPCC5EjDVVB4wCFm9zdvLXGYuf"
+  },
+  "remainingMap": "MAP-023 / IDEA-20261025-04",
+  "scope": "Verified production SOURCE only; migration installation and actual group operations remain unperformed"
+}

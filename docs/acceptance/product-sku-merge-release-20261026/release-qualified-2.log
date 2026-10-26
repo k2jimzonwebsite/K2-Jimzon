@@ -1,0 +1,40 @@
+
+> k2-jimzon-prototype@0.1.0 test:store-orientation
+> playwright test --config=playwright.store-orientation.config.js
+
+[WebServer] (node:12348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:10780) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:19924) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\store-orientation-ui.spec.js:18:1 › fallback keeps room controls usable in portrait and landscape (2.1s)
+[WebServer] 9:25:30 AM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 9:25:30 AM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 9:25:31 AM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok  2 tests\store-orientation-ui.spec.js:37:1 › 3D room renders in desktop, portrait and landscape (28.0s)
+[WebServer] 9:25:56 AM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 9:25:57 AM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 9:25:57 AM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok  3 tests\store-overlay-collision.spec.js:47:3 › Mobile store overlay collision prevention › portrait viewport (375x812): zero collision between counter, keeper, zoom, and basket dock (8.4s)
+[WebServer] 9:26:05 AM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 9:26:05 AM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 9:26:05 AM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok  4 tests\store-overlay-collision.spec.js:122:3 › Mobile store overlay collision prevention › landscape viewport (844x390): controls and basket dock usable without collision (5.0s)
+  ok  5 tests\store-overlay-collision.spec.js:149:3 › Mobile store overlay collision prevention › reduced motion fallback (375x812): flat scene card unobstructed by basket dock (883ms)
+  ok  6 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 390px in light mode (1.2s)
+  ok  7 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 390px in dark mode (1.2s)
+  ok  8 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 1440px in light mode (2.0s)
+  ok  9 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 1440px in dark mode (1.6s)
+[WebServer] 9:26:17 AM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 9:26:17 AM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 9:26:17 AM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok 10 tests\store-readability-ui.spec.js:73:1 › short mobile drag changes shelf; zoom controls and hint leave room to browse (12.1s)
+  ok 11 tests\store-readability-ui.spec.js:126:1 › enlarged phone text keeps store help reachable (774ms)
+[WebServer] 9:26:29 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\store-readability-ui.spec.js:142:1 › catalog footer remains readable in both themes (864ms)
+
+  12 passed (1.1m)

@@ -1,0 +1,56 @@
+
+> k2-jimzon-prototype@0.1.0 test:inbox-ui
+> playwright test --config=playwright.inbox.config.js
+
+[WebServer] (node:16480) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:7608) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 41 tests using 1 worker
+
+(node:17560) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\inbox-categorization-viewport.spec.js:11:3 › Inbox Categorization Logic › accurately classifies inquiries by purpose and intent (9ms)
+  ok  2 tests\inbox-categorization-viewport.spec.js:48:3 › Inbox Categorization Logic › accurately identifies channel origins (3ms)
+  ok  3 tests\inbox-categorization-viewport.spec.js:59:3 › Inbox Categorization Logic › returns direct portal deep-links and reply instructions for external channels (4ms)
+  ok  4 tests\inbox-categorization-viewport.spec.js:93:3 › Inbox Viewport & UI Interactions › displays category tabs, badges, and filters conversations (786ms)
+  ok  5 tests\inbox-categorization-viewport.spec.js:119:3 › Inbox Viewport & UI Interactions › enlarge workspace maximizes reading height and collapses metric rail (781ms)
+  ok  6 tests\inbox-categorization-viewport.spec.js:139:3 › Inbox Viewport & UI Interactions › message actions & deletion modal provides copyable SQL and moderation status (1.0s)
+  ok  7 tests\inbox-categorization-viewport.spec.js:161:3 › Inbox Viewport & UI Interactions › collapsible workflow sidebar expands reading width (884ms)
+  ok  8 tests\inbox-categorization-viewport.spec.js:179:3 › Inbox Viewport & UI Interactions › staff can delete an errant or fooling message directly from the conversation stream (1.0s)
+  ok  9 tests\inbox-categorization-viewport.spec.js:216:3 › Inbox Viewport & UI Interactions › staff can 1-click archive and remove a thread from active view (805ms)
+  ok 10 tests\inbox-phase2.spec.js:5:1 › drafts remain bound to the customer when switching channels (823ms)
+  ok 11 tests\inbox-phase2.spec.js:15:1 › pending note save preserves edits made after submission (1.5s)
+  ok 12 tests\inbox-phase2.spec.js:25:1 › late note completion cannot clear another customer draft or show its success there (1.8s)
+  ok 13 tests\inbox-phase2.spec.js:38:1 › workflow reason retains keyboard focus through multiple characters (1.2s)
+  ok 14 tests\inbox-phase2.spec.js:48:1 › staff switching discards the prior actor draft and late notice (1.6s)
+  ok 15 tests\inbox-phase2.spec.js:62:3 › delayed history cannot replace the current customer (759ms)
+  ok 16 tests\inbox-phase2.spec.js:62:3 › delayed history cannot replace the current return visit (773ms)
+  ok 17 tests\inbox-phase2.spec.js:80:1 › delayed website reply preserves newer text (1.7s)
+  ok 18 tests\inbox-phase2.spec.js:91:1 › phone navigation preserves each customer draft (773ms)
+  ok 19 tests\inbox-phase2.spec.js:106:3 › Phase 2 unified inbox contract › migration models workflow, delivery truth, and immutable events (9ms)
+  ok 20 tests\inbox-phase2.spec.js:125:3 › Phase 2 unified inbox contract › admin inbox runtime normalizes snake_case and camelCase unread state independently from status (6ms)
+  ok 21 tests\inbox-phase2.spec.js:162:3 › Phase 2 unified inbox contract › admin inbox labels internal notes and disconnected delivery truthfully (3ms)
+  ok 22 tests\inbox-phase2.spec.js:176:3 › Phase 2 inbox interactions › desktop queue saves internal notes and controlled workflow changes (831ms)
+  ok 23 tests\inbox-phase2.spec.js:200:3 › Phase 2 inbox interactions › mobile queue opens one conversation at a time with a usable back action (598ms)
+  ok 24 tests\inbox-phase2.spec.js:218:3 › Phase 2 inbox interactions › virtual-store website chat is unmistakable and sends a customer-visible reply (724ms)
+  ok 25 tests\inbox-phase2.spec.js:236:3 › Inbox polling ownership and canonical unread › background polling yields to hidden tabs, in-flight reads, and disabled sessions (148ms)
+  ok 26 tests\inbox-phase2.spec.js:245:3 › Inbox polling ownership and canonical unread › a superseded read response can never repopulate the queue (1ms)
+  ok 27 tests\inbox-phase2.spec.js:253:3 › Inbox polling ownership and canonical unread › a failed background poll keeps the loaded queue and marks it stale (1ms)
+  ok 28 tests\inbox-phase2.spec.js:264:3 › Inbox polling ownership and canonical unread › a replayed read receipt cannot clear a message that arrived after it (1ms)
+  ok 29 tests\inbox-phase2.spec.js:278:3 › Inbox polling ownership and canonical unread › the Inbox tells staff when the visible queue is stale rather than live (538ms)
+  ok 30 tests\inbox-phase2.spec.js:284:3 › Inbox polling ownership and canonical unread › the inbox runtime owns its polling instead of resetting the queue every interval (3ms)
+  ok 31 tests\inbox-phase2.spec.js:298:3 › Inbox event history parity and failure states › a failed history read is distinguishable from an empty one and can be retried (732ms)
+  ok 32 tests\inbox-phase2.spec.js:308:3 › Inbox event history parity and failure states › event history is reachable on a phone, not only on wide desktops (513ms)
+  ok 33 tests\inbox-phase2.spec.js:318:3 › Inbox event history parity and failure states › the runtime reports a failed history read instead of an empty timeline (1ms)
+  ok 34 tests\inbox-phase2.spec.js:326:3 › Inbox ambiguous command reconciliation › an unconfirmed command is shown as unknown, not as a clean failure (723ms)
+  ok 35 tests\inbox-phase2.spec.js:338:3 › Inbox ambiguous command reconciliation › the runtime distinguishes an unconfirmed command from a rejected one (2ms)
+  ok 36 tests\inbox-phase2.spec.js:344:3 › Inbox ambiguous command reconciliation › leaving the page with an unresolved command is guarded, because a reload discards its identity (1ms)
+  ok 37 tests\inbox-phase2.spec.js:353:3 › Inbox truncated-window honesty and safe recovery › metric counts say they cover the visible page when the queue is truncated (560ms)
+  ok 38 tests\inbox-phase2.spec.js:359:3 › Inbox truncated-window honesty and safe recovery › a template asks before replacing a typed draft (734ms)
+  ok 39 tests\inbox-phase2.spec.js:371:3 › Inbox truncated-window honesty and safe recovery › an unconfirmed command offers the same-command retry (756ms)
+  ok 40 tests\inbox-phase2.spec.js:382:3 › Inbox truncated-window honesty and safe recovery › history events name the staff actor instead of omitting it (550ms)
+  ok 41 tests\inbox-phase2.spec.js:389:3 › Inbox truncated-window honesty and safe recovery › the uncertain retry resolves the same retained command instead of minting a new one (2ms)
+
+  41 passed (27.0s)

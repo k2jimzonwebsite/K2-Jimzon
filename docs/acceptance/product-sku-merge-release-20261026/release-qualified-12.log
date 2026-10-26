@@ -1,0 +1,16 @@
+
+> k2-jimzon-prototype@0.1.0 test:owner-count-close-ui
+> playwright test --config=playwright.owner-close.config.js tests/owner-count-close-ui.spec.js
+
+[WebServer] (node:21368) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21176) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:11116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\owner-count-close-ui.spec.js:12:1 › phone Owner Count & Close reaches a sealed customer-free handoff (4.4s)
+
+  1 passed (7.5s)

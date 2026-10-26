@@ -1,0 +1,184 @@
+{
+  "source": "203cce6e8eebcbbc6f3682925def3ae4a60bc376",
+  "tree": "c06414b666a2131672ad179ffe645df7e0463565",
+  "originalInvocation": "npm run verify:release",
+  "originalLog": "release-main.log",
+  "originalExit": -1,
+  "aggregateCleanExitClaim": false,
+  "initialPassingStages": [
+    "security:test-turnstile",
+    "test:security-check-ui",
+    "test:product-sku-merge",
+    "test:product-families",
+    "test:store-categories",
+    "test:base Node prelude"
+  ],
+  "routingCorrections": {
+    "merge": "excluded incompatible base; included ProductMaster5181",
+    "logo": "excluded combined base; included Storefront5192;16focused pass",
+    "windows": "existing K2_ACCEPTANCE_NO_WATCH=true opt-in; production unchanged"
+  },
+  "stages": [
+    {
+      "command": "npx playwright test --config=playwright.config.js",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-0.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:mobile-moderation",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-1.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:store-orientation",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-2.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:storefront-ui",
+      "exit": 1,
+      "log": ".tools/sku-merge-completion/release-qualified-3.log",
+      "coverage": "reconciled by focused passing case",
+      "focused": {
+        "log": "logo-768-focused.log",
+        "case": "logo preserves shopping layout at768dark",
+        "original": "47pass/1fail; focused unchanged1pass; original failure retained; cause unconfirmed"
+      }
+    },
+    {
+      "command": "npm run test:storefront-recovery",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-4.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:admin-ui",
+      "exit": 1,
+      "log": ".tools/sku-merge-completion/release-qualified-5.log",
+      "coverage": "reconciled by focused passing case",
+      "focused": {
+        "log": "admin-guide-focused.log",
+        "case": "complete paid-API blocker and manual fallback",
+        "original": "41pass/1React-preamble fixture failure; focused unchanged1pass"
+      }
+    },
+    {
+      "command": "npx playwright test --config=playwright.shop-stock.config.js",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-6.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npx playwright test --config=playwright.auth-recovery.config.js",
+      "exit": 1,
+      "log": ".tools/sku-merge-completion/release-qualified-7.log",
+      "coverage": "reconciled by focused passing case",
+      "focused": {
+        "log": "auth-widget-focused.log",
+        "case": "provider geometry after resize",
+        "original": "5pass/1detached-parent fixture failure; focused unchanged1pass"
+      }
+    },
+    {
+      "command": "npm run test:payment-ui",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-8.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:inbox-ui",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-9.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:admin-product-master-ui",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-10.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:admin-website-assignment-ui",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-11.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:owner-count-close-ui",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-12.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:customer-account-ui",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-13.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:selling-surfaces",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-14.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:order-receipt-direct",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-15.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:workflow-api",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-16.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:intake-ai-ui",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-17.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run test:vercel-output",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-18.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run build:storefront",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-19.log",
+      "coverage": "passed",
+      "focused": null
+    },
+    {
+      "command": "npm run build:admin",
+      "exit": 0,
+      "log": ".tools/sku-merge-completion/release-qualified-20.log",
+      "coverage": "passed",
+      "focused": null
+    }
+  ],
+  "counts": "Per-stage results; do not add duplicate focused/base counts",
+  "scope": "reconciled complete local release coverage, not an original clean aggregate exit0"
+}

@@ -1,0 +1,7 @@
+[
+  {
+    "command": "npx playwright test --config=playwright.config.js",
+    "exit": 4294967295,
+    "log": ".tools/sku-merge-completion/release-resumed-0.log"
+  }
+]

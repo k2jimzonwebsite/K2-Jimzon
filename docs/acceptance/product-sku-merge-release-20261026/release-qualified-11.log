@@ -1,0 +1,52 @@
+
+> k2-jimzon-prototype@0.1.0 test:admin-website-assignment-ui
+> playwright test --config=playwright.product-master.config.js tests/admin-website-assignment.spec.js
+
+[WebServer] (node:536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19112) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 14 tests using 1 worker
+
+(node:6312) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+  ok  1 [chromium] › tests\admin-website-assignment.spec.js:19:1 › separate reasoned Website assign and remove preserve current row version without Product Master writes (2.2s)
+  ok  2 [chromium] › tests\admin-website-assignment.spec.js:34:1 › lost Website reply survives reload missing product and Staff refusal; historical receipt is separate from current state (2.0s)
+  ok  3 [chromium] › tests\admin-website-assignment.spec.js:46:1 › Website stale saved request releases only after explicit exact recheck and valid fresh read (1.3s)
+  ok  4 [chromium] › tests\admin-website-assignment.spec.js:57:69 › Website reconciliation preserves evidence on unavailable read (1.9s)
+  ok  5 [chromium] › tests\admin-website-assignment.spec.js:57:69 › Website reconciliation preserves evidence on wrong SKU read (1.0s)
+  ok  6 [chromium] › tests\admin-website-assignment.spec.js:57:69 › Website reconciliation preserves evidence on missing version read (1.0s)
+  ok  7 [chromium] › tests\admin-website-assignment.spec.js:64:1 › malformed successful Website receipt cannot erase pending evidence (863ms)
+  ok  8 [chromium] › tests\admin-website-assignment.spec.js:68:1 › corrupt Website storage blocks fresh controls and remains untouched (678ms)
+  ok  9 [chromium] › tests\admin-website-assignment.spec.js:74:1 › Website actor switch away and back cannot acknowledge held original receipt (943ms)
+  ok 10 [chromium] › tests\admin-website-assignment.spec.js:80:1 › Website two tabs cannot replace a held request with another decision (1.4s)
+  ok 11 [chromium] › tests\admin-website-assignment.spec.js:87:1 › Website current account change during latest read retains request (1.1s)
+  ok 12 [chromium] › tests\admin-website-assignment.spec.js:95:1 › Website storage remove and restore invalidates held reconciliation (1.0s)
+  ok 13 [chromium] › tests\admin-website-assignment.spec.js:105:1 › Website in-progress refusal never enables replacement (940ms)
+  ok 14 [chromium] › tests\admin-website-assignment.spec.js:110:1 › delayed Website lock completion cannot leave stale handoff for a later saved decision (1.5s)
+
+  14 passed (21.2s)

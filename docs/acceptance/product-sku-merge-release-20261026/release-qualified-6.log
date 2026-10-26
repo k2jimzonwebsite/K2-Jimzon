@@ -1,0 +1,19 @@
+[WebServer] (node:20732) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:8884) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\shop-stock-ui.spec.js:46:1 › protected shop stock never uses the direct database path (2.2s)
+  ok 2 tests\shop-stock-ui.spec.js:56:3 › successful inventory_balances read refuses incomplete or missing count 3 (440ms)
+  ok 3 tests\shop-stock-ui.spec.js:56:3 › successful inventory_transfer_requests read refuses incomplete or missing count 26 (530ms)
+  ok 4 tests\shop-stock-ui.spec.js:56:3 › successful channel_shops read refuses incomplete or missing count null (477ms)
+  ok 5 tests\shop-stock-ui.spec.js:65:1 › empty canonical shop reads do not create six operating shops (562ms)
+  ok 6 tests\shop-stock-ui.spec.js:73:1 › missing warehouse balance never borrows display stock or reports coverage (598ms)
+  ok 7 tests\shop-stock-ui.spec.js:83:1 › missing saved allocation is Needs review even when aggregate stock exists (573ms)
+  ok 8 tests\shop-stock-ui.spec.js:94:1 › failed reads hide operating totals and actions, then Refresh recovers exact saved rows (8.2s)
+
+  8 passed (17.9s)

@@ -1,0 +1,107 @@
+[
+  {
+    "command": "npx playwright test --config=playwright.config.js",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-0.log"
+  },
+  {
+    "command": "npm run test:mobile-moderation",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-1.log"
+  },
+  {
+    "command": "npm run test:store-orientation",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-2.log"
+  },
+  {
+    "command": "npm run test:storefront-ui",
+    "exit": 1,
+    "log": ".tools/sku-merge-completion/release-qualified-3.log"
+  },
+  {
+    "command": "npm run test:storefront-recovery",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-4.log"
+  },
+  {
+    "command": "npm run test:admin-ui",
+    "exit": 1,
+    "log": ".tools/sku-merge-completion/release-qualified-5.log"
+  },
+  {
+    "command": "npx playwright test --config=playwright.shop-stock.config.js",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-6.log"
+  },
+  {
+    "command": "npx playwright test --config=playwright.auth-recovery.config.js",
+    "exit": 1,
+    "log": ".tools/sku-merge-completion/release-qualified-7.log"
+  },
+  {
+    "command": "npm run test:payment-ui",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-8.log"
+  },
+  {
+    "command": "npm run test:inbox-ui",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-9.log"
+  },
+  {
+    "command": "npm run test:admin-product-master-ui",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-10.log"
+  },
+  {
+    "command": "npm run test:admin-website-assignment-ui",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-11.log"
+  },
+  {
+    "command": "npm run test:owner-count-close-ui",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-12.log"
+  },
+  {
+    "command": "npm run test:customer-account-ui",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-13.log"
+  },
+  {
+    "command": "npm run test:selling-surfaces",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-14.log"
+  },
+  {
+    "command": "npm run test:order-receipt-direct",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-15.log"
+  },
+  {
+    "command": "npm run test:workflow-api",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-16.log"
+  },
+  {
+    "command": "npm run test:intake-ai-ui",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-17.log"
+  },
+  {
+    "command": "npm run test:vercel-output",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-18.log"
+  },
+  {
+    "command": "npm run build:storefront",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-19.log"
+  },
+  {
+    "command": "npm run build:admin",
+    "exit": 0,
+    "log": ".tools/sku-merge-completion/release-qualified-20.log"
+  }
+]

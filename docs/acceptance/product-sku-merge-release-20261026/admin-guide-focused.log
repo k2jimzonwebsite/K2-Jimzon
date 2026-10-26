@@ -1,0 +1,13 @@
+[WebServer] (node:2160) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19888) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:9776) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 9:35:00 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 1 [chromium] › tests\admin-dashboard-redesign.spec.js:1649:3 › admin command center redesign › shows the complete paid-API blocker and manual fallback in the phone guide (2.2s)
+
+  1 passed (5.6s)

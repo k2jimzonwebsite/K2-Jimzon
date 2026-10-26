@@ -1,0 +1,31 @@
+[
+  {
+    "id": "dpl_HV3dvRaLibPWFi1uaRygYAf6kMdG",
+    "name": "k2-jimzon",
+    "state": "READY",
+    "target": "production",
+    "url": "k2-jimzon-e6up3820o-k2-jimzon.vercel.app",
+    "alias": [
+      "www.k2jimzon.com",
+      "k2-jimzon-vert.vercel.app",
+      "k2jimzon.com",
+      "k2-jimzon-k2-jimzon.vercel.app",
+      "k2-jimzon-git-main-k2-jimzon.vercel.app"
+    ],
+    "source": "f6fc249ba2e4b85dd63fdd6079c4b0449451df7e"
+  },
+  {
+    "id": "dpl_G8wXAh42tAcuQNd9Yb9RYPkP1sZM",
+    "name": "k2-jimzon-admin",
+    "state": "READY",
+    "target": "production",
+    "url": "k2-jimzon-admin-9mxz52r5t-k2-jimzon.vercel.app",
+    "alias": [
+      "admin.k2jimzon.com",
+      "k2-jimzon-admin-seven.vercel.app",
+      "k2-jimzon-admin-k2-jimzon.vercel.app",
+      "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+    ],
+    "source": "f6fc249ba2e4b85dd63fdd6079c4b0449451df7e"
+  }
+]
