@@ -1,6 +1,6 @@
 # Owner action handoff — things Claude cannot do from this workstation
 
-26 October2026 / MAP-024: connected-browser Search Console/GA4 setup is verified; Pasabuy recovery, Italy-to-Philippines copy and consent-first measurement are qualified locally on codex/search-visibility-20261026. No live promotion or product-gate approval is implied. The owning MAP item contains exact unresolved approval/release/Google/vendor actions; docs/acceptance/SEARCH_VISIBILITY_SETUP_20261026.md/json names systems/files, commands, outcomes, limitations and rollback. Do not repeat account creation, successful sitemap submission or catalog/trade indexing requests. Admin is outside further work at the owner's direction.
+26 October2026 / MAP-024: approved PR33 is deployed and actual storefront discovery/Google live rendering/request/consent-first GA4 ingestion are verified.107approved products eligible,9held noindex; actual XML111. Remaining only external indexing/rank processing, remote CI terminal receipts and pre-existing callback acceptance, as named in MAP-024. Do not repeat publication/provider setup. Full files/systems/commands/results/limits/recovery: docs/acceptance/SEARCH_VISIBILITY_SETUP_20261026.md/json.
 
 **Latest dummy-testing status,9October:** Source release is deployed separately to
 Storefront/Admin. Full operational database activation is still unverified. A

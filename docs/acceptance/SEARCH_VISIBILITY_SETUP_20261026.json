@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-26T11:23:54.696Z",
+  "recordedAt": "2026-10-26T11:41:10.904Z",
   "map": "MAP-024",
   "ideas": [
     "IDEA-20261026-03",
@@ -9,11 +9,11 @@
   "base": "a3aca9f2f60c647089d1bea52398e419fc37da77",
   "state": {
     "provider": "Applied and observed as described in companion MD",
-    "source": "Owner-approved candidate; complete release-stage union qualified after focused recovery; promotion pending",
-    "deployed": false,
-    "productGlobalGate": "OFF by explicit owner approval; exact107 ready /9 held",
-    "livePasabuy": "Google Soft404 not yet repaired in production",
-    "liveAnalytics": "No ingestion verified",
+    "source": "Qualifiedf2bf9259 merged as identical production tree19b06e1c",
+    "deployed": true,
+    "productGlobalGate": "OFF for exact107 approved ready products;9held noindex",
+    "livePasabuy": "Google live test available/can be indexed; indexing request accepted, actual index outcome pending",
+    "liveAnalytics": "Actual Google204, consent/privacy/withdrawal/navigation checks pass; GA realtime1active user/3views on / and /pasabuy (controlled verification)",
     "admin": "Read-only qualification; owner stops further Admin work"
   },
   "catalog": {
@@ -85,14 +85,16 @@
     "designConsent": "ship after elevation removal; five variants",
     "designPasabuy": "ship after air-only badge correction; five refreshed variants",
     "documenter": "Ordinary extension; no design-system change; existing drift left untouched",
-    "latestConsent": "Independent Impeccable verdict pass: ship; only close-icon finding scored resolved. Primary all seven captures checked. Detector [] from prior single run."
+    "latestConsent": "Independent Impeccable verdict pass: ship; only close-icon finding scored resolved. Primary all seven captures checked. Detector [] from prior single run.",
+    "documenterFinal": "Ordinary extension; PRODUCT.md/DESIGN.md/sidecar unchanged. Source/screenshot/log hashes match. No documentation repair needed."
   },
   "limits": [
-    "Not full release-gate evidence",
-    "Google vendor isolated in local tests",
-    "No actual GA collection/automatic-event proof",
-    "No repaired production Google render or rank guarantee",
-    "Screenshots/logs are ignored local evidence, may be absent in fresh clone"
+    "Google index selection, timing and ranking remain external;107products are eligible, not asserted indexed.",
+    "GA report counts are controlled verification, not business performance; no real commerce conversion measured.",
+    "Physical-device and genuine staff/customer operational acceptance remain separate.",
+    "Remote CI terminal receipts remain tracked in MAP-024; no full-green remote claim.",
+    "Admin read-only exclusion evidence is current, not proof of never-indexed history.",
+    "Original screenshot changes remain uncommitted/excluded; broad reset was automatically rejected and not bypassed."
   ],
   "sources": [
     {
@@ -346,6 +348,61 @@
       "path": ".tools/search-visibility-20261026/build-admin-final.log",
       "bytes": 24544,
       "sha256": "d0c6976e7add58ae0a49a2c2d8b9e770d1f55c609360d90e3e20d6a31f397676"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/live-release-hosts.json",
+      "bytes": 3641,
+      "sha256": "6dc76a562b78d6975276b405d9e5945b7de6ed28b8ea8e0a772add9a4a9fb649"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/live-products.json",
+      "bytes": 1801,
+      "sha256": "37cd8c840384fe02ddca069d2d2ba0c99bc9af28d82bbd280237dbd66b07e143"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/live-analytics.json",
+      "bytes": 608,
+      "sha256": "f798768dbd8ebf59aead8015bd9f3648eede4cdda7d520c368d608d974868412"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/live-navigation.json",
+      "bytes": 309,
+      "sha256": "3a47d237efe1ec0c9609f5b52d35bdda3497340862ad808b8618bd13c231f720"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/ci33-latest.json",
+      "bytes": 7996,
+      "sha256": "cf6917d645952debce466952a8dffc81aa4c41d20345a79a41650822e1e40ed0"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/ci-main-details.json",
+      "bytes": 8025,
+      "sha256": "fc95bd31e2dbeb488e36c2879844e749adcd8d12221bd405896b41cf7c6d3d76"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/production-status.jsonl",
+      "bytes": 284,
+      "sha256": "34ecbdf82152c3d14d01a93b7a0659274cb2ad56dccce16c6ad90b8ed756c71f"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/storefront-production-ax.txt",
+      "bytes": 7733,
+      "sha256": "b0a6bf4696eec5b5b66c2e55d53bacfb91fd6b94048ba8363fb6e90444540356"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/admin-production-ax.txt",
+      "bytes": 8056,
+      "sha256": "78dde245842bc9e0f2862b8472f416781aadb8d449fab0fbba17b6344ff39e61"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/pasabuy-request-ax.txt",
+      "bytes": 1148,
+      "sha256": "c635ec7ca88c993f931fb03774944b6a376ccb944eb545014f3c33c16283883d"
+    },
+    {
+      "path": ".tools/search-visibility-20261026/ga4-public-pages-ax.txt",
+      "bytes": 10584,
+      "sha256": "ce0926a120114ddca187f0ad193138b562f008da9052fb521030050d1894cd8d"
     }
   ],
   "screenshots": [
@@ -473,6 +530,36 @@
       "path": ".impeccable/review/mobile-200.png",
       "bytes": 130943,
       "sha256": "c34e5505aeb6b57d83ab0503a5c5e65ed466f39818d4a4018256413289e91476"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/sitemap-updated-accepted.png",
+      "bytes": 50409,
+      "sha256": "128ea0bd1b6c40c4f1e18c22a39b588b02948fb6d02376c5022fd6dacf251848"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/pasabuy-live-released.png",
+      "bytes": 75022,
+      "sha256": "960a828ad4d07cdabaa03bf94ce59735aa575f3ccf1651e2807198683a70e45f"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/pasabuy-google-render-repaired.png",
+      "bytes": 46546,
+      "sha256": "9bd187e1701cad2e017632c70c90625f5d5ed87f676936b6cbe87ec6be6d9e73"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/pasabuy-indexing-requested.png",
+      "bytes": 49371,
+      "sha256": "aaca13be96a8ca1b5fb02d431b78fa0e7649e713d324a195b2eeb6c8659df768"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/ga4-realtime-after-release.png",
+      "bytes": 95944,
+      "sha256": "6ac0221ede1e9430df857b7c8a581ac97d21b47362bc84875f841b6295bb6319"
+    },
+    {
+      "path": "docs/evidence/20261026-search-visibility/ga4-public-pages-received.png",
+      "bytes": 76473,
+      "sha256": "8fec78230ce648bdfd95dcf431a677b8e371ebec7a319815d4fcfeae25e58535"
     }
   ],
   "publicReadReceipts": [
@@ -496,5 +583,56 @@
     "path": ".tools/search-visibility-20261026/pasabuy-review/dom.json",
     "bytes": 2076,
     "sha256": "ebf3d1de25f0668b48b7376b38a9f5ff52c02ca6b72c1de9218a57e7ae4e09b3"
+  },
+  "production": {
+    "pullRequest": "https://github.com/k2jimzonwebsite/K2-Jimzon/pull/33",
+    "candidate": "f2bf9259f9682a2bec5918861d0cb5f59fc78d35",
+    "merge": "19b06e1cfff313cc375eed26751a540ccbd34805",
+    "identicalTree": true,
+    "storefront": "https://vercel.com/k2-jimzon/k2-jimzon/FJhkvMsgp64srSX4TvmwZZ7K5CtU",
+    "admin": "https://vercel.com/k2-jimzon/k2-jimzon-admin/DNN4DFxha9skuoVH8XRpshv4YjdN",
+    "status": "Both Ready/Production/Current, canonical aliases and exact source observed",
+    "receipts": [
+      {
+        "path": "docs/acceptance/search-visibility-20261026/live-analytics.json",
+        "bytes": 608,
+        "sha256": "f798768dbd8ebf59aead8015bd9f3648eede4cdda7d520c368d608d974868412"
+      },
+      {
+        "path": "docs/acceptance/search-visibility-20261026/live-navigation.json",
+        "bytes": 309,
+        "sha256": "3a47d237efe1ec0c9609f5b52d35bdda3497340862ad808b8618bd13c231f720"
+      },
+      {
+        "path": "docs/acceptance/search-visibility-20261026/live-products.json",
+        "bytes": 1801,
+        "sha256": "37cd8c840384fe02ddca069d2d2ba0c99bc9af28d82bbd280237dbd66b07e143"
+      },
+      {
+        "path": "docs/acceptance/search-visibility-20261026/live-release-hosts.json",
+        "bytes": 3641,
+        "sha256": "6dc76a562b78d6975276b405d9e5945b7de6ed28b8ea8e0a772add9a4a9fb649"
+      },
+      {
+        "path": "docs/acceptance/search-visibility-20261026/production-status.jsonl",
+        "bytes": 284,
+        "sha256": "34ecbdf82152c3d14d01a93b7a0659274cb2ad56dccce16c6ad90b8ed756c71f"
+      }
+    ]
+  },
+  "providerPostflight": {
+    "sitemap": "Submission accepted; deployed111URLs; Google discovered counter still prior4 pending processing",
+    "pasabuy": "Live test available/indexable, rendered storefront, indexing request accepted",
+    "analytics": {
+      "googleCollectionStatus": 204,
+      "realtimeUsers": 1,
+      "realtimeViews": 3,
+      "publicPaths": [
+        "/",
+        "/pasabuy"
+      ],
+      "controlledVerification": true
+    },
+    "ranking": "Performance processing/no query positions; no guarantee"
   }
 }

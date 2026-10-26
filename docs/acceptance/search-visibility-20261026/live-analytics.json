@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-26T11:30:30.517Z",
+  "decline": "No vendor script or collection request",
+  "accept": "Real Google collection response and sanitized manual page_view",
+  "private": "Disable flag true before private route; no private URL collected",
+  "withdraw": "GA cookies removed; next public load does not load vendor",
+  "pass": true,
+  "events": [
+    {
+      "phase": "accepted",
+      "measurement": "G-4JQ3D0GDB9",
+      "event": "page_view",
+      "location": "https://www.k2jimzon.com/pasabuy",
+      "referrer": "",
+      "title": "K2 Jimzon"
+    }
+  ],
+  "collectionStatuses": [
+    204
+  ]
+}

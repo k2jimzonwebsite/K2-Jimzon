@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-26T11:31:28.517Z",
+  "pass": true,
+  "rows": [
+    {
+      "url": "https://www.k2jimzon.com/product/K2-SKU-001001",
+      "title": "Combino Spaghetti No. 5 1kg — K2 Jimzon",
+      "h1": "Combino Spaghetti No. 5 1kg",
+      "canonical": "https://www.k2jimzon.com/product/K2-SKU-001001",
+      "robots": "index, follow",
+      "description": "Combino Spaghetti No. 5 in a 1kg bag. Sold by the bag at ₱349. See available stock and delivery options when ordering.",
+      "decodedImages": 2
+    },
+    {
+      "url": "https://www.k2jimzon.com/product/K2-SKU-001017",
+      "title": "Borella Carne — K2 Jimzon",
+      "h1": "Borella Carne",
+      "canonical": "https://www.k2jimzon.com/product/K2-SKU-001017",
+      "robots": "index, follow",
+      "description": "Pasta Borella Carne is tortellini with a meat filling. Check the pack for ingredients, allergens, cooking directions and net content.",
+      "decodedImages": 1
+    },
+    {
+      "url": "https://www.k2jimzon.com/product/K2-SKU-001173",
+      "title": "Siciliani Pistacchio Crunchy 200 g — K2 Jimzon",
+      "h1": "Siciliani Pistacchio Crunchy 200 g",
+      "canonical": "https://www.k2jimzon.com/product/K2-SKU-001173",
+      "robots": "index, follow",
+      "description": "Siciliani Pistacchio Crunchy is a pistachio spread in a 200 g jar. Check the jar for ingredients, allergens and serving details.",
+      "decodedImages": 1
+    },
+    {
+      "url": "https://www.k2jimzon.com/product/K2-SKU-001028",
+      "title": "Cien Cream Soap Olive 2-Pack — K2 Jimzon",
+      "h1": "Cien Cream Soap Olive 2-Pack",
+      "canonical": "https://www.k2jimzon.com/product/K2-SKU-001028",
+      "robots": "noindex, follow",
+      "description": "Cien olive cream soap in a two-pack.",
+      "decodedImages": 1
+    }
+  ]
+}

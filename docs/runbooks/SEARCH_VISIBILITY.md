@@ -27,3 +27,5 @@ After an approved release, inspect actual network/consent behavior without using
 ## Recovery
 
 Retain DNS ownership TXT and the existing account/property unless expressly revoking them. Source rollback is a scoped revert; production rollback uses each independent project's prior verified artifact. Preserve failed/unknown provider evidence and never automatically replay an ambiguous mutation. After material changes update operations/Brain/design/test/decision records and the owning MAP item; remove completed actions only when their durable receipt exists.
+
+26 October2026 executed baseline: PR33/19b06e1 deployed,111URL XML,107eligible/9held, Google Pasabuy live render/indexing request and actual consent/GA realtime ingestion verified. Reuse this account/property/domain; remaining report/CI observations are MAP-024 receipt actions. Full minimal public/redacted receipts: docs/acceptance/search-visibility-20261026/.

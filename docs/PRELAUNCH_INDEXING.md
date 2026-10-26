@@ -169,3 +169,5 @@ Account, messages, checkout and confirmation have permanent scoped-route
 These are separate from the temporary product launch gate. Removing the product
 gate must preserve those four route rules. Marketing/catalog pages remain
 indexable. Crawler exclusions never replace authorization.
+
+26 October2026 verified activation: owner-approved107ready products are eligible in live111URL sitemap;9held share pages remain noindex,follow. Exact source19b06e1 and actual raw/hydrated signals verified in SEARCH_VISIBILITY_SETUP_20261026 receipt. Google processing/index/ranking is separate; do not reactivate the blanket gate or remove row holds merely to match a report counter.
