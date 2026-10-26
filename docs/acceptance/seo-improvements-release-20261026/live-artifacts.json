@@ -1,0 +1,56 @@
+{
+  "at": "2026-10-26T14:54:15.977Z",
+  "pass": true,
+  "rows": [
+    {
+      "target": "storefront",
+      "origin": "https://www.k2jimzon.com",
+      "identity": {
+        "target": "storefront"
+      },
+      "entry": "/assets/index-Bm5vXvBc.js",
+      "status": 200,
+      "bytes": 131252,
+      "sha256": "6256b8d8ce4c00e511c218e029b46029dc708dd791150457059a58e7023d2899"
+    },
+    {
+      "target": "admin",
+      "origin": "https://admin.k2jimzon.com",
+      "identity": {
+        "target": "admin"
+      },
+      "entry": "/assets/index-cGIMbpWt.js",
+      "status": 200,
+      "bytes": 47835,
+      "sha256": "cf0007a2164ba7f45c96a1be0217616b5525cbb9d8cbe5004448b8c4574fabbd"
+    },
+    {
+      "path": "wood-bg.webp",
+      "status": 200,
+      "bytes": 25100,
+      "sha256": "ebd31a7ca13a49b4591ec6d376d974360d5f373bf12922bf234b26706fd843bb",
+      "matchesSource": true
+    },
+    {
+      "path": "seo-media/10eff3b03c25f453e29d-256.webp",
+      "status": 200,
+      "bytes": 27762,
+      "sha256": "17c5cf020ef6a19b681c05a06d30f7be7e1e0d6d583b1fda8b8f40978201edb7",
+      "matchesSource": true
+    },
+    {
+      "path": "fonts/fraunces-normal-7234ed860a9c.woff2",
+      "status": 200,
+      "bytes": 67304,
+      "sha256": "7234ed860a9cc83045413c4faee63c960a8f2d1917adcf728119307d56e0d783",
+      "matchesSource": true
+    },
+    {
+      "path": "fonts/brand.css",
+      "status": 200,
+      "bytes": 3128,
+      "sha256": "2c56489df2a2385b9a6044f0a1e9326d1bc266a944203a68cb082311ad08ea6e",
+      "matchesSource": true
+    }
+  ]
+}

@@ -1,37 +1,417 @@
 {
-  "at": "2026-10-26T14:26:32.769Z",
-  "owner": "MAP-024, IDEA-20261026-03/05–09",
-  "state": "Owner-approved release in progress; not promoted",
-  "authorization": "Owner approve, then approve before your commit and push ensure that the accounts is proper; identifies EdgerzXc developer for this exact project",
+  "at": "2026-10-26T14:57:45.260Z",
+  "owner": "MAP-024 / IDEA-20261026-03,05–09",
+  "state": "Published and both production artifacts/hosts verified; Google outcomes and specific performance follow-up remain",
+  "authorization": "Owner explicitly approved publishing PR34 and required correct accounts before any further commit/push. Account condition verified before EdgerzXc-authored corrections, push and merge.",
   "github": {
     "actor": "EdgerzXc",
+    "id": 285345756,
     "repository": "k2jimzonwebsite/K2-Jimzon",
-    "verifiedPush": true,
+    "pushPermissionVerified": true,
     "repositoryLocalEmail": "285345756+EdgerzXc@users.noreply.github.com",
-    "historicalCommitsPreserved": true
+    "globalConfigurationAndHistoryPreserved": true,
+    "pr": "https://github.com/k2jimzonwebsite/K2-Jimzon/pull/34"
   },
   "source": {
     "prepared": "f0d8f12e1ececbcc9ad0eee24bb674b9764775f6",
-    "priorPrHead": "2845581736cbfb04d53277b3984575d957b72941",
-    "newBehavioralDiff": "None; restore only the erroneous recovery-test selector to its original button semantics",
-    "correctionCommit": "e3f7b96c58b57290bbaf0771414cbb9bf6d04246",
-    "additionalTestDiff": "Two legacy role expectations: customer navigation5links, Wholesale link; no app behavior edit"
+    "qualified": "5c4fded137097f5c6052f0d0ad87c46d02a1cf6e",
+    "merged": "caf3885c4b32dba537a0b9792af2f3d22fcc7f30",
+    "mergedBy": "EdgerzXc",
+    "mergedAt": "2026-10-26T14:43:07Z",
+    "qualifiedTreeEqualsMergedTree": true,
+    "testCorrections": [
+      "Recovery Catalog breadcrumb button restored to baseline",
+      "Customer mobile public navigation count5 links",
+      "Wholesale navigation link"
+    ],
+    "noAppBehaviorChangeInCorrections": true
   },
   "gate": {
-    "initial": "verify:release exits1 solely at Catalog-link selector; all prior stages pass, recovery38otherspass",
-    "focused": "Stock recovery1/1pass, all assertions retained",
-    "development": "Final development after2test-role corrections exits0",
-    "remaining": "Prior continuation passes AdminUI/payment/inbox/ProductMaster/WebsiteAssignment/OwnerCount, customer6pass/2legacy rolefailures. Corrected focused2/2pass via maintained wrapper; selling and later exact stages are running.",
-    "ci": "Existing source CI pending, new corrected-head CI will be separate",
-    "correctionReview": "Independent correction review retry after capacity interruption approved; count5 and all auth/receipt/security/commercial assertions unchanged"
+    "identity": "Exact K2 pixplcjqivlfflickobf and https://pixplcjqivlfflickobf.supabase.co",
+    "prePromotionReadiness": "8 verified / 2 owner-decided / 3 connector-blocked / 0 failed",
+    "initialReleaseExitCode": 1,
+    "initialFailure": "One recovery role selector after all prior stages passed; other38 recovery cases pass",
+    "focusedRecovery": "1/1 pass, stock assertions intact",
+    "firstContinuation": "AdminUI/payment/inbox/ProductMaster/WebsiteAssignment/OwnerCount pass; customer6pass/2legacy role failures",
+    "focusedCustomer": "2/2 pass via maintained fixture wrapper; auth/receipt/authority assertions intact; earlier direct-config server-absent failure retained",
+    "development": "Final development after each correction batch exits0",
+    "remaining": "All7 exact remaining scripts pass, finished2026-10-26T14:40:24.915Z",
+    "completeReconciledCoverage": true,
+    "originalCommandNotRelabeledGreen": true,
+    "independentCorrectionReview": "Approved; no findings",
+    "boundaries": "Storefront146.84KB JS/29.99KB CSS; Admin227.44KB JS, both budgets and secret/artifact boundaries pass"
   },
-  "provider": {
-    "k2": "Exact pixplcjqivlfflickobf preflight;readiness8verified2owner3connector0failed",
-    "vercel": "Signed-in K2 owner/browser, exact separate projects/repo/domains; connector403team scope not falsely claimed",
-    "writes": "None;source-only publication authorized;no data/ACL/credential/settings mutation"
+  "deployments": {
+    "account": "k2jimzonwebsite",
+    "team": "k2-jimzon",
+    "teamId": "team_C3Wf3dVUBjUqGQ4rndMTCchz",
+    "observation": "Signed-in own browser; connector403team scope not claimed as observed",
+    "source": "caf3885c4b32dba537a0b9792af2f3d22fcc7f30",
+    "storefront": {
+      "projectId": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "deployment": "dpl_5k8F5GqtegZvgLxBNo7sLuzhbDpE",
+      "status": "Ready / Production / Current",
+      "canonical": "https://www.k2jimzon.com",
+      "url": "https://k2-jimzon-676qsshaa-k2-jimzon.vercel.app"
+    },
+    "admin": {
+      "projectId": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "deployment": "dpl_HCSkRKGHu9UQ6uQBqFPsWe1zukna",
+      "status": "Ready / Production / Current",
+      "canonical": "https://admin.k2jimzon.com",
+      "url": "https://k2-jimzon-admin-lhdjew991-k2-jimzon.vercel.app"
+    }
   },
-  "recovery": "Do not promote before complete reconciled gate. Revert scoped source or restore baseline Storefront4ixmcDrVxyKZtmFgeMuGekz81Bvs /Admin2dh4QZriHattzPuHToMJNshUGhU9, both source1799e23. Originals/business/provider state unchanged.",
-  "evidenceFormat": "Copied text logs normalize CRLF/trailing whitespace; original hashes retained.",
+  "live": {
+    "hosts": {
+      "at": "2026-10-26T14:49:16.443Z",
+      "pass": true,
+      "sitemapUrls": 111,
+      "readyProducts": 107,
+      "heldProducts": 9,
+      "rows": [
+        {
+          "url": "https://www.k2jimzon.com/sitemap.xml",
+          "status": 200,
+          "contentType": "application/xml",
+          "robots": null,
+          "cache": "no-store",
+          "title": null,
+          "canonical": null,
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/robots.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": null,
+          "canonical": null,
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/pasabuy",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": "Pasabuy from Italy to the Philippines | K2 Jimzon",
+          "canonical": "https://www.k2jimzon.com/pasabuy",
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/product/K2-SKU-001001",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": "Combino Spaghetti No. 5 1kg — K2 Jimzon",
+          "canonical": "https://www.k2jimzon.com/product/K2-SKU-001001",
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/product/K2-SKU-001017",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": "Borella Carne — K2 Jimzon",
+          "canonical": "https://www.k2jimzon.com/product/K2-SKU-001017",
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/product/K2-SKU-001173",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": "Siciliani Pistacchio Crunchy 200 g — K2 Jimzon",
+          "canonical": "https://www.k2jimzon.com/product/K2-SKU-001173",
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/product/K2-SKU-001028",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": "Cien Cream Soap Olive 2-Pack — K2 Jimzon",
+          "canonical": "https://www.k2jimzon.com/product/K2-SKU-001028",
+          "metaRobots": "noindex, follow"
+        },
+        {
+          "url": "https://www.k2jimzon.com/account",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": "noindex, nofollow",
+          "cache": "no-store",
+          "title": "K2 Jimzon — Italian imports, direct to the Philippines",
+          "canonical": "https://www.k2jimzon.com/",
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/admin-portal-k2-secure",
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": "Page not found — K2 Jimzon",
+          "canonical": null,
+          "metaRobots": "noindex, nofollow"
+        },
+        {
+          "url": "https://admin.k2jimzon.com/",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": "noindex, nofollow",
+          "cache": "private, no-store",
+          "title": "K2 Jimzon Admin",
+          "canonical": "https://admin.k2jimzon.com/admin-portal-k2-secure",
+          "metaRobots": null
+        },
+        {
+          "url": "https://admin.k2jimzon.com/api/admin/session",
+          "status": 401,
+          "contentType": "application/json; charset=utf-8",
+          "robots": "noindex, nofollow",
+          "cache": "no-store",
+          "title": null,
+          "canonical": null,
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/contact",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": "Contact K2 Jimzon | Italian Imports &amp; Pasabuy",
+          "canonical": "https://www.k2jimzon.com/contact",
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/privacy",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": "Privacy &amp; Data | K2 Jimzon",
+          "canonical": "https://www.k2jimzon.com/privacy",
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/terms",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": "Terms of Service | K2 Jimzon",
+          "canonical": "https://www.k2jimzon.com/terms",
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/returns",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": "Returns &amp; Replacements | K2 Jimzon",
+          "canonical": "https://www.k2jimzon.com/returns",
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/product/K2-SKU-001001",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "robots": null,
+          "cache": "no-store",
+          "title": "Combino Spaghetti No. 5 1kg — K2 Jimzon",
+          "canonical": "https://www.k2jimzon.com/product/K2-SKU-001001",
+          "metaRobots": null
+        },
+        {
+          "url": "https://www.k2jimzon.com/wood-bg.webp",
+          "status": 200,
+          "bytes": 25100,
+          "contentType": "image/webp",
+          "cache": "no-store"
+        },
+        {
+          "url": "https://www.k2jimzon.com/seo-media/10eff3b03c25f453e29d-256.webp",
+          "status": 200,
+          "bytes": 27762,
+          "contentType": "image/webp",
+          "cache": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "https://www.k2jimzon.com/fonts/fraunces-normal-7234ed860a9c.woff2",
+          "status": 200,
+          "bytes": 67304,
+          "contentType": "font/woff2",
+          "cache": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "https://www.k2jimzon.com/fonts/brand.css",
+          "status": 200,
+          "bytes": 3128,
+          "contentType": "text/css; charset=utf-8",
+          "cache": "no-store"
+        }
+      ]
+    },
+    "artifacts": {
+      "at": "2026-10-26T14:54:15.977Z",
+      "pass": true,
+      "rows": [
+        {
+          "target": "storefront",
+          "origin": "https://www.k2jimzon.com",
+          "identity": {
+            "target": "storefront"
+          },
+          "entry": "/assets/index-Bm5vXvBc.js",
+          "status": 200,
+          "bytes": 131252,
+          "sha256": "6256b8d8ce4c00e511c218e029b46029dc708dd791150457059a58e7023d2899"
+        },
+        {
+          "target": "admin",
+          "origin": "https://admin.k2jimzon.com",
+          "identity": {
+            "target": "admin"
+          },
+          "entry": "/assets/index-cGIMbpWt.js",
+          "status": 200,
+          "bytes": 47835,
+          "sha256": "cf0007a2164ba7f45c96a1be0217616b5525cbb9d8cbe5004448b8c4574fabbd"
+        },
+        {
+          "path": "wood-bg.webp",
+          "status": 200,
+          "bytes": 25100,
+          "sha256": "ebd31a7ca13a49b4591ec6d376d974360d5f373bf12922bf234b26706fd843bb",
+          "matchesSource": true
+        },
+        {
+          "path": "seo-media/10eff3b03c25f453e29d-256.webp",
+          "status": 200,
+          "bytes": 27762,
+          "sha256": "17c5cf020ef6a19b681c05a06d30f7be7e1e0d6d583b1fda8b8f40978201edb7",
+          "matchesSource": true
+        },
+        {
+          "path": "fonts/fraunces-normal-7234ed860a9c.woff2",
+          "status": 200,
+          "bytes": 67304,
+          "sha256": "7234ed860a9cc83045413c4faee63c960a8f2d1917adcf728119307d56e0d783",
+          "matchesSource": true
+        },
+        {
+          "path": "fonts/brand.css",
+          "status": 200,
+          "bytes": 3128,
+          "sha256": "2c56489df2a2385b9a6044f0a1e9326d1bc266a944203a68cb082311ad08ea6e",
+          "matchesSource": true
+        }
+      ]
+    },
+    "analytics": {
+      "at": "2026-10-26T14:49:40.424Z",
+      "immersive": "Unknown consent stays unknown, no vendor or prompt in room; choices return on exit",
+      "decline": "No vendor script or collection request",
+      "accept": "Real Google collection response and sanitized manual page_view",
+      "private": "Disable flag true before private route; no private URL collected",
+      "withdraw": "GA cookies removed; next public load does not load vendor",
+      "pass": true,
+      "events": [
+        {
+          "phase": "accepted",
+          "measurement": "G-4JQ3D0GDB9",
+          "event": "page_view",
+          "location": "https://www.k2jimzon.com/pasabuy",
+          "referrer": "",
+          "title": "K2 Jimzon"
+        }
+      ],
+      "collectionStatuses": [
+        204
+      ]
+    },
+    "navigation": {
+      "at": "2026-10-26T14:51:45.281Z",
+      "pass": true,
+      "events": [
+        {
+          "event": "page_view",
+          "location": "https://www.k2jimzon.com/pasabuy",
+          "title": "K2 Jimzon"
+        },
+        {
+          "event": "page_view",
+          "location": "https://www.k2jimzon.com/",
+          "title": "K2 Jimzon"
+        }
+      ]
+    },
+    "googleProduct": {
+      "url": "https://www.k2jimzon.com/product/K2-SKU-001001",
+      "result": "https://search.google.com/test/rich-results/result?id=cVw5Y62MR94XfaQIL-7mvQ",
+      "crawl": "Successful26October2026 22:51:13 GMT+8",
+      "validItems": 6,
+      "nonCriticalWarnings": "Product/merchant/local-business optional facts; do not fabricate missing fields"
+    },
+    "searchConsole": "Correct K2 account/domain; Pasabuy Discovered-currently not indexed, sitemap recognized; performance processing/no query data; fresh live test confirms URL available to Google / Page can be indexed and smartphone screenshot renders the real Pasabuy page"
+  },
+  "mobileLab": {
+    "method": "Fresh actual-host PSI; emulated Moto G Power, Lighthouse13.5.0, slow4G, single initial load; no field data",
+    "home": {
+      "report": "https://pagespeed.web.dev/analysis/https-www-k2jimzon-com/bx3yinvsio?form_factor=mobile",
+      "performance": 84,
+      "seo": 100,
+      "accessibility": 96,
+      "lcpSeconds": 3.9,
+      "cls": 0.077,
+      "prior": {
+        "performance": 72,
+        "lcpSeconds": 7.1,
+        "cls": 0.048
+      }
+    },
+    "pasabuy": {
+      "report": "https://pagespeed.web.dev/analysis/https-www-k2jimzon-com-pasabuy/dr7wz3fpz5?form_factor=mobile",
+      "performance": 66,
+      "seo": 100,
+      "accessibility": 100,
+      "lcpSeconds": 9.7,
+      "cls": 0.031,
+      "prior": {
+        "performance": 55,
+        "lcpSeconds": 8.4,
+        "cls": 0.399
+      },
+      "remaining": "Video.hero-video__media remains LCP candidate; report shows2,110ms element render delay and3,156KiB network payload; do not claim LCP improved"
+    }
+  },
+  "ci": {
+    "originalRun40334385345": "Failure at the repaired Catalog selector; retained",
+    "intermediateRun40340236873": "Cancelled as superseded, not passed",
+    "qualified": {
+      "id": 40341490693,
+      "status": "in_progress",
+      "conclusion": ""
+    },
+    "main": {
+      "id": 40342239214,
+      "status": "in_progress",
+      "conclusion": ""
+    },
+    "note": "Both Vercel commit statuses success. Remote CI is a separate receipt, no pending job claimed green."
+  },
+  "remaining": "MAP-024 only: Google indexing/query outcomes; terminal remote CI receipt if still pending; IDEA06 Pasabuy video/LCP and observed audit details; IDEA07 meaningful initial-body assessment; retained OAuth/human/physical acceptance in owning items. Deferred10–13 stay outside active queue.",
+  "writes": "Approved Git source publication only. No SQL, schema, ACL, product/stock/order/customer, credentials, account grants, provider flags, account creation, repeated sitemap/indexing request or advertising changes.",
+  "recovery": "Scoped source revert or restore prior independent Storefront4ixmcDrVxyKZtmFgeMuGekz81Bvs and Admin2dh4QZriHattzPuHToMJNshUGhU9 (source1799e23). Original media and provider/business state intact. Preserve DNS ownership and existing GA/SC setup.",
+  "evidenceFormat": "Archived text canonicalized to LF with trailing horizontal whitespace removed; original byte hashes retained. Pins cover canonical committed content; no self-referential pins.",
   "evidence": [
     {
       "path": "docs/acceptance/seo-improvements-release-20261026/accounts.json",
@@ -40,76 +420,28 @@
       "originalSha256": "faffc0e9739e3268912a2e6b7f44e72d81f3ce8d8b8ed85f3633082fe15434ca"
     },
     {
-      "path": "docs/acceptance/seo-improvements-release-20261026/preflight.log",
-      "bytes": 171,
-      "sha256": "863b38bfdd924891810fade78cab2e60db566af04a7e03cbcf22880289d83d17",
-      "originalSha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
-    },
-    {
-      "path": "docs/acceptance/seo-improvements-release-20261026/readiness.log",
-      "bytes": 2155,
-      "sha256": "7b47814fa399fcb65593fc858897f419869b78afc17664f3301cb120d33ec123",
-      "originalSha256": "81952b5c7e32e9f4fe4e367dd3b04f17f92f6164d25715dbb9600bee4b95e40c"
-    },
-    {
-      "path": "docs/acceptance/seo-improvements-release-20261026/release.log",
-      "bytes": 269353,
-      "sha256": "1af3f3315fc8d7e649b95af7cac9a9cbcdca4767734e1a31bc54d4c51ce1359a",
-      "originalSha256": "41d1dc63e24c2e65d04dc11351008f4af8db1e54cb92a9ab8ab3191bef7571d1"
-    },
-    {
-      "path": "docs/acceptance/seo-improvements-release-20261026/release-result.json",
-      "bytes": 72,
-      "sha256": "c694c64340886d524544b1089eb118d57b5f76f1607072f3b07ebf29d4bf0185",
-      "originalSha256": "c694c64340886d524544b1089eb118d57b5f76f1607072f3b07ebf29d4bf0185"
-    },
-    {
-      "path": "docs/acceptance/seo-improvements-release-20261026/recovery-selector-red-context.md",
-      "bytes": 25470,
-      "sha256": "c705d72f68ed7ca43c49a0854615bf2d946a9b8efdaf882d7b4fb099b1191cf7",
-      "originalSha256": "9609e8eb2689615e09218cebb381a23fbc96c9648620018f3accc462c543ae2a"
-    },
-    {
-      "path": "docs/acceptance/seo-improvements-release-20261026/recovery-focused-green.log",
-      "bytes": 985,
-      "sha256": "064895bdc9b8d3ed848a5c921994d5f93f75104a7760b34bf1869b1437f03cbe",
-      "originalSha256": "0fe5a6423e2a4e1b5a8f6e2980cc574f658c5491ef65256119a4dff7d780d9c5"
-    },
-    {
-      "path": "docs/acceptance/seo-improvements-release-20261026/development-selector-final.log",
-      "bytes": 18541,
-      "sha256": "5511e72e3a820b5c8cc5e7bfc3f37a40aeb292a480aacf8457581719cddad2a2",
-      "originalSha256": "ba6a893e8b9029a5d879b77f90ad6ecd7603ba71ac138d6c193991246343fe7c"
-    },
-    {
-      "path": "docs/acceptance/seo-improvements-release-20261026/storefront-project-identity.png",
-      "bytes": 58743,
-      "sha256": "329d4cac0b04df62d6b6c8d006c03de89f0cdf87ee92cdf776ca74d1a42c79ec",
-      "originalSha256": "329d4cac0b04df62d6b6c8d006c03de89f0cdf87ee92cdf776ca74d1a42c79ec"
-    },
-    {
       "path": "docs/acceptance/seo-improvements-release-20261026/admin-production-baseline.png",
       "bytes": 85437,
       "sha256": "25c1dbbec55581018c27fcd388cdce0c920b52099f177b8e1833ff289b77e63e",
       "originalSha256": "25c1dbbec55581018c27fcd388cdce0c920b52099f177b8e1833ff289b77e63e"
     },
     {
-      "path": "docs/acceptance/seo-improvements-release-20261026/customer-nav-red-context.md",
-      "bytes": 23493,
-      "sha256": "80ad6b28de9c921e50d9936bf376877f44a545db430904cfe26195ffce30cad9",
-      "originalSha256": "ae5c7f187d6fe0db2c1cd3ca1653fdac57f607b4ed39e70829e870733acf395a"
-    },
-    {
-      "path": "docs/acceptance/seo-improvements-release-20261026/wholesale-nav-red-context.md",
-      "bytes": 25679,
-      "sha256": "2fad81a13762cb9bf2b4535425900bb8bd055245f88595d0ec6a949e8d5e7367",
-      "originalSha256": "f785513a2444f735a45299d332c18d5a155a0d2dbc3e39deccd129cd2268866d"
+      "path": "docs/acceptance/seo-improvements-release-20261026/admin-production-ready.png",
+      "bytes": 76875,
+      "sha256": "25c7700bd72b62c7164f0713ede3a6647cd32c3893c9d4c5e2c6a243e6f99be5",
+      "originalSha256": "25c7700bd72b62c7164f0713ede3a6647cd32c3893c9d4c5e2c6a243e6f99be5"
     },
     {
       "path": "docs/acceptance/seo-improvements-release-20261026/customer-nav-focused-green.log",
       "bytes": 3373,
       "sha256": "4e0325376db19edcb755b4a853fd52df381801f35116c7b2aed29c97e672b35b",
       "originalSha256": "199214ada75ba6606cfcc9b4bd7c5533967f0035cb2e71a1006b8bc1692a1468"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/customer-nav-red-context.md",
+      "bytes": 23493,
+      "sha256": "80ad6b28de9c921e50d9936bf376877f44a545db430904cfe26195ffce30cad9",
+      "originalSha256": "ae5c7f187d6fe0db2c1cd3ca1653fdac57f607b4ed39e70829e870733acf395a"
     },
     {
       "path": "docs/acceptance/seo-improvements-release-20261026/customer-nav-wrapper-green.log",
@@ -124,6 +456,168 @@
       "originalSha256": "23b007240dcb325028753e4ef0722142d4fb88fbf2a4ac5df393472f62f1e123"
     },
     {
+      "path": "docs/acceptance/seo-improvements-release-20261026/development-selector-final.log",
+      "bytes": 18541,
+      "sha256": "5511e72e3a820b5c8cc5e7bfc3f37a40aeb292a480aacf8457581719cddad2a2",
+      "originalSha256": "ba6a893e8b9029a5d879b77f90ad6ecd7603ba71ac138d6c193991246343fe7c"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/final-release-stages.log",
+      "bytes": 93050,
+      "sha256": "f97fa7e5eb1758e195deebf9c084242c6e3299549ee48a5c9be9617a0bdac29e",
+      "originalSha256": "8798183614631fa803e7b183fc147cf89efb3eebe0481d142c38b54e2a55ed20"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/google-live-rich-results.png",
+      "bytes": 47798,
+      "sha256": "137f43eb8b7f63f7636778561a6345fb6094aeccbc81785b919ef987bc23f91d",
+      "originalSha256": "137f43eb8b7f63f7636778561a6345fb6094aeccbc81785b919ef987bc23f91d"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/google-live-rich-results.txt",
+      "bytes": 505,
+      "sha256": "69d04a35a7a19e1a190b76e1f9c817e48d5af693cde9bc6c472d92d22dee84d6",
+      "originalSha256": "69d04a35a7a19e1a190b76e1f9c817e48d5af693cde9bc6c472d92d22dee84d6"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/index-lock-recovery.json",
+      "bytes": 331,
+      "sha256": "9aca780607448c99b4643313a4e1554dc128e1d4b374f9e440c1454a1d82c30f",
+      "originalSha256": "aff700e7d91431621e346d2da19cbaf98b96fd2086498f26a8dbeaa558e98530"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/live-analytics.json",
+      "bytes": 709,
+      "sha256": "0d0957d4baa744934eb109353121f47c58189ba4deecb883fd045efef256b281",
+      "originalSha256": "0d0957d4baa744934eb109353121f47c58189ba4deecb883fd045efef256b281"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/live-artifacts.json",
+      "bytes": 1547,
+      "sha256": "cb6fa9205a4832499700e68a6dd2220925fb967e7c903e37e1390ca791b3f5f6",
+      "originalSha256": "cb6fa9205a4832499700e68a6dd2220925fb967e7c903e37e1390ca791b3f5f6"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/live-navigation.json",
+      "bytes": 309,
+      "sha256": "47f1aea29c8d72e4c413a69770916e17b788756b8ad399416aa4d6f82f1a615b",
+      "originalSha256": "47f1aea29c8d72e4c413a69770916e17b788756b8ad399416aa4d6f82f1a615b"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/live-release-hosts.json",
+      "bytes": 6059,
+      "sha256": "31f8883cfbb2e80ea85d940fb409ea8a02d5b5eb4a1f7847050d721b69014f2e",
+      "originalSha256": "31f8883cfbb2e80ea85d940fb409ea8a02d5b5eb4a1f7847050d721b69014f2e"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/main-ci-latest.json",
+      "bytes": 7981,
+      "sha256": "37b93cc5188ef2a684b61202b36cacd7ae958ca061565ccfdd1397a21da986b0",
+      "originalSha256": "13831c7be48247693f22694af699024aacc67a12b8adc0fe513c91e7056e0144"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/merge.json",
+      "bytes": 312,
+      "sha256": "33a1ef2affe552935023f6b0dff8040c74474f61f1d141c9f98bae009bb597a7",
+      "originalSha256": "33a1ef2affe552935023f6b0dff8040c74474f61f1d141c9f98bae009bb597a7"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/navigation-selector-review.md",
+      "bytes": 442,
+      "sha256": "f2f9b5a96cdf74581606e6166099c795a7a1bdfefe6dc55bb7622083eb1068c4",
+      "originalSha256": "f2f9b5a96cdf74581606e6166099c795a7a1bdfefe6dc55bb7622083eb1068c4"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/pr-ci-latest.json",
+      "bytes": 8161,
+      "sha256": "3102648eb784d4bef90109d5e2b7388f8c44c2456e840e08997a70fe9b7ea43b",
+      "originalSha256": "d5b6e39c0c77bde166e659ea09440565afb2b69507e5231cf271c25e37ae1ce1"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/pre-promotion-preflight.log",
+      "bytes": 171,
+      "sha256": "863b38bfdd924891810fade78cab2e60db566af04a7e03cbcf22880289d83d17",
+      "originalSha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/pre-promotion-readiness.log",
+      "bytes": 2155,
+      "sha256": "7b47814fa399fcb65593fc858897f419869b78afc17664f3301cb120d33ec123",
+      "originalSha256": "81952b5c7e32e9f4fe4e367dd3b04f17f92f6164d25715dbb9600bee4b95e40c"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/preflight.log",
+      "bytes": 171,
+      "sha256": "863b38bfdd924891810fade78cab2e60db566af04a7e03cbcf22880289d83d17",
+      "originalSha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/production-deployment-status-final.json",
+      "bytes": 317,
+      "sha256": "98b2001c03f118ee9f07fcd03f7e694903caa705979330df66a6ce6f1a21843c",
+      "originalSha256": "ab574be6e249a4b518c4ffdf2cb2601d3dadb6fbe5a2c4bd8e4e7fde4d2f8ada"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/psi-home.png",
+      "bytes": 55925,
+      "sha256": "a7019e7c84ef0982521ddcded26f1310a5eecf45b128f9de1cbebd2d53988952",
+      "originalSha256": "a7019e7c84ef0982521ddcded26f1310a5eecf45b128f9de1cbebd2d53988952"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/psi-home.txt",
+      "bytes": 14646,
+      "sha256": "6af7a041728f0ba547efe85fb74346ab3132f3284727b8e65620199c97381214",
+      "originalSha256": "f50ffd1f4b95373016001331f89653b97b285efccc737ee4dde63ec5ddd201e9"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/psi-pasabuy-detail.txt",
+      "bytes": 16468,
+      "sha256": "eb0491e63f6e6d60275478c8850cfd0ba0b9822a3f500eeb9529cd03230044fb",
+      "originalSha256": "5206880c9bbae5491f157d6abf688f9a2218daff2f6bbe08b09c1e1296bca769"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/psi-pasabuy.png",
+      "bytes": 62676,
+      "sha256": "cbbd765e155c32a83b11a22782e37d30f07f9771ffde45ba3a14ceb0d2f685b4",
+      "originalSha256": "cbbd765e155c32a83b11a22782e37d30f07f9771ffde45ba3a14ceb0d2f685b4"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/psi-pasabuy.txt",
+      "bytes": 15120,
+      "sha256": "92d4bad1f246e8b3a694af888282b52effa6341436b9ea59573363ec744d9b6e",
+      "originalSha256": "8b73a15146150f0299605e5681825e7dfe949e85e7192fec33f9ca8fe772211d"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/readiness.log",
+      "bytes": 2155,
+      "sha256": "7b47814fa399fcb65593fc858897f419869b78afc17664f3301cb120d33ec123",
+      "originalSha256": "81952b5c7e32e9f4fe4e367dd3b04f17f92f6164d25715dbb9600bee4b95e40c"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/recovery-focused-green.log",
+      "bytes": 985,
+      "sha256": "064895bdc9b8d3ed848a5c921994d5f93f75104a7760b34bf1869b1437f03cbe",
+      "originalSha256": "0fe5a6423e2a4e1b5a8f6e2980cc574f658c5491ef65256119a4dff7d780d9c5"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/recovery-selector-red-context.md",
+      "bytes": 25470,
+      "sha256": "c705d72f68ed7ca43c49a0854615bf2d946a9b8efdaf882d7b4fb099b1191cf7",
+      "originalSha256": "9609e8eb2689615e09218cebb381a23fbc96c9648620018f3accc462c543ae2a"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/release-result.json",
+      "bytes": 68,
+      "sha256": "04732ce9505442c830c51a926bddd9dec1476fa2d94a713e7b5f3a4cae18d0d3",
+      "originalSha256": "c694c64340886d524544b1089eb118d57b5f76f1607072f3b07ebf29d4bf0185"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/release.log",
+      "bytes": 269353,
+      "sha256": "1af3f3315fc8d7e649b95af7cac9a9cbcdca4767734e1a31bc54d4c51ce1359a",
+      "originalSha256": "41d1dc63e24c2e65d04dc11351008f4af8db1e54cb92a9ab8ab3191bef7571d1"
+    },
+    {
       "path": "docs/acceptance/seo-improvements-release-20261026/remaining-release.log",
       "bytes": 62880,
       "sha256": "c919a7e192c4d155a2e8f430ff7a08d58cf9374e4bc7619181cfc8ab2d2d02c7",
@@ -136,10 +630,88 @@
       "originalSha256": "33aba3e1e64f4de4473663d5433d1385548afc651e1c6cfcd0f783cb8963c408"
     },
     {
-      "path": "docs/acceptance/seo-improvements-release-20261026/index-lock-recovery.json",
-      "bytes": 331,
-      "sha256": "9aca780607448c99b4643313a4e1554dc128e1d4b374f9e440c1454a1d82c30f",
-      "originalSha256": "aff700e7d91431621e346d2da19cbaf98b96fd2086498f26a8dbeaa558e98530"
+      "path": "docs/acceptance/seo-improvements-release-20261026/remaining-result.json",
+      "bytes": 618,
+      "sha256": "f1d1f79d285a07064500fc1dba0da00d6ccd5595aab8a8c014b0615d2dd40b41",
+      "originalSha256": "f1d1f79d285a07064500fc1dba0da00d6ccd5595aab8a8c014b0615d2dd40b41"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/sc-index-state.txt",
+      "bytes": 5355,
+      "sha256": "39e6e73ce5eeffd18da14de0a512e7cc20fcc5a5393012f2e6bfec21cbcb2d3e",
+      "originalSha256": "3389a6645fca13295d7ae2fc07b335b7629b004d8356b73c53f3444f7efcbdc1"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/sc-live-result.png",
+      "bytes": 74625,
+      "sha256": "2ae3001a4fe68263a3685ba8bb2614060d546e8e1c5a5a1b03da9a9364ed7e6f",
+      "originalSha256": "2ae3001a4fe68263a3685ba8bb2614060d546e8e1c5a5a1b03da9a9364ed7e6f"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/sc-live-result.txt",
+      "bytes": 5102,
+      "sha256": "e13e60a41757b4d024a1126834c8389f542672df5992d66efdcf70875226438c",
+      "originalSha256": "b955eda9a06d36d6264727d115f15dcc3d22abc11fea33795784e8f08cfbaf19"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/sc-performance.txt",
+      "bytes": 5369,
+      "sha256": "39f14524dfd5af6fb1e240910f2e2da2716bbf66c1c98f39fd9ca4e4357c975b",
+      "originalSha256": "39f14524dfd5af6fb1e240910f2e2da2716bbf66c1c98f39fd9ca4e4357c975b"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/sc-rendered-pasabuy.png",
+      "bytes": 87228,
+      "sha256": "c7e92bb0e8a4b92eb090ce652d120d09a2edb513e007745ce24ea329fbfef722",
+      "originalSha256": "c7e92bb0e8a4b92eb090ce652d120d09a2edb513e007745ce24ea329fbfef722"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/selector-review.md",
+      "bytes": 444,
+      "sha256": "296581e49731361c73f476ead733fe7bb80e2e929c4580c69343aaca68effbff",
+      "originalSha256": "296581e49731361c73f476ead733fe7bb80e2e929c4580c69343aaca68effbff"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/storefront-production-ready.png",
+      "bytes": 81914,
+      "sha256": "589179ea9217f0550eed59ba18deff8c6ec3ceefed1518cf771723e52a2ad05f",
+      "originalSha256": "589179ea9217f0550eed59ba18deff8c6ec3ceefed1518cf771723e52a2ad05f"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/storefront-project-identity.png",
+      "bytes": 58743,
+      "sha256": "329d4cac0b04df62d6b6c8d006c03de89f0cdf87ee92cdf776ca74d1a42c79ec",
+      "originalSha256": "329d4cac0b04df62d6b6c8d006c03de89f0cdf87ee92cdf776ca74d1a42c79ec"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/verify-artifacts.mjs",
+      "bytes": 1713,
+      "sha256": "e4bea50d7864ec19a7429d37cb0acd11511d2b3c7f0be226edae58c84bd21432",
+      "originalSha256": "e4bea50d7864ec19a7429d37cb0acd11511d2b3c7f0be226edae58c84bd21432"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/verify-live-analytics.mjs",
+      "bytes": 4497,
+      "sha256": "27914ddbe3a870ebb2bec374eefeeeb9a8773ceb6dd321cc1f1e4246f8c9db8d",
+      "originalSha256": "27914ddbe3a870ebb2bec374eefeeeb9a8773ceb6dd321cc1f1e4246f8c9db8d"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/verify-live-navigation.mjs",
+      "bytes": 1934,
+      "sha256": "21501cb347fcb73f50da821a462579f81208d3cc52ac61532e2b4c40e6771721",
+      "originalSha256": "21501cb347fcb73f50da821a462579f81208d3cc52ac61532e2b4c40e6771721"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/verify-live-release.mjs",
+      "bytes": 4538,
+      "sha256": "0d1500104ef3989f762334dc728f3bc760739271183af07b3666e85891ff6625",
+      "originalSha256": "0d1500104ef3989f762334dc728f3bc760739271183af07b3666e85891ff6625"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/wholesale-nav-red-context.md",
+      "bytes": 25679,
+      "sha256": "2fad81a13762cb9bf2b4535425900bb8bd055245f88595d0ec6a949e8d5e7367",
+      "originalSha256": "f785513a2444f735a45299d332c18d5a155a0d2dbc3e39deccd129cd2268866d"
     }
   ]
 }

@@ -1,0 +1,197 @@
+{
+  "at": "2026-10-26T14:49:16.443Z",
+  "pass": true,
+  "sitemapUrls": 111,
+  "readyProducts": 107,
+  "heldProducts": 9,
+  "rows": [
+    {
+      "url": "https://www.k2jimzon.com/sitemap.xml",
+      "status": 200,
+      "contentType": "application/xml",
+      "robots": null,
+      "cache": "no-store",
+      "title": null,
+      "canonical": null,
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/robots.txt",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": null,
+      "canonical": null,
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/pasabuy",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": "Pasabuy from Italy to the Philippines | K2 Jimzon",
+      "canonical": "https://www.k2jimzon.com/pasabuy",
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/product/K2-SKU-001001",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": "Combino Spaghetti No. 5 1kg — K2 Jimzon",
+      "canonical": "https://www.k2jimzon.com/product/K2-SKU-001001",
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/product/K2-SKU-001017",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": "Borella Carne — K2 Jimzon",
+      "canonical": "https://www.k2jimzon.com/product/K2-SKU-001017",
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/product/K2-SKU-001173",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": "Siciliani Pistacchio Crunchy 200 g — K2 Jimzon",
+      "canonical": "https://www.k2jimzon.com/product/K2-SKU-001173",
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/product/K2-SKU-001028",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": "Cien Cream Soap Olive 2-Pack — K2 Jimzon",
+      "canonical": "https://www.k2jimzon.com/product/K2-SKU-001028",
+      "metaRobots": "noindex, follow"
+    },
+    {
+      "url": "https://www.k2jimzon.com/account",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": "noindex, nofollow",
+      "cache": "no-store",
+      "title": "K2 Jimzon — Italian imports, direct to the Philippines",
+      "canonical": "https://www.k2jimzon.com/",
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/admin-portal-k2-secure",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": "Page not found — K2 Jimzon",
+      "canonical": null,
+      "metaRobots": "noindex, nofollow"
+    },
+    {
+      "url": "https://admin.k2jimzon.com/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": "noindex, nofollow",
+      "cache": "private, no-store",
+      "title": "K2 Jimzon Admin",
+      "canonical": "https://admin.k2jimzon.com/admin-portal-k2-secure",
+      "metaRobots": null
+    },
+    {
+      "url": "https://admin.k2jimzon.com/api/admin/session",
+      "status": 401,
+      "contentType": "application/json; charset=utf-8",
+      "robots": "noindex, nofollow",
+      "cache": "no-store",
+      "title": null,
+      "canonical": null,
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/contact",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": "Contact K2 Jimzon | Italian Imports &amp; Pasabuy",
+      "canonical": "https://www.k2jimzon.com/contact",
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/privacy",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": "Privacy &amp; Data | K2 Jimzon",
+      "canonical": "https://www.k2jimzon.com/privacy",
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/terms",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": "Terms of Service | K2 Jimzon",
+      "canonical": "https://www.k2jimzon.com/terms",
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/returns",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": "Returns &amp; Replacements | K2 Jimzon",
+      "canonical": "https://www.k2jimzon.com/returns",
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/product/K2-SKU-001001",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": null,
+      "cache": "no-store",
+      "title": "Combino Spaghetti No. 5 1kg — K2 Jimzon",
+      "canonical": "https://www.k2jimzon.com/product/K2-SKU-001001",
+      "metaRobots": null
+    },
+    {
+      "url": "https://www.k2jimzon.com/wood-bg.webp",
+      "status": 200,
+      "bytes": 25100,
+      "contentType": "image/webp",
+      "cache": "no-store"
+    },
+    {
+      "url": "https://www.k2jimzon.com/seo-media/10eff3b03c25f453e29d-256.webp",
+      "status": 200,
+      "bytes": 27762,
+      "contentType": "image/webp",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "https://www.k2jimzon.com/fonts/fraunces-normal-7234ed860a9c.woff2",
+      "status": 200,
+      "bytes": 67304,
+      "contentType": "font/woff2",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "https://www.k2jimzon.com/fonts/brand.css",
+      "status": 200,
+      "bytes": 3128,
+      "contentType": "text/css; charset=utf-8",
+      "cache": "no-store"
+    }
+  ]
+}

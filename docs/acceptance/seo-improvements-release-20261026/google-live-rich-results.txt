@@ -1,0 +1,4 @@
+Browser tab: 4, Title: "Rich Results Test - Google Search Console", URL: "https://search.google.com/test/rich-results/result?id=cVw5Y62MR94XfaQIL-7mvQ".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 75
+The focused UI element is 0 AXWebArea Rich Results Test - Google Search Console, URL: search.google.com/test/rich-results/result?id=cVw5Y62MR94XfaQIL-7mvQ

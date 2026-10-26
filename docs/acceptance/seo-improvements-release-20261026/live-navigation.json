@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-26T14:51:45.281Z",
+  "pass": true,
+  "events": [
+    {
+      "event": "page_view",
+      "location": "https://www.k2jimzon.com/pasabuy",
+      "title": "K2 Jimzon"
+    },
+    {
+      "event": "page_view",
+      "location": "https://www.k2jimzon.com/",
+      "title": "K2 Jimzon"
+    }
+  ]
+}

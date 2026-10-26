@@ -1,0 +1,100 @@
+Browser tab: 1, Title: "Performance on Search results", URL: "https://search.google.com/search-console/performance/search-analytics?resource_id=sc-domain%3Ak2jimzon.com".
+0 AXWebArea Performance on Search results, URL: search.google.com/search-console/performance/search-analytics?resource_id=sc-domain%3Ak2jimzon.com
+	1 container yDmH0d
+		2 container gb
+			3 container
+				4 button (collapsed) Description: Main menu, Secondary Actions: Expand
+					5 image
+				6 link Description: Google Search Console, Value: search.google.com/search-console?resource_id=sc-domain%3Ak2jimzon.com, ID: sdgBod
+				7 container
+					8 combo box (collapsed, settable) Description: Inspect any URL in k2jimzon.com, Secondary Actions: Expand
+				9 button Search
+					10 image
+				11 button Help
+				12 button User settings
+				13 button Messages
+				14 button (collapsed) Description: Google apps, Secondary Actions: Expand
+				15 button (collapsed) Description: Google Account: k2jimzonwebsite (k2jimzonwebsite@gmail.com), Secondary Actions: Expand
+		16 container navigational drawer
+			17 container
+				18 container Primary
+					19 pop up button (collapsed) Description: Search property, Secondary Actions: Expand
+						20 image favicon
+						21 combo box (collapsed, settable) Description: k2jimzon.com, Secondary Actions: Expand
+					22 container
+						23 link Description: Overview, Value: search.google.com/search-console?resource_id=sc-domain%3Ak2jimzon.com
+						24 link Description: Insights, Value: search.google.com/search-console/performance/insights?resource_id=sc-domain%3Ak2jimzon.com
+						25 link Description: Performance, Value: search.google.com/search-console/performance/search-analytics?resource_id=sc-domain%3Ak2jimzon.com
+						26 button URL inspection
+							27 text URL inspection
+						28 text Indexing
+						29 button (expanded) Description: Indexing report section, Secondary Actions: Collapse
+						30 container
+							31 link Description: Pages, Value: search.google.com/search-console/index?resource_id=sc-domain%3Ak2jimzon.com
+							32 link Description: Sitemaps, Value: search.google.com/search-console/sitemaps?resource_id=sc-domain%3Ak2jimzon.com
+							33 link Description: Removals, Value: search.google.com/search-console/removals?resource_id=sc-domain%3Ak2jimzon.com
+						34 text Experience
+						35 button (expanded) Description: Experience report section, Secondary Actions: Collapse
+						36 link Description: Core Web Vitals, Value: search.google.com/search-console/core-web-vitals?resource_id=sc-domain%3Ak2jimzon.com
+						37 text Security & Manual Actions
+						38 button (collapsed) Description: Security & Manual Actions report section, Secondary Actions: Expand
+						39 link Description: Links report, Value: search.google.com/search-console/links?resource_id=sc-domain%3Ak2jimzon.com
+						40 link Description: Achievements, Value: search.google.com/search-console/achievements?resource_id=sc-domain%3Ak2jimzon.com
+						41 link Description: Settings, Value: search.google.com/search-console/settings?resource_id=sc-domain%3Ak2jimzon.com
+						42 button Submit feedback
+							43 text Submit feedback
+						44 button About Search Console
+							45 text About Search Console
+						46 link Description: Privacy, Value: myaccount.google.com/privacypolicy?hl=en
+						47 link Description: Terms, Value: myaccount.google.com/termsofservice?hl=en
+		48 container
+			49 container Breadcrumbs
+				50 heading Performance, Value: 1
+					51 text Performance
+			52 pop up button (disabled, collapsed) Description: EXPORT, Secondary Actions: Expand
+			53 Select time range
+				54 radio button 24 hours, Value: 0
+				55 radio button 7 days, Value: 0
+				56 radio button 28 days, Value: 0
+				57 radio button 3 months, Value: 1
+			58 button More time ranges
+			59 content list
+				60 button (disabled) Search type: Web
+				61 pop up button (disabled, collapsed) Add filter, Secondary Actions: Expand
+				62 button Customize your Performance report using AI
+			63 text Last update: 3.5 hours ago
+			64 container
+				65 text Processing data, please check again in a day or so
+				66 container dimension-tables
+					67 tab group
+						68 tab (selectable, disabled, settable, boolean) QUERIES, Value: 0
+QUERIES
+						69 tab (selectable, disabled, settable, boolean) PAGES, Value: 0
+PAGES
+						70 tab (selectable, disabled, settable, boolean) COUNTRIES, Value: 0
+COUNTRIES
+						71 tab (selectable, disabled, settable, boolean) DEVICES, Value: 0
+DEVICES
+						72 tab (selectable, disabled, settable, boolean) SEARCH APPEARANCE, Value: 0
+SEARCH APPEARANCE
+						73 tab (selectable, disabled, settable, boolean) DAYS, Value: 0
+DAYS
+					74 container
+						75 pop up button (collapsed) Description: Filter table rows, Secondary Actions: Expand
+						76 table
+							77 row
+								78 cell
+									79 text Top queries
+								80 cell
+									81 text Clicks
+								82 cell
+									83 text Impressions
+						84 text No data
+			85 container
+				86 text Performance on Search results Explore your property's performance on Google Search, including impressions, position, CTR, and top query strings.
+				87 container
+					88 container Learn more
+				89 container
+					90 container Got it
+
+The focused UI element is 0 AXWebArea Performance on Search results, URL: search.google.com/search-console/performance/search-analytics?resource_id=sc-domain%3Ak2jimzon.com
