@@ -1,0 +1,53 @@
+{
+  "source": "9bbf17693581157c9e6c20c9f749024504deed4a",
+  "observedAt": "2026-10-26T06:42:46.663Z",
+  "deployments": [
+    {
+      "id": "dpl_BvQxwUjFejzhY91aHGLrn5Mkr6eY",
+      "project": {
+        "id": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+        "name": "k2-jimzon-admin",
+        "framework": null
+      },
+      "state": "READY",
+      "target": "production",
+      "source": "9bbf17693581157c9e6c20c9f749024504deed4a",
+      "alias": [
+        "admin.k2jimzon.com",
+        "k2-jimzon-admin-seven.vercel.app",
+        "k2-jimzon-admin-k2-jimzon.vercel.app",
+        "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+      ],
+      "url": "k2-jimzon-admin-cdoeqbctt-k2-jimzon.vercel.app"
+    },
+    {
+      "id": "dpl_Efy3GDJtETsqUzwn3i93qGPsc6td",
+      "project": {
+        "id": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+        "name": "k2-jimzon",
+        "framework": null
+      },
+      "state": "READY",
+      "target": "production",
+      "source": "9bbf17693581157c9e6c20c9f749024504deed4a",
+      "alias": [
+        "www.k2jimzon.com",
+        "k2-jimzon-vert.vercel.app",
+        "k2jimzon.com",
+        "k2-jimzon-k2-jimzon.vercel.app",
+        "k2-jimzon-git-main-k2-jimzon.vercel.app"
+      ],
+      "url": "k2-jimzon-ki8ayo2ij-k2-jimzon.vercel.app"
+    }
+  ],
+  "ci": {
+    "runId": 40281130698,
+    "status": "in_progress"
+  },
+  "httpEvidence": ".tools/duplicate-products-20261026/production-http.json",
+  "hostedBrowser": {
+    "storefront": "Reloaded canonical catalog: exactly two Borella cards,45/64 available",
+    "admin": "Reloaded canonical authenticated Inventory:196products/126active/273projectedunits"
+  }
+}
+

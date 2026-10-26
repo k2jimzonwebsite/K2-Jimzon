@@ -1,3 +1,5 @@
+> Source promotion is now verified on main9bbf1769 with both production artifacts. See [release receipt](DUPLICATE_CONSOLIDATION_RELEASE_20261026.md). Remote CI remains separately tracked, not claimed green.
+
 # Duplicate consolidation applied — 26 October 2026
 
 MAP-023 / IDEA-20261025-04 and IDEA-20261026-02. This receipt supersedes the earlier prepared-only and failed-request checkpoints. The owner approved the original exact K2 schema packet and both Borella merges, then separately approved the single-function two-second lock limit. No permanent product/history deletion was performed.
