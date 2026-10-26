@@ -180,7 +180,7 @@ async function acceptStandardDelivery(page) {
 test('a failed batch-stock read keeps the product visible but hides the stale row count', async ({ page }) => {
   page.on('pageerror', error => console.error(`Stock fixture browser error: ${error.message}`))
   const fixture = await catalog(page, { sku: 'projection-failure', stockReadFails: true })
-  await page.getByRole('link', { name: 'Catalog', exact: true }).click()
+  await page.getByRole('button', { name: 'Catalog', exact: true }).click()
   await expect(page.getByRole('heading', { level: 1, name: 'Explore the Italian cabinet.' })).toBeVisible()
 
   const card = page.getByTestId('product-card')

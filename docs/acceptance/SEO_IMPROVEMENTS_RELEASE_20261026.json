@@ -1,0 +1,94 @@
+{
+  "at": "2026-10-26T14:26:32.769Z",
+  "owner": "MAP-024, IDEA-20261026-03/05–09",
+  "state": "Owner-approved release in progress; not promoted",
+  "authorization": "Owner approve, then approve before your commit and push ensure that the accounts is proper; identifies EdgerzXc developer for this exact project",
+  "github": {
+    "actor": "EdgerzXc",
+    "repository": "k2jimzonwebsite/K2-Jimzon",
+    "verifiedPush": true,
+    "repositoryLocalEmail": "285345756+EdgerzXc@users.noreply.github.com",
+    "historicalCommitsPreserved": true
+  },
+  "source": {
+    "prepared": "f0d8f12e1ececbcc9ad0eee24bb674b9764775f6",
+    "priorPrHead": "2845581736cbfb04d53277b3984575d957b72941",
+    "newBehavioralDiff": "None; restore only the erroneous recovery-test selector to its original button semantics"
+  },
+  "gate": {
+    "initial": "verify:release exits1 solely at Catalog-link selector; all prior stages pass, recovery38otherspass",
+    "focused": "Stock recovery1/1pass, all assertions retained",
+    "development": "exit0 after final test edit",
+    "remaining": "Exact remaining npm test scripts followed by test:vercel-output,build:storefront,build:admin are running; not claimed green",
+    "ci": "Existing source CI pending, new corrected-head CI will be separate"
+  },
+  "provider": {
+    "k2": "Exact pixplcjqivlfflickobf preflight;readiness8verified2owner3connector0failed",
+    "vercel": "Signed-in K2 owner/browser, exact separate projects/repo/domains; connector403team scope not falsely claimed",
+    "writes": "None;source-only publication authorized;no data/ACL/credential/settings mutation"
+  },
+  "recovery": "Do not promote before complete reconciled gate. Revert scoped source or restore baseline Storefront4ixmcDrVxyKZtmFgeMuGekz81Bvs /Admin2dh4QZriHattzPuHToMJNshUGhU9, both source1799e23. Originals/business/provider state unchanged.",
+  "evidenceFormat": "Copied text logs normalize CRLF/trailing whitespace; original hashes retained.",
+  "evidence": [
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/accounts.json",
+      "bytes": 2012,
+      "sha256": "12e4acb98152c4d7c23f755cc85b7ed8d6893c541460850205e7c811221a4804",
+      "originalSha256": "faffc0e9739e3268912a2e6b7f44e72d81f3ce8d8b8ed85f3633082fe15434ca"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/preflight.log",
+      "bytes": 171,
+      "sha256": "863b38bfdd924891810fade78cab2e60db566af04a7e03cbcf22880289d83d17",
+      "originalSha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/readiness.log",
+      "bytes": 2155,
+      "sha256": "7b47814fa399fcb65593fc858897f419869b78afc17664f3301cb120d33ec123",
+      "originalSha256": "81952b5c7e32e9f4fe4e367dd3b04f17f92f6164d25715dbb9600bee4b95e40c"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/release.log",
+      "bytes": 269353,
+      "sha256": "1af3f3315fc8d7e649b95af7cac9a9cbcdca4767734e1a31bc54d4c51ce1359a",
+      "originalSha256": "41d1dc63e24c2e65d04dc11351008f4af8db1e54cb92a9ab8ab3191bef7571d1"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/release-result.json",
+      "bytes": 72,
+      "sha256": "c694c64340886d524544b1089eb118d57b5f76f1607072f3b07ebf29d4bf0185",
+      "originalSha256": "c694c64340886d524544b1089eb118d57b5f76f1607072f3b07ebf29d4bf0185"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/recovery-selector-red-context.md",
+      "bytes": 25470,
+      "sha256": "c705d72f68ed7ca43c49a0854615bf2d946a9b8efdaf882d7b4fb099b1191cf7",
+      "originalSha256": "9609e8eb2689615e09218cebb381a23fbc96c9648620018f3accc462c543ae2a"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/recovery-focused-green.log",
+      "bytes": 985,
+      "sha256": "064895bdc9b8d3ed848a5c921994d5f93f75104a7760b34bf1869b1437f03cbe",
+      "originalSha256": "0fe5a6423e2a4e1b5a8f6e2980cc574f658c5491ef65256119a4dff7d780d9c5"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/development-selector-final.log",
+      "bytes": 18541,
+      "sha256": "5511e72e3a820b5c8cc5e7bfc3f37a40aeb292a480aacf8457581719cddad2a2",
+      "originalSha256": "ba6a893e8b9029a5d879b77f90ad6ecd7603ba71ac138d6c193991246343fe7c"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/storefront-project-identity.png",
+      "bytes": 58743,
+      "sha256": "329d4cac0b04df62d6b6c8d006c03de89f0cdf87ee92cdf776ca74d1a42c79ec",
+      "originalSha256": "329d4cac0b04df62d6b6c8d006c03de89f0cdf87ee92cdf776ca74d1a42c79ec"
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-release-20261026/admin-production-baseline.png",
+      "bytes": 85437,
+      "sha256": "25c1dbbec55581018c27fcd388cdce0c920b52099f177b8e1833ff289b77e63e",
+      "originalSha256": "25c1dbbec55581018c27fcd388cdce0c920b52099f177b8e1833ff289b77e63e"
+    }
+  ]
+}
