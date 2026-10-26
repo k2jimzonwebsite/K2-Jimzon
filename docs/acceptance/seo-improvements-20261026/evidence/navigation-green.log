@@ -1,0 +1,50 @@
+[WebServer] (node:8948) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23988) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 18 tests using 1 worker
+
+(node:3108) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 8:34:00 PM [vite] (client) [console.error] TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/Footer.jsx
+[WebServer]
+[WebServer] The above error occurred in one of your React components.
+[WebServer]
+[WebServer] React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+[WebServer]
+[WebServer] 8:34:00 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "react-boundary", pathname: "/pasabuy" } TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/Footer.jsx
+  ok  1 tests\search-visibility-ui.spec.js:19:1 › a failed Footer module cannot replace the Pasabuy page (1.8s)
+[WebServer] 8:34:01 PM [vite] (client) [console.error] TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/StorefrontAnalytics.jsx
+[WebServer]
+[WebServer] The above error occurred in one of your React components.
+[WebServer]
+[WebServer] React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+[WebServer]
+[WebServer] 8:34:01 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "react-boundary", pathname: "/catalog" } TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/StorefrontAnalytics.jsx
+  ok  2 tests\search-visibility-ui.spec.js:27:1 › a failed optional Analytics module cannot replace the shopping page (1.7s)
+  ok  3 tests\search-visibility-ui.spec.js:35:1 › product names provide real links and preserve client navigation (1.4s)
+[WebServer] 8:34:05 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\search-visibility-ui.spec.js:45:1 › the immersive store defers the optional prompt without granting consent (2.0s)
+  ok  5 tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 375 (1.1s)
+  ok  6 tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 1440 (1.3s)
+  ok  7 tests\search-visibility-ui.spec.js:76:1 › contact and policy pages identify their own public content (2.1s)
+  ok  8 tests\search-visibility-ui.spec.js:84:1 › analytics requires consent, strips URLs, avoids duplicate/private views and can be withdrawn (2.0s)
+  ok  9 tests\search-visibility-ui.spec.js:116:1 › browser privacy signals refuse analytics even if a previous visit allowed it (806ms)
+  ok 10 tests\search-visibility-ui.spec.js:129:1 › keyboard reopening focuses the consent choices and Escape restores the opener (902ms)
+  ok 11 tests\search-visibility-ui.spec.js:140:1 › consent expiry disables measurement in a tab that remains open (2.7s)
+  ok 12 tests\search-visibility-ui.spec.js:151:1 › enlarged text keeps consent reachable and closing does not grant analytics (1.4s)
+[WebServer] 8:34:19 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\search-visibility-ui.spec.js:172:3 › consent controls remain readable and clear navigation: mobile-320 (915ms)
+[WebServer] 8:34:20 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 14 tests\search-visibility-ui.spec.js:172:3 › consent controls remain readable and clear navigation: mobile (1.1s)
+[WebServer] 8:34:20 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 15 tests\search-visibility-ui.spec.js:172:3 › consent controls remain readable and clear navigation: mobile-dark (793ms)
+[WebServer] 8:34:21 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 16 tests\search-visibility-ui.spec.js:172:3 › consent controls remain readable and clear navigation: desktop (1.4s)
+[WebServer] 8:34:23 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 17 tests\search-visibility-ui.spec.js:172:3 › consent controls remain readable and clear navigation: desktop-dark (823ms)
+[WebServer] 8:34:24 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 18 tests\search-visibility-ui.spec.js:172:3 › consent controls remain readable and clear navigation: user-777 (1.3s)
+
+  18 passed (29.9s)

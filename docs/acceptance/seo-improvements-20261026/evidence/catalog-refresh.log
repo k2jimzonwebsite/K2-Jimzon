@@ -1,0 +1,11 @@
+
+> k2-jimzon-prototype@0.1.0 evidence:map024-catalog
+> node scripts/map024-evidence/read-published-catalog.mjs --output=scripts/map024-evidence/published-catalog.json
+
+MAP024_CATALOG_READ: wrote scripts/map024-evidence/published-catalog.json
+  sitemap-eligible statuses : Live, Active
+  rows read                 : 116
+  published === false       : 0
+  no image on any column    : 0
+  no product description    : 0
+  missing SKU               : 0

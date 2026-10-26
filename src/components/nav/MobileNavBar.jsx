@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { useStore } from '../../context/StoreContext'
 import { HomeIcon, GridIcon, PlaneIcon, BriefcaseIcon, ChatIcon } from '../ui/icons'
+import { ActionElement } from '../ui/bits'
+import { STOREFRONT_VIEW_TO_PATH } from '../../lib/storefrontRoutes'
 
 export default function MobileNavBar() {
   const { view, go } = useStore()
@@ -28,8 +30,9 @@ export default function MobileNavBar() {
           const isActive = activeKey === item.key
           const ItemIcon = item.icon
           return (
-            <button
+            <ActionElement
               key={item.key}
+              href={STOREFRONT_VIEW_TO_PATH[item.key]}
               onClick={() => go(item.key)}
               aria-current={isActive ? 'page' : undefined}
               aria-label={item.key === 'catalog' ? 'Inventory & Catalog' : item.label}
@@ -38,7 +41,7 @@ export default function MobileNavBar() {
               <ItemIcon size={19} />
               <span style={{ overflowWrap: 'anywhere' }} className={`max-w-full text-xs leading-4 ${isActive ? 'font-bold' : 'font-semibold'}`}>{item.label}</span>
               {isActive && <span className="absolute -top-1.5 h-0.5 w-7 rounded-full bg-crimson" />}
-            </button>
+            </ActionElement>
           )
         })}
       </div>

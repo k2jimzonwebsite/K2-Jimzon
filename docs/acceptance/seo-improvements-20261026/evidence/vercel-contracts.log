@@ -1,0 +1,11 @@
+✔ the Storefront sitemap dependency imports in Node ESM (4.1533ms)
+✔ Build Output candidate isolates each API and preserves static/security routes (1682.5539ms)
+✔ Build Output refuses to replace its own static source (1.7101ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1807.2189

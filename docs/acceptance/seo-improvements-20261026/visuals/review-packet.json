@@ -1,0 +1,136 @@
+{
+  "originalRequest": "Proceed with storefront SEO improvements for K2 Jimzon, focusing on Pasabuy, Italian imports, Italy to the Philippines. Preserve Admin and consent-first Analytics.",
+  "scope": "MAP-024 ideas03,05–09; existing-world refinement, no redesign or new comp round. Source prepared only; no live promotion authorized.",
+  "artifactPath": "C:\\Users\\jerze\\K2 JImzon",
+  "screenshots": [
+    {
+      "path": ".impeccable/review/seo-20261026/catalog-desktop-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/catalog-desktop.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/catalog-mobile-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/catalog-mobile.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/home-desktop-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/home-desktop.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/home-mobile-dark-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/home-mobile-dark.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/home-mobile-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/home-mobile.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/home-user-777-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/home-user-777.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/pasabuy-320-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/pasabuy-320.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/pasabuy-desktop-questions.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/pasabuy-desktop-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/pasabuy-desktop.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/pasabuy-mobile-dark-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/pasabuy-mobile-dark.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/pasabuy-mobile-questions.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/pasabuy-mobile-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/pasabuy-mobile.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/product-desktop-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/product-desktop.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/product-mobile-viewport.png",
+      "required": true
+    },
+    {
+      "path": ".impeccable/review/seo-20261026/product-mobile.png",
+      "required": true
+    }
+  ],
+  "evidence": ".impeccable/review/seo-20261026/evidence.json",
+  "directionContract": {
+    "thesis": "Make the established storefront easier to discover and faster to load while preserving its wood canvas and Italian editorial identity.",
+    "ownWorld": "Existing Paper/Navy and Terracotta, wood texture, Fraunces/Source Sans 3, incumbent product imagery and components. Both themes persist.",
+    "story": "Understand Italian goods and Pasabuy sourcing; browse the catalog or submit a considered custom quote request. No invented business claims.",
+    "firstViewport": "Preserve incumbent Home rail/hero and Pasabuy poster band with copy below. Native href navigation retains existing client transition/focus.",
+    "form": "Code-led refinement of current K2 surfaces; no selected seed, approved comp or comp-led state applies.",
+    "finish": "Independent visual review and documentation must complete; all new delivery rasters carry source provenance."
+  },
+  "qualityBar": [
+    "Preserve owner identity and incumbent layout; no restyling to satisfy detector taste warnings",
+    "Navigation and controls remain readable and reachable at1440/777/375/320, no horizontal overflow;44px minimum actions",
+    "Native links preserve ordinary client navigation and native modified-click behavior",
+    "Pasabuy answers use existing quote/sea-air/destination confirmation contract; no fees, deadlines, reviews or coverage invented",
+    "New delivery copies preserve reviewed source appearance and detail originals; source provenance and all418 hashes/bounds pass",
+    "Consent never implied; optional prompt defers inside immersive store and resumes on exit"
+  ],
+  "detector": ".tools/seo-improvements-20261026/detector.json",
+  "detectorDisposition": "Three pre-existing interactive-store.css warnings: side border823, owner-pinned Fraunces769/1035. No new detector finding. Do not restyle existing identity.",
+  "craftFloor": "C:/Users/jerze/.agents/skills/impeccable/reference/craft-floor.md",
+  "product": "PRODUCT.md",
+  "design": "DESIGN.md",
+  "compPaths": [],
+  "buildState": null,
+  "primaryInspection": "All26 current captures opened once after final batch; reduced motion, fonts/image decode settled, top/full-page verified. First-round desktop poster was a premature capture; current desktop shot decoded. Desktop anchor alignment corrected in final batch. No more primary polishing."
+}

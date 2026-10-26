@@ -36,14 +36,14 @@ test.describe('storefront theme contract', () => {
     await expect(storefront).toBeVisible()
     await expect(page.locator('html')).not.toHaveClass(/dark/)
     await expect.poll(() => storefront.evaluate(element => getComputedStyle(element).backgroundImage))
-      .toContain('wood-bg.jpg')
+      .toContain('wood-bg.webp')
 
     const lightAnnouncement = await surfaceColors(announcement)
     const lightFooter = await surfaceColors(footer)
     expect(contrastRatio(lightAnnouncement.color, lightAnnouncement.backgroundColor)).toBeGreaterThanOrEqual(4.5)
     expect(contrastRatio(lightFooter.color, lightFooter.backgroundColor)).toBeGreaterThanOrEqual(4.5)
     if (process.env.K2_CAPTURE_THEMES === '1') {
-      await expect(page.getByRole('button', { name: /Shop the Collection/i })).toBeVisible({ timeout: 45000 })
+      await expect(page.getByRole('link', { name: /Shop the Collection/i })).toBeVisible({ timeout: 45000 })
       await page.screenshot({ path: 'test-results/storefront-theme-light.png', fullPage: true })
     }
 

@@ -1,0 +1,101 @@
+[WebServer] (node:17092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:9700) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:6968) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 375 (6.8s)
+(node:24580) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 1440 (6.0s)
+(node:9264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\search-visibility-ui.spec.js:76:1 › contact and policy pages identify their own public content (5.4s)
+(node:25544) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 tests\search-visibility-ui.spec.js:140:1 › consent expiry disables measurement in a tab that remains open (2.9s)
+
+
+  1) tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 375
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByRole('navigation', { name: 'Mobile storefront', exact: true }).getByRole('link', { name: 'Pasabuy', exact: true })
+    Expected: "/pasabuy"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" getByRole('navigation', { name: 'Mobile storefront', exact: true }).getByRole('link', { name: 'Pasabuy', exact: true }) with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Mobile storefront', exact: true }).getByRole('link', { name: 'Pasabuy', exact: true })
+
+
+      62 |     await page.getByRole('button', { name: 'Decline', exact: true }).click()
+      63 |     const nav = page.getByRole('navigation', { name: width < 1024 ? 'Mobile storefront' : 'Storefront', exact: true })
+    > 64 |     await expect(nav.getByRole('link', { name: 'Pasabuy', exact: true })).toHaveAttribute('href', '/pasabuy')
+         |                                                                           ^
+      65 |     await expect(page.getByRole('link', { name: 'Request from Italy', exact: true })).toHaveAttribute('href', '/pasabuy')
+      66 |     await expect(page.getByRole('link', { name: 'Wholesale orders', exact: true })).toHaveAttribute('href', '/trade')
+      67 |     await expect(page.getByRole('link', { name: 'Privacy & Data', exact: true })).toHaveAttribute('href', '/privacy')
+        at C:\Users\jerze\K2 JImzon\tests\search-visibility-ui.spec.js:64:75
+
+    Error Context: test-results\search-visibility-ui-publi-64573-es-client-navigation-at-375\error-context.md
+
+  2) tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 1440
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByRole('navigation', { name: 'Storefront', exact: true }).getByRole('link', { name: 'Pasabuy', exact: true })
+    Expected: "/pasabuy"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" getByRole('navigation', { name: 'Storefront', exact: true }).getByRole('link', { name: 'Pasabuy', exact: true }) with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Storefront', exact: true }).getByRole('link', { name: 'Pasabuy', exact: true })
+
+
+      62 |     await page.getByRole('button', { name: 'Decline', exact: true }).click()
+      63 |     const nav = page.getByRole('navigation', { name: width < 1024 ? 'Mobile storefront' : 'Storefront', exact: true })
+    > 64 |     await expect(nav.getByRole('link', { name: 'Pasabuy', exact: true })).toHaveAttribute('href', '/pasabuy')
+         |                                                                           ^
+      65 |     await expect(page.getByRole('link', { name: 'Request from Italy', exact: true })).toHaveAttribute('href', '/pasabuy')
+      66 |     await expect(page.getByRole('link', { name: 'Wholesale orders', exact: true })).toHaveAttribute('href', '/trade')
+      67 |     await expect(page.getByRole('link', { name: 'Privacy & Data', exact: true })).toHaveAttribute('href', '/privacy')
+        at C:\Users\jerze\K2 JImzon\tests\search-visibility-ui.spec.js:64:75
+
+    Error Context: test-results\search-visibility-ui-publi-74f1b-s-client-navigation-at-1440\error-context.md
+
+  3) tests\search-visibility-ui.spec.js:76:1 › contact and policy pages identify their own public content
+
+    Error: expect(page).toHaveTitle(expected) failed
+
+    Expected pattern: /Contact K2 Jimzon/
+    Received string:  "K2 Jimzon — Italian imports, direct to the Philippines"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+        13 × locator resolved to <html lang="en">…</html>
+           - unexpected value "K2 Jimzon — Italian imports, direct to the Philippines"
+
+
+      77 |   for (const [path, title] of [['/contact', 'Contact K2 Jimzon'], ['/privacy', 'Privacy & Data'], ['/terms', 'Terms of Service'], ['/returns', 'Returns & Replacements']]) {
+      78 |     await page.goto(path)
+    > 79 |     await expect(page).toHaveTitle(new RegExp(title))
+         |                        ^
+      80 |     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `http://localhost:5191${path}`)
+      81 |   }
+      82 | })
+        at C:\Users\jerze\K2 JImzon\tests\search-visibility-ui.spec.js:79:24
+
+    Error Context: test-results\search-visibility-ui-conta-293d0-fy-their-own-public-content\error-context.md
+
+  3 failed
+    tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 375
+    tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 1440
+    tests\search-visibility-ui.spec.js:76:1 › contact and policy pages identify their own public content
+  1 passed (27.6s)

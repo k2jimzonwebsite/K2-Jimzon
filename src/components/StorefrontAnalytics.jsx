@@ -67,7 +67,9 @@ export default function StorefrontAnalytics() {
     if (saved) close()
     else setOpen(true)
   }
-  if (!open) return null
+  // The immersive room owns its full viewport. Defer the optional prompt until
+  // the visitor leaves; consent remains unset/off and regular controls return.
+  if (!open || view === 'store') return null
   return (
     <section ref={panelRef} aria-label="Optional analytics" onKeyDown={event => { if (event.key === 'Escape') { event.preventDefault(); close() } }} className="fixed left-4 right-4 z-50 rounded-xl border border-line bg-paper p-5 text-navy sm:right-auto sm:max-w-sm" style={{ bottom: 'calc(var(--k2-mobile-nav-height, 0px) + 5rem)', maxHeight: 'calc(100dvh - var(--k2-mobile-nav-height, 0px) - 6rem)', overflowY: 'auto' }}>
       <button type="button" aria-label="Close analytics choices" onClick={close} className="absolute flex items-center justify-center rounded-xl border border-line text-navy hover:border-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy" style={{ top: 8, right: 8, width: 44, height: 44 }}><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m18 6-12 12M6 6l12 12" /></svg></button>

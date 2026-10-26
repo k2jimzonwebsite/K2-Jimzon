@@ -18,7 +18,7 @@ function PasabuyBanner() {
             Tell us what you need. We check availability in Italian stores and send you a clear quote to approve before we buy.
           </p>
         </div>
-        <RedButton onClick={() => go('pasabuy')} className="relative mt-7 px-7 md:mt-0">
+        <RedButton href="/pasabuy" onClick={() => go('pasabuy')} className="relative mt-7 px-7 md:mt-0">
           Send a Pasabuy request <ArrowIcon size={15} />
         </RedButton>
       </div>
@@ -41,7 +41,7 @@ function WholesaleStrip() {
             Order case packs, whole beans, or pantry staples — pricing and delivery quoted per order after staff review.
           </p>
         </div>
-        <GhostButton onClick={() => go('wholesale')} className="border-blue/30 text-blue">
+        <GhostButton href="/trade" onClick={() => go('wholesale')} className="border-blue/30 text-blue">
           Inquire about wholesale <ArrowIcon size={15} />
         </GhostButton>
       </div>

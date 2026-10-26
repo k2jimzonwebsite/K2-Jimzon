@@ -23,6 +23,25 @@ function compact(record) {
   )
 }
 
+/** Public facts already shown in the storefront footer and returns page. */
+export function buildOrganizationStructuredData({ origin }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'OnlineStore',
+    '@id': new URL('/#organization', origin).href,
+    name: 'K2 Jimzon',
+    url: new URL('/', origin).href,
+    logo: new URL('/icon-512.png', origin).href,
+    telephone: '+639318649654',
+    email: 'k2jimzonwebsite@gmail.com',
+    sameAs: ['https://www.facebook.com/FamilyPinItaly', 'https://www.instagram.com/kaikiko8/'],
+    hasMerchantReturnPolicy: {
+      '@type': 'MerchantReturnPolicy',
+      merchantReturnLink: new URL('/returns', origin).href,
+    },
+  }
+}
+
 /**
  * Availability, mapped from the same stock projection the shelf reads.
  *

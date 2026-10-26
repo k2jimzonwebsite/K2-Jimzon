@@ -22,10 +22,10 @@ const STEPS = [
   },
   {
     image: 'plane',
-    title: 'Scheduled monthly cargo flights to Manila',
+    title: 'Freight agreed before purchase',
     coords: 'TRANSIT · MXP ➔ MNL (10,400 KM)',
-    badge: 'Temperature-Safe Freight',
-    body: 'Catalog goods and approved Pasabuy custom items are packed in protective thermal wrap and transported via scheduled air cargo from Milan Malpensa directly to our Manila operations hub.',
+    badge: 'Quoted sea or air option',
+    body: 'For Pasabuy requests, we check availability in Italy and quote the product, the agreed sea or air shipping option, and timing before purchase. Review and approve your quote before we buy.',
   },
   {
     image: 'warehouse',

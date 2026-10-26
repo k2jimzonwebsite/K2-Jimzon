@@ -1,0 +1,38 @@
+[WebServer] (node:20712) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 48 tests using 1 worker
+
+(node:25752) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 9:10:12 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 320, light (3.2s)
+[WebServer] 9:10:14 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 320, dark (1.2s)
+[WebServer] 9:10:15 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 375, light (1.4s)
+[WebServer] 9:10:16 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 375, dark (1.2s)
+[WebServer] 9:10:18 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 430, light (1.3s)
+[WebServer] 9:10:19 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 430, dark (1.4s)
+[WebServer] 9:10:21 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 768, light (1.8s)
+[WebServer] 9:10:22 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  8 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 768, dark (1.5s)
+[WebServer] 9:10:24 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  9 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 1024, light (1.6s)
+[WebServer] 9:10:26 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 1024, dark (1.4s)
+[WebServer] 9:10:27 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 11 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 1440, light (1.5s)
+[WebServer] 9:10:29 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 1440, dark (1.4s)
+  ok 13 tests\brand-logo.spec.js:43:1 › aircraft settles and navigation does not replay the arrival (3.0s)
+  ok 14 tests\brand-logo.spec.js:60:1 › failed artwork keeps a readable usable home control (638ms)
+  ok 15 tests\brand-logo.spec.js:69:1 › owner artwork delivery stays below 200 kB (83ms)
+  ok 16 tests\brand-logo.spec.js:75:1 › browser and install icons decode at their declared sizes (505ms)
+  ok 17 tests\buyer.spec.js:4:3 › Pasabuy and wholesale truthfulness › Pasabuy validates contact and explains attachment limitation (1.9s)

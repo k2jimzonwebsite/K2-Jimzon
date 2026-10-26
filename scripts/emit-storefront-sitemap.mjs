@@ -24,6 +24,7 @@ import { generateSitemap, K2_STOREFRONT_ORIGIN } from './map024-evidence/generat
 import { generateProductPages } from './map024-evidence/generate-product-pages.mjs'
 import { generateMarketingPages } from './map024-evidence/generate-marketing-pages.mjs'
 import { STOREFRONT_SEO_PAGES } from '../src/lib/storefrontSeoPages.js'
+import { buildOrganizationStructuredData } from '../src/lib/productStructuredData.js'
 import { productUrlsAllowedInSitemap, PRELAUNCH_PRODUCT_NOINDEX } from './prelaunch-indexing.mjs'
 
 const rootDir = fileURLToPath(new URL('..', import.meta.url))
@@ -68,7 +69,11 @@ export function emitSitemap({ target = resolveTarget(), origin = K2_STOREFRONT_O
   const products = productUrlsAllowedInSitemap() ? allProducts : []
   const xml = generateSitemap({ products, origin })
   fs.writeFileSync(path.join(distDir, 'sitemap.xml'), xml, 'utf8')
+  const identity = JSON.stringify(buildOrganizationStructuredData({ origin })).replaceAll('<', '\\u003c')
   const template = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8')
+    .replace(/<script\s+type="application\/ld\+json"\s+data-k2-organization-jsonld>[\s\S]*?<\/script>/g, '')
+    .replace('</head>', `<script type="application/ld+json" data-k2-organization-jsonld>${identity}</script>\n</head>`)
+  fs.writeFileSync(path.join(distDir, 'index.html'), template, 'utf8')
   const marketingPages = generateMarketingPages({ template, origin })
   for (const [segment, html] of marketingPages) {
     const directory = path.join(distDir, segment)
@@ -87,7 +92,7 @@ export function emitSitemap({ target = resolveTarget(), origin = K2_STOREFRONT_O
 
   // Count what actually made it in, so the build log states the truth rather
   // than implying the whole catalog was published.
-  const productUrls = (xml.match(/<loc>/g) || []).length - Object.keys(STOREFRONT_SEO_PAGES).length
+  const productUrls = (xml.match(/<loc>/g) || []).length - Object.values(STOREFRONT_SEO_PAGES).filter(page => page.sitemap !== false).length
   return { written: true, products: products.length, productUrls, productPages: pages.size, marketingPages: marketingPages.size }
 }
 
@@ -116,5 +121,5 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
 
 function productUrlLabel(result) {
   const count = result.productUrls
-  return `${Object.keys(STOREFRONT_SEO_PAGES).length} stable routes and ${count} product ${count === 1 ? 'URL' : 'URLs'}`
+  return `${Object.values(STOREFRONT_SEO_PAGES).filter(page => page.sitemap !== false).length} stable routes and ${count} product ${count === 1 ? 'URL' : 'URLs'}`
 }

@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import * as motion from 'motion/react-m'
 import { useReducedMotion } from 'motion/react'
 import { useStore } from '../../context/StoreContext'
-import { RedButton, GhostButton, Kicker } from '../ui/bits'
+import { ActionElement, RedButton, GhostButton, Kicker } from '../ui/bits'
 import { ArrowIcon, CheckIcon, PlaneIcon, ShieldIcon, GridIcon, ChatIcon } from '../ui/icons'
 import FlightMap from './FlightMap'
 import { peso } from '../../lib/formatMoney'
 import { groupFamilyResults, familyPriceRange } from '../../lib/productFamilyPresentation'
 import './Hero.css'
+import { recoverOriginalImage, storefrontImage } from '../../lib/storefrontMedia'
 
 const reveal = {
   hidden: { opacity: 0, transform: 'translateY(10px)' },
@@ -60,10 +61,10 @@ function Hero() {
             Shop Italian favorites from our Manila stock, or request a specific item through Pasabuy.
           </motion.p>
           <motion.div variants={reveal} className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <RedButton onClick={() => go('catalog')} className="px-7 py-3.5 text-base font-bold shadow-sm">
+            <RedButton href="/catalog" onClick={() => go('catalog')} className="px-7 py-3.5 text-base font-bold shadow-sm">
               Shop the Collection <ArrowIcon size={16} />
             </RedButton>
-            <GhostButton onClick={() => go('pasabuy')} className="px-7 py-3.5 text-base font-bold">
+            <GhostButton href="/pasabuy" onClick={() => go('pasabuy')} className="px-7 py-3.5 text-base font-bold">
               Request from Italy
             </GhostButton>
           </motion.div>
@@ -83,11 +84,11 @@ function Hero() {
                 const range = multiple ? familyPriceRange(product, listedProducts, isWholesale) : null
                 const priceLabel = multiple ? range ? `${range.min === range.max ? '' : 'From '}${peso(range.min)}` : 'Choose an option' : peso(isWholesale ? product.wholesale_price : product.srp)
                 return (
-                <button key={product.sku} className="hero-collection-item hover:border-crimson hover:bg-shell/50" onClick={() => openProduct(product.sku)}>
-                  <img className="hero-collection-image" src={product.img || '/images/placeholder.svg'} alt="" onError={event => { if (!event.currentTarget.src.endsWith('/images/placeholder.svg')) event.currentTarget.src = '/images/placeholder.svg' }} />
+                <ActionElement href={`/product/${encodeURIComponent(product.sku)}`} key={product.sku} className="hero-collection-item hover:border-crimson hover:bg-shell/50" onClick={() => openProduct(product.sku)}>
+                  <img className="hero-collection-image" src={storefrontImage(product.img, 'small') || '/images/placeholder.svg'} alt="" onError={event => { if (!recoverOriginalImage(event, product.img) && !event.currentTarget.src.endsWith('/images/placeholder.svg')) event.currentTarget.src = '/images/placeholder.svg' }} />
                   <span className="hero-collection-name">{multiple ? product.family.name : product.name}</span>
                   <span className="mt-auto flex w-full items-center justify-between gap-1 pt-2 text-sm font-bold tabular-nums">{priceLabel} <ArrowIcon size={14} /></span>
-                </button>
+                </ActionElement>
               )})}
               {(loading || !listedProducts.length) && <p className="hero-collection-empty">{loading ? 'Loading the collection…' : 'Explore the collection or request a favorite from Italy.'}</p>}
             </div>

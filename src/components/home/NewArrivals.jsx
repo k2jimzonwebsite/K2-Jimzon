@@ -7,6 +7,7 @@ import ProductVisual from '../ProductVisual'
 import { ArrowIcon } from '../ui/icons'
 import { peso } from '../../lib/formatMoney'
 import { groupFamilyResults, familyPriceRange } from '../../lib/productFamilyPresentation'
+import { ActionElement } from '../ui/bits'
 
 export default function NewArrivals() {
   const { listedProducts: products, loading, catalogStale, catalogFailed, openProduct, isWholesale, go } = useStore()
@@ -34,12 +35,12 @@ export default function NewArrivals() {
             </p>
           </div>
 
-          <button
+          <ActionElement href="/catalog"
             onClick={() => go('catalog', { focusSelector: '#catalog-heading' })}
             className="hidden min-h-11 items-center gap-2 text-sm font-bold text-navy transition-colors hover:text-crimson sm:flex cursor-pointer"
           >
             Explore all arrivals <ArrowIcon size={15} />
-          </button>
+          </ActionElement>
         </div>
 
           {arrivals.length === 0 ? (
@@ -93,7 +94,7 @@ export default function NewArrivals() {
                   >
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] p-1">
-                        <ProductVisual product={item} className="h-full w-full object-contain" pad="p-0" />
+                        <ProductVisual product={item} delivery="small" className="h-full w-full object-contain" pad="p-0" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-bold uppercase tracking-wider text-navy-faint truncate">
@@ -112,7 +113,7 @@ export default function NewArrivals() {
                       </div>
                     </div>
 
-                    <button
+                    <ActionElement href={`/product/${encodeURIComponent(item.sku)}`}
                       onClick={(e) => {
                         e.stopPropagation()
                         openProduct(item.sku)
@@ -121,7 +122,7 @@ export default function NewArrivals() {
                       aria-label={`View ${item.name} details`}
                     >
                       <ArrowIcon size={14} />
-                    </button>
+                    </ActionElement>
                   </div>
                 )
               })}

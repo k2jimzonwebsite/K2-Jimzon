@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 test.describe('storefront interaction language', () => {
   test('route transitions focus the destination after its content renders', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
-    await page.getByRole('button', { name: 'Explore all arrivals' }).click()
+    await page.getByRole('link', { name: 'Explore all arrivals' }).click()
     await expect(page.locator('#catalog-heading')).toBeVisible({ timeout: 60000 })
     await expect(page.locator('#catalog-heading')).toBeFocused()
 

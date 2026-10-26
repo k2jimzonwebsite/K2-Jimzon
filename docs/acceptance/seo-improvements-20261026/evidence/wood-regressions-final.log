@@ -1,0 +1,18 @@
+[WebServer] (node:9780) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:14780) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:564) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\smoke.spec.js:37:3 › launch-critical storefront › light mode preserves the luxury wood canvas without leaking into dark mode (2.8s)
+  ok 2 tests\smoke.spec.js:242:3 › MAP-027 virtual store acceptance › keeps the reduced-motion room self-contained and readable in a dark site theme (983ms)
+[WebServer] 9:14:56 PM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 9:14:56 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 9:14:56 PM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok 3 tests\smoke.spec.js:365:3 › MAP-027 virtual store acceptance › renders a non-blank WebGL aisle with usable shelf navigation (24.3s)
+  ok 4 tests\storefront-theme.spec.js:28:3 › storefront theme contract › saved theme is applied before render and persists after toggling (1.6s)
+
+  4 passed (33.5s)

@@ -1,6 +1,6 @@
 26 October2026 / owner-requested follow-up SEO audit: sound111URL foundation, remaining measured gaps; scope English/PH/Italy imports/Pasabuy, read-only provider/site inspection. Master Action Plan gate: existing product goal and MAP-024 own all accepted work; no duplicate SEO system, new backlog, Admin/data write or implied release authorization. CI40315394577 is now failed, not pending; focused consent/store qualification under existing IDEA-20261026-03 precedes the next release. Evidence: docs/acceptance/SEO_AUDIT_20261026.md/json.
 
-26 October2026 / IDEA-20261026-05 — Crawlable public navigation. Decision register: ACCEPT/MERGE into MAP-024; real public href destinations preserving client/native behavior and private gates. Current task is audit only. Dependencies, exact next action and recovery live only in MAP-024.
+26 October2026 / IDEA-20261026-05 — Crawlable public navigation. Decision register: ACCEPT/MERGE into MAP-024; real public href destinations preserving client/native behavior and private gates. Owner requested implementation; source correction is locally qualified, not deployed. Dependencies, exact next action and recovery live only in MAP-024.
 
 26 October2026 / IDEA-20261026-06 — Mobile SEO performance and stability. Decision register: ACCEPT/MERGE into MAP-024; observed Home72/LCP7.1s and Pasabuy55/LCP8.4s/CLS0.399; approved image derivatives, early content/consent/poster and stable font/layout qualification. Preserve identity and privacy. Dependencies, exact next action and recovery live only in MAP-024.
 

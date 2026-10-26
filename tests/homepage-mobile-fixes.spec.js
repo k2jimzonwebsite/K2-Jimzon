@@ -19,7 +19,7 @@ for (const width of [320, 375, 430, 768, 1440]) for (const theme of ['light', 'd
     const hero = page.locator('section').filter({ has: page.locator('h1') }).first()
     await expect(hero.locator('.hero-collection-item')).toHaveCount(3, { timeout: 60000 })
     await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), theme === 'dark')
-    const cta = hero.getByRole('button', { name: 'Shop the Collection', exact: true })
+    const cta = hero.getByRole('link', { name: 'Shop the Collection', exact: true })
     if (width <= 430) {
       const nav = await page.getByRole('navigation', { name: 'Mobile storefront' }).boundingBox()
       const action = await cta.boundingBox()
@@ -79,12 +79,12 @@ test('mobile homepage preserves layout with 200% text and ordinary motion', asyn
   await page.getByRole('button', { name: 'Close analytics choices', exact: true }).click()
   await expect(page.getByRole('region', { name: 'Optional analytics' })).toHaveCount(0)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
-  await expect(page.getByRole('button', { name: 'Shop the Collection', exact: true })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Shop the Collection', exact: true })).toBeVisible()
   const stops = page.getByRole('group', { name: 'Sourcing route stops' })
   expect(await stops.evaluate(group => [...group.querySelectorAll('button')].every(button => button.scrollWidth <= button.clientWidth))).toBe(true)
   const routeTitle = page.locator('p').filter({ hasText: /^Milano to Manila$/ })
   expect(await routeTitle.evaluate(e => e.scrollWidth <= e.clientWidth)).toBe(true)
-  await page.getByRole('main').getByRole('button', { name: 'Request from Italy', exact: true }).click()
+  await page.getByRole('main').getByRole('link', { name: 'Request from Italy', exact: true }).click()
   await expect(page).toHaveURL(/\/pasabuy$/)
 })
 

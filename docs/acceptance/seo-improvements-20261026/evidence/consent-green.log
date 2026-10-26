@@ -1,0 +1,73 @@
+[WebServer] (node:20144) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:13948) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 15 tests using 1 worker
+
+(node:25484) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 8:27:42 PM [vite] (client) [console.error] TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/Footer.jsx
+[WebServer]
+[WebServer] The above error occurred in one of your React components.
+[WebServer]
+[WebServer] React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+[WebServer]
+[WebServer] 8:27:42 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "react-boundary", pathname: "/pasabuy" } TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/Footer.jsx
+  ok  1 tests\search-visibility-ui.spec.js:19:1 › a failed Footer module cannot replace the Pasabuy page (2.0s)
+[WebServer] 8:27:43 PM [vite] (client) [console.error] TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/StorefrontAnalytics.jsx
+[WebServer]
+[WebServer] The above error occurred in one of your React components.
+[WebServer]
+[WebServer] React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+[WebServer]
+[WebServer] 8:27:43 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "react-boundary", pathname: "/catalog" } TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/StorefrontAnalytics.jsx
+  ok  2 tests\search-visibility-ui.spec.js:27:1 › a failed optional Analytics module cannot replace the shopping page (1.2s)
+  ok  3 tests\search-visibility-ui.spec.js:35:1 › product names provide real links and preserve client navigation (1.7s)
+[WebServer] 8:27:47 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\search-visibility-ui.spec.js:45:1 › the immersive store defers the optional prompt without granting consent (2.5s)
+  ok  5 tests\search-visibility-ui.spec.js:58:1 › analytics requires consent, strips URLs, avoids duplicate/private views and can be withdrawn (4.4s)
+  ok  6 tests\search-visibility-ui.spec.js:90:1 › browser privacy signals refuse analytics even if a previous visit allowed it (6.3s)
+  ok  7 tests\search-visibility-ui.spec.js:103:1 › keyboard reopening focuses the consent choices and Escape restores the opener (7.4s)
+  x   8 tests\search-visibility-ui.spec.js:114:1 › consent expiry disables measurement in a tab that remains open (7.0s)
+(node:27512) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  9 tests\search-visibility-ui.spec.js:125:1 › enlarged text keeps consent reachable and closing does not grant analytics (2.9s)
+[WebServer] 8:28:36 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\search-visibility-ui.spec.js:146:3 › consent controls remain readable and clear navigation: mobile-320 (4.1s)
+[WebServer] 8:28:40 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 11 tests\search-visibility-ui.spec.js:146:3 › consent controls remain readable and clear navigation: mobile (2.0s)
+[WebServer] 8:28:42 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\search-visibility-ui.spec.js:146:3 › consent controls remain readable and clear navigation: mobile-dark (1.7s)
+[WebServer] 8:28:44 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\search-visibility-ui.spec.js:146:3 › consent controls remain readable and clear navigation: desktop (2.3s)
+[WebServer] 8:28:46 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 14 tests\search-visibility-ui.spec.js:146:3 › consent controls remain readable and clear navigation: desktop-dark (1.4s)
+[WebServer] 8:28:47 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 15 tests\search-visibility-ui.spec.js:146:3 › consent controls remain readable and clear navigation: user-777 (1.7s)
+
+
+  1) tests\search-visibility-ui.spec.js:114:1 › consent expiry disables measurement in a tab that remains open
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      118 |   await page.route('https://www.googletagmanager.com/gtag/js?*', route => route.fulfill({ contentType: 'application/javascript', body: '/* isolated vendor */' }))
+      119 |   await page.goto('/catalog')
+    > 120 |   await expect.poll(() => page.evaluate(() => Boolean(window.gtag))).toBe(true)
+          |                                                                      ^
+      121 |   await expect(page.getByRole('region', { name: 'Optional analytics' })).toBeVisible({ timeout: 7000 })
+      122 |   expect(await page.evaluate(() => window['ga-disable-G-4JQ3D0GDB9'])).toBe(true)
+      123 | })
+        at C:\Users\jerze\K2 JImzon\tests\search-visibility-ui.spec.js:120:70
+
+    Error Context: test-results\search-visibility-ui-conse-13f40--in-a-tab-that-remains-open\error-context.md
+
+  1 failed
+    tests\search-visibility-ui.spec.js:114:1 › consent expiry disables measurement in a tab that remains open
+  14 passed (1.3m)

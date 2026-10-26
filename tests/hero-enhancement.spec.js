@@ -27,8 +27,8 @@ test('additive hero preserves the original content and supports keyboard shoppin
   for (const text of ['Delivered to Manila.', 'Milano to Manila', 'Genuine catalog', 'Personal confirmation']) {
     await expect(hero.getByText(text, { exact: false }).first()).toBeVisible()
   }
-  await expect(hero.getByRole('button', { name: 'Shop the Collection' })).toBeVisible()
-  await expect(hero.getByRole('button', { name: 'Request from Italy' })).toBeVisible()
+  await expect(hero.getByRole('link', { name: 'Shop the Collection' })).toBeVisible()
+  await expect(hero.getByRole('link', { name: 'Request from Italy' })).toBeVisible()
   const items = hero.locator('.hero-collection-item')
   await expect(items).toHaveCount(3)
   await expect(items.first()).toContainText('₱550')
@@ -90,9 +90,9 @@ test('loading and empty collection keep both original shopping routes available'
   await expect(page.locator('.hero-collection')).toHaveAttribute('aria-busy', 'false')
   await expect(page.locator('.hero-collection-item')).toHaveCount(0)
   await expect(page.getByText('Explore the collection or request a favorite from Italy.', { exact: true })).toBeVisible()
-  await page.getByRole('main').getByRole('button', { name: 'Request from Italy', exact: true }).click()
+  await page.getByRole('main').getByRole('link', { name: 'Request from Italy', exact: true }).click()
   await expect(page).toHaveURL(/\/pasabuy$/)
   await page.goto('/')
-  await page.getByRole('button', { name: 'Shop the Collection', exact: true }).click()
+  await page.getByRole('link', { name: 'Shop the Collection', exact: true }).click()
   await expect(page).toHaveURL(/\/catalog$/)
 })

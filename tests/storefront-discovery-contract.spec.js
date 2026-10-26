@@ -190,8 +190,9 @@ test('optional brand fonts cannot block Storefront bootstrap', () => {
   const main = read('src/main.jsx')
 
   expect(html).not.toMatch(/<link[^>]+rel="stylesheet"[^>]+fonts\.googleapis\.com/)
-  expect(main).toContain('requestIdleCallback')
-  expect(main).toContain('fonts.googleapis.com/css2?family=Fraunces')
+  expect(html).toContain('href="/fonts/brand.css"')
+  expect(main).not.toContain('fonts.googleapis.com')
+  expect(read('public/fonts/brand.css')).toContain('font-display: optional')
 })
 
 test('the cart overlay is loaded only when Storefront chrome requests it', () => {

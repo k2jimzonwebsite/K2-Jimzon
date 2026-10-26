@@ -31,7 +31,7 @@ export function generateMarketingPages({ template, origin = K2_STOREFRONT_ORIGIN
   const pages = new Map()
   for (const [key, page] of Object.entries(STOREFRONT_SEO_PAGES)) {
     if (key === 'home') continue
-    const loc = `${origin}${page.path}`
+    const loc = `${origin}${page.canonicalPath || page.path}`
     let html = template
     html = replaceRequired(html, /<title>[\s\S]*?<\/title>/iu, `<title>${escapeHtml(page.title)}</title>`, 'title')
     html = replaceRequired(html, metaPattern('name', 'description'), meta('name', 'description', page.description), 'description')
@@ -45,6 +45,7 @@ export function generateMarketingPages({ template, origin = K2_STOREFRONT_ORIGIN
     ]) {
       html = replaceRequired(html, metaPattern(attribute, name), meta(attribute, name, content), name)
     }
+    if (page.preloadImage) html = replaceRequired(html, /<\/head>/iu, `<link rel="preload" as="image" href="${escapeHtml(page.preloadImage)}" fetchpriority="high" data-k2-page-image />\n</head>`, '</head>')
     pages.set(page.path.slice(1), html)
   }
   return pages

@@ -1,0 +1,41 @@
+[WebServer] (node:16884) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:8456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\search-visibility-ui.spec.js:45:1 › the immersive store defers the optional prompt without granting consent (7.7s)
+
+
+  1) tests\search-visibility-ui.spec.js:45:1 › the immersive store defers the optional prompt without granting consent
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('region', { name: 'Optional analytics' })
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('region', { name: 'Optional analytics' }) with timeout 5000ms
+      - waiting for getByRole('region', { name: 'Optional analytics' })
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      47 |   await page.goto('/store')
+      48 |   await expect(page.getByRole('main', { name: 'K2 virtual store' })).toBeVisible()
+    > 49 |   await expect(page.getByRole('region', { name: 'Optional analytics' })).toHaveCount(0)
+         |                                                                          ^
+      50 |   expect(await page.locator('script[src*="googletagmanager.com"]').count()).toBe(0)
+      51 |   expect(await page.evaluate(() => localStorage.getItem('k2-analytics-consent-v1'))).toBeNull()
+      52 |   await page.getByRole('button', { name: 'Leave the store', exact: true }).click()
+        at C:\Users\jerze\K2 JImzon\tests\search-visibility-ui.spec.js:49:74
+
+    Error Context: test-results\search-visibility-ui-the-i-b10ab-pt-without-granting-consent\error-context.md
+
+  1 failed
+    tests\search-visibility-ui.spec.js:45:1 › the immersive store defers the optional prompt without granting consent

@@ -1,0 +1,515 @@
+{
+  "at": "2026-10-26T13:29:27.999Z",
+  "owner": "MAP-024 / IDEA-20261026-03,05–09",
+  "state": "locally qualified; feature PR preparation, not deployed",
+  "baseline": "1799e23d",
+  "branch": "codex/seo-audit-20261026",
+  "scope": {
+    "sitemap": 111,
+    "indexableProducts": 107,
+    "heldProducts": 9,
+    "projectionProducts": 116,
+    "brands": 116,
+    "recordedWeights": 49,
+    "countryOfOrigin": 0,
+    "mediaUniqueSources": 209,
+    "deliveryImages": 418,
+    "woodBytes": [
+      543116,
+      25100
+    ],
+    "landingGzipKB": {
+      "js": 146.84,
+      "css": 29.99
+    },
+    "separateAdminApplicationKB": 227.44
+  },
+  "verification": {
+    "seoBrowser": "22/22; alignment2/2 final follow-up",
+    "contracts": "137/137 affected",
+    "storeOrientation": "12/12",
+    "legacyStorefront": "44/48 then4/4 filename-only corrections =48/48 reconciled; initial obsolete-selector run stopped, retained",
+    "buildOutput": "3/3",
+    "development": "exit0 once after final code correction",
+    "storefrontBuild": "exit0, target/budgets/secrets",
+    "adminBuild": "exit0, target/budget/secrets",
+    "k2": "identity exact;readiness8verified2owner3connector0failed after2timeouts;read-only projection refresh and anonymous brand relation HTTP200",
+    "external": "Google code input6valid;Schema.org code input0errors0warnings3items;see external-validation.json",
+    "visual": "Fresh independent fallback finish-review contract: ship for all26 local captures and sampled source; see finish-review.md",
+    "fullRelease": "not run for this preparation;required once immediately before separately owner-requested production promotion",
+    "documentation": "Independent documenter retry completed after initial usage interruption; ordinary extension preserves PRODUCT and design sidecar; two new-note wording corrections resolved. See design-documentation.md."
+  },
+  "limitations": [
+    "Initial body remains client-rendered; shared initial head and rendered hrefs improved, not an SSR claim",
+    "No new mobile PSI or field-CWV gain verified; repeat actual-host lab after promotion and observe field data",
+    "No new indexed-count,ranking,traffic,conversion or sales claim",
+    "No fees,return windows,shipping coverage,timing,ratings,GTIN or country invented",
+    "Google initial offer optional availability/shipping/return notices retained;runtime availability uses live stock;global return policy link validates",
+    "Search Console outcome observation and pre-existing OAuth acceptance remain MAP-024;do not repeat prior accepted index requests"
+  ],
+  "recovery": "Scoped feature source revert. Originals remain unchanged;unknown/new media URLs or failed derivatives fall back to original. No DB/provider rollback or catalog republish. Existing prior production artifacts remain live.",
+  "evidence": [
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/admin-build.log",
+      "bytes": 5674,
+      "sha256": "a6291179786cc8b60759f689c164359a2b0e2849bf43241fb37e466f3a416f34",
+      "originalCapturedSha256": "22e825e48eac9e63b0b1717c7b8a427bc37c6129d026979fb29b1687738233a9",
+      "originalCapturedBytes": 5747
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/brand-red.log",
+      "bytes": 1792,
+      "sha256": "dfe2d7c577f1404a9b0621c9e4ba21e21d57ed1e201416115182d29d6ac3fbf1",
+      "originalCapturedSha256": "54767685f024809901a3f9cc431e8dbbce9294ae368192935b7de7b3a049902e",
+      "originalCapturedBytes": 1822
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/built-seo-verified.json",
+      "bytes": 158,
+      "sha256": "b0b125d0640803f767900a0c4be59bb7d7ec7ec2cf0c053dcf8f1d1b2e38ac62",
+      "originalCapturedSha256": "b0b125d0640803f767900a0c4be59bb7d7ec7ec2cf0c053dcf8f1d1b2e38ac62",
+      "originalCapturedBytes": 158
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/catalog-refresh.log",
+      "bytes": 447,
+      "sha256": "a9bb0c00311999e0c681f0ab429fdf39403797c0b82c89b660efad3857b3ae8c",
+      "originalCapturedSha256": "06435a47e98ff06dff8bd3174797f4792630a16d76dbcd8749a663b8b234a0d7",
+      "originalCapturedBytes": 458
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/consent-green.log",
+      "bytes": 6997,
+      "sha256": "0d77b079561cf00c3de1fa71cd75a83460f6eafd056ac22fcec41e7d8e8c6952",
+      "originalCapturedSha256": "6a9efa7afcf5982f4c789d749e6c2beaf700fbd17169b70a411ca87ed6117437",
+      "originalCapturedBytes": 7078
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/consent-red.log",
+      "bytes": 2203,
+      "sha256": "d1e479999db7166fe9b0d044d09f6ad01f36f010385a4d5ae2d74f25efcc04f8",
+      "originalCapturedSha256": "62e5d77571bada8614013e763ff7a905a38769eb367cdd2a2b16631b085cb207",
+      "originalCapturedBytes": 2246
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/contracts.log",
+      "bytes": 17380,
+      "sha256": "aaa436c7f61a2289feabdf64ea32b743ad810d8b82c88b45225fe2045e5885b4",
+      "originalCapturedSha256": "54a0359ddb4b2b8e18b916a39f6df7b43e12bd3d940041af29cc9928a347aab1",
+      "originalCapturedBytes": 17524
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/delivery-red.log",
+      "bytes": 2045,
+      "sha256": "218af9526c490606705292cf655939d03e43f3e1d33f49853c73d90f902d5cb0",
+      "originalCapturedSha256": "c5d47c2811ec2e80412412db93ec58b056ddd39df73c14bd05ffdf94bc8607ee",
+      "originalCapturedBytes": 2082
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/detector.json",
+      "bytes": 1490,
+      "sha256": "5e2162746a42c7ec0d1b57dc0b388aee5b324337bb229e42a64358611db1f285",
+      "originalCapturedSha256": "5e2162746a42c7ec0d1b57dc0b388aee5b324337bb229e42a64358611db1f285",
+      "originalCapturedBytes": 1490
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/development.log",
+      "bytes": 18524,
+      "sha256": "7a454ffef2c39d72176b1f829d2c7dd5009f2077e54e294a20a37397435aee5c",
+      "originalCapturedSha256": "bf4a88486bb9211d0211696dcb811836954b0c352c536bc48f523991526b7bfb",
+      "originalCapturedBytes": 18811
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/font-receipt.json",
+      "bytes": 3351,
+      "sha256": "4a7087fb03e40e994a03af074378f3ddd6569457bfd11473f7bdd467d93a4f51",
+      "originalCapturedSha256": "4a7087fb03e40e994a03af074378f3ddd6569457bfd11473f7bdd467d93a4f51",
+      "originalCapturedBytes": 3351
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/identity-red.log",
+      "bytes": 1984,
+      "sha256": "632e17d39797608425871efebafc71239daf686128d6d434d6806ffc619b96f5",
+      "originalCapturedSha256": "2ce3d62e435a273824c4d141d5d2cda04753094175025f1922cc3fa9add80a00",
+      "originalCapturedBytes": 2027
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/media-receipt.json",
+      "bytes": 179773,
+      "sha256": "76fc977ea02d508b6a0d59f4bdf30824f7fbf555a49c6199c37e5eb30439d2ef",
+      "originalCapturedSha256": "76fc977ea02d508b6a0d59f4bdf30824f7fbf555a49c6199c37e5eb30439d2ef",
+      "originalCapturedBytes": 179773
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/media-red.log",
+      "bytes": 2211,
+      "sha256": "77d5f37c312500c709fba4033d80cc0dd0a040b547f91e9ead2d8dad9efbe81c",
+      "originalCapturedSha256": "0d010c704347e65abfa6675b0c979cac2fab5fd36ad3cc31f2a73a144f5b6434",
+      "originalCapturedBytes": 2254
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/media-verified.json",
+      "bytes": 510,
+      "sha256": "3e1840e7a681647d50d12f245784b9a438602307e869316ccba15cd4e32dd5d9",
+      "originalCapturedSha256": "3e1840e7a681647d50d12f245784b9a438602307e869316ccba15cd4e32dd5d9",
+      "originalCapturedBytes": 510
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/navigation-alignment-final.log",
+      "bytes": 871,
+      "sha256": "df7a74049b795c3e1f90a8981693ba5a54d0dc1b18cfbc28b1b311f195bd7815",
+      "originalCapturedSha256": "d66c3cd42625e86e09d2af5cf7a774544d04f9fd772e298b364cc4944ba64fd0",
+      "originalCapturedBytes": 884
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/navigation-green.log",
+      "bytes": 6010,
+      "sha256": "caaccf9ca7d1f29784b7940ac1cea6a174624b68e49afd669c6d1314eed0e3d3",
+      "originalCapturedSha256": "11f96c43b7ba6c1887c5a25ff10f26705cc9b845e2c5e93048cfa7b146b1ae41",
+      "originalCapturedBytes": 6066
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/navigation-metadata-red.log",
+      "bytes": 6619,
+      "sha256": "63a5cb8d384aa768569458391d9ca76385fb35b345d81b20f75c75332567786e",
+      "originalCapturedSha256": "9c79db55b5ea7c3190932fc44fae6ca9455314996800493380b9188af5a515be",
+      "originalCapturedBytes": 6726
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/navigation-regressions-final.log",
+      "bytes": 22046,
+      "sha256": "5c6de6837aeaad32c677407c2aec652a796273097f8a503a73e1a5a7bd2a49dd",
+      "originalCapturedSha256": "30c25f78f4784e509165d2faeff20615c56cfd05500c8cf19b86e448639ae7b9",
+      "originalCapturedBytes": 22276
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/navigation-regressions.log",
+      "bytes": 5251,
+      "sha256": "6bbff9043f8a058ffda872e251032ef58b7353bcc3148d0249cfe8c4c7229c20",
+      "originalCapturedSha256": "c7de01bca3e59e51de255fccb5bc7d9b57d3877fd2cdd44b78d04cf2d541a108",
+      "originalCapturedBytes": 5289
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/public-brand-read.json",
+      "bytes": 180,
+      "sha256": "5b7a8ef37334b72a4ff787c3493674e8d989f7b15f3e7f1cb8e1045acb5ad188",
+      "originalCapturedSha256": "5b7a8ef37334b72a4ff787c3493674e8d989f7b15f3e7f1cb8e1045acb5ad188",
+      "originalCapturedBytes": 180
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/readiness-final.log",
+      "bytes": 2121,
+      "sha256": "c836985b19f01118d741d19cb55ef20a57a8e9cd7dfdd8c1e75dd3a82b94ce8a",
+      "originalCapturedSha256": "3f08c3cd839c0828647f74f8304f22ae5fd884a687ef4083df41b839e7380023",
+      "originalCapturedBytes": 2146
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/readiness-retry.log",
+      "bytes": 562,
+      "sha256": "24f8681e8f83bf4946d25ca2eebfb33050dec7c95e7a313f3299aad2bbf6805d",
+      "originalCapturedSha256": "40610ec30c3b9e64c7e123a591aad7da75468e8bfef6d42d84a2cc934b4589d9",
+      "originalCapturedBytes": 576
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/readiness.log",
+      "bytes": 339,
+      "sha256": "50caed0b8c214e7804310bd346c5b637f6e305869eea1df9eca49a1d44c1f6e6",
+      "originalCapturedSha256": "beb9bf30d3d08f63d0ffb6017602c6eb69c1d5ffc692cbfa9cef4ca42f785dac",
+      "originalCapturedBytes": 351
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/seo-ui-green.log",
+      "bytes": 433,
+      "sha256": "5f82a33425662edf5557ab2ae5259fac8ed9868ad66153fc84e4aea388d0ac50",
+      "originalCapturedSha256": "bdb20c425a5f5e08e8a3d127b2c29cd0bd01b160a92c23a6cabc99eed95c21f6",
+      "originalCapturedBytes": 440
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/seo-ui-retry.log",
+      "bytes": 6538,
+      "sha256": "b1bb1c08c4965db55b5c7bfda00ac1316dee439cb687821440c7d1dd7125af1d",
+      "originalCapturedSha256": "1832d159e4b17702ee5052346718918eb76c0e676bce8ec4103e0f6ede626c34",
+      "originalCapturedBytes": 6598
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/store-green.log",
+      "bytes": 3709,
+      "sha256": "eb732e4b47157fab25852cd5354c47b991abcf58c90bcc4c59003fc20ce7fda9",
+      "originalCapturedSha256": "e728f0cbd3fdee0af15a064b022b095c602f77f8e6fcb417ccb0b8fcdcdfc434",
+      "originalCapturedBytes": 3746
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/storefront-build-final.log",
+      "bytes": 6129,
+      "sha256": "6a0ef1962e8e4b4eb33b0dc1e085b5381137367df2c693cc7e85091a34e32cea",
+      "originalCapturedSha256": "d6d3bc87c7c9f7698e8f62755a8814b3628d772ccba1c4d2172c7881636a28bf",
+      "originalCapturedBytes": 6211
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/storefront-build.log",
+      "bytes": 6862,
+      "sha256": "b041f435eefeb4c5e045cbe502d90ec1293b533b8bc48720b8d8d6e33fa9ad45",
+      "originalCapturedSha256": "5c1dafbb70b4e597916d76e828eb74954460c885b634c41730dd84cdf17f102d",
+      "originalCapturedBytes": 6953
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/vercel-contracts.log",
+      "bytes": 348,
+      "sha256": "c86c3443b0991fa8a87cbf436226d25e696d6e6f9e02c782c769ca2ffbb4b757",
+      "originalCapturedSha256": "692d4716149d7f91f89caf836a209626188ddb6160b1a20aa9d3d90065bb1726",
+      "originalCapturedBytes": 359
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/visual-capture-final.log",
+      "bytes": 289,
+      "sha256": "a10dbe7a139c4408e5767a4d84205956e46c7533fb2356e1cc3eb832844c8d37",
+      "originalCapturedSha256": "98e7c190e438a8e5af52bb160b0ffe6cb2acdd3967afbc2c579f2773241d3e75",
+      "originalCapturedBytes": 301
+    },
+    {
+      "path": "docs/acceptance/seo-improvements-20261026/evidence/wood-regressions-final.log",
+      "bytes": 1579,
+      "sha256": "1ecadd514209d27ea61a84e10c9ac0b8dc81a64e8d1931e48afeefaf3149f1b1",
+      "originalCapturedSha256": "490f645995de38c0be5bd20cebf88d6fc0a099bc2092043d05d4806deb83db0d",
+      "originalCapturedBytes": 1597
+    }
+  ],
+  "evidenceFormat": "Archived log copies normalize CRLF to LF and strip trailing horizontal whitespace; original captured hash/bytes retained per entry. Original runtime files remain in .tools. All message/error/result content retained. Redundant trailing EOF blank lines may also be removed.",
+  "reviews": {
+    "source": "docs/acceptance/seo-improvements-20261026/code-review.md",
+    "visual": "docs/acceptance/seo-improvements-20261026/finish-review.md",
+    "design": "docs/acceptance/seo-improvements-20261026/design-documentation.md"
+  },
+  "preparedSourceFiles": [
+    {
+      "path": "index.html",
+      "bytes": 2881,
+      "sha256": "817add08e66e30c56115417f7a3e4ce89b757cf064690295dfd7c2c3881ede08"
+    },
+    {
+      "path": "scripts/emit-storefront-sitemap.mjs",
+      "bytes": 6732,
+      "sha256": "0a893dddd53682f75d5129684bb92c9b2aa153e98546234bf9dd48db6e2cc536"
+    },
+    {
+      "path": "scripts/map024-evidence/generate-marketing-pages.mjs",
+      "bytes": 2350,
+      "sha256": "c802fec15a1c359951f22d6d1323f195cced88ed7244a7172e54ba066ea29519"
+    },
+    {
+      "path": "scripts/map024-evidence/generate-sitemap.mjs",
+      "bytes": 7935,
+      "sha256": "828d203a5b1002b22a0e82b85f08318c58f1c0bec969b597d5a54c35e69d34e5"
+    },
+    {
+      "path": "scripts/map024-evidence/published-catalog.json",
+      "bytes": 133358,
+      "sha256": "2c601a60feefca8092184c75aaf60cee6b0e5f7cbdfa565deab89c4c49531ddd"
+    },
+    {
+      "path": "scripts/map024-evidence/read-published-catalog.mjs",
+      "bytes": 7719,
+      "sha256": "47840ecf38e7ab115fee20cda0c2590f71b3b9fa5ae1fec3b91a66d46f3f1f88"
+    },
+    {
+      "path": "scripts/prepare-storefront-media.mjs",
+      "bytes": 3939,
+      "sha256": "39ed82d0a9fd1f712491655204ddf8c3560e4586dec47cfca8bbf7ff90add901"
+    },
+    {
+      "path": "src/components/Footer.jsx",
+      "bytes": 7517,
+      "sha256": "19b76f488ab3def873d9faa7e7a0c58700609c2737525e4a2089d239c5298ebe"
+    },
+    {
+      "path": "src/components/InteractiveReveal.jsx",
+      "bytes": 4933,
+      "sha256": "ce4586af4dbe80bb7215830a70d13adf55ffa2d114a21cb4d0280884b6d74dad"
+    },
+    {
+      "path": "src/components/ProductCard.jsx",
+      "bytes": 9315,
+      "sha256": "0dc9ce9b6646dab28178cbac0ae742ec9e284455dcdd411d7fb20a01b1070425"
+    },
+    {
+      "path": "src/components/ProductVisual.jsx",
+      "bytes": 1106,
+      "sha256": "5c7763737d39c6064f3e75130389ea82e839aec5218274d6b5cdffce835c2376"
+    },
+    {
+      "path": "src/components/StoreHeader.jsx",
+      "bytes": 5625,
+      "sha256": "44552102cdc1b2cc0a8c4529db42219499809f9dd343eb7579f6a52e98299502"
+    },
+    {
+      "path": "src/components/StorefrontAnalytics.jsx",
+      "bytes": 5540,
+      "sha256": "30a7af7d828915697ada9e42b684843377a4382c6fa8747a7a3c6e3b95df83f6"
+    },
+    {
+      "path": "src/components/StorefrontMetadata.jsx",
+      "bytes": 5970,
+      "sha256": "1da51c061fbd3042c586e1e6cbe1c97e0cd5ba141767141b126f7c2edab3557d"
+    },
+    {
+      "path": "src/components/home/Banners.jsx",
+      "bytes": 2757,
+      "sha256": "12d0170837dac84cc32c3c014d7d12310e94d3dc165a5ad0c0eee7ead871e6d2"
+    },
+    {
+      "path": "src/components/home/Hero.jsx",
+      "bytes": 9406,
+      "sha256": "eb4e657b79f8f75b9787a8b4ca0adde010009ed7ebff1b0102e866e5b4173d67"
+    },
+    {
+      "path": "src/components/home/NewArrivals.jsx",
+      "bytes": 7444,
+      "sha256": "cbf88213028a21a54436ded263f19292341d18fdaa0781a39e3e588b4d59cc07"
+    },
+    {
+      "path": "src/components/home/StorySection.jsx",
+      "bytes": 8971,
+      "sha256": "db8020ac408032c5b5ea273608dfda0a845b5faee47f830952620a2eb3427906"
+    },
+    {
+      "path": "src/components/nav/MobileNavBar.jsx",
+      "bytes": 2578,
+      "sha256": "292a5a7fdc029eee2bd948dbceb8de574e57d1f1229cc433d38a3d0a42d21e38"
+    },
+    {
+      "path": "src/components/ui/bits.jsx",
+      "bytes": 7197,
+      "sha256": "3d55986991027dd04e37ccce1a213c5277f309ba164a4fb8e745153591df1dca"
+    },
+    {
+      "path": "src/context/StoreContext.jsx",
+      "bytes": 45392,
+      "sha256": "00a85584cf3c53628da38f0c82e9ebf66e580324122d30da82d8b9196b3b3d0c"
+    },
+    {
+      "path": "src/data/storefrontMedia.json",
+      "bytes": 5437,
+      "sha256": "503d9cd71fbb26f7c18828e4a8bf04bf27ac6966b497d1168d3b3bf9e5028846"
+    },
+    {
+      "path": "src/index.css",
+      "bytes": 31037,
+      "sha256": "63b9d1217e6b3f4758af3bb0005125a248e1164089beb6b2fdcdead41ba01813"
+    },
+    {
+      "path": "src/interactive-store.css",
+      "bytes": 38273,
+      "sha256": "7e244ee157f50312a0013c58f0169dde045dfe66844e94ffcd824cf2ab6434be"
+    },
+    {
+      "path": "src/lib/productStructuredData.js",
+      "bytes": 6800,
+      "sha256": "917c6d3f49650f54bd1d3b0a68b5d95da218171933a7aba17d3973989314f4bb"
+    },
+    {
+      "path": "src/lib/storefrontMedia.js",
+      "bytes": 1052,
+      "sha256": "a5f1dca1e1db9f9d27f31b83d2665f2680d184d4cf529bdf6e16e36965b521a1"
+    },
+    {
+      "path": "src/lib/storefrontSeoPages.js",
+      "bytes": 2533,
+      "sha256": "86d459d347d565dfd53d19f492d8757b3ef41e55a49a3d498e722f33b9d540e5"
+    },
+    {
+      "path": "src/main.jsx",
+      "bytes": 871,
+      "sha256": "e0661b7f0d55be373c57faef3a51474d0a495e071007e06da5c60be72f4cb738"
+    },
+    {
+      "path": "src/views/Pasabuy.jsx",
+      "bytes": 14270,
+      "sha256": "1ec66770a2544cc71bafb43e918c02ab8a40a4ddb7bf4328273271ac677fbfe0"
+    },
+    {
+      "path": "tests/brand-logo.spec.js",
+      "bytes": 4733,
+      "sha256": "156f1c731e68f61c71a1ebb4c1438260e9c7e8a4721858341629ab319d72b3e7"
+    },
+    {
+      "path": "tests/buyer.spec.js",
+      "bytes": 1880,
+      "sha256": "f4b8231d329e879cca7661c243aa118c74c492992d37e027dbf7cba87a123123"
+    },
+    {
+      "path": "tests/hero-enhancement.spec.js",
+      "bytes": 5817,
+      "sha256": "f9d6f44af3e95d9bfce0eb21f98b45671b7fdb0b5874c1606f493ccb51d88011"
+    },
+    {
+      "path": "tests/homepage-mobile-fixes.spec.js",
+      "bytes": 9301,
+      "sha256": "e4ec3d73e73b91a9659c27fd17ce4cea491b07a809c984a36a149860b23b0296"
+    },
+    {
+      "path": "tests/map024-sitemap.spec.js",
+      "bytes": 13590,
+      "sha256": "7b7ce31d5045c9cb1812a221992a7543d6dd4db8e2ee8ea43f1cdefdf5c753e5"
+    },
+    {
+      "path": "tests/search-visibility-ui.spec.js",
+      "bytes": 14357,
+      "sha256": "46afd0695334b569a52fd450f460df859884a475c0ba14c9d98d42983b732b89"
+    },
+    {
+      "path": "tests/smoke.spec.js",
+      "bytes": 27035,
+      "sha256": "95aab07504674cb00925bebd49aa123a8e780b702c2d0956320a308e89be6f34"
+    },
+    {
+      "path": "tests/storefront-discovery-contract.spec.js",
+      "bytes": 16799,
+      "sha256": "813082d75f481348197c7957ff4ad0b82f70e41e2cabe3b108fcec90719b28ee"
+    },
+    {
+      "path": "tests/storefront-mobile-audit.spec.js",
+      "bytes": 15642,
+      "sha256": "3c9cb2fc43b89cee41888e6b9fe689d6a7a99dc7fa932674b60f246fdefcf53b"
+    },
+    {
+      "path": "tests/storefront-mobile.spec.js",
+      "bytes": 5951,
+      "sha256": "9c2ce7649c9e83bcd331564263dee209347be2f672327540fb5acc37592f975b"
+    },
+    {
+      "path": "tests/storefront-motion.spec.js",
+      "bytes": 5048,
+      "sha256": "43ad0afec4dfcabc13e00ce55c0c5a8f28369176bd66d151063af54f871845ec"
+    },
+    {
+      "path": "tests/storefront-recovery-ui.spec.js",
+      "bytes": 48932,
+      "sha256": "fa66c85b3d4fd3863fae5bbdb61226a793d869cfd88611dbcdbc680e32db802a"
+    },
+    {
+      "path": "tests/storefront-theme.spec.js",
+      "bytes": 3713,
+      "sha256": "d24738f8959425a7a56858f4ec97e217f5d0efb179029fb0e8b740af9fd3c141"
+    },
+    {
+      "path": "vercel.storefront.json",
+      "bytes": 4419,
+      "sha256": "c4eb7673cb027d8432e7c421e89c146e67355b6328a7ee61e6b0147752cb8c85"
+    }
+  ],
+  "sourceHashFormat": "Git index bytes (LF canonical source), excluding self-referential aggregate receipt. Media/font byte receipts and26capture set are separately pinned.",
+  "reviewHashes": {
+    "source": {
+      "path": "docs/acceptance/seo-improvements-20261026/code-review.md",
+      "sha256": "4236d016a2f41e43fe2b11b407217703c6364cfcbae3d1031266c69b069d1b41"
+    },
+    "visual": {
+      "path": "docs/acceptance/seo-improvements-20261026/finish-review.md",
+      "sha256": "70b4d93cdd2b4bef2a41bc08c612f648bee4eca83379103625ad38865af0c79b"
+    },
+    "design": {
+      "path": "docs/acceptance/seo-improvements-20261026/design-documentation.md",
+      "sha256": "4223c7c26d4e91e1ecec209494982833e12b6f5ca12e649206030d8a24be7e0d"
+    }
+  }
+}

@@ -14,6 +14,9 @@
     ],
     "srp": "349",
     "updated_at": "2026-10-18 07:45:01.138528+00",
+    "net_weight": "1000",
+    "country_of_origin": null,
+    "brand_name": "Combino",
     "search_indexable": true
   },
   {
@@ -31,6 +34,9 @@
     ],
     "srp": "404",
     "updated_at": "2026-10-18 09:47:25.551251+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Amalfi",
     "search_indexable": true
   },
   {
@@ -48,6 +54,9 @@
     ],
     "srp": "404",
     "updated_at": "2026-10-18 10:07:21.268324+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Amalfi",
     "search_indexable": true
   },
   {
@@ -65,6 +74,9 @@
     ],
     "srp": "249",
     "updated_at": "2026-10-25 09:44:22.617336+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Astratto",
     "search_indexable": true
   },
   {
@@ -82,6 +94,9 @@
     ],
     "srp": "249",
     "updated_at": "2026-10-22 11:07:42.768802+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Baresa",
     "search_indexable": true
   },
   {
@@ -99,6 +114,9 @@
     ],
     "srp": "289",
     "updated_at": "2026-10-23 07:40:56.145252+00",
+    "net_weight": "290",
+    "country_of_origin": null,
+    "brand_name": "Baresa",
     "search_indexable": true
   },
   {
@@ -116,6 +134,9 @@
     ],
     "srp": "249",
     "updated_at": "2026-10-23 07:44:00.242997+00",
+    "net_weight": "190",
+    "country_of_origin": null,
+    "brand_name": "Baresa",
     "search_indexable": true
   },
   {
@@ -133,6 +154,9 @@
     ],
     "srp": "255",
     "updated_at": "2026-10-23 07:45:33.005003+00",
+    "net_weight": "190",
+    "country_of_origin": null,
+    "brand_name": "Baresa",
     "search_indexable": true
   },
   {
@@ -150,6 +174,9 @@
     ],
     "srp": "379",
     "updated_at": "2026-10-22 11:11:05.103629+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Barilla",
     "search_indexable": true
   },
   {
@@ -167,6 +194,9 @@
     ],
     "srp": "499",
     "updated_at": "2026-10-25 09:44:38.760869+00",
+    "net_weight": "200",
+    "country_of_origin": null,
+    "brand_name": "Barissimo",
     "search_indexable": true
   },
   {
@@ -184,6 +214,9 @@
     ],
     "srp": "499",
     "updated_at": "2026-10-20 10:22:03.71223+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Bellarom",
     "search_indexable": true
   },
   {
@@ -201,6 +234,9 @@
     ],
     "srp": "259",
     "updated_at": "2026-10-26 06:31:51.469126+00",
+    "net_weight": "250",
+    "country_of_origin": null,
+    "brand_name": "Borella",
     "search_indexable": true
   },
   {
@@ -218,6 +254,9 @@
     ],
     "srp": "259",
     "updated_at": "2026-10-26 06:33:32.23962+00",
+    "net_weight": "250",
+    "country_of_origin": null,
+    "brand_name": "Borella",
     "search_indexable": true
   },
   {
@@ -235,6 +274,9 @@
     ],
     "srp": "299",
     "updated_at": "2026-10-23 07:50:52.177476+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Caffè Poli",
     "search_indexable": true
   },
   {
@@ -252,6 +294,9 @@
     ],
     "srp": "649",
     "updated_at": "2026-10-19 06:31:57.369741+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Suddenly",
     "search_indexable": true
   },
   {
@@ -269,6 +314,9 @@
     ],
     "srp": "105",
     "updated_at": "2026-10-19 06:10:39.11186+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Cien",
     "search_indexable": true
   },
   {
@@ -286,6 +334,9 @@
     ],
     "srp": "105",
     "updated_at": "2026-10-25 09:44:49.935815+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Cien",
     "search_indexable": true
   },
   {
@@ -303,6 +354,9 @@
     ],
     "srp": "100",
     "updated_at": "2026-10-19 07:13:56.227536+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Cien",
     "search_indexable": false
   },
   {
@@ -320,6 +374,9 @@
     ],
     "srp": "100",
     "updated_at": "2026-10-25 09:45:03.38775+00",
+    "net_weight": "300",
+    "country_of_origin": null,
+    "brand_name": "Cien",
     "search_indexable": false
   },
   {
@@ -337,6 +394,9 @@
     ],
     "srp": "599",
     "updated_at": "2026-10-19 02:18:47.386302+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Cien",
     "search_indexable": true
   },
   {
@@ -354,6 +414,9 @@
     ],
     "srp": "599",
     "updated_at": "2026-10-25 09:45:52.696824+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Cien",
     "search_indexable": true
   },
   {
@@ -371,6 +434,9 @@
     ],
     "srp": "404",
     "updated_at": "2026-10-19 07:41:12.874153+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Cien",
     "search_indexable": true
   },
   {
@@ -388,6 +454,9 @@
     ],
     "srp": "199",
     "updated_at": "2026-10-23 06:50:51.185877+00",
+    "net_weight": "500",
+    "country_of_origin": null,
+    "brand_name": "Combino",
     "search_indexable": true
   },
   {
@@ -405,6 +474,9 @@
     ],
     "srp": "249",
     "updated_at": "2026-10-23 06:56:10.142409+00",
+    "net_weight": "500",
+    "country_of_origin": null,
+    "brand_name": "Combino",
     "search_indexable": true
   },
   {
@@ -422,6 +494,9 @@
     ],
     "srp": "199",
     "updated_at": "2026-10-23 15:42:33.102837+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Combino",
     "search_indexable": true
   },
   {
@@ -439,6 +514,9 @@
     ],
     "srp": "1199",
     "updated_at": "2026-10-22 17:02:21.135319+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Dante",
     "search_indexable": false
   },
   {
@@ -456,6 +534,9 @@
     ],
     "srp": "949",
     "updated_at": "2026-10-22 17:04:45.394524+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Dante",
     "search_indexable": false
   },
   {
@@ -473,6 +554,9 @@
     ],
     "srp": "345",
     "updated_at": "2026-10-25 09:34:11.042456+00",
+    "net_weight": "500",
+    "country_of_origin": null,
+    "brand_name": "Delverde",
     "search_indexable": true
   },
   {
@@ -490,6 +574,9 @@
     ],
     "srp": "299",
     "updated_at": "2026-10-23 07:54:42.176155+00",
+    "net_weight": "1000",
+    "country_of_origin": null,
+    "brand_name": "Divella",
     "search_indexable": true
   },
   {
@@ -507,6 +594,9 @@
     ],
     "srp": "199",
     "updated_at": "2026-10-25 10:35:28.044157+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Dulciar",
     "search_indexable": true
   },
   {
@@ -524,6 +614,9 @@
     ],
     "srp": "199",
     "updated_at": "2026-10-22 11:14:52.420618+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Dulciar",
     "search_indexable": true
   },
   {
@@ -541,6 +634,9 @@
     ],
     "srp": "199",
     "updated_at": "2026-10-22 11:15:32.582164+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Dulciar",
     "search_indexable": true
   },
   {
@@ -558,6 +654,9 @@
     ],
     "srp": "199",
     "updated_at": "2026-10-22 11:16:14.572723+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Dulciar",
     "search_indexable": true
   },
   {
@@ -575,6 +674,9 @@
     ],
     "srp": "199",
     "updated_at": "2026-10-18 12:28:42.538601+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Fin Carré",
     "search_indexable": true
   },
   {
@@ -592,6 +694,9 @@
     ],
     "srp": "199",
     "updated_at": "2026-10-18 12:28:50.173463+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Fin Carré",
     "search_indexable": true
   },
   {
@@ -609,6 +714,9 @@
     ],
     "srp": "199",
     "updated_at": "2026-10-18 12:29:06.60439+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Fin Carré",
     "search_indexable": true
   },
   {
@@ -626,6 +734,9 @@
     ],
     "srp": "135",
     "updated_at": "2026-10-23 15:44:34.295129+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Fini",
     "search_indexable": true
   },
   {
@@ -643,6 +754,9 @@
     ],
     "srp": "135",
     "updated_at": "2026-10-23 15:46:03.975593+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Fini",
     "search_indexable": true
   },
   {
@@ -660,6 +774,9 @@
     ],
     "srp": "439",
     "updated_at": "2026-10-22 08:15:54.393999+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Galatine",
     "search_indexable": true
   },
   {
@@ -677,6 +794,9 @@
     ],
     "srp": "439",
     "updated_at": "2026-10-23 08:42:26.540719+00",
+    "net_weight": "125",
+    "country_of_origin": null,
+    "brand_name": "Galatine",
     "search_indexable": false
   },
   {
@@ -694,6 +814,9 @@
     ],
     "srp": "469",
     "updated_at": "2026-10-22 13:10:37.762321+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Galatine",
     "search_indexable": false
   },
   {
@@ -711,6 +834,9 @@
     ],
     "srp": "349",
     "updated_at": "2026-10-23 15:47:06.324283+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Giglio",
     "search_indexable": true
   },
   {
@@ -728,6 +854,9 @@
     ],
     "srp": "374",
     "updated_at": "2026-10-23 07:56:10.317681+00",
+    "net_weight": "50",
+    "country_of_origin": null,
+    "brand_name": "Gimoka",
     "search_indexable": true
   },
   {
@@ -745,6 +874,9 @@
     ],
     "srp": "374",
     "updated_at": "2026-10-18 13:16:05.641909+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Gimoka",
     "search_indexable": true
   },
   {
@@ -762,6 +894,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-23 07:38:28.196306+00",
+    "net_weight": "300",
+    "country_of_origin": null,
+    "brand_name": "Gullón",
     "search_indexable": true
   },
   {
@@ -779,6 +914,9 @@
     ],
     "srp": "1200",
     "updated_at": "2026-10-25 09:43:23.497269+00",
+    "net_weight": "600",
+    "country_of_origin": null,
+    "brand_name": "Gusto Etna",
     "search_indexable": true
   },
   {
@@ -796,6 +934,9 @@
     ],
     "srp": "649",
     "updated_at": "2026-10-24 08:45:07.807502+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "G. Bellini",
     "search_indexable": true
   },
   {
@@ -813,6 +954,9 @@
     ],
     "srp": "649",
     "updated_at": "2026-10-24 08:46:40.026304+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "G. Bellini",
     "search_indexable": true
   },
   {
@@ -830,6 +974,9 @@
     ],
     "srp": "249",
     "updated_at": "2026-10-23 15:48:08.639782+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Italiamo",
     "search_indexable": true
   },
   {
@@ -847,6 +994,9 @@
     ],
     "srp": "249",
     "updated_at": "2026-10-23 07:57:27.944474+00",
+    "net_weight": "500",
+    "country_of_origin": null,
+    "brand_name": "Italiamo",
     "search_indexable": true
   },
   {
@@ -864,6 +1014,9 @@
     ],
     "srp": "349",
     "updated_at": "2026-10-23 15:49:22.42047+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Italiamo",
     "search_indexable": true
   },
   {
@@ -881,6 +1034,9 @@
     ],
     "srp": "349",
     "updated_at": "2026-10-23 07:58:32.036692+00",
+    "net_weight": "400",
+    "country_of_origin": null,
+    "brand_name": "Italiamo",
     "search_indexable": true
   },
   {
@@ -898,6 +1054,9 @@
     ],
     "srp": "345",
     "updated_at": "2026-10-23 08:00:49.233234+00",
+    "net_weight": "360",
+    "country_of_origin": null,
+    "brand_name": "Italiamo",
     "search_indexable": true
   },
   {
@@ -915,6 +1074,9 @@
     ],
     "srp": "259",
     "updated_at": "2026-10-19 01:43:50.663464+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Italiamo",
     "search_indexable": true
   },
   {
@@ -932,6 +1094,9 @@
     ],
     "srp": "349",
     "updated_at": "2026-10-23 06:41:24.32327+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Italian Coffee",
     "search_indexable": true
   },
   {
@@ -949,6 +1114,9 @@
     ],
     "srp": "349",
     "updated_at": "2026-10-23 06:42:22.970886+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Italian Coffee",
     "search_indexable": true
   },
   {
@@ -966,6 +1134,9 @@
     ],
     "srp": "249",
     "updated_at": "2026-10-23 06:43:26.235913+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Italian Coffee",
     "search_indexable": true
   },
   {
@@ -983,6 +1154,9 @@
     ],
     "srp": "349",
     "updated_at": "2026-10-18 13:16:11.624849+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Italian Coffee",
     "search_indexable": true
   },
   {
@@ -998,6 +1172,9 @@
     "lifestyle_images": [],
     "srp": "689",
     "updated_at": "2026-10-19 07:01:48.427024+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Suddenly",
     "search_indexable": true
   },
   {
@@ -1015,6 +1192,9 @@
     ],
     "srp": "249",
     "updated_at": "2026-10-23 08:32:39.533653+00",
+    "net_weight": "150",
+    "country_of_origin": null,
+    "brand_name": "La Suissa",
     "search_indexable": true
   },
   {
@@ -1032,6 +1212,9 @@
     ],
     "srp": "175",
     "updated_at": "2026-10-19 01:27:32.224088+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Laica",
     "search_indexable": true
   },
   {
@@ -1049,6 +1232,9 @@
     ],
     "srp": "175",
     "updated_at": "2026-10-18 12:48:22.669405+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Laica",
     "search_indexable": true
   },
   {
@@ -1066,6 +1252,9 @@
     ],
     "srp": "549",
     "updated_at": "2026-10-23 08:03:44.732597+00",
+    "net_weight": "750",
+    "country_of_origin": null,
+    "brand_name": "Lavazza",
     "search_indexable": true
   },
   {
@@ -1083,6 +1272,9 @@
     ],
     "srp": "549",
     "updated_at": "2026-10-23 08:41:40.099926+00",
+    "net_weight": "1500",
+    "country_of_origin": null,
+    "brand_name": "Lavazza",
     "search_indexable": true
   },
   {
@@ -1100,6 +1292,9 @@
     ],
     "srp": "559",
     "updated_at": "2026-10-23 08:33:54.995636+00",
+    "net_weight": "1000",
+    "country_of_origin": null,
+    "brand_name": "Lavazza",
     "search_indexable": true
   },
   {
@@ -1117,6 +1312,9 @@
     ],
     "srp": "585",
     "updated_at": "2026-10-23 08:43:20.394851+00",
+    "net_weight": "500",
+    "country_of_origin": null,
+    "brand_name": "Lavazza",
     "search_indexable": true
   },
   {
@@ -1134,6 +1332,9 @@
     ],
     "srp": "789",
     "updated_at": "2026-10-23 08:44:11.481837+00",
+    "net_weight": "750",
+    "country_of_origin": null,
+    "brand_name": "Lavazza",
     "search_indexable": true
   },
   {
@@ -1151,6 +1352,9 @@
     ],
     "srp": "1790",
     "updated_at": "2026-10-25 09:38:20.428995+00",
+    "net_weight": "1000",
+    "country_of_origin": null,
+    "brand_name": "Lavazza",
     "search_indexable": true
   },
   {
@@ -1168,6 +1372,9 @@
     ],
     "srp": "579",
     "updated_at": "2026-10-23 08:35:25.059614+00",
+    "net_weight": "1000",
+    "country_of_origin": null,
+    "brand_name": "Lavazza",
     "search_indexable": true
   },
   {
@@ -1185,6 +1392,9 @@
     ],
     "srp": "579",
     "updated_at": "2026-10-25 09:38:39.044198+00",
+    "net_weight": "1500",
+    "country_of_origin": null,
+    "brand_name": "Lavazza",
     "search_indexable": true
   },
   {
@@ -1202,6 +1412,9 @@
     ],
     "srp": "549",
     "updated_at": "2026-10-23 08:45:09.600628+00",
+    "net_weight": "1000",
+    "country_of_origin": null,
+    "brand_name": "Lavazza",
     "search_indexable": true
   },
   {
@@ -1219,6 +1432,9 @@
     ],
     "srp": "299",
     "updated_at": "2026-10-25 09:38:54.184466+00",
+    "net_weight": "220",
+    "country_of_origin": null,
+    "brand_name": "Loacker",
     "search_indexable": true
   },
   {
@@ -1236,6 +1452,9 @@
     ],
     "srp": "849",
     "updated_at": "2026-10-25 09:39:13.250284+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Luxury",
     "search_indexable": true
   },
   {
@@ -1253,6 +1472,9 @@
     ],
     "srp": "599",
     "updated_at": "2026-10-19 07:09:35.191247+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Suddenly",
     "search_indexable": true
   },
   {
@@ -1270,6 +1492,9 @@
     ],
     "srp": "1415",
     "updated_at": "2026-10-25 09:39:29.500142+00",
+    "net_weight": "720",
+    "country_of_origin": null,
+    "brand_name": "Mareblu",
     "search_indexable": true
   },
   {
@@ -1287,6 +1512,9 @@
     ],
     "srp": "735",
     "updated_at": "2026-10-23 11:58:39.413426+00",
+    "net_weight": "360",
+    "country_of_origin": null,
+    "brand_name": "Maruzzella",
     "search_indexable": true
   },
   {
@@ -1304,6 +1532,9 @@
     ],
     "srp": "345",
     "updated_at": "2026-10-23 14:19:42.918423+00",
+    "net_weight": "160",
+    "country_of_origin": null,
+    "brand_name": "Marysol",
     "search_indexable": true
   },
   {
@@ -1321,6 +1552,9 @@
     ],
     "srp": "590",
     "updated_at": "2026-10-25 09:39:48.740351+00",
+    "net_weight": "210",
+    "country_of_origin": null,
+    "brand_name": "Marysol",
     "search_indexable": true
   },
   {
@@ -1338,6 +1572,9 @@
     ],
     "srp": "399",
     "updated_at": "2026-10-18 12:29:22.516433+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "McKennedy",
     "search_indexable": true
   },
   {
@@ -1355,6 +1592,9 @@
     ],
     "srp": "399",
     "updated_at": "2026-10-18 12:29:29.901322+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "McKennedy",
     "search_indexable": true
   },
   {
@@ -1372,6 +1612,9 @@
     ],
     "srp": "274",
     "updated_at": "2026-10-21 11:59:07.230698+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Montegrappa",
     "search_indexable": true
   },
   {
@@ -1389,6 +1632,9 @@
     ],
     "srp": "274",
     "updated_at": "2026-10-22 11:12:40.518098+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Montegrappa",
     "search_indexable": true
   },
   {
@@ -1406,6 +1652,9 @@
     ],
     "srp": "599",
     "updated_at": "2026-10-25 09:40:05.064324+00",
+    "net_weight": "280",
+    "country_of_origin": null,
+    "brand_name": "Nixe",
     "search_indexable": true
   },
   {
@@ -1423,6 +1672,9 @@
     ],
     "srp": "1299",
     "updated_at": "2026-10-25 09:41:36.418046+00",
+    "net_weight": "720",
+    "country_of_origin": null,
+    "brand_name": "Nostromo",
     "search_indexable": true
   },
   {
@@ -1440,6 +1692,9 @@
     ],
     "srp": "990",
     "updated_at": "2026-10-25 09:42:44.389911+00",
+    "net_weight": "420",
+    "country_of_origin": null,
+    "brand_name": "Nostromo",
     "search_indexable": true
   },
   {
@@ -1457,6 +1712,9 @@
     ],
     "srp": "399",
     "updated_at": "2026-10-21 12:14:14.1536+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Nutella",
     "search_indexable": true
   },
   {
@@ -1474,6 +1732,9 @@
     ],
     "srp": "649",
     "updated_at": "2026-10-24 08:48:53.280481+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "G. Bellini",
     "search_indexable": true
   },
   {
@@ -1491,6 +1752,9 @@
     ],
     "srp": "499",
     "updated_at": "2026-10-23 11:58:39.413426+00",
+    "net_weight": "1000",
+    "country_of_origin": null,
+    "brand_name": "Pellini",
     "search_indexable": true
   },
   {
@@ -1508,6 +1772,9 @@
     ],
     "srp": "604",
     "updated_at": "2026-10-19 06:37:29.568993+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Suddenly",
     "search_indexable": true
   },
   {
@@ -1525,6 +1792,9 @@
     ],
     "srp": "299",
     "updated_at": "2026-10-21 12:22:41.779179+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Poppies",
     "search_indexable": true
   },
   {
@@ -1542,6 +1812,9 @@
     ],
     "srp": "399",
     "updated_at": "2026-10-23 08:37:35.998604+00",
+    "net_weight": "150",
+    "country_of_origin": null,
+    "brand_name": "Laica",
     "search_indexable": true
   },
   {
@@ -1559,6 +1832,9 @@
     ],
     "srp": "2200",
     "updated_at": "2026-10-25 09:10:13.34807+00",
+    "net_weight": "1120",
+    "country_of_origin": null,
+    "brand_name": "Rio Mare",
     "search_indexable": true
   },
   {
@@ -1576,6 +1852,9 @@
     ],
     "srp": "1700",
     "updated_at": "2026-10-23 08:46:52.341021+00",
+    "net_weight": "720",
+    "country_of_origin": null,
+    "brand_name": "Rio Mare",
     "search_indexable": false
   },
   {
@@ -1593,6 +1872,9 @@
     ],
     "srp": "1439",
     "updated_at": "2026-10-23 05:49:44.298534+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Rio Mare",
     "search_indexable": false
   },
   {
@@ -1610,6 +1892,9 @@
     ],
     "srp": "1550",
     "updated_at": "2026-10-23 05:50:59.576406+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Rio Mare",
     "search_indexable": false
   },
   {
@@ -1627,6 +1912,9 @@
     ],
     "srp": "1650",
     "updated_at": "2026-10-23 08:47:32.966546+00",
+    "net_weight": "640",
+    "country_of_origin": null,
+    "brand_name": "Rio Mare",
     "search_indexable": true
   },
   {
@@ -1644,6 +1932,9 @@
     ],
     "srp": "599",
     "updated_at": "2026-10-21 13:23:26.166271+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Suddenly",
     "search_indexable": true
   },
   {
@@ -1661,6 +1952,9 @@
     ],
     "srp": "529",
     "updated_at": "2026-10-25 09:11:17.15038+00",
+    "net_weight": "1000",
+    "country_of_origin": null,
+    "brand_name": "Segafredo",
     "search_indexable": true
   },
   {
@@ -1678,6 +1972,9 @@
     ],
     "srp": "499",
     "updated_at": "2026-10-23 08:49:24.877384+00",
+    "net_weight": "200",
+    "country_of_origin": null,
+    "brand_name": "I Siciliani",
     "search_indexable": true
   },
   {
@@ -1695,6 +1992,9 @@
     ],
     "srp": "499",
     "updated_at": "2026-10-23 07:47:43.078487+00",
+    "net_weight": "200",
+    "country_of_origin": null,
+    "brand_name": "I Siciliani",
     "search_indexable": true
   },
   {
@@ -1712,6 +2012,9 @@
     ],
     "srp": "409",
     "updated_at": "2026-10-23 07:48:52.729555+00",
+    "net_weight": "400",
+    "country_of_origin": null,
+    "brand_name": "Sondey",
     "search_indexable": true
   },
   {
@@ -1729,6 +2032,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-21 05:22:06.459824+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Tigullio",
     "search_indexable": true
   },
   {
@@ -1746,6 +2052,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-21 05:16:25.750068+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Tigullio",
     "search_indexable": true
   },
   {
@@ -1763,6 +2072,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-22 11:14:09.70392+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Tigullio",
     "search_indexable": true
   },
   {
@@ -1780,6 +2092,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-21 05:27:23.579813+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Tigullio",
     "search_indexable": true
   },
   {
@@ -1797,6 +2112,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-21 07:52:29.568888+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Tigullio",
     "search_indexable": true
   },
   {
@@ -1814,6 +2132,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-21 05:34:02.698473+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Tigullio",
     "search_indexable": true
   },
   {
@@ -1831,6 +2152,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-22 03:53:48.980843+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Tigullio",
     "search_indexable": true
   },
   {
@@ -1848,6 +2172,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-22 04:00:41.140803+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Tigullio",
     "search_indexable": true
   },
   {
@@ -1865,6 +2192,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-19 01:39:14.923619+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Tigullio",
     "search_indexable": true
   },
   {
@@ -1882,6 +2212,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-21 05:59:10.70169+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Tigullio",
     "search_indexable": true
   },
   {
@@ -1899,6 +2232,9 @@
     ],
     "srp": "429",
     "updated_at": "2026-10-21 06:02:25.854435+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "Loacker",
     "search_indexable": true
   },
   {
@@ -1916,6 +2252,9 @@
     ],
     "srp": "297",
     "updated_at": "2026-10-25 09:36:40.766961+00",
+    "net_weight": "240",
+    "country_of_origin": null,
+    "brand_name": "Francesco Moretti",
     "search_indexable": true
   },
   {
@@ -1933,6 +2272,9 @@
     ],
     "srp": "175",
     "updated_at": "2026-10-23 08:39:10.278044+00",
+    "net_weight": "90",
+    "country_of_origin": null,
+    "brand_name": "Vidal",
     "search_indexable": true
   },
   {
@@ -1950,6 +2292,9 @@
     ],
     "srp": "175",
     "updated_at": "2026-10-23 08:04:45.359227+00",
+    "net_weight": "90",
+    "country_of_origin": null,
+    "brand_name": "Vidal",
     "search_indexable": true
   },
   {
@@ -1967,6 +2312,9 @@
     ],
     "srp": "649",
     "updated_at": "2026-10-24 08:41:11.4598+00",
+    "net_weight": null,
+    "country_of_origin": null,
+    "brand_name": "G. Bellini",
     "search_indexable": true
   }
 ]
