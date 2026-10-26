@@ -115,3 +115,31 @@ stock recovery must preserve original lot IDs and later operations; never
 manufacture stock adjustments, recreate lots or restore an old whole database
 over subsequent business activity. Unknown save outcomes require the exact
 original saved request/key, not a new decision.
+
+## Final qualification and authorization checkpoint
+
+Qualified source is committed as `b7b511d6` on
+`codex/borella-duplicate-consolidation`. The full release manifest is reconciled:
+original1115base passes plus12unchanged focused comparison cases,47storefront
+passes plus1unchanged focused logo case, all previously passing Admin/shop cases
+plus the final6-case auth file, every remaining manifest suite, Vercel packaging,
+and both separate production builds pass. The auth geometry test now returns false
+while its node is detached during viewport replacement, then applies the unchanged
+containment/security assertions to the replacement. This reproduces red twice and
+passes the full auth file; final development passes. No clean aggregate exit0 is
+claimed. Exact stage logs and results are in the paired JSON.
+
+Independent review also approved the exact schema packet and operational executor:
+source/packet SHA checks, exact project/fresh readiness, exclusive wx pending-attempt
+creation, send exact bytes once, and six-function/ledger/security/business/audit
+read-only reconciliation on success or ambiguity. The schema packet itself has
+passed the local rollback rehearsal.
+
+The attempted production executor launch was **rejected before execution** by
+automatic approval review. Its reason was missing specific trusted owner approval
+for this schema/function/permission installation, beyond duplicate-listing fixes.
+Nothing from the command ran. A concrete question now names the exact K2 project,
+source SHA and both45/64unitBorella merges. Await the owner answer before retrying;
+do not bypass the rejection through another tool/writer. Stock and merge schema
+remain unapplied. Completed live Torino/Pagani/package prerequisite changes are
+separately evidenced; they do not imply schema installation.

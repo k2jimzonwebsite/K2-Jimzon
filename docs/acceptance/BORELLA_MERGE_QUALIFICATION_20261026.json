@@ -453,5 +453,12 @@
     "listingsUnchanged": true,
     "productCount": 196,
     "publicCount": 120
+  },
+  "sourceCommit": "b7b511d6",
+  "productionInstallation": {
+    "status": "rejected_before_execution",
+    "reason": "Automatic approval review requires explicit owner approval naming production schema installation",
+    "questionPending": true,
+    "noSchemaWrite": true
   }
 }
