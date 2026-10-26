@@ -1,0 +1,184 @@
+{
+  "observedAt": "2026-10-26T06:33:40.348Z",
+  "project": "pixplcjqivlfflickobf",
+  "products": 196,
+  "lots": 49,
+  "units": 273,
+  "publicListings": 116,
+  "duplicatePublicNames": 0,
+  "changes": {
+    "products": [
+      {
+        "id": "K2-SKU-001016",
+        "keys": [
+          "status",
+          "published",
+          "updated_at",
+          "catalog_record_version"
+        ]
+      },
+      {
+        "id": "K2-SKU-001017",
+        "keys": [
+          "updated_at",
+          "catalog_record_version"
+        ]
+      },
+      {
+        "id": "K2-SKU-001018",
+        "keys": [
+          "status",
+          "published",
+          "updated_at",
+          "catalog_record_version"
+        ]
+      },
+      {
+        "id": "K2-SKU-001019",
+        "keys": [
+          "status",
+          "published",
+          "updated_at",
+          "catalog_record_version"
+        ]
+      },
+      {
+        "id": "K2-SKU-001020",
+        "keys": [
+          "updated_at",
+          "total_stock",
+          "stock_available",
+          "catalog_record_version"
+        ]
+      },
+      {
+        "id": "K2-SKU-001021",
+        "keys": [
+          "status",
+          "published",
+          "updated_at",
+          "total_stock",
+          "stock_available",
+          "catalog_record_version"
+        ]
+      }
+    ],
+    "lots": [
+      {
+        "id": "5de2ebb3-71ca-43b7-951a-433236650a21",
+        "keys": [
+          "sku",
+          "updated_at"
+        ]
+      }
+    ],
+    "balances": [
+      {
+        "id": "K2-SKU-001017",
+        "keys": [
+          "updated_at"
+        ]
+      },
+      {
+        "id": "K2-SKU-001020",
+        "keys": [
+          "on_hand",
+          "available",
+          "updated_at"
+        ]
+      },
+      {
+        "id": "K2-SKU-001021",
+        "keys": [
+          "on_hand",
+          "available",
+          "updated_at"
+        ]
+      }
+    ],
+    "listings": [
+      {
+        "id": "K2-SKU-001016",
+        "keys": [
+          "status",
+          "updated_at",
+          "publication_status"
+        ]
+      },
+      {
+        "id": "K2-SKU-001018",
+        "keys": [
+          "status",
+          "updated_at",
+          "publication_status"
+        ]
+      },
+      {
+        "id": "K2-SKU-001019",
+        "keys": [
+          "status",
+          "updated_at",
+          "publication_status"
+        ]
+      },
+      {
+        "id": "K2-SKU-001021",
+        "keys": [
+          "status",
+          "updated_at",
+          "publication_status"
+        ]
+      }
+    ]
+  },
+  "events": [
+    {
+      "group_id": "borella-carne",
+      "request_id": "a1e1ff16-1b02-4040-85f2-4430cfd58f96",
+      "canonical_sku": "K2-SKU-001017",
+      "source_skus": [
+        "K2-SKU-001016",
+        "K2-SKU-001018"
+      ],
+      "created_at": "2026-10-26 06:31:51.731247+00",
+      "result": {
+        "groupId": "borella-carne",
+        "lotCount": 1,
+        "quantity": 45,
+        "available": 45,
+        "requestId": "a1e1ff16-1b02-4040-85f2-4430cfd58f96",
+        "sourceSkus": [
+          "K2-SKU-001016",
+          "K2-SKU-001018"
+        ],
+        "canonicalSku": "K2-SKU-001017"
+      },
+      "website_events": 2,
+      "master_events": 2
+    },
+    {
+      "group_id": "borella-prosciutto",
+      "request_id": "daabe964-3c96-4686-aa1f-a257fe6e2fc3",
+      "canonical_sku": "K2-SKU-001020",
+      "source_skus": [
+        "K2-SKU-001019",
+        "K2-SKU-001021"
+      ],
+      "created_at": "2026-10-26 06:33:32.491798+00",
+      "result": {
+        "groupId": "borella-prosciutto",
+        "lotCount": 2,
+        "quantity": 64,
+        "available": 64,
+        "requestId": "daabe964-3c96-4686-aa1f-a257fe6e2fc3",
+        "sourceSkus": [
+          "K2-SKU-001019",
+          "K2-SKU-001021"
+        ],
+        "canonicalSku": "K2-SKU-001020"
+      },
+      "website_events": 2,
+      "master_events": 2
+    }
+  ]
+}

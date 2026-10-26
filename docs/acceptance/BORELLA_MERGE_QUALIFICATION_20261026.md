@@ -1,3 +1,5 @@
+> Superseded status: the approved setting and both live merges are now verified. See [final applied receipt](DUPLICATE_CONSOLIDATION_APPLIED_20261026.md). Statements below describe the earlier checkpoints, not current pending work.
+
 # Borella duplicate consolidation — qualification in progress
 
 MAP-023 / IDEA-20261025-04. The owner requested continuing the merging/purging
