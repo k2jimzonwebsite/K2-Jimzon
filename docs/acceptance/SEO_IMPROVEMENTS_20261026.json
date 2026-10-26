@@ -1,7 +1,7 @@
 {
   "at": "2026-10-26T13:29:27.999Z",
   "owner": "MAP-024 / IDEA-20261026-03,05–09",
-  "state": "locally qualified; feature PR preparation, not deployed",
+  "state": "locally qualified and pushed as draft PR34; not merged or deployed to production",
   "baseline": "1799e23d",
   "branch": "codex/seo-audit-20261026",
   "scope": {
@@ -37,7 +37,7 @@
     "external": "Google code input6valid;Schema.org code input0errors0warnings3items;see external-validation.json",
     "visual": "Fresh independent fallback finish-review contract: ship for all26 local captures and sampled source; see finish-review.md",
     "fullRelease": "not run for this preparation;required once immediately before separately owner-requested production promotion",
-    "documentation": "Independent documenter retry completed after initial usage interruption; ordinary extension preserves PRODUCT and design sidecar; two new-note wording corrections resolved. See design-documentation.md."
+    "documentation": "Independent fallback documenter retry complete;26stable pins and both new-note wording corrections verified; PRODUCT/sidecar preserved."
   },
   "limitations": [
     "Initial body remains client-rendered; shared initial head and rendered hrefs improved, not an SSR claim",
@@ -511,5 +511,18 @@
       "path": "docs/acceptance/seo-improvements-20261026/design-documentation.md",
       "sha256": "4223c7c26d4e91e1ecec209494982833e12b6f5ca12e649206030d8a24be7e0d"
     }
+  },
+  "pullRequest": {
+    "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/pull/34",
+    "sourceCommit": "f0d8f12e1ececbcc9ad0eee24bb674b9764775f6",
+    "draft": true,
+    "observedAt": "2026-10-26T13:53:40.448Z",
+    "ci": {
+      "run": 40334385345,
+      "status": "in_progress",
+      "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40334385345"
+    },
+    "automaticPreviews": "pending; neither verified or promoted",
+    "production": "unchanged prior approved release"
   }
 }
