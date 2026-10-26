@@ -31,7 +31,10 @@ export function classifyInstalledPermissions(live,publicFunctions,expected){
 export function classifyBackupProof(manifest,proof,actual){
  if(!manifest||!proof||!actual||manifest.projectRef!=='pixplcjqivlfflickobf'||typeof manifest.backupId!=='string'||!manifest.backupId||proof.backupId!==manifest.backupId||proof.restoreVerified!==true)return blocked('Backup and isolated restore identity are not bound');
  if(!/^[a-f0-9]{64}$/.test(actual.sha256)||manifest.encryptedSha256!==actual.sha256||!Number.isSafeInteger(actual.bytes)||actual.bytes<1||manifest.encryptedBytes!==actual.bytes)return blocked('Encrypted backup bytes/hash differ from manifest');
- if(!/^\d{14}$/.test(actual.latest)||proof.latestMigrationVersion!==actual.latest)return blocked('Restored backup does not contain the current installed migration');
+ const migrationVersion=actual.latest;
+ const migrationDate=typeof migrationVersion==='string'&&/^\d{8}(?:\d{6})?$/.test(migrationVersion)
+  ? `${migrationVersion.slice(0,4)}-${migrationVersion.slice(4,6)}-${migrationVersion.slice(6,8)}T${migrationVersion.length===14?`${migrationVersion.slice(8,10)}:${migrationVersion.slice(10,12)}:${migrationVersion.slice(12,14)}`:'00:00:00'}Z` : '';
+ if(!utcTimestamp(migrationDate)||proof.latestMigrationVersion!==migrationVersion)return blocked('Restored backup does not contain the current installed migration');
  const created=Date.parse(manifest.createdAt),verified=Date.parse(proof.verifiedAt);
  if(!utcTimestamp(manifest.createdAt)||!utcTimestamp(proof.verifiedAt)||!Number.isFinite(actual.now)||created>actual.now+60000||verified>actual.now+60000||verified<created)return blocked('Backup creation/restore chronology is invalid');
  const day=manifest.createdAt.slice(0,10).replaceAll('-','');

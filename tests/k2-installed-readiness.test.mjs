@@ -39,6 +39,13 @@ test('approved order-chat adapter extends the exact installed catalog without ad
 const manifest={projectRef:'pixplcjqivlfflickobf',backupId:'current-k2-bound',createdAt:'2026-10-13T11:30:00Z',encryptedSha256:hash,encryptedBytes:128};
 const proof={backupId:manifest.backupId,restoreVerified:true,verifiedAt:'2026-10-13T11:31:00Z',latestMigrationVersion:'20261013110000'};
 const actual={sha256:hash,bytes:128,latest:'20261013110000',now};
+test('date-only migration version requires the exact restored version and all backup bindings',()=>{
+ const version='20261013',p={...proof,latestMigrationVersion:version},a={...actual,latest:version};
+ assert.equal(classifyBackupProof(manifest,p,a).state,'verified');
+ for(const changed of ['20261012','20261013110000'])assert.equal(classifyBackupProof(manifest,{...p,latestMigrationVersion:changed},a).state,'blocked');
+ for(const latest of ['2026101','202610130','2026101311000','20261313','20260230'])assert.equal(classifyBackupProof(manifest,{...p,latestMigrationVersion:latest},{...a,latest}).state,'blocked');
+ assert.equal(classifyBackupProof(manifest,p,{...a,sha256:'b'.repeat(64)}).state,'blocked');
+});
 test('backup must match encrypted bytes/hash and actual restored current migration',()=>{assert.equal(classifyBackupProof(manifest,proof,actual).state,'verified');for(const drift of [{backupId:'other'},{restoreVerified:false},{latestMigrationVersion:'20260928092634'}])assert.equal(classifyBackupProof(manifest,{...proof,...drift},actual).state,'blocked');assert.equal(classifyBackupProof(manifest,proof,{...actual,sha256:'b'.repeat(64)}).state,'blocked');assert.equal(classifyBackupProof(manifest,proof,{...actual,bytes:127}).state,'blocked')});
 test('missing proof and impossible/future creation or restoration evidence refuse',()=>{assert.equal(classifyBackupProof(manifest,null,actual).state,'blocked');for(const createdAt of ['bad','2026-10-14T12:00:00Z'])assert.equal(classifyBackupProof({...manifest,createdAt},proof,actual).state,'blocked');assert.equal(classifyBackupProof(manifest,{...proof,verifiedAt:'2026-10-13T11:29:00Z'},actual).state,'blocked')});
 test('unknown backup creation metadata cannot be bypassed by a valid candidate',()=>{const valid={file:'valid',manifest},unknown={file:'unknown',manifest:null};for(const candidates of [[valid,unknown],[unknown,valid]])assert.equal(selectBackupEvidence(candidates).state,'blocked');assert.equal(selectBackupEvidence([valid]).candidate.file,'valid');assert.equal(selectBackupEvidence([{file:'bad',manifest:{...manifest,createdAt:'bad'}},valid]).state,'blocked')});

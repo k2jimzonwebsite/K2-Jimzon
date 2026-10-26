@@ -124,7 +124,7 @@ revoke all on function public.read_admin_product_sku_merge_v1(text) from public,
 grant execute on function public.read_admin_product_sku_merge_v1(text) to authenticated;
 
 create function k2_private.execute_product_sku_merge_v1(p_payload jsonb,p_key uuid)
-returns jsonb language plpgsql security definer set search_path='' as $$
+returns jsonb language plpgsql security definer set search_path='' set lock_timeout='2s' as $$
 declare s text[];v jsonb;a jsonb;r jsonb;l public.product_batches;n public.product_batches;
  v_depth int;v_instant timestamptz;v_sku text;v_total int;v_available int;v_old_setting text;
  v_before jsonb;v_after jsonb;v_target text;v_status text;
