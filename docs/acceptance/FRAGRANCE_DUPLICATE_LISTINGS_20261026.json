@@ -1,0 +1,83 @@
+{
+  "idea": "IDEA-20261026-01",
+  "map": "MAP-023",
+  "project": "pixplcjqivlfflickobf",
+  "verifiedAt": "2026-10-26T02:31:27.031Z",
+  "checks": {
+    "belliniProductsUnchanged": true,
+    "belliniLotsUnchanged": true,
+    "belliniBalancesUnchanged": true,
+    "chalouProductsUnchanged": true,
+    "chalouLotsUnchanged": true,
+    "chalouBalancesUnchanged": true,
+    "exactNinePaused": true
+  },
+  "changedWebsiteSkus": [
+    "K2-SKU-001025",
+    "K2-SKU-001073",
+    "K2-SKU-001075",
+    "K2-SKU-001076",
+    "K2-SKU-001146",
+    "K2-SKU-001147",
+    "K2-SKU-001148",
+    "K2-SKU-001194",
+    "K2-SKU-001195"
+  ],
+  "retainedWebsiteSkus": [
+    "K2-SKU-001024",
+    "K2-SKU-001072",
+    "K2-SKU-001074",
+    "K2-SKU-001145",
+    "K2-SKU-001193"
+  ],
+  "publicBrowser": {
+    "host": "https://www.k2jimzon.com/catalog",
+    "totalListings": 121,
+    "fragranceListings": 10,
+    "oneCardEach": true
+  },
+  "backup": {
+    "backupId": "current-pixplcjqivlfflickobf-2026-10-26T020445114Z-bf37894c3cd4",
+    "verifiedAt": "2026-10-26T02:10:11.271Z",
+    "restoreVerified": true,
+    "publicRelations": 75,
+    "latestMigrationVersion": "20261013110000",
+    "excludedManagedEntries": 10,
+    "evidenceBoundary": "Application database in isolated PostgreSQL; managed Vault, Storage objects and provider settings are excluded."
+  },
+  "privateEvidence": [
+    {
+      "file": ".tools/duplicate-products-20261026/initial-read.json",
+      "sha256": "cac7033f5ab3bdbe2a680e41c5d937f2ae56d43e0bc681a4e76e0349e1200858"
+    },
+    {
+      "file": ".tools/duplicate-products-20261026/dependencies.json",
+      "sha256": "0009ac7a371349fab0d87c4f2bd7490954158683783f8a57e0afe1cc69aa1ea4"
+    },
+    {
+      "file": ".tools/duplicate-products-20261026/after-read.json",
+      "sha256": "c473a9bf7a59d61ea16beb6d92856ea60be6b978dd3ed33fb310f7655e0f6723"
+    },
+    {
+      "file": ".tools/duplicate-products-20261026/chalou-read.json",
+      "sha256": "dd9ac1642450d09c5138a3f9b5edbf1aeb9a4a96b68249fb479ba10d4eecf809"
+    },
+    {
+      "file": ".tools/duplicate-products-20261026/chalou-dependencies.json",
+      "sha256": "bf3e116fddaae498e3db129ec3f1d49274a91bf8e9ba6c5d6a40c0101b7740e7"
+    },
+    {
+      "file": ".tools/duplicate-products-20261026/chalou-after.json",
+      "sha256": "d7e43b18551bc86c0dea97b62497ed49fd466e66b1e6743b632fd71724c11da7"
+    },
+    {
+      "file": ".tools/duplicate-products-20261026/restore-receipt.json",
+      "sha256": "23374f6321ee5d74f6dae668a85682849d077b44b46e3951113b555e1be57578"
+    },
+    {
+      "file": ".tools/duplicate-products-20261026/fragrances-after.png",
+      "sha256": "a504cfaa5c7c81d57f87e5dd690490f7d739d09c9edb495bf4f61feded559739"
+    }
+  ],
+  "boundary": "Website assignments only; no product lifecycle, stock, lot, schema or application deployment change. Managed provider recovery and physical stock remain unverified."
+}
