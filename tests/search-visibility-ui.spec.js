@@ -42,6 +42,92 @@ test('product names provide real links and preserve client navigation', async ({
   expect(await page.evaluate(() => window.__sameDocumentSeoTest)).toBe(true)
 })
 
+test('the immersive store defers the optional prompt without granting consent', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/store')
+  await expect(page.getByRole('main', { name: 'K2 virtual store' })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Optional analytics' })).toHaveCount(0)
+  expect(await page.locator('script[src*="googletagmanager.com"]').count()).toBe(0)
+  expect(await page.evaluate(() => localStorage.getItem('k2-analytics-consent-v1'))).toBeNull()
+  await page.getByRole('button', { name: 'Leave the store', exact: true }).click()
+  await expect(page.getByRole('region', { name: 'Optional analytics' })).toBeVisible()
+  await page.getByRole('button', { name: 'Decline', exact: true }).click()
+  expect(await page.locator('script[src*="googletagmanager.com"]').count()).toBe(0)
+})
+
+for (const width of [375, 1440]) {
+  test(`public navigation exposes canonical links and preserves client navigation at ${width}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto('/catalog')
+    await page.getByRole('button', { name: 'Decline', exact: true }).click()
+    const nav = page.getByRole('navigation', { name: width < 1024 ? 'Mobile storefront' : 'Storefront', exact: true })
+    await expect(nav.getByRole('link', { name: 'Pasabuy', exact: true })).toHaveAttribute('href', '/pasabuy')
+    await expect(page.getByRole('link', { name: 'Request from Italy', exact: true })).toHaveAttribute('href', '/pasabuy')
+    await expect(page.getByRole('link', { name: 'Wholesale orders', exact: true })).toHaveAttribute('href', '/trade')
+    await expect(page.getByRole('link', { name: 'Privacy & Data', exact: true })).toHaveAttribute('href', '/privacy')
+    await page.evaluate(() => { window.__sameDocumentSeoNav = true })
+    await nav.getByRole('link', { name: 'Pasabuy', exact: true }).click()
+    await expect(page).toHaveURL(/\/pasabuy$/)
+    await expect(page.getByRole('heading', { level: 1, name: /Pasabuy/ })).toBeVisible()
+    expect(await page.evaluate(() => window.__sameDocumentSeoNav)).toBe(true)
+  })
+}
+
+test('contact and policy pages identify their own public content', async ({ page }) => {
+  for (const [path, title] of [['/contact', 'Contact K2 Jimzon'], ['/privacy', 'Privacy & Data'], ['/terms', 'Terms of Service'], ['/returns', 'Returns & Replacements']]) {
+    await page.goto(path)
+    await expect(page).toHaveTitle(new RegExp(title))
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `http://localhost:5191${path}`)
+  }
+})
+
+test('brand fonts load locally and the first-view poster is prioritized', async ({ page }) => {
+  await page.goto('/pasabuy')
+  await expect.poll(() => page.evaluate(() => [...document.fonts].some(face => face.family.replaceAll('"', '') === 'Source Sans 3' && face.status === 'loaded'))).toBe(true)
+  await expect(page.locator('link[rel="preload"][as="image"][href="/ambient/pasabuy.jpg"]')).toHaveCount(1)
+  expect(await page.locator('link[href*="fonts.googleapis.com"]').count()).toBe(0)
+})
+
+test('the featured product rail uses a bounded delivery copy of its approved image', async ({ page }) => {
+  const image = 'https://pixplcjqivlfflickobf.supabase.co/storage/v1/object/public/product-images/5164364f-046b-4904-8f38-4157c39d978b/product-media/178b5d63-0112-4b90-83a4-6e7bfe5a86f5-10eff3b03c25f453.png'
+  await page.route('**/rest/v1/products**', route => route.fulfill({ json: [{ ...product, name: 'Combino Spaghetti No. 5 1kg', primary_image_url: image }] }))
+  await page.goto('/')
+  const picture = page.locator('.hero-collection-image').first()
+  await expect(picture).toHaveAttribute('src', /\/seo-media\/.*-256\.webp$/)
+  await expect.poll(() => picture.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true)
+  const response = await page.request.get(await picture.getAttribute('src'))
+  expect(response.ok()).toBe(true)
+  expect((await response.body()).length).toBeLessThan(100000)
+})
+
+test('public merchant identity uses verified details and clears on a private route', async ({ page }) => {
+  await page.goto('/catalog')
+  const identity = page.locator('script[data-k2-organization-jsonld]')
+  await expect(identity).toHaveCount(1)
+  const data = JSON.parse(await identity.textContent())
+  expect(data['@type']).toBe('OnlineStore')
+  expect(data.name).toBe('K2 Jimzon')
+  expect(data.hasMerchantReturnPolicy.merchantReturnLink).toBe('http://localhost:5191/returns')
+  expect(data).not.toHaveProperty('address')
+  expect(data).not.toHaveProperty('aggregateRating')
+  await page.goto('/checkout')
+  await expect(identity).toHaveCount(0)
+})
+
+test('product facts and markup resolve the catalog brand relationship', async ({ page }) => {
+  await page.route('**/rest/v1/products**', route => {
+    expect(new URL(route.request().url()).searchParams.get('select')).toContain('brand:brands(name)')
+    return route.fulfill({ json: [{ ...product, brand: { name: 'Reviewed coffee brand' }, net_weight: 250, country_of_origin: 'Italy' }] })
+  })
+  await page.goto(`/product/${product.sku}`)
+  await expect(page.getByText('Reviewed coffee brand', { exact: true }).first()).toBeVisible()
+  const data = JSON.parse(await page.locator('script[data-k2-product-jsonld]').textContent())
+  expect(data.brand.name).toBe('Reviewed coffee brand')
+  expect(data.weight).toMatchObject({ value: 250, unitCode: 'GRM' })
+  expect(data.countryOfOrigin).toBe('Italy')
+  expect(data).not.toHaveProperty('gtin13')
+})
+
 test('analytics requires consent, strips URLs, avoids duplicate/private views and can be withdrawn', async ({ page }) => {
   let tagLoads = 0
   await page.route('https://www.googletagmanager.com/gtag/js?*', route => {

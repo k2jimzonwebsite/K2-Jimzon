@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-26T13:13:15.722Z",
+  "sourceUrls": 231,
+  "uniqueSourceImages": 209,
+  "deliveryFiles": 418,
+  "deliveredFileBytes": 63827634,
+  "originalBytesReferenced": 298130686,
+  "allHashesAndDimensionsMatch": true,
+  "allProvenanceSidecarsPresent": true,
+  "wood": {
+    "originalBytes": 543116,
+    "deliveredBytes": 25100,
+    "sourceSha256": "6cff2ce7dd72c4a0e9230e835d6b4a1d024bacc6191643e7f6d4c6480022d225",
+    "sha256": "ebd31a7ca13a49b4591ec6d376d974360d5f373bf12922bf234b26706fd843bb"
+  }
+}

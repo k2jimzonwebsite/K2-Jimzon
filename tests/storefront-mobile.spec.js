@@ -18,7 +18,7 @@ test.describe('mobile storefront contract', () => {
       if (/\/rest\/v1\/(conversations|messages)(\?|$)/.test(request.url())) privateInboxRequests.push(request.url())
     })
     await page.goto('/')
-    await page.getByRole('button', { name: 'Inventory & Catalog' }).click()
+    await page.getByRole('link', { name: 'Inventory & Catalog' }).click()
 
     const cards = page.getByTestId('product-card')
     await expect(cards.first()).toBeVisible({ timeout: 30000 })
@@ -60,7 +60,7 @@ test.describe('mobile storefront contract', () => {
 
   test('accessible mobile route and interactive review globe remain present', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('button', { name: /Shop the Collection/i })).toBeVisible({ timeout: 45000 })
+    await expect(page.getByRole('link', { name: /Shop the Collection/i })).toBeVisible({ timeout: 45000 })
 
     const routeMap = page.getByRole('group', { name: 'Sourcing route stops' })
     await expect(routeMap).toBeVisible()

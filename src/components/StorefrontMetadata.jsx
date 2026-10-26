@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useStore } from '../context/StoreContext'
 import { resolveStorefrontMetadataOrigin } from '../lib/storefrontMetadataOrigin'
 import {
-  buildBreadcrumbStructuredData, buildFaqStructuredData, buildProductStructuredData, writeJsonLd,
+  buildBreadcrumbStructuredData, buildFaqStructuredData, buildOrganizationStructuredData, buildProductStructuredData, writeJsonLd,
 } from '../lib/productStructuredData'
 import { getProductKnowledge } from '../lib/productKnowledge'
 import { useProductKnowledgeVersion } from '../lib/useProductKnowledgeVersion'
@@ -51,7 +51,7 @@ export default function StorefrontMetadata() {
   useEffect(() => {
     const origin = resolveStorefrontMetadataOrigin({ origin: window.location.origin, hostname: window.location.hostname, isDev: import.meta.env.DEV })
     const seoPage = STOREFRONT_SEO_PAGES[view]
-    const canonicalUrl = new URL(seoPage?.path || window.location.pathname, origin).href
+    const canonicalUrl = new URL(seoPage?.canonicalPath || seoPage?.path || window.location.pathname, origin).href
     const title = product
       ? `${product.name} — K2 Jimzon`
       : view === 'not_found'
@@ -75,6 +75,19 @@ export default function StorefrontMetadata() {
     }
     canonical.setAttribute('href', canonicalUrl)
 
+    let pageImage = document.head.querySelector('link[data-k2-page-image]')
+    if (seoPage?.preloadImage) {
+      if (!pageImage) {
+        pageImage = document.createElement('link')
+        pageImage.setAttribute('data-k2-page-image', '')
+        document.head.appendChild(pageImage)
+      }
+      pageImage.rel = 'preload'
+      pageImage.as = 'image'
+      pageImage.href = seoPage.preloadImage
+      pageImage.fetchPriority = 'high'
+    } else pageImage?.remove()
+
     setMeta('name', 'description', description)
     const productHeld = view === 'master_product' && !__K2_INDEXABLE_PRODUCT_SKUS__.includes(product?.sku)
     setMeta('name', 'robots', unavailableSurface || scopedSurface || (view === 'master_product' && __K2_PRODUCT_NOINDEX__) ? 'noindex, nofollow' : productHeld ? 'noindex, follow' : 'index, follow')
@@ -88,6 +101,9 @@ export default function StorefrontMetadata() {
     setMeta('name', 'twitter:title', title)
     setMeta('name', 'twitter:description', description)
     setMeta('name', 'twitter:image', image)
+
+    writeJsonLd('data-k2-organization-jsonld',
+      scopedSurface || unavailableSurface ? null : buildOrganizationStructuredData({ origin }))
 
     // One builder serves this page and the virtual store. Markup that disagreed
     // between the two surfaces would cost the rich result, not just tidiness.

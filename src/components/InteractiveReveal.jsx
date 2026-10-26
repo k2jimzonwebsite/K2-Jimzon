@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
+import { recoverOriginalImage, storefrontImage } from '../lib/storefrontMedia'
 
 const onImageFallback = (e) => {
   const img = e?.currentTarget
@@ -75,9 +76,9 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
       {/* Base Layer: Before Image */}
       <div className="absolute inset-0 z-0 bg-shell flex items-center justify-center p-6 sm:p-8">
         <img 
-          src={beforeImage} 
+          src={storefrontImage(beforeImage)}
           alt="Base product"
-          onError={onImageFallback}
+          onError={event => { if (!recoverOriginalImage(event, beforeImage)) onImageFallback(event) }}
           loading="lazy"
           className="h-full w-full object-contain"
           draggable={false}
@@ -91,9 +92,9 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
           style={{ clipPath: `inset(0 0 0 ${pos}%)` }}
         >
           <img 
-            src={afterImage} 
+            src={storefrontImage(afterImage)}
             alt="After use"
-            onError={onImageFallback}
+            onError={event => { if (!recoverOriginalImage(event, afterImage)) onImageFallback(event) }}
             loading="lazy"
             className="h-full w-full object-cover"
             draggable={false}

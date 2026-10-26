@@ -1,0 +1,41 @@
+[WebServer] (node:22736) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:4224) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\search-visibility-ui.spec.js:91:1 › the featured product rail uses a bounded delivery copy of its approved image (5.8s)
+
+
+  1) tests\search-visibility-ui.spec.js:91:1 › the featured product rail uses a bounded delivery copy of its approved image
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: locator('.hero-collection-image').first()
+    Expected pattern: /\/seo-media\/.*-256\.webp$/
+    Received string:  "/images/placeholder.svg"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('.hero-collection-image').first() with timeout 5000ms
+      - waiting for locator('.hero-collection-image').first()
+        6 × locator resolved to <img alt="" class="hero-collection-image" src="/images/placeholder.svg"/>
+          - unexpected value "/images/placeholder.svg"
+
+
+      94 |   await page.goto('/')
+      95 |   const picture = page.locator('.hero-collection-image').first()
+    > 96 |   await expect(picture).toHaveAttribute('src', /\/seo-media\/.*-256\.webp$/)
+         |                         ^
+      97 |   await expect.poll(() => picture.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true)
+      98 |   const response = await page.request.get(await picture.getAttribute('src'))
+      99 |   expect(response.ok()).toBe(true)
+        at C:\Users\jerze\K2 JImzon\tests\search-visibility-ui.spec.js:96:25
+
+    Error Context: test-results\search-visibility-ui-the-f-abb4d--copy-of-its-approved-image\error-context.md
+
+  1 failed
+    tests\search-visibility-ui.spec.js:91:1 › the featured product rail uses a bounded delivery copy of its approved image

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useStore } from '../context/StoreContext'
-import { RedButton, TrustBadge, TuscanCard, Kicker } from '../components/ui/bits'
+import { ActionElement, RedButton, TrustBadge, TuscanCard, Kicker } from '../components/ui/bits'
 import { CheckIcon, PlaneIcon } from '../components/ui/icons'
 import TurnstileChallenge from '../components/security/TurnstileChallenge'
 import { guestBffEnabled } from '../services/guestCommerceService'
@@ -173,6 +173,24 @@ export default function Pasabuy() {
             <TrustBadge>Sea or air, as agreed</TrustBadge>
             <TrustBadge>No upfront fee to request</TrustBadge>
           </div>
+
+          <section className="mt-12" aria-labelledby="pasabuy-questions">
+            <h2 id="pasabuy-questions" className="font-serif text-2xl font-semibold text-navy">Planning your Italy to Philippines Pasabuy</h2>
+            <div className="mt-4 divide-y divide-[var(--store-surface-border)] border-y border-[var(--store-surface-border)]">
+              {[
+                ['What should I include in my request?', 'Send the product name, brand, exact size and quantity. A shop link or reference photo URL helps us check the item you mean. We confirm whether it can be sourced before quoting.'],
+                ['When will I know the price and arrival timing?', 'We check availability in Italy and send the item quote, shipping method and expected timing for your approval before purchasing. Ask us to clarify any charge or condition before you accept.'],
+                ['Does Pasabuy travel by sea or air?', 'The shipping option is agreed in your quote. Choose your preference in the request, and our team will confirm the available method and schedule for those items.'],
+                ['Can you deliver to my area in the Philippines?', 'Include your destination in the request notes so our team can confirm delivery or pickup options and charges with you before purchase.'],
+              ].map(([question, answer]) => (
+                <details key={question} className="group py-2">
+                  <summary className="min-h-11 cursor-pointer py-3 font-semibold text-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson">{question}</summary>
+                  <p className="pb-4 text-base leading-relaxed text-navy-soft">{answer}</p>
+                </details>
+              ))}
+            </div>
+            <p className="mt-5 text-base leading-relaxed text-navy-soft">Looking for items already in our cabinet? <ActionElement href="/catalog" onClick={() => go('catalog')} className="inline-flex min-h-11 items-center font-semibold text-crimson underline underline-offset-4">Browse the Italian goods catalog</ActionElement>.</p>
+          </section>
         </div>
 
         <div className="space-y-6 lg:sticky lg:top-28 lg:h-fit">

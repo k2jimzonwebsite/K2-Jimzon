@@ -1,0 +1,1400 @@
+{
+  "at": "2026-10-26T13:20:46.307Z",
+  "surface": "Local production build with real anonymous K2 public catalog reads; no account/order/form submission; analytics declined",
+  "captures": [
+    {
+      "name": "home-desktop",
+      "path": "/",
+      "theme": "light",
+      "width": 1440,
+      "title": "K2 Jimzon — Italian imports, direct to the Philippines",
+      "scrollWidth": 1440,
+      "viewport": 1440,
+      "fonts": [
+        "Fraunces",
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ab4e2711c709629ec51a-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/14503c03b96579d20c1f-256.webp",
+          "decoded": true
+        }
+      ],
+      "internalLinks": 31
+    },
+    {
+      "name": "home-mobile",
+      "path": "/",
+      "theme": "light",
+      "width": 375,
+      "title": "K2 Jimzon — Italian imports, direct to the Philippines",
+      "scrollWidth": 375,
+      "viewport": 375,
+      "fonts": [
+        "Fraunces",
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ab4e2711c709629ec51a-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/14503c03b96579d20c1f-256.webp",
+          "decoded": true
+        }
+      ],
+      "internalLinks": 31
+    },
+    {
+      "name": "home-mobile-dark",
+      "path": "/",
+      "theme": "dark",
+      "width": 375,
+      "title": "K2 Jimzon — Italian imports, direct to the Philippines",
+      "scrollWidth": 375,
+      "viewport": 375,
+      "fonts": [
+        "Fraunces",
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ab4e2711c709629ec51a-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/14503c03b96579d20c1f-256.webp",
+          "decoded": true
+        }
+      ],
+      "internalLinks": 31
+    },
+    {
+      "name": "home-user-777",
+      "path": "/",
+      "theme": "light",
+      "width": 777,
+      "title": "K2 Jimzon — Italian imports, direct to the Philippines",
+      "scrollWidth": 777,
+      "viewport": 777,
+      "fonts": [
+        "Fraunces",
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ab4e2711c709629ec51a-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-256.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/14503c03b96579d20c1f-256.webp",
+          "decoded": true
+        }
+      ],
+      "internalLinks": 31
+    },
+    {
+      "name": "pasabuy-desktop",
+      "path": "/pasabuy",
+      "theme": "light",
+      "width": 1440,
+      "title": "Pasabuy from Italy to the Philippines | K2 Jimzon",
+      "scrollWidth": 1440,
+      "viewport": 1440,
+      "fonts": [
+        "Fraunces",
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [],
+      "internalLinks": 19
+    },
+    {
+      "name": "pasabuy-mobile",
+      "path": "/pasabuy",
+      "theme": "light",
+      "width": 375,
+      "title": "Pasabuy from Italy to the Philippines | K2 Jimzon",
+      "scrollWidth": 375,
+      "viewport": 375,
+      "fonts": [
+        "Fraunces",
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [],
+      "internalLinks": 19
+    },
+    {
+      "name": "pasabuy-mobile-dark",
+      "path": "/pasabuy",
+      "theme": "dark",
+      "width": 375,
+      "title": "Pasabuy from Italy to the Philippines | K2 Jimzon",
+      "scrollWidth": 375,
+      "viewport": 375,
+      "fonts": [
+        "Fraunces",
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [],
+      "internalLinks": 19
+    },
+    {
+      "name": "pasabuy-320",
+      "path": "/pasabuy",
+      "theme": "light",
+      "width": 320,
+      "title": "Pasabuy from Italy to the Philippines | K2 Jimzon",
+      "scrollWidth": 320,
+      "viewport": 320,
+      "fonts": [
+        "Fraunces",
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [],
+      "internalLinks": 19
+    },
+    {
+      "name": "catalog-desktop",
+      "path": "/catalog",
+      "theme": "light",
+      "width": 1440,
+      "title": "Italian Imported Goods in Manila | K2 Jimzon",
+      "scrollWidth": 1440,
+      "viewport": 1440,
+      "fonts": [
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [
+        {
+          "src": "/seo-media/43081f334ffce83121dd-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e562685cf04ea1475cca-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/966ca9944e9b35e8c4c8-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/dc85f7cecb37dcb70c33-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/22ac364aa5d583594121-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ebd990aec07a990b21fd-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/eb931338b12952982a76-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4d04a52271f4c6e7407d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/52a0573588717c8956d1-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/bc5b7fe2579a2a17baf6-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/14503c03b96579d20c1f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/fce222b05657e06bb975-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/b98912e4b7d5266b943f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/8d5c7feeb4794dc7174e-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/b2f60a2bc754bb73e7a9-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/fd9c58189c87b85093c8-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/86df607bbe0ceece7218-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/44757cdc1a7177674dfb-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/142e2614073a1d27b475-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/7decae04bd9aeb5385a8-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/88a618a4c281425e5537-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/7ab8451bd1b70320c626-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/dc2d732daa89cf238db7-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/fc9914139692fcb8b765-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/439138c85aa923b5479e-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/94fd6df4651ac9469b00-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/94fd6df4651ac9469b00-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/94fd6df4651ac9469b00-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/9cb7c3e58c85d33f53ef-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/a07110fae44859e003b6-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0d57e0a7506111ea5ade-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/c04a787e33124b70e67d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/a647a9d786fbaab103fa-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/844807f797d928aaafea-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2de0b6a694bb52cf9342-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/188f1a9bd98c47bbdbc7-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/95cc0ebbfaa7c507b33d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/410636081e8dac6606bf-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/cbb70f76f56a28afefb3-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/f6b9bc9833b7a7867265-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/de45225e50b29d67beee-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/f524eb4b711a8f80f107-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/14553f4bee1fdf44192d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/588541a5f29dc05b0791-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e1a1726bb8dcc572f73b-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/9c9ba1d08122f1cec695-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/1007cccc747b47647ff0-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/b406aac42897e82c257a-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/79113ea001fd10d7e0b4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/11e42887311783717511-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4a46263d753c1d62b6c7-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0d8c8bd62584efd7a4fe-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/81787eb01c8232d9548e-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/6ee84fbc05e87e9f50ba-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2f7ce99d96e8d68d3112-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2f7ce99d96e8d68d3112-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2f7ce99d96e8d68d3112-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2f7ce99d96e8d68d3112-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/50bcbd1c8a395d467361-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/78312a30bf9da58db730-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2c6de581ecc87f5d9852-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/88942798b03d663a82d1-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/258005b724dd31f99088-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e882d2fa71e2d6a6ff8d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/dfcbe4ff21664510baa0-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/c5c2e99ff781429ef7f2-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4cf5e5e93414697d5e00-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4cf5e5e93414697d5e00-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e165a8333807bcd2efc4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/a20063067676da71d94e-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/8132b4b52472ae1ff05b-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4e8bbb60ca7d5b111da2-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/fa5d2308b75d545c21e4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ecee69153ed3c5609f10-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ecee69153ed3c5609f10-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/bdd54f68c0737eed01a4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/bdd54f68c0737eed01a4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/bdd54f68c0737eed01a4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0696e6166140667c803-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/142ea33e5f793fb69f81-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/6a3528bcd71cdadd2a95-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/01e789dd5b1364118c75-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/9f81f91ce5193132d620-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ac5e73a78482d1f89f50-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0620ac243078185be708-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/355c63825033af917523-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4a2cfec8be1e6ca754ee-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/506c3c39a8594c5e2455-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0620ac243078185be708-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/f3a96508867a50c2cf2f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/16d91ac234c70ff23eb2-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e5d8320571a1dc663c41-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/60c7da29ffae79d83a2d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/27c831f0419a5f600f8f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/086a52ac9f472e4b0239-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ba99be7800efd865133d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/329627b6013afb925337-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/76beeae193d652054388-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/b486e417b77441deff0a-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2066a5529acb7945cc73-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/69bdc060cb8ec75779a5-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/d913436d189702eab9b8-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ba836d48463b0add02d9-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e11a4540e9918816a105-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/5b4a06effff3b3bb4e51-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/5b4a06effff3b3bb4e51-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/f6ec7359bccc534158a2-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4f59870b87155c751e2c-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/842e501074331e259d07-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ecdf3c7a8adfbed56782-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/a4f23f8415c69086dbd4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/9e2bf458696c204a4599-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/c719dc99dad2fd0493ea-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e2d1d433946692a93e8a-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0bbce939f242ea7ada4f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/f28d0afa00319b33defb-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/c209192766f7be763ca5-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/5a3742f49f5397f2f47e-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0b847ecb96c815f8fe1d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/eaf87ed4bf0aedfe467f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/25cc17cb184465531221-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/62557b9bd6a5a14bebbb-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/10eff3b03c25f453e29d-768.webp",
+          "decoded": true
+        }
+      ],
+      "internalLinks": 270
+    },
+    {
+      "name": "catalog-mobile",
+      "path": "/catalog",
+      "theme": "light",
+      "width": 375,
+      "title": "Italian Imported Goods in Manila | K2 Jimzon",
+      "scrollWidth": 375,
+      "viewport": 375,
+      "fonts": [
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [
+        {
+          "src": "/seo-media/43081f334ffce83121dd-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e562685cf04ea1475cca-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/966ca9944e9b35e8c4c8-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/dc85f7cecb37dcb70c33-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/22ac364aa5d583594121-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ebd990aec07a990b21fd-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/eb931338b12952982a76-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4d04a52271f4c6e7407d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/52a0573588717c8956d1-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/bc5b7fe2579a2a17baf6-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/14503c03b96579d20c1f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/fce222b05657e06bb975-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/b98912e4b7d5266b943f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/8d5c7feeb4794dc7174e-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/b2f60a2bc754bb73e7a9-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/fd9c58189c87b85093c8-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/86df607bbe0ceece7218-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/44757cdc1a7177674dfb-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/142e2614073a1d27b475-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/7decae04bd9aeb5385a8-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/88a618a4c281425e5537-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/7ab8451bd1b70320c626-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/dc2d732daa89cf238db7-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/fc9914139692fcb8b765-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/439138c85aa923b5479e-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/94fd6df4651ac9469b00-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/94fd6df4651ac9469b00-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/94fd6df4651ac9469b00-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/9cb7c3e58c85d33f53ef-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/a07110fae44859e003b6-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0d57e0a7506111ea5ade-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/c04a787e33124b70e67d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/a647a9d786fbaab103fa-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/844807f797d928aaafea-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2de0b6a694bb52cf9342-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/188f1a9bd98c47bbdbc7-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/95cc0ebbfaa7c507b33d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/410636081e8dac6606bf-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/cbb70f76f56a28afefb3-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/f6b9bc9833b7a7867265-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/de45225e50b29d67beee-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/f524eb4b711a8f80f107-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/14553f4bee1fdf44192d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/588541a5f29dc05b0791-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e1a1726bb8dcc572f73b-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/9c9ba1d08122f1cec695-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/1007cccc747b47647ff0-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/b406aac42897e82c257a-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/79113ea001fd10d7e0b4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/11e42887311783717511-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4a46263d753c1d62b6c7-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0d8c8bd62584efd7a4fe-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/81787eb01c8232d9548e-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/6ee84fbc05e87e9f50ba-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2f7ce99d96e8d68d3112-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2f7ce99d96e8d68d3112-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2f7ce99d96e8d68d3112-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2f7ce99d96e8d68d3112-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/50bcbd1c8a395d467361-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/78312a30bf9da58db730-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2c6de581ecc87f5d9852-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/88942798b03d663a82d1-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/258005b724dd31f99088-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e882d2fa71e2d6a6ff8d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/dfcbe4ff21664510baa0-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/c5c2e99ff781429ef7f2-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4cf5e5e93414697d5e00-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4cf5e5e93414697d5e00-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e165a8333807bcd2efc4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/a20063067676da71d94e-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/8132b4b52472ae1ff05b-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4e8bbb60ca7d5b111da2-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/fa5d2308b75d545c21e4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ecee69153ed3c5609f10-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ecee69153ed3c5609f10-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/bdd54f68c0737eed01a4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/bdd54f68c0737eed01a4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/bdd54f68c0737eed01a4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0696e6166140667c803-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/142ea33e5f793fb69f81-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/6a3528bcd71cdadd2a95-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/01e789dd5b1364118c75-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/9f81f91ce5193132d620-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ac5e73a78482d1f89f50-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0620ac243078185be708-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/355c63825033af917523-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4a2cfec8be1e6ca754ee-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/506c3c39a8594c5e2455-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0620ac243078185be708-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/f3a96508867a50c2cf2f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/16d91ac234c70ff23eb2-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e5d8320571a1dc663c41-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/60c7da29ffae79d83a2d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/27c831f0419a5f600f8f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/086a52ac9f472e4b0239-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ba99be7800efd865133d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/329627b6013afb925337-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/76beeae193d652054388-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/b486e417b77441deff0a-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/2066a5529acb7945cc73-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/69bdc060cb8ec75779a5-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/d913436d189702eab9b8-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ba836d48463b0add02d9-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e11a4540e9918816a105-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/5b4a06effff3b3bb4e51-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/5b4a06effff3b3bb4e51-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/f6ec7359bccc534158a2-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/4f59870b87155c751e2c-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/842e501074331e259d07-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/ecdf3c7a8adfbed56782-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/a4f23f8415c69086dbd4-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/9e2bf458696c204a4599-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/c719dc99dad2fd0493ea-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e2d1d433946692a93e8a-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0bbce939f242ea7ada4f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/f28d0afa00319b33defb-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/c209192766f7be763ca5-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/5a3742f49f5397f2f47e-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/0b847ecb96c815f8fe1d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/eaf87ed4bf0aedfe467f-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/25cc17cb184465531221-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/62557b9bd6a5a14bebbb-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/10eff3b03c25f453e29d-768.webp",
+          "decoded": true
+        }
+      ],
+      "internalLinks": 270
+    },
+    {
+      "name": "product-desktop",
+      "path": "/product/K2-SKU-001001",
+      "theme": "light",
+      "width": 1440,
+      "title": "Combino Spaghetti No. 5 1kg — K2 Jimzon",
+      "scrollWidth": 1440,
+      "viewport": 1440,
+      "fonts": [
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/14503c03b96579d20c1f-768.webp",
+          "decoded": true
+        }
+      ],
+      "internalLinks": 26
+    },
+    {
+      "name": "product-mobile",
+      "path": "/product/K2-SKU-001001",
+      "theme": "light",
+      "width": 375,
+      "title": "Combino Spaghetti No. 5 1kg — K2 Jimzon",
+      "scrollWidth": 375,
+      "viewport": 375,
+      "fonts": [
+        "Fraunces",
+        "Source Sans 3",
+        "Source Sans 3",
+        "Source Sans 3"
+      ],
+      "images": [
+        {
+          "src": "/seo-media/ad186ffb02cd778b7a65-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/38a387e39c5fca0bfa9d-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/e0904fcda9ea3ad4df1b-768.webp",
+          "decoded": true
+        },
+        {
+          "src": "/seo-media/14503c03b96579d20c1f-768.webp",
+          "decoded": true
+        }
+      ],
+      "internalLinks": 26
+    }
+  ]
+}

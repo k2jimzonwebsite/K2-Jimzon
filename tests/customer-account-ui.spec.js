@@ -247,7 +247,7 @@ test('customer account entry is phone-safe, passwordless, recoverable, and keeps
   await expect(page.getByRole('main')).toBeVisible({ timeout: 90000 })
   await page.getByRole('button', { name: 'Customer account' }).click()
   await expect(page.getByRole('heading', { name: 'Keep verified K2 history across devices.' })).toBeVisible({ timeout: 90000 })
-  await expect(page.getByRole('navigation', { name: 'Mobile storefront' }).getByRole('button')).toHaveCount(5)
+  await expect(page.getByRole('navigation', { name: 'Mobile storefront' }).getByRole('link')).toHaveCount(5)
   await expect(page.getByLabel('Email address')).toBeVisible()
   await expect(page.getByText('Complete this check before K2 asks the sign-in provider to send a link or text code.')).toBeVisible()
   await expect(page.locator('input[type="password"]')).toHaveCount(0)

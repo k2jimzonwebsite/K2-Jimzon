@@ -1,0 +1,35 @@
+[WebServer] (node:18120) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:25164) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:10512) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\search-visibility-ui.spec.js:84:1 › brand fonts load locally and the first-view poster is prioritized (5.2s)
+
+
+  1) tests\search-visibility-ui.spec.js:84:1 › brand fonts load locally and the first-view poster is prioritized
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      84 | test('brand fonts load locally and the first-view poster is prioritized', async ({ page }) => {
+      85 |   await page.goto('/pasabuy')
+    > 86 |   await expect.poll(() => page.evaluate(() => [...document.fonts].some(face => face.family.replaceAll('"', '') === 'Source Sans 3' && face.status === 'loaded'))).toBe(true)
+         |                                                                                                                                                                   ^
+      87 |   await expect(page.locator('link[rel="preload"][as="image"][href="/ambient/pasabuy.jpg"]')).toHaveCount(1)
+      88 |   expect(await page.locator('link[href*="fonts.googleapis.com"]').count()).toBe(0)
+      89 | })
+        at C:\Users\jerze\K2 JImzon\tests\search-visibility-ui.spec.js:86:163
+
+    Error Context: test-results\search-visibility-ui-brand-14a99--view-poster-is-prioritized\error-context.md
+
+  1 failed
+    tests\search-visibility-ui.spec.js:84:1 › brand fonts load locally and the first-view poster is prioritized

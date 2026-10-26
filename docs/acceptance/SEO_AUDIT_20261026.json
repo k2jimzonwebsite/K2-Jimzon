@@ -1,0 +1,268 @@
+{
+  "at": "2026-10-26T12:15:21.277Z",
+  "owner": "MAP-024",
+  "state": "Read-only audit complete; no app/provider/data/publication changes",
+  "source": {
+    "head": "1799e23d",
+    "runtimeMerge": "19b06e1cfff313cc375eed26751a540ccbd34805"
+  },
+  "scope": {
+    "market": "Philippines",
+    "language": "English",
+    "intent": [
+      "Italy-to-PH Pasabuy",
+      "Italian imports",
+      "retail/wholesale"
+    ],
+    "indexableProducts": 107,
+    "heldProducts": 9
+  },
+  "crawl": {
+    "sitemap": {
+      "status": 200,
+      "count": 111,
+      "productCount": 107
+    },
+    "summary": {
+      "requests": 129,
+      "errors": [],
+      "non200Sitemap": [],
+      "canonicalMismatch": [],
+      "noindexInSitemap": [],
+      "duplicateTitles": [],
+      "duplicateDescriptions": [],
+      "rawBodyH1Count": 0,
+      "rawBodyInternalAnchors": 0
+    },
+    "redirects": [
+      {
+        "url": "http://k2jimzon.com/",
+        "status": 308,
+        "location": "https://k2jimzon.com/"
+      },
+      {
+        "url": "https://k2jimzon.com/",
+        "status": 308,
+        "location": "https://www.k2jimzon.com/"
+      },
+      {
+        "url": "http://www.k2jimzon.com/",
+        "status": 308,
+        "location": "https://www.k2jimzon.com/"
+      },
+      {
+        "url": "https://www.k2jimzon.com/pasabuy/",
+        "status": 200,
+        "location": null
+      },
+      {
+        "url": "https://www.k2jimzon.com/catalog/",
+        "status": 200,
+        "location": null
+      }
+    ]
+  },
+  "mobileLab": {
+    "home": {
+      "url": "https://pagespeed.web.dev/analysis/https-www-k2jimzon-com/u5xl6fhb7e?form_factor=mobile",
+      "performance": 72,
+      "lcpSeconds": 7.1,
+      "cls": 0.048,
+      "tbtMs": 10,
+      "seo": 100,
+      "bytesKiB": 6847,
+      "imageSavingsKiB": 3748,
+      "lcpElement": "Analytics consent paragraph"
+    },
+    "pasabuy": {
+      "url": "https://pagespeed.web.dev/analysis/https-www-k2jimzon-com-pasabuy/0nqjbd8wz0?form_factor=mobile",
+      "performance": 55,
+      "lcpSeconds": 8.4,
+      "cls": 0.399,
+      "tbtMs": 0,
+      "seo": 100,
+      "bytesKiB": 3648,
+      "lcpElement": "Hero video/poster"
+    },
+    "field": "No CrUX data; CWV insufficient usage90days; no field pass/fail inferred"
+  },
+  "google": {
+    "manualActions": "No issues detected",
+    "securityIssues": "No issues detected",
+    "pages": "Processing; no index count or query positions established"
+  },
+  "releaseCI": {
+    "run": 40315394577,
+    "status": "completed",
+    "conclusion": "failure",
+    "security": "success",
+    "sql": "success",
+    "buildAndSmoke": "failure;10virtual-store UI cases; explicit consent-panel pointer interception in one log; not all failures assigned one root cause"
+  },
+  "healthIndex": {
+    "score": 85,
+    "band": "Good",
+    "scope": "Provisional technical/content readiness; authority unscored/weight redistributed; no rank forecast",
+    "raw": {
+      "crawlability": 85,
+      "technical": 80,
+      "onPage": 87,
+      "content": 90
+    },
+    "weights": {
+      "crawlability": 0.3333333333333333,
+      "technical": 0.2777777777777778,
+      "onPage": 0.2222222222222222,
+      "content": 0.16666666666666666
+    }
+  },
+  "ideas": [
+    "IDEA-20261026-05",
+    "IDEA-20261026-06",
+    "IDEA-20261026-07",
+    "IDEA-20261026-08",
+    "IDEA-20261026-09",
+    "IDEA-20261026-10",
+    "IDEA-20261026-11",
+    "IDEA-20261026-12",
+    "IDEA-20261026-13"
+  ],
+  "artifacts": [
+    {
+      "path": ".tools/seo-audit-20261026/core-web-vitals-ax.txt",
+      "bytes": 5317,
+      "sha256": "c83cdf3a2a26c179ff4c946ce2e980502ad6347c511bebe90bc673f48c430d3e"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/crawl.log",
+      "bytes": 974,
+      "sha256": "496330ca10ee50140c63376e80caa570a29888133e7233ef61781736be349276"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/homepage-psi-ax.txt",
+      "bytes": 30287,
+      "sha256": "7d007e6d02a526a901c09a95da8f2db59c421ed56f43f54357c0ffc5ebac66bf"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/homepage-psi.png",
+      "bytes": 72731,
+      "sha256": "cca5f5e5bd440a9ae0c3dbc8140b177edccefa8bec3cdb4bc398dea11719c655"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/manual-actions-ax.txt",
+      "bytes": 4473,
+      "sha256": "50b025b8c943f15bbe442b421d1e07a256cd534f78a1817251944da757356274"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/pasabuy-psi-ax.txt",
+      "bytes": 15035,
+      "sha256": "e5ddc8899b4e33152e034aa05d523f64ab36ed65254b27886d05597761924a9b"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/pasabuy-psi-details-ax.txt",
+      "bytes": 20004,
+      "sha256": "b0078a4ca854f3b0c8b6f7e12c0981777a766baaf75d247e9b1fad5b5b36bdfb"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/pasabuy-psi.png",
+      "bytes": 55658,
+      "sha256": "24cb18d7593ec428a753bdbabcd181321a011a6beb35a6b81ae188bc50ede769"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/public-crawl.json",
+      "bytes": 348768,
+      "sha256": "3b0b6f7be066fc79266810abf62196ded32866c1f30eb5038ac4f4e829cd5459"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/release-ci-current.json",
+      "bytes": 8235,
+      "sha256": "6e3ba58fc0465abbaad8c818de2076d84eb3290e6f146bb82eb2950f502ac64e"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/release-ci-failure.log",
+      "bytes": 449144,
+      "sha256": "db9ca3756b809bc6d0bc086754d57c36133553889ee16b31aade4a62c4b1e944"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/rendered-dom.json",
+      "bytes": 14845,
+      "sha256": "739017bfb8004f1ab5d7cec97911e2614e70e5110ec6575a875a96ac54ec6c14"
+    },
+    {
+      "path": ".tools/seo-audit-20261026/security-issues-ax.txt",
+      "bytes": 4240,
+      "sha256": "89a3cdd13a4170baf5f625b2abcb25676d397fb1b3ef4a7d0a2c022319a69fea"
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "src/components/StoreHeader.jsx",
+      "bytes": 5453,
+      "sha256": "b9dfc09ca5b54ff2b6dd86b15582e9f083a0a04fe4e17b58927b7bf705f1bf33"
+    },
+    {
+      "path": "src/components/Footer.jsx",
+      "bytes": 7320,
+      "sha256": "f6603ee053b878b722c74aedaf6627bddd69b2c0f4a3840e55be3e846c963f81"
+    },
+    {
+      "path": "src/components/CatalogGrid.jsx",
+      "bytes": 8136,
+      "sha256": "ff72a9c466743dbeb3fbe59b5085fce3a56b18cdcb519be33647ba60e9f09a16"
+    },
+    {
+      "path": "src/components/StorefrontMetadata.jsx",
+      "bytes": 5297,
+      "sha256": "83459230d659325d2f789aebb9d61a68aecff7c634d83c4dd0933d44079a66bb"
+    },
+    {
+      "path": "src/lib/storefrontSeoPages.js",
+      "bytes": 1018,
+      "sha256": "6e7988b9284df390d9fe526cfb33fbfe3ab5213a5daeeb209d75a3636be02f51"
+    },
+    {
+      "path": "src/lib/productStructuredData.js",
+      "bytes": 6113,
+      "sha256": "15f321fe561e414653577beae7a321d7dc86a6605a097a707cffd0e96408f882"
+    },
+    {
+      "path": "scripts/map024-evidence/generate-product-pages.mjs",
+      "bytes": 4785,
+      "sha256": "7d42363cfd10a1b8e2d8ba4da9e168ac8f829a9e4ef0825bfe11bd47850c60f2"
+    },
+    {
+      "path": "scripts/map024-evidence/generate-marketing-pages.mjs",
+      "bytes": 2121,
+      "sha256": "dfa1a1e860f20e7608771585181e68ec0ee7efe84dd074ab99b1858dba3d0230"
+    },
+    {
+      "path": "scripts/map024-evidence/read-published-catalog.mjs",
+      "bytes": 7611,
+      "sha256": "b64fb6ad5d56fecca7dc89695bd58a6fbaebacf5c28dc27556e52ad7711066b9"
+    },
+    {
+      "path": "src/components/home/StorySection.jsx",
+      "bytes": 8979,
+      "sha256": "973ba04cdc14905d1b3b8036fa7b6e984ffe383c62cde514120d9a4e7428f4ed"
+    }
+  ],
+  "branch": "codex/seo-audit-20261026",
+  "recordedState": "Local documentation-only audit; no new production publication",
+  "portableEvidence": [
+    {
+      "path": "docs/acceptance/seo-audit-20261026/public-crawl.json",
+      "bytes": 348768,
+      "sha256": "3b0b6f7be066fc79266810abf62196ded32866c1f30eb5038ac4f4e829cd5459"
+    },
+    {
+      "path": "docs/acceptance/seo-audit-20261026/release-ci-current.json",
+      "bytes": 8235,
+      "sha256": "6e3ba58fc0465abbaad8c818de2076d84eb3290e6f146bb82eb2950f502ac64e"
+    },
+    {
+      "path": "docs/acceptance/seo-audit-20261026/rendered-dom.json",
+      "bytes": 14845,
+      "sha256": "739017bfb8004f1ab5d7cec97911e2614e70e5110ec6575a875a96ac54ec6c14"
+    }
+  ]
+}

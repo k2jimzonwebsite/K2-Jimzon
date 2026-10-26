@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-26T13:26:53.650Z",
+  "mode": "Code input of prepared public product HTML; not deployed-host validation",
+  "product": "K2-SKU-001001",
+  "google": {
+    "url": "https://search.google.com/test/rich-results/result?id=XfZuCyicSTW72VyN60AUpA",
+    "validItems": 6,
+    "merchantOptionalMissing": [
+      "offers.hasMerchantReturnPolicy",
+      "offers.availability",
+      "offers.shippingDetails"
+    ],
+    "note": "Global return policy link validates separately; static stock/quoted freight facts are not invented. Runtime availability uses the live public stock projection."
+  },
+  "schemaOrg": {
+    "url": "https://validator.schema.org/",
+    "errors": 0,
+    "warnings": 0,
+    "items": [
+      "OnlineStore",
+      "BreadcrumbList",
+      "Product"
+    ]
+  }
+}

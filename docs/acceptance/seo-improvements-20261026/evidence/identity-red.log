@@ -1,0 +1,41 @@
+[WebServer] (node:21056) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23360) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:3548) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\search-visibility-ui.spec.js:103:1 › public merchant identity uses verified details and clears on a private route (5.6s)
+
+
+  1) tests\search-visibility-ui.spec.js:103:1 › public merchant identity uses verified details and clears on a private route
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('script[data-k2-organization-jsonld]')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('script[data-k2-organization-jsonld]') with timeout 5000ms
+      - waiting for locator('script[data-k2-organization-jsonld]')
+        13 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      104 |   await page.goto('/catalog')
+      105 |   const identity = page.locator('script[data-k2-organization-jsonld]')
+    > 106 |   await expect(identity).toHaveCount(1)
+          |                          ^
+      107 |   const data = JSON.parse(await identity.textContent())
+      108 |   expect(data['@type']).toBe('OnlineStore')
+      109 |   expect(data.name).toBe('K2 Jimzon')
+        at C:\Users\jerze\K2 JImzon\tests\search-visibility-ui.spec.js:106:26
+
+    Error Context: test-results\search-visibility-ui-publi-c6d8b-d-clears-on-a-private-route\error-context.md
+
+  1 failed
+    tests\search-visibility-ui.spec.js:103:1 › public merchant identity uses verified details and clears on a private route

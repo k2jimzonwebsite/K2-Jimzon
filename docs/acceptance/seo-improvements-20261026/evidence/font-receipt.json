@@ -1,0 +1,78 @@
+{
+  "query": "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Source+Sans+3:ital,wght@0,400..800;1,400..700&display=swap",
+  "records": [
+    {
+      "family": "Fraunces",
+      "style": "italic",
+      "subset": "latin-ext",
+      "source": "https://fonts.gstatic.com/s/fraunces/v38/6NU58FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChjdPeQ_5Y.woff2",
+      "path": "/fonts/fraunces-italic-4983926d3a16.woff2",
+      "bytes": 71460,
+      "sha256": "4983926d3a16544eedcd2233448bd8a43f711e7bf1fabaae8431e78e0b798635"
+    },
+    {
+      "family": "Fraunces",
+      "style": "italic",
+      "subset": "latin",
+      "source": "https://fonts.gstatic.com/s/fraunces/v38/6NU58FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChjeveQ.woff2",
+      "path": "/fonts/fraunces-italic-066710ce7ed2.woff2",
+      "bytes": 81520,
+      "sha256": "066710ce7ed235a339d3d6cdcc8b55c0bea5632232662d83aacea25852108271"
+    },
+    {
+      "family": "Fraunces",
+      "style": "normal",
+      "subset": "latin-ext",
+      "source": "https://fonts.gstatic.com/s/fraunces/v38/6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxCFTeO-U.woff2",
+      "path": "/fonts/fraunces-normal-a2930b27d13a.woff2",
+      "bytes": 59388,
+      "sha256": "a2930b27d13a228bd9ab6a49269b5f800237892ad560cb9dd7fab01b1620f88e"
+    },
+    {
+      "family": "Fraunces",
+      "style": "normal",
+      "subset": "latin",
+      "source": "https://fonts.gstatic.com/s/fraunces/v38/6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeA.woff2",
+      "path": "/fonts/fraunces-normal-7234ed860a9c.woff2",
+      "bytes": 67304,
+      "sha256": "7234ed860a9cc83045413c4faee63c960a8f2d1917adcf728119307d56e0d783"
+    },
+    {
+      "family": "Source Sans 3",
+      "style": "italic",
+      "subset": "latin-ext",
+      "source": "https://fonts.gstatic.com/s/sourcesans3/v20/nwpMtKy2OAdR1K-IwhWudF-R3woqaeLY1HY.woff2",
+      "path": "/fonts/source-sans-3-italic-6fe10a66ec41.woff2",
+      "bytes": 59496,
+      "sha256": "6fe10a66ec416f77a26309b645471d032ad8175063bb605b886e9b7e57efaaa8"
+    },
+    {
+      "family": "Source Sans 3",
+      "style": "italic",
+      "subset": "latin",
+      "source": "https://fonts.gstatic.com/s/sourcesans3/v20/nwpMtKy2OAdR1K-IwhWudF-R3woqZ-LY.woff2",
+      "path": "/fonts/source-sans-3-italic-5fbc14d56cea.woff2",
+      "bytes": 28460,
+      "sha256": "5fbc14d56cea35e60596c72ca969b349443c6a536f74e11748eed8b3a396e61d"
+    },
+    {
+      "family": "Source Sans 3",
+      "style": "normal",
+      "subset": "latin-ext",
+      "source": "https://fonts.gstatic.com/s/sourcesans3/v20/nwpStKy2OAdR1K-IwhWudF-R3wEaZfrc.woff2",
+      "path": "/fonts/source-sans-3-normal-a85a7459bdb3.woff2",
+      "bytes": 60088,
+      "sha256": "a85a7459bdb3cdc1136751e151a506bae653fc29ada3ca86237477df6f1b59e6"
+    },
+    {
+      "family": "Source Sans 3",
+      "style": "normal",
+      "subset": "latin",
+      "source": "https://fonts.gstatic.com/s/sourcesans3/v20/nwpStKy2OAdR1K-IwhWudF-R3w8aZQ.woff2",
+      "path": "/fonts/source-sans-3-normal-19143dca0759.woff2",
+      "bytes": 28872,
+      "sha256": "19143dca075972bc84e3fd9eab7416dd40cc565dccb2435a044bdfabe060c7d5"
+    }
+  ],
+  "loading": "Self-hosted original WOFF2, optional display avoids late swaps; preloaded normal faces; original OFL licenses retained"
+}

@@ -1,6 +1,17 @@
 import BrandMark from './BrandMark'
 import { CheckIcon } from './icons'
 
+// Public destinations keep native link behavior for new tabs and modified
+// clicks, while ordinary clicks reuse the existing in-page navigation.
+export function ActionElement({ href, onClick, ...props }) {
+  if (!href) return <button {...props} onClick={onClick} />
+  return <a {...props} href={href} onClick={event => {
+    if (!onClick || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    event.preventDefault()
+    onClick(event)
+  }} />
+}
+
 // Italian-green trust badge — authenticity, freshness, stock states only.
 export function TrustBadge({ children, solid = false }) {
   return (
@@ -38,11 +49,11 @@ export function Tricolor({ className = '' }) {
 }
 
 export function Wordmark({ size = 'text-2xl', onClick, light = false, animate = false, mark = true }) {
-  const Tag = onClick ? 'button' : 'span'
+  const Tag = onClick ? ActionElement : 'span'
   return (
     <Tag
       onClick={onClick}
-      type={onClick ? 'button' : undefined}
+      href={onClick ? '/' : undefined}
       aria-label={onClick ? 'K2 Jimzon home' : undefined}
       className={'group inline-flex min-h-11 items-center gap-2 text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 ' + (onClick ? 'cursor-pointer' : '')}
     >
@@ -62,7 +73,7 @@ export function Wordmark({ size = 'text-2xl', onClick, light = false, animate = 
 
 export function TerracottaButton({ children, className = '', ...props }) {
   return (
-    <button
+    <ActionElement
       {...props}
       className={
         'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-crimson px-5 py-3 text-sm font-bold text-white shadow-sm transition-[transform,background-color,box-shadow] duration-150 ease-out-quart hover:bg-crimson-deep hover:shadow-card active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 ' +
@@ -70,7 +81,7 @@ export function TerracottaButton({ children, className = '', ...props }) {
       }
     >
       {children}
-    </button>
+    </ActionElement>
   )
 }
 
@@ -80,7 +91,7 @@ export const CrimsonButton = TerracottaButton
 
 export function GhostButton({ children, className = '', ...props }) {
   return (
-    <button
+    <ActionElement
       {...props}
       className={
         'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-navy/20 bg-transparent px-5 py-3 text-sm font-bold text-navy transition-[transform,border-color,background-color] duration-150 ease-out-quart hover:border-navy/45 hover:bg-navy/[0.04] active:scale-[0.97] ' +
@@ -88,7 +99,7 @@ export function GhostButton({ children, className = '', ...props }) {
       }
     >
       {children}
-    </button>
+    </ActionElement>
   )
 }
 

@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   background-color: var(--k2-wall, #D5D5D5);
-  background-image: url('/wood-bg.jpg');
+  background-image: url('/wood-bg.webp');
   background-size: cover;
   background-position: center;
   color: var(--k2-ink, #111111);
@@ -170,7 +170,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background-image: url('/wood-bg.jpg');
+  background-image: url('/wood-bg.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

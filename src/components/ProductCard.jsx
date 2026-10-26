@@ -45,11 +45,11 @@ export default function ProductCard({ product, compact = false, featured = false
       <article data-testid="product-card" className="grid h-full grid-cols-1 overflow-hidden rounded-2xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-[var(--store-surface-shadow)] md:grid-cols-[1.18fr_0.82fr]">
         <div className="product-img-surface relative min-h-64 overflow-hidden md:min-h-0">
           {product.afterImage ? (
-            <Suspense fallback={<ProductVisual product={product} className="h-full w-full object-contain drop-shadow-xl" pad="p-7 md:p-12" />}>
+            <Suspense fallback={<ProductVisual product={product} delivery="large" className="h-full w-full object-contain drop-shadow-xl" pad="p-7 md:p-12" />}>
               <InteractiveReveal beforeImage={product.img} afterImage={product.afterImage} />
             </Suspense>
           ) : (
-            <ProductVisual product={product} className="h-full w-full object-contain drop-shadow-xl" pad="p-7 md:p-12" />
+            <ProductVisual product={product} delivery="large" className="h-full w-full object-contain drop-shadow-xl" pad="p-7 md:p-12" />
           )}
         </div>
 
@@ -93,7 +93,7 @@ export default function ProductCard({ product, compact = false, featured = false
   return (
     <article data-testid="product-card" className="product-card group flex h-full w-full flex-col overflow-hidden rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-[var(--store-surface-shadow)]">
       <a href={productHref} onClick={followProduct} aria-label={`View ${name}`} data-testid="product-image-btn" className="product-img-surface relative aspect-[4/5] overflow-hidden text-left cursor-pointer">
-        <ProductVisual product={product} className="product-card-visual h-full w-full object-contain drop-shadow-lg" pad="p-4 sm:p-6" />
+        <ProductVisual product={product} delivery="large" className="product-card-visual h-full w-full object-contain drop-shadow-lg" pad="p-4 sm:p-6" />
         {product.tag && <span className="absolute left-2.5 top-2.5 rounded-md bg-navy/90 px-2 py-1 text-xs font-bold uppercase tracking-[0.1em] text-cream">{product.tag}</span>}
       </a>
 

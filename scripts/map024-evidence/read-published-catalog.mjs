@@ -34,6 +34,8 @@ const PROJECTION_COLUMNS = [
   'lifestyle_images',
   'srp',
   'updated_at',
+  'net_weight',
+  'country_of_origin',
 ]
 
 function readEnv(path = ENV_PATH) {
@@ -48,7 +50,7 @@ function readEnv(path = ENV_PATH) {
 function buildQuery() {
   const columns = PROJECTION_COLUMNS.map(column => `p.${column}`).join(', ')
   const statuses = SITEMAP_STATUSES.map(status => `'${status}'`).join(', ')
-  return `select ${columns} from public.products p where p.status in (${statuses}) and p.published is true and p.is_human_reviewed is true and exists (select 1 from public.v_storefront_visible_skus v where v.sku = p.sku) order by p.sku`
+  return `select ${columns}, b.name as brand_name from public.products p left join public.brands b on b.id = p.brand_id where p.status in (${statuses}) and p.published is true and p.is_human_reviewed is true and exists (select 1 from public.v_storefront_visible_skus v where v.sku = p.sku) order by p.sku`
 }
 
 // Fail closed. This script must never become a general SQL executor against

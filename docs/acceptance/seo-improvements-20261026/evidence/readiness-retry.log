@@ -1,0 +1,14 @@
+
+> k2-jimzon-prototype@0.1.0 readiness:k2-live
+> node --env-file=.env.local scripts/k2-live-readiness.mjs
+
+PASS       project-identity                   K2 pixplcjqivlfflickobf
+PASS       migration-ledger                   12 entries, latest 20261025
+PASS       canonical-installation             Exact phased complete-source receipt and canonical relations installed; installer must not be repeated
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[DOMException [TimeoutError]: The operation was aborted due to timeout]
+
+Node.js v24.16.0

@@ -49,6 +49,10 @@ test('catalog discovery reads only reviewed published Website members in read-on
   expect(request.query).toMatch(/published\s+is\s+true/i)
   expect(request.query).toMatch(/is_human_reviewed\s+is\s+true/i)
   expect(request.query).not.toContain('select *')
+  expect(request.query).toContain('left join public.brands b on b.id = p.brand_id')
+  expect(request.query).toContain('b.name as brand_name')
+  expect(request.query).toContain('p.net_weight')
+  expect(request.query).toContain('p.country_of_origin')
 })
 
 const visibleProducts = [
@@ -102,7 +106,10 @@ test('MAP-024 marketing routes have distinct initial-response metadata', () => {
   </head><body><div id="root"></div></body></html>`
   const pages = generateMarketingPages({ template })
 
-  expect([...pages.keys()]).toEqual(['catalog', 'pasabuy', 'trade'])
+  expect([...pages.keys()]).toEqual(['catalog', 'pasabuy', 'trade', 'contact', 'privacy', 'terms', 'returns', 'policies', 'store'])
+  expect(pages.get('contact')).toContain('<title>Contact K2 Jimzon')
+  expect(pages.get('privacy')).toContain('https://www.k2jimzon.com/privacy')
+  expect(pages.get('store')).toContain('<link rel="canonical" href="https://www.k2jimzon.com/catalog"')
   expect(pages.get('pasabuy')).toContain('<title>Pasabuy from Italy to the Philippines | K2 Jimzon</title>')
   expect(pages.get('pasabuy')).toContain('<link rel="canonical" href="https://www.k2jimzon.com/pasabuy"')
   expect(pages.get('trade')).toContain('Italian Grocery Wholesale')

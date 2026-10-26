@@ -41,7 +41,7 @@ test.describe('launch-critical storefront', () => {
     const storefront = page.locator('.storefront-ui')
     await expect(storefront).toBeVisible()
     await expect.poll(() => storefront.evaluate(element => getComputedStyle(element).backgroundImage))
-      .toContain('wood-bg.jpg')
+      .toContain('wood-bg.webp')
 
     await page.getByRole('button', { name: 'Switch to dark mode' }).click()
     await expect.poll(() => storefront.evaluate(element => getComputedStyle(element).backgroundImage))
@@ -51,9 +51,9 @@ test.describe('launch-critical storefront', () => {
   test('home and catalog render without unsafe payment claims', async ({ page }) => {
     await openStorefront(page)
     await expect(page).toHaveTitle(/K2 Jimzon/)
-    await expect(page.getByRole('button', { name: /Shop the Collection/i })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Shop the Collection/i })).toBeVisible()
     await expect(page.getByText(/Payment confirms automatically/i)).toHaveCount(0)
-    await page.getByRole('button', { name: /Inventory & Catalog/i }).first().click()
+    await page.getByRole('link', { name: /Inventory & Catalog/i }).first().click()
     await expect(page.locator('[data-testid="product-card"]').first()).toBeVisible({ timeout: 15000 })
   })
 
@@ -74,7 +74,7 @@ test.describe('launch-critical storefront', () => {
 
   test('contact is always visible and never fabricates live staff availability', async ({ page }) => {
     await openStorefront(page)
-    await page.getByRole('navigation', { name: 'Storefront' }).getByRole('button', { name: 'Contact us' }).click()
+    await page.getByRole('navigation', { name: 'Storefront' }).getByRole('link', { name: 'Contact us' }).click()
 
     const main = page.getByRole('main')
     // The Contact view is a lazy production chunk. A cold Vite transform on CI
@@ -94,7 +94,7 @@ test.describe('launch-critical storefront', () => {
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
 
     await page.setViewportSize({ width: 375, height: 812 })
-    const mobileContact = page.getByRole('navigation', { name: 'Mobile storefront' }).getByRole('button', { name: 'Contact' })
+    const mobileContact = page.getByRole('navigation', { name: 'Mobile storefront' }).getByRole('link', { name: 'Contact' })
     await expect(mobileContact).toBeVisible()
     await expect(mobileContact).toHaveAttribute('aria-current', 'page')
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
@@ -102,7 +102,7 @@ test.describe('launch-critical storefront', () => {
 
   test('cart closes before checkout and checkout is an order request', async ({ page }) => {
     await openStorefront(page)
-    await page.getByRole('button', { name: /Inventory & Catalog/i }).first().click()
+    await page.getByRole('link', { name: /Inventory & Catalog/i }).first().click()
     await page.locator('button[aria-label^="Add "]:not([disabled])').first().click()
     const cart = page.getByRole('dialog', { name: 'Shopping cart' })
     await expect(cart).toBeVisible()
@@ -118,7 +118,7 @@ test.describe('launch-critical storefront', () => {
 
   test('checkout cannot submit while qualified commerce is inactive', async ({ page }) => {
     await openStorefront(page)
-    await page.getByRole('button', { name: /Inventory & Catalog/i }).first().click()
+    await page.getByRole('link', { name: /Inventory & Catalog/i }).first().click()
     await page.locator('button[aria-label^="Add "]:not([disabled])').first().click()
     await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /Review order request/i }).click()
     await page.getByLabel('Full name').fill('Launch Test')
@@ -131,7 +131,7 @@ test.describe('launch-critical storefront', () => {
     test.setTimeout(90000)
     await page.setViewportSize({ width: 375, height: 812 })
     await openStorefront(page)
-    await page.getByRole('navigation', { name: 'Storefront' }).getByRole('button', { name: 'Wholesale' }).click()
+    await page.getByRole('navigation', { name: 'Storefront' }).getByRole('link', { name: 'Wholesale' }).click()
     await expect(page.getByRole('heading', { name: /Tell us what you need to order/i })).toBeVisible({ timeout: 15000 })
     await page.getByLabel(/Registered Company Name/i).fill('Launch Test Cafe')
     await page.getByLabel(/Contact Person Full Name/i).fill('Maria Test')
@@ -180,7 +180,7 @@ test.describe('storefront deep linking', () => {
   test('browser back returns to the previous view rather than leaving the site', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
-    await page.getByRole('button', { name: /Inventory & Catalog/i }).first().click()
+    await page.getByRole('link', { name: /Inventory & Catalog/i }).first().click()
     await expect.poll(() => new URL(page.url()).pathname, { timeout: 15000 }).toBe('/catalog')
     await page.goBack()
     await expect.poll(() => new URL(page.url()).pathname, { timeout: 15000 }).toBe('/')
@@ -249,7 +249,7 @@ test.describe('MAP-027 virtual store acceptance', () => {
     await shopkeeper.getByRole('button', { name: 'Open K2 shopkeeper' }).click()
     const flatScene = page.locator('.k2-store-flat-scene')
     await expect.poll(() => flatScene.evaluate(element => getComputedStyle(element).backgroundImage))
-      .toContain('wood-bg.jpg')
+      .toContain('wood-bg.webp')
     await expect(page.locator('footer')).toHaveCount(0)
     await expect(page.getByRole('navigation', { name: 'Mobile storefront' })).toHaveCount(0)
     const colors = await shopkeeper.evaluate(element => {
@@ -369,7 +369,7 @@ test.describe('MAP-027 virtual store acceptance', () => {
     const store = page.getByRole('main', { name: 'K2 virtual store' })
     await expect(store).toBeVisible({ timeout: 60000 })
     await expect.poll(() => store.evaluate(element => getComputedStyle(element).backgroundImage))
-      .toContain('wood-bg.jpg')
+      .toContain('wood-bg.webp')
 
     const canvas = store.locator('.k2-store-scene canvas')
     await expect(canvas).toBeVisible({ timeout: 60000 })

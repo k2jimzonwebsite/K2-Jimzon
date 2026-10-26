@@ -160,7 +160,7 @@ test('cart checkout action focuses the new route heading', async ({ page }) => {
 for (const width of [320, 1440]) test(`${width}: chat returns focus after browser Back changes its trigger`, async ({ page }) => {
   await page.setViewportSize({ width, height: 900 })
   await page.goto('/')
-  await page.getByRole('button', { name: 'Shop the Collection', exact: true }).click()
+  await page.getByRole('link', { name: 'Shop the Collection', exact: true }).click()
   await expect(page).toHaveURL(/\/catalog$/)
   await page.getByRole('button', { name: 'Chat with K2 staff', exact: true }).click()
   await expect(page.getByRole('dialog', { name: 'Storefront live chat' })).toBeVisible()
@@ -192,7 +192,7 @@ for (const width of [768, 1023]) test(`${width}: tablet has navigation and chat 
   const chat = await page.getByRole('button', { name: 'Chat with K2 staff', exact: true }).boundingBox()
   const bounds = await nav.boundingBox()
   expect(chat.y + chat.height).toBeLessThan(bounds.y - 8)
-  await nav.getByRole('button', { name: 'Inventory & Catalog', exact: true }).click()
+  await nav.getByRole('link', { name: 'Inventory & Catalog', exact: true }).click()
   await expect(page).toHaveURL(/\/catalog$/)
 })
 

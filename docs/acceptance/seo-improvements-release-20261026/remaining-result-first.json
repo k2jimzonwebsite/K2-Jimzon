@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-26T14:24:13.830Z",
+  "source": "Current reviewed application code, one original test-selector expectation restored; no app behavior edit",
+  "stages": [
+    "test:admin-ui",
+    "test:payment-ui",
+    "test:inbox-ui",
+    "test:admin-product-master-ui",
+    "test:admin-website-assignment-ui",
+    "test:owner-count-close-ui",
+    "test:customer-account-ui",
+    "test:selling-surfaces",
+    "test:order-receipt-direct",
+    "test:workflow-api",
+    "test:intake-ai-ui",
+    "test:vercel-output",
+    "build:storefront",
+    "build:admin"
+  ],
+  "passed": [
+    "test:admin-ui",
+    "test:payment-ui",
+    "test:inbox-ui",
+    "test:admin-product-master-ui",
+    "test:admin-website-assignment-ui",
+    "test:owner-count-close-ui"
+  ],
+  "failedStage": "test:customer-account-ui",
+  "exitCode": 1
+}

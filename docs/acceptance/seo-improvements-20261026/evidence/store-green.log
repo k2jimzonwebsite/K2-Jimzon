@@ -1,0 +1,37 @@
+
+> k2-jimzon-prototype@0.1.0 test:store-orientation
+> playwright test --config=playwright.store-orientation.config.js
+
+[WebServer] (node:6640) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:26584) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:26984) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\store-orientation-ui.spec.js:18:1 › fallback keeps room controls usable in portrait and landscape (3.5s)
+[WebServer] 8:27:48 PM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 8:27:48 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 8:27:48 PM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok  2 tests\store-orientation-ui.spec.js:37:1 › 3D room renders in desktop, portrait and landscape (44.9s)
+[WebServer] 8:28:31 PM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 8:28:32 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 8:28:32 PM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok  3 tests\store-overlay-collision.spec.js:47:3 › Mobile store overlay collision prevention › portrait viewport (375x812): zero collision between counter, keeper, zoom, and basket dock (9.8s)
+  ok  4 tests\store-overlay-collision.spec.js:122:3 › Mobile store overlay collision prevention › landscape viewport (844x390): controls and basket dock usable without collision (2.4s)
+  ok  5 tests\store-overlay-collision.spec.js:149:3 › Mobile store overlay collision prevention › reduced motion fallback (375x812): flat scene card unobstructed by basket dock (1.7s)
+  ok  6 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 390px in light mode (2.2s)
+  ok  7 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 390px in dark mode (2.5s)
+  ok  8 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 1440px in light mode (3.3s)
+  ok  9 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 1440px in dark mode (2.2s)
+[WebServer] 8:28:55 PM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 8:28:55 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 8:28:55 PM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok 10 tests\store-readability-ui.spec.js:73:1 › short mobile drag changes shelf; zoom controls and hint leave room to browse (18.9s)
+  ok 11 tests\store-readability-ui.spec.js:126:1 › enlarged phone text keeps store help reachable (901ms)
+[WebServer] 8:29:14 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\store-readability-ui.spec.js:142:1 › catalog footer remains readable in both themes (978ms)
+
+  12 passed (1.6m)

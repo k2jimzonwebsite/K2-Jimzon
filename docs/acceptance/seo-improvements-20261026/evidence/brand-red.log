@@ -1,0 +1,28 @@
+
+Running 1 test using 1 worker
+
+(node:24572) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\map024-sitemap.spec.js:40:1 › catalog discovery reads only reviewed published Website members in read-only mode (11ms)
+
+
+  1) tests\map024-sitemap.spec.js:40:1 › catalog discovery reads only reviewed published Website members in read-only mode
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "left join public.brands b on b.id = p.brand_id"
+    Received string:    "select p.sku, p.name, p.description, p.short_description, p.status, p.published, p.primary_image_url, p.image_url, p.secondary_images, p.lifestyle_images, p.srp, p.updated_at from public.products p where p.status in ('Live', 'Active') and p.published is true and p.is_human_reviewed is true and exists (select 1 from public.v_storefront_visible_skus v where v.sku = p.sku) order by p.sku"
+
+      50 |   expect(request.query).toMatch(/is_human_reviewed\s+is\s+true/i)
+      51 |   expect(request.query).not.toContain('select *')
+    > 52 |   expect(request.query).toContain('left join public.brands b on b.id = p.brand_id')
+         |                         ^
+      53 |   expect(request.query).toContain('b.name as brand_name')
+      54 |   expect(request.query).toContain('p.net_weight')
+      55 |   expect(request.query).toContain('p.country_of_origin')
+        at C:\Users\jerze\K2 JImzon\tests\map024-sitemap.spec.js:52:25
+
+    Error Context: test-results\map024-sitemap-catalog-dis-b6be3-e-members-in-read-only-mode\error-context.md
+
+  1 failed
+    tests\map024-sitemap.spec.js:40:1 › catalog discovery reads only reviewed published Website members in read-only mode

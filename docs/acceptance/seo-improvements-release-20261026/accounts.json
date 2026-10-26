@@ -1,0 +1,52 @@
+{
+  "at": "2026-10-26T14:08:29.576Z",
+  "authorization": "Owner explicitly approves PR34 publication and requires correct account checks before further commit/push",
+  "github": {
+    "authenticatedActor": "EdgerzXc",
+    "id": 285345756,
+    "repository": "k2jimzonwebsite/K2-Jimzon",
+    "permissions": {
+      "push": true,
+      "pull": true,
+      "triage": true,
+      "admin": false,
+      "maintain": false
+    },
+    "gitAuthor": {
+      "name": "EdgerzXc",
+      "email": "k2jimzonwebsite@gmail.com",
+      "mappedHistoricalGitHubAuthor": "k2jimzonwebsite"
+    },
+    "noCredentialsChanged": true,
+    "newRepositoryLocalAttribution": {
+      "name": "EdgerzXc",
+      "email": "285345756+EdgerzXc@users.noreply.github.com",
+      "scope": "This repository only; no historical rewrite or global config change",
+      "formatEvidence": "https://docs.github.com/en/account-and-profile/reference/email-addresses-reference"
+    }
+  },
+  "vercel": {
+    "observation": "Signed-in browser; connector403K2scope recorded, not used for project acceptance",
+    "account": "k2jimzonwebsite",
+    "team": "k2-jimzon",
+    "teamId": "team_C3Wf3dVUBjUqGQ4rndMTCchz",
+    "storefront": {
+      "name": "k2-jimzon",
+      "projectId": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "repo": "k2jimzonwebsite/K2-Jimzon",
+      "canonical": "https://www.k2jimzon.com",
+      "baselineSource": "1799e23d345a24fe06120dfabdd7d0af4f510d8a",
+      "baselineDeployment": "4ixmcDrVxyKZtmFgeMuGekz81Bvs"
+    },
+    "admin": {
+      "name": "k2-jimzon-admin",
+      "projectId": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "projectIdEvidence": "Browser General settings directly confirms prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x; matches existing local binding",
+      "repo": "k2jimzonwebsite/K2-Jimzon",
+      "canonical": "https://admin.k2jimzon.com",
+      "baselineSource": "1799e23d345a24fe06120dfabdd7d0af4f510d8a",
+      "baselineDeployment": "2dh4QZriHattzPuHToMJNshUGhU9"
+    }
+  },
+  "noProviderPermissionOrCredentialChange": true
+}

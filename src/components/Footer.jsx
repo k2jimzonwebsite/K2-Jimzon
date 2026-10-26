@@ -1,7 +1,7 @@
 import BrandMark from './ui/BrandMark'
 import { ANALYTICS_CHOICE_EVENT } from '../lib/storefrontAnalytics'
 import { useStore } from '../context/StoreContext'
-import { Wordmark } from './ui/bits'
+import { ActionElement, Wordmark } from './ui/bits'
 import { ArrowIcon, FacebookIcon, InboxIcon, InstagramIcon, MapIcon, PhoneIcon } from './ui/icons'
 
 const MARKETPLACE_SHOPS = [
@@ -47,14 +47,14 @@ export default function Footer() {
           </FooterColumn>
 
           <FooterColumn title="Services">
-            <FooterButton onClick={() => go('pasabuy')}>Request from Italy</FooterButton>
-            <FooterButton onClick={() => go('wholesale')}>Wholesale orders</FooterButton>
-            <FooterButton onClick={() => go('catalog')}>Browse products</FooterButton>
+            <FooterButton href="/pasabuy" onClick={() => go('pasabuy')}>Request from Italy</FooterButton>
+            <FooterButton href="/trade" onClick={() => go('wholesale')}>Wholesale orders</FooterButton>
+            <FooterButton href="/catalog" onClick={() => go('catalog')}>Browse products</FooterButton>
             <FooterButton onClick={() => go('checkout')}>Review your basket</FooterButton>
           </FooterColumn>
 
           <FooterColumn title="Contact">
-            <FooterButton onClick={() => go('contact')}>Contact us</FooterButton>
+            <FooterButton href="/contact" onClick={() => go('contact')}>Contact us</FooterButton>
             <li>
               <a className="footer-link" href="tel:09318649654" aria-label="Call 0931 864 9654">
                 <PhoneIcon size={14} className="shrink-0 text-navy-soft" />
@@ -114,9 +114,9 @@ export default function Footer() {
         </section>
 
         <div className="mt-8 flex flex-wrap items-center gap-x-6 border-t border-[var(--store-surface-border)] pt-2 text-sm font-semibold text-navy-soft">
-          <button onClick={() => go('privacy')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Privacy &amp; Data</button>
-          <button onClick={() => go('terms')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Terms of Service</button>
-          <button onClick={() => go('returns')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Returns &amp; Replacements</button>
+          <ActionElement href="/privacy" onClick={() => go('privacy')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Privacy &amp; Data</ActionElement>
+          <ActionElement href="/terms" onClick={() => go('terms')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Terms of Service</ActionElement>
+          <ActionElement href="/returns" onClick={() => go('returns')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Returns &amp; Replacements</ActionElement>
           <button onClick={() => window.dispatchEvent(new Event(ANALYTICS_CHOICE_EVENT))} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Analytics choices</button>
         </div>
 
@@ -134,6 +134,6 @@ function FooterColumn({ title, children }) {
   return <div><h3 className="text-base font-semibold text-navy">{title}</h3><ul className="mt-4 space-y-1">{children}</ul></div>
 }
 
-function FooterButton({ children, onClick }) {
-  return <li><button onClick={onClick} className="footer-link">{children}</button></li>
+function FooterButton({ children, onClick, href }) {
+  return <li><ActionElement href={href} onClick={onClick} className="footer-link">{children}</ActionElement></li>
 }

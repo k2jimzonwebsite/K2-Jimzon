@@ -1,7 +1,8 @@
 import { useContext } from 'react'
 import { useStore } from '../context/StoreContext'
 import { CustomerAccountContext } from '../context/customerAccountContextValue'
-import { Wordmark } from './ui/bits'
+import { ActionElement, Wordmark } from './ui/bits'
+import { STOREFRONT_VIEW_TO_PATH } from '../lib/storefrontRoutes'
 import { BagIcon, SearchIcon, MoonIcon, SunIcon, UserIcon } from './ui/icons'
 import { customerAccountEnabled } from '../services/customerAccountService'
 
@@ -53,16 +54,17 @@ export default function StoreHeader() {
           {nav.map(([key, label]) => {
             const isActive = active === key
             return (
-              <button
+              <ActionElement
                 key={key}
+                href={STOREFRONT_VIEW_TO_PATH[key]}
                 onClick={() => go(key)}
                 aria-label={key === 'catalog' ? 'Inventory & Catalog' : undefined}
                 aria-current={isActive ? 'page' : undefined}
-                className={`relative min-h-11 whitespace-nowrap px-3 text-sm font-semibold transition-colors duration-150 ${isActive ? 'text-crimson' : 'text-navy-soft hover:text-navy'}`}
+                className={`relative inline-flex min-h-11 items-center whitespace-nowrap px-3 text-sm font-semibold transition-colors duration-150 ${isActive ? 'text-crimson' : 'text-navy-soft hover:text-navy'}`}
               >
                 {label}
                 <span className={`absolute inset-x-3 -bottom-3 h-0.5 origin-left bg-crimson transition-transform duration-200 ease-out-quart ${isActive ? 'scale-x-100' : 'scale-x-0'}`} />
-              </button>
+              </ActionElement>
             )
           })}
         </nav>
