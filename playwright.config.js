@@ -34,6 +34,7 @@ export default defineConfig({
     'admin-inventory-batch-read-ui.spec.js',
     'admin-reference-workflow.spec.js',
     'admin-product-master-recovery.spec.js',
+    'admin-sku-merge-ui.spec.js',
     'admin-website-assignment.spec.js',
     'admin-secure-sheet-reference.spec.js',
     'buyer.spec.js',
