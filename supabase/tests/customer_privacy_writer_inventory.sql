@@ -2,15 +2,7 @@
 with selected as (
  select c.oid,n.nspname as schema,c.relname as name,c.relrowsecurity as rls,c.relforcerowsecurity as forced_rls
  from pg_class c join pg_namespace n on n.oid=c.relnamespace
- where c.relkind in ('r','p') and (
-   (n.nspname='auth' and c.relname in ('users','identities','sessions','refresh_tokens'))
-   or (n.nspname='public' and c.relname in ('customers','user_profiles','customer_accounts','customer_contact_points',
-     'channel_identities','guest_access_grants','customer_claim_requests','order_requests','order_items',
-     'payment_evidence','order_receipts','order_delivery_details','pasabuy_requests','wholesale_inquiries',
-     'conversations','messages','conversation_events'))
-   or (n.nspname='k2_private' and (c.relname like 'customer_%' or c.relname in ('order_payment_receipts','order_delivery_snapshots')))
-   or c.oid in (select fk.conrelid from pg_constraint fk where fk.contype='f'
-     and fk.confrelid in (to_regclass('public.order_requests'),to_regclass('public.conversations'))))
+ where c.relkind in ('r','p') and n.nspname in ('auth','public','k2_private')
 ), relations as (
  select s.*,coalesce((select jsonb_agg(jsonb_build_object('name',a.attname,'type',format_type(a.atttypid,a.atttypmod),
    'notNull',a.attnotnull) order by a.attnum) from pg_attribute a where a.attrelid=s.oid and a.attnum>0 and not a.attisdropped),'[]'::jsonb) as columns,
@@ -18,8 +10,15 @@ with selected as (
    'enabled',t.tgenabled,'function',t.tgfoid::regprocedure::text,'sourceMd5',md5(p.prosrc)) order by t.tgname)
    from pg_trigger t join pg_proc p on p.oid=t.tgfoid where t.tgrelid=s.oid and not t.tgisinternal),'[]'::jsonb) as triggers,
  coalesce((select jsonb_agg(jsonb_build_object('name',con.conname,'definition',pg_get_constraintdef(con.oid),
-   'references',con.confrelid::regclass::text) order by con.conname) from pg_constraint con
+   'references',con.confrelid::regclass::text,
+   'sourceColumns',(select jsonb_agg(a.attname order by k.ord) from unnest(con.conkey) with ordinality k(num,ord)
+     join pg_attribute a on a.attrelid=con.conrelid and a.attnum=k.num),
+   'targetColumns',(select jsonb_agg(a.attname order by k.ord) from unnest(con.confkey) with ordinality k(num,ord)
+     join pg_attribute a on a.attrelid=con.confrelid and a.attnum=k.num)) order by con.conname) from pg_constraint con
    where con.conrelid=s.oid and con.contype='f'),'[]'::jsonb) as foreign_keys,
+ coalesce((select jsonb_agg(a.attname order by k.ord) from pg_constraint con,
+   unnest(con.conkey) with ordinality k(num,ord) join pg_attribute a on a.attrelid=s.oid and a.attnum=k.num
+   where con.conrelid=s.oid and con.contype='p'),'[]'::jsonb) as primary_key,
  coalesce((select jsonb_agg(jsonb_build_object('role',r.rolname,'insert',has_table_privilege(r.oid,s.oid,'INSERT'),
    'update',has_table_privilege(r.oid,s.oid,'UPDATE'),'delete',has_table_privilege(r.oid,s.oid,'DELETE')) order by r.rolname)
    from pg_roles r where r.rolname in ('anon','authenticated','service_role','supabase_auth_admin','supabase_storage_admin')),'[]'::jsonb) as role_capabilities,
@@ -46,6 +45,12 @@ with selected as (
 )
 select jsonb_build_object(
  'scope','owned restored schema metadata after prepared migrations, not live privileges or a complete writer proof',
+ 'catalogRelations',(select jsonb_agg(n.nspname||'.'||c.relname order by n.nspname,c.relname)
+   from pg_class c join pg_namespace n on n.oid=c.relnamespace
+   where c.relkind in ('r','p') and n.nspname in ('auth','public','k2_private')),
+ 'excludedRelations',(select coalesce(jsonb_agg(n.nspname||'.'||c.relname order by n.nspname,c.relname),'[]'::jsonb)
+   from pg_class c join pg_namespace n on n.oid=c.relnamespace where c.relkind in ('r','p')
+     and n.nspname not in ('auth','public','k2_private','pg_catalog','information_schema') and n.nspname !~ '^pg_toast'),
  'relations',(select jsonb_agg(to_jsonb(r)-'oid' order by schema,name) from relations r),
  'routines',(select jsonb_agg(to_jsonb(r) order by schema,name,signature) from routines r),
  'limits',jsonb_build_array('Original owners and ACLs excluded by restore; role capabilities are local only.',

@@ -24,6 +24,10 @@ const migrations = [
 ]
 const coordinatorProtocol = process.argv.includes('--hold-coordinator-protocol')
 const addressBookProtocol = process.argv.includes('--address-book-protocol')
+const writerProtocol = process.argv.includes('--writer-barrier-protocol')
+const writerMigration = 'supabase/migrations/20261028_customer_privacy_writer_barrier.sql'
+const writerAssertions = 'supabase/tests/customer_privacy_writer_barrier.sql'
+const writerConcurrency = 'supabase/tests/customer_privacy_writer_concurrency.sql'
 const addressMigration = 'supabase/migrations/20261028_customer_delivery_addresses.sql'
 if (addressBookProtocol) migrations.push(addressMigration)
 const holdProtocol = process.argv.includes('--hold-intent-protocol') || coordinatorProtocol
@@ -45,6 +49,15 @@ const coordinatorSources = [authorityAssertions, authorityConcurrencyFile, 'scri
 const inventoryFile = 'supabase/tests/customer_privacy_writer_inventory.sql'
 const inventoryOnly = process.argv.includes('--inventory-privacy-writers')
 if (holdProtocol && inventoryOnly) throw new Error('QUALIFICATION_MODES_ARE_EXCLUSIVE')
+if (inventoryOnly && !addressBookProtocol) migrations.push(addressMigration,
+  'supabase/migrations/20261027_customer_privacy_hold_intent.sql',
+  'supabase/migrations/20261027_customer_privacy_hold_authority.sql')
+if (writerProtocol) {
+  if (holdProtocol || addressBookProtocol || inventoryOnly) throw new Error('QUALIFICATION_MODES_ARE_EXCLUSIVE')
+  migrations.push(addressMigration, 'supabase/migrations/20261027_customer_privacy_hold_intent.sql',
+    'supabase/migrations/20261027_customer_privacy_hold_authority.sql')
+  if (fs.existsSync(path.join(root, writerMigration))) migrations.push(writerMigration)
+}
 const hash = value => createHash('sha256').update(value).digest('hex')
 const literal = value => "'" + value.replaceAll("'", "''") + "'"
 const identifier = value => '"' + value.replaceAll('"', '""') + '"'
@@ -52,8 +65,10 @@ const receipt = { mapItem: 'MAP-019', startedAt: new Date().toISOString(), statu
   productionChanged: false, limits: ['Existing 26 October archive, not a new production snapshot.',
     'Restore excludes managed Vault entries and original ACL/owners; not managed privilege, Auth, Storage or hosted acceptance.',
     'Migration transaction rollback only, not a committed downgrade or post-closure recovery safeguard.'],
-  sources: [...migrations, inventoryOnly ? inventoryFile : assertions, ...(addressBookProtocol ? [addressAssertions,addressConcurrency] : []), ...(coordinatorProtocol ? coordinatorSources : []), ...(holdProtocol ? [holdConcurrencyFile] : [])].map(file => ({ path: file, sha256: hash(fs.readFileSync(path.join(root, file))) })) }
-receipt.mode = inventoryOnly ? 'writer-catalog-inventory-only' : addressBookProtocol ? 'address-book-protocol' : coordinatorProtocol ? 'native-hold-coordinator-protocol' : holdProtocol ? 'native-hold-intent-protocol' : 'closure-compatibility'
+  sources: [...migrations, inventoryOnly ? inventoryFile : writerProtocol ? writerAssertions : assertions,
+    ...(writerProtocol && fs.existsSync(path.join(root, writerConcurrency)) ? [writerConcurrency] : []),
+    ...(inventoryOnly ? ['tests/customer-privacy-writer-inventory.test.mjs'] : []), ...(addressBookProtocol ? [addressAssertions,addressConcurrency] : []), ...(coordinatorProtocol ? coordinatorSources : []), ...(holdProtocol ? [holdConcurrencyFile] : [])].map(file => ({ path: file, sha256: hash(fs.readFileSync(path.join(root, file))) })) }
+receipt.mode = inventoryOnly ? 'writer-catalog-inventory-only' : writerProtocol ? 'native-writer-barrier-protocol' : addressBookProtocol ? 'address-book-protocol' : coordinatorProtocol ? 'native-hold-coordinator-protocol' : holdProtocol ? 'native-hold-intent-protocol' : 'closure-compatibility'
 const startupProbe = process.argv.includes('--prove-startup-recovery')
 let startAttempted = false, port, env
 fs.mkdirSync(work, { recursive: true })
@@ -134,7 +149,7 @@ try {
     return sourceSql.replace(/^begin;\r?\n/im, '').replace(/^commit;\s*$/im, '')
   }
   const transaction = ['begin;', ...migrations.map(file => stripTransaction(fs.readFileSync(path.join(root, file), 'utf8'))),
-    inventoryOnly ? fs.readFileSync(path.join(root, inventoryFile), 'utf8') : holdProtocol ? assertionSql() :
+    inventoryOnly ? fs.readFileSync(path.join(root, inventoryFile), 'utf8') : writerProtocol ? fs.readFileSync(path.join(root, writerAssertions), 'utf8') : holdProtocol ? assertionSql() :
       "select 'CURRENT_SCHEMA_MIGRATIONS_INSTALLED_IN_TRANSACTION';\n" + assertionSql(), 'rollback;'].join('\n')
   let executionFailure
   try {
@@ -144,6 +159,13 @@ try {
       fs.writeFileSync(path.join(work, 'writer-inventory.json'), JSON.stringify(inventory, null, 2) + '\n', { flag: 'wx' })
       receipt.inventory = { path: 'writer-inventory.json', sha256: hash(fs.readFileSync(path.join(work, 'writer-inventory.json'))),
         relations: inventory.relations.length, routines: inventory.routines.length }
+      const coverage = spawnSync(process.execPath, ['--test', 'tests/customer-privacy-writer-inventory.test.mjs'], {
+        cwd: root, env: { ...env, K2_PRIVACY_WRITER_INVENTORY: path.join(work, 'writer-inventory.json') },
+        windowsHide: true, encoding: 'utf8', timeout: 10000,
+      })
+      fs.writeFileSync(path.join(work, 'inventory-coverage.log'), (coverage.stdout || '') + (coverage.stderr || ''), { flag: 'wx' })
+      if (coverage.error || coverage.status !== 0) throw new Error('NATIVE_WRITER_INVENTORY_COVERAGE_FAILED')
+      receipt.inventory.completeCatalogCheck = true
     }
     if (holdProtocol) {
       const result = JSON.parse(output.trim().split(/\r?\n/).at(-1))
@@ -162,16 +184,20 @@ try {
       receipt.holdProtocol = { checks: result.checks, nativeProofExportsVerified: Object.keys(result.exports).length,
         sha256: hash(fs.readFileSync(path.join(work, 'hold-protocol.json'))) }
     }
-    if (holdProtocol || addressBookProtocol) {
+    if (holdProtocol || addressBookProtocol || writerProtocol) {
       // A separate owned clone permits real committed concurrent sessions.
       // The original restore remains under the full before/after conservation gate.
-      const clone = `k2_native_${addressBookProtocol ? 'address' : 'hold'}_${randomUUID().replaceAll('-', '')}`
-      if (!/^k2_native_(?:hold|address)_[0-9a-f]{32}$/.test(clone) || env.PGHOST !== '127.0.0.1') throw new Error('OWNED_NATIVE_CLONE_IDENTITY_REFUSED')
+      const clone = `k2_native_${writerProtocol ? 'writer' : addressBookProtocol ? 'address' : 'hold'}_${randomUUID().replaceAll('-', '')}`
+      if (!/^k2_native_(?:hold|address|writer)_[0-9a-f]{32}$/.test(clone) || env.PGHOST !== '127.0.0.1') throw new Error('OWNED_NATIVE_CLONE_IDENTITY_REFUSED')
       const cloneEnv = { ...env, PGDATABASE: clone }
       try {
         run('createdb', ['--template', database, clone])
         for (const file of migrations) run('psql', ['-X', '-q', '-v', 'ON_ERROR_STOP=1', '-f', file], { env: cloneEnv })
-        if (addressBookProtocol) {
+        if (writerProtocol) {
+          const concurrent = run('psql', ['-X','-qAt','-v','ON_ERROR_STOP=1','-f',writerConcurrency], { env: cloneEnv })
+          receipt.writerBarrier = JSON.parse(concurrent.trim().split(/\r?\n/).at(-1))
+          if (receipt.writerBarrier.checks.length !== 13 || receipt.writerBarrier.disconnected !== true) throw new Error('WRITER_BARRIER_QUALIFICATION_FAILED')
+        } else if (addressBookProtocol) {
           const concurrent = run('psql', ['-X','-qAt','-v','ON_ERROR_STOP=1','-f',addressConcurrency], { env: cloneEnv })
           receipt.addressConcurrency = JSON.parse(concurrent.trim().split(/\r?\n/).at(-1))
           if (receipt.addressConcurrency.checks.length !== 2 || receipt.addressConcurrency.disconnected !== true) throw new Error('ADDRESS_CONCURRENCY_QUALIFICATION_FAILED')
@@ -192,7 +218,7 @@ try {
         // Exact fresh generated name in this already verified owned loopback cluster.
         run('dropdb', ['--if-exists', '--force', clone])
         const dropped = sql(`select count(*) from pg_database where datname=${literal(clone)}`) === '0'
-        receipt[addressBookProtocol ? 'addressCloneDropped' : 'holdCloneDropped'] = dropped
+        receipt[writerProtocol ? 'writerCloneDropped' : addressBookProtocol ? 'addressCloneDropped' : 'holdCloneDropped'] = dropped
         if (!dropped) throw new Error('OWNED_NATIVE_CLONE_DROP_NOT_VERIFIED')
       }
     }
@@ -203,11 +229,12 @@ try {
   receipt.checks.push('Rollback preserves complete restored schema, all selected tables/rows and exact sequence values/is_called, including after a refused transaction.')
   if (executionFailure) throw executionFailure
   receipt.checks.push(`All ${migrations.length} migrations applied together inside one transaction against the restored schema.`)
-  receipt.checks.push(inventoryOnly ? 'Catalog metadata inventory captured without printing row values or source bodies; not complete writer qualification.' : holdProtocol ?
+  receipt.checks.push(inventoryOnly ? 'Catalog metadata inventory captured without printing row values or source bodies; not complete writer qualification.' : writerProtocol ?
+    'Private lock-entry primitives and real-session ordering/refusal/expiry qualify only the entry boundary; complete association guards/manifest/permit/restore remain required.' : holdProtocol ?
     'Native one-shot hold intent/projection/resolution, private grants and cross-language canonical/HMAC checks pass; no genuine Auth/journal/freeze qualification.' :
     'Synthetic account/contact/grant/settings/notification closure and repeated processing pass against original restored constraints/triggers.')
   receipt.status = 'passed'
-  console.log(inventoryOnly ? 'CURRENT_SCHEMA_WRITER_CATALOG_AND_ATOMIC_ROLLBACK_PASSED' : holdProtocol ? 'CURRENT_SCHEMA_NATIVE_HOLD_PROTOCOL_AND_ATOMIC_ROLLBACK_PASSED' : 'CURRENT_SCHEMA_PRIVACY_COMPATIBILITY_AND_ATOMIC_ROLLBACK_PASSED')
+  console.log(inventoryOnly ? 'CURRENT_SCHEMA_WRITER_CATALOG_AND_ATOMIC_ROLLBACK_PASSED' : writerProtocol ? 'CURRENT_SCHEMA_WRITER_ENTRY_AND_ATOMIC_ROLLBACK_PASSED' : holdProtocol ? 'CURRENT_SCHEMA_NATIVE_HOLD_PROTOCOL_AND_ATOMIC_ROLLBACK_PASSED' : 'CURRENT_SCHEMA_PRIVACY_COMPATIBILITY_AND_ATOMIC_ROLLBACK_PASSED')
 } catch (error) {
   if (startupProbe && error.message === 'SYNTHETIC_START_ACKNOWLEDGEMENT_LOSS') {
     receipt.status = 'passed'

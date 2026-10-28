@@ -1,0 +1,189 @@
+{
+  "mapItem": "MAP-019",
+  "idea": "IDEA-20261027-02",
+  "date": "2026-10-28",
+  "status": "private-native-entry-foundation-qualified-complete-writer-guards-unimplemented",
+  "goalComplete": false,
+  "productionChanged": false,
+  "native": {
+    "receipt": {
+      "path": ".tools/privacy-current-schema/b65ee2ce-988b-4e03-80fc-e076f71747dc/receipt.json",
+      "sha256": "d02c77397b141048331e23dd67bdba54479c2978a1bfe392ff1eea73010b2842"
+    },
+    "checks": [
+      "exclusive freeze drains earlier shared transaction through commit",
+      "exclusive lock wait expires at existing two second bound",
+      "freeze identity is immutable while state transition needs exclusive gate",
+      "freeze row requires real exclusive gate and permits absent original UUID",
+      "ordinary shared writer progresses alongside another writer",
+      "ordinary writer waits for exclusive capture then resumes",
+      "preheld account advisory refuses before exclusive wait",
+      "preheld canonical customer row refuses before exclusive wait",
+      "preheld conflicting table lock refuses even without row mutation",
+      "prior transaction mutation refuses freeze entry",
+      "shared to exclusive upgrade refuses",
+      "stale isolation refuses both writer and freezer",
+      "truncate cannot bypass freeze record exclusive guard"
+    ],
+    "before": {
+      "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+      "tables": 161,
+      "rows": 49717,
+      "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+      "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+    },
+    "after": {
+      "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+      "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+      "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+    },
+    "writerCloneDropped": true,
+    "clusterStopped": true,
+    "portRefused": true,
+    "restoredPlaintextRemoved": true
+  },
+  "inventory": {
+    "receipt": {
+      "path": ".tools/privacy-current-schema/a816ea4e-8daa-430e-a528-4bd7854bd247/receipt.json",
+      "sha256": "56e513c1ffbb30e7e472c58b5366277636f28da25efed84793fbd49938855b84"
+    },
+    "metadata": {
+      "path": ".tools/privacy-current-schema/a816ea4e-8daa-430e-a528-4bd7854bd247/writer-inventory.json",
+      "sha256": "017cf058a4eb8af7699ef658e5b8c4e90ded1f51dc5214ef1714e233c522a9d6"
+    },
+    "path": "writer-inventory.json",
+    "sha256": "017cf058a4eb8af7699ef658e5b8c4e90ded1f51dc5214ef1714e233c522a9d6",
+    "relations": 151,
+    "routines": 194,
+    "completeCatalogCheck": true,
+    "preparedMigrations": 6,
+    "excludedProviderSurfaces": [
+      "Storage",
+      "Realtime"
+    ]
+  },
+  "sources": [
+    {
+      "path": "supabase/migrations/20261027_customer_account_portfolio.sql",
+      "sha256": "705f776cac7aac988a85487dcd039a03022705012308bfb722f761c51b694cb9"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_automation.sql",
+      "sha256": "e3354448f8d2126e538782ba01513bcc40919af92f4b2ed36a408208840fe1e4"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_admin.sql",
+      "sha256": "686ab1ede2e5d770942996cc83d06ac809daa377bf5e182741b553ee9819c9bf"
+    },
+    {
+      "path": "supabase/migrations/20261028_customer_delivery_addresses.sql",
+      "sha256": "4b3adbd3916c97711fe5feda75f651a8d8dcab38b2ca59930e949697fc28dfd1"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_hold_intent.sql",
+      "sha256": "ab0e7f73abf556e8d1c9d2bb3189133a3800a092df056a52657f5d19a8e2a311"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_hold_authority.sql",
+      "sha256": "47fca296bae4472c83daae5b49d47c528a1e095eeae9decb02490fea846aaa76"
+    },
+    {
+      "path": "supabase/migrations/20261028_customer_privacy_writer_barrier.sql",
+      "sha256": "919cf90eb568d25bb1b39834b32c2d7183f4b5c2fa6a4a87c0c711a914e22416"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_writer_barrier.sql",
+      "sha256": "e282f5f974949f92388d0b07b0e72033faa17128b51c60e20c9017536b068fdf"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_writer_concurrency.sql",
+      "sha256": "62dd0e9dc4920f8743a915175a2ef7416a18d8e49884b6a0476911961037264d"
+    },
+    {
+      "path": "scripts/rehearse-customer-privacy-current-schema.mjs",
+      "sha256": "6f4406f6263ef30a9399396d5366142f0fd2a9ecbede037570b5019e5eed1f3a"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_writer_inventory.sql",
+      "sha256": "c954a42dd012cf1f5ef1223bbd8587d41853e459a67137c611b88e6d4d02d5c9"
+    },
+    {
+      "path": "tests/customer-privacy-writer-inventory.test.mjs",
+      "sha256": "421490f8764ef80245eb9bab3e882b61a1c033c7a507200eff463985934fdfba"
+    }
+  ],
+  "archive": ".tools/map019-native-writer-20261028/entry-qualified",
+  "failedRuns": [
+    {
+      "id": "330425da-3a50-4366-bd58-25787a324899",
+      "reason": "Sandbox loopback permission denied; original cleanup could not prove refusal. Later exact owned stop/refusal/removal verified in separate receipt.",
+      "reconciliation": {
+        "path": ".tools/privacy-current-schema/330425da-3a50-4366-bd58-25787a324899/startup-reconciliation.json",
+        "sha256": "ac4b4acf4301244fa9c26f7578a54d6c8cf2fc2212245042bd56c1d1e2b1ef1b"
+      }
+    },
+    {
+      "id": "5c58c6c1-42d1-4a63-afac-5a15afc4149b",
+      "reason": "Expected failed-first native barrier missing."
+    },
+    {
+      "id": "b478061b-6b6a-433f-bf56-9a94c1313960",
+      "reason": "TRUNCATE fixture blocked by controller AccessShareLock; timeout is not qualifying bug reproduction."
+    },
+    {
+      "id": "84457016-69ad-49fa-bb59-fc11b76cd921",
+      "reason": "Corrected failed-first TRUNCATE regression: unguarded attempt incorrectly succeeded."
+    }
+  ],
+  "earlierEntryReceipt": {
+    "path": ".tools/privacy-current-schema/3133d25f-8d79-4bdb-a15b-e9ca8e9771e7/receipt.json",
+    "sha256": "d08b6d1fc5b14f2360764fc1b2a6f4579a61c2ae9dffd2d82789ef0dd7edf6fe"
+  },
+  "development": {
+    "status": "original-gate-failed-sandbox-loopback-reconciled-by-focused-test-and-remaining-steps",
+    "wholeGateExit": 1,
+    "adminSessionOriginal": {
+      "passed": 90,
+      "failed": 1,
+      "total": 91
+    },
+    "focused": {
+      "passed": 2,
+      "failed": 0,
+      "log": {
+        "path": ".tools/map019-native-writer-20261028/development-focused-loopback.log",
+        "sha256": "ff92c88aa3b50f8d27b677e0e1cf85d16d8b826bf4e594189925d1573b283e23"
+      }
+    },
+    "remainingPrebuildExit": 0,
+    "privacyPassed": 142,
+    "sourceRouteGaps": 0,
+    "unexpectedPublicFunctionGrants": 0,
+    "logs": [
+      {
+        "path": ".tools/map019-native-writer-20261028/development.log",
+        "sha256": "51616258dce911c6ff370e6416a02ae39e99bd9c3e7a996db53c9d8e55a807a4"
+      },
+      {
+        "path": ".tools/map019-native-writer-20261028/development-remaining-terminal.log",
+        "sha256": "7172937d5a8326c05e9d6bb299380d9f2ad30de9a7849eb3ebae64ff72aebfd0"
+      }
+    ],
+    "unaffectedPassingSuitesRepeated": false
+  },
+  "review": {
+    "design": "Skeptic/Guardian/Advocate/Arbiter APPROVED local implementation/tests; S1/S2 accepted/resolved, none rejected.",
+    "implementation": "Final independent review APPROVED private entry foundation after accepted TRUNCATE finding reproduced/fixed. No remaining Critical/Important finding in this bounded slice."
+  },
+  "limits": [
+    "No application relation statement/row guards or complete OLD/NEW/parent/cascade map yet.",
+    "No native freeze RPC, manifest, executable permit, restored suppression, production key/configuration or provider activation.",
+    "Original encrypted 26 October archive excludes original ACL/owners and managed Vault values; not live privilege/Auth/Storage evidence.",
+    "Native entry and synthetic record tests do not prove genuine signed customer/staff journeys or production capacity."
+  ],
+  "recovery": {
+    "beforeActivation": "Scoped source reversal to48773ac1 or .tools/map019-native-writer-20261028/before; preserve earlier source, operation identities, unrelated PNGs and immutable evidence.",
+    "afterDataExists": "Never drop saved personal data or automatically restore old unsafe profile writer. No production data recovery is authorized."
+  },
+  "nextActionLocation": "MASTER_ACTION_PLAN.md#MAP-019"
+}
