@@ -57,3 +57,15 @@ all earlier evidence and immutable operation identities. Before activation,
 recovery is a scoped source revert on the feature branch; no production rollback
 or restoration of erased personal data is involved. The existing production
 deployments above remain the known release baseline.
+
+## Source publication receipt
+
+Source commit `6edfb09c236408933342bb2e92470882271de6c1` was created on the
+existing feature branch and pushed successfully to
+`origin/codex/customer-privacy-owner-decisions`. The normal commit and push
+hooks passed: 13 Node guard/challenge checks, 7 challenge contracts, import
+integrity, and 8 rendered security-recovery cases. The push installed its
+upstream tracking ref. Independent `git ls-remote` then confirmed the exact
+checkpoint SHA on the remote feature branch and main still at `c630e7eb`.
+No main push or production deployment was performed. The documentation-only
+receipt commit following this source commit changes no application code.
