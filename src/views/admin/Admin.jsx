@@ -1,3 +1,4 @@
+import './admin-typography.css'
 import { useState, useEffect, useRef, Suspense, lazy } from 'react'
 import {
   BoxIcon, GlobeIcon, GridIcon, UserIcon, InboxIcon,

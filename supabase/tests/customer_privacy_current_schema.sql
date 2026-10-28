@@ -37,6 +37,9 @@ begin
     values(grant_id,customer,extensions.digest(grant_id::text,'sha256'),clock_timestamp()+interval '1 day');
   insert into k2_private.customer_account_settings(user_id,display_name,delivery_address)
     values(actor,'Synthetic privacy qualification','Synthetic address; never a real customer');
+  if current_setting('k2_test.address_book_coverage',true)='on' then
+    perform pg_temp.populate_address_book(actor);
+  end if;
   insert into k2_private.customer_account_notifications(user_id,source_event_key,event_kind,public_reference)
     values(actor,'privacy-qualification:'||actor::text,'staff_reply','SYNTHETIC-ONLY');
   insert into public.conversations(id,customer_id,customer_name,customer_email,platform,status,source_kind,source_id,unread_count)

@@ -11,6 +11,7 @@ import TurnstileChallenge from '../components/security/TurnstileChallenge'
 import { guestBffEnabled } from '../services/guestCommerceService'
 import DeliveryEstimate from '../components/DeliveryEstimate'
 import StorefrontChatButton from '../components/shop/StorefrontChatButton'
+import { useCheckoutDetails } from '../hooks/useCheckoutDetails'
 
 const DELIVERY_OPTIONS = [
   { id: 'standard', methodName: 'Standard Courier Delivery', hint: 'Delivery charge calculated for your basket and area.' },
@@ -25,29 +26,7 @@ export default function Checkout() {
     go, applyCoupon, removeCoupon, appliedCoupon, couponDiscount,
   } = useStore()
 
-  const [form, setForm] = useState(() => (pendingCheckout
-    ? {
-        ...pendingCheckout,
-        name: pendingCheckout.customerName || '',
-        phone: pendingCheckout.phone || '',
-        street: pendingCheckout.street || pendingCheckout.address || '',
-        barangay: pendingCheckout.barangay || '',
-        city: pendingCheckout.city || '',
-        address: pendingCheckout.address || '',
-        paymentMethod: pendingCheckout.paymentMethod || 'gcash',
-        note: (pendingCheckout.note || '').replace(/^\[Payment: [^\]]+\]\s*/, ''),
-      }
-    : {
-        name: '',
-        email: '',
-        phone: '',
-        street: '',
-        barangay: '',
-        city: '',
-        address: '',
-        paymentMethod: 'gcash',
-        note: '',
-      }))
+  const { form, setForm, update, touchArea, useSavedAddress, selectedAddressId, destinationSeed, areaSelectionKey } = useCheckoutDetails(account, pendingCheckout)
 
   const [deliveryReview, setDeliveryReview] = useState(null)
   const [quoteRevision, setQuoteRevision] = useState(0)
@@ -63,18 +42,6 @@ export default function Checkout() {
   // or unreadable switch row means off, so customers can never be offered
   // a payment method the store has not approved.
   const [codAvailable, setCodAvailable] = useState(false)
-
-  useEffect(() => {
-    const settings = account?.settingsState?.settings
-    if (!settings || pendingCheckout) return
-    setForm(current => ({
-      ...current,
-      name: current.name || settings.displayName || '',
-      address: current.address || settings.deliveryAddress || '',
-      email: current.email || account.session?.user?.email || '',
-      phone: current.phone || account.session?.user?.phone || '',
-    }))
-  }, [account?.settingsState?.settings, account?.session?.user?.email, account?.session?.user?.phone, pendingCheckout])
 
   useEffect(() => {
     let active = true
@@ -98,7 +65,7 @@ export default function Checkout() {
 
   const selectedDeliveryOption = DELIVERY_OPTIONS.find(option => option.id === deliveryOptionId)
   const deliveryItems = useMemo(() => lines.map(line => ({ sku: line.id || line.product.id, quantity: line.qty })), [lines])
-  const deliveryKey = JSON.stringify([deliveryOptionId, deliveryItems, form.address, quoteRevision])
+  const deliveryKey = JSON.stringify([deliveryOptionId, deliveryItems, form.address, quoteRevision, areaSelectionKey])
   const currentReview = deliveryReview?.baseKey === deliveryKey ? deliveryReview : null
   const displayQuote = pendingCheckout?.deliveryPreview || currentReview?.quote
   const shippingFee = displayQuote?.feeMinor == null ? null : displayQuote.feeMinor / 100
@@ -118,8 +85,6 @@ export default function Checkout() {
   const requestSubtotal = lines.reduce((sum, line) => sum + (line.product.retail * line.qty), 0)
   const productsTotal = Math.max(requestSubtotal - couponDiscount, 0)
   const grandTotal = shippingFee === null ? null : productsTotal + shippingFee
-
-  const update = (key) => (event) => setForm((current) => ({ ...current, [key]: event.target.value }))
 
   const submit = async (event) => {
     event.preventDefault()
@@ -328,6 +293,12 @@ export default function Checkout() {
             </div>
 
             <fieldset disabled={submitting || Boolean(pendingCheckout)} className="mt-5 space-y-4">
+              {account?.session && account.settingsState?.settings?.addressBook?.addresses?.length > 0 && <label htmlFor="checkout-saved-address" className="block text-sm font-semibold">Saved delivery address
+                <select id="checkout-saved-address" className={`${fieldClass} mt-1.5`} value={selectedAddressId} onChange={event => { setDeliveryReview(null); useSavedAddress(event.target.value) }}>
+                  <option value="">Enter a different address</option>
+                  {account.settingsState.settings.addressBook.addresses.map(address => <option key={address.id} value={address.id}>{address.label} — {address.recipientName}{address.id === account.settingsState.settings.addressBook.defaultAddressId ? ' (default)' : ''}</option>)}
+                </select>
+              </label>}
               <label className="block text-sm font-semibold">Full name
                 <input className={`${fieldClass} mt-1.5`} value={form.name} onChange={update('name')} autoComplete="name" required />
               </label>
@@ -369,7 +340,8 @@ export default function Checkout() {
               </fieldset>
               {pendingCheckout && <p role="status" className="text-sm text-navy-soft">Your original delivery terms are held for this retry.</p>}
               <div hidden={Boolean(pendingCheckout)}>
-                <DeliveryEstimate items={deliveryItems} service={deliveryOptionId} baseKey={deliveryKey} onReview={setDeliveryReview} paused={Boolean(pendingCheckout)} />
+              <DeliveryEstimate items={deliveryItems} service={deliveryOptionId} baseKey={deliveryKey} onReview={setDeliveryReview} paused={Boolean(pendingCheckout)}
+                initialDestination={destinationSeed} selectionKey={areaSelectionKey} onAreaTouched={touchArea} />
               </div>
 
               {/* Payment Preference Selector */}

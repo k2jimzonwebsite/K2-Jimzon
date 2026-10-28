@@ -23,12 +23,18 @@ const migrations = [
   'supabase/migrations/20261027_customer_privacy_admin.sql',
 ]
 const coordinatorProtocol = process.argv.includes('--hold-coordinator-protocol')
+const addressBookProtocol = process.argv.includes('--address-book-protocol')
+const addressMigration = 'supabase/migrations/20261028_customer_delivery_addresses.sql'
+if (addressBookProtocol) migrations.push(addressMigration)
 const holdProtocol = process.argv.includes('--hold-intent-protocol') || coordinatorProtocol
+if (addressBookProtocol && holdProtocol) throw new Error('QUALIFICATION_MODES_ARE_EXCLUSIVE')
 if (holdProtocol) migrations.push('supabase/migrations/20261027_customer_privacy_hold_intent.sql')
 if (coordinatorProtocol) migrations.push('supabase/migrations/20261027_customer_privacy_hold_authority.sql')
 const assertions = holdProtocol ? 'supabase/tests/customer_privacy_hold_intent.sql' : 'supabase/tests/customer_privacy_current_schema.sql'
 const authorityAssertions = 'supabase/tests/customer_privacy_hold_authority.sql'
-const assertionSql = () => [assertions, ...(coordinatorProtocol ? [authorityAssertions] : [])].map(file => fs.readFileSync(path.join(root, file), 'utf8')).join('\n')
+const addressAssertions = 'supabase/tests/customer_address_book_assertions.sql'
+const addressConcurrency = 'supabase/tests/customer_address_book_concurrency.sql'
+const assertionSql = () => [...(addressBookProtocol ? [addressAssertions] : []), assertions, ...(coordinatorProtocol ? [authorityAssertions] : [])].map(file => fs.readFileSync(path.join(root, file), 'utf8')).join('\n')
 const holdConcurrencyFile = 'supabase/tests/customer_privacy_hold_concurrency.sql'
 const authorityConcurrencyFile = 'supabase/tests/customer_privacy_hold_authority_concurrency.sql'
 const coordinatorSources = [authorityAssertions, authorityConcurrencyFile, 'scripts/prove-customer-hold-coordinator.mjs',
@@ -46,8 +52,8 @@ const receipt = { mapItem: 'MAP-019', startedAt: new Date().toISOString(), statu
   productionChanged: false, limits: ['Existing 26 October archive, not a new production snapshot.',
     'Restore excludes managed Vault entries and original ACL/owners; not managed privilege, Auth, Storage or hosted acceptance.',
     'Migration transaction rollback only, not a committed downgrade or post-closure recovery safeguard.'],
-  sources: [...migrations, inventoryOnly ? inventoryFile : assertions, ...(coordinatorProtocol ? coordinatorSources : []), ...(holdProtocol ? [holdConcurrencyFile] : [])].map(file => ({ path: file, sha256: hash(fs.readFileSync(path.join(root, file))) })) }
-receipt.mode = inventoryOnly ? 'writer-catalog-inventory-only' : coordinatorProtocol ? 'native-hold-coordinator-protocol' : holdProtocol ? 'native-hold-intent-protocol' : 'closure-compatibility'
+  sources: [...migrations, inventoryOnly ? inventoryFile : assertions, ...(addressBookProtocol ? [addressAssertions,addressConcurrency] : []), ...(coordinatorProtocol ? coordinatorSources : []), ...(holdProtocol ? [holdConcurrencyFile] : [])].map(file => ({ path: file, sha256: hash(fs.readFileSync(path.join(root, file))) })) }
+receipt.mode = inventoryOnly ? 'writer-catalog-inventory-only' : addressBookProtocol ? 'address-book-protocol' : coordinatorProtocol ? 'native-hold-coordinator-protocol' : holdProtocol ? 'native-hold-intent-protocol' : 'closure-compatibility'
 const startupProbe = process.argv.includes('--prove-startup-recovery')
 let startAttempted = false, port, env
 fs.mkdirSync(work, { recursive: true })
@@ -129,7 +135,7 @@ try {
   }
   const transaction = ['begin;', ...migrations.map(file => stripTransaction(fs.readFileSync(path.join(root, file), 'utf8'))),
     inventoryOnly ? fs.readFileSync(path.join(root, inventoryFile), 'utf8') : holdProtocol ? assertionSql() :
-      "select 'CURRENT_SCHEMA_THREE_MIGRATIONS_INSTALLED_IN_TRANSACTION';\n" + fs.readFileSync(path.join(root, assertions), 'utf8'), 'rollback;'].join('\n')
+      "select 'CURRENT_SCHEMA_MIGRATIONS_INSTALLED_IN_TRANSACTION';\n" + assertionSql(), 'rollback;'].join('\n')
   let executionFailure
   try {
     const output = run('psql', ['-X', inventoryOnly || holdProtocol ? '-qAt' : '-q', '-v', 'ON_ERROR_STOP=1'], { input: transaction })
@@ -155,14 +161,21 @@ try {
       fs.writeFileSync(path.join(work, 'hold-protocol.json'), JSON.stringify(result, null, 2) + '\n', { flag: 'wx' })
       receipt.holdProtocol = { checks: result.checks, nativeProofExportsVerified: Object.keys(result.exports).length,
         sha256: hash(fs.readFileSync(path.join(work, 'hold-protocol.json'))) }
+    }
+    if (holdProtocol || addressBookProtocol) {
       // A separate owned clone permits real committed concurrent sessions.
       // The original restore remains under the full before/after conservation gate.
-      const clone = `k2_native_hold_${randomUUID().replaceAll('-', '')}`
-      if (!/^k2_native_hold_[0-9a-f]{32}$/.test(clone) || env.PGHOST !== '127.0.0.1') throw new Error('OWNED_NATIVE_CLONE_IDENTITY_REFUSED')
+      const clone = `k2_native_${addressBookProtocol ? 'address' : 'hold'}_${randomUUID().replaceAll('-', '')}`
+      if (!/^k2_native_(?:hold|address)_[0-9a-f]{32}$/.test(clone) || env.PGHOST !== '127.0.0.1') throw new Error('OWNED_NATIVE_CLONE_IDENTITY_REFUSED')
       const cloneEnv = { ...env, PGDATABASE: clone }
       try {
         run('createdb', ['--template', database, clone])
         for (const file of migrations) run('psql', ['-X', '-q', '-v', 'ON_ERROR_STOP=1', '-f', file], { env: cloneEnv })
+        if (addressBookProtocol) {
+          const concurrent = run('psql', ['-X','-qAt','-v','ON_ERROR_STOP=1','-f',addressConcurrency], { env: cloneEnv })
+          receipt.addressConcurrency = JSON.parse(concurrent.trim().split(/\r?\n/).at(-1))
+          if (receipt.addressConcurrency.checks.length !== 2 || receipt.addressConcurrency.disconnected !== true) throw new Error('ADDRESS_CONCURRENCY_QUALIFICATION_FAILED')
+        } else {
         run('psql', ['-X', '-qAt', '-v', 'ON_ERROR_STOP=1'], { env: cloneEnv,
           input: 'create schema k2_hold_fixture;\n' + assertionSql().replaceAll('pg_temp.', 'k2_hold_fixture.') })
         const concurrent = run('psql', ['-X', '-qAt', '-v', 'ON_ERROR_STOP=1', '-f', holdConcurrencyFile], { env: cloneEnv })
@@ -174,11 +187,13 @@ try {
           const { proveCustomerHoldCoordinator } = await import('./prove-customer-hold-coordinator.mjs')
           receipt.holdCoordinator = await proveCustomerHoldCoordinator({ bin, env: cloneEnv, work })
         }
+        }
       } finally {
         // Exact fresh generated name in this already verified owned loopback cluster.
         run('dropdb', ['--if-exists', '--force', clone])
-        receipt.holdCloneDropped = sql(`select count(*) from pg_database where datname=${literal(clone)}`) === '0'
-        if (!receipt.holdCloneDropped) throw new Error('OWNED_NATIVE_CLONE_DROP_NOT_VERIFIED')
+        const dropped = sql(`select count(*) from pg_database where datname=${literal(clone)}`) === '0'
+        receipt[addressBookProtocol ? 'addressCloneDropped' : 'holdCloneDropped'] = dropped
+        if (!dropped) throw new Error('OWNED_NATIVE_CLONE_DROP_NOT_VERIFIED')
       }
     }
   } catch (error) { executionFailure = error }

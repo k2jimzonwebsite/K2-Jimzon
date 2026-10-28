@@ -1,0 +1,232 @@
+{
+  "mapItem": "MAP-019",
+  "ideaId": "IDEA-20261028-01",
+  "status": "locally-qualified-prepared-only",
+  "productionChanged": false,
+  "ownerChoice": "Multiple addresses with one default; guest ordering remains available",
+  "sources": [
+    {
+      "path": "shared/customer-address-book.js",
+      "sha256": "11b4f7e1762766622bf51c98e0b2865d74095029df11b505640da5305d5497d2"
+    },
+    {
+      "path": "prepared-api/storefront/account/settings.js",
+      "sha256": "f7d0e7e0beb0c9a89d06ce47cf7d2fede6ea84d1953c3f8ff9dda7ae9e56bd26"
+    },
+    {
+      "path": "server/storefront-bff/supabase.js",
+      "sha256": "bcb2f7778c0f38075704d52828a3fc44e4808c5a13501da42f61401e743a6ff7"
+    },
+    {
+      "path": "src/services/customerAccountService.js",
+      "sha256": "9af7c223b2f1162bb80e3914e1aec58e394591929e8221f906d0f246bab148ae"
+    },
+    {
+      "path": "src/hooks/useCustomerAccount.js",
+      "sha256": "d43393929e18c55497776fe366b12e8afbf2bf9ddcadf3a94b40e00b85761650"
+    },
+    {
+      "path": "src/hooks/useCheckoutDetails.js",
+      "sha256": "a569d6c6de1e7f63d4c31008ab07a059ca374ff81b56c05dd5f04af394fe2cf1"
+    },
+    {
+      "path": "src/hooks/useDeliveryArea.js",
+      "sha256": "e703b4f1162562586b72a749cb1f3040059ae6ce69104a1612203290c29aab4f"
+    },
+    {
+      "path": "src/components/DeliveryAreaFields.jsx",
+      "sha256": "3e346dea189bee887a4148a4d07bf2338cd7dfd3d5b86ab26026bf707314a2af"
+    },
+    {
+      "path": "src/components/DeliveryEstimate.jsx",
+      "sha256": "7b2b0aa10d584bbe2de832c8b1f264178f6bf0130bf6f7229e3b19141edc3f7a"
+    },
+    {
+      "path": "src/components/account/CustomerDeliveryAddresses.jsx",
+      "sha256": "4ace52ca2636034c5b95b67007824c498b5bfb498d11d927d70a92a7417565bb"
+    },
+    {
+      "path": "src/views/CustomerAccount.jsx",
+      "sha256": "6319f0244ea925d0daf2dc55e7322d4cb7fa878a4cd9033692cdc138be5f4364"
+    },
+    {
+      "path": "src/views/Checkout.jsx",
+      "sha256": "d650dc6b5a1774c43638c8d268a07cab9447ee5cf45f03bfc0e654b8b3ed3bbf"
+    },
+    {
+      "path": "src/index.css",
+      "sha256": "2d29840de5923f75dcb64e7e804a883b42080c8c2f4ee08ad22887763c944ea0"
+    },
+    {
+      "path": "src/views/admin/Admin.jsx",
+      "sha256": "2f773bb6a2164027ab233086dfefeabf447379f2829355bfaad76f5dba583d55"
+    },
+    {
+      "path": "src/views/admin/admin-typography.css",
+      "sha256": "326c8fc92e4a8809a5bdaffb3544241c80027a06b98c21f2ed7b9e7bcb8a9f8c"
+    },
+    {
+      "path": "supabase/migrations/20261028_customer_delivery_addresses.sql",
+      "sha256": "4b3adbd3916c97711fe5feda75f651a8d8dcab38b2ca59930e949697fc28dfd1"
+    },
+    {
+      "path": "supabase/tests/customer_address_book_assertions.sql",
+      "sha256": "8b4b75baf86981218ca8026075e51bfd9a87eaec91e7c7b1e527d8606a7dbe2f"
+    },
+    {
+      "path": "supabase/tests/customer_address_book_concurrency.sql",
+      "sha256": "4ed7639c172b0018dd62e53e615e8f7d2a88ccb3473fde3345b774aa7132df58"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_current_schema.sql",
+      "sha256": "59ae646afe35c4cd40026ffc60f335e36b375687370a46e78da59c90c1738222"
+    },
+    {
+      "path": "scripts/rehearse-customer-privacy-current-schema.mjs",
+      "sha256": "64458d377fb47f0915980050c7dab0ae4e61272f03fcd00decf0d1da42bcd0be"
+    },
+    {
+      "path": "tests/customer-address-book.test.mjs",
+      "sha256": "326a95fcff76b52e27c719b3fd1fca6238ae45fec19d5f9af1f44811e95a13cc"
+    },
+    {
+      "path": "tests/customer-address-book-api.test.mjs",
+      "sha256": "09d2e98d0ef3466aea9ea5762a60e8cdf0e9ed2f91fbee2064ddc4615863568a"
+    },
+    {
+      "path": "tests/customer-account-ui.spec.js",
+      "sha256": "b1439f7e534ed904beeabeb37df5b0408da29a1ceaeddc64511aaec0c516fa7a"
+    },
+    {
+      "path": "package.json",
+      "sha256": "82080709f8c8d687148bf954394e884f15aea7e243c558fe6f682475caae2a31"
+    }
+  ],
+  "checks": {
+    "helperAndApi": {
+      "passed": 10,
+      "failed": 0
+    },
+    "accountAndWholesaleBrowser": {
+      "passed": 48,
+      "failed": 0,
+      "savedDeliveryCases": 11,
+      "fixtureProviderOnly": true
+    },
+    "native": {
+      "status": "passed",
+      "mode": "address-book-protocol",
+      "before": {
+        "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+        "tables": 161,
+        "rows": 49717,
+        "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+        "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+      },
+      "after": {
+        "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+        "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+        "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+      },
+      "addressConcurrency": {
+        "checks": [
+          "simultaneous first saves: one complete profile/address winner, one conflict",
+          "simultaneous existing revision saves: one winner, no overwritten update"
+        ],
+        "disconnected": true
+      },
+      "addressCloneDropped": true,
+      "clusterStopped": true,
+      "portRefused": true,
+      "restoredPlaintextRemoved": true,
+      "sources": [
+        {
+          "path": "supabase/migrations/20261027_customer_account_portfolio.sql",
+          "sha256": "705f776cac7aac988a85487dcd039a03022705012308bfb722f761c51b694cb9"
+        },
+        {
+          "path": "supabase/migrations/20261027_customer_privacy_automation.sql",
+          "sha256": "e3354448f8d2126e538782ba01513bcc40919af92f4b2ed36a408208840fe1e4"
+        },
+        {
+          "path": "supabase/migrations/20261027_customer_privacy_admin.sql",
+          "sha256": "686ab1ede2e5d770942996cc83d06ac809daa377bf5e182741b553ee9819c9bf"
+        },
+        {
+          "path": "supabase/migrations/20261028_customer_delivery_addresses.sql",
+          "sha256": "4b3adbd3916c97711fe5feda75f651a8d8dcab38b2ca59930e949697fc28dfd1"
+        },
+        {
+          "path": "supabase/tests/customer_privacy_current_schema.sql",
+          "sha256": "59ae646afe35c4cd40026ffc60f335e36b375687370a46e78da59c90c1738222"
+        },
+        {
+          "path": "supabase/tests/customer_address_book_assertions.sql",
+          "sha256": "8b4b75baf86981218ca8026075e51bfd9a87eaec91e7c7b1e527d8606a7dbe2f"
+        },
+        {
+          "path": "supabase/tests/customer_address_book_concurrency.sql",
+          "sha256": "4ed7639c172b0018dd62e53e615e8f7d2a88ccb3473fde3345b774aa7132df58"
+        }
+      ]
+    },
+    "development": {
+      "command": "npm run verify:development",
+      "exitCode": 0,
+      "privacyAndAddressCases": 136,
+      "initialFailure": "Dynamic RPC name not statically inventoried; literal dispatch fixed and focused inventory/API checks passed before final rerun."
+    },
+    "vercelPackaging": {
+      "passed": 3,
+      "failed": 0
+    },
+    "storefrontBuild": {
+      "jsGzipKB": 147.44,
+      "jsLimitKB": 150.5,
+      "cssGzipKB": 29.82,
+      "cssLimitKB": 30.0,
+      "boundary": "passed",
+      "secrets": "passed"
+    },
+    "adminBuild": {
+      "chunkMinifiedKB": 227.44,
+      "limitKB": 300,
+      "boundary": "passed",
+      "secrets": "passed"
+    },
+    "visual": {
+      "widths": [
+        375,
+        1440
+      ],
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "reducedMotion": true,
+      "horizontalOverflow": false,
+      "minimumControlHeight": 44,
+      "keyboardFocus": "passed",
+      "captures": [
+        "docs/acceptance/customer-addresses-20261028/editor-dark-1440.png",
+        "docs/acceptance/customer-addresses-20261028/editor-dark-375.png",
+        "docs/acceptance/customer-addresses-20261028/editor-light-1440.png",
+        "docs/acceptance/customer-addresses-20261028/editor-light-375.png"
+      ]
+    }
+  },
+  "limits": [
+    "Existing 26 October archive, not a new production snapshot.",
+    "Restore excludes managed Vault entries and original ACL/owners; not managed privilege, Auth, Storage or hosted acceptance.",
+    "Migration transaction rollback only, not a committed downgrade or post-closure recovery safeguard.",
+    "Synthetic provider/browser evidence only; physical-device and hosted real sign-in/save/order acceptance remain unverified.",
+    "No production migration, provider update, main push or Vercel promotion.",
+    "Data-retaining production activation/deactivation packet is not prepared or authorized; earlier MAP-019 recovery/freeze/permit/restore dependencies remain."
+  ],
+  "recovery": "Scoped source revert before apply. After data exists, deactivate writer/UI while retaining saved data/columns and initialized legacy guard; never automatically drop saved personal data or restore unsafe profile writer.",
+  "review": {
+    "disposition": "APPROVED qualified local-source slice",
+    "remainingCriticalOrImportant": 0,
+    "scope": "Focused fixes, fresh Chromium probe, normalized reconciliation, removed-address draft, Admin declaration conservation and24source hashes. No provider/hosted/activation approval."
+  }
+}

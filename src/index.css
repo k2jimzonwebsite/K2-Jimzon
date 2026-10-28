@@ -850,61 +850,7 @@
   background: rgba(212, 175, 55, 0.7);
 }
 
-/* ADMIN TYPOGRAPHY CONTRACT
-   One readable sans family for the operational surface. Monospace remains for
-   actual editable machine values; normal metrics use tabular sans numerals. */
-.admin-ui {
-  --text-admin-micro: 0.75rem;
-  --text-admin-label: 0.8125rem;
-  --text-admin-meta: 0.8125rem;
-  --text-admin-dense: 0.9375rem;
-  --text-admin-body: 1rem;
-  --text-admin-section: 1rem;
-  --text-admin-title: 1.5rem;
-}
-
-.admin-ui :is(h1, h2, h3, h4, h5, h6),
-.admin-ui .font-serif {
-  font-family: var(--font-sans);
-  letter-spacing: -0.012em;
-}
-
-.admin-ui .font-mono {
-  font-family: var(--font-sans);
-  font-variant-numeric: tabular-nums slashed-zero;
-  letter-spacing: 0;
-}
-
-.admin-ui :is(code, pre, kbd, input.font-mono, textarea.font-mono) {
-  font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
-}
-
-.admin-ui .tabular-nums,
-.storefront-ui .tabular-nums {
-  font-variant-numeric: tabular-nums;
-}
-
-.admin-ui .text-base { font-size: var(--text-admin-body); line-height: 1.5; }
-.admin-ui .text-sm { font-size: var(--text-admin-dense); line-height: 1.5; }
-.admin-ui .text-xs { font-size: var(--text-admin-label); line-height: 1.45; }
-.admin-ui :is(.text-\[13px\], .text-\[14px\], .text-\[15px\]) { font-size: var(--text-admin-dense); line-height: 1.5; }
-.admin-ui :is(.text-\[9px\], .text-\[10px\], .text-\[11px\]) { font-size: var(--text-admin-micro); line-height: 1.45; }
-
-.admin-ui .uppercase {
-  letter-spacing: 0.08em;
-}
-
-/* Operational text must remain readable on the dark canvas. */
-.admin-ui :is(.text-white\/35, .text-white\/38, .text-white\/40) { color: rgba(255, 255, 255, 0.55); }
-.admin-ui .text-white\/45 { color: rgba(255, 255, 255, 0.62); }
-
-/* The admin uses one cool accent; keep its scroll affordances in that system. */
-.admin-ui .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.34);
-}
-.admin-ui .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.58);
-}
+.storefront-ui .tabular-nums { font-variant-numeric: tabular-nums; }
 
 /* Packing slip prints alone on paper: hide the admin chrome and the dialog
    backdrop, then pin the slip to the top of the page. Screen rendering is

@@ -7,6 +7,7 @@ import {
 import TurnstileChallenge from '../components/security/TurnstileChallenge'
 import CustomerPurchases from '../components/account/CustomerPurchases'
 import CustomerPrivacy from '../components/account/CustomerPrivacy'
+import CustomerDeliveryAddresses from '../components/account/CustomerDeliveryAddresses'
 import { ArrowIcon, ChatIcon, CheckIcon, ShieldIcon, SyncIcon, UserIcon } from '../components/ui/icons'
 
 const field = 'store-field mt-2 min-h-12 w-full px-4 text-base'
@@ -139,13 +140,13 @@ function AccountSettings({ account, offline, settingsDraft, setSettingsDraft }) 
     if (offline) return updateDraft({ error: 'Reconnect before saving settings.' })
     const requestId = crypto.randomUUID()
     updateDraft({ pendingId: requestId })
-    const result = await saveSettings(name.trim(), address.trim(), notifyInApp)
+    const result = await saveSettings(name.trim(), settingsState.settings?.addressBook ? settingsState.settings.deliveryAddress || '' : address.trim(), notifyInApp)
     setSettingsDraft(current => current?.owner !== owner || current.pendingId !== requestId ? current : {
       ...current, pendingId: null, dirty: result.ok ? false : current.dirty, saved: result.ok,
       error: result.ok ? '' : result.error || 'Settings could not be saved. Try again.',
     })
   }
-  return <section aria-labelledby="account-settings-title" className="scroll-mt-32 border-t border-line py-8">
+  return <><section aria-labelledby="account-settings-title" className="scroll-mt-32 border-t border-line py-8">
     <h2 id="account-settings-title" className="font-serif text-2xl font-semibold text-navy">Your account settings</h2>
     <p className="mt-2 text-sm leading-6 text-navy-soft">These details help you prepare future requests. Saving an address does not change an order already submitted.</p>
     <dl className="mt-4 space-y-2 text-sm leading-6 text-navy">{account.session?.user?.email_confirmed_at && <div><dt className="font-bold">Verified email</dt><dd className="break-all">{account.session.user.email}</dd></div>}{account.session?.user?.phone_confirmed_at && <div><dt className="font-bold">Verified phone</dt><dd>{account.session.user.phone}</dd></div>}</dl>
@@ -153,11 +154,11 @@ function AccountSettings({ account, offline, settingsDraft, setSettingsDraft }) 
     {settingsState.status === 'error' && <div className="mt-4" role="alert"><p className="text-sm text-crimson">{settingsState.error}</p><button type="button" className={`${secondary} mt-2`} onClick={() => refreshSettings()} disabled={offline}>Try again</button></div>}
     {settingsState.status === 'ready' && <form onSubmit={submit} className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
       <label className="block text-sm font-bold text-navy" htmlFor="account-profile-name">Your name<input id="account-profile-name" className={field} maxLength={140} autoComplete="name" value={name} disabled={pending} onChange={event => updateDraft({ name: event.target.value, dirty: true, saved: false })} required /></label>
-      <label className="block text-sm font-bold text-navy sm:col-span-2" htmlFor="account-profile-address">Saved delivery address<textarea id="account-profile-address" className={`${field} min-h-24 resize-y`} maxLength={500} autoComplete="street-address" value={address} disabled={pending} onChange={event => updateDraft({ address: event.target.value, dirty: true, saved: false })} /></label>
+      {!settingsState.settings?.addressBook && <label className="block text-sm font-bold text-navy sm:col-span-2" htmlFor="account-profile-address">Saved delivery address<textarea id="account-profile-address" className={`${field} min-h-24 resize-y`} maxLength={500} autoComplete="street-address" value={address} disabled={pending} onChange={event => updateDraft({ address: event.target.value, dirty: true, saved: false })} /></label>}
       <label className="flex min-h-11 items-center gap-3 text-sm font-semibold text-navy sm:col-span-2"><input type="checkbox" checked={notifyInApp} disabled={pending} onChange={event => updateDraft({ notifyInApp: event.target.checked, dirty: true, saved: false })} className="h-5 w-5 accent-crimson" />Show account notifications</label>
       <div className="sm:col-span-2">{error && <p className="mb-3 text-sm font-semibold text-crimson" role="alert">{error}</p>}{saved && <p className="mb-3 text-sm font-semibold text-forest" role="status">Settings saved.</p>}<button className={primary} disabled={pending || offline}>{pending ? 'Saving…' : 'Save settings'}</button></div>
     </form>}
-  </section>
+  </section><CustomerDeliveryAddresses key={owner} account={account} offline={offline} profileName={name} /></>
 }
 
 const notificationLabels = {

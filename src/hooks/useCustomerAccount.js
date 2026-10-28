@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   claimGuestCustomer, customerAccountEnabled, customerAuthClient,
   loadCustomerHistory, loadCustomerSettings, markCustomerNotificationRead,
-  replyAsCustomerAccount, saveCustomerSettings,
+  replyAsCustomerAccount, saveCustomerSettings, saveCustomerAddressBook,
 } from '../services/customerAccountService'
 
 const initialState = { ready: false, session: null, history: null, historyState: 'idle', error: '', code: '' }
@@ -164,13 +164,13 @@ export function useCustomerAccount() {
     }
   }, [enabled, refreshHistory, refreshSettings, updateSignOutGate])
 
-  const saveSettings = useCallback(async (displayName, deliveryAddress, notifyInApp) => {
+  const updateSettings = useCallback(async mutate => {
     const actorId = state.session?.user?.id
     const token = state.session?.access_token
     const epoch = identityEpoch.current
     const generationAtStart = settingsReadGeneration.current
     if (!token) return { ok: false, error: 'Sign in before saving settings.' }
-    const result = await saveCustomerSettings(token, displayName, deliveryAddress, notifyInApp)
+    const result = await mutate(token)
     if (result.ok && activeRef.current && identityEpoch.current === epoch && sessionRef.current?.user?.id === actorId) {
       if (generationAtStart !== settingsReadGeneration.current) {
         const refreshed = await refreshSettings()
@@ -183,10 +183,14 @@ export function useCustomerAccount() {
       }
       const generation = ++settingsReadGeneration.current
       setSettingsState(current => generation !== settingsReadGeneration.current || identityEpoch.current !== epoch || sessionRef.current?.user?.id !== actorId
-        ? current : { ...current, settings: result.data, status: 'ready', error: '' })
+        ? current : { ...current, settings: { ...current.settings, ...result.data }, status: 'ready', error: '' })
     }
     return result
   }, [state.session, refreshSettings])
+
+  const saveSettings = useCallback((displayName, deliveryAddress, notifyInApp) =>
+    updateSettings(token => saveCustomerSettings(token, displayName, deliveryAddress, notifyInApp)), [updateSettings])
+  const saveAddressBook = useCallback(command => updateSettings(token => saveCustomerAddressBook(token, command)), [updateSettings])
 
   const markNotificationRead = useCallback(async (notificationId) => {
     const actorId = state.session?.user?.id
@@ -280,5 +284,5 @@ export function useCustomerAccount() {
     storeSignOutNotice(false)
   }, [])
 
-  return { enabled, ...state, settingsState, signOutNotice, signOutBlocked, dismissSignOutNotice, refreshHistory, refreshSettings, saveSettings, markNotificationRead, claim, reply, signOut }
+  return { enabled, ...state, settingsState, signOutNotice, signOutBlocked, dismissSignOutNotice, refreshHistory, refreshSettings, saveSettings, saveAddressBook, markNotificationRead, claim, reply, signOut }
 }

@@ -55,6 +55,325 @@ const purchasePortfolio = { summary: { orderCount: 21, fulfilledItems: 42, verif
  orders: [{ public_reference: 'WEB-PURCHASE-1', status: 'fulfilled', payment_status: 'verified', shipping_quote_status: 'waived', total_amount: 10,
  created_at: '2026-10-01T00:00:00Z', payment: { amount: 10, currency: 'PHP', method: 'GCash', reference: 'OWN-REFERENCE' },
  items: [{ sku: 'SYNTHETIC', name: 'Synthetic pantry item', quantity: 2, unitPrice: 5, lineTotal: 10 }], proofs: [{ id: '50000000-0000-4000-8000-000000000001', mediaType: 'application/pdf' }] }], nextCursor: null }
+
+const addressPlaces = [
+ {code:'1300000000',name:'National Capital Region',level:'Reg'},
+ {code:'1374000000',name:'Second District',level:'Group'},
+ {code:'1374030000',name:'Pasig City',level:'City'},
+ {code:'1374030010',name:'San Antonio',level:'Bgy'},
+].map(place=>({...place,sourceVersion:'psgc-2026-06-30'}))
+const deliveryAddressFixture = (patch={}) => ({id:'50000000-0000-4000-8000-000000000008',label:'Home',recipientName:'Teresa Abella',
+ phone:'+639276143852',street:'42 Mabini Street',postalCode:'1600',landmark:'Blue gate',
+ destination:{sourceVersion:'psgc-2026-06-30',path:addressPlaces.map(place=>place.code)},
+ formattedAddress:'42 Mabini Street, San Antonio, Pasig City, 1600, Blue gate',...patch})
+async function addressReferenceRoutes(page){
+ await page.route('**/api/storefront/delivery/locations*',route=>{
+  const parent=new URL(route.request().url()).searchParams.get('parent')
+  const index=parent?addressPlaces.findIndex(place=>place.code===parent)+1:0
+  return route.fulfill({json:{ok:true,sourceVersion:'psgc-2026-06-30',children:addressPlaces[index]?[addressPlaces[index]]:[]}})
+ })
+}
+async function addressCheckoutBase(page,authenticated=true){
+ if(authenticated)await seedExpressAccount(page,fakeJwt(expressActor))
+ await addressReferenceRoutes(page)
+ await page.addInitScript(()=>localStorage.setItem('k2_cart_v1',JSON.stringify([{id:'ADDRESS-COFFEE',qty:1}])))
+ await page.route('**/rest/v1/**',route=>{
+  const table=new URL(route.request().url()).pathname.split('/').pop()
+  return route.fulfill({json:table==='products'?[{sku:'ADDRESS-COFFEE',name:'Synthetic address-test coffee',status:'Live',srp:845,primary_image_url:'/images/placeholder.svg',description:'Synthetic local fixture',subcategory:'Coffee & Drinks'}]
+   :table==='v_storefront_visible_skus'?[{sku:'ADDRESS-COFFEE'}]:table==='v_product_stock_from_batches'?[{sku:'ADDRESS-COFFEE',stock_from_batches:8}]:[]})
+ })
+ await page.route('**/api/storefront/account/history',route=>route.fulfill({json:accountExpressHistory()}))
+ const quotes=[]
+ await page.route('**/api/storefront/delivery/quote',route=>{quotes.push(route.request().postDataJSON());return route.fulfill({json:{ok:true,
+  quote:{service:'standard',feeMinor:6500,inputFingerprint:'address-fixture',rateVersion:1,weightBasis:'estimated'}}})})
+ return quotes
+}
+
+test('saved delivery addresses retain one exact change through a lost save reply',async({page})=>{
+ await seedExpressAccount(page,fakeJwt(expressActor));await addressReferenceRoutes(page)
+ await page.route('**/api/storefront/account/history',route=>route.fulfill({json:accountExpressHistory()}))
+ await page.route('**/api/storefront/account/portfolio',route=>route.fulfill({json:{ok:true,portfolio:purchasePortfolio}}))
+ let settings={displayName:'Elena Villanueva',deliveryAddress:'',notifyInApp:true,addressBook:{initialized:false,addresses:[],defaultAddressId:null,revision:0}}
+ const writes=[];let lost=true
+ await page.route('**/api/storefront/account/settings',route=>{
+  const body=route.request().postDataJSON()
+  if(body.operation==='addresses'){
+   writes.push(body)
+   if(settings.addressBook.lastOperationId!==body.operationId)settings={...settings,deliveryAddress:'42 Mabini Street, San Antonio, Pasig City, 1600',
+    addressBook:{initialized:true,addresses:body.addresses.map(a=>({...a,formattedAddress:'42 Mabini Street, San Antonio, Pasig City, 1600'})),
+     defaultAddressId:body.defaultAddressId,revision:body.expectedRevision+1,lastOperationId:body.operationId,lastOperationRevision:body.expectedRevision}}
+   if(lost){lost=false;return route.abort('failed')}
+  }
+  return route.fulfill({json:{ok:true,settings,notifications:[]}})
+ })
+ await page.goto('/account')
+ const section=page.getByRole('region',{name:'Delivery addresses',exact:true})
+ await expect(section).toBeVisible({timeout:5000})
+ await section.getByRole('button',{name:'Add delivery address',exact:true}).click()
+ await section.getByLabel('Address label',{exact:true}).fill('Home')
+ await section.getByLabel('Recipient full name',{exact:true}).fill('Teresa Abella')
+ await section.getByLabel('Delivery contact number',{exact:true}).fill('09276143852')
+ await section.getByLabel('House, unit and street',{exact:true}).fill('42 Mabini Street')
+ for(let i=0;i<addressPlaces.length;i++)await section.locator(`#account-address-area-${i}`).selectOption(addressPlaces[i].code)
+ await section.getByLabel('Postal code (optional)',{exact:true}).fill('1600')
+ await section.getByRole('button',{name:'Save address',exact:true}).click()
+ await expect(section.getByRole('button',{name:'Retry saved change',exact:true})).toBeVisible()
+ await expect(section.getByRole('textbox',{name:'House, unit and street',exact:true})).toBeDisabled()
+ await section.getByRole('button',{name:'Retry saved change',exact:true}).click()
+ await expect(section.getByText('Address saved.',{exact:true})).toBeVisible()
+ expect(writes).toHaveLength(2);expect(writes[1]).toEqual(writes[0])
+ expect(writes[0].addresses[0].phone).toBe('+639276143852')
+ await expect(section.getByText('Default',{exact:true})).toBeVisible()
+ await expect(section.getByText('Teresa Abella',{exact:true})).toBeVisible()
+ await page.reload();await expect(section.getByText('Teresa Abella',{exact:true})).toBeVisible()
+})
+
+test('saved delivery default restores gift recipient and location without requiring another entry',async({page})=>{
+ const quotes=await addressCheckoutBase(page),address=deliveryAddressFixture()
+ await page.route('**/api/storefront/account/settings',route=>route.fulfill({json:{ok:true,settings:{displayName:'Elena Villanueva',notifyInApp:true,
+  deliveryAddress:address.formattedAddress,addressBook:{initialized:true,addresses:[address],defaultAddressId:address.id,revision:1}},notifications:[]}}))
+ await page.goto('/checkout')
+ await expect(page.getByRole('heading',{name:'Review order request',exact:true})).toBeVisible()
+ await expect(page.getByLabel('Full name',{exact:true})).toHaveValue('Teresa Abella')
+ await expect(page.getByLabel('Mobile number',{exact:true})).toHaveValue('+639276143852')
+ await expect(page.getByRole('textbox',{name:'Delivery address',exact:true})).toHaveValue(address.formattedAddress)
+ await expect(page.getByRole('combobox',{name:'Saved delivery address',exact:true})).toHaveValue(address.id)
+ await expect.poll(()=>quotes.length).toBeGreaterThan(0)
+ expect(quotes.at(-1).destination).toEqual(address.destination)
+ await expect(page.getByRole('checkbox',{name:/I accept the/})).not.toBeChecked()
+})
+
+test('saved delivery editor accepts a name added in the profile form while it is open',async({page})=>{
+ await seedExpressAccount(page,fakeJwt(expressActor));await addressReferenceRoutes(page)
+ await page.route('**/api/storefront/account/history',route=>route.fulfill({json:accountExpressHistory()}))
+ await page.route('**/api/storefront/account/portfolio',route=>route.fulfill({json:{ok:true,portfolio:purchasePortfolio}}))
+ let settings={displayName:'',deliveryAddress:'',notifyInApp:true,addressBook:{initialized:false,addresses:[],defaultAddressId:null,revision:0}}
+ const writes=[]
+ await page.route('**/api/storefront/account/settings',route=>{
+  const body=route.request().postDataJSON()
+  if(typeof body.displayName==='string'&&!body.operation)settings={...settings,displayName:body.displayName}
+  if(body.operation==='addresses'){
+   writes.push(body);settings={...settings,deliveryAddress:'42 Mabini Street',addressBook:{initialized:true,revision:1,
+    addresses:body.addresses.map(a=>({...a,formattedAddress:'42 Mabini Street'})),defaultAddressId:body.defaultAddressId}}
+  }
+  return route.fulfill({json:{ok:true,settings,notifications:[]}})
+ })
+ await page.goto('/account');const section=page.getByRole('region',{name:'Delivery addresses',exact:true})
+ await section.getByRole('button',{name:'Add delivery address',exact:true}).click()
+ await expect(section.locator('#address-profile-name')).toBeVisible()
+ await page.locator('#account-profile-name').fill('Elena Villanueva')
+ await page.getByRole('button',{name:'Save settings',exact:true}).click()
+ await expect(page.getByText('Settings saved.',{exact:true})).toBeVisible()
+ await expect(section.locator('#address-profile-name')).toHaveCount(0)
+ await section.getByLabel('Recipient full name',{exact:true}).fill('Teresa Abella')
+ await section.getByLabel('Delivery contact number',{exact:true}).fill('09276143852')
+ await section.getByLabel('House, unit and street',{exact:true}).fill('42 Mabini Street')
+ for(let i=0;i<addressPlaces.length;i++)await section.locator(`#account-address-area-${i}`).selectOption(addressPlaces[i].code)
+ await section.getByRole('button',{name:'Save address',exact:true}).click()
+ await expect(section.getByText('Address saved.',{exact:true})).toBeVisible()
+ expect(writes).toHaveLength(1);expect(writes[0].displayName).toBe('Elena Villanueva')
+})
+
+test('saved delivery lost reply reconciles a JSONB destination with reordered keys',async({page})=>{
+ await seedExpressAccount(page,fakeJwt(expressActor));await addressReferenceRoutes(page)
+ await page.route('**/api/storefront/account/history',route=>route.fulfill({json:accountExpressHistory()}))
+ await page.route('**/api/storefront/account/portfolio',route=>route.fulfill({json:{ok:true,portfolio:purchasePortfolio}}))
+ const address=deliveryAddressFixture();let settings={displayName:'Elena Villanueva',deliveryAddress:address.formattedAddress,
+  notifyInApp:true,addressBook:{initialized:true,addresses:[address],defaultAddressId:address.id,revision:1}}
+ let writes=0
+ await page.route('**/api/storefront/account/settings',route=>{
+  const body=route.request().postDataJSON()
+  if(body.operation==='addresses'){
+   writes++;settings={...settings,addressBook:{initialized:true,revision:body.expectedRevision+1,defaultAddressId:body.defaultAddressId,
+    lastOperationId:body.operationId,lastOperationRevision:body.expectedRevision,
+    addresses:body.addresses.map(a=>({...a,destination:{path:a.destination.path,sourceVersion:a.destination.sourceVersion},formattedAddress:address.formattedAddress}))}}
+   return route.abort('failed')
+  }
+  return route.fulfill({json:{ok:true,settings,notifications:[]}})
+ })
+ await page.goto('/account');const section=page.getByRole('region',{name:'Delivery addresses',exact:true})
+ await section.getByRole('button',{name:'Edit Home',exact:true}).click()
+ await section.getByLabel('Address label',{exact:true}).fill('Work')
+ await section.getByRole('button',{name:'Save address',exact:true}).click()
+ await expect(section.getByRole('button',{name:'Retry saved change',exact:true})).toBeVisible()
+ await section.getByRole('button',{name:'Check latest addresses',exact:true}).click()
+ await expect(section.getByText('Address saved.',{exact:true})).toBeVisible()
+ await expect(section.getByRole('heading',{name:'Work',exact:true})).toBeVisible()
+ await expect(section.getByRole('button',{name:'Retry saved change',exact:true})).toHaveCount(0)
+ expect(writes).toBe(1)
+})
+
+test('saved delivery default never mixes into a manually entered recipient or street',async({page})=>{
+ const quotes=await addressCheckoutBase(page),address=deliveryAddressFixture()
+ let release,started;const held=new Promise(resolve=>{release=resolve}),requested=new Promise(resolve=>{started=resolve})
+ await page.route('**/api/storefront/account/settings',async route=>{started();await held;return route.fulfill({json:{ok:true,
+  settings:{displayName:'Elena Villanueva',deliveryAddress:address.formattedAddress,notifyInApp:true,
+   addressBook:{initialized:true,addresses:[address],defaultAddressId:address.id,revision:1}},notifications:[]}})})
+ await page.goto('/checkout');await requested
+ await page.getByRole('textbox',{name:'Full name',exact:true}).fill('Manual recipient')
+ await page.getByRole('textbox',{name:'Mobile number',exact:true}).fill('09178546329')
+ await page.getByRole('textbox',{name:'Delivery address',exact:true}).fill('A different street already typed')
+ release()
+ await expect(page.getByRole('combobox',{name:'Saved delivery address',exact:true})).toBeVisible()
+ await expect(page.getByRole('textbox',{name:'Full name',exact:true})).toHaveValue('Manual recipient')
+ await expect(page.getByRole('textbox',{name:'Mobile number',exact:true})).toHaveValue('09178546329')
+ await expect(page.getByRole('textbox',{name:'Delivery address',exact:true})).toHaveValue('A different street already typed')
+ await expect(page.locator('#delivery-area-0')).toHaveValue('');expect(quotes).toHaveLength(0)
+ await page.getByRole('combobox',{name:'Saved delivery address',exact:true}).selectOption(address.id)
+ await expect(page.getByRole('textbox',{name:'Full name',exact:true})).toHaveValue(address.recipientName)
+ await expect.poll(()=>quotes.length).toBeGreaterThan(0)
+ expect(quotes.at(-1).destination).toEqual(address.destination)
+ await expect(page.getByRole('checkbox',{name:/I accept the/})).not.toBeChecked()
+})
+
+test('saved delivery addresses change defaults and remove the final destination without resurrection',async({page})=>{
+ await seedExpressAccount(page,fakeJwt(expressActor))
+ await page.route('**/api/storefront/account/history',route=>route.fulfill({json:accountExpressHistory()}))
+ await page.route('**/api/storefront/account/portfolio',route=>route.fulfill({json:{ok:true,portfolio:purchasePortfolio}}))
+ const home=deliveryAddressFixture(),work=deliveryAddressFixture({id:'50000000-0000-4000-8000-000000000009',label:'Work',recipientName:'Elena Villanueva'})
+ let settings={displayName:'Elena Villanueva',notifyInApp:true,deliveryAddress:home.formattedAddress,
+  addressBook:{initialized:true,addresses:[home,work],defaultAddressId:home.id,revision:1}}
+ await page.route('**/api/storefront/account/settings',route=>{
+  const body=route.request().postDataJSON()
+  if(body.operation==='addresses')settings={...settings,deliveryAddress:body.addresses.length?home.formattedAddress:'',addressBook:{initialized:true,
+   addresses:body.addresses.map(a=>({...a,formattedAddress:home.formattedAddress})),defaultAddressId:body.defaultAddressId,revision:body.expectedRevision+1,
+   lastOperationId:body.operationId,lastOperationRevision:body.expectedRevision}}
+  return route.fulfill({json:{ok:true,settings,notifications:[]}})
+ })
+ await page.goto('/account');const section=page.getByRole('region',{name:'Delivery addresses',exact:true})
+ await section.getByRole('button',{name:'Make Work default',exact:true}).click()
+ await expect(section.getByRole('article').filter({has:page.getByRole('heading',{name:'Work',exact:true})}).getByText('Default',{exact:true})).toBeVisible()
+ await section.getByRole('button',{name:'Remove Work',exact:true}).click()
+ await expect(section.getByText(/Home will become your default/)).toBeVisible()
+ await section.getByRole('button',{name:'Confirm removal',exact:true}).click()
+ await expect(section.getByText('Address removed.',{exact:true})).toBeVisible()
+ await section.getByRole('button',{name:'Remove Home',exact:true}).click()
+ await section.getByRole('button',{name:'Confirm removal',exact:true}).click()
+ await expect(section.getByText(/No delivery addresses saved yet/)).toBeVisible()
+ expect(settings.deliveryAddress).toBe('');expect(settings.addressBook.defaultAddressId).toBeNull()
+ await page.reload();await expect(section.getByText(/No delivery addresses saved yet/)).toBeVisible()
+ await expect(page.getByLabel('Saved delivery address',{exact:true})).toHaveCount(0)
+})
+
+test('saved delivery work keeps guest checkout available without an account',async({page})=>{
+ const quotes=await addressCheckoutBase(page,false);let accountReads=0
+ await page.route('**/api/storefront/account/settings',route=>{accountReads++;return route.abort()})
+ await page.goto('/checkout')
+ await page.getByRole('textbox',{name:'Full name',exact:true}).fill('Guest recipient')
+ await page.getByRole('textbox',{name:'Email address',exact:true}).fill('guest@example.invalid')
+ await page.getByRole('textbox',{name:'Delivery address',exact:true}).fill('18 Synthetic Street')
+ for(let i=0;i<addressPlaces.length;i++)await page.locator(`#delivery-area-${i}`).selectOption(addressPlaces[i].code)
+ await expect.poll(()=>quotes.length).toBeGreaterThan(0)
+ await expect(page.getByRole('checkbox',{name:/I accept the/})).toBeVisible()
+ await expect(page.getByRole('button',{name:'Submit order request',exact:true})).toBeVisible()
+ await expect(page.getByRole('combobox',{name:'Saved delivery address',exact:true})).toHaveCount(0)
+ expect(accountReads).toBe(0)
+})
+
+test('saved delivery checkout clears the previous customer on an account switch and sign-out',async({page})=>{
+ const quotes=await addressCheckoutBase(page),address=deliveryAddressFixture(),actorB='10000000-0000-4000-8000-000000000002'
+ const tokenB=fakeJwt(actorB),other=deliveryAddressFixture({recipientName:'Second customer',street:'9 Second Street',formattedAddress:'9 Second Street, Pasig City'})
+ await page.route('https://fixture.supabase.co/auth/v1/user',route=>route.fulfill({json:accountUser(actorB)}))
+ await page.route('**/api/storefront/account/settings',route=>{
+  const a=route.request().headers().authorization===`Bearer ${tokenB}`?other:address
+  return route.fulfill({json:{ok:true,settings:{displayName:'Profile name',deliveryAddress:a.formattedAddress,notifyInApp:true,
+   addressBook:{initialized:true,addresses:[a],defaultAddressId:a.id,revision:1}},notifications:[]}})
+ })
+ await page.goto('/checkout');await expect(page.getByLabel('Full name',{exact:true})).toHaveValue(address.recipientName)
+ await expect.poll(()=>quotes.length).toBeGreaterThan(0)
+ await page.getByRole('checkbox',{name:/I accept the/}).check()
+ await page.evaluate(async token=>{
+  const {customerAuthClient}=await import('/src/services/customerAccountService.js')
+  const result=await(await customerAuthClient()).auth.setSession({access_token:token,refresh_token:'synthetic-other'})
+  if(result.error)throw result.error
+ },tokenB)
+ await expect(page.getByLabel('Full name',{exact:true})).toHaveValue(other.recipientName)
+ await expect(page.getByRole('textbox',{name:'Delivery address',exact:true})).toHaveValue(other.formattedAddress)
+ await expect(page.getByRole('checkbox',{name:/I accept the/})).not.toBeChecked()
+ await page.evaluate(async()=>{
+  const {customerAuthClient}=await import('/src/services/customerAccountService.js')
+  await(await customerAuthClient()).auth.signOut({scope:'local'})
+ })
+ await expect(page.getByLabel('Full name',{exact:true})).toHaveValue('')
+ await expect(page.getByRole('textbox',{name:'Delivery address',exact:true})).toHaveValue('')
+ await expect(page.getByRole('combobox',{name:'Saved delivery address',exact:true})).toHaveCount(0)
+ await expect(page.locator('#delivery-area-0')).toHaveValue('')
+})
+
+test('saved delivery default cannot replace an existing held order snapshot',async({page})=>{
+ const quotes=await addressCheckoutBase(page),address=deliveryAddressFixture()
+ const key='60000000-0000-4000-8000-000000000001'
+ const payload={idempotencyKey:key,customerName:'Original held recipient',phone:'+639178563492',email:'held@example.invalid',
+  address:'Original held street',fulfillmentMethod:'Standard Courier Delivery',items:[{sku:'ADDRESS-COFFEE',quantity:1}],
+  delivery:{service:'standard',destination:address.destination},note:'[Payment: gcash] Original note'}
+ await page.addInitScript(({key,payload})=>localStorage.setItem('k2-checkout-recovery-v1',JSON.stringify({version:1,state:'pending',key,payload,
+  paymentMethod:'gcash',deliveryPreview:{service:'standard',feeMinor:6500},lines:[{id:'ADDRESS-COFFEE',qty:1,unit:845,
+   product:{id:'ADDRESS-COFFEE',name:'Synthetic held coffee',retail:845}}]})),{key,payload})
+ await page.route('**/api/storefront/account/settings',route=>route.fulfill({json:{ok:true,settings:{displayName:'Elena Villanueva',
+  deliveryAddress:address.formattedAddress,notifyInApp:true,addressBook:{initialized:true,addresses:[address],defaultAddressId:address.id,revision:1}},notifications:[]}}))
+ await page.goto('/checkout')
+ await expect(page.getByLabel('Full name',{exact:true})).toHaveValue(payload.customerName)
+ await expect(page.getByLabel('Full name',{exact:true})).toBeDisabled()
+ await expect(page.getByRole('combobox',{name:'Saved delivery address',exact:true})).toBeDisabled()
+ await expect(page.getByRole('textbox',{name:'Delivery address',exact:true})).toHaveValue(payload.address)
+ await expect(page.getByText('Your original delivery terms are held for this retry.',{exact:true})).toBeVisible()
+ expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('k2-checkout-recovery-v1')).payload)).toEqual(payload)
+ expect(quotes).toHaveLength(0)
+})
+
+test('saved delivery edit removed in another tab remains a draft instead of a false save',async({page})=>{
+ await seedExpressAccount(page,fakeJwt(expressActor));await addressReferenceRoutes(page)
+ await page.route('**/api/storefront/account/history',route=>route.fulfill({json:accountExpressHistory()}))
+ await page.route('**/api/storefront/account/portfolio',route=>route.fulfill({json:{ok:true,portfolio:purchasePortfolio}}))
+ const home=deliveryAddressFixture(),work=deliveryAddressFixture({id:'50000000-0000-4000-8000-000000000009',label:'Work'})
+ let settings={displayName:'Elena Villanueva',notifyInApp:true,deliveryAddress:home.formattedAddress,
+  addressBook:{initialized:true,addresses:[home,work],defaultAddressId:home.id,revision:1}},writes=0
+ await page.route('**/api/storefront/account/settings',route=>{
+  if(route.request().postDataJSON().operation==='addresses'){
+   writes++;settings={...settings,addressBook:{...settings.addressBook,addresses:[work],defaultAddressId:work.id,revision:2}}
+   if(writes===1)return route.fulfill({status:409,json:{ok:false,error:{code:'ADDRESS_BOOK_CONFLICT'}}})
+  }
+  return route.fulfill({json:{ok:true,settings,notifications:[]}})
+ })
+ await page.goto('/account');const section=page.getByRole('region',{name:'Delivery addresses',exact:true})
+ await section.getByRole('button',{name:'Edit Home',exact:true}).click()
+ await section.getByRole('textbox',{name:'House, unit and street',exact:true}).fill('A draft to preserve')
+ await section.getByRole('button',{name:'Save address',exact:true}).click()
+ await section.getByRole('button',{name:'Check latest addresses',exact:true}).click()
+ await expect(section.getByText('Latest saved addresses loaded. Review your draft before saving.',{exact:true})).toBeVisible()
+ await section.getByRole('button',{name:'Save address',exact:true}).click()
+ await expect(section.getByText('This address was removed elsewhere. Your draft is still here. Cancel and add it as a new address if needed.',{exact:true})).toBeVisible()
+ await expect(section.getByRole('textbox',{name:'House, unit and street',exact:true})).toHaveValue('A draft to preserve')
+ expect(writes).toBe(1)
+})
+
+test('saved delivery address editor stays readable on mobile and desktop in both themes',async({page})=>{
+ await seedExpressAccount(page,fakeJwt(expressActor));await addressReferenceRoutes(page)
+ await page.route('**/api/storefront/account/history',route=>route.fulfill({json:accountExpressHistory()}))
+ await page.route('**/api/storefront/account/portfolio',route=>route.fulfill({json:{ok:true,portfolio:purchasePortfolio}}))
+ const address=deliveryAddressFixture()
+ await page.route('**/api/storefront/account/settings',route=>route.fulfill({json:{ok:true,settings:{displayName:'Elena Villanueva',
+  deliveryAddress:address.formattedAddress,notifyInApp:true,addressBook:{initialized:true,addresses:[address],defaultAddressId:address.id,revision:1}},notifications:[]}}))
+ await page.goto('/account');const section=page.getByRole('region',{name:'Delivery addresses',exact:true})
+ await section.getByRole('button',{name:'Edit Home',exact:true}).click()
+ await expect(section.locator('#account-address-area-3')).toHaveValue(addressPlaces[3].code)
+ const decline=page.getByRole('button',{name:'Decline',exact:true});if(await decline.isVisible())await decline.click()
+ await page.emulateMedia({reducedMotion:'reduce'})
+ for(const theme of ['light','dark']){
+  const toggle=page.getByRole('button',{name:theme==='light'?'Switch to light mode':'Switch to dark mode'})
+  if(await toggle.isVisible())await toggle.click()
+  for(const width of [375,1440]){
+   await page.setViewportSize({width,height:900});await section.scrollIntoViewIfNeeded()
+   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true)
+   for(const control of await section.locator('input,select,textarea,button').all()){
+    if(await control.isVisible())expect((await control.boundingBox()).height).toBeGreaterThanOrEqual(44)
+   }
+   await section.getByLabel('Address label',{exact:true}).focus()
+   await expect(section.getByLabel('Address label',{exact:true})).toBeFocused()
+   await section.screenshot({path:`docs/acceptance/customer-addresses-20261028/editor-${theme}-${width}.png`,animations:'disabled'})
+  }
+ }
+})
 test('account purchase overview uses complete linked totals and has private order/proof downloads', async ({ page },testInfo) => {
  await seedExpressAccount(page,fakeJwt(expressActor))
  await page.route('**/api/storefront/account/history',route=>route.fulfill({json:accountExpressHistory()}))

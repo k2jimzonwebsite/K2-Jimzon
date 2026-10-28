@@ -94,6 +94,53 @@ Required core evidence includes simultaneous cancel/authorize/expire; duplicate 
 
 ## Sequential decision log
 
+### 28 October phase-only recovery fix — approved for local implementation
+
+Reuse the confirmed Understanding Lock and accepted IDEA-20261027-02. The goal
+is a complete bounded retry of the existing hold operation under measured steady
+latency, with the same current native proof, complete observed history, generation,
+seal, witness and one-shot projection checks. No product policy, erasure permit,
+provider, deadline increase or production activation is added.
+
+The first Skeptic review returned REVISE with two accepted objections: inner
+scopes currently reset their clock despite the parent's remaining time, and a
+scan can consume the entire budget before proof/claim/CAS or witness finalization.
+Pass an absolute monotonic deadline through Admin, native, journal and proof
+scopes; every nested scope uses the earlier inherited/configured deadline.
+Reserve the latter half of the effective remaining budget for unchanged-head
+validation, finalization and the following non-yieldable action. Yield replay
+only after complete checked events; use observed complete-step cost to avoid
+starting a known step beyond its replay slice. Save only incomplete, validated
+prefixes after fresh unchanged-head checks while the scope is active. Expired
+or partially validated work is discarded.
+
+Keep one disposable exact-command continuation per authority instance containing
+only INITIAL, SUBMIT or CONFIRM control flow and its original command/native
+identity. Never save an authoritative completed snapshot or a trusted receipt.
+INITIAL retains the current native fact and complete initial view. SUBMIT retries
+the normal journal path, including its complete pre/post replay and conditional
+append. After a verified submission, CONFIRM continues the existing fresh native
+fact plus complete final view and one-shot transition. Recover the exact receipt
+from that freshly replayed operation. Derived release recovery is bound to its
+signed release command and uses the same stages, including an original apply
+retry after native resolution. A single invocation owner prevents competing or
+late work from publishing phases. Cold restart discards phases and reconstructs
+from the real journal/native records.
+
+Liveness assumptions are explicit: a stable head and repeated identical retries;
+a complete event and necessary head recheck fit a replay slice; finalization and
+fresh proof/claim/candidate/CAS fit its reserved tail; final native confirmation
+and transition fit the reserved tail. New unusually slow steps may still time
+out without saving a prefix. Tests and the unchanged-latency owned composition
+must establish the supported local envelope; this is not arbitrary-latency or
+production-capacity proof. No completed-baseline cache or unawaited background
+work is permitted. Alternatives remain the rejected unsafe scan removal,
+unhelpful two-bundle experiment and prohibited deadline increase. Required
+evidence includes native-read fencing, between-stage history loss, unknown CAS,
+changed command bytes, competing calls, abort/late completion and cold restart.
+Sequential review disposition and implementation evidence follow here; the
+implementation steps and unfinished work remain only in MAP-019.
+
 ### 28 October customer-only hold scope — proposed local continuation
 
 The same confirmed owner Understanding Lock applies. A real customer may need a hold before any closure request or linked Auth account exists. Creating a fictional request/identity would corrupt that truth. Extend the existing v2 hold payload as a closed union: either the original UUID `actorId` and UUID `requestId`, or both fields explicitly `null`; `customerId` and all protection/initiator/command fields remain mandatory. A customer-only protection matches its canonical customer across later real requests and cannot match unrelated actors through a null identity. Registration and cancellation remain actual-request-only. No new customer model, journal kind, generic proof or erasure permission is added. Existing non-null command bytes and semantics are unchanged; only unactivated prepared source is modified.
@@ -221,3 +268,5 @@ Measured smaller candidate implementation review — **FAILED**: a generation-2 
 **Bounded two-event read proposal — local review only.** The Skeptic proposes at most two consecutive already-listed marker bundles in parallel, with marker → candidate → logical command fetched sequentially within each bundle; await all bounded read outcomes, then validate and apply strictly in revision order. Fetch jobs are read-only, immediately handle rejection, use the existing deadline scope for every dependent read, and never mutate scan/witness/seal or keep unvalidated bytes between passes. Validate candidate namespace/hash before following it and operation UUID before constructing its command key. Charge every launched bundle against the shared per-reconciliation allowance, including speculative work discarded after head movement. Keep missing-final-marker recovery serial and preserve fresh-head failure deferral, complete ordering/witness/finalization, no writes for incomplete replay and all current bounds. This is a performance experiment, not a sustained-latency or unbounded-history solution. Required tests cover max-two concurrency, one-event budgets, reversed completion, corrupt/missing slots, head movement, abort/hung/late I/O, pagination/contention/witness/restart, and actual unchanged-latency composition. Skeptic and Guardian approve local testing only, with launch-time work charging, strict validation, head/witness/finalization and late-I/O tests; Advocate and Arbiter approve local implementation/testing only; all listed adversarial and unchanged-latency composition evidence remains required.
 
 Bounded-read experiment disposition: local test/review and restored-schema run b6cb38a3 passed, but the measured 11-event scan was 2.052s versus 1.955s serial on the preceding local run, with the same retry pattern. This is one comparison, not a capacity conclusion. The prototype was removed; the verified original journal and tests were restored exactly. Retain the experiment and evidence under .tools/map019-bounded-reads-20261028/; the timeout/replay liveness problem remains open.
+
+Phase-only recovery review disposition: Skeptic, Constraint Guardian and User Advocate APPROVED bounded local implementation/testing. Arbiter APPROVED after accepting both Skeptic objections and their inherited-deadline/tail-reserve resolutions; no objection rejected or unresolved. The measured-envelope, observed-history versus atomic-snapshot, no completed cache, late-work/fence/deletion/identity and full composition/conservation gates remain binding. No implementation evidence or production authority follows. Subsequent owner address/profile steering is recorded in MAP-019 without discarding this approved recovery dependency.

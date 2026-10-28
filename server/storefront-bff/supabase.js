@@ -13,6 +13,10 @@ export function createStorefrontServerSupabase(accessToken = null) {
 export function mapBoundaryResult(data) {
   const result = Array.isArray(data) ? data[0] : data
   if (!result) return { ok: false, status: 503, code: 'SERVICE_UNAVAILABLE' }
+  if (['ADDRESS_BOOK_CONFLICT', 'ADDRESS_BOOK_OPERATION_CONFLICT', 'ADDRESS_BOOK_LEGACY_CONFLICT'].includes(result.error_code)) {
+    return { ok: false, status: 409, code: result.error_code }
+  }
+  if (result.error_code === 'ADDRESS_BOOK_INVALID') return { ok: false, status: 400, code: result.error_code }
   if (result.ok) return { ok: true, result }
   if (['ACCOUNT_CLOSED','PRIVACY_PROOF_REQUIRED','PRIVACY_PROOF_EXPIRED','PRIVACY_CONTACT_CHANGED','PRIVACY_REQUEST_EXISTS','PRIVACY_PROCESSING_STARTED'].includes(result.error_code)) {
     return { ok: false, status: 409, code: result.error_code }

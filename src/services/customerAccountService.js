@@ -23,6 +23,10 @@ const ACCOUNT_ERRORS = {
   EXPRESS_ORDER_INELIGIBLE: 'This order cannot accept another quote. Refresh its status or contact K2.',
   DELIVERY_ACCESS_REQUIRED: 'This account no longer has access. Your saved approval is kept; contact K2 before starting another.',
   ACCOUNT_PORTFOLIO_UNAVAILABLE: 'Purchase records could not be loaded. Try again; unavailable records are not zero purchases.',
+  ADDRESS_BOOK_CONFLICT: 'Your saved addresses changed in another session. Check the latest addresses before saving again.',
+  ADDRESS_BOOK_OPERATION_CONFLICT: 'This saved change no longer matches the original request. Check the latest addresses.',
+  ADDRESS_BOOK_LEGACY_CONFLICT: 'Your delivery addresses changed. Reload the saved settings before saving this profile.',
+  ADDRESS_BOOK_INVALID: 'Check the recipient, contact number and complete delivery area. The full address must fit 500 characters.',
   ACCOUNT_PRIVACY_UNAVAILABLE: 'Closure status could not be checked. Keep your saved request and retry.',
   ACCOUNT_CLOSED: 'This account is closed. Keep your closure receipt while remaining cleanup finishes.',
   PRIVACY_CODE_UNAVAILABLE: 'The code could not be sent. Wait a minute and retry the saved request.',
@@ -136,5 +140,6 @@ export const replyAsCustomerAccount = (accessToken, conversationReference, messa
 export const loadCustomerSettings = (accessToken) => accountRequest('account/settings', {}, accessToken)
 export const saveCustomerSettings = (accessToken, displayName, deliveryAddress, notifyInApp) =>
   accountRequest('account/settings', { displayName, deliveryAddress, notifyInApp }, accessToken)
+export const saveCustomerAddressBook = (accessToken, command) => accountRequest('account/settings', command, accessToken)
 export const markCustomerNotificationRead = (accessToken, notificationId) =>
   accountRequest('account/notifications', { notificationId }, accessToken)
