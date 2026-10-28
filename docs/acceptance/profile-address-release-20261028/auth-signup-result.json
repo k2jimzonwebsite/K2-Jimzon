@@ -1,0 +1,30 @@
+{
+  "mapItem": "MAP-019",
+  "project": "pixplcjqivlfflickobf",
+  "packetSha256": "25bfee729eb6288152eb3db6dcede81dabddbc5fbf411a8a613165cc40f2d0f2",
+  "ownerApproval": "Approve K2 signup activation",
+  "startedAt": "2026-10-28T15:41:47.883Z",
+  "before": {
+    "signupDisabled": true,
+    "emailEnabled": true,
+    "emailAutoconfirm": false,
+    "phoneEnabled": false,
+    "siteUrl": "https://www.k2jimzon.com",
+    "redirectAllowList": "https://www.k2jimzon.com/**,https://k2jimzon.com/**,https://admin.k2jimzon.com/**",
+    "customSmtpConfigured": true
+  },
+  "status": "applied-and-exact-readback-verified",
+  "recovery": "Separately authorize auth-disable-signups.json to block future signups; retain all existing users and saved data.",
+  "patchHttpStatus": 200,
+  "after": {
+    "signupDisabled": false,
+    "emailEnabled": true,
+    "emailAutoconfirm": false,
+    "phoneEnabled": false,
+    "siteUrl": "https://www.k2jimzon.com",
+    "redirectAllowList": "https://www.k2jimzon.com/**,https://k2jimzon.com/**,https://admin.k2jimzon.com/**",
+    "customSmtpConfigured": true
+  },
+  "otherChangedFieldNames": [],
+  "completedAt": "2026-10-28T15:41:48.297Z"
+}

@@ -1,0 +1,135 @@
+{
+  "mapItem": "MAP-019",
+  "recordedAt": "2026-10-28T15:55:20.007Z",
+  "status": "production-source-and-provider-activation-verified-customer-journey-pending",
+  "source": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+  "git": {
+    "repository": "k2jimzonwebsite/K2-Jimzon",
+    "main": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+    "featureBranch": "codex/customer-privacy-owner-decisions",
+    "promotion": "Normal non-forced fast-forward from c630e7eb; exact remote main/feature readback matches",
+    "normalPushHooks": "13 Node, 7 contract, 8 rendered-security cases and import integrity pass"
+  },
+  "deployments": [
+    {
+      "project": "k2-jimzon",
+      "id": "dpl_BBcdubRHrt3CnHZ2xnvwykfGtPGp",
+      "url": "https://vercel.com/k2-jimzon/k2-jimzon/BBcdubRHrt3CnHZ2xnvwykfGtPGp",
+      "status": "Ready",
+      "environment": "Production",
+      "source": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+      "canonicalHost": "https://www.k2jimzon.com",
+      "previousId": "dpl_26SG7xKPREX84Pd1KhwqzWxvoPJo"
+    },
+    {
+      "project": "k2-jimzon-admin",
+      "id": "dpl_3F1JxYadP6tmosBeKjCT5wQDTEKD",
+      "url": "https://vercel.com/k2-jimzon/k2-jimzon-admin/3F1JxYadP6tmosBeKjCT5wQDTEKD",
+      "status": "Ready",
+      "environment": "Production",
+      "source": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+      "canonicalHost": "https://admin.k2jimzon.com",
+      "previousId": "dpl_8aa4TjSsMbEnoYqgW1zYQz6WnCj3"
+    }
+  ],
+  "browser": {
+    "account": "Canonical /account renders Create an account or sign in, email-link field and Send sign-in link. Security check completed automatically; no agent challenge-solving or submission occurred.",
+    "admin": "Canonical Admin renders the authenticated existing Admin command center with inventory projection196; no business command was submitted.",
+    "sms": "Text code tab remains visible in existing UI, but K2 phone provider is disabled. SMS delivery is not operational or part of this activation."
+  },
+  "privacy": {
+    "enabled": false,
+    "observedPublicAsset": "https://www.k2jimzon.com/assets/CustomerAccount-cP5TfEZR.js",
+    "compiledFunction": "function F(e){return e.recoveryOnly?null:(0,j.jsxs)(`section`,{\"aria-labelledby\":`account-closure-title`,className:`mt-10 border-t border-line pt-8`,children:[(0,j.jsx)(`h2`,{id:`account-closure-title`,className:`font-serif text-2xl font-semibold text-navy`,children:`Privacy`}),(0,j.jsx)(`p`,{className:`mt-3 text-sm leading-6 text-navy-soft`,children:`For account closure or a privacy request, contact K2.`}),(0,j.jsx)(`a`,{className:`${O} mt-4`,href:`/contact`,children:`Contact K2`})]})}",
+    "recoveryOnlyReturnsNull": true,
+    "manualContactRoute": "/contact",
+    "databasePrivacyMigrationInstalled": false
+  },
+  "http": {
+    "observedAt": "2026-10-28T15:52:07.981Z",
+    "phase": "after",
+    "accountDocumentStatus": 200,
+    "entries": [
+      "https://www.k2jimzon.com/theme-init.js",
+      "https://www.k2jimzon.com/assets/index-CBMCDTzz.js"
+    ],
+    "artifacts": [
+      {
+        "url": "https://www.k2jimzon.com/theme-init.js",
+        "status": 200,
+        "accountRefs": []
+      },
+      {
+        "url": "https://www.k2jimzon.com/assets/index-CBMCDTzz.js",
+        "status": 200,
+        "accountRefs": [
+          "https://www.k2jimzon.com/assets/CustomerAccount-cP5TfEZR.js",
+          "https://www.k2jimzon.com/assets/CustomerAccountProvider-CQVu68kN.js"
+        ]
+      },
+      {
+        "url": "https://www.k2jimzon.com/assets/CustomerAccount-cP5TfEZR.js",
+        "status": 200,
+        "manualPrivacyMessage": true,
+        "accountDisabledMessage": true
+      },
+      {
+        "url": "https://www.k2jimzon.com/assets/CustomerAccountProvider-CQVu68kN.js",
+        "status": 200,
+        "manualPrivacyMessage": false,
+        "accountDisabledMessage": false
+      },
+      {
+        "target": "storefront",
+        "url": "https://www.k2jimzon.com/k2-build-target.json",
+        "status": 200,
+        "body": "{\n  \"target\": \"storefront\"\n}\n"
+      },
+      {
+        "target": "admin",
+        "url": "https://admin.k2jimzon.com/k2-build-target.json",
+        "status": 200,
+        "body": "{\n  \"target\": \"admin\"\n}\n"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/live-account-entry.png",
+      "sha256": "f85a6f9dc44ab35d00cdf80215f347e9e1d381f83f4e5c1939cfe476a6bd6f4b"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/vercel-account-flag.png",
+      "sha256": "8dfd11764d1bd3f97cf0a40466aca42f18692939814aa2f45c415ab7838a3503"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/vercel-storefront-production.txt",
+      "sha256": "4ebcce02fba76475ee4aadaf0c53585db341872698dfce61f0f1476fb294e7ec"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/vercel-admin-production.txt",
+      "sha256": "093cedb351f22a63d894f5c22e6a7602f2ee0a75113e1a7d47e1fe4e832a3466"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/public-source-after.json",
+      "sha256": "3ad5b0c72836603eb3138fbe44e97806df7c15c50f4e3879c1f6d5d5bcc23018"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/auth-signup-result.json",
+      "sha256": "a7e69d68608a588ea4a3d0e7656c518c83891299353343c0f98f0ad69ff4e18d"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/release-coverage.json",
+      "sha256": "f926f014905f510c70b092f069e1abfd33109f10af6c16180e98532f8b3827c4"
+    }
+  ],
+  "buildLogAnnotation": "Storefront Vercel labels two error lines, but its copied lines are successful check-marked tests: synchronous render failure becomes a retryable error; operation failure still verifies shutdown/preserves original error. This is log classification, not a failed build. Ready status and local gates are independently observed.",
+  "remaining": [
+    "Real email-link delivery/verification and customer login",
+    "Authenticated profile/settings and saved-address save/readback; default-address checkout prefill without submitting an order",
+    "Phone sign-in remains disabled; do not claim SMS readiness",
+    "Automated deletion and all unfinished writer/freeze/manifest/permit/retention/provider recovery work remain suspended in MAP-019"
+  ],
+  "recovery": "Use source/per-project rollback to the recorded previous deployments only by scoped recovery decision. Disable the Storefront account flag before any separately authorized RPC deactivation. Retain address columns/data/legacy writer guard. Signup inverse blocks future signup without deleting users. Never replay installed SQL/Auth or restore an old database over later data.",
+  "receiptOnlyPolicy": "Save this evidence to the existing feature branch; no second main push, app build or production deployment is needed."
+}

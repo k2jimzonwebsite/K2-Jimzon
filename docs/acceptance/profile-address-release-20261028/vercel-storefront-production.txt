@@ -1,0 +1,52 @@
+ [level=3]
+  - button "Share":
+    - generic: Share
+  - link "Logs":
+    - /url: /k2-jimzon/k2-jimzon/logs?deploymentIds=dpl_BBcdubRHrt3CnHZ2xnvwykfGtPGp
+    - generic: Logs
+  - link "Visit":
+    - /url: https://k2-jimzon-ra7v6zteq-k2-jimzon.vercel.app
+    - generic: Visit
+  - button "Visit with":
+  - button "Deployment Actions":
+  - link "Visit Deployment":
+    - /url: https://k2-jimzon-ra7v6zteq-k2-jimzon.vercel.app
+  - generic: Created
+  - img "github/EdgerzXc":
+    - img "github/EdgerzXc"
+  - generic: EdgerzXc
+  - generic: 2m ago
+  - generic: Status
+  - generic "This deployment is ready.":
+    - generic: Ready
+    - link "Latest":
+      - /url: /k2-jimzon/k2-jimzon/deployments?filterBranch=main
+  - generic: Duration
+  - generic "Oct 28, 2026, 11:50:54 PM GMT+8":
+    - generic: 1m 3s
+    - generic: 1m ago
+  - generic: Environment
+  - link "Production":
+    - /url: /k2-jimzon/k2-jimzon/settings/environments/production
+  - generic: Domains
+  - link "www.k2jimzon.com":
+    - /url: https://www.k2jimzon.com
+    - generic: www.k2jimzon.com
+  - generic: "+2"
+  - link "k2-jimzon-git-main-k2-jimzon.vercel.app":
+    - /url: https://k2-jimzon-git-main-k2-jimzon.vercel.app
+    - generic: k2-jimzon-git-main-k2-jimzon.vercel.app
+  - link "k2-jimzon-ra7v6zteq-k2-jimzon.vercel.app":
+    - /url: https://k2-jimzon-ra7v6zteq-k2-jimzon.vercel.app
+    - generic: k2-jimzon-ra7v6zteq-k2-jimzon.vercel.app
+  - generic: Source
+  - link "main":
+    - /url: https://github.com/k2jimzonwebsite/K2-Jimzon/tree/main
+  - 'link "4e37d74 test(account): Match the linked-record copy contract"':
+    - /url: https://github.com/k2jimzonwebsite/K2-Jimzon/commit/4e37d74870196a17a9626ca878e79c4cdb16c28f
+    - generic: 4e37d74
+    - 'generic "test(account): Match the linked-record copy contract"'
+  - button "Deployment Settings 2 Recommendations":
+    - generic: Deployment Settings
+    - generic: 2 Recommendations
+  -

@@ -1,0 +1,256 @@
+
+RELEASE_STAGE_START test:mobile-moderation
+
+> k2-jimzon-prototype@0.1.0 test:mobile-moderation
+> playwright test --config=playwright.api.config.js tests/mobile-store-moderation-pwa-contract.spec.js
+
+
+Running 4 tests using 1 worker
+
+(node:22000) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\mobile-store-moderation-pwa-contract.spec.js:6:1 › mobile store minimizes the Shopkeeper behind sheets and supports bottom product popup (13ms)
+  ok 2 tests\mobile-store-moderation-pwa-contract.spec.js:18:1 › footer exposes the six owner-approved marketplace destinations as real links (8ms)
+  ok 3 tests\mobile-store-moderation-pwa-contract.spec.js:33:1 › Admin is installable without caching authenticated operational data (6ms)
+  ok 4 tests\mobile-store-moderation-pwa-contract.spec.js:48:1 › anonymous chat moderation is hash-only, role-gated, auditable and separate (13ms)
+
+  4 passed (748ms)
+
+RELEASE_STAGE_START test:store-orientation
+
+> k2-jimzon-prototype@0.1.0 test:store-orientation
+> playwright test --config=playwright.store-orientation.config.js
+
+[WebServer] (node:16252) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:16488) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:16888) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\store-orientation-ui.spec.js:18:1 › fallback keeps room controls usable in portrait and landscape (2.3s)
+[WebServer] 11:12:41 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 11:12:42 PM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok  2 tests\store-orientation-ui.spec.js:37:1 › 3D room renders in desktop, portrait and landscape (32.8s)
+[WebServer] 11:13:12 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 11:13:13 PM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok  3 tests\store-overlay-collision.spec.js:47:3 › Mobile store overlay collision prevention › portrait viewport (375x812): zero collision between counter, keeper, zoom, and basket dock (11.2s)
+[WebServer] 11:13:24 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 11:13:24 PM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok  4 tests\store-overlay-collision.spec.js:122:3 › Mobile store overlay collision prevention › landscape viewport (844x390): controls and basket dock usable without collision (7.8s)
+  ok  5 tests\store-overlay-collision.spec.js:149:3 › Mobile store overlay collision prevention › reduced motion fallback (375x812): flat scene card unobstructed by basket dock (1.7s)
+  ok  6 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 390px in light mode (1.3s)
+  ok  7 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 390px in dark mode (1.2s)
+  ok  8 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 1440px in light mode (2.1s)
+  ok  9 tests\store-readability-ui.spec.js:31:3 › readable shelf and chat at 1440px in dark mode (1.5s)
+[WebServer] 11:13:39 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 11:13:39 PM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok 10 tests\store-readability-ui.spec.js:73:1 › short mobile drag changes shelf; zoom controls and hint leave room to browse (14.4s)
+  ok 11 tests\store-readability-ui.spec.js:126:1 › enlarged phone text keeps store help reachable (843ms)
+[WebServer] 11:13:54 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\store-readability-ui.spec.js:142:1 › catalog footer remains readable in both themes (892ms)
+
+  12 passed (1.5m)
+
+RELEASE_STAGE_START test:storefront-ui
+
+> k2-jimzon-prototype@0.1.0 test:storefront-ui
+> playwright test --config=playwright.map027.config.js tests/smoke.spec.js tests/buyer.spec.js tests/storefront-mobile.spec.js tests/storefront-motion.spec.js tests/storefront-theme.spec.js tests/brand-logo.spec.js
+
+[WebServer] (node:1712) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21828) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 48 tests using 1 worker
+
+(node:27412) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 11:14:06 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 320, light (1.3s)
+[WebServer] 11:14:07 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 320, dark (1.3s)
+[WebServer] 11:14:09 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 375, light (966ms)
+[WebServer] 11:14:10 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 375, dark (1.3s)
+[WebServer] 11:14:11 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 430, light (986ms)
+[WebServer] 11:14:12 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 430, dark (1.0s)
+[WebServer] 11:14:13 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 768, light (1.3s)
+[WebServer] 11:14:14 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  8 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 768, dark (1.0s)
+[WebServer] 11:14:15 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  9 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 1024, light (1.2s)
+[WebServer] 11:14:17 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 1024, dark (1.1s)
+[WebServer] 11:14:18 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 11 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 1440, light (1.3s)
+[WebServer] 11:14:19 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\brand-logo.spec.js:9:3 › logo preserves shopping layout at 1440, dark (1.0s)
+  x  13 tests\brand-logo.spec.js:43:1 › aircraft settles and navigation does not replay the arrival (5.4s)
+(node:20304) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 14 tests\brand-logo.spec.js:60:1 › failed artwork keeps a readable usable home control (1.1s)
+  ok 15 tests\brand-logo.spec.js:69:1 › owner artwork delivery stays below 200 kB (98ms)
+  ok 16 tests\brand-logo.spec.js:75:1 › browser and install icons decode at their declared sizes (428ms)
+  x  17 tests\buyer.spec.js:4:3 › Pasabuy and wholesale truthfulness › Pasabuy validates contact and explains attachment limitation (1.8s)
+(node:4624) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 18 tests\buyer.spec.js:16:3 › Pasabuy and wholesale truthfulness › wholesale page has no demo credential bypass (1.5s)
+  ok 19 tests\buyer.spec.js:24:3 › Pasabuy and wholesale truthfulness › mobile primary actions meet the 44px interaction target (880ms)
+  ok 20 tests\smoke.spec.js:28:3 › launch-critical storefront › production storefront ignores the prototype demo hash and exposes no VIP password rail (885ms)
+  ok 21 tests\smoke.spec.js:37:3 › launch-critical storefront › light mode preserves the luxury wood canvas without leaking into dark mode (1.2s)
+  ok 22 tests\smoke.spec.js:51:3 › launch-critical storefront › home and catalog render without unsafe payment claims (902ms)
+  ok 23 tests\smoke.spec.js:60:3 › launch-critical storefront › latest consignment keeps the featured visual free of a New Arrival overlay (920ms)
+  ok 24 tests\smoke.spec.js:75:3 › launch-critical storefront › contact is always visible and never fabricates live staff availability (1.5s)
+[WebServer] 11:14:41 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 25 tests\smoke.spec.js:103:3 › launch-critical storefront › cart closes before checkout and checkout is an order request (3.0s)
+[WebServer] 11:14:44 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  x  26 tests\smoke.spec.js:119:3 › launch-critical storefront › checkout cannot submit while qualified commerce is inactive (8.1s)
+(node:7636) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  27 tests\smoke.spec.js:130:3 › launch-critical storefront › wholesale inquiry never fabricates a receipt, approval, or response promise (1.5m)
+(node:19568) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 28 tests\smoke.spec.js:161:3 › storefront deep linking › a cold load of /catalog renders the catalog, not the home view (830ms)
+  ok 29 tests\smoke.spec.js:168:3 › storefront deep linking › a cold load of /product/:sku opens that product and survives reload (1.2s)
+  ok 30 tests\smoke.spec.js:180:3 › storefront deep linking › browser back returns to the previous view rather than leaving the site (914ms)
+  ok 31 tests\smoke.spec.js:194:3 › MAP-027 virtual store acceptance › requests the Interactive Shop payload only after deliberate store entry (2.2s)
+[WebServer] 11:16:26 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 32 tests\smoke.spec.js:225:3 › MAP-027 virtual store acceptance › moves keyboard focus into the store and restores the catalog entry control (1.3s)
+  ok 33 tests\smoke.spec.js:242:3 › MAP-027 virtual store acceptance › keeps the reduced-motion room self-contained and readable in a dark site theme (958ms)
+  ok 34 tests\smoke.spec.js:271:3 › MAP-027 virtual store acceptance › keeps the pop-out guide, store moment, and canonical basket synchronized (1.1s)
+  ok 35 tests\smoke.spec.js:293:3 › MAP-027 virtual store acceptance › keeps a shelf question attached to its original product after browsing away (1.2s)
+[WebServer] 11:16:32 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 11:16:32 PM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+[WebServer] 11:16:41 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 36 tests\smoke.spec.js:320:3 › MAP-027 virtual store acceptance › completes the phone shelf-to-order-request journey through the canonical basket (13.7s)
+[WebServer] 11:16:45 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[WebServer] 11:16:46 PM [vite] (client) [console.warn] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.
+  ok 37 tests\smoke.spec.js:365:3 › MAP-027 virtual store acceptance › renders a non-blank WebGL aisle with usable shelf navigation (23.5s)
+  ok 38 tests\smoke.spec.js:425:3 › MAP-027 virtual store acceptance › keeps the semantic store usable when reduced motion disables WebGL (822ms)
+  ok 39 tests\smoke.spec.js:447:3 › MAP-027 virtual store acceptance › keeps the reduced-motion shopping controls usable in phone landscape with enlarged text (929ms)
+  ok 40 tests\storefront-mobile.spec.js:15:3 › mobile storefront contract › catalog stays readable and keeps stock in one universal slot (1.3s)
+[WebServer] 11:17:12 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+  ok 41 tests\storefront-mobile.spec.js:61:3 › mobile storefront contract › accessible mobile route and interactive review globe remain present (1.5s)
+[WebServer] 11:17:12 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 42 tests\storefront-mobile.spec.js:88:3 › mobile storefront contract › landmarks, names, keyboard focus, and reflow survive 200% text (1.4s)
+  ok 43 tests\storefront-motion.spec.js:4:3 › storefront interaction language › route transitions focus the destination after its content renders (1.9s)
+[WebServer] 11:17:17 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+  ok 44 tests\storefront-motion.spec.js:16:3 › storefront interaction language › interactive surfaces respond without changing the editorial layout (1.9s)
+[WebServer] 11:17:18 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 45 tests\storefront-motion.spec.js:49:3 › storefront interaction language › reduced motion keeps every interaction visible and usable (1.2s)
+  ok 46 tests\storefront-motion.spec.js:72:3 › storefront interaction language › Three.js globe chunk is not requested until the section is scrolled near (1.0s)
+  ok 47 tests\storefront-theme.spec.js:28:3 › storefront theme contract › saved theme is applied before render and persists after toggling (1.7s)
+  ok 48 tests\storefront-theme.spec.js:69:3 › storefront theme contract › first visit follows the operating-system preference (775ms)
+
+
+  1) tests\brand-logo.spec.js:43:1 › aircraft settles and navigation does not replay the arrival ───
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('header [data-brand-mark="compact"]')
+    Expected: "played"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('header [data-brand-mark="compact"]') with timeout 5000ms
+      - waiting for locator('header [data-brand-mark="compact"]')
+        10 × locator resolved to <svg width="36" height="36" focusable="false" aria-hidden="true" viewBox="0 0 230 230" data-brand-mark="compact">…</svg>
+           - unexpected value "null"
+
+
+      45 |   await page.goto('/')
+      46 |   const mark = page.locator('header [data-brand-mark="compact"]')
+    > 47 |   await expect(mark).toHaveAttribute('data-arrival', 'played')
+         |                      ^
+      48 |   await expect.poll(() => mark.locator('[data-brand-plane]').evaluate(e => e.getAnimations().filter(a => a.playState === 'running').length)).toBe(0)
+      49 |   await page.getByRole('navigation', { name: 'Storefront', exact: true }).getByRole('link', { name: 'Inventory & Catalog', exact: true }).click()
+      50 |   await page.getByRole('link', { name: 'K2 Jimzon home', exact: true }).click()
+        at C:\Users\jerze\K2 JImzon\.tools\map019-profile-release\clean-source-d2b728b7\tests\brand-logo.spec.js:47:22
+
+    Error Context: test-results\brand-logo-aircraft-settle-36b5a-does-not-replay-the-arrival\error-context.md
+
+  2) tests\buyer.spec.js:4:3 › Pasabuy and wholesale truthfulness › Pasabuy validates contact and explains attachment limitation 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected pattern: /email address or mobile number/i
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <p id="_r_9_" role="alert" class="mt-2 text-sm text-crimson">The security check is not configured. Please cont…</p> aka getByText('The security check is not')
+        2) <p role="alert" class="mt-4 rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">Please enter your email address or mobile number …</p> aka getByText('Please enter your email')
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      11 |     await page.getByLabel(/Item name, brand, and exact size/i).fill('Exact Italian product test')
+      12 |     await page.getByRole('button', { name: /Submit Pasabuy request/i }).click()
+    > 13 |     await expect(page.getByRole('alert')).toContainText(/email address or mobile number/i)
+         |                                           ^
+      14 |   })
+      15 |
+      16 |   test('wholesale page has no demo credential bypass', async ({ page }) => {
+        at C:\Users\jerze\K2 JImzon\.tools\map019-profile-release\clean-source-d2b728b7\tests\buyer.spec.js:13:43
+
+    Error Context: test-results\buyer-Pasabuy-and-wholesal-38e7f-lains-attachment-limitation\error-context.md
+
+  3) tests\smoke.spec.js:119:3 › launch-critical storefront › checkout cannot submit while qualified commerce is inactive 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Order requests are not active yet. Contact K2 for help.')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Order requests are not active yet. Contact K2 for help.') with timeout 5000ms
+      - waiting for getByText('Order requests are not active yet. Contact K2 for help.')
+
+
+      125 |     await page.getByLabel('Delivery address').fill('Makati City, Metro Manila')
+      126 |     await expect(page.getByRole('button', { name: /Submit order request/i })).toBeDisabled()
+    > 127 |     await expect(page.getByText('Order requests are not active yet. Contact K2 for help.')).toBeVisible()
+          |                                                                                             ^
+      128 |   })
+      129 |
+      130 |   test('wholesale inquiry never fabricates a receipt, approval, or response promise', async ({ page }) => {
+        at C:\Users\jerze\K2 JImzon\.tools\map019-profile-release\clean-source-d2b728b7\tests\smoke.spec.js:127:93
+
+    Error Context: test-results\smoke-launch-critical-stor-cb458-lified-commerce-is-inactive\error-context.md
+
+  4) tests\smoke.spec.js:130:3 › launch-critical storefront › wholesale inquiry never fabricates a receipt, approval, or response promise 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.click: Test timeout of 90000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Prepare Wholesale Email' })
+
+
+      140 |     await page.getByLabel(/Delivery City.*Area/i).fill('Makati City')
+      141 |     await page.getByLabel(/I am authorized to make this inquiry/i).check()
+    > 142 |     await page.getByRole('button', { name: 'Prepare Wholesale Email' }).click()
+          |                                                                         ^
+      143 |     await expect(page.getByRole('heading', { name: 'Email draft prepared — not submitted' })).toBeVisible()
+      144 |     await expect(page.getByText(/has not received or recorded this inquiry yet/i)).toBeVisible()
+      145 |     await expect(page.getByText(/within 1–2 business days/i)).toHaveCount(0)
+        at C:\Users\jerze\K2 JImzon\.tools\map019-profile-release\clean-source-d2b728b7\tests\smoke.spec.js:142:73
+
+    Error Context: test-results\smoke-launch-critical-stor-36eb1-pproval-or-response-promise\error-context.md
+
+  4 failed
+    tests\brand-logo.spec.js:43:1 › aircraft settles and navigation does not replay the arrival ────
+    tests\buyer.spec.js:4:3 › Pasabuy and wholesale truthfulness › Pasabuy validates contact and explains attachment limitation 
+    tests\smoke.spec.js:119:3 › launch-critical storefront › checkout cannot submit while qualified commerce is inactive 
+    tests\smoke.spec.js:130:3 › launch-critical storefront › wholesale inquiry never fabricates a receipt, approval, or response promise 
+  44 passed (3.4m)

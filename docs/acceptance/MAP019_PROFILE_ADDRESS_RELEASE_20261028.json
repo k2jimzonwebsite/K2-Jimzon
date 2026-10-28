@@ -6,7 +6,7 @@
   ],
   "ownerDecision": "Release profile/addresses first; continue here",
   "recordedAt": "2026-10-28T14:02:36.862Z",
-  "status": "approved-SQL-installed-on-exact-K2-source-promotion-pending",
+  "status": "production-source-and-provider-activation-verified-customer-journey-pending",
   "productionChanged": true,
   "automatedDeletionEnabled": false,
   "packet": {
@@ -354,14 +354,276 @@
     "privacyDisabled": "2pass at375/1440 with exposed false flag",
     "optInFixture": "1expected missing-control red before allowlist correction;1green afterward; all transport intercepted",
     "release": {
-      "initialCommand": "npm run verify:release",
-      "initialSource": "d2b728b79863f36c84e7ed1567e3ac8ecd9649cc",
-      "initialExit": 1,
-      "baseBrowserCasesPassed": 1129,
-      "failedCase": "guest-commerce-bff-contract.spec.js:454 old customer-visible Website messages literal",
-      "fix": "Update the contract to the existing linked-record wording; product/runtime unchanged",
-      "focusedCorrection": "1passed",
-      "continuation": "Resume only npm test stages after test:base, then packaging and both builds; no restart of passed base suites"
+      "mapItem": "MAP-019",
+      "sourceCommit": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+      "status": "passed-reconciled-complete-release-coverage",
+      "completedAt": "2026-10-28T15:48:23.408Z",
+      "initialInvocation": {
+        "command": "npm run verify:release",
+        "exitCode": 1,
+        "basePassed": 1129,
+        "failure": "One obsolete copy assertion; focused corrected contract passes. The initial aggregate is retained as failed."
+      },
+      "storefrontFollowup": "44 initial cases passed; four default-off fixture cases failed because public build flags were present too early. Public build environment isolated to build stages; the same four focused cases pass. No runtime source changed.",
+      "interruption": "Storefront recovery and Admin UI completed before the session disappeared during payment UI. Read-only process inventory confirmed no survivor. Only the unfinished payment group and later stages resumed under a distinct log/receipt.",
+      "runtimeUnchangedFromInitialGate": true,
+      "successfulStages": [
+        "test:mobile-moderation",
+        "test:store-orientation",
+        "test:storefront-ui (44 initial + 4 corrected focused)",
+        "test:storefront-recovery",
+        "test:admin-ui",
+        "test:payment-ui",
+        "test:inbox-ui",
+        "test:admin-product-master-ui",
+        "test:admin-website-assignment-ui",
+        "test:owner-count-close-ui",
+        "test:customer-account-ui",
+        "test:selling-surfaces",
+        "test:order-receipt-direct",
+        "test:workflow-api",
+        "test:intake-ai-ui",
+        "test:vercel-output",
+        "build:storefront",
+        "build:admin"
+      ],
+      "artifacts": [
+        {
+          "path": "docs/acceptance/profile-address-release-20261028/release-remainder.json",
+          "sha256": "bc62323ce0c0ec8d5ce6c96d497fd47d7af5c0ef6efbe494a3f0fc0b3bc7b3c0"
+        },
+        {
+          "path": "docs/acceptance/profile-address-release-20261028/release-remainder.log",
+          "sha256": "27ef0622c144322fcf13dee1c31e5f467535798b31f17d0097afab6b5bffa6ac"
+        },
+        {
+          "path": "docs/acceptance/profile-address-release-20261028/release-storefront-focused-actual.log",
+          "sha256": "d8b30fcf415a5ba01ad4b87ec879828794034e0065b37d0942dcb857b5a19d44"
+        },
+        {
+          "path": "docs/acceptance/profile-address-release-20261028/release-final-remainder.json",
+          "sha256": "f47256cd7b11c244d6c629d8e7b844bea78c7864f0e231644a33aaae4b53ca1a"
+        },
+        {
+          "path": "docs/acceptance/profile-address-release-20261028/release-final-remainder.log",
+          "sha256": "0b747b3f39f3409bc48150c3d38af59a857470a709f8fbea43285a92ab60a1d7"
+        },
+        {
+          "path": "docs/acceptance/profile-address-release-20261028/release-interrupted-remainder.json",
+          "sha256": "0f8d25894cd31c0ada62297f6388f5ad37190fdd322c4933909e506d80c486af"
+        },
+        {
+          "path": "docs/acceptance/profile-address-release-20261028/release-interrupted-remainder.log",
+          "sha256": "6c8e88a1fecf22305dd41b5b5954e0a5446e61860fcac760ce04616c1d49c59c"
+        },
+        {
+          "path": "docs/acceptance/profile-address-release-20261028/dependency-junction-repair.json",
+          "sha256": "3b9516239b6b5be9a1e51a0f437c8d16288c0102d8c0b46eeecd7472a4d45de5"
+        },
+        {
+          "path": "docs/acceptance/profile-address-release-20261028/build-environment-isolation.json",
+          "sha256": "3e8f3ac11fc7d004f92fb1ce09d3c520833ae3c4f912249f1c746906cd9f65e4"
+        }
+      ],
+      "limits": "Local synthetic browser/API evidence and separate artifacts; not real email delivery, a genuine customer save/default checkout, physical stock or full deletion qualification.",
+      "acceptanceLogEncoding": "Acceptance log copies normalize CRLF to LF for portable Git blob hashes. Original private .tools logs are preserved unchanged."
     }
+  },
+  "providerActivation": {
+    "mapItem": "MAP-019",
+    "observedAt": "2026-10-28T15:44:31.619Z",
+    "browserAccount": "k2jimzonwebsite",
+    "supabase": {
+      "organization": "K2jimzon",
+      "project": "pixplcjqivlfflickobf",
+      "url": "https://pixplcjqivlfflickobf.supabase.co"
+    },
+    "vercel": {
+      "team": "k2-jimzon",
+      "project": "k2-jimzon",
+      "projectId": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "environment": "Production",
+      "key": "VITE_CUSTOMER_ACCOUNT_ENABLED",
+      "submittedValue": "true",
+      "saveConfirmed": true,
+      "deploymentRequired": false,
+      "postSaveValueReveal": "MFA requested; optional reveal dismissed without a code",
+      "privacyVariables": "No CUSTOMER variables existed before this addition; no privacy activation added",
+      "screenshot": "docs/acceptance/profile-address-release-20261028/vercel-account-flag.png",
+      "screenshotSha256": "8dfd11764d1bd3f97cf0a40466aca42f18692939814aa2f45c415ab7838a3503",
+      "activatedInDeployment": "dpl_BBcdubRHrt3CnHZ2xnvwykfGtPGp"
+    },
+    "beforeProduction": {
+      "source": "c630e7ebfa491c463c618c030e4222e544269f06",
+      "storefrontDeployment": "26SG7xKPREX84Pd1KhwqzWxvoPJo",
+      "adminDeployment": "8aa4TjSsMbEnoYqgW1zYQz6WnCj3",
+      "bothReadyOnCanonicalDomains": true
+    },
+    "auth": {
+      "mapItem": "MAP-019",
+      "project": "pixplcjqivlfflickobf",
+      "packetSha256": "25bfee729eb6288152eb3db6dcede81dabddbc5fbf411a8a613165cc40f2d0f2",
+      "ownerApproval": "Approve K2 signup activation",
+      "startedAt": "2026-10-28T15:41:47.883Z",
+      "before": {
+        "signupDisabled": true,
+        "emailEnabled": true,
+        "emailAutoconfirm": false,
+        "phoneEnabled": false,
+        "siteUrl": "https://www.k2jimzon.com",
+        "redirectAllowList": "https://www.k2jimzon.com/**,https://k2jimzon.com/**,https://admin.k2jimzon.com/**",
+        "customSmtpConfigured": true
+      },
+      "status": "applied-and-exact-readback-verified",
+      "recovery": "Separately authorize auth-disable-signups.json to block future signups; retain all existing users and saved data.",
+      "patchHttpStatus": 200,
+      "after": {
+        "signupDisabled": false,
+        "emailEnabled": true,
+        "emailAutoconfirm": false,
+        "phoneEnabled": false,
+        "siteUrl": "https://www.k2jimzon.com",
+        "redirectAllowList": "https://www.k2jimzon.com/**,https://k2jimzon.com/**,https://admin.k2jimzon.com/**",
+        "customSmtpConfigured": true
+      },
+      "otherChangedFieldNames": [],
+      "completedAt": "2026-10-28T15:41:48.297Z"
+    },
+    "limits": "Provider configuration is verified; no new customer, email/SMS delivery, hosted settings/address save, checkout or new deployment is claimed."
+  },
+  "liveRelease": {
+    "mapItem": "MAP-019",
+    "recordedAt": "2026-10-28T15:55:20.007Z",
+    "status": "production-source-and-provider-activation-verified-customer-journey-pending",
+    "source": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+    "git": {
+      "repository": "k2jimzonwebsite/K2-Jimzon",
+      "main": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+      "featureBranch": "codex/customer-privacy-owner-decisions",
+      "promotion": "Normal non-forced fast-forward from c630e7eb; exact remote main/feature readback matches",
+      "normalPushHooks": "13 Node, 7 contract, 8 rendered-security cases and import integrity pass"
+    },
+    "deployments": [
+      {
+        "project": "k2-jimzon",
+        "id": "dpl_BBcdubRHrt3CnHZ2xnvwykfGtPGp",
+        "url": "https://vercel.com/k2-jimzon/k2-jimzon/BBcdubRHrt3CnHZ2xnvwykfGtPGp",
+        "status": "Ready",
+        "environment": "Production",
+        "source": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+        "canonicalHost": "https://www.k2jimzon.com",
+        "previousId": "dpl_26SG7xKPREX84Pd1KhwqzWxvoPJo"
+      },
+      {
+        "project": "k2-jimzon-admin",
+        "id": "dpl_3F1JxYadP6tmosBeKjCT5wQDTEKD",
+        "url": "https://vercel.com/k2-jimzon/k2-jimzon-admin/3F1JxYadP6tmosBeKjCT5wQDTEKD",
+        "status": "Ready",
+        "environment": "Production",
+        "source": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+        "canonicalHost": "https://admin.k2jimzon.com",
+        "previousId": "dpl_8aa4TjSsMbEnoYqgW1zYQz6WnCj3"
+      }
+    ],
+    "browser": {
+      "account": "Canonical /account renders Create an account or sign in, email-link field and Send sign-in link. Security check completed automatically; no agent challenge-solving or submission occurred.",
+      "admin": "Canonical Admin renders the authenticated existing Admin command center with inventory projection196; no business command was submitted.",
+      "sms": "Text code tab remains visible in existing UI, but K2 phone provider is disabled. SMS delivery is not operational or part of this activation."
+    },
+    "privacy": {
+      "enabled": false,
+      "observedPublicAsset": "https://www.k2jimzon.com/assets/CustomerAccount-cP5TfEZR.js",
+      "compiledFunction": "function F(e){return e.recoveryOnly?null:(0,j.jsxs)(`section`,{\"aria-labelledby\":`account-closure-title`,className:`mt-10 border-t border-line pt-8`,children:[(0,j.jsx)(`h2`,{id:`account-closure-title`,className:`font-serif text-2xl font-semibold text-navy`,children:`Privacy`}),(0,j.jsx)(`p`,{className:`mt-3 text-sm leading-6 text-navy-soft`,children:`For account closure or a privacy request, contact K2.`}),(0,j.jsx)(`a`,{className:`${O} mt-4`,href:`/contact`,children:`Contact K2`})]})}",
+      "recoveryOnlyReturnsNull": true,
+      "manualContactRoute": "/contact",
+      "databasePrivacyMigrationInstalled": false
+    },
+    "http": {
+      "observedAt": "2026-10-28T15:52:07.981Z",
+      "phase": "after",
+      "accountDocumentStatus": 200,
+      "entries": [
+        "https://www.k2jimzon.com/theme-init.js",
+        "https://www.k2jimzon.com/assets/index-CBMCDTzz.js"
+      ],
+      "artifacts": [
+        {
+          "url": "https://www.k2jimzon.com/theme-init.js",
+          "status": 200,
+          "accountRefs": []
+        },
+        {
+          "url": "https://www.k2jimzon.com/assets/index-CBMCDTzz.js",
+          "status": 200,
+          "accountRefs": [
+            "https://www.k2jimzon.com/assets/CustomerAccount-cP5TfEZR.js",
+            "https://www.k2jimzon.com/assets/CustomerAccountProvider-CQVu68kN.js"
+          ]
+        },
+        {
+          "url": "https://www.k2jimzon.com/assets/CustomerAccount-cP5TfEZR.js",
+          "status": 200,
+          "manualPrivacyMessage": true,
+          "accountDisabledMessage": true
+        },
+        {
+          "url": "https://www.k2jimzon.com/assets/CustomerAccountProvider-CQVu68kN.js",
+          "status": 200,
+          "manualPrivacyMessage": false,
+          "accountDisabledMessage": false
+        },
+        {
+          "target": "storefront",
+          "url": "https://www.k2jimzon.com/k2-build-target.json",
+          "status": 200,
+          "body": "{\n  \"target\": \"storefront\"\n}\n"
+        },
+        {
+          "target": "admin",
+          "url": "https://admin.k2jimzon.com/k2-build-target.json",
+          "status": 200,
+          "body": "{\n  \"target\": \"admin\"\n}\n"
+        }
+      ]
+    },
+    "artifacts": [
+      {
+        "path": "docs/acceptance/profile-address-release-20261028/live-account-entry.png",
+        "sha256": "f85a6f9dc44ab35d00cdf80215f347e9e1d381f83f4e5c1939cfe476a6bd6f4b"
+      },
+      {
+        "path": "docs/acceptance/profile-address-release-20261028/vercel-account-flag.png",
+        "sha256": "8dfd11764d1bd3f97cf0a40466aca42f18692939814aa2f45c415ab7838a3503"
+      },
+      {
+        "path": "docs/acceptance/profile-address-release-20261028/vercel-storefront-production.txt",
+        "sha256": "4ebcce02fba76475ee4aadaf0c53585db341872698dfce61f0f1476fb294e7ec"
+      },
+      {
+        "path": "docs/acceptance/profile-address-release-20261028/vercel-admin-production.txt",
+        "sha256": "093cedb351f22a63d894f5c22e6a7602f2ee0a75113e1a7d47e1fe4e832a3466"
+      },
+      {
+        "path": "docs/acceptance/profile-address-release-20261028/public-source-after.json",
+        "sha256": "3ad5b0c72836603eb3138fbe44e97806df7c15c50f4e3879c1f6d5d5bcc23018"
+      },
+      {
+        "path": "docs/acceptance/profile-address-release-20261028/auth-signup-result.json",
+        "sha256": "a7e69d68608a588ea4a3d0e7656c518c83891299353343c0f98f0ad69ff4e18d"
+      },
+      {
+        "path": "docs/acceptance/profile-address-release-20261028/release-coverage.json",
+        "sha256": "f926f014905f510c70b092f069e1abfd33109f10af6c16180e98532f8b3827c4"
+      }
+    ],
+    "buildLogAnnotation": "Storefront Vercel labels two error lines, but its copied lines are successful check-marked tests: synchronous render failure becomes a retryable error; operation failure still verifies shutdown/preserves original error. This is log classification, not a failed build. Ready status and local gates are independently observed.",
+    "remaining": [
+      "Real email-link delivery/verification and customer login",
+      "Authenticated profile/settings and saved-address save/readback; default-address checkout prefill without submitting an order",
+      "Phone sign-in remains disabled; do not claim SMS readiness",
+      "Automated deletion and all unfinished writer/freeze/manifest/permit/retention/provider recovery work remain suspended in MAP-019"
+    ],
+    "recovery": "Use source/per-project rollback to the recorded previous deployments only by scoped recovery decision. Disable the Storefront account flag before any separately authorized RPC deactivation. Retain address columns/data/legacy writer guard. Signup inverse blocks future signup without deleting users. Never replay installed SQL/Auth or restore an old database over later data.",
+    "receiptOnlyPolicy": "Save this evidence to the existing feature branch; no second main push, app build or production deployment is needed."
   }
 }

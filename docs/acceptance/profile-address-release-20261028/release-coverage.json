@@ -1,0 +1,75 @@
+{
+  "mapItem": "MAP-019",
+  "sourceCommit": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+  "status": "passed-reconciled-complete-release-coverage",
+  "completedAt": "2026-10-28T15:48:23.408Z",
+  "initialInvocation": {
+    "command": "npm run verify:release",
+    "exitCode": 1,
+    "basePassed": 1129,
+    "failure": "One obsolete copy assertion; focused corrected contract passes. The initial aggregate is retained as failed."
+  },
+  "storefrontFollowup": "44 initial cases passed; four default-off fixture cases failed because public build flags were present too early. Public build environment isolated to build stages; the same four focused cases pass. No runtime source changed.",
+  "interruption": "Storefront recovery and Admin UI completed before the session disappeared during payment UI. Read-only process inventory confirmed no survivor. Only the unfinished payment group and later stages resumed under a distinct log/receipt.",
+  "runtimeUnchangedFromInitialGate": true,
+  "successfulStages": [
+    "test:mobile-moderation",
+    "test:store-orientation",
+    "test:storefront-ui (44 initial + 4 corrected focused)",
+    "test:storefront-recovery",
+    "test:admin-ui",
+    "test:payment-ui",
+    "test:inbox-ui",
+    "test:admin-product-master-ui",
+    "test:admin-website-assignment-ui",
+    "test:owner-count-close-ui",
+    "test:customer-account-ui",
+    "test:selling-surfaces",
+    "test:order-receipt-direct",
+    "test:workflow-api",
+    "test:intake-ai-ui",
+    "test:vercel-output",
+    "build:storefront",
+    "build:admin"
+  ],
+  "artifacts": [
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/release-remainder.json",
+      "sha256": "bc62323ce0c0ec8d5ce6c96d497fd47d7af5c0ef6efbe494a3f0fc0b3bc7b3c0"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/release-remainder.log",
+      "sha256": "27ef0622c144322fcf13dee1c31e5f467535798b31f17d0097afab6b5bffa6ac"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/release-storefront-focused-actual.log",
+      "sha256": "d8b30fcf415a5ba01ad4b87ec879828794034e0065b37d0942dcb857b5a19d44"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/release-final-remainder.json",
+      "sha256": "f47256cd7b11c244d6c629d8e7b844bea78c7864f0e231644a33aaae4b53ca1a"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/release-final-remainder.log",
+      "sha256": "0b747b3f39f3409bc48150c3d38af59a857470a709f8fbea43285a92ab60a1d7"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/release-interrupted-remainder.json",
+      "sha256": "0f8d25894cd31c0ada62297f6388f5ad37190fdd322c4933909e506d80c486af"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/release-interrupted-remainder.log",
+      "sha256": "6c8e88a1fecf22305dd41b5b5954e0a5446e61860fcac760ce04616c1d49c59c"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/dependency-junction-repair.json",
+      "sha256": "3b9516239b6b5be9a1e51a0f437c8d16288c0102d8c0b46eeecd7472a4d45de5"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/build-environment-isolation.json",
+      "sha256": "3e8f3ac11fc7d004f92fb1ce09d3c520833ae3c4f912249f1c746906cd9f65e4"
+    }
+  ],
+  "limits": "Local synthetic browser/API evidence and separate artifacts; not real email delivery, a genuine customer save/default checkout, physical stock or full deletion qualification.",
+  "acceptanceLogEncoding": "Acceptance log copies normalize CRLF to LF for portable Git blob hashes. Original private .tools logs are preserved unchanged."
+}

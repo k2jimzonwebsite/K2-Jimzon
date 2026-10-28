@@ -1,0 +1,107 @@
+{
+  "mapItem": "MAP-019",
+  "sourceCommit": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+  "initialSource": "d2b728b79863f36c84e7ed1567e3ac8ecd9649cc",
+  "runtimeUnchangedFromInitialGate": true,
+  "initialAggregateExit": 1,
+  "basePassed": 1129,
+  "focusedContractCorrectionPassed": true,
+  "startedAt": "2026-10-28T15:36:51.696Z",
+  "status": "passed-reconciled-release-coverage",
+  "stages": [
+    {
+      "name": "test:payment-ui",
+      "startedAt": "2026-10-28T15:36:51.698Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:37:40.024Z"
+    },
+    {
+      "name": "test:inbox-ui",
+      "startedAt": "2026-10-28T15:37:40.024Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:38:14.971Z"
+    },
+    {
+      "name": "test:admin-product-master-ui",
+      "startedAt": "2026-10-28T15:38:14.971Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:39:50.074Z"
+    },
+    {
+      "name": "test:admin-website-assignment-ui",
+      "startedAt": "2026-10-28T15:39:50.074Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:40:11.473Z"
+    },
+    {
+      "name": "test:owner-count-close-ui",
+      "startedAt": "2026-10-28T15:40:11.473Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:40:25.909Z"
+    },
+    {
+      "name": "test:customer-account-ui",
+      "startedAt": "2026-10-28T15:40:25.909Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:41:48.022Z"
+    },
+    {
+      "name": "test:selling-surfaces",
+      "startedAt": "2026-10-28T15:41:48.022Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:45:49.609Z"
+    },
+    {
+      "name": "test:order-receipt-direct",
+      "startedAt": "2026-10-28T15:45:49.609Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:46:05.664Z"
+    },
+    {
+      "name": "test:workflow-api",
+      "startedAt": "2026-10-28T15:46:05.664Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:46:33.750Z"
+    },
+    {
+      "name": "test:intake-ai-ui",
+      "startedAt": "2026-10-28T15:46:33.750Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:46:59.775Z"
+    },
+    {
+      "name": "test:vercel-output",
+      "startedAt": "2026-10-28T15:46:59.775Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:47:02.942Z"
+    },
+    {
+      "name": "build:storefront",
+      "startedAt": "2026-10-28T15:47:02.942Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:47:44.971Z"
+    },
+    {
+      "name": "build:admin",
+      "startedAt": "2026-10-28T15:47:44.971Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:48:23.408Z"
+    }
+  ],
+  "interruptedPredecessor": "release-final-remainder.json",
+  "interruption": "Previous session disappeared during payment-ui; exact process inventory confirms no surviving validation process. Retain completed storefront-recovery/admin-ui stages and rerun only unfinished payment-ui plus later stages.",
+  "completedAt": "2026-10-28T15:48:23.408Z"
+}

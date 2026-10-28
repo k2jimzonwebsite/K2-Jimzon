@@ -1,0 +1,61 @@
+{
+  "mapItem": "MAP-019",
+  "observedAt": "2026-10-28T15:44:31.619Z",
+  "browserAccount": "k2jimzonwebsite",
+  "supabase": {
+    "organization": "K2jimzon",
+    "project": "pixplcjqivlfflickobf",
+    "url": "https://pixplcjqivlfflickobf.supabase.co"
+  },
+  "vercel": {
+    "team": "k2-jimzon",
+    "project": "k2-jimzon",
+    "projectId": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+    "environment": "Production",
+    "key": "VITE_CUSTOMER_ACCOUNT_ENABLED",
+    "submittedValue": "true",
+    "saveConfirmed": true,
+    "deploymentRequired": true,
+    "postSaveValueReveal": "MFA requested; optional reveal dismissed without a code",
+    "privacyVariables": "No CUSTOMER variables existed before this addition; no privacy activation added",
+    "screenshot": "docs/acceptance/profile-address-release-20261028/vercel-account-flag.png",
+    "screenshotSha256": "8dfd11764d1bd3f97cf0a40466aca42f18692939814aa2f45c415ab7838a3503"
+  },
+  "beforeProduction": {
+    "source": "c630e7ebfa491c463c618c030e4222e544269f06",
+    "storefrontDeployment": "26SG7xKPREX84Pd1KhwqzWxvoPJo",
+    "adminDeployment": "8aa4TjSsMbEnoYqgW1zYQz6WnCj3",
+    "bothReadyOnCanonicalDomains": true
+  },
+  "auth": {
+    "mapItem": "MAP-019",
+    "project": "pixplcjqivlfflickobf",
+    "packetSha256": "25bfee729eb6288152eb3db6dcede81dabddbc5fbf411a8a613165cc40f2d0f2",
+    "ownerApproval": "Approve K2 signup activation",
+    "startedAt": "2026-10-28T15:41:47.883Z",
+    "before": {
+      "signupDisabled": true,
+      "emailEnabled": true,
+      "emailAutoconfirm": false,
+      "phoneEnabled": false,
+      "siteUrl": "https://www.k2jimzon.com",
+      "redirectAllowList": "https://www.k2jimzon.com/**,https://k2jimzon.com/**,https://admin.k2jimzon.com/**",
+      "customSmtpConfigured": true
+    },
+    "status": "applied-and-exact-readback-verified",
+    "recovery": "Separately authorize auth-disable-signups.json to block future signups; retain all existing users and saved data.",
+    "patchHttpStatus": 200,
+    "after": {
+      "signupDisabled": false,
+      "emailEnabled": true,
+      "emailAutoconfirm": false,
+      "phoneEnabled": false,
+      "siteUrl": "https://www.k2jimzon.com",
+      "redirectAllowList": "https://www.k2jimzon.com/**,https://k2jimzon.com/**,https://admin.k2jimzon.com/**",
+      "customSmtpConfigured": true
+    },
+    "otherChangedFieldNames": [],
+    "completedAt": "2026-10-28T15:41:48.297Z"
+  },
+  "limits": "Provider configuration is verified; no new customer, email/SMS delivery, hosted settings/address save, checkout or new deployment is claimed."
+}

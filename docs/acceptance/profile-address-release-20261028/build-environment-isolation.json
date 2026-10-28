@@ -1,0 +1,9 @@
+{
+  "reason": "Public build activation flags were incorrectly present during default-off browser fixtures. Keep CI-like tests without an env file; inject this public-only file only for the two final builds.",
+  "movedFrom": "C:\\Users\\jerze\\K2 JImzon\\.tools\\map019-profile-release\\clean-source-d2b728b7\\.env.local",
+  "movedTo": "C:\\Users\\jerze\\K2 JImzon\\.tools\\map019-profile-release\\public-build.env",
+  "applicationSourceChanged": false,
+  "productionChanged": false,
+  "failedStage": "test:storefront-ui",
+  "passedCasesPreserved": 44
+}

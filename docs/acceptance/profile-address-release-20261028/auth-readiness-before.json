@@ -1,0 +1,20 @@
+{
+  "project": "pixplcjqivlfflickobf",
+  "observedAt": "2026-10-28T15:28:16.619Z",
+  "readOnly": true,
+  "apiReference": "https://supabase.com/docs/reference/api/v1-get-auth-service-config",
+  "emailEnabled": true,
+  "signupDisabled": true,
+  "emailAutoconfirm": false,
+  "customSmtpHostConfigured": true,
+  "smtpSenderConfigured": true,
+  "smtpCredentialConfigured": true,
+  "phoneEnabled": false,
+  "siteUrl": "https://www.k2jimzon.com",
+  "redirectAllowList": "https://www.k2jimzon.com/**,https://k2jimzon.com/**,https://admin.k2jimzon.com/**",
+  "emailOtpLength": 8,
+  "emailRateLimit": 30,
+  "magicLinkTemplateContainsCode": false,
+  "confirmationTemplateContainsCode": false,
+  "limits": "Secret configuration values were neither logged nor saved. This is config metadata, not delivery or customer execution evidence."
+}

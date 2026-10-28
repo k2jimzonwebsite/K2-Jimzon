@@ -1,0 +1,14 @@
+{
+  "reason": "The denied initial junction let the first Vite process create a regular cache directory before setup retried. The existence check mistook that cache for the dependency junction.",
+  "archivedOwnedCache": "C:\\Users\\jerze\\K2 JImzon\\.tools\\map019-profile-release\\qualification-generated-module-cache",
+  "entries": [
+    ".vite-combined",
+    ".vite-product-families",
+    ".vite-security-check",
+    ".vite-store-categories",
+    ".vite-storefront"
+  ],
+  "verifiedTarget": "C:\\Users\\jerze\\K2 JImzon\\node_modules",
+  "sourceChanged": false,
+  "productionChanged": false
+}

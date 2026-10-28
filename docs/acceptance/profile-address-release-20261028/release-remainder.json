@@ -1,0 +1,35 @@
+{
+  "mapItem": "MAP-019",
+  "sourceCommit": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+  "initialSource": "d2b728b79863f36c84e7ed1567e3ac8ecd9649cc",
+  "runtimeUnchangedFromInitialGate": true,
+  "initialAggregateExit": 1,
+  "basePassed": 1129,
+  "focusedContractCorrectionPassed": true,
+  "startedAt": "2026-10-28T15:12:23.004Z",
+  "status": "failed-focused-followup-required",
+  "stages": [
+    {
+      "name": "test:mobile-moderation",
+      "startedAt": "2026-10-28T15:12:23.005Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:12:24.856Z"
+    },
+    {
+      "name": "test:store-orientation",
+      "startedAt": "2026-10-28T15:12:24.856Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:13:55.146Z"
+    },
+    {
+      "name": "test:storefront-ui",
+      "startedAt": "2026-10-28T15:13:55.146Z",
+      "status": "failed",
+      "exitCode": 1,
+      "completedAt": "2026-10-28T15:17:22.961Z"
+    }
+  ],
+  "completedAt": "2026-10-28T15:17:22.961Z"
+}

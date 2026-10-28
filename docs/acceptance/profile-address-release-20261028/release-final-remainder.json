@@ -1,0 +1,32 @@
+{
+  "mapItem": "MAP-019",
+  "sourceCommit": "4e37d74870196a17a9626ca878e79c4cdb16c28f",
+  "initialSource": "d2b728b79863f36c84e7ed1567e3ac8ecd9649cc",
+  "runtimeUnchangedFromInitialGate": true,
+  "initialAggregateExit": 1,
+  "basePassed": 1129,
+  "focusedContractCorrectionPassed": true,
+  "startedAt": "2026-10-28T15:25:26.125Z",
+  "status": "running",
+  "stages": [
+    {
+      "name": "test:storefront-recovery",
+      "startedAt": "2026-10-28T15:25:26.126Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:27:35.804Z"
+    },
+    {
+      "name": "test:admin-ui",
+      "startedAt": "2026-10-28T15:27:35.805Z",
+      "status": "passed",
+      "exitCode": 0,
+      "completedAt": "2026-10-28T15:29:19.831Z"
+    },
+    {
+      "name": "test:payment-ui",
+      "startedAt": "2026-10-28T15:29:19.832Z",
+      "status": "running"
+    }
+  ]
+}
