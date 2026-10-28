@@ -69,3 +69,22 @@ upstream tracking ref. Independent `git ls-remote` then confirmed the exact
 checkpoint SHA on the remote feature branch and main still at `c630e7eb`.
 No main push or production deployment was performed. The documentation-only
 receipt commit following this source commit changes no application code.
+
+## Automatic preview findings
+
+The Git push automatically triggered separate Vercel previews on source
+`6edfb09c236408933342bb2e92470882271de6c1`. Admin preview
+`dpl_d4m2ArVSNt96f3etH9pFpZ8tP1Wt` reports READY. Storefront preview
+`dpl_9v41puJRXhYGhwoCmuBe2exNRy5o` reports ERROR. Its actual build log records
+`Storefront landing budget exceeded: JS 147.21 kB/150.50 kB gzip; CSS 30.09 kB/30.00 kB gzip`
+at `scripts/verify-bundle-budgets.mjs:60`. The production boundary check passed
+before this refusal. The CSS budget must be met before release; no threshold
+was raised and no application code was edited in this diagnostic session.
+
+The subsequent documentation-only commit `2c33410ebee8d6a55fd77b71db58b105200a826a`
+also pushed successfully with normal hooks. Vercel queued another preview pair;
+those unchanged-application rebuilds are not awaited or represented as passing.
+This is no longer a Git/account failure. It is a recorded storefront build
+failure plus the separate unfinished database/activation dependencies. Existing
+production deployments remain the baseline above. All remaining action stays
+in MAP-019.
