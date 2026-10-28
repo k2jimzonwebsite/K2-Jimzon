@@ -1,0 +1,9 @@
+{
+  "backupId": "current-pixplcjqivlfflickobf-2026-10-28T144849665Z-0e6aa8e0c660",
+  "verifiedAt": "2026-10-28T14:49:13.493Z",
+  "restoreVerified": true,
+  "publicRelations": 75,
+  "latestMigrationVersion": "20261028140000",
+  "excludedManagedEntries": 10,
+  "evidenceBoundary": "Application database in isolated PostgreSQL; managed Vault, Storage objects and provider settings are excluded."
+}

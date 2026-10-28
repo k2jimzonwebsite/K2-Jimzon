@@ -1,0 +1,34 @@
+
+> k2-jimzon-prototype@0.1.0 test:customer-account-ui
+> node scripts/test-customer-account-ui.mjs --grep closure survives
+
+
+Running 1 test using 1 worker
+
+(node:4564) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\customer-account-ui.spec.js:486:1 › closure survives a lost confirmation response and can be recovered without repeating confirmation (45.0s)
+
+
+  1) tests\customer-account-ui.spec.js:486:1 › closure survives a lost confirmation response and can be recovered without repeating confirmation 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.check: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for getByRole('checkbox', { name: /I understand eligible closure starts/ })
+
+
+      496 |  })
+      497 |  await page.goto('/account')
+    > 498 |  await page.getByRole('checkbox',{name:/I understand eligible closure starts/}).check()
+          |                                                                                 ^
+      499 |  await page.getByRole('button',{name:'Send closure verification code'}).click()
+      500 |  await page.getByLabel('Closure verification code').fill('123456')
+      501 |  await page.getByRole('button',{name:'Confirm account closure',exact:true}).click()
+        at C:\Users\jerze\K2 JImzon\tests\customer-account-ui.spec.js:498:81
+
+    Error Context: test-results\customer-account-ui-closur-4a35d-hout-repeating-confirmation\error-context.md
+
+  1 failed
+    tests\customer-account-ui.spec.js:486:1 › closure survives a lost confirmation response and can be recovered without repeating confirmation 

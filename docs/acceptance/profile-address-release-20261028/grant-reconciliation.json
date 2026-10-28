@@ -1,0 +1,12 @@
+{
+  "project": "pixplcjqivlfflickobf",
+  "observedAt": "2026-10-28T14:47:54.127Z",
+  "status": "approved-packet-applied-and-provider-default-acl-reconciled",
+  "anonymousExecute": false,
+  "privateHelperApplicationExecute": false,
+  "platformServiceRoleExecute": "Existing postgres/public function default; preserved exactly by the approved SQL. Application transport does not use service credentials.",
+  "installedSourceIdentityAndBffGuardsVerified": true,
+  "liveCallerLimit": "An optional read-only function-invocation probe returned HTTP400; no caller execution success is claimed. Installed source/catalog checks and prior native actor tests are separate evidence; genuine hosted caller acceptance remains pending.",
+  "postcheckCorrection": "Initial orchestration check incorrectly required service_role=false. The approved migrations revoke PUBLIC/anon and explicitly grant authenticated while preserving the provider service-role default. No additional SQL or permission change was sent.",
+  "sourceGuard": "Both RPCs require auth.uid() before any action and require the existing signed BFF verifier; owner scoping remains unchanged."
+}

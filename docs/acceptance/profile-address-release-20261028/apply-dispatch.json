@@ -1,0 +1,32 @@
+{
+  "project": "pixplcjqivlfflickobf",
+  "url": "https://pixplcjqivlfflickobf.supabase.co",
+  "packetSha256": "4a662c94adc48a95b7b3bd68950a9d62570006efdc16a4358ee2bf729d4b4774",
+  "backupId": "current-pixplcjqivlfflickobf-2026-10-28T143757727Z-b09a42220e82",
+  "ownerApproval": "Approve profile/address SQL",
+  "startedAt": "2026-10-28T14:42:56.629Z",
+  "before": {
+    "rpcCount": 0,
+    "ledgerCount": 0,
+    "ledgerExact": false,
+    "oldSettings": {
+      "hash": "d751713988987e9331980363e24189ce",
+      "count": 0
+    },
+    "helperPrivate": false,
+    "privacyAbsent": true,
+    "rpcGrantsSafe": false,
+    "addressColumns": 0,
+    "functionHashes": [
+      {
+        "sha256": "8dfc55a1fdcf816c9c4cbb70c9f3df5371eca4d7e2bae6d325edc34883969e09",
+        "signature": "read_customer_account_settings_v1(bigint,uuid,text,text,text)"
+      },
+      {
+        "sha256": "c519af9e447978831672aad13b9a5148a79b6589d952a0e1794c561b98cd512c",
+        "signature": "save_customer_account_settings_v1(bigint,uuid,text,text,text)"
+      }
+    ]
+  },
+  "status": "dispatching-once"
+}

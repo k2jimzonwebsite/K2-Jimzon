@@ -1,0 +1,69 @@
+{
+  "project": "pixplcjqivlfflickobf",
+  "url": "https://pixplcjqivlfflickobf.supabase.co",
+  "packetSha256": "4a662c94adc48a95b7b3bd68950a9d62570006efdc16a4358ee2bf729d4b4774",
+  "backupId": "current-pixplcjqivlfflickobf-2026-10-28T143757727Z-b09a42220e82",
+  "ownerApproval": "Approve profile/address SQL",
+  "startedAt": "2026-10-28T14:42:56.629Z",
+  "before": {
+    "rpcCount": 0,
+    "ledgerCount": 0,
+    "ledgerExact": false,
+    "oldSettings": {
+      "hash": "d751713988987e9331980363e24189ce",
+      "count": 0
+    },
+    "helperPrivate": false,
+    "privacyAbsent": true,
+    "rpcGrantsSafe": false,
+    "addressColumns": 0,
+    "functionHashes": [
+      {
+        "sha256": "8dfc55a1fdcf816c9c4cbb70c9f3df5371eca4d7e2bae6d325edc34883969e09",
+        "signature": "read_customer_account_settings_v1(bigint,uuid,text,text,text)"
+      },
+      {
+        "sha256": "c519af9e447978831672aad13b9a5148a79b6589d952a0e1794c561b98cd512c",
+        "signature": "save_customer_account_settings_v1(bigint,uuid,text,text,text)"
+      }
+    ]
+  },
+  "status": "refused-or-unknown-readback-required-no-retry",
+  "after": {
+    "rpcCount": 2,
+    "ledgerCount": 1,
+    "ledgerExact": true,
+    "oldSettings": {
+      "hash": "d751713988987e9331980363e24189ce",
+      "count": 0
+    },
+    "helperPrivate": true,
+    "privacyAbsent": true,
+    "rpcGrantsSafe": false,
+    "addressColumns": 6,
+    "functionHashes": [
+      {
+        "sha256": "8ae31d4713863fcca23cd16bd5a41058f20839ac07825855ee045b686bfeb4e5",
+        "signature": "k2_private.customer_account_settings_payload_v1(uuid)"
+      },
+      {
+        "sha256": "4c54de29b4f365d10af39619081229017bb4b01f23e26aaf28663b7d804db3e9",
+        "signature": "read_customer_account_settings_v1(bigint,uuid,text,text,text)"
+      },
+      {
+        "sha256": "5a6c2645783f1f43f88036482e1a4573a31c081f4de0d774ffb43c1f198796e6",
+        "signature": "read_customer_portfolio_v1(bigint,uuid,text,text,text)"
+      },
+      {
+        "sha256": "2987966f64fa57704714e2f7e89ae0fa27a9ea4ada1505834fee3649d8a7e12f",
+        "signature": "save_customer_account_address_book_v1(bigint,uuid,text,text,text)"
+      },
+      {
+        "sha256": "c31b9c8af4db39b7c1e8533742cf57c4253294ea0326ed43b384b9e63b8df25e",
+        "signature": "save_customer_account_settings_v1(bigint,uuid,text,text,text)"
+      }
+    ]
+  },
+  "failure": "K2_APPLY_RETURNED_READBACK_INCOMPLETE_DO_NOT_RETRY",
+  "completedAt": "2026-10-28T14:42:57.507Z"
+}

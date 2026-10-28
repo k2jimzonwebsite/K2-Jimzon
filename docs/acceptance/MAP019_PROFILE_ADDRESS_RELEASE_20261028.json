@@ -6,8 +6,8 @@
   ],
   "ownerDecision": "Release profile/addresses first; continue here",
   "recordedAt": "2026-10-28T14:02:36.862Z",
-  "status": "locally-qualified-awaiting-named-SQL-approval-and-K2-Vercel-access",
-  "productionChanged": false,
+  "status": "approved-SQL-installed-on-exact-K2-source-promotion-pending",
+  "productionChanged": true,
   "automatedDeletionEnabled": false,
   "packet": {
     "mapItem": "MAP-019",
@@ -139,8 +139,8 @@
     }
   },
   "blocked": {
-    "sql": "Exact packet owner approval required by repository instructions; no live write attempted",
-    "vercel": "Known K2 team GET project 403; authorize_team_access 404; local browser disabled"
+    "hostedAcceptance": "Actual customer saving/default checkout and both production source artifacts remain unverified; source release work continues.",
+    "vercelConnector": "K2 scope API403/consent404, but existing GitHub Vercel build statuses are accessible. Use the already authorized Git-connected main release; do not require new provider access unless a setting change is actually needed."
   },
   "deferredDeletionRunner": {
     "path": ".tools/map019-profile-release/suspended-deletion-runner.mjs",
@@ -153,12 +153,60 @@
       "sha256": "4a662c94adc48a95b7b3bd68950a9d62570006efdc16a4358ee2bf729d4b4774"
     },
     {
+      "path": "docs/acceptance/profile-address-release-20261028/apply-dispatch.json",
+      "sha256": "02ae240cca37858cc79b5dba8e88b6f5fe979e8e4c878d7e459a55d8ebbede8f"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/apply-result.json",
+      "sha256": "ded4d2b5bdaa7a483e113f234346bd823ef79a4b75b264c5edb9e5518d031d93"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/backup-applied-manifest.json",
+      "sha256": "e1cf09126ad999807118ca55039d5226a67ef449e0b4351e407257aa0dade425"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/backup-applied-restore-verification.json",
+      "sha256": "5274962e41988dc6a48dbfe2af8cf447eb75d2f267a93f17015cd0a2e325c8ef"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/backup-approved-manifest.json",
+      "sha256": "94a6f482f68f410680fe60ba846e9e5476db4255360f2ca6b03b53c22300a5de"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/backup-approved-restore-verification.json",
+      "sha256": "7006a1b93a56968f7d33a0aeb03e71eb897479c580974bcec5b8a3e1017421eb"
+    },
+    {
       "path": "docs/acceptance/profile-address-release-20261028/deactivate.sql",
       "sha256": "55ce13f569e4041b4ffefba9319cbd97ce1c3649ee9551aaf10b891927c78b67"
     },
     {
+      "path": "docs/acceptance/profile-address-release-20261028/development-final.log",
+      "sha256": "0d2001e006f95e42196929493918c1a7f5d30db9be3fd5ecda29482cede2f87c"
+    },
+    {
       "path": "docs/acceptance/profile-address-release-20261028/development.log",
       "sha256": "e28dc0245d0569012825bbcea2c0fe1a1c7d713668b60f67316622e607fe759f"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/flag-disabled-final.log",
+      "sha256": "d16f51cbc427f98c148354b946d15bd617239a17302d8054d951a8aea602b71d"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/flag-positive-green.log",
+      "sha256": "a56cd21ace2e2cdc757a3c633ef9e7c36784d66ae2eb8a03e4c0d95797b67ac4"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/flag-positive-red-actual.log",
+      "sha256": "41845da264ab0b6efcd96bec2f38fdcdd4a47255657b924fa2e9a64e0da3a83d"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/grant-reconciliation.json",
+      "sha256": "8e9e5cc8fb379fda4c517f12ac56b1aa1662e51e02077edef2e43a574e982ed0"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/live-grants-after.json",
+      "sha256": "4b0850c992778d96491290c7608ed45f85947757a77e154f0fb02db0db77721a"
     },
     {
       "path": "docs/acceptance/profile-address-release-20261028/native-first-refusal.json",
@@ -181,6 +229,10 @@
       "sha256": "90f3693790bd8cf85d9cf3b9e40be44b27a00cb5da63d140bcebddfe5b96aa74"
     },
     {
+      "path": "docs/acceptance/profile-address-release-20261028/readiness-after-apply.json",
+      "sha256": "17a05c0fb2c4c0c9865e98cab0444a877dec24490ba7500d5ad32f2ce77eae65"
+    },
+    {
       "path": "docs/acceptance/profile-address-release-20261028/restored-acl-fixture.sql",
       "sha256": "f0c9c40cba70d64427139639310e42cfc19b756808e51ddf002d871eae90236f"
     },
@@ -188,5 +240,98 @@
       "path": "docs/acceptance/profile-address-release-20261028/ui.log",
       "sha256": "fc6d3ab78590242887c7625c88886e155ac9316b3e4dca348db1ea3dfbfc1bbf"
     }
-  ]
+  ],
+  "ownerSqlApproval": {
+    "answer": "Approve profile/address SQL",
+    "packetSha256": "4a662c94adc48a95b7b3bd68950a9d62570006efdc16a4358ee2bf729d4b4774",
+    "target": "pixplcjqivlfflickobf",
+    "ownerAccountConstraint": "K2 Jimzon; do not use edgerzXc/ScoutIT; K2 token or signed-in browser allowed"
+  },
+  "databaseApplication": {
+    "project": "pixplcjqivlfflickobf",
+    "url": "https://pixplcjqivlfflickobf.supabase.co",
+    "packetSha256": "4a662c94adc48a95b7b3bd68950a9d62570006efdc16a4358ee2bf729d4b4774",
+    "backupId": "current-pixplcjqivlfflickobf-2026-10-28T143757727Z-b09a42220e82",
+    "ownerApproval": "Approve profile/address SQL",
+    "startedAt": "2026-10-28T14:42:56.629Z",
+    "before": {
+      "rpcCount": 0,
+      "ledgerCount": 0,
+      "ledgerExact": false,
+      "oldSettings": {
+        "hash": "d751713988987e9331980363e24189ce",
+        "count": 0
+      },
+      "helperPrivate": false,
+      "privacyAbsent": true,
+      "rpcGrantsSafe": false,
+      "addressColumns": 0,
+      "functionHashes": [
+        {
+          "sha256": "8dfc55a1fdcf816c9c4cbb70c9f3df5371eca4d7e2bae6d325edc34883969e09",
+          "signature": "read_customer_account_settings_v1(bigint,uuid,text,text,text)"
+        },
+        {
+          "sha256": "c519af9e447978831672aad13b9a5148a79b6589d952a0e1794c561b98cd512c",
+          "signature": "save_customer_account_settings_v1(bigint,uuid,text,text,text)"
+        }
+      ]
+    },
+    "status": "refused-or-unknown-readback-required-no-retry",
+    "after": {
+      "rpcCount": 2,
+      "ledgerCount": 1,
+      "ledgerExact": true,
+      "oldSettings": {
+        "hash": "d751713988987e9331980363e24189ce",
+        "count": 0
+      },
+      "helperPrivate": true,
+      "privacyAbsent": true,
+      "rpcGrantsSafe": false,
+      "addressColumns": 6,
+      "functionHashes": [
+        {
+          "sha256": "8ae31d4713863fcca23cd16bd5a41058f20839ac07825855ee045b686bfeb4e5",
+          "signature": "k2_private.customer_account_settings_payload_v1(uuid)"
+        },
+        {
+          "sha256": "4c54de29b4f365d10af39619081229017bb4b01f23e26aaf28663b7d804db3e9",
+          "signature": "read_customer_account_settings_v1(bigint,uuid,text,text,text)"
+        },
+        {
+          "sha256": "5a6c2645783f1f43f88036482e1a4573a31c081f4de0d774ffb43c1f198796e6",
+          "signature": "read_customer_portfolio_v1(bigint,uuid,text,text,text)"
+        },
+        {
+          "sha256": "2987966f64fa57704714e2f7e89ae0fa27a9ea4ada1505834fee3649d8a7e12f",
+          "signature": "save_customer_account_address_book_v1(bigint,uuid,text,text,text)"
+        },
+        {
+          "sha256": "c31b9c8af4db39b7c1e8533742cf57c4253294ea0326ed43b384b9e63b8df25e",
+          "signature": "save_customer_account_settings_v1(bigint,uuid,text,text,text)"
+        }
+      ]
+    },
+    "failure": "K2_APPLY_RETURNED_READBACK_INCOMPLETE_DO_NOT_RETRY",
+    "completedAt": "2026-10-28T14:42:57.507Z"
+  },
+  "grantReconciliation": {
+    "project": "pixplcjqivlfflickobf",
+    "observedAt": "2026-10-28T14:47:54.127Z",
+    "status": "approved-packet-applied-and-provider-default-acl-reconciled",
+    "anonymousExecute": false,
+    "privateHelperApplicationExecute": false,
+    "platformServiceRoleExecute": "Existing postgres/public function default; preserved exactly by the approved SQL. Application transport does not use service credentials.",
+    "installedSourceIdentityAndBffGuardsVerified": true,
+    "liveCallerLimit": "An optional read-only function-invocation probe returned HTTP400; no caller execution success is claimed. Installed source/catalog checks and prior native actor tests are separate evidence; genuine hosted caller acceptance remains pending.",
+    "postcheckCorrection": "Initial orchestration check incorrectly required service_role=false. The approved migrations revoke PUBLIC/anon and explicitly grant authenticated while preserving the provider service-role default. No additional SQL or permission change was sent.",
+    "sourceGuard": "Both RPCs require auth.uid() before any action and require the existing signed BFF verifier; owner scoping remains unchanged."
+  },
+  "finalSourceChecks": {
+    "development": "exit0 after final Vite edit;142privacy/address cases pass",
+    "privacyDisabled": "2pass at375/1440 with exposed false flag",
+    "optInFixture": "1expected missing-control red before allowlist correction;1green afterward; all transport intercepted",
+    "release": "not yet run; once immediately before main promotion"
+  }
 }

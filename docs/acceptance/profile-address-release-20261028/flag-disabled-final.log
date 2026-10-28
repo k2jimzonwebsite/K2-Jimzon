@@ -1,0 +1,13 @@
+
+> k2-jimzon-prototype@0.1.0 test:customer-account-ui
+> node scripts/test-customer-account-ui.mjs --grep disabled account closure
+
+
+Running 2 tests using 1 worker
+
+(node:26636) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\customer-account-ui.spec.js:31:34 › disabled account closure keeps settings available at 375 (2.6s)
+  ok 2 tests\customer-account-ui.spec.js:31:34 › disabled account closure keeps settings available at 1440 (3.2s)
+
+  2 passed (9.7s)

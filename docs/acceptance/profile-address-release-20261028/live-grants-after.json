@@ -1,0 +1,68 @@
+{
+  "project": "pixplcjqivlfflickobf",
+  "observedAt": "2026-10-28T14:43:45.111Z",
+  "functions": [
+    {
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "anon": false,
+      "owner": "postgres",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": false,
+      "signature": "read_customer_account_settings_v1(bigint,uuid,text,text,text)",
+      "authenticated": true
+    },
+    {
+      "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}",
+      "anon": false,
+      "owner": "postgres",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "signature": "read_customer_portfolio_v1(bigint,uuid,text,text,text)",
+      "authenticated": true
+    },
+    {
+      "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}",
+      "anon": false,
+      "owner": "postgres",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "signature": "save_customer_account_address_book_v1(bigint,uuid,text,text,text)",
+      "authenticated": true
+    },
+    {
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "anon": false,
+      "owner": "postgres",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": false,
+      "signature": "save_customer_account_settings_v1(bigint,uuid,text,text,text)",
+      "authenticated": true
+    }
+  ],
+  "defaultAcl": [
+    {
+      "acl": "{postgres=X/supabase_admin,anon=X/supabase_admin,authenticated=X/supabase_admin,service_role=X/supabase_admin}",
+      "type": "f",
+      "owner": "supabase_admin",
+      "schema": "public"
+    },
+    {
+      "acl": "{postgres=X/postgres,service_role=X/postgres}",
+      "type": "f",
+      "owner": "postgres",
+      "schema": "public"
+    }
+  ]
+}
