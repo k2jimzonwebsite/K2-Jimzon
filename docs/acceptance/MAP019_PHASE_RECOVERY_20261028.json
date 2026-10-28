@@ -366,5 +366,24 @@
     "Non-hold register/freeze/authorize proofs and native setup remain synthetic, not executable erasure or all-writer freeze.",
     "No provider/SQL activation, default authority configuration, main push, real-host acceptance or production promotion."
   ],
-  "recovery": "Before activation revert only this scoped source slice using the feature parent f8f7f02d or preserved .tools/map019-phase-recovery-20261028/before copies. Do not reset unrelated dirty images or erase/rewrite immutable command identities/evidence. Disposable in-memory progress may be discarded; cold recovery reconstructs from current native facts, journal and witness. Native freeze/permit/restore and exact deployment/activation gates remain MAP-019."
+  "recovery": "Before activation revert only this scoped source slice using the feature parent f8f7f02d or preserved .tools/map019-phase-recovery-20261028/before copies. Do not reset unrelated dirty images or erase/rewrite immutable command identities/evidence. Disposable in-memory progress may be discarded; cold recovery reconstructs from current native facts, journal and witness. Native freeze/permit/restore and exact deployment/activation gates remain MAP-019.",
+  "publishedSource": {
+    "commit": "39116b61676ead7a3ef658ad026d06db8a6eb041",
+    "branch": "codex/customer-privacy-owner-decisions",
+    "normalCommitAndPushHooks": "passed",
+    "remoteRef": "verified",
+    "githubReportedPreviewStatuses": [
+      {
+        "context": "Vercel \u2013 k2-jimzon",
+        "state": "success",
+        "url": "https://vercel.com/k2-jimzon/k2-jimzon/GLTbC3vnXkgxiaBzidCaVexH9Haz"
+      },
+      {
+        "context": "Vercel \u2013 k2-jimzon-admin",
+        "state": "success",
+        "url": "https://vercel.com/k2-jimzon/k2-jimzon-admin/3FyU5mmYTmnB8mbH3S4gcX6gek8f"
+      }
+    ],
+    "limits": "GitHub commit status observations only. No direct Vercel metadata, genuine hosted acceptance, main push or production promotion."
+  }
 }
