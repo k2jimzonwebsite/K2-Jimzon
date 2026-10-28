@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+(node:3188) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\guest-commerce-bff-contract.spec.js:454:1 › customer account UI is independently gated, passwordless, honest, and keeps account outside primary mobile navigation (31ms)
+
+  1 passed (1.8s)

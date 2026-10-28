@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "d2b728b79863f36c84e7ed1567e3ac8ecd9649cc",
+  "path": "C:\\Users\\jerze\\K2 JImzon\\.tools\\map019-profile-release\\clean-source-d2b728b7",
+  "publicBuildEnvironmentKeys": [
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_GUEST_BFF_ENABLED",
+    "VITE_CUSTOMER_ACCOUNT_ENABLED",
+    "VITE_CUSTOMER_PRIVACY_ENABLED",
+    "VITE_ADMIN_BFF_ENABLED",
+    "VITE_IS_ADMIN_DEPLOYMENT",
+    "VITE_STOREFRONT_URL",
+    "K2_ACCEPTANCE_NO_WATCH"
+  ],
+  "qualificationAccountEnabled": true,
+  "qualificationPrivacyEnabled": false,
+  "unrelatedUncommittedFilesExcluded": true,
+  "dependencies": "Junction to the existing locked node_modules; no reinstall or upgrade"
+}

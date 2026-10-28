@@ -478,7 +478,7 @@ test('customer account UI is independently gated, passwordless, honest, and keep
   for (const required of [
     'No password to remember.', 'No automatic identity merge from matching text.',
     'No VIP or wholesale pricing promise.', 'You are offline.',
-    'Link verified guest records', 'customer-visible Website messages',
+    'Link verified guest records', 'Your linked orders, requests and Website messages.',
   ]) expect(accountUi).toContain(required)
   expect(accountUi).toContain('min-h-12')
   expect(accountUi).toContain('role="alert"')

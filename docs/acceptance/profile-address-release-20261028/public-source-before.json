@@ -1,0 +1,48 @@
+{
+  "observedAt": "2026-10-28T15:03:53.354Z",
+  "phase": "before",
+  "accountDocumentStatus": 200,
+  "entries": [
+    "https://www.k2jimzon.com/theme-init.js",
+    "https://www.k2jimzon.com/assets/index-Bm5vXvBc.js"
+  ],
+  "artifacts": [
+    {
+      "url": "https://www.k2jimzon.com/theme-init.js",
+      "status": 200,
+      "accountRefs": []
+    },
+    {
+      "url": "https://www.k2jimzon.com/assets/index-Bm5vXvBc.js",
+      "status": 200,
+      "accountRefs": [
+        "https://www.k2jimzon.com/assets/CustomerAccount-DOdri5O_.js",
+        "https://www.k2jimzon.com/assets/CustomerAccountProvider-qe_UEFOL.js"
+      ]
+    },
+    {
+      "url": "https://www.k2jimzon.com/assets/CustomerAccount-DOdri5O_.js",
+      "status": 200,
+      "manualPrivacyMessage": false,
+      "accountDisabledMessage": true
+    },
+    {
+      "url": "https://www.k2jimzon.com/assets/CustomerAccountProvider-qe_UEFOL.js",
+      "status": 200,
+      "manualPrivacyMessage": false,
+      "accountDisabledMessage": false
+    },
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com/k2-build-target.json",
+      "status": 200,
+      "body": "{\n  \"target\": \"storefront\"\n}\n"
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/k2-build-target.json",
+      "status": 200,
+      "body": "{\n  \"target\": \"admin\"\n}\n"
+    }
+  ]
+}

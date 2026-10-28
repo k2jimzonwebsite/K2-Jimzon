@@ -140,7 +140,8 @@
   },
   "blocked": {
     "hostedAcceptance": "Actual customer saving/default checkout and both production source artifacts remain unverified; source release work continues.",
-    "vercelConnector": "K2 scope API403/consent404, but existing GitHub Vercel build statuses are accessible. Use the already authorized Git-connected main release; do not require new provider access unless a setting change is actually needed."
+    "vercelConnector": "K2 scope API403/consent404, but existing GitHub Vercel build statuses are accessible. Use the already authorized Git-connected main release; do not require new provider access unless a setting change is actually needed.",
+    "hostedActivation": "Actual production compiled account capability is false. Existing K2 Vercel project access is now needed to enable VITE_CUSTOMER_ACCOUNT_ENABLED=true; requested owner browser/connection access while completing remaining release checks."
   },
   "deferredDeletionRunner": {
     "path": ".tools/map019-profile-release/suspended-deletion-runner.mjs",
@@ -175,6 +176,10 @@
     {
       "path": "docs/acceptance/profile-address-release-20261028/backup-approved-restore-verification.json",
       "sha256": "7006a1b93a56968f7d33a0aeb03e71eb897479c580974bcec5b8a3e1017421eb"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/clean-source.json",
+      "sha256": "88fc8ba5c8589dc722ac570021552cea3a0374c3f6baa3b7fcd868763fdf0e08"
     },
     {
       "path": "docs/acceptance/profile-address-release-20261028/deactivate.sql",
@@ -229,8 +234,24 @@
       "sha256": "90f3693790bd8cf85d9cf3b9e40be44b27a00cb5da63d140bcebddfe5b96aa74"
     },
     {
+      "path": "docs/acceptance/profile-address-release-20261028/public-account-capability-before.json",
+      "sha256": "3cccc4a6c78207b302a3d797e5fabdac711af351e90b1c23cea20891a80c9d53"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/public-source-before.json",
+      "sha256": "3cf727c9c428dca832c60f3bf3e572bbe35d9a2d0a6dd66b242d8627fb2ca167"
+    },
+    {
       "path": "docs/acceptance/profile-address-release-20261028/readiness-after-apply.json",
       "sha256": "17a05c0fb2c4c0c9865e98cab0444a877dec24490ba7500d5ad32f2ce77eae65"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/release-focused-contract.log",
+      "sha256": "3df18a47ee05ab012c335fd7b7e7fc69e89653f69bf41286173b35503f5f79a1"
+    },
+    {
+      "path": "docs/acceptance/profile-address-release-20261028/release-gate.log",
+      "sha256": "1316b6b1baa19da2c6021ff215f7593d21d9a8dc20ceb2f48a8c72a74d5ae860"
     },
     {
       "path": "docs/acceptance/profile-address-release-20261028/restored-acl-fixture.sql",
@@ -332,6 +353,15 @@
     "development": "exit0 after final Vite edit;142privacy/address cases pass",
     "privacyDisabled": "2pass at375/1440 with exposed false flag",
     "optInFixture": "1expected missing-control red before allowlist correction;1green afterward; all transport intercepted",
-    "release": "not yet run; once immediately before main promotion"
+    "release": {
+      "initialCommand": "npm run verify:release",
+      "initialSource": "d2b728b79863f36c84e7ed1567e3ac8ecd9649cc",
+      "initialExit": 1,
+      "baseBrowserCasesPassed": 1129,
+      "failedCase": "guest-commerce-bff-contract.spec.js:454 old customer-visible Website messages literal",
+      "fix": "Update the contract to the existing linked-record wording; product/runtime unchanged",
+      "focusedCorrection": "1passed",
+      "continuation": "Resume only npm test stages after test:base, then packaging and both builds; no restart of passed base suites"
+    }
   }
 }

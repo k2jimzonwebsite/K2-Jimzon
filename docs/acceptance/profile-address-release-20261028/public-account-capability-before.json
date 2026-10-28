@@ -1,0 +1,9 @@
+{
+  "observedAt": "2026-10-28T15:08:50.337Z",
+  "url": "https://www.k2jimzon.com/assets/index-Bm5vXvBc.js",
+  "sha256": "6256b8d8ce4c00e511c218e029b46029dc708dd791150457059a58e7023d2899",
+  "accountCapabilityExport": "k -> Mo",
+  "function": "function Mo() {\n  return Ao;\n}\nas",
+  "compiledCapability": "var Ao = false",
+  "requiresActualProviderFlagActivation": true
+}
