@@ -1,0 +1,370 @@
+{
+  "mapItem": "MAP-019",
+  "ideaId": "IDEA-20261027-02",
+  "status": "qualified-local-inactive-recovery-slice",
+  "productionChanged": false,
+  "sources": [
+    {
+      "path": "server/privacy-authority/bounds.js",
+      "sha256": "4d516b2f266a475b576fba7ba97b18d26bbb1981ef504d0e3caeb77227419550"
+    },
+    {
+      "path": "server/privacy-authority/journal.js",
+      "sha256": "015033fd64178ef2ac7d939d2a403ce9313b413408454ad06177fd482f07eae1"
+    },
+    {
+      "path": "server/privacy-authority/native-holds.js",
+      "sha256": "4dca5e878ecd5ffe272d3e42d37a87aafaddd1a7b9557ac43ce8f15c56cdf9c6"
+    },
+    {
+      "path": "server/admin-bff/customer-privacy.js",
+      "sha256": "9e0e46013c89c224062294c167978d209f61dc903c08f387d8e40c95ec9c0ffe"
+    },
+    {
+      "path": "scripts/prove-customer-hold-coordinator.mjs",
+      "sha256": "b02ad994057d350359d4afe02fa4226c0675bf5eea29c46bd0a3aa361faa591d"
+    },
+    {
+      "path": "tests/customer-privacy-authority-bounds.test.mjs",
+      "sha256": "db705f2d5ae3a6429ea6bab2952c9110b8943c17a4a1df05f0079c4af954c817"
+    },
+    {
+      "path": "tests/customer-closure-authority-journal.test.mjs",
+      "sha256": "78e2c052bfa73502dc59a3fca5cad12f6b2207ff9b3c8e6a6f573e0c645f9041"
+    },
+    {
+      "path": "tests/customer-privacy-hold-coordinator.test.mjs",
+      "sha256": "9f58f54e2ad9d209453274042d976cd3413da835b70a5b01252406aeefeb62da"
+    },
+    {
+      "path": "tests/customer-privacy-admin-api.test.mjs",
+      "sha256": "a553cc9c4250dc173da25b669ff50b04dad218082b3b079bf4b2c5e10a55e014"
+    }
+  ],
+  "development": {
+    "command": "npm run verify:development",
+    "exitCode": 0,
+    "privacyAndAddressCases": 142
+  },
+  "packaging": {
+    "command": "npm run test:vercel-output",
+    "passed": 3,
+    "failed": 0
+  },
+  "native": {
+    "status": "passed",
+    "mode": "native-hold-coordinator-protocol",
+    "before": {
+      "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+      "tables": 161,
+      "rows": 49717,
+      "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+      "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+    },
+    "after": {
+      "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+      "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+      "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+    },
+    "sources": [
+      {
+        "path": "supabase/migrations/20261027_customer_account_portfolio.sql",
+        "sha256": "705f776cac7aac988a85487dcd039a03022705012308bfb722f761c51b694cb9"
+      },
+      {
+        "path": "supabase/migrations/20261027_customer_privacy_automation.sql",
+        "sha256": "e3354448f8d2126e538782ba01513bcc40919af92f4b2ed36a408208840fe1e4"
+      },
+      {
+        "path": "supabase/migrations/20261027_customer_privacy_admin.sql",
+        "sha256": "686ab1ede2e5d770942996cc83d06ac809daa377bf5e182741b553ee9819c9bf"
+      },
+      {
+        "path": "supabase/migrations/20261027_customer_privacy_hold_intent.sql",
+        "sha256": "ab0e7f73abf556e8d1c9d2bb3189133a3800a092df056a52657f5d19a8e2a311"
+      },
+      {
+        "path": "supabase/migrations/20261027_customer_privacy_hold_authority.sql",
+        "sha256": "47fca296bae4472c83daae5b49d47c528a1e095eeae9decb02490fea846aaa76"
+      },
+      {
+        "path": "supabase/tests/customer_privacy_hold_intent.sql",
+        "sha256": "5d235e591f08aa8ee06ca1c1e6fce2fb666e5af44da1622063ab26be2e989dcc"
+      },
+      {
+        "path": "supabase/tests/customer_privacy_hold_authority.sql",
+        "sha256": "ae55a3d11790ea53982e0190b267935c3be84ba4bb234f7f1ef1397ee45e13c7"
+      },
+      {
+        "path": "supabase/tests/customer_privacy_hold_authority_concurrency.sql",
+        "sha256": "1094aee47fb50b9bd2b3ff543335f5924d62c15da13a5957d17a805a2fc5277b"
+      },
+      {
+        "path": "scripts/prove-customer-hold-coordinator.mjs",
+        "sha256": "b02ad994057d350359d4afe02fa4226c0675bf5eea29c46bd0a3aa361faa591d"
+      },
+      {
+        "path": "server/admin-bff/customer-privacy.js",
+        "sha256": "9e0e46013c89c224062294c167978d209f61dc903c08f387d8e40c95ec9c0ffe"
+      },
+      {
+        "path": "server/admin-bff/security.js",
+        "sha256": "3657c0200f7b25e3f1f51d04d0d17da69b2d6507d1eb93c5980064b63a75cae1"
+      },
+      {
+        "path": "server/admin-bff/request-deadline.js",
+        "sha256": "1f2b9f1b7d1446cb5f570be21c08ad6256d02367443a54a0e7a0ff3a3444850b"
+      },
+      {
+        "path": "server/privacy-authority/native-holds.js",
+        "sha256": "4dca5e878ecd5ffe272d3e42d37a87aafaddd1a7b9557ac43ce8f15c56cdf9c6"
+      },
+      {
+        "path": "server/privacy-authority/bounds.js",
+        "sha256": "4d516b2f266a475b576fba7ba97b18d26bbb1981ef504d0e3caeb77227419550"
+      },
+      {
+        "path": "server/privacy-authority/journal.js",
+        "sha256": "015033fd64178ef2ac7d939d2a403ce9313b413408454ad06177fd482f07eae1"
+      },
+      {
+        "path": "server/privacy-authority/state.js",
+        "sha256": "83550d9bdfc5dab919c2636fefdd82c55037d3a026b3fbd3b463f996e6ee6d1f"
+      },
+      {
+        "path": "server/privacy-authority/sqlite-witness.js",
+        "sha256": "0c617c6f31e08a9c776994dace68baf8e01d34098b28f6d822ba7e9fbfbe26cf"
+      },
+      {
+        "path": "scripts/lib/local-worker-runtime.mjs",
+        "sha256": "ee23a828e77c299455bf00bacd058305c6327728393ff55668d65d2ced4bdd42"
+      },
+      {
+        "path": ".tools/closure-authority-runtime/package-lock.json",
+        "sha256": "8b545e43dde6a2b6ae0754c47da814845ac2781e88dbb0afc031ab5509235787"
+      },
+      {
+        "path": "supabase/tests/customer_privacy_hold_concurrency.sql",
+        "sha256": "337b205fdef1fc770461e584b30af5bb803b0cada90cc8b0eb25623a411ef543"
+      }
+    ],
+    "holdProtocol": {
+      "checks": [
+        "AAL and current assignment checks refuse wrong initiators",
+        "canonical order integer bounds and closed ASCII values qualify",
+        "capability MAC purpose generation and literal binding refuse",
+        "current record facts bind fresh challenge namespace and exact committed resolution export",
+        "customer-only signed preparation projection and facts require no Auth or request origin",
+        "customer-scoped resolution preserves null origin and permanently prevents late projection reinsertion",
+        "event failure rolls back hold and intent with retryable original capability",
+        "historical exports survive closed customer while fresh mutation refuses",
+        "literal-bound intent is stable and not a saved hold",
+        "lost projection reply resolve delayed retry never reinserts a hold/event",
+        "native config keys and hold ledgers have no application-role table privileges",
+        "native paired-null constraint and signed current facts reject invented or rebound origin",
+        "native proof export",
+        "private protocol has no PUBLIC anon authenticated or service-role grants",
+        "projection creates exactly one fixed hold and review event",
+        "read RPC rejects wrong service proof purpose and corrupt native cached command",
+        "resolution checks current database role AAL and assignment before mutation",
+        "service capabilities and signed staff commands have separate narrow execute grants",
+        "signed Admin prepare and resolution preserve signer and both literal retry boundaries",
+        "witness-capability refusal is immutable and never creates a canonical hold or event"
+      ],
+      "nativeProofExportsVerified": 2,
+      "sha256": "40b715a2580ef4cdae3054387cfaba0ef5a5670d583546b5cec1885cf12c6a69"
+    },
+    "holdConcurrency": {
+      "checks": [
+        "protect key prevents cross-customer release reuse under repeatable read",
+        "release key prevents cross-customer protect reuse under repeatable read",
+        "uncommitted projection serializes before resolution",
+        "uncommitted resolution permanently blocks late projection reinsertion"
+      ],
+      "disconnected": true
+    },
+    "holdAuthorityExpiry": {
+      "checks": [
+        "refusal expiry is rechecked after an observed native lock wait"
+      ],
+      "disconnected": true
+    },
+    "holdCoordinator": {
+      "status": "passed",
+      "checks": [
+        "direct authenticated legacy review refuses all four hold mutations after migration five",
+        "an existing canonical hold without an intent remains intact and explicitly requires reconciliation",
+        "signed authenticated Admin prepare and real nonce/HMAC service reads compose with actual R2 and native SQLite",
+        "lost native projection reply reconciles its one committed hold/event without another transition",
+        "cancellation/replacement remains protected and a lost Admin resolution reply automatically exports the committed release",
+        "after fixture authorization/closed native state, delayed original projection and signed historical retries never recreate a hold/event",
+        "reopened native SQLite plus actual R2 history retain the same protected/released decision and native result",
+        "a witnessed authorization winner permanently refuses an unaccepted native intent without any canonical hold",
+        "actual Admin handler signed native prepare plus coordinator reconciles a lost projection reply with one hold/event and no browser proof export",
+        "actual Admin adapter recovers committed native resolution and verified release then refuses historical creation as a current saved hold",
+        "actual Admin adapter returns processing-started refusal without a canonical hold or false success",
+        "actual customer-only Admin hold predates signup or request, reconciles loss and survives SQLite reopen with no invented origin",
+        "later real request respects pre-request customer protection while unrelated customer proceeds; assignment and lost resolution preserve original null scope and one-shot outcome"
+      ],
+      "productionChanged": false,
+      "recoveryMeasurements": [
+        {
+          "label": "request hold after lost projection reply",
+          "attempts": [
+            {
+              "elapsedMs": 728,
+              "status": 503,
+              "code": "AUTHORITY_PENDING"
+            },
+            {
+              "elapsedMs": 2038,
+              "status": 200,
+              "code": null
+            }
+          ]
+        },
+        {
+          "label": "request resolution after lost native reply",
+          "attempts": [
+            {
+              "elapsedMs": 6265,
+              "status": 200,
+              "code": null
+            }
+          ]
+        },
+        {
+          "label": "request released history",
+          "attempts": [
+            {
+              "elapsedMs": 1898,
+              "outcome": "complete"
+            }
+          ]
+        },
+        {
+          "label": "historical request hold",
+          "attempts": [
+            {
+              "elapsedMs": 2184,
+              "status": 409,
+              "code": null
+            }
+          ]
+        },
+        {
+          "label": "authorization refusal",
+          "attempts": [
+            {
+              "elapsedMs": 2332,
+              "status": 409,
+              "code": null
+            }
+          ]
+        },
+        {
+          "label": "customer scope baseline history",
+          "attempts": [
+            {
+              "elapsedMs": 2014,
+              "outcome": "complete"
+            }
+          ]
+        }
+      ],
+      "customerScopeMeasurement": {
+        "historyRevision": 11,
+        "baselineScanMs": 2014,
+        "firstAttemptMs": 6331,
+        "firstAttemptStatus": 503,
+        "firstAttemptFailure": {
+          "stage": "authority_apply",
+          "code": "AUTHORITY_PENDING",
+          "message": "AUTHORITY_PENDING"
+        },
+        "firstAttemptReachedLostReply": false,
+        "retries": [
+          {
+            "elapsedMs": 3102,
+            "status": 503,
+            "failure": {
+              "stage": "authority_apply",
+              "code": "AUTHORITY_PENDING",
+              "message": "AUTHORITY_PENDING"
+            }
+          },
+          {
+            "elapsedMs": 2515,
+            "status": 200,
+            "failure": null
+          }
+        ],
+        "eventualLostReplyReached": true,
+        "resolutionRetries": [
+          {
+            "elapsedMs": 6790,
+            "status": 503,
+            "failure": {
+              "stage": "authority_release",
+              "code": "AUTHORITY_PENDING",
+              "message": "AUTHORITY_PENDING"
+            }
+          },
+          {
+            "elapsedMs": 1420,
+            "status": 200,
+            "failure": null
+          }
+        ]
+      },
+      "nonHoldProof": "synthetic register/cancel/freeze/authorize and native customer status setup only; not genuine erasure/Auth",
+      "r2": "actual isolated Miniflare R2 binding",
+      "witness": "actual Node SQLite using maintained witness adapter",
+      "transitions": 6,
+      "shutdown": {
+        "readyObserved": true,
+        "disposed": true,
+        "portRefused": true,
+        "ok": true,
+        "host": "127.0.0.1",
+        "port": 54913
+      }
+    },
+    "holdCloneDropped": true,
+    "clusterStopped": true,
+    "portRefused": true,
+    "restoredPlaintextRemoved": true
+  },
+  "review": {
+    "disposition": "APPROVED continued local qualification",
+    "remainingCriticalOrImportant": 0,
+    "freshFocusedCases": 9,
+    "additionalProbes": [
+      "Steady latency plus lost native projection reply completes once and original apply drives derived release.",
+      "Committed candidate deleted after SUBMIT before resumed CONFIRM returns AUTHORITY_INTEGRITY and zero transitions."
+    ]
+  },
+  "failedRuns": [
+    {
+      "receipt": "b495b0fe-38ac-4c5a-adc8-7a98936f818e",
+      "reason": "Owner backup passphrase environment not loaded; refused before restore.",
+      "cleanup": "passed"
+    },
+    {
+      "receipt": "d0919f71-1891-428a-b835-9ebbe649cbdf",
+      "reason": "Existing fixture assumed one retry must return200; pending503 retained exact command. Eight earlier composition checks passed; not a passing qualification.",
+      "originalConservation": "passed",
+      "ownedCleanup": "passed"
+    }
+  ],
+  "limits": [
+    "Existing 26 October archive, not a new production snapshot.",
+    "Restore excludes managed Vault entries and original ACL/owners; not managed privilege, Auth, Storage or hosted acceptance.",
+    "Migration transaction rollback only, not a committed downgrade or post-closure recovery safeguard.",
+    "Measured stable local history and synthetic6/8ms object delays only; no arbitrary latency/contention/growth capacity guarantee.",
+    "Nonce/current native proof, generation/head/seal/witness and complete final history checks remain. Full observed history is not atomic custody against deletion of previously read objects.",
+    "Non-hold register/freeze/authorize proofs and native setup remain synthetic, not executable erasure or all-writer freeze.",
+    "No provider/SQL activation, default authority configuration, main push, real-host acceptance or production promotion."
+  ],
+  "recovery": "Before activation revert only this scoped source slice using the feature parent f8f7f02d or preserved .tools/map019-phase-recovery-20261028/before copies. Do not reset unrelated dirty images or erase/rewrite immutable command identities/evidence. Disposable in-memory progress may be discarded; cold recovery reconstructs from current native facts, journal and witness. Native freeze/permit/restore and exact deployment/activation gates remain MAP-019."
+}

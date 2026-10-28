@@ -83,7 +83,8 @@ export function createCustomerPrivacyAdminHandler({ authorize = authorizeAdminRe
             return call.abortSignal ? call.abortSignal(scope.signal) : call
           })
           if (error) throw new Error(String(error.message || 'PRIVACY_COMMAND_UNAVAILABLE'))
-          return scope.io(() => adding ? holdAuthority.applyHold(data, { signal: scope.signal }) : holdAuthority.releaseHold(data, { signal: scope.signal }))
+          const options = { signal: scope.signal, deadlineAt: scope.deadlineAt }
+          return scope.io(() => adding ? holdAuthority.applyHold(data, options) : holdAuthority.releaseHold(data, options))
         }, { deadlineMs, signal: currentAdminRequestSignal() })
         if (adding && result?.currentState === 'resolved') return safeJson(res, 409, { error: { code: 'PRIVACY_HOLD_ALREADY_RESOLVED' } })
         if (adding && result?.currentState === 'refused') return safeJson(res, 409, { error: { code: 'PRIVACY_PROCESSING_STARTED' } })

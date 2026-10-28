@@ -270,3 +270,50 @@ Measured smaller candidate implementation review — **FAILED**: a generation-2 
 Bounded-read experiment disposition: local test/review and restored-schema run b6cb38a3 passed, but the measured 11-event scan was 2.052s versus 1.955s serial on the preceding local run, with the same retry pattern. This is one comparison, not a capacity conclusion. The prototype was removed; the verified original journal and tests were restored exactly. Retain the experiment and evidence under .tools/map019-bounded-reads-20261028/; the timeout/replay liveness problem remains open.
 
 Phase-only recovery review disposition: Skeptic, Constraint Guardian and User Advocate APPROVED bounded local implementation/testing. Arbiter APPROVED after accepting both Skeptic objections and their inherited-deadline/tail-reserve resolutions; no objection rejected or unresolved. The measured-envelope, observed-history versus atomic-snapshot, no completed cache, late-work/fence/deletion/identity and full composition/conservation gates remain binding. No implementation evidence or production authority follows. Subsequent owner address/profile steering is recorded in MAP-019 without discarding this approved recovery dependency.
+
+
+### 28 October phase-only recovery implementation (local qualification)
+
+The approved design is implemented locally in bounds.js, journal.js,
+native-holds.js and the existing Admin adapter. The absolute monotonic deadline
+is inherited by every nested proof/journal/native scope. Replay admits checked
+complete steps using measured step cost and reserves the latter half of the
+remaining budget. Only incomplete prefixes are published after an unchanged-head
+check while the scope is live; completed views are freshly replayed.
+
+The coordinator retains one exact export/method control-flow identity and phase
+(INITIAL/SUBMIT/CONFIRM, with derived release subphases), plus the derived release
+command hash. It retains no trusted native fact, completed authority view or
+receipt. Fresh native facts and a complete CONFIRM view still precede projection
+and read-back; release receipts come from that freshly replayed operation.
+Concurrent hold calls return pending rather than mutating the same slot. Process
+loss discards it and reconstructs through the normal protocol.
+
+Failed-first tests reproduce missing inherited-clock support, repeated slow
+replay and forty identical hold retries that never complete. Focused corrected
+tests cover steady6/8ms synthetic object latency, apply/release, derived release,
+resumed-generation fencing and shared preparation time. Independent review
+found no Critical/Important issue and additionally proved that deleting a
+committed candidate before resumed confirmation causes integrity refusal and no
+projection. Actual restored PostgreSQL/R2/SQLite qualification is still pending.
+
+The first composed run d0919f71 retained all eight earlier native coordinator
+checks but hit its outdated single-retry success assertion (503 vs200). This is
+a failed run, with original161table/49,717row/schema/data/exact-sequence hashes
+preserved and clone/cluster/loopback/runtime/plaintext cleanup verified. The
+fixture now records bounded exact-command retries without relaxing one-shot
+native outcome assertions. It has not yet passed. All current status and next
+actions remain MAP-019. No SQL/provider/hosted/activation authority follows.
+
+
+
+28 October qualification addendum: actual composed retry run47423d36 now PASSES,
+superseding only the pending status above.20native groups,4real-session races,
+1lock-wait expiry and13actual Postgres/R2/SQLite groups retain original full
+161table/49,717row/schema/data/exact-sequence conservation and verified owned
+cleanup. Final development exit0 includes142privacy/address cases; Vercel
+packaging3passes. Measured history11baseline2014ms; customer-only hold required
+6331ms pending,3102ms pending,2515ms success after real synthetic reply loss;
+resolution retries6790ms pending then1420ms success. No arbitrary latency,
+contention, provider custody/capacity, full native freeze or executable erasure
+claim follows. Evidence/pins/recovery: docs/acceptance/MAP019_PHASE_RECOVERY_20261028.md/json.

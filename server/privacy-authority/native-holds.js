@@ -122,10 +122,10 @@ export function createNativeHoldAuthority({ genesisId, databaseId, generation, p
           intent: context.intent, role: 'admin', principalId: c.payload.initiatorId, adminHoldAuthorized: true,
           holdIntentCommitted: f.state === 'pending', resolutionCommitted: f.state === 'resolved',
           protection: { ...c.payload, generation }, resolution: { ...c.payload, generation } }
-      }, { deadlineMs, signal: context.signal })
+      }, { deadlineMs, signal: context.signal, deadlineAt: context.deadlineAt })
     } })
   async function view(scope) {
-    const result = await scope.io(() => journal.reconcile({ signal: scope.signal }))
+    const result = await scope.io(() => journal.reconcile({ signal: scope.signal, deadlineAt: scope.deadlineAt }))
     if (result.state.generation !== generation || result.state.mode !== 'active') refuse('AUTHORITY_PENDING')
     return result.state
   }
@@ -133,21 +133,53 @@ export function createNativeHoldAuthority({ genesisId, databaseId, generation, p
     return Object.entries(state.operations).find(([_id, op]) => op.receipt.kind === 'authorize'
       && (f.actorId !== null && op.receipt.subject.actorId === f.actorId || op.receipt.subject.customerId === f.customerId))
   }
-  async function existing(state, f, e, scope) {
+  function existing(state, f, e) {
     const op = state.operations[e.export.command.operationId]
     if (!op || op.commandHash !== e.body.commandHash || op.receipt.outcome !== 'protected') refuse('AUTHORITY_INTEGRITY')
     let protection = state.protections[f.protectionId]
     if (f.state === 'projected' && protection?.state !== 'active') refuse('AUTHORITY_PENDING')
-    if (f.state === 'resolved' && protection?.state === 'active') {
-      await scope.io(() => journal.submit(f.releaseExport.command, f.releaseExport, { signal: scope.signal }))
-      protection = (await view(scope)).protections[f.protectionId]
-    }
     if (f.state === 'resolved' && protection?.state !== 'released') refuse('AUTHORITY_PENDING')
     return { receipt: f.creationReceipt, currentState: f.state }
   }
   async function transition(body, scope) {
     // An unsigned transport acknowledgement is deliberately ignored.
     await remote('transition_customer_privacy_hold_v1', await signed({ ...namespace, ...body, expiresAt: expires() }, scope), scope)
+  }
+  const optionsFor = scope => ({ signal: scope.signal, deadlineAt: scope.deadlineAt })
+  // One disposable exact-command control-flow slot. No completed state, fact or
+  // receipt is cached. Every resumed final phase reads native facts and history.
+  let continuation = null, commandBusy = false
+  function continued(method, input, options, action) {
+    if (commandBusy) refuse('AUTHORITY_PENDING')
+    commandBusy = true
+    return withAuthorityScope(async scope => {
+      const e = await exported(input, scope), identity = `${method}:${canonicalJson(e.export)}`
+      if (e.export.command.kind !== (method === 'apply' ? 'protect' : 'release_protection')) refuse()
+      scope.check()
+      if (continuation?.identity !== identity) continuation = { identity, phase: 'INITIAL', releaseHash: null }
+      const cursor = continuation
+      const phase = (next, releaseHash = cursor.releaseHash) => {
+        scope.check(); cursor.phase = next; cursor.releaseHash = releaseHash
+      }
+      try {
+        const result = await action(e, scope, cursor, phase)
+        scope.check(); continuation = null
+        return result
+      } catch (error) {
+        if (error.code !== 'AUTHORITY_PENDING') { scope.check(); continuation = null }
+        throw error
+      }
+    }, { deadlineMs, signal: options.signal, deadlineAt: options.deadlineAt }).finally(() => { commandBusy = false })
+  }
+  async function finishDerivedRelease(e, f, scope, cursor, phase) {
+    if (f.state !== 'resolved') refuse('AUTHORITY_PENDING')
+    if (cursor.releaseHash !== f.releaseCommandHash) refuse('AUTHORITY_INTEGRITY')
+    if (cursor.phase === 'RELEASE_SUBMIT') {
+      await scope.io(() => journal.submit(f.releaseExport.command, f.releaseExport, optionsFor(scope)))
+      phase('RELEASE_CONFIRM')
+    }
+    f = await current(e, scope)
+    return existing(await view(scope), f, e)
   }
   return {
     reconcile: options => journal.reconcile(options),
@@ -156,48 +188,76 @@ export function createNativeHoldAuthority({ genesisId, databaseId, generation, p
       return journal.submit(command, evidence, options)
     },
     applyHold(input, options = {}) {
-      return withAuthorityScope(async scope => {
-        const e = await exported(input, scope)
-        if (e.export.command.kind !== 'protect') refuse()
+      return continued('apply', input, options, async (e, scope, cursor, phase) => {
         for (let attempt = 0; attempt < 2; attempt++) {
-          let f = await current(e, scope), state = await view(scope), authorized = authorization(state, f)
-          if (f.state === 'refused') {
-            if (!authorized || f.refusalReceipt.authorizationId !== authorized[0] || f.refusalReceipt.authorizationHash !== authorized[1].commandHash) refuse('AUTHORITY_INTEGRITY')
-            return { receipt: f.refusalReceipt, currentState: 'refused' }
+          let f = await current(e, scope), state
+          if (cursor.phase.startsWith('RELEASE_')) return finishDerivedRelease(e, f, scope, cursor, phase)
+          if (cursor.phase === 'INITIAL') {
+            state = await view(scope)
+            const authorized = authorization(state, f)
+            if (f.state === 'refused') {
+              if (!authorized || f.refusalReceipt.authorizationId !== authorized[0] || f.refusalReceipt.authorizationHash !== authorized[1].commandHash) refuse('AUTHORITY_INTEGRITY')
+              return { receipt: f.refusalReceipt, currentState: 'refused' }
+            }
+            if (['projected', 'resolved'].includes(f.state)) {
+              if (f.state === 'resolved' && state.protections[f.protectionId]?.state === 'active') {
+                phase('RELEASE_SUBMIT', f.releaseCommandHash)
+                return finishDerivedRelease(e, f, scope, cursor, phase)
+              }
+              return existing(state, f, e)
+            }
+            if (authorized) {
+              await transition({ purpose: 'refuse_hold', intentId: f.intentId, protectionId: f.protectionId, nativeIntentHash: f.nativeIntentHash,
+                authorizationId: authorized[0], authorizationHash: authorized[1].commandHash }, scope)
+              f = await current(e, scope)
+              if (f.state !== 'refused') refuse('AUTHORITY_PENDING')
+              return { receipt: f.refusalReceipt, currentState: 'refused' }
+            }
+            phase('SUBMIT')
           }
-          if (['projected', 'resolved'].includes(f.state)) return existing(state, f, e, scope)
-          if (authorized) {
-            await transition({ purpose: 'refuse_hold', intentId: f.intentId, protectionId: f.protectionId, nativeIntentHash: f.nativeIntentHash,
-              authorizationId: authorized[0], authorizationHash: authorized[1].commandHash }, scope)
-            f = await current(e, scope)
-            if (f.state !== 'refused') refuse('AUTHORITY_PENDING')
-            return { receipt: f.refusalReceipt, currentState: 'refused' }
+          if (cursor.phase === 'SUBMIT') {
+            try { await scope.io(() => journal.submit(e.export.command, e.export, optionsFor(scope))) }
+            catch (error) { if (error.code === 'PROCESSING_STARTED') { phase('INITIAL'); continue }; throw error }
+            phase('CONFIRM')
           }
-          try { await scope.io(() => journal.submit(e.export.command, e.export, { signal: scope.signal })) }
-          catch (error) { if (error.code === 'PROCESSING_STARTED') continue; throw error }
           f = await current(e, scope); state = await view(scope)
-          if (['projected', 'resolved'].includes(f.state)) return existing(state, f, e, scope)
+          if (['projected', 'resolved'].includes(f.state)) {
+            if (f.state === 'resolved' && state.protections[f.protectionId]?.state === 'active') {
+              phase('RELEASE_SUBMIT', f.releaseCommandHash)
+              return finishDerivedRelease(e, f, scope, cursor, phase)
+            }
+            return existing(state, f, e)
+          }
           const protection = state.protections[f.protectionId]
           if (!equal(protection, { ...e.export.command.payload, state: 'active', release: null }) || f.state !== 'pending') refuse('AUTHORITY_PENDING')
           await transition({ purpose: 'project_hold', intentId: f.intentId, protectionId: f.protectionId, nativeIntentHash: f.nativeIntentHash }, scope)
           const confirmed = await current(e, scope)
           if (!['projected', 'resolved'].includes(confirmed.state)) refuse('AUTHORITY_PENDING')
-          return existing(state, confirmed, e, scope)
+          if (confirmed.state === 'resolved' && state.protections[confirmed.protectionId]?.state === 'active') {
+            phase('RELEASE_SUBMIT', confirmed.releaseCommandHash)
+            return finishDerivedRelease(e, confirmed, scope, cursor, phase)
+          }
+          return existing(state, confirmed, e)
         }
         refuse('AUTHORITY_PENDING')
-      }, { deadlineMs, signal: options.signal })
+      })
     },
     releaseHold(input, options = {}) {
-      return withAuthorityScope(async scope => {
-        const e = await exported(input, scope)
-        if (e.export.command.kind !== 'release_protection') refuse()
-        const f = await current(e, scope)
+      return continued('release', input, options, async (e, scope, cursor, phase) => {
+        let f = await current(e, scope)
         if (f.state !== 'resolved') refuse()
-        const decision = await scope.io(() => journal.submit(e.export.command, e.export, { signal: scope.signal }))
+        if (cursor.phase === 'INITIAL') phase('SUBMIT')
+        if (cursor.phase === 'SUBMIT') {
+          await scope.io(() => journal.submit(e.export.command, e.export, optionsFor(scope)))
+          phase('CONFIRM')
+        }
+        f = await current(e, scope)
         const state = await view(scope), protection = state.protections[f.protectionId]
         if (protection?.state !== 'released' || protection.release?.nativeResolutionHash !== f.resolutionHash) refuse('AUTHORITY_PENDING')
-        return { receipt: f.creationReceipt, currentState: 'resolved', decisionReceipt: decision.receipt }
-      }, { deadlineMs, signal: options.signal })
+        const operation = state.operations[e.export.command.operationId]
+        if (!operation || operation.commandHash !== e.body.commandHash || operation.receipt.outcome !== 'protection_released') refuse('AUTHORITY_INTEGRITY')
+        return { receipt: f.creationReceipt, currentState: 'resolved', decisionReceipt: operation.receipt }
+      })
     },
   }
 }

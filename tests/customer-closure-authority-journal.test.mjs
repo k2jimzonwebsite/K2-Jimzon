@@ -72,6 +72,29 @@ async function fixture(options = {}) {
 }
 const refuses = (promise, code) => assert.rejects(promise, error => error.code === code)
 
+test('stable slow replay yields validated prefixes before the deadline and eventually completes', async () => {
+  const f = await fixture()
+  const setup = f.journal()
+  for (let index = 0; index < 4; index++) {
+    const id = randomUUID()
+    await setup.submit(command('register', { actorId, requestId: id, receiptHash: 'b'.repeat(64) }))
+    await setup.submit(command('cancel', { actorId, requestId: id }))
+  }
+  const original = f.bucket.get
+  f.bucket.get = async key => {
+    if (/\/(commits|candidates|commands)\//.test(key)) await new Promise(resolve => setTimeout(resolve, 8))
+    return original(key)
+  }
+  const slow = f.journal({ deadlineMs: 180 })
+  let result, pending = 0
+  for (let retry = 0; retry < 14; retry++) {
+    try { result = await slow.reconcile(); break }
+    catch (error) { assert.equal(error.code, 'AUTHORITY_PENDING'); pending++ }
+  }
+  assert.ok(pending > 0)
+  assert.equal(result?.state.revision, 8)
+})
+
 test('normal requests never bootstrap an absent head or bypass an unqualified proof', async () => {
   const f = await fixture(); f.objects.delete(headKey)
   await refuses(f.journal().submit(register()), 'AUTHORITY_INTEGRITY')

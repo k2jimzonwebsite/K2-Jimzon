@@ -21,13 +21,13 @@ export function createJournal({ genesisId, bucket, witness, verifyCommand, maxPa
     hash: state.hash, generation: state.generation, mode: state.mode, revisionNonce: candidate ? candidate.revisionNonce : genesisId,
     eventKey: candidate ? eventKey(candidate) : null, parentHash: candidate ? candidate.parentHash : null })
 
-  async function bounded(operation, { signal } = {}) {
+  async function bounded(operation, { signal, deadlineAt } = {}) {
     return withAuthorityScope(async scope => {
     const core = createDecisionCore({ genesisId,
-      verifyCommand: (command, context, evidence) => scope.io(() => verifyCommand ? verifyCommand(command, { ...context, signal: scope.signal }, evidence) : null),
+      verifyCommand: (command, context, evidence) => scope.io(() => verifyCommand ? verifyCommand(command, { ...context, signal: scope.signal, deadlineAt: scope.deadlineAt }, evidence) : null),
       commandStore: { claim: (key, bytes) => putImmutable(scope, key, bytes) } })
     return operation(scope, core)
-    }, { deadlineMs, signal })
+    }, { deadlineMs, signal, deadlineAt })
   }
 
   async function read(scope, key) {
@@ -81,6 +81,15 @@ export function createJournal({ genesisId, bucket, witness, verifyCommand, maxPa
   async function scanPass(scope, core, scan, budget) {
     const head = scan.head.body
     while (true) {
+      if (!scan.pendingKeys.length && scan.listDone && scan.state.revision === head.revision) {
+        if (!same(head, headFor(scan.state, scan.lastCandidate)) || !scan.witnessed) refuse('AUTHORITY_INTEGRITY')
+        return true
+      }
+      // Admit one complete step on every retry. Later steps use observed cost
+      // and leave the latter half for fresh-head checks and finalization.
+      scope.check()
+      if ((budget.events || budget.pages) && performance.now() + budget.stepMs >= budget.replayUntil) return false
+      const stepStarted = performance.now()
       if (!scan.pendingKeys.length && !scan.listDone) {
         if (budget.pages === maxPages) return false
         let result
@@ -97,6 +106,7 @@ export function createJournal({ genesisId, bucket, witness, verifyCommand, maxPa
           scan.seenCursors.push(result.cursor); scan.cursor = result.cursor
         }
         budget.pages++
+        budget.stepMs = Math.max(budget.stepMs, performance.now() - stepStarted)
       }
       if (!scan.pendingKeys.length && !scan.listDone) continue
       const revision = scan.state.revision + 1
@@ -130,13 +140,14 @@ export function createJournal({ genesisId, bucket, witness, verifyCommand, maxPa
       scan.lastCandidate = candidate
       if (hasMarker) scan.pendingKeys.shift()
       budget.events++
+      budget.stepMs = Math.max(budget.stepMs, performance.now() - stepStarted)
     }
   }
 
   async function reconcile(scope, core) {
     if (scanBusy) refuse('AUTHORITY_PENDING')
     scanBusy = true
-    const budget = { pages: 0, events: 0 }
+    const budget = { pages: 0, events: 0, stepMs: 0, replayUntil: performance.now() + scope.remainingMs() / 2 }
     try {
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       const before = await readHead(scope)
@@ -152,7 +163,7 @@ export function createJournal({ genesisId, bucket, witness, verifyCommand, maxPa
       const after = await readHead(scope)
       if (before.etag !== after.etag || !same(before.body, after.body)) { progress = null; continue }
       if (failure) { progress = null; throw failure }
-      if (!complete) { progress = scan; refuse('AUTHORITY_PENDING') }
+      if (!complete) { scope.check(); progress = scan; refuse('AUTHORITY_PENDING') }
       let latestWitness
       try { latestWitness = await scope.io(() => witness.read()) }
       catch { refuse('AUTHORITY_PENDING') }

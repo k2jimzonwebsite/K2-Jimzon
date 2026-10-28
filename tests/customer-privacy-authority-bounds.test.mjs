@@ -20,3 +20,15 @@ test('a microtask chain cannot defer the elapsed deadline until after later I/O'
   }, { deadlineMs: 10 }))
   assert.equal(later, 0)
 })
+
+test('nested authority scopes inherit the original absolute deadline and expose checked remaining time', async () => {
+  await withAuthorityScope(async parent => {
+    assert.equal(typeof parent.remainingMs, 'function')
+    const end = performance.now() + 25; while (performance.now() < end) {}
+    await withAuthorityScope(async child => {
+      assert.equal(child.deadlineAt, parent.deadlineAt)
+      assert.ok(child.remainingMs() < 80)
+      assert.ok(child.remainingMs() <= parent.remainingMs() + 1)
+    }, { deadlineMs: 9000, signal: parent.signal, deadlineAt: parent.deadlineAt })
+  }, { deadlineMs: 100 })
+})

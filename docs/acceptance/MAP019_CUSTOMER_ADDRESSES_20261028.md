@@ -93,3 +93,13 @@ exist, retain saved data/columns and the initialized legacy-write guard while
 deactivating the new writer/UI if needed. Do not drop saved personal details or
 restore an unsafe old profile writer. No production deactivation packet has been
 applied. Unrelated modified historical images remain outside the source commit.
+
+
+Source publication: commit `f8f7f02dde7522091b11c60bbdcddfcc14dbad17` is
+on the existing GitHub feature branch, with normal hooks passing and remote ref
+verified. GitHub's combined commit status reports successful Vercel storefront
+and Admin preview builds; deployment dashboard links are retained in the JSON.
+The current Vercel connector returns403for the known K2 team and its suggested
+consent helper404; only another team appears in that connection. The preview
+status is therefore observed through GitHub, not direct Vercel metadata, and
+there is no real-host or production claim. No main push occurred.

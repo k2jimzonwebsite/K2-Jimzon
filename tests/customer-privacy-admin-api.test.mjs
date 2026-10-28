@@ -128,3 +128,17 @@ test('one deadline aborts native prepare and prevents late coordinator or fallba
  assert.equal(res.statusCode,503);assert.equal(nativeSignal.aborted,true);assert.equal(applies,0)
  finish({data:prepared});await new Promise(resolve=>setImmediate(resolve));assert.equal(applies,0);assert.equal(res.body.ok,undefined)
 })
+
+test('native preparation time remains inside the inherited coordinator deadline',async()=>{
+ let remaining
+ const handler=holdHandler({deadlineMs:120,rpc:async()=>{
+  const end=performance.now()+30;while(performance.now()<end){}
+  return {data:prepared}
+ },authority:{applyHold:async(_value,options)=>{
+  remaining=options.deadlineAt-performance.now()
+  assert.ok(remaining>0&&remaining<100,'coordinator cannot receive a reset120ms or9000ms clock')
+  return {currentState:'projected',receipt:{holdId:hold}}
+ }}})
+ const res=response();await handler(request({requestId:id,action:'add_hold',kind:'legal',reason:'Review needed'}),res)
+ assert.equal(res.statusCode,200);assert.ok(Number.isFinite(remaining))
+})

@@ -241,3 +241,77 @@ test('unconfigured non-hold proof remains denied rather than inheriting native h
   await refuses(f.authority.submitDecision(f.register(), { verified: true }), 'AUTHORITY_PROOF_REQUIRED')
   assert.equal(f.writes.length, 0)
 })
+
+test('stable slow hold retries progress through complete initial, submit and fresh confirmation scans', async () => {
+  const f = await fixture({ deadlineMs: 220 })
+  for (let index = 0; index < 4; index++) {
+    const requestId = index === 0 ? f.facts.requestId : randomUUID()
+    await f.authority.submitDecision(f.register(requestId))
+    await f.authority.submitDecision(f.command('cancel', { actorId: f.facts.actorId, requestId }))
+  }
+  const get = f.configuration.bucket.get
+  f.configuration.bucket.get = async key => {
+    if (/\/(commits|candidates|commands)\//.test(key)) await new Promise(resolve => setTimeout(resolve, 6))
+    return get(key)
+  }
+  const finish = async action => {
+    let pending = 0
+    for (let retry = 0; retry < 40; retry++) {
+      try { return { result: await action(), pending } }
+      catch (error) { assert.equal(error.code, 'AUTHORITY_PENDING'); pending++; await new Promise(resolve => setTimeout(resolve, 1)) }
+    }
+    assert.fail('Stable slow exact retry did not complete')
+  }
+  const applied = await finish(() => f.authority.applyHold(f.protect))
+  assert.ok(applied.pending > 0); assert.equal(applied.result.currentState, 'projected')
+  assert.equal(f.native.creations, 1)
+  const release = f.resolve(), released = await finish(() => f.authority.releaseHold(release))
+  assert.ok(released.pending > 0); assert.equal(released.result.currentState, 'resolved')
+  assert.equal(released.result.decisionReceipt.outcome, 'protection_released')
+  assert.equal(f.native.creations, 1)
+})
+
+test('a resumed confirmation still rejects a fence after the first call expired', async () => {
+  const f = await fixture({ deadlineMs: 90, customerOnly: true })
+  let unblock, entered
+  const waiting = new Promise(resolve => { unblock = resolve }), started = new Promise(resolve => { entered = resolve })
+  f.native.beforeRpc = async name => {
+    if (name === 'read_customer_privacy_hold_fact_v1' && f.native.calls.filter(value => value === name).length === 4) {
+      entered(); await waiting
+    }
+  }
+  const first = f.authority.applyHold(f.protect); await started
+  await refuses(first, 'AUTHORITY_PENDING'); unblock()
+  await new Promise(resolve => setTimeout(resolve, 5))
+  f.native.beforeRpc = null
+  const other = createJournal({ ...f.configuration, verifyCommand: (command, context) => ({
+    verified: true, projectRef, genesisId, generation: command.generation, purpose: command.kind,
+    commandHash: context.commandHash, intent: context.intent, principalId: command.payload.operatorId, role: 'operator',
+  }) })
+  await other.submit(f.command('fence', { operatorId: randomUUID(), nextGeneration: 2 }))
+  await refuses(f.authority.applyHold(f.protect), 'AUTHORITY_PENDING')
+  assert.equal(f.native.transitions, 0); assert.equal(f.native.creations, 0)
+})
+
+test('a lost native resolution resumes derived release under the same steady slow history', async () => {
+  const f = await fixture({ deadlineMs: 220, customerOnly: true })
+  await f.authority.applyHold(f.protect)
+  for (let index = 0; index < 4; index++) {
+    const actorId = randomUUID(), requestId = randomUUID()
+    await f.authority.submitDecision(f.command('register', { actorId, requestId, receiptHash: hash('synthetic history') }))
+    await f.authority.submitDecision(f.command('cancel', { actorId, requestId }))
+  }
+  f.resolve()
+  const get = f.configuration.bucket.get
+  f.configuration.bucket.get = async key => {
+    if (/\/(commits|candidates|commands)\//.test(key)) await new Promise(resolve => setTimeout(resolve, 6))
+    return get(key)
+  }
+  let result, pending = 0
+  for (let retry = 0; retry < 40; retry++) {
+    try { result = await f.authority.applyHold(f.protect); break }
+    catch (error) { assert.equal(error.code, 'AUTHORITY_PENDING'); pending++; await new Promise(resolve => setTimeout(resolve, 1)) }
+  }
+  assert.ok(pending > 0); assert.equal(result?.currentState, 'resolved'); assert.equal(f.native.creations, 1)
+  assert.equal(f.native.transitions, 1)
+})

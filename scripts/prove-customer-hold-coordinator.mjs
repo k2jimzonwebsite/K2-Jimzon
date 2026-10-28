@@ -93,6 +93,32 @@ export async function proveCustomerHoldCoordinator({ bin, env, work }) {
       const configuration = { ...cfg, bucket, witness, rpc, proofKey, executionKey, verifyOtherCommand }
       let authority = createNativeHoldAuthority(configuration)
       let loseResolutionReply = false, lastAdminFailure = null
+      receipt.recoveryMeasurements = []
+      async function finishAdmin(label, c, payload, operation) {
+        const attempts = []
+        for (let retry = 0; retry < 12; retry++) {
+          const started = performance.now(), result = await adminRoute(c, payload, operation)
+          attempts.push({ elapsedMs: Math.round(performance.now() - started), status: result.statusCode, code: lastAdminFailure?.code || null })
+          if (result.statusCode !== 503) { receipt.recoveryMeasurements.push({ label, attempts }); return result }
+        }
+        receipt.recoveryMeasurements.push({ label, attempts })
+        assert.fail(`Exact Admin retry did not complete: ${label}`)
+      }
+      async function finishAuthority(label, action) {
+        const attempts = []
+        for (let retry = 0; retry < 12; retry++) {
+          const started = performance.now()
+          try {
+            const result = await action(); attempts.push({ elapsedMs: Math.round(performance.now() - started), outcome: 'complete' })
+            receipt.recoveryMeasurements.push({ label, attempts }); return result
+          } catch (error) {
+            attempts.push({ elapsedMs: Math.round(performance.now() - started), outcome: error.code })
+            if (error.code !== 'AUTHORITY_PENDING') throw error
+          }
+        }
+        receipt.recoveryMeasurements.push({ label, attempts })
+        assert.fail(`Exact authority retry did not complete: ${label}`)
+      }
       const diagnosticAuthority = {
         async applyHold(...args) { try { return await authority.applyHold(...args) } catch (error) { lastAdminFailure = { stage: "authority_apply", code: error.code, message: error.message }; throw error } },
         async releaseHold(...args) { try { return await authority.releaseHold(...args) } catch (error) { lastAdminFailure = { stage: "authority_release", code: error.code, message: error.message }; throw error } },
@@ -192,7 +218,7 @@ export async function proveCustomerHoldCoordinator({ bin, env, work }) {
       const routePayload={requestId:routeContext.requestId,action:'add_hold',kind:'legal',reason:'Synthetic actual Admin adapter'}
       loseReply=true
       assert.equal((await adminRoute(routeContext,routePayload,routeKey)).statusCode,503)
-      const routeCreated=await adminRoute(routeContext,routePayload,routeKey)
+      const routeCreated=await finishAdmin('request hold after lost projection reply',routeContext,routePayload,routeKey)
       assert.equal(routeCreated.statusCode,200);assert.equal(routeCreated.body.result.currentState,'projected')
       const routeHold=routeCreated.body.result.holdId
       assert.equal(sql(`select count(*) from k2_private.customer_privacy_review_events where hold_id=${literal(routeHold)}::uuid`),'1')
@@ -200,23 +226,23 @@ export async function proveCustomerHoldCoordinator({ bin, env, work }) {
       const routeResolution={requestId:routeContext.requestId,action:'resolve_hold',holdId:routeHold,reason:'Synthetic adapter resolution'},routeResolutionKey=randomUUID()
       loseResolutionReply=true
       assert.equal((await adminRoute(routeContext,routeResolution,routeResolutionKey)).statusCode,503)
-      const routeReleased=await adminRoute(routeContext,routeResolution,routeResolutionKey)
+      const routeReleased=await finishAdmin('request resolution after lost native reply',routeContext,routeResolution,routeResolutionKey)
       assert.equal(routeReleased.statusCode,200);assert.equal(routeReleased.body.result.currentState,'resolved')
       assert.equal(sql(`select count(*) from k2_private.customer_privacy_review_events where hold_id=${literal(routeHold)}::uuid`),'2')
-      const routeState=(await authority.reconcile()).state
+      const routeState=(await finishAuthority('request released history',()=>authority.reconcile())).state
       assert.equal(Object.values(routeState.protections).find(p=>p.requestId===routeContext.requestId).state,'released')
-      const historical=await adminRoute(routeContext,routePayload,routeKey)
+      const historical=await finishAdmin('historical request hold',routeContext,routePayload,routeKey)
       assert.equal(historical.statusCode,409);assert.equal(historical.body.error.code,'PRIVACY_HOLD_ALREADY_RESOLVED')
       checks.push('actual Admin adapter recovers committed native resolution and verified release then refuses historical creation as a current saved hold')
       const refusedRouteKey=randomUUID(),refusedRoutePayload={requestId:refusedContext.requestId,action:'add_hold',kind:'security',reason:'Synthetic adapter cutoff'}
-      const routeRefused=await adminRoute(refusedContext,refusedRoutePayload,refusedRouteKey)
+      const routeRefused=await finishAdmin('authorization refusal',refusedContext,refusedRoutePayload,refusedRouteKey)
       assert.equal(routeRefused.statusCode,409);assert.equal(routeRefused.body.error.code,'PRIVACY_PROCESSING_STARTED')
       assert.equal(sql(`select count(*) from k2_private.customer_privacy_holds where customer_id=${literal(refusedContext.customerId)}::uuid`),'0')
       checks.push('actual Admin adapter returns processing-started refusal without a canonical hold or false success')
       const guest=sql("insert into public.customers(display_name,created_source) values('Synthetic customer before signup','website_guest') returning id")
       const guestContext={customerId:guest,adminId:first.adminId},guestKey=randomUUID()
       const guestPayload={customerId:guest,action:'add_customer_hold',kind:'security',reason:'Synthetic pre-request protection'}
-      const startedBaselineScan=performance.now(), baselineScan=await authority.reconcile()
+      const startedBaselineScan=performance.now(), baselineScan=await finishAuthority('customer scope baseline history',()=>authority.reconcile())
       receipt.customerScopeMeasurement={historyRevision:baselineScan.state.revision, baselineScanMs:Math.round(performance.now()-startedBaselineScan)}
       const registeredBefore=Object.keys(baselineScan.state.requests).length
       loseReply=true

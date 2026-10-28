@@ -1,9 +1,10 @@
 function pending() { return Object.assign(new Error('AUTHORITY_PENDING'), { code: 'AUTHORITY_PENDING' }) }
 
-export async function withAuthorityScope(operation, { deadlineMs = 9000, signal } = {}) {
-  if (!Number.isSafeInteger(deadlineMs) || deadlineMs < 1 || deadlineMs > 9000) throw new Error('COMMAND_INVALID')
+export async function withAuthorityScope(operation, { deadlineMs = 9000, signal, deadlineAt: inheritedDeadline } = {}) {
+  if (!Number.isSafeInteger(deadlineMs) || deadlineMs < 1 || deadlineMs > 9000
+    || inheritedDeadline !== undefined && !Number.isFinite(inheritedDeadline)) throw new Error('COMMAND_INVALID')
   if (signal?.aborted) throw pending()
-  const deadlineAt = performance.now() + deadlineMs
+  const deadlineAt = Math.min(performance.now() + deadlineMs, inheritedDeadline ?? Infinity)
   let expired = false, rejectBound
   const controller = new AbortController(), timeout = new Promise((_resolve, reject) => { rejectBound = reject })
   const cancel = () => { expired = true; controller.abort(); rejectBound(pending()) }
@@ -14,9 +15,10 @@ export async function withAuthorityScope(operation, { deadlineMs = 9000, signal 
     if (expired) throw pending()
   }
   timeout.catch(() => {}) // A pre-I/O check may reject before a race is attached.
-  const timer = setTimeout(cancel, deadlineMs)
+  const timer = setTimeout(cancel, Math.max(0, deadlineAt - performance.now()))
   signal?.addEventListener('abort', cancel, { once: true })
-  const scope = { signal: controller.signal, async io(action) {
+  const scope = { signal: controller.signal, deadlineAt, check,
+    remainingMs() { check(); return Math.max(0, deadlineAt - performance.now()) }, async io(action) {
     check()
     const value = await Promise.race([Promise.resolve().then(() => {
       check()
