@@ -17,7 +17,15 @@ function newSaved(owner,channel) {
 }
 const retainedLabels={excel_review:'Excel copies need review',backup_review:'Backup copies need review',transaction_retention_review:'Required transaction records are retained pending retention review',conversation_audit_review:'Conversation audit records need review',external_channel_review:'External channel copies need review'}
 const reasonLabels={open_order_or_payment:'An order or payment case is still open.',open_pasabuy:'A Pasabuy request is still open.',open_wholesale:'A Wholesale inquiry is still open.',active_hold:'A legal, refund, dispute or security hold needs review.',case_review:'A support case needs review.'}
-export default function CustomerPrivacy({account,offline,recoveryOnly=false}) {
+export default function CustomerPrivacy(props) {
+ if(import.meta.env.VITE_CUSTOMER_PRIVACY_ENABLED!=='true')return props.recoveryOnly?null:<section aria-labelledby="account-closure-title" className="mt-10 border-t border-line pt-8">
+  <h2 id="account-closure-title" className="font-serif text-2xl font-semibold text-navy">Privacy</h2>
+  <p className="mt-3 text-sm leading-6 text-navy-soft">For account closure or a privacy request, contact K2.</p>
+  <a className={`${secondary} mt-4`} href="/contact">Contact K2</a>
+ </section>
+ return <EnabledCustomerPrivacy {...props} />
+}
+function EnabledCustomerPrivacy({account,offline,recoveryOnly=false}) {
  const owner=account.session?.user?.id||null
  const [saved,setSaved]=useState(()=>readSaved(recoveryOnly?null:owner))
  const [receipt,setReceipt]=useState(null);const [pending,setPending]=useState(false);const [error,setError]=useState('')

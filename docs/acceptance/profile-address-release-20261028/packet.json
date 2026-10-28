@@ -1,0 +1,28 @@
+{
+  "mapItem": "MAP-019",
+  "project": "pixplcjqivlfflickobf",
+  "preparedAt": "2026-10-28T13:50:16.505Z",
+  "liveObservedAt": "2026-10-28T13:44:38.411Z",
+  "sourcePaths": [
+    {
+      "path": "supabase/migrations/20261027_customer_account_portfolio.sql",
+      "sha256": "705f776cac7aac988a85487dcd039a03022705012308bfb722f761c51b694cb9"
+    },
+    {
+      "path": "supabase/migrations/20261028_customer_delivery_addresses.sql",
+      "sha256": "4b3adbd3916c97711fe5feda75f651a8d8dcab38b2ca59930e949697fc28dfd1"
+    }
+  ],
+  "activation": {
+    "path": "docs/acceptance/profile-address-release-20261028/activate.sql",
+    "sha256": "4a662c94adc48a95b7b3bd68950a9d62570006efdc16a4358ee2bf729d4b4774",
+    "rehearsedPath": ".tools/map019-profile-release/activate.sql"
+  },
+  "deactivation": {
+    "path": "docs/acceptance/profile-address-release-20261028/deactivate.sql",
+    "sha256": "55ce13f569e4041b4ffefba9319cbd97ce1c3649ee9551aaf10b891927c78b67",
+    "rehearsedPath": ".tools/map019-profile-release/deactivate.sql"
+  },
+  "liveChanged": false,
+  "automatedDeletionEnabled": false
+}

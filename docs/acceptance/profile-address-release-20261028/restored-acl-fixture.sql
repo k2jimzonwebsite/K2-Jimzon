@@ -1,0 +1,4 @@
+revoke all on function k2_private.project_express_quote_v1(uuid) from public,anon,authenticated,service_role;
+revoke all on function k2_private.verify_guest_bff_request(text,bigint,uuid,text,text,text) from public,anon,authenticated,service_role;
+revoke all on function public.read_customer_account_settings_v1(bigint,uuid,text,text,text) from public,anon,authenticated,service_role;grant execute on function public.read_customer_account_settings_v1(bigint,uuid,text,text,text) to authenticated;
+revoke all on function public.save_customer_account_settings_v1(bigint,uuid,text,text,text) from public,anon,authenticated,service_role;grant execute on function public.save_customer_account_settings_v1(bigint,uuid,text,text,text) to authenticated;

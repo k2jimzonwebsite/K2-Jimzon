@@ -1,0 +1,90 @@
+{
+  "mapItem": "MAP-019",
+  "startedAt": "2026-10-28T13:53:57.130Z",
+  "status": "passed",
+  "checks": [
+    "Negative control detects an uncalled sequence counter change hidden by pg_sequences.",
+    "Existing encrypted archive identity/hash and isolated restore passed.",
+    "Rollback preserves complete restored schema, all selected tables/rows and exact sequence values/is_called, including after a refused transaction.",
+    "All 1 migrations applied together inside one transaction against the restored schema.",
+    "Exact profile/address packet, signed portfolio ownership/refusals, saved-address serial/two real races, replay refusal and committed data-retaining deactivation pass. No privacy migration installed."
+  ],
+  "productionChanged": false,
+  "limits": [
+    "Existing 26 October archive, not a new production snapshot.",
+    "Restore excludes managed Vault entries and original ACL/owners; not managed privilege, Auth, Storage or hosted acceptance.",
+    "Migration transaction rollback only, not a committed downgrade or post-closure recovery safeguard."
+  ],
+  "sources": [
+    {
+      "path": ".tools/map019-profile-release/activate.sql",
+      "sha256": "4a662c94adc48a95b7b3bd68950a9d62570006efdc16a4358ee2bf729d4b4774"
+    },
+    {
+      "path": "supabase/tests/customer_profile_release.sql",
+      "sha256": "fffd9025332ceeb3ce9701a9540167c307138a038dde3aff66155f4526bd2c49"
+    },
+    {
+      "path": "supabase/tests/customer_address_book_assertions.sql",
+      "sha256": "8b4b75baf86981218ca8026075e51bfd9a87eaec91e7c7b1e527d8606a7dbe2f"
+    },
+    {
+      "path": "supabase/tests/customer_address_book_concurrency.sql",
+      "sha256": "4ed7639c172b0018dd62e53e615e8f7d2a88ccb3473fde3345b774aa7132df58"
+    },
+    {
+      "path": ".tools/map019-profile-release/restored-acl-fixture.sql",
+      "sha256": "f0c9c40cba70d64427139639310e42cfc19b756808e51ddf002d871eae90236f"
+    },
+    {
+      "path": ".tools/map019-profile-release/deactivate.sql",
+      "sha256": "55ce13f569e4041b4ffefba9319cbd97ce1c3649ee9551aaf10b891927c78b67"
+    },
+    {
+      "path": ".tools/map019-profile-release/prepare.mjs",
+      "sha256": "09085483a07b1cbc4f56f090d199c5f5d10433c5d112599690c025e067f56c53"
+    }
+  ],
+  "mode": "profile-address-release-only",
+  "backup": "current-pixplcjqivlfflickobf-2026-10-26T060903948Z-b69d1e297447",
+  "restore": {
+    "backupId": "current-pixplcjqivlfflickobf-2026-10-26T060903948Z-b69d1e297447",
+    "verifiedAt": "2026-10-28T13:54:09.469Z",
+    "restoreVerified": true,
+    "publicRelations": 75,
+    "latestMigrationVersion": "20261025",
+    "excludedManagedEntries": 10,
+    "evidenceBoundary": "Application database in isolated PostgreSQL; managed Vault, Storage objects and provider settings are excluded."
+  },
+  "before": {
+    "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+    "tables": 161,
+    "rows": 49717,
+    "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+    "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+  },
+  "addressConcurrency": {
+    "checks": [
+      "simultaneous first saves: one complete profile/address winner, one conflict",
+      "simultaneous existing revision saves: one winner, no overwritten update"
+    ],
+    "disconnected": true
+  },
+  "profileRelease": {
+    "exactPacket": true,
+    "replayRefused": true,
+    "deactivationDataRetained": true,
+    "restoredAclFixture": true,
+    "deletionAbsent": true
+  },
+  "addressCloneDropped": true,
+  "after": {
+    "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+    "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+    "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+  },
+  "portRefused": true,
+  "clusterStopped": true,
+  "restoredPlaintextRemoved": true,
+  "completedAt": "2026-10-28T13:54:53.332Z"
+}

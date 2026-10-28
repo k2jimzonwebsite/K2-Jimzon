@@ -22,6 +22,8 @@ const env = {
   VITE_SUPABASE_PUBLISHABLE_KEY: 'fixture-publishable-key',
   VITE_GUEST_BFF_ENABLED: 'true',
   VITE_CUSTOMER_ACCOUNT_ENABLED: 'true',
+  // Closure fixtures opt in explicitly; production defaults to disabled.
+  VITE_CUSTOMER_PRIVACY_ENABLED: process.env.VITE_CUSTOMER_PRIVACY_ENABLED ?? 'true',
   VITE_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
   K2_ACCOUNT_UI_AUTH_STORAGE_KEY: authStorageKey,
   PLAYWRIGHT_ACCOUNT_BASE_URL: `http://127.0.0.1:${port}`,

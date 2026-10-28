@@ -27,6 +27,29 @@ test.beforeEach(async ({ page }) => {
 const expressActor = '10000000-0000-4000-8000-000000000001'
 const expressReference = 'WEB-ACCOUNTEXPRESS01'
 const expressStorageKey = `k2-express-acceptance-v1:${expressReference}`
+
+for (const width of [375, 1440]) test(`disabled account closure keeps settings available at ${width}`, async ({ page }) => {
+  test.skip(process.env.VITE_CUSTOMER_PRIVACY_ENABLED !== 'false', 'Runs against the disabled production capability.')
+  await page.setViewportSize({ width, height: 900 })
+  await seedExpressAccount(page, fakeJwt(expressActor))
+  await page.addInitScript(({ owner }) => localStorage.setItem(`k2-privacy-request-v1:${owner}`, JSON.stringify({ owner, requestId: '20000000-0000-4000-8000-000000000001', receiptToken: 'a'.repeat(43) })), { owner: expressActor })
+  await page.route('**/api/storefront/account/history', route => route.fulfill({ json: accountExpressHistory() }))
+  await page.route('**/api/storefront/account/settings', route => route.fulfill({ json: { ok: true, settings: { displayName: 'Elena Villanueva', deliveryAddress: '', notifyInApp: true, addressBook: { initialized: true, addresses: [], defaultAddressId: null, revision: 0 } }, notifications: [] } }))
+  await page.route('**/api/storefront/account/portfolio', route => route.fulfill({ json: { ok: true, portfolio: purchasePortfolio } }))
+  let privacyRequests = 0
+  await page.route('**/api/storefront/account/privacy', route => { privacyRequests++; return route.fulfill({ status: 404, json: { error: { code: 'NOT_FOUND' } } }) })
+  await page.goto('/account')
+  await expect(page.getByRole('region', { name: 'Delivery addresses', exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Save settings', exact: true })).toBeVisible()
+  await expect(page.getByText('For account closure or a privacy request, contact K2.', { exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Send closure verification code', exact: true })).toHaveCount(0)
+  expect(privacyRequests).toBe(0)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false)
+  const declineAnalytics = page.getByRole('button', { name: 'Decline', exact: true })
+  if (await declineAnalytics.count()) await declineAnalytics.click()
+  await page.getByRole('heading', { name: 'Privacy', exact: true }).scrollIntoViewIfNeeded()
+  await page.screenshot({ path: test.info().outputPath(`profile-release-${width}.png`), fullPage: true })
+})
 function accountUser(id) {
   return { id, aud: 'authenticated', role: 'authenticated', email: 'buyer@example.com',
     email_confirmed_at: new Date().toISOString(), app_metadata: {}, user_metadata: {}, created_at: new Date().toISOString() }

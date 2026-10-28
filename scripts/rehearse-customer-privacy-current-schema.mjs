@@ -23,18 +23,23 @@ const migrations = [
   'supabase/migrations/20261027_customer_privacy_admin.sql',
 ]
 const coordinatorProtocol = process.argv.includes('--hold-coordinator-protocol')
-const addressBookProtocol = process.argv.includes('--address-book-protocol')
+const profileRelease = process.argv.includes('--profile-release')
+const addressBookProtocol = process.argv.includes('--address-book-protocol') || profileRelease
 const writerProtocol = process.argv.includes('--writer-barrier-protocol')
 const writerMigration = 'supabase/migrations/20261028_customer_privacy_writer_barrier.sql'
 const writerAssertions = 'supabase/tests/customer_privacy_writer_barrier.sql'
 const writerConcurrency = 'supabase/tests/customer_privacy_writer_concurrency.sql'
 const addressMigration = 'supabase/migrations/20261028_customer_delivery_addresses.sql'
 if (addressBookProtocol) migrations.push(addressMigration)
+const profilePacket = 'docs/acceptance/profile-address-release-20261028/activate.sql'
+const profileFixture = 'docs/acceptance/profile-address-release-20261028/restored-acl-fixture.sql'
+const profileDeactivation = 'docs/acceptance/profile-address-release-20261028/deactivate.sql'
+if (profileRelease) migrations.splice(0, migrations.length, profilePacket)
 const holdProtocol = process.argv.includes('--hold-intent-protocol') || coordinatorProtocol
 if (addressBookProtocol && holdProtocol) throw new Error('QUALIFICATION_MODES_ARE_EXCLUSIVE')
 if (holdProtocol) migrations.push('supabase/migrations/20261027_customer_privacy_hold_intent.sql')
 if (coordinatorProtocol) migrations.push('supabase/migrations/20261027_customer_privacy_hold_authority.sql')
-const assertions = holdProtocol ? 'supabase/tests/customer_privacy_hold_intent.sql' : 'supabase/tests/customer_privacy_current_schema.sql'
+const assertions = profileRelease ? 'supabase/tests/customer_profile_release.sql' : holdProtocol ? 'supabase/tests/customer_privacy_hold_intent.sql' : 'supabase/tests/customer_privacy_current_schema.sql'
 const authorityAssertions = 'supabase/tests/customer_privacy_hold_authority.sql'
 const addressAssertions = 'supabase/tests/customer_address_book_assertions.sql'
 const addressConcurrency = 'supabase/tests/customer_address_book_concurrency.sql'
@@ -67,8 +72,8 @@ const receipt = { mapItem: 'MAP-019', startedAt: new Date().toISOString(), statu
     'Migration transaction rollback only, not a committed downgrade or post-closure recovery safeguard.'],
   sources: [...migrations, inventoryOnly ? inventoryFile : writerProtocol ? writerAssertions : assertions,
     ...(writerProtocol && fs.existsSync(path.join(root, writerConcurrency)) ? [writerConcurrency] : []),
-    ...(inventoryOnly ? ['tests/customer-privacy-writer-inventory.test.mjs'] : []), ...(addressBookProtocol ? [addressAssertions,addressConcurrency] : []), ...(coordinatorProtocol ? coordinatorSources : []), ...(holdProtocol ? [holdConcurrencyFile] : [])].map(file => ({ path: file, sha256: hash(fs.readFileSync(path.join(root, file))) })) }
-receipt.mode = inventoryOnly ? 'writer-catalog-inventory-only' : writerProtocol ? 'native-writer-barrier-protocol' : addressBookProtocol ? 'address-book-protocol' : coordinatorProtocol ? 'native-hold-coordinator-protocol' : holdProtocol ? 'native-hold-intent-protocol' : 'closure-compatibility'
+    ...(inventoryOnly ? ['tests/customer-privacy-writer-inventory.test.mjs'] : []), ...(addressBookProtocol ? [addressAssertions,addressConcurrency] : []), ...(profileRelease ? [profileFixture,profileDeactivation] : []), ...(coordinatorProtocol ? coordinatorSources : []), ...(holdProtocol ? [holdConcurrencyFile] : [])].map(file => ({ path: file, sha256: hash(fs.readFileSync(path.join(root, file))) })) }
+receipt.mode = profileRelease ? 'profile-address-release-only' : inventoryOnly ? 'writer-catalog-inventory-only' : writerProtocol ? 'native-writer-barrier-protocol' : addressBookProtocol ? 'address-book-protocol' : coordinatorProtocol ? 'native-hold-coordinator-protocol' : holdProtocol ? 'native-hold-intent-protocol' : 'closure-compatibility'
 const startupProbe = process.argv.includes('--prove-startup-recovery')
 let startAttempted = false, port, env
 fs.mkdirSync(work, { recursive: true })
@@ -151,9 +156,11 @@ try {
   const transaction = ['begin;', ...migrations.map(file => stripTransaction(fs.readFileSync(path.join(root, file), 'utf8'))),
     inventoryOnly ? fs.readFileSync(path.join(root, inventoryFile), 'utf8') : writerProtocol ? fs.readFileSync(path.join(root, writerAssertions), 'utf8') : holdProtocol ? assertionSql() :
       "select 'CURRENT_SCHEMA_MIGRATIONS_INSTALLED_IN_TRANSACTION';\n" + assertionSql(), 'rollback;'].join('\n')
+  // ACLs excluded by archive restore are a declared fixture, never live evidence.
+  const qualifiedTransaction = profileRelease ? transaction.replace('begin;', 'begin;\n' + fs.readFileSync(path.join(root, profileFixture), 'utf8')) : transaction
   let executionFailure
   try {
-    const output = run('psql', ['-X', inventoryOnly || holdProtocol ? '-qAt' : '-q', '-v', 'ON_ERROR_STOP=1'], { input: transaction })
+    const output = run('psql', ['-X', inventoryOnly || holdProtocol ? '-qAt' : '-q', '-v', 'ON_ERROR_STOP=1'], { input: qualifiedTransaction })
     if (inventoryOnly) {
       const inventory = JSON.parse(output.trim())
       fs.writeFileSync(path.join(work, 'writer-inventory.json'), JSON.stringify(inventory, null, 2) + '\n', { flag: 'wx' })
@@ -192,6 +199,7 @@ try {
       const cloneEnv = { ...env, PGDATABASE: clone }
       try {
         run('createdb', ['--template', database, clone])
+        if (profileRelease) run('psql', ['-X','-q','-v','ON_ERROR_STOP=1','-f',profileFixture], { env: cloneEnv })
         for (const file of migrations) run('psql', ['-X', '-q', '-v', 'ON_ERROR_STOP=1', '-f', file], { env: cloneEnv })
         if (writerProtocol) {
           const concurrent = run('psql', ['-X','-qAt','-v','ON_ERROR_STOP=1','-f',writerConcurrency], { env: cloneEnv })
@@ -201,6 +209,17 @@ try {
           const concurrent = run('psql', ['-X','-qAt','-v','ON_ERROR_STOP=1','-f',addressConcurrency], { env: cloneEnv })
           receipt.addressConcurrency = JSON.parse(concurrent.trim().split(/\r?\n/).at(-1))
           if (receipt.addressConcurrency.checks.length !== 2 || receipt.addressConcurrency.disconnected !== true) throw new Error('ADDRESS_CONCURRENCY_QUALIFICATION_FAILED')
+          if (profileRelease) {
+            const fingerprint = `select md5(coalesce((select jsonb_agg(to_jsonb(s) order by user_id)::text from k2_private.customer_account_settings s),'[]'))`
+            const cloneSql = statement => run('psql',['-X','-qAt','-v','ON_ERROR_STOP=1','-c',statement],{env:cloneEnv}).trim()
+            const saved = cloneSql(fingerprint)
+            let replayRefused = false
+            try { run('psql',['-X','-q','-v','ON_ERROR_STOP=1','-f',profilePacket],{env:cloneEnv}) } catch(error) { if(/K2_PROFILE_(RELEASE_ALREADY_PRESENT_OR_PRIVACY_ACTIVE|DEPENDENCY_DRIFT)/.test(String(error))) replayRefused=true; else throw error }
+            if(!replayRefused || cloneSql(fingerprint)!==saved)throw new Error('PROFILE_PACKET_REPLAY_NOT_SAFE')
+            run('psql',['-X','-q','-v','ON_ERROR_STOP=1','-f',profileDeactivation],{env:cloneEnv})
+            if(cloneSql(fingerprint)!==saved || cloneSql(`select has_function_privilege('authenticated','public.save_customer_account_address_book_v1(bigint,uuid,text,text,text)','EXECUTE') or has_function_privilege('authenticated','public.read_customer_portfolio_v1(bigint,uuid,text,text,text)','EXECUTE')`)!=='f')throw new Error('PROFILE_DEACTIVATION_NOT_DATA_RETAINING')
+            receipt.profileRelease={exactPacket:true,replayRefused:true,deactivationDataRetained:true,restoredAclFixture:true,deletionAbsent:true}
+          }
         } else {
         run('psql', ['-X', '-qAt', '-v', 'ON_ERROR_STOP=1'], { env: cloneEnv,
           input: 'create schema k2_hold_fixture;\n' + assertionSql().replaceAll('pg_temp.', 'k2_hold_fixture.') })
@@ -229,7 +248,7 @@ try {
   receipt.checks.push('Rollback preserves complete restored schema, all selected tables/rows and exact sequence values/is_called, including after a refused transaction.')
   if (executionFailure) throw executionFailure
   receipt.checks.push(`All ${migrations.length} migrations applied together inside one transaction against the restored schema.`)
-  receipt.checks.push(inventoryOnly ? 'Catalog metadata inventory captured without printing row values or source bodies; not complete writer qualification.' : writerProtocol ?
+  receipt.checks.push(profileRelease ? 'Exact profile/address packet, signed portfolio ownership/refusals, saved-address serial/two real races, replay refusal and committed data-retaining deactivation pass. No privacy migration installed.' : inventoryOnly ? 'Catalog metadata inventory captured without printing row values or source bodies; not complete writer qualification.' : writerProtocol ?
     'Private lock-entry primitives and real-session ordering/refusal/expiry qualify only the entry boundary; complete association guards/manifest/permit/restore remain required.' : holdProtocol ?
     'Native one-shot hold intent/projection/resolution, private grants and cross-language canonical/HMAC checks pass; no genuine Auth/journal/freeze qualification.' :
     'Synthetic account/contact/grant/settings/notification closure and repeated processing pass against original restored constraints/triggers.')
