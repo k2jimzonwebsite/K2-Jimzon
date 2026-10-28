@@ -1,0 +1,396 @@
+{
+  "item": "MAP-019",
+  "idea": "IDEA-20261027-02",
+  "date": "2026-10-28",
+  "status": "inactive-hold-coordinator-locally-qualified-full-goal-active",
+  "branch": "codex/customer-privacy-owner-decisions",
+  "baseCommit": "c630e7ebfa491c463c618c030e4222e544269f06",
+  "native": {
+    "runId": "495acbfe-eb68-4993-8bcb-cfc956ccd9fa",
+    "path": ".tools/privacy-current-schema/495acbfe-eb68-4993-8bcb-cfc956ccd9fa/receipt.json",
+    "sha256": "e46a13b8d61afdd7ef2cf295192c43dcf2a5449c608d628a411445b7d0c7ef6f",
+    "status": "passed",
+    "command": "node --env-file=.env.local scripts/rehearse-customer-privacy-current-schema.mjs --hold-coordinator-protocol",
+    "session": 39728,
+    "startExecution": "6c65e2",
+    "sourcePinsMatched": 17,
+    "serial": {
+      "checks": [
+        "AAL and current assignment checks refuse wrong initiators",
+        "canonical order integer bounds and closed ASCII values qualify",
+        "capability MAC purpose generation and literal binding refuse",
+        "current record facts bind fresh challenge namespace and exact committed resolution export",
+        "event failure rolls back hold and intent with retryable original capability",
+        "historical exports survive closed customer while fresh mutation refuses",
+        "literal-bound intent is stable and not a saved hold",
+        "lost projection reply resolve delayed retry never reinserts a hold/event",
+        "native config keys and hold ledgers have no application-role table privileges",
+        "native proof export",
+        "private protocol has no PUBLIC anon authenticated or service-role grants",
+        "projection creates exactly one fixed hold and review event",
+        "read RPC rejects wrong service proof purpose and corrupt native cached command",
+        "resolution checks current database role AAL and assignment before mutation",
+        "service capabilities and signed staff commands have separate narrow execute grants",
+        "signed Admin prepare and resolution preserve signer and both literal retry boundaries",
+        "witness-capability refusal is immutable and never creates a canonical hold or event"
+      ],
+      "nativeProofExportsVerified": 2,
+      "sha256": "2d44b8823f43f12a96d1babd0098b3966ae22353daf271d8b951e5a6fb1971a4"
+    },
+    "concurrent": {
+      "checks": [
+        "protect key prevents cross-customer release reuse under repeatable read",
+        "release key prevents cross-customer protect reuse under repeatable read",
+        "uncommitted projection serializes before resolution",
+        "uncommitted resolution permanently blocks late projection reinsertion"
+      ],
+      "disconnected": true
+    },
+    "expiry": {
+      "checks": [
+        "refusal expiry is rechecked after an observed native lock wait"
+      ],
+      "disconnected": true
+    },
+    "composition": {
+      "status": "passed",
+      "checks": [
+        "signed authenticated Admin prepare and real nonce/HMAC service reads compose with actual R2 and native SQLite",
+        "lost native projection reply reconciles its one committed hold/event without another transition",
+        "cancellation/replacement remains protected and a lost Admin resolution reply automatically exports the committed release",
+        "after fixture authorization/closed native state, delayed original projection and signed historical retries never recreate a hold/event",
+        "reopened native SQLite plus actual R2 history retain the same protected/released decision and native result",
+        "a witnessed authorization winner permanently refuses an unaccepted native intent without any canonical hold"
+      ],
+      "productionChanged": false,
+      "nonHoldProof": "synthetic register/cancel/freeze/authorize and native customer status setup only; not genuine erasure/Auth",
+      "r2": "actual isolated Miniflare R2 binding",
+      "witness": "actual Node SQLite using maintained witness adapter",
+      "transitions": 3,
+      "shutdown": {
+        "readyObserved": true,
+        "disposed": true,
+        "portRefused": true,
+        "ok": true,
+        "host": "127.0.0.1",
+        "port": 54635
+      }
+    },
+    "before": {
+      "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+      "tables": 161,
+      "rows": 49717,
+      "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+      "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+    },
+    "after": {
+      "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+      "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+      "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+    },
+    "cloneDropped": true,
+    "clusterStopped": true,
+    "portRefused": true,
+    "restoredPlaintextRemoved": true,
+    "archiveId": "current-pixplcjqivlfflickobf-2026-10-26T060903948Z-b69d1e297447",
+    "limits": [
+      "Existing 26 October archive, not a new production snapshot.",
+      "Restore excludes managed Vault entries and original ACL/owners; not managed privilege, Auth, Storage or hosted acceptance.",
+      "Migration transaction rollback only, not a committed downgrade or post-closure recovery safeguard."
+    ]
+  },
+  "runtime": {
+    "runId": "07f06509-a258-442f-a7f2-261b6b9b5ce5",
+    "path": ".tools/closure-authority-runs/07f06509-a258-442f-a7f2-261b6b9b5ce5/receipt.json",
+    "sha256": "ba314798c98412dd300243f21e0d00479fec291eb50362f46d196649ff77bf1f",
+    "status": "passed",
+    "command": "node scripts/rehearse-customer-closure-authority.mjs",
+    "session": 87234,
+    "startExecution": "2c4867",
+    "terminalExecution": "bd6930",
+    "checks": [
+      "normal request cannot bootstrap absent head",
+      "actual local R2 create-once and stale ETag CAS return null",
+      "qualified fixture proof and real SQLite witness compose; denied proof creates no decision",
+      "actual workerd deadline returns pending before immutable writes and identical healthy retry succeeds",
+      "serialized native Durable Object terminal race and exact receipt retry",
+      "full runtime dispose/restart preserves actual R2 and SQLite state",
+      "actual empty SQLite witness reconstructs from full R2 history",
+      "actual workerd bounded calls resume and cold restart repeats genesis before identical completion",
+      "actual local head rollback refuses against marker/witness and exact restoration reconciles",
+      "increasing-history local measurements recorded, not production capacity",
+      "v2 global protection survives origin cancellation and blocks replacement authorization",
+      "v2 protection persists in native SQLite and reconstructs from R2 after runtime/witness loss",
+      "v2 verified synthetic release preserves cancellation and late protection cannot use its historic outcome after authorization"
+    ],
+    "sourcePinsMatched": 9,
+    "shutdowns": [
+      {
+        "readyObserved": true,
+        "disposed": true,
+        "portRefused": true,
+        "ok": true,
+        "host": "127.0.0.1",
+        "port": 56557
+      },
+      {
+        "readyObserved": true,
+        "disposed": true,
+        "portRefused": true,
+        "ok": true,
+        "host": "127.0.0.1",
+        "port": 56583
+      },
+      {
+        "readyObserved": true,
+        "disposed": true,
+        "portRefused": true,
+        "ok": true,
+        "host": "127.0.0.1",
+        "port": 56595
+      },
+      {
+        "readyObserved": true,
+        "disposed": true,
+        "portRefused": true,
+        "ok": true,
+        "host": "127.0.0.1",
+        "port": 56651
+      }
+    ],
+    "timings": [
+      {
+        "revision": 4,
+        "reconciliationMs": 46
+      },
+      {
+        "revision": 8,
+        "reconciliationMs": 81
+      },
+      {
+        "revision": 16,
+        "reconciliationMs": 174
+      }
+    ],
+    "miniflareVersion": "4.20260730.0"
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "path": ".tools/map019-hold-coordinator-final-development-20261028.log",
+    "sha256": "3016e80f5fd065a84788ffdd114ab0f960d6f969b3f3094f3590ee39bef9bfe1",
+    "session": 24663,
+    "startExecution": "c42732",
+    "terminalExecution": "5d73ab",
+    "exitCode": 0,
+    "privacyToolCases": 112,
+    "unexpectedPublicGrants": 0,
+    "unexpectedAnonymousGrants": 0
+  },
+  "review": {
+    "agent": "hold_coordinator_final_review",
+    "criticalRemaining": 0,
+    "importantRemaining": 0,
+    "independentlyPassedRuntimeCases": 8,
+    "finalReviewExecution": "26c5af",
+    "resolved": [
+      "Timer starvation handled with elapsed checks and cancellation at I/O boundaries",
+      "Refusal expiry sampled after native locks",
+      "Committed resolution recovered and exported without another Admin action",
+      "Stale projected facts cannot claim an active released protection",
+      "Hung startup always reaches bounded cleanup",
+      "All direct fixture R2/body I/O bounded; injected hang reaches cleanup"
+    ]
+  },
+  "failedFirst": [
+    {
+      "execution": "6b1c84",
+      "reason": "Journal lacked propagated cancellation"
+    },
+    {
+      "execution": "8381d6",
+      "reason": "Native coordinator module not implemented"
+    },
+    {
+      "execution": "c40fec",
+      "reason": "Lost committed resolution and stale projected facts"
+    },
+    {
+      "execution": "1c6358",
+      "reason": "Synchronous/microtask starvation bypassed timer-only deadline"
+    },
+    {
+      "execution": "0fee92",
+      "reason": "Bounded startup operation wrapper not implemented"
+    },
+    {
+      "execution": "421305",
+      "reason": "Bounded fixture I/O helper not implemented",
+      "passingExecution": "92ea51"
+    }
+  ],
+  "historicalRuns": [
+    {
+      "runIdPrefix": "a9449e2e",
+      "reason": "Missing native current-record/signed wrapper boundary: intended initial red"
+    },
+    {
+      "runId": "ff535597-30d3-45cf-bcb6-ebf2864c473a",
+      "reason": "Expired refusal capability could mutate after a real lock wait; fixed by checking time after locks",
+      "path": ".tools/privacy-current-schema/ff535597-30d3-45cf-bcb6-ebf2864c473a/receipt.json",
+      "sha256": "7f4b3730b0ba0836a98e3e4feddd0de9df9aaa374cb3668cdb13dbefb4dcde51",
+      "status": "failed",
+      "schemaConserved": true,
+      "rowsConserved": true,
+      "exactSequencesConserved": true,
+      "cloneDropped": true,
+      "stopped": true,
+      "portRefused": true,
+      "plaintextRemoved": true
+    },
+    {
+      "runId": "c3f3f3e2-0498-4fbf-9ba4-620328bd42d7",
+      "reason": "First full native/R2/SQLite pass, before startup cleanup review",
+      "path": ".tools/privacy-current-schema/c3f3f3e2-0498-4fbf-9ba4-620328bd42d7/receipt.json",
+      "sha256": "34104ca6be005369197285d7c99c799d185caeaedc947d1a16cbf996e9cd1e9d",
+      "status": "passed",
+      "schemaConserved": true,
+      "rowsConserved": true,
+      "exactSequencesConserved": true,
+      "cloneDropped": true,
+      "stopped": true,
+      "portRefused": true,
+      "plaintextRemoved": true
+    },
+    {
+      "runId": "9def80ae-14d6-413a-a49a-85da1ada9412",
+      "reason": "Startup cleanup pass, before final direct fixture-I/O bounding",
+      "path": ".tools/privacy-current-schema/9def80ae-14d6-413a-a49a-85da1ada9412/receipt.json",
+      "sha256": "59a51d6efb10b7ef9c5b49b8aeb03388cecfbb33b1636446391abe76208529a6",
+      "status": "passed",
+      "schemaConserved": true,
+      "rowsConserved": true,
+      "exactSequencesConserved": true,
+      "cloneDropped": true,
+      "stopped": true,
+      "portRefused": true,
+      "plaintextRemoved": true
+    }
+  ],
+  "sources": [
+    {
+      "path": "supabase/migrations/20261027_customer_account_portfolio.sql",
+      "sha256": "705f776cac7aac988a85487dcd039a03022705012308bfb722f761c51b694cb9"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_automation.sql",
+      "sha256": "e3354448f8d2126e538782ba01513bcc40919af92f4b2ed36a408208840fe1e4"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_admin.sql",
+      "sha256": "686ab1ede2e5d770942996cc83d06ac809daa377bf5e182741b553ee9819c9bf"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_hold_intent.sql",
+      "sha256": "2612e44313ec2ce2c98ac1fbc14779eae73d28622c2d909b6cb6085cb9b9b79f"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_hold_authority.sql",
+      "sha256": "5e691c115df8c32613aa24d3f863e50245130e57d4a19efe2872993ecee70b8a"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_hold_intent.sql",
+      "sha256": "5d235e591f08aa8ee06ca1c1e6fce2fb666e5af44da1622063ab26be2e989dcc"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_hold_authority.sql",
+      "sha256": "a18f1c642a6a0641a5ace44b2c0ed2ffc78eb4ef91919708ff9d0fd6d05533b1"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_hold_authority_concurrency.sql",
+      "sha256": "1094aee47fb50b9bd2b3ff543335f5924d62c15da13a5957d17a805a2fc5277b"
+    },
+    {
+      "path": "scripts/prove-customer-hold-coordinator.mjs",
+      "sha256": "f821dd0d63559c5a455e19b82f5fa6c86a7aedbc853f2eb7dee25a98432ebae3"
+    },
+    {
+      "path": "server/privacy-authority/native-holds.js",
+      "sha256": "82543fe815e2a69cc760613954695678a226c9c97655e34b7bf2d6e3cbc22423"
+    },
+    {
+      "path": "server/privacy-authority/bounds.js",
+      "sha256": "6a248bf9135fe69751601a8dc036f19950bad985b0e3f752c036ab10b664a178"
+    },
+    {
+      "path": "server/privacy-authority/journal.js",
+      "sha256": "d67af8a886adce8cfe78a9c253906083fcd4a2563e97627ec6ab7fbef1e938a5"
+    },
+    {
+      "path": "server/privacy-authority/state.js",
+      "sha256": "daa4b5cddefcb6792bc8dd092e593d3bdccc8788bda61bf05209bf62f591e467"
+    },
+    {
+      "path": "server/privacy-authority/sqlite-witness.js",
+      "sha256": "0c617c6f31e08a9c776994dace68baf8e01d34098b28f6d822ba7e9fbfbe26cf"
+    },
+    {
+      "path": "scripts/lib/local-worker-runtime.mjs",
+      "sha256": "ee23a828e77c299455bf00bacd058305c6327728393ff55668d65d2ced4bdd42"
+    },
+    {
+      "path": ".tools/closure-authority-runtime/package-lock.json",
+      "sha256": "8b545e43dde6a2b6ae0754c47da814845ac2781e88dbb0afc031ab5509235787"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_hold_concurrency.sql",
+      "sha256": "337b205fdef1fc770461e584b30af5bb803b0cada90cc8b0eb25623a411ef543"
+    },
+    {
+      "path": "tests/fixtures/customer-closure-authority-worker.mjs",
+      "sha256": "540e52d1cb598b29dc02e2851bb36f646e046e292132174e115f6554a1947abc"
+    },
+    {
+      "path": "scripts/rehearse-customer-closure-authority.mjs",
+      "sha256": "a30da44658ff7341be80f7a28712f6931dba6d0a3513fbb30849239b39aff666"
+    },
+    {
+      "path": "tests/fixtures/customer-closure-authority-wrangler.toml",
+      "sha256": "5f81ecc554a96f4949e78a175f5cfa9fc4384bfe61b91ca45d0e0399b47ea0d0"
+    },
+    {
+      "path": "scripts/rehearse-customer-privacy-current-schema.mjs",
+      "sha256": "0803db9c4489d41c6565705a658baa9af13c65800b25974e8bfcaca1ddf584d5"
+    },
+    {
+      "path": "tests/customer-privacy-authority-bounds.test.mjs",
+      "sha256": "98cfec02a20f7acf8cddd728c01864bfc8e725e29219775299a4c467f711f3e0"
+    },
+    {
+      "path": "tests/customer-privacy-hold-coordinator.test.mjs",
+      "sha256": "aa9887cbf742e725cee91c39576ff3e024224ae89176b4700c008f477691defb"
+    },
+    {
+      "path": "tests/customer-closure-authority-journal.test.mjs",
+      "sha256": "663e981b930f0fcccef787db3ebb223df6f04bae409dd338e8bc80dc0c79003e"
+    },
+    {
+      "path": "tests/local-worker-runtime.test.mjs",
+      "sha256": "7e8f1b043e0b8894803957c0fe10af00fc876de967fcb745ab4c18b546b68028"
+    },
+    {
+      "path": "package.json",
+      "sha256": "4ec3b33f126ec1a08616c4f358c7c3781a6dce3e544e6e28d480d34ac147ea22"
+    }
+  ],
+  "limits": [
+    "Inactive source only. No production SQL, configured keys, subscription, Auth/provider settings, application activation, main push or deployment.",
+    "Native role/AAL proofs use synthetic fixture identities and role claims against real local Postgres. No genuine hosted Auth, browser-to-BFF or provider acceptance.",
+    "Actual local R2 and native SQLite compose with maintained hold proofs. Register/cancel/freeze/authorize and native customer closure are explicitly synthetic setup, not executable deletion permission.",
+    "Existing 26 October encrypted archive; no fresh production snapshot. Managed Vault entries, original ownership/ACLs, provider Auth/Storage and external copies are excluded.",
+    "Node elapsed-time and microtask regressions qualify host-observable boundaries only. Cloudflare Workers clocks advance after I/O; no hard wall-clock or CPU preemption/capacity claim.",
+    "No active BFF coordinator wiring, pre-request/customer-only hold integration, legacy-hold reconciliation, all-writer freeze, retrievable manifest, erasure permit or versioned restore suppression is qualified.",
+    "Retention periods remain OWNER-006 decisions. New private intent/operation/export/refusal records require explicit retention and recovery mapping. Full profile/settings/deletion goal remains MAP-019."
+  ],
+  "recovery": "No installed state to downgrade. Revert only this MAP-019 coordinator/bounds/fifth-migration/tool/test batch together after reconciling the dirty worktree; retain prior authority/native primitives and all historical receipts. Never replay fixture bootstrap, synthetic signer or closed installer against a provider. Failed local run: inspect its redacted receipt/owned exact clone and runtime shutdown, never infer a stopped server from observation timeout.",
+  "nextAction": "In MAP-019, finish pre-request/customer-only and existing canonical hold reconciliation, wire signed Admin hold actions through this authority and remove direct-hold bypasses; then complete native all-writer freeze/manifest/permit/restore suppression before provider/retention/activation gates."
+}

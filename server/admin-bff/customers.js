@@ -80,6 +80,8 @@ export async function readAdminCustomers(client) {
       const orders = ordersByCustomer.get(customer.id) || []
       const requests = pasabuyByCustomer.get(customer.id) || []
       const conversations = conversationsByCustomer.get(customer.id) || []
+      const unknownOrderCount = orders.filter(order => order.total_amount === null).length
+      const knownOrderValue = orders.reduce((sum, order) => sum + (order.total_amount === null ? 0 : Number(order.total_amount)), 0)
       return {
         id: customer.id,
         displayName: customer.display_name,
@@ -99,7 +101,9 @@ export async function readAdminCustomers(client) {
         })),
         metrics: metricsAvailable ? {
           orderCount: orders.length,
-          orderValue: orders.reduce((sum, order) => sum + Number(order.total_amount || 0), 0),
+          orderValue: unknownOrderCount ? null : knownOrderValue,
+          knownOrderValue,
+          unknownOrderCount,
           pasabuyCount: requests.length,
           conversationCount: conversations.length,
           unreadCount: conversations.reduce((sum, conversation) => sum + Number(conversation.unread_count || 0), 0),

@@ -18,6 +18,7 @@ import productMedia from '../../prepared-api/admin/product-media.js'
 import productMediaAssign from '../../prepared-api/admin/product-media/assign.js'
 import productMediaOrphans from '../../prepared-api/admin/product-media/orphans.js'
 import customers from '../../prepared-api/admin/customers.js'
+import customerPrivacy from '../../prepared-api/admin/customer-privacy.js'
 import fulfillment from '../../prepared-api/admin/fulfillment.js'
 import fulfillmentAssignBox from '../../prepared-api/admin/fulfillment/assign-box.js'
 import fulfillmentConfirm from '../../prepared-api/admin/fulfillment/confirm.js'
@@ -133,6 +134,7 @@ const ROUTES = new Map([
   ['product-media/assign', productMediaAssign],
   ['product-media/orphans', productMediaOrphans],
   ['customers', customers],
+  ['customer-privacy', customerPrivacy],
   ['fulfillment', fulfillment],
   ['fulfillment/assign-box', fulfillmentAssignBox],
   ['fulfillment/confirm', fulfillmentConfirm],
@@ -287,7 +289,7 @@ export const ADMIN_BFF_ROUTE_CONTROLS = Object.freeze(Object.fromEntries(
     const globeMethods = route === 'globe-cms' || route === 'delivery/customer-rates' || route === 'delivery/express-quote'
       ? Object.freeze({ POST: Object.freeze({ csrf: true, idempotency: true, rateLimit: 'database' }) })
       : undefined
-    const procurementMethods = route === 'procurement'
+    const procurementMethods = route === 'procurement' || route === 'customer-privacy'
       ? Object.freeze({ POST: Object.freeze({ csrf: true, idempotency: true, rateLimit: 'database' }) })
       : undefined
     const channelMethods = route === 'channels'

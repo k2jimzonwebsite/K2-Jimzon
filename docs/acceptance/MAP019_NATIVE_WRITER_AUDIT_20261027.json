@@ -1,0 +1,198 @@
+{
+  "item": "MAP-019",
+  "idea": "IDEA-20261027-02",
+  "date": "2026-10-27",
+  "status": "local-catalog-inventory-qualified-freeze-unimplemented",
+  "mode": "writer-catalog-inventory-only",
+  "actual": {
+    "relations": 39,
+    "routines": 98,
+    "lexicalWriteCandidates": 67,
+    "dynamicSqlCandidates": [
+      "guest_order_conversation_v1(bigint,uuid,text,text,text,text,text)"
+    ],
+    "relationNames": [
+      "auth.identities",
+      "auth.refresh_tokens",
+      "auth.sessions",
+      "auth.users",
+      "k2_private.customer_account_notifications",
+      "k2_private.customer_account_settings",
+      "k2_private.customer_delivery_rate_heads",
+      "k2_private.customer_delivery_rate_versions",
+      "k2_private.customer_privacy_holds",
+      "k2_private.customer_privacy_legacy_guards",
+      "k2_private.customer_privacy_requests",
+      "k2_private.customer_privacy_review_events",
+      "k2_private.customer_privacy_tombstones",
+      "k2_private.customer_privacy_worker_cooldowns",
+      "k2_private.express_delivery_acceptances",
+      "k2_private.express_delivery_context",
+      "k2_private.express_delivery_quotes",
+      "k2_private.guest_conversation_receipts",
+      "k2_private.order_delivery_snapshots",
+      "k2_private.order_payment_receipts",
+      "public.channel_identities",
+      "public.conversation_events",
+      "public.conversations",
+      "public.coupon_redemptions",
+      "public.customer_accounts",
+      "public.customer_claim_requests",
+      "public.customer_contact_points",
+      "public.customers",
+      "public.guest_access_grants",
+      "public.inventory_reservations",
+      "public.messages",
+      "public.order_request_events",
+      "public.order_request_items",
+      "public.order_requests",
+      "public.orders",
+      "public.packing_scan_events",
+      "public.pasabuy_requests",
+      "public.user_profiles",
+      "public.wholesale_inquiries"
+    ]
+  },
+  "run": {
+    "execution": "7157f1/638276",
+    "receipt": {
+      "mapItem": "MAP-019",
+      "startedAt": "2026-10-27T12:37:33.264Z",
+      "status": "passed",
+      "checks": [
+        "Negative control detects an uncalled sequence counter change hidden by pg_sequences.",
+        "Existing encrypted archive identity/hash and isolated restore passed.",
+        "Rollback preserves complete restored schema, all selected tables/rows and exact sequence values/is_called, including after a refused transaction.",
+        "All three migrations applied together inside one transaction against the restored schema.",
+        "Catalog metadata inventory captured without printing row values or source bodies; not complete writer qualification."
+      ],
+      "productionChanged": false,
+      "limits": [
+        "Existing 26 October archive, not a new production snapshot.",
+        "Restore excludes managed Vault entries and original ACL/owners; not managed privilege, Auth, Storage or hosted acceptance.",
+        "Migration transaction rollback only, not a committed downgrade or post-closure recovery safeguard."
+      ],
+      "sources": [
+        {
+          "path": "supabase/migrations/20261027_customer_account_portfolio.sql",
+          "sha256": "705f776cac7aac988a85487dcd039a03022705012308bfb722f761c51b694cb9"
+        },
+        {
+          "path": "supabase/migrations/20261027_customer_privacy_automation.sql",
+          "sha256": "e3354448f8d2126e538782ba01513bcc40919af92f4b2ed36a408208840fe1e4"
+        },
+        {
+          "path": "supabase/migrations/20261027_customer_privacy_admin.sql",
+          "sha256": "686ab1ede2e5d770942996cc83d06ac809daa377bf5e182741b553ee9819c9bf"
+        },
+        {
+          "path": "supabase/tests/customer_privacy_writer_inventory.sql",
+          "sha256": "f757c992146eae7cf618851ddf0e55fbd40dbc1957e6045b27a0f90865957360"
+        }
+      ],
+      "mode": "writer-catalog-inventory-only",
+      "backup": "current-pixplcjqivlfflickobf-2026-10-26T060903948Z-b69d1e297447",
+      "restore": {
+        "backupId": "current-pixplcjqivlfflickobf-2026-10-26T060903948Z-b69d1e297447",
+        "verifiedAt": "2026-10-27T12:38:04.258Z",
+        "restoreVerified": true,
+        "publicRelations": 75,
+        "latestMigrationVersion": "20261025",
+        "excludedManagedEntries": 10,
+        "evidenceBoundary": "Application database in isolated PostgreSQL; managed Vault, Storage objects and provider settings are excluded."
+      },
+      "before": {
+        "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+        "tables": 161,
+        "rows": 49717,
+        "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+        "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+      },
+      "inventory": {
+        "path": "writer-inventory.json",
+        "sha256": "d6239fe2e73685f0b819f49518f0f09eaab996f0486c11410f87624ea575f112",
+        "relations": 39,
+        "routines": 98
+      },
+      "after": {
+        "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+        "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+        "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+      },
+      "portRefused": true,
+      "clusterStopped": true,
+      "restoredPlaintextRemoved": true,
+      "completedAt": "2026-10-27T12:38:48.697Z"
+    },
+    "pin": {
+      "path": ".tools/privacy-current-schema/e3f7fd21-5c1f-4554-ae4c-b91a10305f99/receipt.json",
+      "sha256": "422f04e43ca977664de1af9b082c845a99b180bc630dfba314360efb5bbf08fb"
+    },
+    "metadataPin": {
+      "path": ".tools/privacy-current-schema/e3f7fd21-5c1f-4554-ae4c-b91a10305f99/writer-inventory.json",
+      "sha256": "d6239fe2e73685f0b819f49518f0f09eaab996f0486c11410f87624ea575f112"
+    }
+  },
+  "initial": {
+    "runId": "b85decde-dbfa-4408-9b5b-978f449df834",
+    "relations": 27,
+    "routines": 92,
+    "lexicalWriteCandidates": 66,
+    "pin": {
+      "path": ".tools/privacy-current-schema/b85decde-dbfa-4408-9b5b-978f449df834/receipt.json",
+      "sha256": "a945fc5fe7ac67c94e3ff0b5deeb4dc73de529286047396e7514f00312d3f58f"
+    },
+    "sourceStatus": "Historical narrower query; finalquery supersedes only relation scope"
+  },
+  "toolPins": [
+    {
+      "path": "scripts/rehearse-customer-privacy-current-schema.mjs",
+      "sha256": "472aa631b737d02a2e7ccb045c0fc5cbe67ed5f52924f297adb48d192299cf49"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_writer_inventory.sql",
+      "sha256": "f757c992146eae7cf618851ddf0e55fbd40dbc1957e6045b27a0f90865957360"
+    }
+  ],
+  "review": {
+    "agent": "/root/closure_state_review",
+    "disposition": "APPROVED bounded source/tool and expanded receipt only",
+    "materialFindings": 0,
+    "execution": "852d9f",
+    "sourcePinsVerified": 4
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "execution": "1fe9d8/ccbdd7",
+    "exitCode": 0,
+    "privacyToolPassed": 78,
+    "failed": 0,
+    "log": {
+      "path": ".tools/map019-native-writer-audit-development-20261027.log",
+      "sha256": "1ded8ad3bb9d34ad9da0649939d52847478fd4028e3c91fdf9a66aabec8f7052"
+    }
+  },
+  "findings": [
+    "Prepared privacy guards are INSERT-only for messages and conversation_events.",
+    "Contact guard UPDATE OF customer_id omits contact/verification field changes.",
+    "Selected-column guards are not universal reparent/update/delete barriers.",
+    "No privacy trigger listed for customers, profiles, settings, notifications, claims or channel identities.",
+    "Private receipt contents, delivery addresses/snapshots and real FKchild evidence require explicit protected/versioned field maps.",
+    "Direct privacy process and worker tick remain inactive independent-journal bypasses.",
+    "Auth lifecycle/provider isolation is not established by local catalog metadata."
+  ],
+  "limits": [
+    "Original owners and ACLs excluded by restore; role capabilities are local only.",
+    "Lexical routine-name matches include readers and can miss dynamic SQL, wrappers, extensions and provider writers.",
+    "No source body, row, contact, credential or payment value is emitted.",
+    "A listed trigger is not proof of an all-writer freeze barrier."
+  ],
+  "closureAssertionsExecuted": false,
+  "livePrivilegesObserved": false,
+  "completeWriterProof": false,
+  "freezeImplemented": false,
+  "productionChanged": false,
+  "fullGoalComplete": false,
+  "nextActionLocation": "MASTER_ACTION_PLAN.md / MAP-019",
+  "recovery": "Remove inventory SQL and runner inventory-only branches while retaining original rehearsal/restore logic. Reconcile only owned local cluster before checked-path plaintext removal. No provider rollback; never restore closed PII."
+}

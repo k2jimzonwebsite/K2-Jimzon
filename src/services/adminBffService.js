@@ -294,6 +294,14 @@ const ERROR_MESSAGES = {
   REFERENCE_PARENT_INVALID: 'This category parent is no longer valid. Refresh and review the hierarchy.',
   REFERENCE_BUSY: 'Reference creation is busy. Keep this request and retry the same change.',
   REFERENCE_COMMAND_UNAVAILABLE: 'Reference creation was not confirmed. Keep this request and retry the same change.',
+  PRIVACY_ASSIGNMENT_REQUIRED: 'A verified request is pending. Its assigned Admin must manage this hold in the request review.',
+  PRIVACY_STATE_CONFLICT: 'This request or customer changed. Refresh and review its current state.',
+  PRIVACY_HOLD_NOT_FOUND: 'This hold is no longer active for this customer. Refresh and review.',
+  PRIVACY_ACTOR_CHANGED: 'The signed-in Admin changed. Return to the original account before retrying this action.',
+  PRIVACY_AUTHORITY_UNAVAILABLE: 'The hold service is unavailable. Keep this saved action and retry it when the service is ready; an earlier attempt may already be recorded.',
+  PRIVACY_HOLD_ALREADY_RESOLVED: 'This saved hold was later resolved. Refresh the request to review its current state.',
+  PRIVACY_PROCESSING_STARTED: 'Closure processing has started. This hold was not added. Refresh the request to review its outcome.',
+  PRIVACY_HOLD_RECONCILIATION_REQUIRED: 'This hold needs reconciliation before it can be changed. Keep its recorded details and leave closure processing disabled.',
   ADMIN_SERVICE_UNAVAILABLE: 'The secure admin service is temporarily unavailable.',
   REQUEST_TIMEOUT: 'The secure admin request timed out. Refresh the record before trying again.',
 }
@@ -523,7 +531,7 @@ function inboxCommand(path, body, idempotencyKey) {
 // A write whose response never arrived may still have committed on the server.
 // These outcomes are uncertain, not clean failures, and must not be reported as
 // "not saved" — the record has to be reconciled before anything is sent again.
-export const UNCERTAIN_COMMAND_CODES = Object.freeze(['REQUEST_TIMEOUT', 'ADMIN_SERVICE_UNAVAILABLE'])
+export const UNCERTAIN_COMMAND_CODES = Object.freeze(['REQUEST_TIMEOUT', 'ADMIN_SERVICE_UNAVAILABLE', 'PRIVACY_AUTHORITY_UNAVAILABLE', 'PRIVACY_ACTOR_CHANGED'])
 
 export const UNCERTAIN_COMMAND_NOTICE = 'The Inbox did not confirm this command, so it may already be saved. Check the refreshed conversation before sending it again.'
 
@@ -780,6 +788,14 @@ export const releaseExpiredReservationsBff = (payload, key) => reservationComman
 
 export function getAdminCustomers(signal) {
   return adminRequest('/api/admin/customers', { signal })
+}
+
+export function getAdminCustomerPrivacy(cursor = null, scope = 'current', signal, customerId = '') {
+  return adminRequest(`/api/admin/customer-privacy?cursor=${encodeURIComponent(cursor || '')}&scope=${encodeURIComponent(scope)}&customerId=${encodeURIComponent(customerId)}`, { signal })
+}
+
+export function reviewAdminCustomerPrivacy(payload, idempotencyKey, expectedActorId) {
+  return adminRequest('/api/admin/customer-privacy', { method: 'POST', body: payload, csrf: true, idempotencyKey, expectedActorId })
 }
 
 export function retryProductEvidenceCleanupBff(cleanupId, idempotencyKey = crypto.randomUUID()) {

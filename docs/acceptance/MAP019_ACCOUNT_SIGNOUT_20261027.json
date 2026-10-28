@@ -1,0 +1,33 @@
+{
+  "mapItem": "MAP-019",
+  "ideaId": "IDEA-20261027-02",
+  "date": "2026-10-27",
+  "timeZone": "Asia/Singapore",
+  "state": "locally_verified_signout_slice_overall_goal_open",
+  "branch": "codex/customer-privacy-owner-decisions",
+  "baseHead": "c630e7ebfa491c463c618c030e4222e544269f06",
+  "previousChatId": "01a178d1-2679-79e3-b9a3-983a323bac2d",
+  "productionOrProviderChange": false,
+  "remoteRevocationVerified": false,
+  "deletionRecoverySafeguardImplemented": false,
+  "qualifiedSources": [
+    { "path": "src/hooks/useCustomerAccount.js", "sha256": "7d8b0247b913db1ddae3c2c985e3a38a7a1b8bd0ff2e3fa6249978869655e2e1" },
+    { "path": "src/views/CustomerAccount.jsx", "sha256": "c0cc33417337d33fd435da385f333d6fc3c9f527d421bdec565059d12751a515" },
+    { "path": "tests/customer-account-ui.spec.js", "sha256": "9f27c82a2a604765216b947a29981b800bfb81666595d6d1ccb539f51d647cd2" },
+    { "path": "scripts/test-customer-account-ui.mjs", "sha256": "b9da0eaf6ec3fb5ad39e4e338a60c4c7a620ae42f9ce05ed190c5beab6ba57e6" },
+    { "path": "playwright.account.config.js", "sha256": "002c3c5ee7041c91936baf0ae300af83a4e5c8fa9d928f7740212db57dd2b0cb" }
+  ],
+  "verification": {
+    "browser": { "command": "node scripts/test-customer-account-ui.mjs", "session": 32846, "exitCode": 0, "passed": 37, "failed": 0, "signOutCases": 10 },
+    "development": { "command": "npm run verify:development", "session": 45466, "exitCode": 0, "privacyNodeCases": 19, "routeControlGaps": 0 },
+    "independentReview": { "importantFindings": 2, "resolved": 2, "remainingImportantFindings": 0, "scope": "sign-out slice, source inspection" },
+    "failedFirstSessions": [71253, 30808],
+    "preservedIntermediateFailure": { "session": 14013, "passed": 9, "failed": 1, "cause": "ambiguous test alert locator; scoped before final passing suite" },
+    "capturesDirectory": "docs/acceptance/account-signout-20261027",
+    "captureCount": 8,
+    "viewports": [375, 1440],
+    "themes": ["light", "dark"]
+  },
+  "remainingWorkAuthority": "MASTER_ACTION_PLAN.md#map-019-complete-optional-customer-identity-and-continuity",
+  "recovery": "Reverse only the sign-out helpers/listeners/flow, notice and tests. Preserve prior dirty work. Never blindly clear a guard over an uncleared session or restore erased PII."
+}

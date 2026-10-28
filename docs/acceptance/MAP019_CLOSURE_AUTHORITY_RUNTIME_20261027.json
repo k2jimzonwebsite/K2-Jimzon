@@ -1,0 +1,198 @@
+{
+  "item": "MAP-019",
+  "idea": "IDEA-20261027-02",
+  "date": "2026-10-27",
+  "status": "local-runtime-qualified-full-goal-active",
+  "runtimeReceipt": {
+    "runId": "1cf3c293-9657-429b-9ef2-c62641d63724",
+    "scope": "local workerd R2/SQLite fixture; no production",
+    "status": "passed",
+    "checks": [
+      "normal request cannot bootstrap absent head",
+      "actual local R2 create-once and stale ETag CAS return null",
+      "qualified fixture proof and real SQLite witness compose; denied proof creates no decision",
+      "actual workerd deadline returns pending before immutable writes and identical healthy retry succeeds",
+      "serialized native Durable Object terminal race and exact receipt retry",
+      "full runtime dispose/restart preserves actual R2 and SQLite state",
+      "actual empty SQLite witness reconstructs from full R2 history",
+      "actual local head rollback refuses against marker/witness and exact restoration reconciles",
+      "increasing-history local measurements recorded, not production capacity"
+    ],
+    "timings": [
+      {
+        "revision": 4,
+        "reconciliationMs": 47
+      },
+      {
+        "revision": 8,
+        "reconciliationMs": 66
+      },
+      {
+        "revision": 16,
+        "reconciliationMs": 114
+      }
+    ],
+    "sourcePins": [
+      {
+        "path": "C:\\Users\\jerze\\K2 JImzon\\tests\\fixtures\\customer-closure-authority-worker.mjs",
+        "sha256": "1d7665d4fe14477eb83766ea0289c43c3acf20788e2614f951d60c5e2ce9aa51"
+      },
+      {
+        "path": "C:\\Users\\jerze\\K2 JImzon\\scripts\\rehearse-customer-closure-authority.mjs",
+        "sha256": "9ffcfcd5196ec0735c523e2d353e7393eb0c36c0ddc91a29594b473416a0baf2"
+      },
+      {
+        "path": "C:\\Users\\jerze\\K2 JImzon\\scripts\\lib\\local-worker-runtime.mjs",
+        "sha256": "17ab12547f46e77ab429b820052b04789f5f9328036dc2962dcf4efee9217de9"
+      },
+      {
+        "path": "C:\\Users\\jerze\\K2 JImzon\\tests\\fixtures\\customer-closure-authority-wrangler.toml",
+        "sha256": "1052d08afe65c5d4ad3bf8a722ae09c4df8b521d65b90df17e6a1e0b03b31b21"
+      },
+      {
+        "path": "C:\\Users\\jerze\\K2 JImzon\\.tools\\closure-authority-runtime\\package-lock.json",
+        "sha256": "8b545e43dde6a2b6ae0754c47da814845ac2781e88dbb0afc031ab5509235787"
+      },
+      {
+        "path": "C:\\Users\\jerze\\K2 JImzon\\server\\privacy-authority\\state.js",
+        "sha256": "ec256601cf6dfaac99c63922871daa333030b946bde34c670d72dfb82da3d0ec"
+      },
+      {
+        "path": "C:\\Users\\jerze\\K2 JImzon\\server\\privacy-authority\\journal.js",
+        "sha256": "87c206688a5e49162cbfe509122369734b0c976e5a551bd95c78772697286246"
+      },
+      {
+        "path": "C:\\Users\\jerze\\K2 JImzon\\server\\privacy-authority\\sqlite-witness.js",
+        "sha256": "4c60d7097f246722159736384f4acb258eb8ac25e01013caabc8e38fcb5121df"
+      }
+    ],
+    "miniflareVersion": "4.20260730.0",
+    "shutdowns": [
+      {
+        "readyObserved": true,
+        "disposed": true,
+        "portRefused": true,
+        "ok": true,
+        "host": "127.0.0.1",
+        "port": 55244
+      },
+      {
+        "readyObserved": true,
+        "disposed": true,
+        "portRefused": true,
+        "ok": true,
+        "host": "127.0.0.1",
+        "port": 55267
+      }
+    ],
+    "runtimeDisposed": true
+  },
+  "runtimeReceiptPin": {
+    "path": ".tools/closure-authority-runs/1cf3c293-9657-429b-9ef2-c62641d63724/receipt.json",
+    "sha256": "7fbd2f0878ab9a0086fc8ce38a5554370ecbb524f7c7ba3ff0bbe1bf7b6fe1a4"
+  },
+  "focusedCleanup": {
+    "command": "node --test tests/local-worker-runtime.test.mjs",
+    "execution": "51e32a",
+    "passed": 5,
+    "failed": 0
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "execution": "3fd951/5aec13",
+    "exitCode": 0,
+    "privacyAndToolTests": 69,
+    "failed": 0,
+    "log": {
+      "path": ".tools/map019-authority-runtime-development-20261027.log",
+      "sha256": "2fe62e5184417ae6e1584134540f69762391e89f1e49689fc58f77def51e1ca8"
+    }
+  },
+  "review": {
+    "agent": "/root/closure_state_review",
+    "disposition": "APPROVED local rehearsal only",
+    "critical": 0,
+    "important": 0,
+    "pinsIndependentlyVerified": 8,
+    "execution": "1af956",
+    "helperTests": 5
+  },
+  "historicalRuns": [
+    {
+      "runId": "44674285-426b-4bc9-b262-2ee1b79b61bf",
+      "status": "failed",
+      "reason": "fixture absent before implementation"
+    },
+    {
+      "runId": "9246f113-8011-4757-9255-a10bfdb4bbca",
+      "status": "failed",
+      "reason": "sandbox local runtime fetch denied"
+    },
+    {
+      "runId": "49b78136-4a4e-4cdc-92ae-851f35c0cba4",
+      "status": "failed",
+      "checks": 6,
+      "reason": "old bucket handle reused after runtime disposal; fixed reacquisition"
+    },
+    {
+      "runId": "ddf033eb-b8dd-43ca-b8ac-4d3a49c1ce0a",
+      "status": "passed",
+      "checks": 8,
+      "reason": "prior scope before cleanup-port/hung-proof additions"
+    }
+  ],
+  "wranglerSmoke": {
+    "version": "4.153.0",
+    "nestedMiniflare": "5.20261023.0-beta",
+    "nestedWorkerd": "1.20261023.1",
+    "mode": "dev --local",
+    "port": 8799,
+    "unmarkedStatus": 403,
+    "bootstrapStatus": 200,
+    "stateStatus": 200,
+    "revision": 0,
+    "firstSession": "88082",
+    "firstStopPortProof": "4a0029",
+    "initialWarning": "unread POST request stream after response; fixture body consumption fixed",
+    "successorSession": "77817",
+    "successorRequest": "042514",
+    "successorBootstrapStatus": 409,
+    "successorCode": "FIXTURE_ALREADY_BOOTSTRAPPED",
+    "successorStateStatus": 200,
+    "successorStop": "85f081",
+    "successorPortProof": "792e4b",
+    "successorPortRefused": true
+  },
+  "currentAdditionalPins": [
+    {
+      "path": "tests/local-worker-runtime.test.mjs",
+      "sha256": "0598d67f9c1480d0fd5da448de13baea12ca1c84decd36e6b82289a13ca2e948"
+    },
+    {
+      "path": "package.json",
+      "sha256": "cb4bc5c6fd4a47c2bc226a3c4a7635eebaebceeb14c4e028273f6a228a66c992"
+    }
+  ],
+  "supersedes": "Historical package.json pin in MAP019_CLOSURE_AUTHORITY_CORE_20261027.json only; three authority modules unchanged",
+  "noEnvironmentRead": true,
+  "remoteBindings": false,
+  "productionChanged": false,
+  "activeRouteWired": false,
+  "executionAllowed": false,
+  "fullGoalComplete": false,
+  "nextActionLocation": "MASTER_ACTION_PLAN.md / MAP-019",
+  "unqualified": [
+    "growing-history recovery bound and resumable scan",
+    "actual provider custody/bootstrap/keys and subscription",
+    "authenticated native proof/retrievable manifest",
+    "native freeze and all writers",
+    "versioned offline suppression including absent old rows",
+    "provider/Auth/Storage isolation and cleanup",
+    "supported scheduler and resumption",
+    "OWNER-006 retention",
+    "actual signup/code/re-registration/sign-out",
+    "real-host customer/staff acceptance",
+    "exact production authorization"
+  ],
+  "recovery": "Remove only runner/helper/fixture/config/test and added package entries before adoption; preserve authority source and previous work. Stop/probe any owned runtime before removing synthetic fixture files. Never restore closed PII."
+}

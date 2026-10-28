@@ -1,0 +1,120 @@
+{
+  "mapItem": "MAP-019",
+  "ideaIds": [
+    "IDEA-20261027-02",
+    "IDEA-20261027-03"
+  ],
+  "date": "2026-10-27",
+  "timeZone": "Asia/Singapore",
+  "goalState": "active_full_profile_settings_and_deletion_goal_not_complete",
+  "productionChanged": false,
+  "sources": [
+    {
+      "path": "scripts/rehearse-customer-privacy-current-schema.mjs",
+      "sha256": "fc83fa3b0a1d68f5319a42b91b1565bcc4866f969440549e85a302e50de2f41f"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_account_portfolio.sql",
+      "sha256": "705f776cac7aac988a85487dcd039a03022705012308bfb722f761c51b694cb9"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_automation.sql",
+      "sha256": "e3354448f8d2126e538782ba01513bcc40919af92f4b2ed36a408208840fe1e4"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_admin.sql",
+      "sha256": "686ab1ede2e5d770942996cc83d06ac809daa377bf5e182741b553ee9819c9bf"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_current_schema.sql",
+      "sha256": "a49b208571e664ec94cba5a155f6b752493a96529d3dc5a060fcfb19c978e1c9"
+    }
+  ],
+  "finalLocalQualification": {
+    "mapItem": "MAP-019",
+    "startedAt": "2026-10-27T09:33:33.621Z",
+    "status": "passed",
+    "checks": [
+      "Negative control detects an uncalled sequence counter change hidden by pg_sequences.",
+      "Existing encrypted archive identity/hash and isolated restore passed.",
+      "Rollback preserves complete restored schema, all selected tables/rows and exact sequence values/is_called, including after a refused transaction.",
+      "All three migrations applied together inside one transaction against the restored schema.",
+      "Synthetic account/contact/grant/settings/notification closure and repeated processing pass against original restored constraints/triggers."
+    ],
+    "productionChanged": false,
+    "limits": [
+      "Existing 26 October archive, not a new production snapshot.",
+      "Restore excludes managed Vault entries and original ACL/owners; not managed privilege, Auth, Storage or hosted acceptance.",
+      "Migration transaction rollback only, not a committed downgrade or post-closure recovery safeguard."
+    ],
+    "sources": [
+      {
+        "path": "supabase/migrations/20261027_customer_account_portfolio.sql",
+        "sha256": "705f776cac7aac988a85487dcd039a03022705012308bfb722f761c51b694cb9"
+      },
+      {
+        "path": "supabase/migrations/20261027_customer_privacy_automation.sql",
+        "sha256": "e3354448f8d2126e538782ba01513bcc40919af92f4b2ed36a408208840fe1e4"
+      },
+      {
+        "path": "supabase/migrations/20261027_customer_privacy_admin.sql",
+        "sha256": "686ab1ede2e5d770942996cc83d06ac809daa377bf5e182741b553ee9819c9bf"
+      },
+      {
+        "path": "supabase/tests/customer_privacy_current_schema.sql",
+        "sha256": "a49b208571e664ec94cba5a155f6b752493a96529d3dc5a060fcfb19c978e1c9"
+      }
+    ],
+    "backup": "current-pixplcjqivlfflickobf-2026-10-26T060903948Z-b69d1e297447",
+    "restore": {
+      "backupId": "current-pixplcjqivlfflickobf-2026-10-26T060903948Z-b69d1e297447",
+      "verifiedAt": "2026-10-27T09:33:51.455Z",
+      "restoreVerified": true,
+      "publicRelations": 75,
+      "latestMigrationVersion": "20261025",
+      "excludedManagedEntries": 10,
+      "evidenceBoundary": "Application database in isolated PostgreSQL; managed Vault, Storage objects and provider settings are excluded."
+    },
+    "before": {
+      "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+      "tables": 161,
+      "rows": 49717,
+      "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+      "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+    },
+    "after": {
+      "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+      "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+      "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+    },
+    "portRefused": true,
+    "clusterStopped": true,
+    "restoredPlaintextRemoved": true,
+    "completedAt": "2026-10-27T09:34:33.286Z"
+  },
+  "privateReceipt": ".tools/privacy-current-schema/d2d86625-bccd-4307-9254-a489bc82f205/receipt.json",
+  "development": {
+    "command": "npm run verify:development",
+    "execSession": 74169,
+    "exitCode": 0
+  },
+  "review": {
+    "importantFindings": 3,
+    "resolved": 3,
+    "remainingImportantFindings": 0,
+    "scope": "bounded source review, no reviewer runtime/provider action"
+  },
+  "providerObservations": {
+    "project": "pixplcjqivlfflickobf",
+    "signupEnabled": false,
+    "emailEnabled": true,
+    "phoneEnabled": false,
+    "emailTemplateHasCode": false,
+    "customSmtpEnabled": true,
+    "vercelPlan": "hobby",
+    "r2SubscriptionActivated": false,
+    "schedulingExtensionsInstalled": false,
+    "readOnlyExtensionReceipt": ".tools/privacy-provider-readiness-20261027.json"
+  },
+  "remainingWorkAuthority": "MASTER_ACTION_PLAN.md#map-019-complete-optional-customer-identity-and-continuity"
+}

@@ -15,7 +15,7 @@ async function sqlFiles(directory){
   }))).flat()
 }
 
-test('customer deletion remains fail-closed until retention policy and audited execution exist',async()=>{
+test('customer closure preserves canonical records and keeps unknown retention/external cleanup explicit',async()=>{
   const [identity,runbook,map,owners]=await Promise.all([
     readFile(path.join(root,'supabase/migrations/20260812_guest_account_identity_and_messaging.sql'),'utf8'),
     readFile(path.join(root,'docs/runbooks/CUSTOMER_DATA_RETENTION_AND_DELETION_RUNBOOK.md'),'utf8'),
@@ -34,6 +34,10 @@ test('customer deletion remains fail-closed until retention policy and audited e
   expect(allSql).not.toMatch(/references\s+public\.customers\s*\(id\)\s+on\s+delete\s+cascade/i)
   expect(allSql).not.toMatch(/delete\s+from\s+public\.customers\b/i)
   expect(STOREFRONT_BFF_ROUTES).not.toContain('account/delete')
+  expect(STOREFRONT_BFF_ROUTES).toContain('account/privacy')
+  const privacySql=await readFile(path.join(root,'supabase/migrations/20261027_customer_privacy_automation.sql'),'utf8')
+  for(const boundary of ['customer_privacy_tombstones','receipt_hash','proofVerified','provider_lease','transaction_retention_review','excel_review','backup_review'])expect(privacySql).toContain(boundary)
+  expect(privacySql).toContain("state='closed'")
   for(const evidence of ['Tier 0','BLOCKED by `OWNER-006`','must never solve retention by cascading deletion','Return `received` only after durable storage']) expect(runbook).toContain(evidence)
   expect(map).toContain('CUSTOMER_DATA_RETENTION_AND_DELETION_RUNBOOK.md')
   expect(owners).toContain('OWNER-006')

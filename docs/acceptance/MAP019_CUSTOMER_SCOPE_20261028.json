@@ -1,0 +1,87 @@
+{
+  "mapItem": "MAP-019",
+  "status": "local-partial-not-production",
+  "sources": [
+    {
+      "path": "server/privacy-authority/state.js",
+      "sha256": "83550d9bdfc5dab919c2636fefdd82c55037d3a026b3fbd3b463f996e6ee6d1f"
+    },
+    {
+      "path": "server/privacy-authority/native-holds.js",
+      "sha256": "d4171c0b59d9b97e83f98ac2a75770171fd3a74653ece74c10a184ef32ec5ac8"
+    },
+    {
+      "path": "server/privacy-authority/journal.js",
+      "sha256": "d67af8a886adce8cfe78a9c253906083fcd4a2563e97627ec6ab7fbef1e938a5"
+    },
+    {
+      "path": "server/admin-bff/customer-privacy.js",
+      "sha256": "e776f90508bf714bd7ee8a804fc961fd1b9f4943d5b9db3d1fee49ce3da85490"
+    },
+    {
+      "path": "src/views/admin/useRetainedFulfillmentCommand.js",
+      "sha256": "b58927a89bcbe5b88d632250b1528857bd7dc4b0a9b025a6d26cc8b440f78dda"
+    },
+    {
+      "path": "src/views/admin/CustomerPrivacyReview.jsx",
+      "sha256": "f9f1a7c9adbc06f9890640f80e2c8f34a51ecec22a7a6e8dd74420a923d4e855"
+    },
+    {
+      "path": "src/views/admin/CustomerPrivacyHolds.jsx",
+      "sha256": "586daface6c078661370f6382b49836b638522396f8eba88672a5cb043fd8f6f"
+    },
+    {
+      "path": "src/services/adminBffService.js",
+      "sha256": "180b523259dd3e09dbf0aa919e095d54151a8a7736c8855c874717ff190dae00"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_hold_intent.sql",
+      "sha256": "ab0e7f73abf556e8d1c9d2bb3189133a3800a092df056a52657f5d19a8e2a311"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_hold_authority.sql",
+      "sha256": "47fca296bae4472c83daae5b49d47c528a1e095eeae9decb02490fea846aaa76"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_hold_authority.sql",
+      "sha256": "ae55a3d11790ea53982e0190b267935c3be84ba4bb234f7f1ef1397ee45e13c7"
+    },
+    {
+      "path": "scripts/prove-customer-hold-coordinator.mjs",
+      "sha256": "77bbc73d157b119e06cbce0746fbe92f553fcc3e6e434870c085cfab8eaf9600"
+    },
+    {
+      "path": "tests/customer-privacy-hold-coordinator.test.mjs",
+      "sha256": "0175524ef56061bee81eff8436bf010c71922c27c8f8ece204d12222b0bfaa96"
+    },
+    {
+      "path": "tests/customer-closure-authority-protection.test.mjs",
+      "sha256": "438ac6aa81488e83e999746818731b38ce33e10edd1991cbdac5fd15a7413c08"
+    },
+    {
+      "path": "tests/customer-crm-ui.spec.js",
+      "sha256": "0cdf446be953ffbd612885b972c32f0da8ca21adfc513f712aaf049244eb8756"
+    }
+  ],
+  "nativeReceipt": {
+    "path": ".tools/privacy-current-schema/8544ccef-4f4e-4f06-8c44-5ca2c7a7fdf4/receipt.json",
+    "sha256": "2e6ef6b50ebe3c87ffb635840481de4f5e3d2cc7b2ef60fc7c25b444e36d9d05",
+    "status": "passed",
+    "limits": "Owned local restored archive and synthetic non-hold proofs; not genuine Auth, erasure or hosted acceptance."
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "exitCode": 0,
+    "privacyToolCases": 126
+  },
+  "browser": {
+    "cases": 9,
+    "method": "Eight passed in the isolated acceptance suite; the ninth passed separately after selecting its intended 375px mobile viewport. Changed-Admin retry and create/resolve are included."
+  },
+  "review": {
+    "unsafeScanReduction": "Rejected after fence race; authority files restored to pre-edit SHA-256. Regression passes.",
+    "liveness": "Sustained slow I/O can repeatedly discard replay progress; unresolved and blocks activation."
+  },
+  "productionChanged": false,
+  "recovery": "Scoped pre-edit copies are under .tools/map019-customer-scope-cb50ce56-deeb-4969-99b3-f60c9d15b3d1 and .tools/map019-scan-reduction-20261028; preserve earlier and unrelated dirty work."
+}

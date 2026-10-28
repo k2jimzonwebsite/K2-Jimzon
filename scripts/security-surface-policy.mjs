@@ -1,4 +1,7 @@
 export const EXPECTED_ANON_FUNCTIONS = Object.freeze([
+  // Signed high-entropy closure receipt recovery only without auth.uid(); all
+  // mutations additionally require the original customer Auth identity/proof.
+  'public.customer_privacy_command_v1(bigint,uuid,text,text,text)',
   'public.get_public_product_stock()',
   // Explicitly eligible published Website variants only; no stock or write authority.
   'public.read_storefront_product_families_v1(text[])',

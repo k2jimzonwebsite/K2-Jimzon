@@ -11,8 +11,8 @@ export function useRetainedFulfillmentCommand(send, retrySafe = true, recordLabe
   const [uncertain, setUncertain] = useState(false)
   const [error, setError] = useState('')
   useEffect(() => {
-    const current = { active: true, busy: false, payload: null,
-      session: createRetainedOperationSession((payload, key) => sender.current(payload, key)) }
+    const current = { active: true, busy: false, payload: null, actor: undefined }
+    current.session = createRetainedOperationSession((payload, key) => sender.current(payload, key, current.actor))
     runtime.current = current
     return () => { current.active = false; current.session.dispose() }
   }, [])
@@ -23,25 +23,27 @@ export function useRetainedFulfillmentCommand(send, retrySafe = true, recordLabe
     window.addEventListener('beforeunload', guard)
     return () => window.removeEventListener('beforeunload', guard)
   }, [locked])
-  const run = async payload => {
+  const run = async (payload, actor) => {
     const current = runtime.current
     if (!current?.active || current.busy || (current.uncertain && !retrySafe)) return null
     current.busy = true
-    current.payload ??= payload
+    if (current.payload === null) { current.payload = payload; current.actor = actor }
     setBusy(true); setError('')
     let result
     try { result = await current.session.run(current.payload) }
     catch { result = { ok: false, code: 'ADMIN_SERVICE_UNAVAILABLE' } }
     if (!current.active) return null
-    const unknown = commandOutcomeIsUncertain(result) || ['FULFILLMENT_COMMAND_UNAVAILABLE', 'PROCUREMENT_COMMAND_UNAVAILABLE', 'COUPON_COMMAND_UNAVAILABLE', 'WHOLESALE_COMMAND_UNAVAILABLE', 'PRODUCT_MEDIA_ASSIGNMENT_UNAVAILABLE', 'PRODUCT_MEDIA_CLEANUP_PENDING', 'COMMAND_IN_PROGRESS'].includes(result?.code)
+    const unknown = commandOutcomeIsUncertain(result) || ['FULFILLMENT_COMMAND_UNAVAILABLE', 'PROCUREMENT_COMMAND_UNAVAILABLE', 'COUPON_COMMAND_UNAVAILABLE', 'WHOLESALE_COMMAND_UNAVAILABLE', 'PRIVACY_COMMAND_UNAVAILABLE', 'PRODUCT_MEDIA_ASSIGNMENT_UNAVAILABLE', 'PRODUCT_MEDIA_CLEANUP_PENDING', 'COMMAND_IN_PROGRESS'].includes(result?.code)
     current.uncertain = unknown
     setUncertain(unknown)
     setError(unknown
       ? retrySafe
-        ? 'This command may already be saved. Keep these details and retry the same command to retrieve its recorded result.'
+        ? result?.code === 'PRIVACY_ACTOR_CHANGED'
+          ? 'The signed-in Admin changed. Return to the original account and retry the saved action.'
+          : 'This command may already be saved. Keep these details and retry the same command to retrieve its recorded result.'
         : `This command may already be saved. Close this form and reconcile the ${recordLabel} before making another change. Safe receipt retry requires the protected workflow.`
       : result?.ok ? '' : result?.error || 'The command was not accepted. Review the details before trying again.')
-    if (!unknown) current.payload = null
+    if (!unknown) { current.payload = null; current.actor = undefined }
     current.busy = false; setBusy(false)
     return result
   }

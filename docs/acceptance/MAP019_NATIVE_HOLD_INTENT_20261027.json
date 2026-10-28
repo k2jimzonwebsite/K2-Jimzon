@@ -1,0 +1,267 @@
+{
+  "item": "MAP-019",
+  "idea": "IDEA-20261027-02",
+  "date": "2026-10-27",
+  "status": "inactive-native-hold-primitives-locally-qualified-full-goal-active",
+  "branch": "codex/customer-privacy-owner-decisions",
+  "baseCommit": "c630e7ebfa491c463c618c030e4222e544269f06",
+  "native": {
+    "rawReceiptPath": ".tools/privacy-current-schema/078d496b-69fc-476e-8bfa-157e7c92f985/receipt.json",
+    "serial": {
+      "checks": [
+        "AAL and current assignment checks refuse wrong initiators",
+        "canonical order integer bounds and closed ASCII values qualify",
+        "capability MAC purpose generation and literal binding refuse",
+        "event failure rolls back hold and intent with retryable original capability",
+        "historical exports survive closed customer while fresh mutation refuses",
+        "literal-bound intent is stable and not a saved hold",
+        "lost projection reply resolve delayed retry never reinserts a hold/event",
+        "native config keys and hold ledgers have no application-role table privileges",
+        "native proof export",
+        "private protocol has no PUBLIC anon authenticated or service-role grants",
+        "projection creates exactly one fixed hold and review event",
+        "resolution checks current database role AAL and assignment before mutation"
+      ],
+      "nativeProofExportsVerified": 2,
+      "sha256": "60c74b8da9effd0da4efc6b8e043ba916f77f10b488d07e10b0c6d8d5e2c23c5"
+    },
+    "cloneDropped": true,
+    "before": {
+      "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+      "tables": 161,
+      "rows": 49717,
+      "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+      "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+    },
+    "concurrent": {
+      "checks": [
+        "protect key prevents cross-customer release reuse under repeatable read",
+        "release key prevents cross-customer protect reuse under repeatable read",
+        "uncommitted projection serializes before resolution",
+        "uncommitted resolution permanently blocks late projection reinsertion"
+      ],
+      "disconnected": true
+    },
+    "limits": [
+      "Existing 26 October archive, not a new production snapshot.",
+      "Restore excludes managed Vault entries and original ACL/owners; not managed privilege, Auth, Storage or hosted acceptance.",
+      "Migration transaction rollback only, not a committed downgrade or post-closure recovery safeguard."
+    ],
+    "terminalExecution": "bde6e9",
+    "session": 83804,
+    "mode": "native-hold-intent-protocol",
+    "portRefused": true,
+    "execution": "9fb49a",
+    "after": {
+      "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+      "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+      "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+    },
+    "rawReceiptSha256": "7a29939acf300a6ddf173c8e3751c6e495889a79fffd7b66c2f37be69ca8536c",
+    "status": "passed",
+    "exitCode": 0,
+    "runId": "078d496b-69fc-476e-8bfa-157e7c92f985",
+    "command": "node --env-file=.env.local scripts/rehearse-customer-privacy-current-schema.mjs --hold-intent-protocol",
+    "restoredPlaintextRemoved": true,
+    "clusterStopped": true
+  },
+  "historicalRuns": [
+    {
+      "receiptSha256": "bdf0738ae3dd5e887b3822d8cc5e455815678d6f2b63f0b1d3833c993e0597a7",
+      "portRefused": true,
+      "plaintextRemoved": true,
+      "schemaConserved": true,
+      "status": "failed",
+      "runId": "ff449751-d76b-415d-a681-e015d23be71c",
+      "rowsConserved": true,
+      "receiptPath": ".tools/privacy-current-schema/ff449751-d76b-415d-a681-e015d23be71c/receipt.json",
+      "exactSequencesConserved": true,
+      "reason": "expected missing implementation",
+      "terminalExecution": "2c22a2",
+      "stopped": true
+    },
+    {
+      "receiptSha256": "97a9cc66f185db67ab8da376b5c38447e2c1d1672951671685b62852688573e8",
+      "portRefused": true,
+      "plaintextRemoved": true,
+      "schemaConserved": true,
+      "status": "failed",
+      "runId": "15583e70-a889-4c3a-ae7d-352d635e3242",
+      "rowsConserved": true,
+      "receiptPath": ".tools/privacy-current-schema/15583e70-a889-4c3a-ae7d-352d635e3242/receipt.json",
+      "exactSequencesConserved": true,
+      "reason": "resolution variable/column ambiguity",
+      "terminalExecution": "368e9b",
+      "stopped": true
+    },
+    {
+      "receiptSha256": "c0d1f113cb70941cd8bc0a21036225025f0a3b63b8841093099120147e7ecce2",
+      "portRefused": true,
+      "plaintextRemoved": true,
+      "schemaConserved": true,
+      "status": "failed",
+      "runId": "61d68ec0-c478-48a3-b6db-4b9f7549b921",
+      "rowsConserved": true,
+      "receiptPath": ".tools/privacy-current-schema/61d68ec0-c478-48a3-b6db-4b9f7549b921/receipt.json",
+      "exactSequencesConserved": true,
+      "reason": "both independent-review regressions reproduced",
+      "terminalExecution": "fba09a",
+      "stopped": true
+    },
+    {
+      "receiptSha256": "31f08768b9bf224ae6adedbd7811237ffbbf41eee23cfa55ab83fc012c5d3040",
+      "portRefused": true,
+      "plaintextRemoved": true,
+      "schemaConserved": true,
+      "status": "passed",
+      "runId": "450c2a79-ed66-4f23-95af-5249fe6d5d52",
+      "rowsConserved": true,
+      "receiptPath": ".tools/privacy-current-schema/450c2a79-ed66-4f23-95af-5249fe6d5d52/receipt.json",
+      "exactSequencesConserved": true,
+      "reason": "serial fixes before concurrency qualification",
+      "terminalExecution": "b4979a",
+      "stopped": true
+    },
+    {
+      "receiptSha256": "fa7fb3827f5fad9835266f1260ea227a87ef3d4b74234521aa2657df52705446",
+      "portRefused": true,
+      "plaintextRemoved": true,
+      "schemaConserved": true,
+      "status": "passed",
+      "runId": "78c5c5db-3de9-4730-b203-18dad16179ab",
+      "rowsConserved": true,
+      "receiptPath": ".tools/privacy-current-schema/78c5c5db-3de9-4730-b203-18dad16179ab/receipt.json",
+      "exactSequencesConserved": true,
+      "reason": "first actual concurrency candidate before single-capability fixture correction",
+      "terminalExecution": "49c2d0",
+      "stopped": true
+    },
+    {
+      "receiptSha256": "dcb3feb8f9e8795a3ac483e7a9ccedf2b53c7ecd67a4fbf022b36a31470c0742",
+      "portRefused": true,
+      "plaintextRemoved": true,
+      "schemaConserved": true,
+      "status": "passed",
+      "runId": "c02dcd88-407b-4f4e-a35f-364b3760dfd8",
+      "rowsConserved": true,
+      "receiptPath": ".tools/privacy-current-schema/c02dcd88-407b-4f4e-a35f-364b3760dfd8/receipt.json",
+      "exactSequencesConserved": true,
+      "reason": "expanded role/table/reflection and corrected fixture before explicit revoke formatting",
+      "terminalExecution": "875734",
+      "stopped": true
+    }
+  ],
+  "review": {
+    "minorFixed": "single capability reused for body and MAC, final native16groups pass",
+    "accepted": [
+      "one operation namespace for protect/release, including cross-customer races",
+      "historical exports before active-customer mutation gates"
+    ],
+    "initialDisposition": "request changes",
+    "minor": "fixture capability generated twice could cross a second boundary",
+    "fixed": true,
+    "finalCritical": 0,
+    "scope": "private SQL primitives and owned-clone qualification tooling only",
+    "agent": "/root/native_hold_review",
+    "finalImportant": 0
+  },
+  "sourceInventory": {
+    "session": 70381,
+    "command": "node scripts/audit-security-surfaces.mjs --fail-on-gaps",
+    "unexpectedAnonymousGrants": 0,
+    "execution": "d2f21a",
+    "terminalExecution": "ca2e0b",
+    "unexpectedPublicGrants": 0,
+    "logPath": ".tools/map019-native-hold-source-surfaces-20261027.log",
+    "logSha256": "e5d3adda5165357dc9f8e9fab4b0016876d527d6274c929f997682237c0a8381",
+    "routeGaps": 0,
+    "exitCode": 0
+  },
+  "initialDevelopment": {
+    "terminalExecution": "d997d5",
+    "session": 51944,
+    "command": "npm run verify:development",
+    "execution": "4408c5",
+    "logSha256": "841950525c0632200cad47b4c8f80b4c8454fb537f9f08c98dc6ce70157453c0",
+    "exitCode": 1,
+    "failure": "source scanner ignored combined multi-function REVOKE, reporting8PUBLIC grants despite nativeACL checks; repaired using8explicit revokes, scanner unchanged",
+    "logPath": ".tools/map019-native-hold-development-20261027.log"
+  },
+  "development": {
+    "session": 33666,
+    "command": "npm run verify:development",
+    "failed": 0,
+    "execution": "ea18d9",
+    "terminalExecution": "f71138",
+    "logPath": ".tools/map019-native-hold-development-final-20261027.log",
+    "logSha256": "91cefce7aaa8ec212c6d641d31a2697efc94c46f5333cc71ab3b641356db22aa",
+    "privacyToolCases": 94,
+    "exitCode": 0
+  },
+  "currentSourcePins": [
+    {
+      "path": "supabase/migrations/20261027_customer_account_portfolio.sql",
+      "sha256": "705f776cac7aac988a85487dcd039a03022705012308bfb722f761c51b694cb9"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_automation.sql",
+      "sha256": "e3354448f8d2126e538782ba01513bcc40919af92f4b2ed36a408208840fe1e4"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_admin.sql",
+      "sha256": "686ab1ede2e5d770942996cc83d06ac809daa377bf5e182741b553ee9819c9bf"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_hold_intent.sql",
+      "sha256": "f93a6b500fc124afc40e144c1c414863cf22199acb7e827176cab4967b9f1e9b"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_hold_intent.sql",
+      "sha256": "5d235e591f08aa8ee06ca1c1e6fce2fb666e5af44da1622063ab26be2e989dcc"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_hold_concurrency.sql",
+      "sha256": "337b205fdef1fc770461e584b30af5bb803b0cada90cc8b0eb25623a411ef543"
+    },
+    {
+      "path": "scripts/rehearse-customer-privacy-current-schema.mjs",
+      "sha256": "1fb9e47262ffb58671d6ef9964309c4bd3e7ec5fe957b7de6ea640e613d55c78"
+    },
+    {
+      "path": "scripts/verify-current-production-restore.mjs",
+      "sha256": "1214f15afcb3055c5fb6fe34cec709188191d213bc6f4f84f82e3382b14c45a0"
+    },
+    {
+      "path": "server/privacy-authority/state.js",
+      "sha256": "daa4b5cddefcb6792bc8dd092e593d3bdccc8788bda61bf05209bf62f591e467"
+    }
+  ],
+  "nativeTables": 3,
+  "nativeFunctions": 8,
+  "configurationSeeded": false,
+  "liveKeysCreated": false,
+  "productionChanged": false,
+  "activeRouteWired": false,
+  "executableErasurePermission": false,
+  "fullGoalComplete": false,
+  "unqualified": [
+    "genuine hosted Auth/roles and current-record native proof verifier",
+    "full remote protection/release/authorize/late-native-retry coordinator lifecycle",
+    "signed narrow application/worker wrappers; existing Admin bypass still inactive",
+    "shared all-writer freeze OLD/NEW/parent locks and production scale EXPLAIN/index coverage",
+    "retrievable versioned manifest and exact native erasure permit",
+    "direct processor/worker bypass removal",
+    "offline restore/suppression original UUIDs absent or later identities",
+    "new native record retention/field mapping and OWNER-006 schedules",
+    "real key custody/bootstrap/recovery and scheduler/capacity",
+    "provider Auth/Storage cleanup/access isolation",
+    "committed downgrade/migration replay",
+    "real signup/contact proof/re-registration/customer-staff hosted acceptance"
+  ],
+  "references": [
+    "https://www.postgresql.org/docs/17/contrib-dblink-send-query.html",
+    "https://www.postgresql.org/docs/17/contrib-dblink-get-result.html"
+  ],
+  "nextActionLocation": "MASTER_ACTION_PLAN.md / MAP-019",
+  "recovery": "Revert only unactivated native hold migration/test/runner slice before adoption; preserve all earlier evidence/unrelated work. Interrupted runs name exact owned cluster path in private receipt; stop/probe before checked-path cleanup. No production rollback and never restore erased PII."
+}

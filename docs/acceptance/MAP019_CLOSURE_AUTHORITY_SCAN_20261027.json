@@ -1,0 +1,271 @@
+{
+  "item": "MAP-019",
+  "idea": "IDEA-20261027-02",
+  "date": "2026-10-27",
+  "status": "local-bounded-scan-qualified-full-goal-active",
+  "branch": "codex/customer-privacy-owner-decisions",
+  "baseCommit": "c630e7ebfa491c463c618c030e4222e544269f06",
+  "focused": {
+    "command": "node --test tests/customer-closure-authority-journal.test.mjs tests/customer-closure-authority-state.test.mjs tests/customer-closure-authority-sqlite.test.mjs",
+    "execution": "43a9ad",
+    "exitCode": 0,
+    "passed": 54,
+    "failed": 0,
+    "journal": 30,
+    "state": 18,
+    "sqlite": 6
+  },
+  "review": {
+    "agent": "/root/closure_state_review",
+    "disposition": "APPROVED local bounded source/runtime only",
+    "critical": 0,
+    "important": 0,
+    "independentJournalPassed": 30,
+    "execution": "676494",
+    "runtimePinsVerified": 8,
+    "pinExecution": "61328a"
+  },
+  "redEvidence": [
+    {
+      "execution": "88a1f4",
+      "failed": 5,
+      "reason": "missing bounded events, pagination continuation, head/reset/contention behavior; initial red promise cleanup corrected"
+    },
+    {
+      "execution": "c73d11",
+      "failed": 1,
+      "reason": "clean contention red after fixture cleanup"
+    },
+    {
+      "execution": "c03190",
+      "runId": "af50daf7-23b8-4026-bcf9-7dd326cc7d13",
+      "reason": "actual bounded endpoint missing404 not pending503"
+    },
+    {
+      "execution": "57cdf5",
+      "failed": 1,
+      "reason": "head-change retry consumed2events under configured1event limit"
+    }
+  ],
+  "runtime": {
+    "execution": "e574f5",
+    "receipt": {
+      "runId": "3056514a-24a9-44d0-a3fd-d7f34cea18da",
+      "historyTarget": 16,
+      "scope": "local workerd R2/SQLite fixture; no production",
+      "status": "passed",
+      "checks": [
+        "normal request cannot bootstrap absent head",
+        "actual local R2 create-once and stale ETag CAS return null",
+        "qualified fixture proof and real SQLite witness compose; denied proof creates no decision",
+        "actual workerd deadline returns pending before immutable writes and identical healthy retry succeeds",
+        "serialized native Durable Object terminal race and exact receipt retry",
+        "full runtime dispose/restart preserves actual R2 and SQLite state",
+        "actual empty SQLite witness reconstructs from full R2 history",
+        "actual workerd bounded calls resume and cold restart repeats genesis before identical completion",
+        "actual local head rollback refuses against marker/witness and exact restoration reconciles",
+        "increasing-history local measurements recorded, not production capacity"
+      ],
+      "timings": [
+        {
+          "revision": 4,
+          "reconciliationMs": 28
+        },
+        {
+          "revision": 8,
+          "reconciliationMs": 54
+        },
+        {
+          "revision": 16,
+          "reconciliationMs": 111
+        }
+      ],
+      "sourcePins": [
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\tests\\fixtures\\customer-closure-authority-worker.mjs",
+          "sha256": "294b86daea970dae974cb7559682b6289dee0b533b1947cd5ee6afc18e41883a"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\scripts\\rehearse-customer-closure-authority.mjs",
+          "sha256": "699e0815e18d5424895301903a3682fb2d4229889f774441cb24ef76b8553864"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\scripts\\lib\\local-worker-runtime.mjs",
+          "sha256": "17ab12547f46e77ab429b820052b04789f5f9328036dc2962dcf4efee9217de9"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\tests\\fixtures\\customer-closure-authority-wrangler.toml",
+          "sha256": "1052d08afe65c5d4ad3bf8a722ae09c4df8b521d65b90df17e6a1e0b03b31b21"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\.tools\\closure-authority-runtime\\package-lock.json",
+          "sha256": "8b545e43dde6a2b6ae0754c47da814845ac2781e88dbb0afc031ab5509235787"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\server\\privacy-authority\\state.js",
+          "sha256": "ec256601cf6dfaac99c63922871daa333030b946bde34c670d72dfb82da3d0ec"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\server\\privacy-authority\\journal.js",
+          "sha256": "42ff3fc5302ae702cb1f310ff22f3d22f19c11c06579b83c914fe44a017a526e"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\server\\privacy-authority\\sqlite-witness.js",
+          "sha256": "4c60d7097f246722159736384f4acb258eb8ac25e01013caabc8e38fcb5121df"
+        }
+      ],
+      "miniflareVersion": "4.20260730.0",
+      "shutdowns": [
+        {
+          "readyObserved": true,
+          "disposed": true,
+          "portRefused": true,
+          "ok": true,
+          "host": "127.0.0.1",
+          "port": 54109
+        },
+        {
+          "readyObserved": true,
+          "disposed": true,
+          "portRefused": true,
+          "ok": true,
+          "host": "127.0.0.1",
+          "port": 54132
+        },
+        {
+          "readyObserved": true,
+          "disposed": true,
+          "portRefused": true,
+          "ok": true,
+          "host": "127.0.0.1",
+          "port": 54141
+        }
+      ],
+      "runtimeDisposed": true
+    },
+    "pin": {
+      "path": ".tools/closure-authority-runs/3056514a-24a9-44d0-a3fd-d7f34cea18da/receipt.json",
+      "sha256": "14b1238a2ed35105368fadd0127c653f07928072efca8622cd6757c16e55d3e9"
+    }
+  },
+  "historicalOriginal128": {
+    "execution": "baa4a6/cfed0a",
+    "pin": {
+      "path": ".tools/closure-authority-runs/637319dc-923f-430a-a795-8a3e2f62685f/receipt.json",
+      "sha256": "ff9eaed110544d87cf4b4c016cb581870359135f66c7adeb97a2848bc87d1176"
+    },
+    "runId": "637319dc-923f-430a-a795-8a3e2f62685f",
+    "status": "passed",
+    "checks": 9,
+    "timings": [
+      {
+        "revision": 4,
+        "reconciliationMs": 39
+      },
+      {
+        "revision": 8,
+        "reconciliationMs": 52
+      },
+      {
+        "revision": 16,
+        "reconciliationMs": 112
+      },
+      {
+        "revision": 32,
+        "reconciliationMs": 310
+      },
+      {
+        "revision": 64,
+        "reconciliationMs": 1535
+      },
+      {
+        "revision": 128,
+        "reconciliationMs": 3362
+      }
+    ],
+    "shutdowns": [
+      {
+        "readyObserved": true,
+        "disposed": true,
+        "portRefused": true,
+        "ok": true,
+        "host": "127.0.0.1",
+        "port": 53708
+      },
+      {
+        "readyObserved": true,
+        "disposed": true,
+        "portRefused": true,
+        "ok": true,
+        "host": "127.0.0.1",
+        "port": 51526
+      }
+    ],
+    "sourceStatus": "OLD bundled core baseline; not current-cursor capacity"
+  },
+  "historicalOriginal64": {
+    "runId": "2de5af39-89a1-47d2-ad13-331b4e867c47",
+    "pin": {
+      "path": ".tools/closure-authority-runs/2de5af39-89a1-47d2-ad13-331b4e867c47/receipt.json",
+      "sha256": "8b5eedff1e8d54af3365e3cf02ef174a89b3fcb6738032c1482e4e260a84efb5"
+    },
+    "reconciliationAt64Ms": 841
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "initialPassed": {
+      "execution": "6f27d8/47aad1",
+      "privacyCases": 77,
+      "log": {
+        "path": ".tools/map019-authority-scan-development-20261027.log",
+        "sha256": "803492d3938339ba23ece8fde1df0c211363dae76d03b95b4b19f927869f9881"
+      }
+    },
+    "final": {
+      "execution": "e3f3ef/e15ae3",
+      "exitCode": 0,
+      "privacyCases": 78,
+      "failed": 0,
+      "log": {
+        "path": ".tools/map019-authority-scan-development-final-20261027.log",
+        "sha256": "b687c65227dcd30e182ca13b109faca906f480fe49c9b50680d3b8439212aaf3"
+      }
+    }
+  },
+  "currentAdditionalPins": [
+    {
+      "path": "tests/customer-closure-authority-journal.test.mjs",
+      "sha256": "6fd01586239dc213ac16f72fa30c959d43a03f2b40ac2b50e08708dbb1765d47"
+    },
+    {
+      "path": "package.json",
+      "sha256": "cb4bc5c6fd4a47c2bc226a3c4a7635eebaebceeb14c4e028273f6a228a66c992"
+    }
+  ],
+  "semantics": {
+    "incompleteWrites": false,
+    "partialReady": false,
+    "executionAllowed": false,
+    "persistentCursor": false,
+    "coldRestart": "from pinned genesis",
+    "passBudget": "shared across every head-change retry in one reconciliation call"
+  },
+  "productionChanged": false,
+  "activeRouteWired": false,
+  "fullGoalComplete": false,
+  "unqualified": [
+    "durable cross-crash scan progress",
+    "production growth and memory capacity",
+    "automatic recovery scheduling",
+    "provider custody/bootstrap/keys",
+    "authenticated native proofs/retrievable manifests",
+    "freeze/all conflicting writers",
+    "versioned offline suppression/absent old Auth rows",
+    "actual Auth/Storage/access isolation/cleanup",
+    "retention",
+    "real-host customer/staff journey",
+    "exact activation authorization"
+  ],
+  "nextActionLocation": "MASTER_ACTION_PLAN.md / MAP-019",
+  "recovery": "Revert only bounded journal/tool/test/fixture slice before adoption; retain prior source/receipts and unrelated work. Stop/probe owned runtime before checked-path fixture removal. Never restore closed PII."
+}

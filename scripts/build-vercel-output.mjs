@@ -83,7 +83,9 @@ export async function buildTargetArtifact({ target, distDir, outputDir }) {
     shouldAddHelpers: true,
     maxDuration: selected.duration,
   }, null, 2))
-  fs.writeFileSync(path.join(resolvedOutput, 'config.json'), JSON.stringify({ version: 3, routes }, null, 2))
+  const crons = target === 'storefront' && process.env.K2_CUSTOMER_PRIVACY_ENABLED === 'true'
+    ? [{ path: '/api/storefront/internal/privacy/run', schedule: '* * * * *' }] : undefined
+  fs.writeFileSync(path.join(resolvedOutput, 'config.json'), JSON.stringify({ version: 3, routes, ...(crons ? { crons } : {}) }, null, 2))
   return resolvedOutput
 }
 

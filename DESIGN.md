@@ -215,6 +215,10 @@ components:
 
 # Design System: K2 Jimzon
 
+27 October 2026 / MAP-019 account settings refinement, local only: preserve the existing account composition, colors and type. A draft survives same-user history refresh, transient errors and guest linking; fields are disabled only while their save is pending. A failed history refresh explicitly identifies last-loaded records. Twenty focused synthetic browser cases including the existing mobile/desktop light/dark closure views and the development gate passed. Provider and hosted acceptance remain unverified.
+
+27 October 2026 / MAP-019 local account copy correction: retain the established storefront account composition and tokens. The purchase summary labels the original recorded payments on orders marked refunded and explicitly says the total is not the refund amount. A focused synthetic browser journey failed before the copy change and passed after at mobile/intermediate/desktop widths, with light/dark captures and no horizontal overflow; no new motion or layout system. This is locally prepared only, not live financial acceptance.
+
 ### Public stock-read failure/recovery evidence — 7 October 2026
 
 Existing pending-stock label, stale banner and disabled add behavior pass the
@@ -1526,3 +1530,48 @@ Evidence, desktop/phone screenshots and deployment limits: docs/acceptance/CURRE
 MAP-023 / IDEA-20261023-02 is released for this Cabinet slice. Owner-approved PR23 plus bounded correction PR24 promote source3975f2fd9ed4f833f07f72e4768b6fa977f161e9 to separate READY storefront dpl_GAy5LLMp9EEZWUWfVaXppDirULbD and Admin dpl_Ti8CP9nvmNPSd2xv4S7JJynQ8f89, with matching source metadata/custom aliases and target-correct HTTP200 markers. The real storefront shows exactly two cards, mouse drag changes rail0→615 without navigating, and a fresh Beverages click opens its one-product result. At375px, two158px cards fit328px rail with no page overflow; Next, End/Home and disabled bounds pass. Native touch/vertical scrolling and320/768/1440/light/dark/long-name behavior are covered by the26 browser fixture cases; physical-device touch remains unverified. Owner chose removing only decorative hover ticks; content, badges, focus and recovery remain. Actual production budget passes JS150.42/150.50 and CSS29.98/30.00kB.
 
 CI39898140906 passed both jobs on exact reviewedfa6a578b5f28f7cf5ff924673b30fd5da97a6d29: complete npm-test acceptance plus both builds; local packaging3/3, contract13/13 and final development0 pass. Failed aggregate/local configuration attempts are preserved and reconciled; there is no claim of a clean full local aggregate exit0. Admin reload confirms196total/93active/103Draft/273available. No product/stock/price/publication/provider/SQL change. Completed Cabinet action is removed from MAP-023 only after this durable record. Remaining listing/operational facts stay in MAP-023. Full evidence, failed-build diagnosis, actual-host images, source hashes and rollback: docs/acceptance/CABINET_PRODUCTION_RELEASE_20261023.md.
+
+### Storefront customer-account contract update — 27 October 2026, local preparation
+
+**Sign-out recovery continuation, local only:** Preserve this account composition, theme tokens and navigation. A failed initial browser safeguard leaves the account signed in with an explicit storage recovery message; a failure during a blocked retry keeps the closed view and reachable retry. Unconfirmed provider removal survives reload without sensitive stored content. SDK-accepted removal states local sign-out only; a new accepted sign-in removes that prior success message. Final37browser cases/10sign-out cases and development gate pass, with the two independent review findings resolved. Eight375/1440light/dark captures, limits, source hashes and recovery: `docs/acceptance/MAP019_ACCOUNT_SIGNOUT_20261027.md/json`. This does not activate deletion, prove remote revocation or establish physical-device/hosted acceptance.
+
+| Before | After | Why |
+| --- | --- | --- |
+| A failed shared-guard write could silently continue sign-out. | Explicit storage failure; the account remains reachable for recovery. | Other tabs must not silently reopen an unresolved saved session. |
+| A storage error during blocked retry hid its recovery control. | Closed-view explanation and Retry sign-out remain. | Storage recovery must not require guessing or an unexplained reload. |
+| SDK acceptance appeared to settle remote sign-out; its notice survived a later sign-in. | Local-only status, possible other sessions, and cleared success copy on accepted sign-in. | The installed SDK can normalize provider refusals, and current account state must be truthful. |
+
+MAP-019 / IDEA-20261027-02 extends the incumbent account contract above. It reuses canonical customer/account records; the owner's IDEA-20261027-03 direction keeps the existing Admin customer directory as the CRM foundation and excludes Excel integration. Existing external copies are not thereby erased.
+
+Purchases show linked-record order count, fulfilled item quantities, verified PHP payment amounts and refunded amounts separately. Totals cover all linked records rather than the displayed page; missing payment amounts have an explicit count and caveat, never an inferred zero or a substituted order charge. Load earlier orders continues bounded keyset history. Native order details expose item snapshots and recorded payment facts. Download order summary produces a text summary, explicitly not a tax invoice; incomplete item records disable that download. Download uploaded proof retrieves the customer's private evidence and remains distinct from K2 payment verification. Failed reads keep a visible retry and explain unavailable totals.
+
+Settings display verified contacts separately from editable name, delivery address and account-notification preference. Saving an address does not change an already submitted order. Loading, save confirmation, failure and offline controls remain explicit.
+
+Closure explains immediate eligible processing after fresh verification, holds for open cases, automatic resumption after resolution and cancellation only before processing starts. The final action is Confirm account closure. Expired proof returns directly to a restartable form. Saved request identity supports reload and uncertain-response status checks; offline controls explain reconnection. A closed-access receipt remains recoverable after sign-out and separately reports provider cleanup, protected transaction retention and external/backup review. Closed app access never means every copy is erased; financial retention remains unapproved. These are locally prepared interactions, not proof of active OTP delivery, scheduled resumption, Auth cleanup or complete deletion.
+
+The compact phone masthead and local section links keep linked-order count and verified payments visible before the fixed five-item navigation at 375px. Native details, visible labels, 44px minimum targets, wrapping controls and settled light/dark semantic surfaces extend the existing Fraunces/Source Sans account composition. No palette, font, shipping raster or decorative-motion system is introduced.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Recent order requests without a complete purchase overview. | All-linked-record totals, unknown-amount caveat and earlier-order detail. | A limited history page cannot establish total payments or purchases. |
+| Order and payment evidence lacked dedicated downloads. | Private uploaded-proof download and explicitly non-tax-invoice text summary. | Uploaded evidence and an order charge do not establish verified payment. |
+| Account settings lacked an integrated closure workflow. | Fresh code, explicit confirmation, held/cancellable state and automatic-resumption explanation. | Customers need the timing and consequences before confirming. |
+| Expired or uncertain verification could leave recovery unclear. | Direct restart after expiry; retained request and explicit status retry after uncertainty. | Recovery must preserve the original request and its actual outcome. |
+| Phone header displaced the purchase facts; themes could be captured mid-transition. | Compact first viewport and settled light/dark captures. | Count and verified payments must remain readable above fixed navigation. |
+
+Local visual evidence: `.impeccable/review/customer-account-20261027/review-packet.json` and adjacent captures. The independent finish review inspected eight base and twelve state images, resolved four material fixes and returned ship for this bounded local visual scope; detector output was `[]`. Actual local React renders use synthetic records; download exercises, 375/768/1024/1440 overflow/target checks and verification/held/expired/offline/uncertain/closed states are local evidence only. No K2 database, Auth/provider, hosted deployment or Excel state is established by this design verdict. Remaining backend, retention, recovery and activation gates stay in MAP-019. Existing global token/document drift is not canonized or repaired by this interaction-only addendum.
+
+### Admin customer and privacy review — 27 October 2026, local preparation
+
+MAP-019 / IDEA-20261027-03 extends the existing customer directory rather than introducing a second CRM model. Search and identity filters state their loaded-record scope; contact details preserve verification/source provenance. Verified privacy requests display assignment, reasons, explicit holds and recorded actions. Read-only outcomes distinguish closure and pending sign-in cleanup. Customer-level holds can be recorded before a request, and an active verified request requires assigned review. Resolve controls explain automatic resumption and preserve the original action for retry during an uncertain response.
+
+The independent finish review found and confirmed fixes for an unavailable-directory/empty-result mix-up, review focus and return, missing hold-read retry and stale selection responses. Five synthetic browser journeys passed, including retry, changed selection and reload reconciliation. Captures in `.impeccable/review/customer-crm-20261027/` cover directory, hold, outcome and privacy states at phone/desktop sizes; the reviewer returned ship for this local scope. No provider, deployed behavior or complete external erasure is implied. Remaining activation and backup gates live in MAP-019.
+### 28 October MAP-019 Admin hold outcome and recovery copy — local only
+
+All four required design skills were applied to the existing Admin Operate surface, preserving its owner-defined product register, layout, controls, tokens and motion. The changes affect response interpretation and recovery copy, not the visual system. Inspected 375/1440 synthetic captures fit the new notices without horizontal overflow. Current eight-case coverage is reconciled from the initial run and focused customer-only/outage replacements; no real provider or complete browser-to-database customer journey follows. Evidence and source recovery: docs/acceptance/MAP019_ADMIN_HOLD_ADAPTER_20261028.md/json.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Historical hold creation could be mistaken for an active saved hold. | Current resolved/refused outcomes show distinct non-success copy; saved notices require the expected current state. | A creation receipt cannot establish that a hold remains active. |
+| Authority absence after a lost reply could unlock the retained action. | Original actor, key and details remain locked for the same saved-action retry. | An outage cannot settle the earlier attempt. |
+| Synthetic customer-only success suggested the backend supported that workflow. | Explicit reconciliation refusal preserves details and existing holds. | Required support is still unfinished; activation remains blocked in MAP-019. |

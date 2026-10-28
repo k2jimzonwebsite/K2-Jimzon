@@ -1,0 +1,270 @@
+{
+  "item": "MAP-019",
+  "idea": "IDEA-20261027-02",
+  "date": "2026-10-27",
+  "status": "inactive-local-v2-protection-qualified-full-goal-active",
+  "branch": "codex/customer-privacy-owner-decisions",
+  "baseCommit": "c630e7ebfa491c463c618c030e4222e544269f06",
+  "authorityFormat": 2,
+  "syntheticGenesis": "90000000-0000-4000-8000-000000000002",
+  "versionBoundary": "v1 synthetic receipts preserved; no installed namespace changed; old-format commands/heads refused",
+  "sourceEvidence": {
+    "passed": 68,
+    "execution": "40d1fc",
+    "sqlite": 7,
+    "distinctFinalCases": 70,
+    "journal": 33,
+    "failed": 0,
+    "additionalExitCode": 0,
+    "exitCode": 0,
+    "protection": 12,
+    "additionalExecution": "c1834f",
+    "additionalCommand": "node --test tests/customer-closure-authority-protection.test.mjs",
+    "additionalFailed": 0,
+    "finalCombinedCoverage": "included in final development94privacy-tool cases",
+    "additionalPassed": 12,
+    "state": 18,
+    "priorCommand": "node --test tests/customer-closure-authority-state.test.mjs tests/customer-closure-authority-journal.test.mjs tests/customer-closure-authority-sqlite.test.mjs tests/customer-closure-authority-protection.test.mjs"
+  },
+  "redEvidence": {
+    "failed": 10,
+    "reason": "new protection/version cases fail against old source before implementation",
+    "execution": "534b20"
+  },
+  "controls": {
+    "receiptSha256": "958bb6765fb406ceb36b4c2622528c74bb248b418c905e616d8706fbb8399961",
+    "scope": "isolated copied-engine mutations only, maintained modules untouched",
+    "receiptPath": ".tools/protection-v2-controls/receipt.json",
+    "execution": "bf0baf",
+    "results": [
+      {
+        "name": "partial-release",
+        "exitCode": 1,
+        "failure": "Missing expected rejection"
+      },
+      {
+        "name": "generation-loss",
+        "exitCode": 1,
+        "failure": "Missing expected rejection"
+      }
+    ]
+  },
+  "review": {
+    "critical": 0,
+    "independentProbeExecution": "82832c",
+    "scope": "inactive local v2 protection source only",
+    "agent": "/root/protection_v2_review",
+    "important": 0,
+    "independentProbeExitCode": 0,
+    "additionalLifecycleRegressionsRetained": true
+  },
+  "runtime": {
+    "receipt": {
+      "runId": "55797676-4f26-4f44-adfa-c37e3deb4b0a",
+      "historyTarget": 16,
+      "scope": "local workerd R2/SQLite fixture; no production",
+      "status": "passed",
+      "checks": [
+        "normal request cannot bootstrap absent head",
+        "actual local R2 create-once and stale ETag CAS return null",
+        "qualified fixture proof and real SQLite witness compose; denied proof creates no decision",
+        "actual workerd deadline returns pending before immutable writes and identical healthy retry succeeds",
+        "serialized native Durable Object terminal race and exact receipt retry",
+        "full runtime dispose/restart preserves actual R2 and SQLite state",
+        "actual empty SQLite witness reconstructs from full R2 history",
+        "actual workerd bounded calls resume and cold restart repeats genesis before identical completion",
+        "actual local head rollback refuses against marker/witness and exact restoration reconciles",
+        "increasing-history local measurements recorded, not production capacity",
+        "v2 global protection survives origin cancellation and blocks replacement authorization",
+        "v2 protection persists in native SQLite and reconstructs from R2 after runtime/witness loss",
+        "v2 verified synthetic release preserves cancellation and late protection cannot use its historic outcome after authorization"
+      ],
+      "timings": [
+        {
+          "revision": 4,
+          "reconciliationMs": 30
+        },
+        {
+          "revision": 8,
+          "reconciliationMs": 58
+        },
+        {
+          "revision": 16,
+          "reconciliationMs": 103
+        }
+      ],
+      "sourcePins": [
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\tests\\fixtures\\customer-closure-authority-worker.mjs",
+          "sha256": "540e52d1cb598b29dc02e2851bb36f646e046e292132174e115f6554a1947abc"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\scripts\\rehearse-customer-closure-authority.mjs",
+          "sha256": "fd8cb88e84b43a9c43678b31f44d2ada310dd020e8185820813e37ead2011e4c"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\scripts\\lib\\local-worker-runtime.mjs",
+          "sha256": "17ab12547f46e77ab429b820052b04789f5f9328036dc2962dcf4efee9217de9"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\tests\\fixtures\\customer-closure-authority-wrangler.toml",
+          "sha256": "5f81ecc554a96f4949e78a175f5cfa9fc4384bfe61b91ca45d0e0399b47ea0d0"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\.tools\\closure-authority-runtime\\package-lock.json",
+          "sha256": "8b545e43dde6a2b6ae0754c47da814845ac2781e88dbb0afc031ab5509235787"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\server\\privacy-authority\\state.js",
+          "sha256": "daa4b5cddefcb6792bc8dd092e593d3bdccc8788bda61bf05209bf62f591e467"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\server\\privacy-authority\\journal.js",
+          "sha256": "1754bdf80cca11bd947142d893b1f086aaf5f36f28c802b065adb11f32c996d4"
+        },
+        {
+          "path": "C:\\Users\\jerze\\K2 JImzon\\server\\privacy-authority\\sqlite-witness.js",
+          "sha256": "0c617c6f31e08a9c776994dace68baf8e01d34098b28f6d822ba7e9fbfbe26cf"
+        }
+      ],
+      "miniflareVersion": "4.20260730.0",
+      "shutdowns": [
+        {
+          "readyObserved": true,
+          "disposed": true,
+          "portRefused": true,
+          "ok": true,
+          "host": "127.0.0.1",
+          "port": 57994
+        },
+        {
+          "readyObserved": true,
+          "disposed": true,
+          "portRefused": true,
+          "ok": true,
+          "host": "127.0.0.1",
+          "port": 58019
+        },
+        {
+          "readyObserved": true,
+          "disposed": true,
+          "portRefused": true,
+          "ok": true,
+          "host": "127.0.0.1",
+          "port": 58028
+        },
+        {
+          "readyObserved": true,
+          "disposed": true,
+          "portRefused": true,
+          "ok": true,
+          "host": "127.0.0.1",
+          "port": 58083
+        }
+      ],
+      "authorityFormat": 2,
+      "genesisId": "90000000-0000-4000-8000-000000000002",
+      "runtimeDisposed": true
+    },
+    "currentPinsMatch": true,
+    "inspectionExecutions": [
+      "739983",
+      "2bee8e"
+    ],
+    "savedReceiptSha256": "a0eff06d0d7a2e383ce11a7d7c793a475cd997c6695c2d34f0c44ab3f383f5b9",
+    "terminalHandleObservation": "session16257 absent on continuation; saved passed receipt/source pins and shutdowns inspected, no duplicate run",
+    "command": "node scripts/rehearse-customer-closure-authority.mjs",
+    "savedReceiptPath": ".tools/closure-authority-runs/55797676-4f26-4f44-adfa-c37e3deb4b0a/receipt.json"
+  },
+  "development": {
+    "exitCode": 0,
+    "unexpectedAnonymousGrants": 0,
+    "routeGaps": 0,
+    "privacyToolCases": 94,
+    "unexpectedPublicGrants": 0,
+    "terminalExecution": "62146f",
+    "logSha256": "ee61132083153355c9134943f07944feb8cd1b1ec798628d21600c279b0c1a16",
+    "failed": 0,
+    "logPath": ".tools/map019-protection-v2-development-20261027.log",
+    "session": 99550,
+    "command": "npm run verify:development",
+    "execution": "4a5536"
+  },
+  "currentSourcePins": [
+    {
+      "sha256": "daa4b5cddefcb6792bc8dd092e593d3bdccc8788bda61bf05209bf62f591e467",
+      "path": "server/privacy-authority/state.js"
+    },
+    {
+      "sha256": "1754bdf80cca11bd947142d893b1f086aaf5f36f28c802b065adb11f32c996d4",
+      "path": "server/privacy-authority/journal.js"
+    },
+    {
+      "sha256": "0c617c6f31e08a9c776994dace68baf8e01d34098b28f6d822ba7e9fbfbe26cf",
+      "path": "server/privacy-authority/sqlite-witness.js"
+    },
+    {
+      "sha256": "183023cf7f03b4fdfe8d5173861ef9508c46f3a3055848ec15dd5edc3dd557cd",
+      "path": "tests/customer-closure-authority-state.test.mjs"
+    },
+    {
+      "sha256": "b4ae1195dcf8cd64e646a66a34ca2d1bde1b07d635bcff3deae8fb928f26c5ba",
+      "path": "tests/customer-closure-authority-journal.test.mjs"
+    },
+    {
+      "sha256": "f20463c90246223f98f789a9cb0a5527a45f34231b4c6cc7479f7f7f3c149b03",
+      "path": "tests/customer-closure-authority-sqlite.test.mjs"
+    },
+    {
+      "sha256": "b5c63524dbfd6df60688e68422f542438cc280009524317c31ae58a4e92635e3",
+      "path": "tests/customer-closure-authority-protection.test.mjs"
+    },
+    {
+      "sha256": "fd8cb88e84b43a9c43678b31f44d2ada310dd020e8185820813e37ead2011e4c",
+      "path": "scripts/rehearse-customer-closure-authority.mjs"
+    },
+    {
+      "sha256": "17ab12547f46e77ab429b820052b04789f5f9328036dc2962dcf4efee9217de9",
+      "path": "scripts/lib/local-worker-runtime.mjs"
+    },
+    {
+      "sha256": "540e52d1cb598b29dc02e2851bb36f646e046e292132174e115f6554a1947abc",
+      "path": "tests/fixtures/customer-closure-authority-worker.mjs"
+    },
+    {
+      "sha256": "5f81ecc554a96f4949e78a175f5cfa9fc4384bfe61b91ca45d0e0399b47ea0d0",
+      "path": "tests/fixtures/customer-closure-authority-wrangler.toml"
+    },
+    {
+      "sha256": "b4c289236894e54911ffc678ef9029887eb5c84f409d0e40765ba654efdf1387",
+      "path": "package.json"
+    }
+  ],
+  "productionChanged": false,
+  "activeRouteWired": false,
+  "executablePermission": false,
+  "fullGoalComplete": false,
+  "unqualified": [
+    "native one-shot intent/projection/resolution including delayed retry after resolution",
+    "genuine dedicated native proof and execution keys/issuer/encoding",
+    "retrievable versioned manifest and shared freeze/all writers",
+    "native exact-scope permit and removal of direct/worker bypasses",
+    "offline generation fencing/versioned suppression including absent Auth rows",
+    "provider custody/key recovery/scheduler/capacity",
+    "Auth/Storage cleanup and complete access isolation",
+    "committed pre-activation rollback",
+    "OWNER-006 numeric retention decisions",
+    "genuine signup/contact proof/re-registration/customer-staff hosted acceptance"
+  ],
+  "nextActionLocation": "MASTER_ACTION_PLAN.md / MAP-019",
+  "recovery": "Before adoption revert only this v2 source/test/fixture/runner/package slice, preserve historical receipts and unrelated work; verify owned runtime shutdown before checked-path cleanup; no provider rollback, never restore closed PII",
+  "generatedFixtureCleanup": {
+    "exitCode": 0,
+    "absolutePathValidated": true,
+    "removedFiles": 8,
+    "workerdProcessesObserved": 0,
+    "execution": "a3a1a0",
+    "scope": "generated middleware/compiled synthetic fixture files only; all historical run receipts preserved",
+    "path": "tests/fixtures/.wrangler/tmp"
+  }
+}

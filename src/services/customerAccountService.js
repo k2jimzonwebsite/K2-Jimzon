@@ -22,6 +22,15 @@ const ACCOUNT_ERRORS = {
   EXPRESS_QUOTE_EXPIRED: 'This quote expired. Ask staff for a current quote, then refresh the order.',
   EXPRESS_ORDER_INELIGIBLE: 'This order cannot accept another quote. Refresh its status or contact K2.',
   DELIVERY_ACCESS_REQUIRED: 'This account no longer has access. Your saved approval is kept; contact K2 before starting another.',
+  ACCOUNT_PORTFOLIO_UNAVAILABLE: 'Purchase records could not be loaded. Try again; unavailable records are not zero purchases.',
+  ACCOUNT_PRIVACY_UNAVAILABLE: 'Closure status could not be checked. Keep your saved request and retry.',
+  ACCOUNT_CLOSED: 'This account is closed. Keep your closure receipt while remaining cleanup finishes.',
+  PRIVACY_CODE_UNAVAILABLE: 'The code could not be sent. Wait a minute and retry the saved request.',
+  PRIVACY_CODE_INVALID: 'That code could not be verified. Check the code or request a new one.',
+  PRIVACY_PROOF_EXPIRED: 'This verification expired. Start a new closure request.',
+  PRIVACY_CONTACT_CHANGED: 'Your verified contact changed. Cancel this request and start again.',
+  PRIVACY_PROCESSING_STARTED: 'Closure has started and can no longer be cancelled. Refresh its status.',
+  PRIVACY_REQUEST_EXISTS: 'A closure request already exists. Resume it here or contact K2.',
 }
 
 export function customerAccountEnabled() {
@@ -107,8 +116,16 @@ async function accountRequest(path, body, accessToken) {
     const code = result?.error?.code || 'SERVICE_UNAVAILABLE'
     return { ok: false, code, error: ACCOUNT_ERRORS[code] || 'The account request could not be completed. Try again.' }
   }
-  return { ok: true, data: result.history || result.settings || result.receipt, notifications: result.notifications || [] }
+  return { ok: true, data: result.history || result.settings || result.receipt || result.portfolio, notifications: result.notifications || [] }
 }
+
+export const loadCustomerPortfolio = (accessToken, cursor = null) => accountRequest('account/portfolio', { cursor }, accessToken)
+export const loadCustomerPaymentProof = (accessToken, orderReference, proofId) =>
+  accountRequest('account/portfolio', { operation: 'proof', orderReference, proofId }, accessToken)
+export const customerPrivacyCommand = (accessToken, body) =>
+  // A saved receipt remains readable after Auth cleanup; other operations still
+  // require a real current account token at the server/database boundary.
+  accountRequest('account/privacy', body, accessToken || (body.operation === 'status' ? 'receipt-capability-only' : ''))
 
 export const loadCustomerHistory = (accessToken) => accountRequest('account/history', {}, accessToken)
 export const acceptAccountExpressDelivery = (accessToken, body) => accountRequest('account/delivery-accept', body, accessToken)

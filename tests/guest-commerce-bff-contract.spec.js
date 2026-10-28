@@ -241,7 +241,7 @@ test('single-function Storefront router allowlists every prepared endpoint and r
   expect(STOREFRONT_BFF_ROUTES.length).toBeGreaterThan(0)
   expect(new Set(STOREFRONT_BFF_ROUTES).size).toBe(STOREFRONT_BFF_ROUTES.length)
   expect(Object.keys(STOREFRONT_BFF_ROUTE_CONTROLS).sort()).toEqual([...STOREFRONT_BFF_ROUTES].sort())
-  expect(Object.entries(STOREFRONT_BFF_ROUTE_CONTROLS).filter(([route]) => route !== 'delivery/locations').every(([, control]) =>
+  expect(Object.entries(STOREFRONT_BFF_ROUTE_CONTROLS).filter(([route]) => !['delivery/locations','internal/privacy/run'].includes(route)).every(([, control]) =>
     control.method === 'POST' && control.origin && control.signed && control.databaseRateLimit)).toBe(true)
   expect(Object.entries(STOREFRONT_BFF_ROUTE_CONTROLS)
     .filter(([, control]) => control.bot).map(([route]) => route).sort()).toEqual([
@@ -280,7 +280,9 @@ test('single-function Storefront router allowlists every prepared endpoint and r
   expect(guestBffEndpoint('order/status')).toBe('/api/storefront/order/status')
   expect(guestBffEndpoint('account/claim')).toBe('/api/storefront/account/claim')
   expect(guestBffEndpoint('account/history')).toBe('/api/storefront/account/history')
-  expect([...GUEST_BFF_CLIENT_ROUTES].sort()).toEqual([...STOREFRONT_BFF_ROUTES].sort())
+  expect([...GUEST_BFF_CLIENT_ROUTES].sort()).toEqual(STOREFRONT_BFF_ROUTES.filter(route => !STOREFRONT_BFF_ROUTE_CONTROLS[route].serverOnly).sort())
+  expect(guestBffEndpoint('internal/privacy/run')).toBeNull()
+  expect(STOREFRONT_BFF_ROUTE_CONTROLS['internal/privacy/run']).toMatchObject({ method:'GET',serverOnly:true,schedulerSecret:true,serviceCapability:true,accountAuth:'scheduler-secret' })
 })
 
 test('canonical delivery boundary validates only SKU quantities and complete destination identifiers', async () => {

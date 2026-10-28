@@ -1,0 +1,326 @@
+{
+  "item": "MAP-019",
+  "idea": "IDEA-20261027-02",
+  "date": "2026-10-28",
+  "status": "inactive-local-adapter-slice-qualified",
+  "fullGoalComplete": false,
+  "branch": "codex/customer-privacy-owner-decisions",
+  "baseCommit": "c630e7ebfa491c463c618c030e4222e544269f06",
+  "productionChanged": false,
+  "defaultAuthorityConfigured": false,
+  "previousReceiptReconciliation": {
+    "path": "docs/acceptance/MAP019_HOLD_COORDINATOR_20261028.json",
+    "sourcePinsMatchedAtResumption": 26,
+    "nativeRuntimeDevelopmentReceiptHashesMatched": true
+  },
+  "identityPreflight": {
+    "command": "npm run preflight:k2-project",
+    "exit": 0,
+    "project": "pixplcjqivlfflickobf",
+    "scope": "read-only identity; first sandbox project-list refusal was followed by passing network-enabled preflight; no write authorization"
+  },
+  "native": {
+    "path": ".tools/privacy-current-schema/d6468cb9-658b-4caf-8df6-4a1cd8a567ec/receipt.json",
+    "sha256": "3f873458e05f7fd068a59f2b00f6cbfec91828c47d0bba0b3bbafa7510ff0ee1",
+    "command": "node --env-file=.env.local scripts/rehearse-customer-privacy-current-schema.mjs --hold-coordinator-protocol",
+    "exit": 0,
+    "serial": 17,
+    "races": 4,
+    "expiryAfterLock": 1,
+    "composition": [
+      "direct authenticated legacy review refuses all four hold mutations after migration five",
+      "an existing canonical hold without an intent remains intact and explicitly requires reconciliation",
+      "signed authenticated Admin prepare and real nonce/HMAC service reads compose with actual R2 and native SQLite",
+      "lost native projection reply reconciles its one committed hold/event without another transition",
+      "cancellation/replacement remains protected and a lost Admin resolution reply automatically exports the committed release",
+      "after fixture authorization/closed native state, delayed original projection and signed historical retries never recreate a hold/event",
+      "reopened native SQLite plus actual R2 history retain the same protected/released decision and native result",
+      "a witnessed authorization winner permanently refuses an unaccepted native intent without any canonical hold",
+      "actual Admin handler signed native prepare plus coordinator reconciles a lost projection reply with one hold/event and no browser proof export",
+      "actual Admin adapter recovers committed native resolution and verified release then refuses historical creation as a current saved hold",
+      "actual Admin adapter returns processing-started refusal without a canonical hold or false success"
+    ],
+    "sourcePinsMatched": 20,
+    "original": {
+      "before": {
+        "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+        "tables": 161,
+        "rows": 49717,
+        "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+        "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+      },
+      "after": {
+        "schemaHash": "f088bbfeeae4812cf771badd89c962684ec3f5c38a68a64b02603161143dc75a",
+        "dataHash": "b342ab6b5a5d158049b0d30b2d38f3a87d6d950c0a9dbc488c221753772ef363",
+        "sequenceHash": "087b0d42ffe77e223b8a21d14f15db237ba79d6c04b425e09e4b2f2e4708104a"
+      },
+      "conserved": true
+    },
+    "cloneDropped": true,
+    "postgresStopped": true,
+    "postgresPortRefused": true,
+    "plaintextRemoved": true,
+    "r2Shutdown": {
+      "readyObserved": true,
+      "disposed": true,
+      "portRefused": true,
+      "ok": true,
+      "host": "127.0.0.1",
+      "port": 50649
+    },
+    "nonHoldProof": "synthetic register/cancel/freeze/authorize and native customer status setup only; not genuine erasure/Auth"
+  },
+  "focusedNode": {
+    "command": "node --test tests/customer-privacy-admin-api.test.mjs",
+    "exit": 0,
+    "cases": 13,
+    "log": {
+      "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/node-final.log",
+      "sha256": "9dc8c47f02ff351d92cdee4863cc5ba0450b8f0a95d298263f385b5fe6beda93"
+    },
+    "failedFirst": {
+      "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/node-red.log",
+      "sha256": "5bfafd540d345d221e145ebd4673172629c53201874594d2443ea4b5f36cfe9e"
+    }
+  },
+  "browser": {
+    "command": "node node_modules/@playwright/test/cli.js test --config=playwright.product-master.config.js tests/customer-crm-ui.spec.js",
+    "currentCases": 8,
+    "scope": "synthetic React/intercepted services; reconciled coverage, no final whole-suite rerun after focused replacements",
+    "initialAggregate": {
+      "exit": 0,
+      "passed": 8,
+      "log": {
+        "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/browser-green.log",
+        "sha256": "318860ff935e4d7f51c37bb90b3a2a05d4807c157f74047f784011751562ef80"
+      },
+      "state": "before final customer-only refusal and outage retry replacements"
+    },
+    "focusedReplacements": [
+      {
+        "match": "customer-only hold refusal",
+        "exit": 0,
+        "passed": 1,
+        "log": {
+          "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/browser-customer-only.log",
+          "sha256": "f64ed403e75fd61e8562cd539d92763254e3060e72955f5e01d49865b0cdbef8"
+        }
+      },
+      {
+        "match": "directory search and privacy hold review",
+        "exit": 0,
+        "passed": 1,
+        "log": {
+          "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/browser-outage-green.log",
+          "sha256": "2c78d39fe4015da6eb36fb003820d90c37b375801e743c5b16697e1b6acb80ca"
+        },
+        "failedFirst": {
+          "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/browser-outage-red.log",
+          "sha256": "f134101155298abb1fe8cdfb579c1bdbe16b7d15911f3dcf79bb24003c05049e"
+        }
+      }
+    ],
+    "currentOutcomeFailedFirst": {
+      "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/browser-red-locator-fixed.log",
+      "sha256": "925514a5977c52d78c6941e0ed6b264526d7f407ed5a796e677e616f22ca450f"
+    },
+    "captures": [
+      {
+        "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/hold-reconciliation-375.png",
+        "sha256": "75cdfc6d792c8169d1c5463643558f58969ef5bc69a9fd59f24d0b7b45b32d40"
+      },
+      {
+        "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/hold-reconciliation-1440.png",
+        "sha256": "9c0b08b3a6fd50f6017d65e98dba8288a565e39eea51ae76f024b46f213b005a"
+      }
+    ],
+    "capturesInspected": true,
+    "infrastructureFailures": [
+      {
+        "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/browser-red.log",
+        "sha256": "eb438a7e1e40c3029129202a2fc8ddedc894cf95c6a37de79f8e010b20f3f8c8",
+        "scope": "sandboxed browser startup stalled; exact owned CRM test process tree stopped; not behavioral evidence"
+      },
+      {
+        "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/browser-red-loopback.log",
+        "sha256": "037786c2921bea0725d6d27225eb01e0124c34933dbc64876341dd1b4f4948a1",
+        "scope": "strict test locator timed out; corrected to accessible roles before the genuine missing-message red run"
+      }
+    ]
+  },
+  "development": {
+    "command": "npm run verify:development",
+    "exit": 0,
+    "privacyToolCases": 119,
+    "log": {
+      "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/development-qualified.log",
+      "sha256": "7aa7ba7b786eaeeb8797f3e9ef62dfeecee533c407afa65a12f6aabaab6e1467"
+    },
+    "initialFailure": {
+      "reason": "dynamic ternary RPC-name expression; corrected to two explicit literal calls without audit-policy changes",
+      "log": {
+        "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/development-final.log",
+        "sha256": "2791d3383ae5a052da2ad379cec0c06877730c8629a42d4c41434e92bd8dd621"
+      }
+    },
+    "focusedSurfaceAudit": {
+      "exit": 0,
+      "dynamicOperations": 0,
+      "unexpectedPublic": 0,
+      "unexpectedAnonymous": 0,
+      "routeGaps": 0,
+      "log": {
+        "path": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df/surface-green.log",
+        "sha256": "046244a22fe845c0c52bffda50333f8e6aa5df1b892a43fd1019ebef680b01b6"
+      }
+    }
+  },
+  "review": {
+    "design": "APPROVED for bounded inactive local implementation/testing only",
+    "skepticObjections": 3,
+    "accepted": 3,
+    "rejected": 0,
+    "guardian": "APPROVED",
+    "advocate": "APPROVED",
+    "arbiter": "APPROVED",
+    "codeReview": "APPROVED; no unresolved Critical/Important",
+    "importantFinding": "authority outage after unknown prior action could clear retained payload; failed-first regression fixed by uncertain classification and truthful copy",
+    "finalLiteralCallReview": "Approval stands; same branch/arguments/signal"
+  },
+  "failedNative": [
+    {
+      "path": ".tools/privacy-current-schema/f5f06bcc-0925-43e3-993a-94f6ed29b956/receipt.json",
+      "sha256": "aa08fbba0f87d1a1d9863dfcc71943d0d21e405d3da3b9308cf12a1d980f21c0",
+      "scope": "sandbox loopback permission failure, not behavioral evidence",
+      "reconciledCleanup": {
+        "path": ".tools/privacy-current-schema/f5f06bcc-0925-43e3-993a-94f6ed29b956/interrupted-cleanup.json",
+        "sha256": "50a0e2c4d1be3b292db99ce051ccfbe5fd02d6f76885561f302454b5d9278890"
+      }
+    },
+    {
+      "path": ".tools/privacy-current-schema/d37d1e5c-3522-4256-a09d-5c1d33e39aec/receipt.json",
+      "sha256": "15b475b7482580871990a8be4194ae22f3de4d81a2b48227253c9ec8abd3784b",
+      "scope": "failed-first direct authenticated legacy hold mutation was not refused; original restored state and owned cleanup verified"
+    }
+  ],
+  "historicalNative": {
+    "path": ".tools/privacy-current-schema/f8c17583-6308-4576-9bab-25feaf57a468/receipt.json",
+    "sha256": "a1bf46a478de3523c00bd5737db38e0e68aaaecc5af6d4e34416e66891f8f697",
+    "scope": "passing adapter before explicit literal RPC call audit correction; current source is final native receipt above"
+  },
+  "sources": [
+    {
+      "path": "supabase/migrations/20261027_customer_account_portfolio.sql",
+      "sha256": "705f776cac7aac988a85487dcd039a03022705012308bfb722f761c51b694cb9"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_automation.sql",
+      "sha256": "e3354448f8d2126e538782ba01513bcc40919af92f4b2ed36a408208840fe1e4"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_admin.sql",
+      "sha256": "686ab1ede2e5d770942996cc83d06ac809daa377bf5e182741b553ee9819c9bf"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_hold_intent.sql",
+      "sha256": "2612e44313ec2ce2c98ac1fbc14779eae73d28622c2d909b6cb6085cb9b9b79f"
+    },
+    {
+      "path": "supabase/migrations/20261027_customer_privacy_hold_authority.sql",
+      "sha256": "5302cd896e4eec2ab958ffc0908a75df76f69e2ee9e5445fc07e369c72d3ece9"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_hold_intent.sql",
+      "sha256": "5d235e591f08aa8ee06ca1c1e6fce2fb666e5af44da1622063ab26be2e989dcc"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_hold_authority.sql",
+      "sha256": "a18f1c642a6a0641a5ace44b2c0ed2ffc78eb4ef91919708ff9d0fd6d05533b1"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_hold_authority_concurrency.sql",
+      "sha256": "1094aee47fb50b9bd2b3ff543335f5924d62c15da13a5957d17a805a2fc5277b"
+    },
+    {
+      "path": "scripts/prove-customer-hold-coordinator.mjs",
+      "sha256": "1c2e89eaf5de13cbfdc44ff79aef5fe4145e3fef21d5d6fe9fc8f8b8eeb1fca4"
+    },
+    {
+      "path": "server/admin-bff/customer-privacy.js",
+      "sha256": "d4942eac6c820eac5a47c90cc4ea261fe43c606e87a98a59abbb3bfc1eaf94cf"
+    },
+    {
+      "path": "server/admin-bff/security.js",
+      "sha256": "3657c0200f7b25e3f1f51d04d0d17da69b2d6507d1eb93c5980064b63a75cae1"
+    },
+    {
+      "path": "server/admin-bff/request-deadline.js",
+      "sha256": "1f2b9f1b7d1446cb5f570be21c08ad6256d02367443a54a0e7a0ff3a3444850b"
+    },
+    {
+      "path": "server/privacy-authority/native-holds.js",
+      "sha256": "82543fe815e2a69cc760613954695678a226c9c97655e34b7bf2d6e3cbc22423"
+    },
+    {
+      "path": "server/privacy-authority/bounds.js",
+      "sha256": "6a248bf9135fe69751601a8dc036f19950bad985b0e3f752c036ab10b664a178"
+    },
+    {
+      "path": "server/privacy-authority/journal.js",
+      "sha256": "d67af8a886adce8cfe78a9c253906083fcd4a2563e97627ec6ab7fbef1e938a5"
+    },
+    {
+      "path": "server/privacy-authority/state.js",
+      "sha256": "daa4b5cddefcb6792bc8dd092e593d3bdccc8788bda61bf05209bf62f591e467"
+    },
+    {
+      "path": "server/privacy-authority/sqlite-witness.js",
+      "sha256": "0c617c6f31e08a9c776994dace68baf8e01d34098b28f6d822ba7e9fbfbe26cf"
+    },
+    {
+      "path": "scripts/lib/local-worker-runtime.mjs",
+      "sha256": "ee23a828e77c299455bf00bacd058305c6327728393ff55668d65d2ced4bdd42"
+    },
+    {
+      "path": ".tools/closure-authority-runtime/package-lock.json",
+      "sha256": "8b545e43dde6a2b6ae0754c47da814845ac2781e88dbb0afc031ab5509235787"
+    },
+    {
+      "path": "supabase/tests/customer_privacy_hold_concurrency.sql",
+      "sha256": "337b205fdef1fc770461e584b30af5bb803b0cada90cc8b0eb25623a411ef543"
+    },
+    {
+      "path": "src/services/adminBffService.js",
+      "sha256": "3c99312df5fcc9d6fe384fa2a5aa1503a03dfd91dcbdcc699e05d1728d429489"
+    },
+    {
+      "path": "src/views/admin/CustomerPrivacyReview.jsx",
+      "sha256": "88e988b931865c118bc77ec581501fae511d3ad88dfb73dc48bf732c26da7a8d"
+    },
+    {
+      "path": "tests/customer-privacy-admin-api.test.mjs",
+      "sha256": "4e80094477b6c2dfed2603cbb0b314e390a123bb731ddf1a6e99f8f048b7104f"
+    },
+    {
+      "path": "tests/customer-crm-ui.spec.js",
+      "sha256": "1cfe807240b4f598a5ca64e8c152f3ae14bcb2c911f946eec7669610b8f33107"
+    },
+    {
+      "path": "package.json",
+      "sha256": "4ec3b33f126ec1a08616c4f358c7c3781a6dce3e544e6e28d480d34ac147ea22"
+    }
+  ],
+  "limits": [
+    "Customer-only/pre-request and existing holds without intents are unsupported; refusal is not completed reconciliation.",
+    "Default app handler has no configured authority; all erasure execution/activation gates remain closed.",
+    "Native register/cancel/freeze/authorize setup is synthetic; no real erasure or hosted Auth/Storage acceptance.",
+    "Existing 26 October archive, managed Vault and original ownership/ACL restoration excluded.",
+    "Full freeze/manifest/permit/processor-worker replacement/versioned suppression/provider scheduling-custody/retention/hosted acceptance remain MAP-019."
+  ],
+  "recovery": {
+    "preEditCopies": ".tools/map019-admin-hold-7911ed60-e464-4fe5-8742-87ca10dd53df",
+    "scope": "Selectively reverse only this adapter/migration/tool/client/test slice against its pre-edit copies, reconciling later edits; preserve prior dirty work and evidence. No installed state changed. Never restore erased PII or discard an uncertain command because the service is unavailable.",
+    "interruption": "Use the exact owned.json/receipt; verify absolute owned data path, stopped server and refused port before plaintext removal."
+  },
+  "nextAction": "MAP-019: reconcile customer-only/pre-request and existing holds before activation, then shared all-writer freeze, versioned manifest/native permit/direct-worker replacement, offline suppression and remaining provider/retention/hosted gates."
+}

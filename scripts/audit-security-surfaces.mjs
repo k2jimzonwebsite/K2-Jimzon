@@ -120,6 +120,16 @@ for (const route of STOREFRONT_BFF_ROUTES) {
     if (control.method !== 'GET' || control.guestGrant !== 'none' || control.idempotency !== false
       || control.accountAuth || control.bot) routeControlGaps.push(`storefront:${route}:invalid-public-reference-control`)
   }
+  else if (route === 'internal/privacy/run' && control.serverOnly === true) {
+    // Exact server-only scheduler boundary. Auth secret and fixed-project
+    // service capability are behavior-tested; it has no browser client route.
+    if (control.method !== 'GET' || control.accountAuth !== 'scheduler-secret'
+      || control.schedulerSecret !== true || control.serviceCapability !== true
+      || control.idempotency !== true || control.guestGrant !== 'none'
+      || control.origin !== false || control.signed !== false || control.bot !== false) {
+      routeControlGaps.push(`storefront:${route}:invalid-scheduler-control`)
+    }
+  }
   else {
     if (control.method !== 'POST') routeControlGaps.push(`storefront:${route}:method-not-post`)
     if (!control.origin) routeControlGaps.push(`storefront:${route}:missing-origin`)

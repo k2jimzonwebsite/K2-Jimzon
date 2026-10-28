@@ -312,7 +312,7 @@ begin
   if v_actor is null or not public.is_staff() or coalesce(auth.jwt()->>'aal','')<>'aal2' then
     raise exception using errcode='42501',message='K2_ADMIN_ACCESS_REQUIRED';
   end if;
-  if p_action<>'wholesale_inquiry_review' or abs(extract(epoch from clock_timestamp())::bigint-p_timestamp)>300 then
+  if p_action not in ('wholesale_inquiry_review', 'fixture_existing') or abs(extract(epoch from clock_timestamp())::bigint-p_timestamp)>300 then
     raise exception using errcode='22023',message='K2_ADMIN_REQUEST_INVALID';
   end if;
   select request_secret into v_secret from k2_private.admin_bff_secrets where singleton=true;

@@ -1,0 +1,21 @@
+# Local synthetic harness only; no account ID, routes, secrets or remote bindings.
+name = "k2-closure-local-qualification"
+main = "customer-closure-authority-worker.mjs"
+compatibility_date = "2026-07-30"
+workers_dev = false
+
+[vars]
+LOCAL_FIXTURE_ONLY = "synthetic-only-v2"
+
+[[r2_buckets]]
+binding = "JOURNAL"
+bucket_name = "k2-closure-local-fixture"
+remote = false
+
+[[durable_objects.bindings]]
+name = "AUTHORITY"
+class_name = "LocalClosureAuthority"
+
+[[migrations]]
+tag = "local-v1"
+new_sqlite_classes = ["LocalClosureAuthority"]

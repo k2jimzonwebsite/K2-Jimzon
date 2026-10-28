@@ -1,0 +1,148 @@
+{
+  "item": "MAP-019",
+  "idea": "IDEA-20261027-02",
+  "date": "2026-10-27",
+  "status": "local-components-qualified-full-goal-active",
+  "branch": "codex/customer-privacy-owner-decisions",
+  "baseCommit": "c630e7ebfa491c463c618c030e4222e544269f06",
+  "command": "node --test tests/customer-closure-authority-state.test.mjs tests/customer-closure-authority-journal.test.mjs tests/customer-closure-authority-sqlite.test.mjs",
+  "focused": {
+    "execution": "6018f0",
+    "exitCode": 0,
+    "passed": 45,
+    "failed": 0,
+    "state": 18,
+    "journal": 21,
+    "sqlite": 6
+  },
+  "independentReview": {
+    "agent": "/root/closure_state_review",
+    "disposition": "APPROVED local components only",
+    "critical": 0,
+    "important": 0,
+    "independentlyPassed": 45,
+    "execution": "45703c"
+  },
+  "redEvidence": [
+    {
+      "execution": "dc4256",
+      "failed": 2,
+      "reason": "caller mutation before command copy and changed retry after state refusal"
+    },
+    {
+      "execution": "fdfa12",
+      "failed": 1,
+      "reason": "malformed self-checksummed checkpoint accepted"
+    },
+    {
+      "execution": "36266d",
+      "failed": 1,
+      "reason": "missing request and actor indexes despite committed receipt accepted"
+    },
+    {
+      "execution": "a0d422",
+      "failed": 2,
+      "reason": "hung read/write exceeded expected uncertainty deadline"
+    },
+    {
+      "execution": "bb2569",
+      "failed": 2,
+      "reason": "native witness replaced newer fork or corrupt existing evidence"
+    },
+    {
+      "execution": "1e0cbf",
+      "failed": 1,
+      "reason": "concurrent valid witness progress returned lower snapshot rather than pending"
+    }
+  ],
+  "development": {
+    "command": "npm run verify:development",
+    "initial": {
+      "execution": "5358d2/34ee68",
+      "exitCode": 1,
+      "tests": 91,
+      "passed": 90,
+      "reason": "existing unrelated localhost fixture denied by sandbox; diagnostic2a8ffe connect EACCES"
+    },
+    "focusedRecovery": {
+      "execution": "58e70c",
+      "passed": 2,
+      "failed": 0,
+      "sourceChanged": false
+    },
+    "final": {
+      "execution": "8085e3/c994bc",
+      "exitCode": 0,
+      "privacyPassed": 64,
+      "routeGaps": 0,
+      "unexpectedPublicGrants": 0,
+      "unexpectedAnonymousGrants": 0
+    }
+  },
+  "runtime": {
+    "node": "24.16.0",
+    "sqlite": "3.53.0",
+    "witness": "native SQLite files and transactions via documented API facade; flush no-op in fixture",
+    "objects": "conditional in-memory I/O double, not R2"
+  },
+  "productionChanged": false,
+  "activeRouteWired": false,
+  "executionAllowed": false,
+  "fullGoalComplete": false,
+  "sources": [
+    {
+      "path": "server/privacy-authority/state.js",
+      "sha256": "ec256601cf6dfaac99c63922871daa333030b946bde34c670d72dfb82da3d0ec"
+    },
+    {
+      "path": "server/privacy-authority/journal.js",
+      "sha256": "87c206688a5e49162cbfe509122369734b0c976e5a551bd95c78772697286246"
+    },
+    {
+      "path": "server/privacy-authority/sqlite-witness.js",
+      "sha256": "4c60d7097f246722159736384f4acb258eb8ac25e01013caabc8e38fcb5121df"
+    },
+    {
+      "path": "tests/customer-closure-authority-state.test.mjs",
+      "sha256": "072eecae4d8e7308a823901665cfa4c3563822c536526bbcb8e4c9561c20508f"
+    },
+    {
+      "path": "tests/customer-closure-authority-journal.test.mjs",
+      "sha256": "6c2a0fbbdee4fd213fb0e3c46fa3d31bbe788f11aaa310cdfb8c37f27199e7ca"
+    },
+    {
+      "path": "tests/customer-closure-authority-sqlite.test.mjs",
+      "sha256": "ec1eeffdef266f0fbc9872fc9dc16eff037b04c880f685aa50bae23049c3d2b4"
+    },
+    {
+      "path": "package.json",
+      "sha256": "1cf5c1e0c8e4d84702ee2dac0309d4e483a5d73155c91a0b5d61c320f7ac8ede"
+    }
+  ],
+  "logs": [
+    {
+      "path": ".tools/map019-authority-development-20261027.log",
+      "sha256": "c6085b8e49dd281c156fd66859a45abc18462ba28bbb673c06f24e0876fed93f"
+    },
+    {
+      "path": ".tools/map019-authority-development-20261027-local.log",
+      "sha256": "c16558be8d365a13953f1cd24501ce690409b5a70cd9be1977944e2d02b0a19d"
+    }
+  ],
+  "recovery": "Revert only new inactive authority modules/tests and package test entries before adoption; preserve prior dirty work/receipts; never restore closed PII.",
+  "nextActionLocation": "MASTER_ACTION_PLAN.md / MAP-019",
+  "unqualified": [
+    "actual local Workers/R2/SQLite composition",
+    "provider custody/bootstrap/keys",
+    "capacity and resumable increasing-history recovery",
+    "native freeze and all writers",
+    "authenticated proofs and retrievable manifest",
+    "versioned offline suppression and absent old Auth rows",
+    "provider access/Auth/Storage isolation and cleanup",
+    "scheduler/resumption",
+    "OWNER-006 retention",
+    "actual signup/code/re-registration/sign-out",
+    "real-host customer/staff journeys",
+    "exact owner production authorization"
+  ]
+}

@@ -532,6 +532,10 @@ public SLA are commercial promises, not safe engineering defaults.
 
 ## OWNER-006  -  Customer-data retention and deletion policy
 
+**28 October owner clarification:** Owner reports no bookkeeping/legal retention schedule and says “no we dont need this what is this for.” The response explains retained order/payment evidence separately from eligible personal data. Do not ask the owner to invent legal periods or make that paperwork a prerequisite to the confirmed eligible profile/contact/inquiry closure implementation. Preserve transaction evidence and real holds; report retained categories accurately. No numeric financial/audit/backup expiry or blanket erasure is approved by this steering. The existing prepared processor already separates independent profile closure from transaction-evidence retention; remaining technical activation work stays MAP-019. The owner also explicitly requests commit/push/live GitHub and both Vercel artifacts after qualification; exact SQL/provider/subscription gates remain separate.
+
+**27 October current scope steering / IDEA-20261027-03:** Owner explicitly says to continue without connecting old Excel copies and to start from a CRM for accounts/customers. Workbook location/custody is no longer a dependency for the requested application implementation and must not be re-asked. Existing Excel copies are not claimed erased. MAP-019 reuses canonical customer/account records and the existing Admin directory; no reset or separate identity truth is authorized.
+
 **Decision:** **Deferred by the owner on 2 September 2026** as too complex to
 answer now. This is a legitimate deferral, not an oversight, and it is recorded
 with its exact consequence so it is not mistaken for completed work.
@@ -551,17 +555,110 @@ default.
 **Needed for:** MAP-019 customer privacy request, anonymization, and deletion
 activation. Source guards preserve operational records until this is decided.
 
-Please confirm with appropriate Philippine legal/accounting advice:
+**27 October 2026 / IDEA-20261027-01 — Reopened, partially answered:** The owner
+selected C: any available Admin may receive privacy requests sent to
+`k2jimzonwebsite@gmail.com`, with each request assigned to one person responsible
+for follow-through. Alternatives were the owner alone or a named staff member.
+The owner initially selected A for final approval: the assigned Admin may approve
+irreversible removal of eligible personal data after identity and retention
+checks, using two-factor authentication (AAL2). Alternatives were a different
+Admin providing a second review or the owner alone. The later automation
+decision below supersedes this requirement for routine eligible requests;
+Admin+AAL2 remains the approval boundary for permitted manual exceptions.
+Neither path permits removal of records K2 must retain. The historical deferral above no
+longer means all questions are unanswered. Retention, holds, verification
+details, anonymization and recovery/backup decisions remain
+open. No request or erasure workflow is activated. MAP-019 owns
+the remaining decisions and any later implementation in dependency order.
+
+**Access timing, 27 October 2026:** Asked when login and old guest-access links
+should stop working after an account-closure request is verified and approved,
+the owner answered that this will be automated and should happen immediately.
+Record immediate automatic access revocation at that point, separately from
+eligible data removal and required retained records.
+
+**Automation scope, 27 October 2026 — Current owner decision:** The owner
+selected B: fully automatic processing of verified, eligible requests; Admins
+handle only blocked cases or exceptions. This supersedes mandatory per-request
+Admin approval for routine eligible requests. Routine processing must not wait
+for a manual assignment or approval; manual follow-up has one assigned Admin.
+Eligibility remains subject to verified identity, configured retention rules,
+holds and protected records; missing or uncertain eligibility goes to Admin,
+not automatic removal. This is target policy only; the unimplemented service
+remains blocked by the other OWNER-006 decisions.
+
+**Open-case handling, 27 October 2026 — Owner selected B:** If an order, refund
+or dispute remains open, keep account closure pending until that case resolves.
+The closure request itself must not revoke account or old guest access during
+this hold; ordinary session/grant expiry and other security controls still
+apply and must not be extended or bypassed. Required records stay protected.
+The owner then selected A for resumption: automatically continue the original
+request after resolution, checking current eligibility again, without asking
+the customer to confirm closure again. Any unresolved hold or uncertain
+eligibility still prevents automatic execution.
+
+**Initial identity verification, 27 October 2026 — Owner selected A:** Before
+accepting the initial closure request, require fresh identity confirmation via
+a link or code sent to the customer's already verified email/phone, even when
+they are signed in. An existing session alone is insufficient. This initial
+proof does not add a second confirmation when a held request resumes; current
+eligibility must still be checked. Customers unable to prove identity remain
+exceptions, not automatically eligible. No Auth/deletion service was activated.
+
+**Retention guidance check, 27 October 2026:** The owner says no retention
+guidance has been provided yet and their cousin handles the bookkeeping.
+No retention period or professional advice is inferred from that role. Keep
+record-specific periods unresolved; do not substitute arbitrary durations.
+Other policy questions may continue while this evidence remains outstanding.
+
+**Understanding confirmed, 27 October 2026:** The owner answered "yep" to the
+collected six-rule workflow: fresh initial identity proof; automatic eligible
+closure/revocation; pending open cases; automatic resumption with new eligibility
+checks; assigned Admin exceptions; preserved required transaction records.
+This confirms the workflow, not retention periods, field-level anonymization,
+backup treatment, implementation or deployment. Design exploration and official
+research are recorded in the existing retention/deletion runbook. Removal of
+eligible personal data is already confirmed and must not be asked again as
+access closure alone. Record-specific retention still needs confirmation.
+
+**Inquiry-only content, 27 October 2026 — Owner selected A:** Where a verified
+closure request concerns a person who has never ordered, paid or had a dispute,
+K2 has no requested continuing business purpose for its copies of inquiry
+messages/photos. Remove eligible inquiry content as part of closure, subject
+to other actual retention requirements or holds. This covers K2-held copies;
+it does not establish deletion of Meta's or a customer's separate copies. No
+inactivity-based cleanup, blanket message deletion or erasure service is activated.
+
+**Grouped answers, 27 October 2026 — Owner answered 1A, 2A, 3 No, 4 Excel:**
+Allow the verified requester to cancel a pending closure before irreversible
+removal starts. Allow a fresh account using the same reverified email/phone
+without automatically restoring erased data. The owner reports no additional
+voluntary warranty/ongoing service beyond the recorded damaged/incorrect-item
+policy; this does not waive applicable rights or obligations. Customer copies
+also exist in Excel. Actual file locations, custodians, versions, duplicate
+exports and automation access have not been observed. Do not claim Excel
+cleanup from database deletion or assume those files have been inspected.
+
+The requested grouped business questions are now answered. Do not re-ask
+confirmed workflow or these choices. Financial retention still needs the
+record-specific sourced draft now in the existing runbook and cousin/bookkeeping
+review; do not ask the owner to invent legal periods. Field-level dependencies,
+Excel inventory and backup handling remain evidence/design qualification.
+
+Remaining evidence and field-level policy, with appropriate Philippine
+legal/accounting advice where needed:
 
 1. Retention periods for customer contact/delivery PII, orders, payments,
    invoices, quotations, fulfillment evidence, Pasabuy/Wholesale inquiries,
    conversations, security evidence, and backups.
 2. Which active operations, disputes, chargebacks, warranties, tax/accounting
    duties, fraud/security investigations, or legal holds pause anonymization.
-3. Who receives and verifies a request, who may approve irreversible execution,
-   the response channel, and whether an appeal/recovery window is required.
-4. Which fields may be anonymized while the operational record remains, and
-   when the Supabase Auth identity may be disabled or deleted.
+3. Field-level removal/anonymization across structured data, free-text evidence,
+   provider identities and external copies while operational records remain;
+   the distinction between immediate access revocation and final Auth deletion.
+4. Technical qualification of approved cancellation and fresh re-registration,
+   plus Excel-copy and backup/restore handling, including truthful reporting of
+   retained categories and pending work.
 
 **Recommendation:** revoke access promptly after verified approval, preserve
 restricted financial/operational truth for its approved basis, anonymize

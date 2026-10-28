@@ -14,6 +14,10 @@ export function mapBoundaryResult(data) {
   const result = Array.isArray(data) ? data[0] : data
   if (!result) return { ok: false, status: 503, code: 'SERVICE_UNAVAILABLE' }
   if (result.ok) return { ok: true, result }
+  if (['ACCOUNT_CLOSED','PRIVACY_PROOF_REQUIRED','PRIVACY_PROOF_EXPIRED','PRIVACY_CONTACT_CHANGED','PRIVACY_REQUEST_EXISTS','PRIVACY_PROCESSING_STARTED'].includes(result.error_code)) {
+    return { ok: false, status: 409, code: result.error_code }
+  }
+  if (result.error_code === 'PRIVACY_REQUEST_NOT_FOUND') return { ok: false, status: 404, code: result.error_code }
   if (result.error_code === 'RATE_LIMITED') {
     return { ok: false, status: 429, code: 'RATE_LIMITED', retryAfter: Number(result.retry_after_seconds || 60) }
   }
