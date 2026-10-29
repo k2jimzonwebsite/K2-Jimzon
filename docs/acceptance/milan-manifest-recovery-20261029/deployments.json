@@ -1,0 +1,94 @@
+{
+  "commit": "0cba36aad971526b23d89b54443571c538ff907a",
+  "teamId": "team_C3Wf3dVUBjUqGQ4rndMTCchz",
+  "observedAt": "2026-10-29T13:28:13.168Z",
+  "storefront": {
+    "id": "dpl_8sY5KwUpf9ZMDJrJfqv2qARsAAqQ",
+    "name": "k2-jimzon",
+    "url": "k2-jimzon-mo4dpzahd-k2-jimzon.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1793280280572,
+    "creator": {
+      "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+      "username": "k2jimzonwebsite"
+    },
+    "project": {
+      "id": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "name": "k2-jimzon",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "main",
+      "githubCommitSha": "0cba36aad971526b23d89b54443571c538ff907a",
+      "githubCommitMessage": "fix(consignments): Recover manifest creation and unblock scanning\n\nSuggest unused manifest codes and preserve entered details on duplicates.\nKeep durable counts moving during canonical refresh, avoid known-SKU catalogue\nreloads, and capture barcode Enter input without waiting on a React render.\nR...",
+      "githubRepo": "K2-Jimzon",
+      "githubOrg": "k2jimzonwebsite"
+    },
+    "alias": [
+      "www.k2jimzon.com",
+      "k2-jimzon-vert.vercel.app",
+      "k2jimzon.com",
+      "k2-jimzon-k2-jimzon.vercel.app",
+      "k2-jimzon-git-main-k2-jimzon.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1793280349309,
+    "ready": 1793280418676,
+    "readyState": "READY",
+    "source": "git",
+    "aliasError": null
+  },
+  "admin": {
+    "id": "dpl_2xJnerqgfEJW36fdap8xcgdHY5az",
+    "name": "k2-jimzon-admin",
+    "url": "k2-jimzon-admin-i3ea952ty-k2-jimzon.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1793280280507,
+    "creator": {
+      "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+      "username": "k2jimzonwebsite"
+    },
+    "project": {
+      "id": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "name": "k2-jimzon-admin",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "main",
+      "githubCommitSha": "0cba36aad971526b23d89b54443571c538ff907a",
+      "githubCommitMessage": "fix(consignments): Recover manifest creation and unblock scanning\n\nSuggest unused manifest codes and preserve entered details on duplicates.\nKeep durable counts moving during canonical refresh, avoid known-SKU catalogue\nreloads, and capture barcode Enter input without waiting on a React render.\nR...",
+      "githubRepo": "K2-Jimzon",
+      "githubOrg": "k2jimzonwebsite"
+    },
+    "alias": [
+      "admin.k2jimzon.com",
+      "k2-jimzon-admin-seven.vercel.app",
+      "k2-jimzon-admin-k2-jimzon.vercel.app",
+      "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1793280281601,
+    "ready": 1793280348445,
+    "readyState": "READY",
+    "source": "git",
+    "aliasError": null
+  },
+  "runtimeErrorRead": {
+    "content": [
+      {
+        "type": "text",
+        "text": "## Runtime Errors\n\n**Project:** prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x\n\n1 error group(s), most frequent first:\n\n### (node:8) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.\ncount=1 users=1 routes=/api/admin\nfirst=2026-10-14T10:13:41.000Z last=2026-10-29T13:25:49.000Z\nlastDeployment=dpl_2xJnerqgfEJW36fdap8xcgdHY5az\n    (node:8) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.\n"
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  }
+}

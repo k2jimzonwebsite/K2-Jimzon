@@ -147,3 +147,31 @@ test('remove preserves a restore action; cancellation can be reopened before dis
  await page.getByRole('button',{name:'Confirm packing change'}).click()
  await expect(page.getByRole('button',{name:'Reopen packing'})).toBeVisible()
 })
+
+test('a scan arriving immediately after journal append is accepted before React renders',async({page})=>{
+ await setup(page,{block:true});await context(page)
+ await page.evaluate(actor=>{
+  const request=navigator.locks.request.bind(navigator.locks);let injected=false
+  navigator.locks.request=(name,callback)=>request(name,lock=>{
+   const result=callback(lock)
+   if(name==='k2:packing:pending:v1:'+actor&&!injected){
+    injected=true
+    const input=document.querySelector('input[list="packing-product-codes"]')
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'8001234567890')
+    input.dispatchEvent(new Event('input',{bubbles:true}))
+    input.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}))
+   }
+   return result
+  })
+ },actor)
+ await scan(page)
+ await expect(page.getByRole('status')).toContainText('2 saved requests')
+})
+
+test('consecutive admissions use the current pause state after the first saved scan',async({page})=>{
+ await page.context().route('**/api/admin/session',r=>r.fulfill({json:{ok:true,user:{userId:actor,role:'Admin'}}}))
+ await page.context().route('**/api/admin/consignments/packing',()=>new Promise(()=>{}))
+ await page.goto('/tests/fixtures/packing-pause-harness.html')
+ await page.getByRole('button',{name:'Queue two'}).click()
+ await expect(page.getByRole('status')).toHaveText('2 saved')
+})

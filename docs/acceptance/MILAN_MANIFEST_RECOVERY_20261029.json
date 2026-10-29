@@ -1,7 +1,7 @@
 {
   "idea": "IDEA-20261029-07",
   "map": "MAP-023",
-  "state": "LOCAL_RELEASE_QUALIFIED_NOT_PROMOTED",
+  "state": "LIVE_REPAIR_STAFF_ACCEPTANCE_PENDING",
   "sourceBase": "9fd595767ccbb27d0562ad318bea320f3df627cf",
   "localEvidence": "milan-manifest-recovery-20261029/local-evidence.json",
   "releaseGate": {
@@ -11,7 +11,7 @@
   },
   "providerWrites": false,
   "productionBusinessWrites": false,
-  "deployed": false,
+  "deployed": true,
   "remainingAuthority": "MASTER_ACTION_PLAN.md / MAP-023",
   "readiness": {
     "project": "pixplcjqivlfflickobf",
@@ -19,5 +19,45 @@
     "owner": 2,
     "connector": 3,
     "failed": 0
+  },
+  "publication": {
+    "commit": "0cba36aad971526b23d89b54443571c538ff907a",
+    "repository": "k2jimzonwebsite/K2-Jimzon",
+    "developer": "EdgerzXc",
+    "main": "0cba36aad971526b23d89b54443571c538ff907a",
+    "featureBranch": "codex/milan-manifest-speed",
+    "normalAtomicPush": true,
+    "hooksRetained": true
+  },
+  "deployments": {
+    "teamId": "team_C3Wf3dVUBjUqGQ4rndMTCchz",
+    "storefront": {
+      "projectId": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "id": "dpl_8sY5KwUpf9ZMDJrJfqv2qARsAAqQ",
+      "status": "READY"
+    },
+    "admin": {
+      "projectId": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "id": "dpl_2xJnerqgfEJW36fdap8xcgdHY5az",
+      "status": "READY"
+    }
+  },
+  "ci": {
+    "id": 40881668088,
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      "build-and-smoke",
+      "security-check-regression",
+      "critical-sql-behavior"
+    ]
+  },
+  "liveEvidence": {
+    "deployments": "milan-manifest-recovery-20261029/deployments.json",
+    "hostVerification": "prior session .tools/milan-create-live-hosts.log",
+    "storefrontStatus": 200,
+    "adminStatus": 200,
+    "adminAnonymousSessionStatus": 401,
+    "physicalStaffAcceptance": "unverified"
   }
 }

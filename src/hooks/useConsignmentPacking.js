@@ -9,14 +9,16 @@ const changedEvent='k2-packing-journal-changed'
 export default function useConsignmentPacking({actorId,onRefresh}) {
  const [entries,setEntries]=useState([]),[error,setError]=useState(''),[paused,setPaused]=useState(true),[busy,setBusy]=useState(false),[refused,setRefused]=useState(null)
  const [refreshing,setRefreshing]=useState(false)
+ const pausedRef=useRef(true)
+ const updatePaused=value=>{pausedRef.current=value;setPaused(value)}
  const scope=useRef(null),running=useRef(null),refreshRef=useRef(onRefresh)
  refreshRef.current=onRefresh
- if(scope.current?.actor!==actorId)scope.current={actor:actorId}
+ if(scope.current?.actor!==actorId){scope.current={actor:actorId};pausedRef.current=true}
  const journal=()=>createPackingJournal()
  const announce=()=>window.dispatchEvent(new Event(changedEvent))
  useEffect(()=>{
-  const identity=scope.current;identity.active=true;setPaused(true);setError('');setRefused(null);setRefreshing(false)
-  const read=()=>{if(scope.current!==identity)return;try{setEntries(journal().read(actorId))}catch(e){setError(e.message);setPaused(true)}}
+  const identity=scope.current;identity.active=true;updatePaused(true);setError('');setRefused(null);setRefreshing(false)
+  const read=()=>{if(scope.current!==identity)return;try{setEntries(journal().read(actorId))}catch(e){setError(e.message);updatePaused(true)}}
   read();window.addEventListener('storage',read);window.addEventListener(changedEvent,read)
   return()=>{identity.active=false;window.removeEventListener('storage',read);window.removeEventListener(changedEvent,read)}
  },[actorId])
@@ -53,7 +55,7 @@ export default function useConsignmentPacking({actorId,onRefresh}) {
  const drain=async()=>{
   const identity=scope.current
   if(running.current===identity)return
-  running.current=identity;setBusy(true);setPaused(false);setError('');setRefused(null)
+  running.current=identity;setBusy(true);updatePaused(false);setError('');setRefused(null)
   const changedSkus=new Set()
   let acknowledged=false
   try{
@@ -81,7 +83,7 @@ export default function useConsignmentPacking({actorId,onRefresh}) {
      if(r.sku)changedSkus.add(r.sku)
     }
    })
-  }catch(e){if(scope.current===identity&&identity.active){setError(e.message);setPaused(true)}}
+  }catch(e){if(scope.current===identity&&identity.active){setError(e.message);updatePaused(true)}}
   finally{
    // Confirmed totals still require a fresh canonical read. Coalesce those reads
    // without blocking the next durable request behind a slow display refresh.
@@ -92,13 +94,13 @@ export default function useConsignmentPacking({actorId,onRefresh}) {
  const enqueue=async(body)=>{
   const identity=scope.current,payloadText=JSON.stringify(validatePackingCommand(body)),key=crypto.randomUUID()
   try{
-   if(paused&&journal().read(actorId).length)throw Error('Resume or resolve the saved packing requests before adding another count.')
+   if(pausedRef.current&&journal().read(actorId).length)throw Error('Resume or resolve the saved packing requests before adding another count.')
    await lock(()=>{
     if(!identity.active||scope.current!==identity)throw Error('The staff account changed. Nothing was queued.')
     const saved=journal().append(actorId,key,payloadText)
     // A newly saved runnable queue must not render as paused while its lock
     // resolves: a disabled default submit button would suppress the next Enter.
-    setPaused(false);setEntries(saved);announce()
+    updatePaused(false);setEntries(saved);announce()
    })
    void drain();return true
   }catch(e){if(scope.current===identity)setError(e.message);return false}

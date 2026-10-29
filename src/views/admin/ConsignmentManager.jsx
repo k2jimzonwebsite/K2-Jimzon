@@ -21,6 +21,7 @@ export default function ConsignmentManager() {
   const [manifests, setManifests] = useState([])
   const [selectedManifestId, setSelectedManifestId] = useState('')
   const [loading, setLoading] = useState(true)
+  const [loadFailed, setLoadFailed] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [showCreate, setShowCreate] = useState(false)
@@ -35,6 +36,9 @@ export default function ConsignmentManager() {
   const [create, setCreate] = useState({ manifestCode: `K2-${new Date().toISOString().slice(0, 7)}`, flightNumber: '' })
   const [line, setLine] = useState({ sku: '', batchCode: '', boxCode: '', bestBefore: '', packedQty: '1' })
   const commandKeysRef = useRef(new Map())
+  const selectedManifestIdRef = useRef('')
+  const loadSequenceRef = useRef(0)
+  const latestLoadRef = useRef(null)
 
   const operationKey = (slot, fingerprint) => {
     const existing = commandKeysRef.current.get(slot)
@@ -45,23 +49,38 @@ export default function ConsignmentManager() {
   }
   const completeOperation = slot => commandKeysRef.current.delete(slot)
 
-  const load = useCallback(async () => {
-    if (!secureConsignments && !supabase) { setError('The consignment service is not configured.'); setLoading(false); return }
+  const load = useCallback(() => {
+    const sequence = ++loadSequenceRef.current
+    const request = (async () => {
+    if (!secureConsignments && !supabase) { setLoadFailed(true); setError('The consignment service is not configured.'); setLoading(false); return }
     const result = secureConsignments
       ? await getAdminConsignments()
       : await supabase.from('consignments').select('*, consignment_items(*)').order('created_at', { ascending: false }).limit(100)
+    if (sequence !== loadSequenceRef.current) return latestLoadRef.current
     const nextManifests = secureConsignments ? result.data?.consignments : result.data
     const loadError = secureConsignments ? (!result.ok ? result.error : '') : result.error
-    if (loadError) setError(secureConsignments ? loadError : 'Flight and consignment records could not be loaded.')
+    if (loadError) {
+      setLoadFailed(true)
+      setManifest(null)
+      setError(secureConsignments ? loadError : 'Flight and consignment records could not be loaded.')
+    }
     else {
+      setLoadFailed(false)
       const records = nextManifests || []
-      const selected = records.find(item => item.id === selectedManifestId) || records[0] || null
+      const requestedId = selectedManifestIdRef.current
+      const selected = requestedId ? records.find(item => item.id === requestedId) : records[0] || null
       setManifests(records)
-      setManifest(selected)
-      setSelectedManifestId(selected?.id || '')
-      setError('')
+      setManifest(selected || null)
+      if (!requestedId) {
+        selectedManifestIdRef.current = selected?.id || ''
+        setSelectedManifestId(selected?.id || '')
+      }
+      setError(requestedId && !selected ? 'The selected manifest is unavailable. Refresh or select another manifest before continuing.' : '')
     }
     setLoading(false)
+    })()
+    latestLoadRef.current = request
+    return request
   }, [selectedManifestId, secureConsignments])
 
   useEffect(() => {
@@ -108,7 +127,7 @@ export default function ConsignmentManager() {
     completeOperation(slot)
     const saved = secureConsignments ? result.result : (Array.isArray(result.data) ? result.data[0] : result.data)
     const savedId = saved?.consignmentId || saved?.id
-    if (savedId) setSelectedManifestId(savedId)
+    if (savedId) { selectedManifestIdRef.current = savedId; setSelectedManifestId(savedId) }
     setShowCreate(false); setNotice('Manifest created in Packing Italy state.'); await load()
   }
 
@@ -259,7 +278,7 @@ export default function ConsignmentManager() {
         </div>
         <button type="button" onClick={openCreate} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create manifest</button>
       </div>
-      {manifests.length > 0 && <label className="mt-4 block max-w-md text-xs font-semibold text-white/55">Current manifest<select className={`${input} mt-1.5`} value={selectedManifestId} onChange={event => { const id = event.target.value; setSelectedManifestId(id); setManifest(manifests.find(item => item.id === id) || null) }}>{manifests.map(item => <option key={item.id} value={item.id}>{item.manifest_code} · {item.status.replaceAll('_', ' ')}</option>)}</select></label>}
+      {manifests.length > 0 && <label className="mt-4 block max-w-md text-xs font-semibold text-white/55">Current manifest<select className={`${input} mt-1.5`} value={selectedManifestId} disabled={loadFailed} onChange={event => { const id = event.target.value; selectedManifestIdRef.current = id; setSelectedManifestId(id); setManifest(manifests.find(item => item.id === id) || null) }}>{manifests.map(item => <option key={item.id} value={item.id}>{item.manifest_code} · {item.status.replaceAll('_', ' ')}</option>)}</select></label>}
     </div>
 
     {showGuide && (
@@ -268,9 +287,9 @@ export default function ConsignmentManager() {
       </div>
     )}
 
-    {(error || notice) && <div role={error ? 'alert' : 'status'} className={`flex items-start gap-2 rounded-adm-sm border p-3 text-sm ${error ? 'border-crimson/40 bg-crimson/10 text-crimson' : 'border-forest/40 bg-forest/10 text-forest'}`}>{error ? <AlertIcon size={17} /> : <CheckIcon size={17} />}<span>{error || notice}</span></div>}
+    {(error || notice) && <div role={error ? 'alert' : 'status'} className={`flex flex-wrap items-start gap-2 rounded-adm-sm border p-3 text-sm ${error ? 'border-crimson/40 bg-crimson/10 text-white' : 'border-forest/40 bg-forest/10 text-forest'}`}>{error ? <AlertIcon size={17} /> : <CheckIcon size={17} />}<span className="min-w-48 flex-1">{error || notice}</span>{error && (!manifest || loadFailed) && <button type="button" className="min-h-11 rounded-adm-sm border border-current px-3 font-semibold" onClick={load}>Retry loading consignments</button>}</div>}
 
-    {!manifest ? <div className="rounded-adm border border-dashed border-adm-line bg-adm-surface p-12 text-center"><PlaneIcon size={28} className="mx-auto text-white/35" /><p className="mt-3 text-[15px] font-semibold text-white/85">No consignment manifests found</p><p className="mt-1 text-sm leading-relaxed text-white/65">Create a real manifest when the next packing cycle begins.</p></div> : <>
+    {!manifest && error ? null : !manifest ? <div className="rounded-adm border border-dashed border-adm-line bg-adm-surface p-12 text-center"><PlaneIcon size={28} className="mx-auto text-white/35" /><p className="mt-3 text-[15px] font-semibold text-white/85">No consignment manifests found</p><p className="mt-1 text-sm leading-relaxed text-white/65">Create a real manifest when the next packing cycle begins.</p></div> : <>
       <section data-tour="flight-manifest" className="rounded-adm border border-adm-line bg-adm-surface p-5">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start"><div><p className="font-mono text-xs font-bold text-white">{manifest.manifest_code}</p><h2 className="mt-1 font-sans text-xl font-bold">{manifest.flight_number}</h2><p className="mt-1 text-sm text-white/50">{manifest.departure_city} → {manifest.destination_city}</p></div><span className="w-fit rounded-full border border-blue/30 bg-blue/10 px-3 py-1.5 text-xs font-semibold text-blue">{manifest.status.replaceAll('_', ' ')}</span></div>
         <div className="mt-5 grid gap-3 sm:grid-cols-3"><Metric label="Milan packed" value={packed} /><Metric label="Manila scanned" value={scanned} /><Metric label={manifest.status === 'Packing_Italy' ? 'Packing lines' : 'Difference'} value={manifest.status === 'Packing_Italy' ? items.filter(i=>!i.packing_removed_at).length : missing} warn={manifest.status !== 'Packing_Italy' && missing > 0} /></div>
