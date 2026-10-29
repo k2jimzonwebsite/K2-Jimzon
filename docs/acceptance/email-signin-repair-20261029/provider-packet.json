@@ -18,7 +18,7 @@
   "siteUrl": "https://www.k2jimzon.com",
   "activationSha256": "b794e9371ccc2810b6a489fc251ce7265d0ad4f78618740433db297f6c7c9ef8",
   "restorationSha256": "063c9762676ba9cdecc173c2f79eaadecf2fdaa30e5ae8515e797dd52c98c744",
-  "limits": "Owner confirms one fresh message reaches Inbox; no general Inbox guarantee. SMTP credentials/Google/roles/confirmation unchanged. Source refresh-token compatibility correction and genuine successful login remain pending.",
+  "limits": "Applied once and readback verified. Owner confirms one fresh message reaches Inbox; general Inbox placement is not guaranteed. Source e4ece97d corrects12-character refresh compatibility on both production artifacts. A fresh successful login remains unverified.",
   "preparedReadOnly": true,
   "productionApplied": true,
   "appliedAt": "2026-10-29T02:37:24.766Z",

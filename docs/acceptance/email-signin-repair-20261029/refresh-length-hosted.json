@@ -1,0 +1,55 @@
+{
+  "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+  "bothProductionReady": true,
+  "observedAt": "2026-10-29T02:55:46.795Z",
+  "deployments": [
+    {
+      "id": "dpl_ETk6P3gMbuj8ypMFTZpWbooCHMgz",
+      "project": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "name": "k2-jimzon",
+      "url": "https://k2-jimzon-m7wuuvuqr-k2-jimzon.vercel.app",
+      "state": "READY",
+      "target": "production",
+      "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+      "aliases": [
+        "www.k2jimzon.com",
+        "k2-jimzon-vert.vercel.app",
+        "k2jimzon.com",
+        "k2-jimzon-k2-jimzon.vercel.app",
+        "k2-jimzon-git-main-k2-jimzon.vercel.app"
+      ]
+    },
+    {
+      "id": "dpl_5yZqQezm1aLGBEZp5hi4AX6LWUer",
+      "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "name": "k2-jimzon-admin",
+      "url": "https://k2-jimzon-admin-b0n9g4rwj-k2-jimzon.vercel.app",
+      "state": "READY",
+      "target": "production",
+      "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+      "aliases": [
+        "admin.k2jimzon.com",
+        "k2-jimzon-admin-seven.vercel.app",
+        "k2-jimzon-admin-k2-jimzon.vercel.app",
+        "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "origin": "https://www.k2jimzon.com",
+      "target": "storefront",
+      "status": 200
+    },
+    {
+      "origin": "https://admin.k2jimzon.com",
+      "target": "admin",
+      "status": 200
+    }
+  ],
+  "publicConfirmationFound": true,
+  "syntheticHashOnly": true,
+  "providerVerificationRequests": 0,
+  "realLoginVerified": false,
+  "fragmentScrubbed": true
+}

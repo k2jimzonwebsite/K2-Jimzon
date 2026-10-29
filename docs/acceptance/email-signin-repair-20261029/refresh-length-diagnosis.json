@@ -1,6 +1,5 @@
 {
   "mapItem": "MAP-019",
-  "observedAt": "2026-10-29T02:45:00Z",
   "readOnly": true,
   "ownerReported": "Fresh branded email reaches Inbox; confirmation reports expired",
   "freshEmailSentAt": "2026-10-29T02:41:38Z",
@@ -10,5 +9,7 @@
   "cause": "BFF and legacy callback parser incorrectly required at least16 characters",
   "correction": "Accept the supported12-character provider refresh token; keep provider verification, rate checks, PKCE and session validation",
   "evidence": "Five parser checks, six BFF boundary cases, six browser cases; failed-first parser/BFF then green; final development0/147",
-  "sourceStatus": "locally qualified; source promotion pending; no provider replay"
+  "sourceStatus": "Deployed on both canonical production artifacts; fresh successful login remains unverified",
+  "recordedAt": "2026-10-29T02:57:01.237038+00:00",
+  "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887"
 }

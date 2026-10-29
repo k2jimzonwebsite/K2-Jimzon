@@ -625,5 +625,139 @@
     ],
     "recovery": "Use source/per-project rollback to the recorded previous deployments only by scoped recovery decision. Disable the Storefront account flag before any separately authorized RPC deactivation. Retain address columns/data/legacy writer guard. Signup inverse blocks future signup without deleting users. Never replay installed SQL/Auth or restore an old database over later data.",
     "receiptOnlyPolicy": "Save this evidence to the existing feature branch; no second main push, app build or production deployment is needed."
+  },
+  "emailRepairRelease": {
+    "mapItem": "MAP-019",
+    "recordedAt": "2026-10-29T02:57:01.237038+00:00",
+    "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+    "status": "source-and-email-provider-repair-live-fresh-login-acceptance-pending",
+    "deployments": [
+      {
+        "id": "dpl_ETk6P3gMbuj8ypMFTZpWbooCHMgz",
+        "project": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+        "name": "k2-jimzon",
+        "url": "https://k2-jimzon-m7wuuvuqr-k2-jimzon.vercel.app",
+        "state": "READY",
+        "target": "production",
+        "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+        "aliases": [
+          "www.k2jimzon.com",
+          "k2-jimzon-vert.vercel.app",
+          "k2jimzon.com",
+          "k2-jimzon-k2-jimzon.vercel.app",
+          "k2-jimzon-git-main-k2-jimzon.vercel.app"
+        ]
+      },
+      {
+        "id": "dpl_5yZqQezm1aLGBEZp5hi4AX6LWUer",
+        "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+        "name": "k2-jimzon-admin",
+        "url": "https://k2-jimzon-admin-b0n9g4rwj-k2-jimzon.vercel.app",
+        "state": "READY",
+        "target": "production",
+        "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+        "aliases": [
+          "admin.k2jimzon.com",
+          "k2-jimzon-admin-seven.vercel.app",
+          "k2-jimzon-admin-k2-jimzon.vercel.app",
+          "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+        ]
+      }
+    ],
+    "publicHostEvidence": {
+      "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+      "bothProductionReady": true,
+      "observedAt": "2026-10-29T02:55:46.795Z",
+      "deployments": [
+        {
+          "id": "dpl_ETk6P3gMbuj8ypMFTZpWbooCHMgz",
+          "project": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+          "name": "k2-jimzon",
+          "url": "https://k2-jimzon-m7wuuvuqr-k2-jimzon.vercel.app",
+          "state": "READY",
+          "target": "production",
+          "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+          "aliases": [
+            "www.k2jimzon.com",
+            "k2-jimzon-vert.vercel.app",
+            "k2jimzon.com",
+            "k2-jimzon-k2-jimzon.vercel.app",
+            "k2-jimzon-git-main-k2-jimzon.vercel.app"
+          ]
+        },
+        {
+          "id": "dpl_5yZqQezm1aLGBEZp5hi4AX6LWUer",
+          "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+          "name": "k2-jimzon-admin",
+          "url": "https://k2-jimzon-admin-b0n9g4rwj-k2-jimzon.vercel.app",
+          "state": "READY",
+          "target": "production",
+          "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+          "aliases": [
+            "admin.k2jimzon.com",
+            "k2-jimzon-admin-seven.vercel.app",
+            "k2-jimzon-admin-k2-jimzon.vercel.app",
+            "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "origin": "https://www.k2jimzon.com",
+          "target": "storefront",
+          "status": 200
+        },
+        {
+          "origin": "https://admin.k2jimzon.com",
+          "target": "admin",
+          "status": 200
+        }
+      ],
+      "publicConfirmationFound": true,
+      "syntheticHashOnly": true,
+      "providerVerificationRequests": 0,
+      "realLoginVerified": false,
+      "fragmentScrubbed": true
+    },
+    "provider": {
+      "packetSha256": "b794e9371ccc2810b6a489fc251ce7265d0ad4f78618740433db297f6c7c9ef8",
+      "appliedAt": "2026-10-29T02:37:24.766Z",
+      "dispatchCount": 1,
+      "readback": "email-repair-provider-reconciled.json",
+      "otherDirectSettingsUnchanged": true,
+      "customizationStatusFlagsReconciled": true
+    },
+    "ownerDeliveryReport": {
+      "freshEmailSentAt": "2026-10-29T02:41:38Z",
+      "placement": "Inbox",
+      "scope": "One owner-reported message, not an Inbox guarantee"
+    },
+    "lastRealAttempt": {
+      "sessionCreatedAt": "2026-10-29T02:41:57.989239Z",
+      "refreshTokenLength": 12,
+      "result": "Provider created session; old BFF rejected its supported token length"
+    },
+    "correction": {
+      "runtimeDelta": "Two lower-bound changes from16 to12 in existing BFF/parser; no provider write",
+      "failedFirst": [
+        "parser",
+        "Auth BFF"
+      ],
+      "passed": {
+        "parser": 5,
+        "authBoundary": 6,
+        "emailBrowser": 6,
+        "developmentPrivacyAddressParser": 147,
+        "separateBuilds": 2
+      },
+      "unaffectedReleaseEvidence": "email-repair-release-coverage.json;24 stages retained without rerun"
+    },
+    "realFreshSuccessfulLoginVerified": false,
+    "remaining": [
+      "One new email confirmation and session persistence after correction",
+      "Real profile/settings/address save/readback/default checkout using owner data, without submitting an order",
+      "Automated deletion remains suspended in MAP-019"
+    ],
+    "recovery": "Retain compatible first-party callback and12-character token support while issued emails remain valid. Any source/provider recovery is a scoped reviewed action; do not replay SQL/signup/email activation, revoke users, reset roles or restore old data. Restore-previous-templates.json is a separately authorized inverse only."
   }
 }
