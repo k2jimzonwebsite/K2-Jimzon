@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+(node:20444) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\customer-account-ui.spec.js:31:1 › email sign-in return waits for confirmation and keeps PKCE before establishing the session (2.1s)
+  ok 2 tests\customer-account-ui.spec.js:54:1 › email sign-in return explains an expired link without sending another email or exposing provider text (910ms)
+  ok 3 tests\customer-account-ui.spec.js:63:1 › email sign-in return accepts an older implicit email link without changing the PKCE client (1.4s)
+  ok 4 tests\customer-account-ui.spec.js:84:1 › email sign-in return preserves the pending sign-out safeguard (459ms)
+  ok 5 tests\customer-account-ui.spec.js:92:34 › email sign-in return fits existing account design at 375 (771ms)
+  ok 6 tests\customer-account-ui.spec.js:92:34 › email sign-in return fits existing account design at 1440 (1.7s)
+
+  6 passed (8.6s)

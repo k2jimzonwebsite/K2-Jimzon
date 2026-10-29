@@ -1,0 +1,25 @@
+{
+  "project": "pixplcjqivlfflickobf",
+  "mapItem": "MAP-019",
+  "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8",
+  "ownerApproval": "Approve K2 email repair",
+  "packetSha256": "b794e9371ccc2810b6a489fc251ce7265d0ad4f78618740433db297f6c7c9ef8",
+  "startedAt": "2026-10-29T02:37:24.766Z",
+  "changedFields": [
+    "smtp_sender_name",
+    "mailer_subjects_magic_link",
+    "mailer_subjects_confirmation",
+    "mailer_templates_magic_link_content",
+    "mailer_templates_confirmation_content"
+  ],
+  "status": "unknown-or-drift-readback-required-no-retry",
+  "backup": "Exact pre-change five-field inverse is preserved in restore-previous-templates.json; no SMTP credentials were retained.",
+  "patchHttpStatus": 200,
+  "changedFieldsVerified": true,
+  "unrelatedChangedFields": [
+    "mailer_subjects_custom_contents",
+    "mailer_templates_custom_contents"
+  ],
+  "failure": "EMAIL_REPAIR_POSTCONDITION_FAILED",
+  "completedAt": "2026-10-29T02:37:25.132Z"
+}

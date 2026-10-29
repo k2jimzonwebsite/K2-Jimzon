@@ -38,3 +38,9 @@ test('email return fails closed if URL credentials cannot be cleared', () => {
   assert.equal(result.kind, 'error')
   assert.equal(JSON.stringify(result).includes('a'.repeat(64)), false)
 })
+
+test('email return accepts the supported twelve-character provider refresh token and refuses shorter tokens', () => {
+  const accessToken = 'one.two.three'
+  assert.deepEqual(capture(`/account#access_token=${accessToken}&refresh_token=abc123def456&type=magiclink`).result, { kind: 'session', accessToken, refreshToken: 'abc123def456' })
+  assert.equal(capture(`/account#access_token=${accessToken}&refresh_token=abc123def45&type=magiclink`).result.kind, 'error')
+})

@@ -1,0 +1,43 @@
+✔ email return captures the hash only in memory and scrubs credentials before SDK initialization (1.9983ms)
+✔ email return rejects duplicate, mixed, recovery and incomplete credentials (0.6041ms)
+✔ email return leaves unrelated account anchors, pages and PKCE codes untouched (1.1519ms)
+✔ email return fails closed if URL credentials cannot be cleared (0.5923ms)
+✖ email return accepts the supported twelve-character provider refresh token and refuses shorter tokens (2.3218ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.6189
+
+✖ failing tests:
+
+test at tests\customer-email-return.test.mjs:42:1
+✖ email return accepts the supported twelve-character provider refresh token and refuses shorter tokens (2.3218ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   kind: 'error',
+  +   message: 'This sign-in link is invalid. Request a new link.'
+  -   accessToken: 'one.two.three',
+  -   kind: 'session',
+  -   refreshToken: 'abc123def456'
+    }
+  
+      at TestContext.<anonymous> (file:///C:/Users/jerze/K2%20JImzon/tests/customer-email-return.test.mjs:44:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { kind: 'error', message: 'This sign-in link is invalid. Request a new link.' },
+    expected: { kind: 'session', accessToken: 'one.two.three', refreshToken: 'abc123def456' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

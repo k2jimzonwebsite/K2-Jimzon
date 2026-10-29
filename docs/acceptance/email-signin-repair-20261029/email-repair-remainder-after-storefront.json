@@ -1,0 +1,75 @@
+{
+  "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8",
+  "priorStages": "email-repair-remainder-final.json",
+  "storefrontGroupPassed": 47,
+  "logoUnchangedFocusedRequired": true,
+  "initialAggregateExit": 1,
+  "baseNodeConstituentsPassed": true,
+  "priorResumptionFailure": "Direct expanded script lacked npm bin PATH at browser launch; all preceding Node constituents passed. Resume browser only.",
+  "retainedPreBaseSource": "dcf3b82e96fe9cfd8ec7504a85fa945610ceb7c0",
+  "retainedPreBaseGroups": [
+    "security:test-turnstile",
+    "test:security-check-ui",
+    "test:product-sku-merge",
+    "test:product-families",
+    "test:store-categories",
+    "test:base",
+    "test:mobile-moderation",
+    "test:store-orientation"
+  ],
+  "crmSeparatePassed": 9,
+  "fixtureAdjustment": "CRM requires Admin BFF; run separately with fabricated provider. Other base fixtures keep default-off flags.",
+  "startedAt": "2026-10-29T02:15:08.608Z",
+  "status": "failed-focused-followup-required",
+  "stages": [
+    {
+      "name": "test:storefront-recovery",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:15:08.610Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:17:19.667Z"
+    },
+    {
+      "name": "test:admin-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:17:19.668Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:18:57.644Z"
+    },
+    {
+      "name": "test:payment-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:18:57.644Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:19:46.563Z"
+    },
+    {
+      "name": "test:inbox-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:19:46.563Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:20:20.608Z"
+    },
+    {
+      "name": "test:admin-product-master-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:20:20.608Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:21:53.707Z"
+    },
+    {
+      "name": "test:admin-website-assignment-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:21:53.707Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:22:14.898Z"
+    },
+    {
+      "name": "test:owner-count-close-ui",
+      "status": "failed",
+      "startedAt": "2026-10-29T02:22:14.898Z",
+      "exitCode": 1,
+      "completedAt": "2026-10-29T02:22:26.772Z"
+    }
+  ]
+}

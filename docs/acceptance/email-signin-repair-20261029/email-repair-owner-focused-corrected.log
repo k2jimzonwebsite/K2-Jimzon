@@ -1,0 +1,17 @@
+
+> k2-jimzon-prototype@0.1.0 test:owner-count-close-ui
+> playwright test --config=playwright.owner-close.config.js tests/owner-count-close-ui.spec.js
+
+[WebServer] (node:19644) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21500) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:4368) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 10:24:19 AM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 1 tests\owner-count-close-ui.spec.js:12:1 › phone Owner Count & Close reaches a sealed customer-free handoff (8.9s)
+
+  1 passed (12.9s)

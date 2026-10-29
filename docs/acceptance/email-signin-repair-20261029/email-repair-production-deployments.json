@@ -1,0 +1,33 @@
+[
+  {
+    "id": "dpl_E6aB7XFxpRLv6JJ532BrMAnQhMCy",
+    "project": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+    "name": "k2-jimzon",
+    "url": "https://k2-jimzon-7jw4v3fgb-k2-jimzon.vercel.app",
+    "state": "READY",
+    "target": "production",
+    "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8",
+    "aliases": [
+      "www.k2jimzon.com",
+      "k2-jimzon-vert.vercel.app",
+      "k2jimzon.com",
+      "k2-jimzon-k2-jimzon.vercel.app",
+      "k2-jimzon-git-main-k2-jimzon.vercel.app"
+    ]
+  },
+  {
+    "id": "dpl_GPwsjWbWvvYdFtbuFiANAj4jQ8rb",
+    "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+    "name": "k2-jimzon-admin",
+    "url": "https://k2-jimzon-admin-nep71ai63-k2-jimzon.vercel.app",
+    "state": "READY",
+    "target": "production",
+    "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8",
+    "aliases": [
+      "admin.k2jimzon.com",
+      "k2-jimzon-admin-seven.vercel.app",
+      "k2-jimzon-admin-k2-jimzon.vercel.app",
+      "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+    ]
+  }
+]

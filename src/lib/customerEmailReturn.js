@@ -23,7 +23,7 @@ export function captureCustomerEmailReturn(locationLike = globalThis.window?.loc
     const accessToken = fragment.get('access_token') || ''
     const refreshToken = fragment.get('refresh_token') || ''
     if (accessToken.length <= 16384 && /^[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$/.test(accessToken)
-        && /^[a-zA-Z0-9_-]{16,2048}$/.test(refreshToken)) {
+        && /^[a-zA-Z0-9_-]{12,2048}$/.test(refreshToken)) {
       result = { kind: 'session', accessToken, refreshToken }
     }
   }

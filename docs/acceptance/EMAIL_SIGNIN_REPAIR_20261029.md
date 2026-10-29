@@ -1,5 +1,8 @@
 # MAP-019 email sign-in repair
 
+**Live checkpoint / correction still required:** Source567dbcec is Ready on both canonical production projects; the confirmation page is browser-verified at375px, fragment scrubbed, with no verification before click. Exact email packetb794e937 was applied once at02:37:24Z. Five fields match; all other direct settings were unchanged at independent postflight. Two boolean customization-status maps changed to mark only the four approved subject/template fields; original strict failure and read-only reconciliation are retained. Owner confirms the fresh email reaches Inbox. Sign-in still failed: K2 metadata proves a new12-character refresh token at02:41:57Z, while BFF/legacy parsing incorrectly required16. The two-line compatibility correction passes failed-first parser/BFF regressions, six browser cases and final development0/147. Promotion of this correction and fresh login/persistence remain next; do not replay templates, SQL or signup. Preserve the completed24-stage release coverage for unchanged inputs.
+
+
 29 October: owner reports the real email landing in Spam and the clicked link returning to signup/sign-in. This repairs accepted IDEA-20261027-02 in existing MAP-019; automated deletion remains suspended.
 
 **Named owner authorization received:** Owner explicitly answers **Approve K2 email repair** for packet `b794e9371ccc2810b6a489fc251ce7265d0ad4f78618740433db297f6c7c9ef8` on exact K2 `pixplcjqivlfflickobf`. The five-field provider request is authorized, but remains unapplied until the repaired source is qualified and deployed. This supersedes approval-pending language below for this exact packet only.

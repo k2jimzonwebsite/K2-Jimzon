@@ -34,7 +34,7 @@ test('email sign-in return waits for confirmation and keeps PKCE before establis
   await page.route('**/api/storefront/account/auth/verify', route => {
     verifies++
     expect(route.request().postDataJSON()).toEqual({ tokenHash })
-    return route.fulfill({ json: { ok: true, session: { accessToken: fakeJwt(expressActor), refreshToken: 'synthetic-email-refresh-token' } } })
+    return route.fulfill({ json: { ok: true, session: { accessToken: fakeJwt(expressActor), refreshToken: 'abc123def456' } } })
   })
   await page.route('https://fixture.supabase.co/auth/v1/user', route => route.fulfill({ json: accountUser(expressActor) }))
   await page.route('**/api/storefront/account/history', route => route.fulfill({ status: 409, json: { error: { code: 'ACCOUNT_NOT_LINKED' } } }))
@@ -70,7 +70,7 @@ test('email sign-in return accepts an older implicit email link without changing
   })
   await page.route('**/api/storefront/account/history', route => route.fulfill({ status: 409, json: { error: { code: 'ACCOUNT_NOT_LINKED' } } }))
   await page.route('**/api/storefront/account/settings', route => route.fulfill({ json: { ok: true, settings: { displayName: '', notifyInApp: true }, notifications: [] } }))
-  await page.goto(`/?account=continue#access_token=${accessToken}&refresh_token=synthetic-email-refresh-token&type=magiclink&token_type=bearer&expires_in=3600`)
+  await page.goto(`/?account=continue#access_token=${accessToken}&refresh_token=abc123def456&type=magiclink&token_type=bearer&expires_in=3600`)
   await expect(page.getByRole('button', { name: 'Complete sign-in', exact: true })).toBeVisible()
   expect(new URL(page.url()).hash).toBe('')
   expect(userChecks).toBe(0)

@@ -132,7 +132,7 @@ export function createCustomerPhoneVerifyHandler(overrides = {}) {
       const accessToken = data?.session?.access_token
       const refreshToken = data?.session?.refresh_token
       if (error || typeof accessToken !== 'string' || accessToken.length < 16
-          || typeof refreshToken !== 'string' || refreshToken.length < 16) {
+          || typeof refreshToken !== 'string' || refreshToken.length < 12) {
         return safeJson(res, 401, { error: { code: 'CUSTOMER_AUTH_CODE_INVALID' } })
       }
       return safeJson(res, 200, { ok: true, session: { accessToken, refreshToken } })

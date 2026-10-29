@@ -1,0 +1,1448 @@
+
+RELEASE_STAGE_START test:customer-account-ui
+
+> k2-jimzon-prototype@0.1.0 test:customer-account-ui
+> node scripts/test-customer-account-ui.mjs
+
+
+Running 56 tests using 1 worker
+
+(node:8236) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\customer-account-ui.spec.js:31:1 › email sign-in return waits for confirmation and keeps PKCE before establishing the session (1.7s)
+  ok  2 tests\customer-account-ui.spec.js:54:1 › email sign-in return explains an expired link without sending another email or exposing provider text (1.4s)
+  ok  3 tests\customer-account-ui.spec.js:63:1 › email sign-in return accepts an older implicit email link without changing the PKCE client (1.9s)
+  ok  4 tests\customer-account-ui.spec.js:84:1 › email sign-in return preserves the pending sign-out safeguard (504ms)
+  ok  5 tests\customer-account-ui.spec.js:92:34 › email sign-in return fits existing account design at 375 (813ms)
+  ok  6 tests\customer-account-ui.spec.js:92:34 › email sign-in return fits existing account design at 1440 (1.7s)
+  -   7 tests\customer-account-ui.spec.js:107:34 › disabled account closure keeps settings available at 375
+  -   8 tests\customer-account-ui.spec.js:107:34 › disabled account closure keeps settings available at 1440
+  ok  9 tests\customer-account-ui.spec.js:191:1 › saved delivery addresses retain one exact change through a lost save reply (1.9s)
+  ok 10 tests\customer-account-ui.spec.js:230:1 › saved delivery default restores gift recipient and location without requiring another entry (1.6s)
+  ok 11 tests\customer-account-ui.spec.js:245:1 › saved delivery editor accepts a name added in the profile form while it is open (1.4s)
+  ok 12 tests\customer-account-ui.spec.js:276:1 › saved delivery lost reply reconciles a JSONB destination with reordered keys (1.3s)
+  ok 13 tests\customer-account-ui.spec.js:305:1 › saved delivery default never mixes into a manually entered recipient or street (1.7s)
+  ok 14 tests\customer-account-ui.spec.js:328:1 › saved delivery addresses change defaults and remove the final destination without resurrection (1.7s)
+  ok 15 tests\customer-account-ui.spec.js:357:1 › saved delivery work keeps guest checkout available without an account (1.2s)
+  ok 16 tests\customer-account-ui.spec.js:372:1 › saved delivery checkout clears the previous customer on an account switch and sign-out (2.7s)
+  ok 17 tests\customer-account-ui.spec.js:402:1 › saved delivery default cannot replace an existing held order snapshot (600ms)
+  ok 18 tests\customer-account-ui.spec.js:423:1 › saved delivery edit removed in another tab remains a draft instead of a false save (1.3s)
+  ok 19 tests\customer-account-ui.spec.js:449:1 › saved delivery address editor stays readable on mobile and desktop in both themes (3.0s)
+  ok 20 tests\customer-account-ui.spec.js:476:1 › account purchase overview uses complete linked totals and has private order/proof downloads (2.8s)
+  ok 21 tests\customer-account-ui.spec.js:522:99 › closure states remain usable at 375 in light (2.2s)
+  ok 22 tests\customer-account-ui.spec.js:522:99 › closure states remain usable at 1440 in dark (2.4s)
+  ok 23 tests\customer-account-ui.spec.js:562:1 › closure survives a lost confirmation response and can be recovered without repeating confirmation (1.6s)
+  ok 24 tests\customer-account-ui.spec.js:608:1 › legacy account history keeps recorded payment and messages without final bill or approval (652ms)
+  ok 25 tests\customer-account-ui.spec.js:626:1 › authenticated express approval recovers an already accepted lost reply after reload (1.7s)
+  ok 26 tests\customer-account-ui.spec.js:656:1 › authenticated express late receipt stays with the original account and accepts an explicit zero fee (1.2s)
+  ok 27 tests\customer-account-ui.spec.js:698:1 › account switch discards a late previous-customer history response (790ms)
+  ok 28 tests\customer-account-ui.spec.js:746:1 › unconfirmed provider sign-out clears the local view and remains visible after reload (2.5s)
+  ok 29 tests\customer-account-ui.spec.js:770:1 › reloading during an unfinished sign-out does not restore the private account view (1.2s)
+  ok 30 tests\customer-account-ui.spec.js:799:1 › a new tab cannot restore a private session while sign-out is unfinished (1.5s)
+  ok 31 tests\customer-account-ui.spec.js:830:1 › sign-out closes an already-open account view in another tab (1.5s)
+  ok 32 tests\customer-account-ui.spec.js:861:1 › sign-out reports failure without hiding the account when its shared guard cannot be saved (1.6s)
+  ok 33 tests\customer-account-ui.spec.js:882:1 › a blocked sign-out keeps its retry when browser storage fails (1.1s)
+  ok 34 tests\customer-account-ui.spec.js:912:1 › a new accepted session clears the previous local sign-out success (806ms)
+  ok 35 tests\customer-account-ui.spec.js:931:1 › sign-out does not claim success when the saved session has disappeared (812ms)
+  ok 36 tests\customer-account-ui.spec.js:945:1 › an SDK-ignored provider refusal does not claim remote sign-out was verified (768ms)
+  ok 37 tests\customer-account-ui.spec.js:956:1 › an SDK-accepted sign-out with a cleared local session does not report an error (758ms)
+  ok 38 tests\customer-account-ui.spec.js:968:1 › a late settings read cannot overwrite a newer saved profile (999ms)
+  ok 39 tests\customer-account-ui.spec.js:1006:1 › a settings read started during a save cannot undo its successful result (1.0s)
+  ok 40 tests\customer-account-ui.spec.js:1052:1 › a save from an earlier sign-in cannot replace newer settings after signing in again (1.6s)
+  ok 41 tests\customer-account-ui.spec.js:1095:1 › a delayed save reply cannot replace a newer settings read (932ms)
+  ok 42 tests\customer-account-ui.spec.js:1133:1 › a stale settings read cannot make a marked notification unread again (1.0s)
+  ok 43 tests\customer-account-ui.spec.js:1175:1 › a delayed save cannot report success on a different customer account (999ms)
+  ok 44 tests\customer-account-ui.spec.js:1211:41 › superseded save reconciliation respects a newer successful read (1.2s)
+  ok 45 tests\customer-account-ui.spec.js:1211:41 › superseded save reconciliation respects a newer failed read (1.2s)
+  ok 46 tests\customer-account-ui.spec.js:1265:1 › marking a notification read preserves unsaved profile edits (996ms)
+  ok 47 tests\customer-account-ui.spec.js:1283:1 › a same-account refresh preserves unsaved profile edits (687ms)
+  ok 48 tests\customer-account-ui.spec.js:1305:1 › refreshing a linked account preserves an unsaved settings draft (752ms)
+  ok 49 tests\customer-account-ui.spec.js:1332:1 › a transient linked-history refresh error keeps the unsaved settings draft (911ms)
+  ok 50 tests\customer-account-ui.spec.js:1350:1 › a late same-account history response cannot replace a newer history result (983ms)
+  ok 51 tests\customer-account-ui.spec.js:1382:1 › linking guest records preserves an unsaved settings draft (1.0s)
+  ok 52 tests\customer-account-ui.spec.js:1399:1 › settings fields cannot be changed while their save is pending (900ms)
+  ok 53 tests\customer-account-ui.spec.js:1421:1 › a verified new customer can save profile settings and read a scoped notification before ordering (1.0s)
+  ok 54 tests\customer-account-ui.spec.js:1463:1 › customer account entry is phone-safe, passwordless, recoverable, and keeps primary mobile navigation at five (3.3s)
+  ok 55 tests\customer-account-ui.spec.js:1500:1 › verified account claims once, loads only customer-visible history, and sends an authenticated bounded reply (1.5s)
+  ok 56 tests\wholesale-inquiry-ui.spec.js:3:1 › secure wholesale inquiry returns only a server receipt and no commercial authority (2.3s)
+
+  2 skipped
+  54 passed (1.3m)
+
+RELEASE_STAGE_START test:selling-surfaces
+
+> k2-jimzon-prototype@0.1.0 test:selling-surfaces
+> playwright test --config=playwright.selling.config.js tests/storefront-selling-surfaces.spec.js tests/hero-enhancement.spec.js tests/storefront-readiness-ui.spec.js tests/product-comparison-containment.spec.js tests/homepage-mobile-fixes.spec.js tests/storefront-mobile-audit.spec.js tests/search-visibility-ui.spec.js
+
+[WebServer] (node:15724) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19960) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 94 tests using 1 worker
+
+(node:4020) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 10:26:12 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\hero-enhancement.spec.js:21:1 › additive hero preserves the original content and supports keyboard shopping (5.7s)
+[WebServer] 10:26:17 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\hero-enhancement.spec.js:67:1 › unavailable product images fall back without losing the product link (795ms)
+[WebServer] 10:26:18 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:26:19 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\hero-enhancement.spec.js:78:1 › loading and empty collection keep both original shopping routes available (1.8s)
+[WebServer] 10:26:20 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\homepage-mobile-fixes.spec.js:16:3 › 320 light: homepage shopping stays readable and reachable (1.2s)
+[WebServer] 10:26:21 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\homepage-mobile-fixes.spec.js:16:3 › 320 dark: homepage shopping stays readable and reachable (1.6s)
+[WebServer] 10:26:23 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\homepage-mobile-fixes.spec.js:16:3 › 375 light: homepage shopping stays readable and reachable (1.2s)
+[WebServer] 10:26:24 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\homepage-mobile-fixes.spec.js:16:3 › 375 dark: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 10:26:26 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  8 tests\homepage-mobile-fixes.spec.js:16:3 › 430 light: homepage shopping stays readable and reachable (1.2s)
+[WebServer] 10:26:27 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  9 tests\homepage-mobile-fixes.spec.js:16:3 › 430 dark: homepage shopping stays readable and reachable (1.4s)
+[WebServer] 10:26:28 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\homepage-mobile-fixes.spec.js:16:3 › 768 light: homepage shopping stays readable and reachable (1.2s)
+[WebServer] 10:26:29 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 11 tests\homepage-mobile-fixes.spec.js:16:3 › 768 dark: homepage shopping stays readable and reachable (1.3s)
+[WebServer] 10:26:31 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\homepage-mobile-fixes.spec.js:16:3 › 1440 light: homepage shopping stays readable and reachable (1.4s)
+[WebServer] 10:26:32 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\homepage-mobile-fixes.spec.js:16:3 › 1440 dark: homepage shopping stays readable and reachable (1.6s)
+  ok 14 tests\homepage-mobile-fixes.spec.js:71:1 › mobile homepage preserves layout with 200% text and ordinary motion (1.1s)
+[WebServer] 10:26:35 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 15 tests\homepage-mobile-fixes.spec.js:92:3 › 320 light: featured browsing controls reveal every product and preserve full photos (1.1s)
+[WebServer] 10:26:36 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 16 tests\homepage-mobile-fixes.spec.js:92:3 › 320 dark: featured browsing controls reveal every product and preserve full photos (1.4s)
+[WebServer] 10:26:37 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 17 tests\homepage-mobile-fixes.spec.js:92:3 › 375 light: featured browsing controls reveal every product and preserve full photos (1.2s)
+[WebServer] 10:26:38 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 18 tests\homepage-mobile-fixes.spec.js:92:3 › 375 dark: featured browsing controls reveal every product and preserve full photos (1.4s)
+[WebServer] 10:26:40 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 19 tests\homepage-mobile-fixes.spec.js:92:3 › 430 light: featured browsing controls reveal every product and preserve full photos (1.2s)
+[WebServer] 10:26:41 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 20 tests\homepage-mobile-fixes.spec.js:92:3 › 430 dark: featured browsing controls reveal every product and preserve full photos (1.4s)
+  ok 21 tests\product-comparison-containment.spec.js:6:7 › 390 light portrait: complete primary stays inside comparison well (442ms)
+  ok 22 tests\product-comparison-containment.spec.js:6:7 › 390 light square: complete primary stays inside comparison well (339ms)
+  ok 23 tests\product-comparison-containment.spec.js:33:5 › 390 light: failed primary retains a contained fallback (298ms)
+  ok 24 tests\product-comparison-containment.spec.js:6:7 › 390 dark portrait: complete primary stays inside comparison well (335ms)
+  ok 25 tests\product-comparison-containment.spec.js:6:7 › 390 dark square: complete primary stays inside comparison well (288ms)
+  ok 26 tests\product-comparison-containment.spec.js:33:5 › 390 dark: failed primary retains a contained fallback (273ms)
+  ok 27 tests\product-comparison-containment.spec.js:6:7 › 1280 light portrait: complete primary stays inside comparison well (705ms)
+  ok 28 tests\product-comparison-containment.spec.js:6:7 › 1280 light square: complete primary stays inside comparison well (518ms)
+  ok 29 tests\product-comparison-containment.spec.js:33:5 › 1280 light: failed primary retains a contained fallback (394ms)
+  ok 30 tests\product-comparison-containment.spec.js:6:7 › 1280 dark portrait: complete primary stays inside comparison well (376ms)
+  ok 31 tests\product-comparison-containment.spec.js:6:7 › 1280 dark square: complete primary stays inside comparison well (310ms)
+  ok 32 tests\product-comparison-containment.spec.js:33:5 › 1280 dark: failed primary retains a contained fallback (305ms)
+[WebServer] 10:26:47 AM [vite] (client) [console.error] TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/Footer.jsx
+[WebServer] 
+[WebServer] The above error occurred in one of your React components.
+[WebServer] 
+[WebServer] React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+[WebServer] 
+[WebServer] 10:26:47 AM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "react-boundary", pathname: "/pasabuy" } TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/Footer.jsx
+  ok 33 tests\search-visibility-ui.spec.js:19:1 › a failed Footer module cannot replace the Pasabuy page (685ms)
+[WebServer] 10:26:48 AM [vite] (client) [console.error] TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/StorefrontAnalytics.jsx
+[WebServer] 
+[WebServer] The above error occurred in one of your React components.
+[WebServer] 
+[WebServer] React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+[WebServer] 
+[WebServer] 10:26:48 AM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "react-boundary", pathname: "/catalog" } TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/StorefrontAnalytics.jsx
+  ok 34 tests\search-visibility-ui.spec.js:27:1 › a failed optional Analytics module cannot replace the shopping page (1.3s)
+  ok 35 tests\search-visibility-ui.spec.js:35:1 › product names provide real links and preserve client navigation (1.8s)
+[WebServer] 10:26:52 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 36 tests\search-visibility-ui.spec.js:45:1 › the immersive store defers the optional prompt without granting consent (1.8s)
+  ok 37 tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 375 (997ms)
+  ok 38 tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 1440 (1.2s)
+  ok 39 tests\search-visibility-ui.spec.js:76:1 › contact and policy pages identify their own public content (2.0s)
+  ok 40 tests\search-visibility-ui.spec.js:84:1 › brand fonts load locally and the first-view poster is prioritized (550ms)
+  ok 41 tests\search-visibility-ui.spec.js:91:1 › the featured product rail uses a bounded delivery copy of its approved image (810ms)
+  ok 42 tests\search-visibility-ui.spec.js:103:1 › public merchant identity uses verified details and clears on a private route (777ms)
+  ok 43 tests\search-visibility-ui.spec.js:117:1 › product facts and markup resolve the catalog brand relationship (1.2s)
+  ok 44 tests\search-visibility-ui.spec.js:131:1 › analytics requires consent, strips URLs, avoids duplicate/private views and can be withdrawn (2.6s)
+  ok 45 tests\search-visibility-ui.spec.js:163:1 › browser privacy signals refuse analytics even if a previous visit allowed it (652ms)
+  ok 46 tests\search-visibility-ui.spec.js:176:1 › keyboard reopening focuses the consent choices and Escape restores the opener (676ms)
+  ok 47 tests\search-visibility-ui.spec.js:187:1 › consent expiry disables measurement in a tab that remains open (3.1s)
+  ok 48 tests\search-visibility-ui.spec.js:198:1 › enlarged text keeps consent reachable and closing does not grant analytics (1.2s)
+[WebServer] 10:27:09 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 49 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: mobile-320 (697ms)
+[WebServer] 10:27:09 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 50 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: mobile (896ms)
+[WebServer] 10:27:10 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 51 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: mobile-dark (684ms)
+[WebServer] 10:27:11 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 52 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: desktop (1.3s)
+[WebServer] 10:27:12 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 53 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: desktop-dark (730ms)
+[WebServer] 10:27:13 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 54 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: user-777 (1.1s)
+[WebServer] 10:27:14 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:15 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:15 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 55 tests\storefront-mobile-audit.spec.js:35:3 › 320 light: every storefront route reflows without runtime errors (6.9s)
+[WebServer] 10:27:21 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:22 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:22 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 56 tests\storefront-mobile-audit.spec.js:35:3 › 320 dark: every storefront route reflows without runtime errors (6.9s)
+[WebServer] 10:27:28 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:29 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:29 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 57 tests\storefront-mobile-audit.spec.js:35:3 › 375 light: every storefront route reflows without runtime errors (6.8s)
+[WebServer] 10:27:35 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:35 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:36 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 58 tests\storefront-mobile-audit.spec.js:35:3 › 375 dark: every storefront route reflows without runtime errors (6.6s)
+[WebServer] 10:27:42 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:42 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:43 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 59 tests\storefront-mobile-audit.spec.js:35:3 › 430 light: every storefront route reflows without runtime errors (7.0s)
+[WebServer] 10:27:49 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:49 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:50 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 60 tests\storefront-mobile-audit.spec.js:35:3 › 430 dark: every storefront route reflows without runtime errors (7.0s)
+[WebServer] 10:27:56 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:56 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:27:57 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 61 tests\storefront-mobile-audit.spec.js:35:3 › 768 light: every storefront route reflows without runtime errors (9.1s)
+[WebServer] 10:28:04 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:28:05 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:28:06 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 62 tests\storefront-mobile-audit.spec.js:35:3 › 768 dark: every storefront route reflows without runtime errors (6.7s)
+[WebServer] 10:28:11 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:28:12 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:28:13 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 63 tests\storefront-mobile-audit.spec.js:35:3 › 1440 light: every storefront route reflows without runtime errors (9.9s)
+[WebServer] 10:28:21 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:28:22 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:28:22 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 64 tests\storefront-mobile-audit.spec.js:35:3 › 1440 dark: every storefront route reflows without runtime errors (6.7s)
+  ok 65 tests\storefront-mobile-audit.spec.js:53:3 › light: checkout retains complete names and contains coupon controls (842ms)
+[WebServer] 10:28:29 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 66 tests\storefront-mobile-audit.spec.js:67:3 › light: FAQ controls remain readable, sized and recover from no results (1.3s)
+  ok 67 tests\storefront-mobile-audit.spec.js:86:3 › light: policy navigation exposes current page and works with keyboard (537ms)
+  ok 68 tests\storefront-mobile-audit.spec.js:99:3 › light: unavailable receiving-account warning has readable contrast (772ms)
+  ok 69 tests\storefront-mobile-audit.spec.js:53:3 › dark: checkout retains complete names and contains coupon controls (777ms)
+[WebServer] 10:28:32 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 70 tests\storefront-mobile-audit.spec.js:67:3 › dark: FAQ controls remain readable, sized and recover from no results (815ms)
+  ok 71 tests\storefront-mobile-audit.spec.js:86:3 › dark: policy navigation exposes current page and works with keyboard (487ms)
+  ok 72 tests\storefront-mobile-audit.spec.js:99:3 › dark: unavailable receiving-account warning has readable contrast (574ms)
+[WebServer] 10:28:34 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 73 tests\storefront-mobile-audit.spec.js:113:3 › cart: modal keyboard focus stays in panel and returns to opener (1.1s)
+[WebServer] 10:28:35 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 74 tests\storefront-mobile-audit.spec.js:113:3 › chat: modal keyboard focus stays in panel and returns to opener (1.1s)
+[WebServer] 10:28:36 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 75 tests\storefront-mobile-audit.spec.js:135:1 › home-indicator spacing keeps mobile chat clear of navigation (637ms)
+[WebServer] 10:28:37 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 76 tests\storefront-mobile-audit.spec.js:147:1 › cart checkout action focuses the new route heading (1.7s)
+[WebServer] 10:28:38 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 77 tests\storefront-mobile-audit.spec.js:160:34 › 320: chat returns focus after browser Back changes its trigger (1.9s)
+[WebServer] 10:28:41 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 78 tests\storefront-mobile-audit.spec.js:160:34 › 1440: chat returns focus after browser Back changes its trigger (2.4s)
+[WebServer] 10:28:43 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 79 tests\storefront-mobile-audit.spec.js:174:1 › enlarged mobile text preserves every header control without trapping the viewport (690ms)
+  ok 80 tests\storefront-mobile-audit.spec.js:187:34 › 768: tablet has navigation and chat clears it (690ms)
+  ok 81 tests\storefront-mobile-audit.spec.js:187:34 › 1023: tablet has navigation and chat clears it (702ms)
+  ok 82 tests\storefront-mobile-audit.spec.js:199:40 › light: QR payment guidance follows the current final-total and funds status (1.9s)
+  ok 83 tests\storefront-mobile-audit.spec.js:199:40 › dark: QR payment guidance follows the current final-total and funds status (1.8s)
+[WebServer] 10:28:49 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:28:49 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:28:50 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 84 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 390px light (5.9s)
+[WebServer] 10:28:54 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:28:55 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:28:56 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 85 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 390px dark (5.3s)
+[WebServer] 10:29:00 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:29:01 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:29:02 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 86 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 1440px light (10.1s)
+[WebServer] 10:29:10 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:29:11 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 10:29:11 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 87 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 1440px dark (5.8s)
+  ok 88 tests\storefront-readiness-ui.spec.js:62:1 › checkout offers the two approved QR methods after staff confirmation (1.6s)
+  ok 89 tests\storefront-selling-surfaces.spec.js:30:1 › product detail renders canonical price and stock, then enforces the cart limit (1.9s)
+  ok 90 tests\storefront-selling-surfaces.spec.js:82:1 › guest message start and reply paths preserve scoped behavioral receipts (1.5s)
+  ok 91 tests\storefront-selling-surfaces.spec.js:166:1 › recorded pickup instructions show the matching MariBank QR (5.6s)
+  ok 92 tests\storefront-selling-surfaces.spec.js:166:1 › recorded pickup instructions show the matching GCash QR (5.8s)
+  ok 93 tests\storefront-selling-surfaces.spec.js:295:1 › cold confirmation handles an expired guest grant with a useful recovery state (762ms)
+  ok 94 tests\storefront-selling-surfaces.spec.js:311:1 › unknown storefront and product URLs render explicit recovery pages (1.7s)
+
+  94 passed (3.5m)
+
+RELEASE_STAGE_START test:order-receipt-direct
+
+> k2-jimzon-prototype@0.1.0 test:order-receipt-direct
+> playwright test --config=playwright.order-receipt.config.js tests/order-receipt-direct-ui.spec.js
+
+[WebServer] (node:3524) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:304) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\order-receipt-direct-ui.spec.js:13:1 › direct saved order conversation accepts a private receipt after fresh instructions without asking identity again (1.9s)
+  ok 2 tests\order-receipt-direct-ui.spec.js:71:1 › direct saved legacy receipt waits for fresh charge and keeps messages after review or refresh failure (9.3s)
+
+  2 passed (14.3s)
+
+RELEASE_STAGE_START test:workflow-api
+
+> k2-jimzon-prototype@0.1.0 test:workflow-api
+> playwright test --config=playwright.workflow.config.js && npm run test:workflow-map
+
+[WebServer] (node:16056) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:944) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:5944) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\workflow-api-ui.spec.js:5:1 › workflow step requests real API records only on staff action (5.6s)
+  ok 2 tests\workflow-api-ui.spec.js:26:1 › partial data stays explicit and a refresh replaces the previous batch (613ms)
+  ok 3 tests\workflow-api-ui.spec.js:43:1 › denied and malformed replies do not masquerade as empty success (584ms)
+  ok 4 tests\workflow-api-ui.spec.js:54:1 › switching steps drops old responses and loads the new allowed route (634ms)
+
+  4 passed (11.6s)
+
+> k2-jimzon-prototype@0.1.0 test:workflow-map
+> playwright test --config=playwright.workflow-map.config.js
+
+[WebServer] (node:19872) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 11 tests using 1 worker
+
+(node:19668) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\workflow-map-ui.spec.js:8:1 › map opens at reading scale with a focused workflow (1.8s)
+  ok  2 tests\workflow-map-ui.spec.js:16:1 › filters show readable matches instead of dimming words (598ms)
+  ok  3 tests\workflow-map-ui.spec.js:24:1 › search results select and bring a distant step into the viewport (706ms)
+  ok  4 tests\workflow-map-ui.spec.js:38:1 › full map scrolls, keyboard pans and reset restores reading size (779ms)
+  ok  5 tests\workflow-map-ui.spec.js:50:1 › keyboard search selection keeps focus on the selected map step (655ms)
+  ok  6 tests\workflow-map-ui.spec.js:58:1 › background drag pans without selecting a step (731ms)
+  ok  7 tests\workflow-map-ui.spec.js:72:1 › search focus stays in its own guide when two maps are mounted (1.0s)
+  ok  8 tests\workflow-map-ui.spec.js:82:1 › empty search recovers and selected details retain the full text (955ms)
+  ok  9 tests\workflow-map-ui.spec.js:94:1 › phone exploration has readable details and no document overflow (700ms)
+  ok 10 tests\workflow-map-ui.spec.js:102:1 › phone role filter fits wider native control text and remains usable (632ms)
+  ok 11 tests\workflow-map-ui.spec.js:111:1 › enlarged text retains full instructions and landscape stays contained (1.2s)
+
+  11 passed (12.9s)
+
+RELEASE_STAGE_START test:intake-ai-ui
+
+> k2-jimzon-prototype@0.1.0 test:intake-ai-ui
+> playwright test --config=playwright.intake-ai.config.js
+
+[WebServer] (node:19072) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20504) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 26 tests using 1 worker
+
+(node:20264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\intake-ai-ui.spec.js:7:35 › completed CSV import opens the same Draft for package review (1.2s)
+  ok  2 tests\intake-ai-ui.spec.js:7:35 › completed CSV import refuses stale selection (713ms)
+  ok  3 tests\intake-ai-ui.spec.js:37:1 › imported Draft manual review keeps its baseline and saves only explicit staff corrections (1.4s)
+  ok  4 tests\intake-ai-ui.spec.js:100:1 › barcode scan shows a public catalog suggestion and saves only staff-confirmed provenance (590ms)
+  ok  5 tests\intake-ai-ui.spec.js:129:1 › an incomplete resume read never authorizes a new intake session (462ms)
+  ok  6 tests\intake-ai-ui.spec.js:150:1 › fresh public SEO data must still match the product staff confirmed (549ms)
+  ok  7 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after response loss (534ms)
+  ok  8 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after refresh failure (1.4s)
+  ok  9 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after incomplete receipt (579ms)
+  ok 10 tests\intake-ai-ui.spec.js:171:3 › packaging evidence retains exact file bytes and command identity after stale record (562ms)
+  ok 11 tests\intake-ai-ui.spec.js:209:3 › intake session creation retains both identities after response loss (506ms)
+  ok 12 tests\intake-ai-ui.spec.js:209:3 › intake session creation retains both identities after refresh failure (1.3s)
+  ok 13 tests\intake-ai-ui.spec.js:209:3 › intake session creation retains both identities after retry denial (575ms)
+  ok 14 tests\intake-ai-ui.spec.js:247:1 › publication keeps its frozen command when the receipt refresh fails (1.4s)
+  ok 15 tests\intake-ai-ui.spec.js:282:1 › automatic field review retains an uncertain transition for exact retry (734ms)
+  ok 16 tests\intake-ai-ui.spec.js:318:1 › replacing the actor during a Draft command ignores its late receipt (486ms)
+  ok 17 tests\intake-ai-ui.spec.js:345:1 › uncertain intake step freezes its reviewed payload and retries the same outer receipt key (608ms)
+  ok 18 tests\intake-ai-ui.spec.js:386:1 › pending packaging review freezes every reviewed control and allows correction only after rejection (611ms)
+  ok 19 tests\intake-ai-ui.spec.js:428:1 › uncertain Draft creation after response loss retries the frozen reviewed Draft with the same outer receipt key (752ms)
+  ok 20 tests\intake-ai-ui.spec.js:428:1 › uncertain Draft creation after refresh failure retries the frozen reviewed Draft with the same outer receipt key (1.4s)
+  ok 21 tests\intake-ai-ui.spec.js:428:1 › uncertain Draft creation after incomplete receipt retries the frozen reviewed Draft with the same outer receipt key (525ms)
+  ok 22 tests\intake-ai-ui.spec.js:476:1 › uncertain first inventory preserves separate inner request and outer receipt identities (664ms)
+  ok 23 tests\intake-ai-ui.spec.js:519:1 › real modal persists automatic field-review transition before saving reviewed canonical Draft (785ms)
+  ok 24 tests\intake-ai-ui.spec.js:573:1 › manual product JSON creates a reviewed Draft without calling the automatic provider (689ms)
+  ok 25 tests\intake-ai-ui.spec.js:626:1 › phone recovery, missing configuration, reviewed image and canonical attachment remain deliberate (884ms)
+  ok 26 tests\intake-ai-ui.spec.js:661:1 › confirmed barcode catalog allows Gemini SEO draft request and shows staff review text (587ms)
+
+  26 passed (25.4s)
+
+RELEASE_STAGE_START test:vercel-output
+
+> k2-jimzon-prototype@0.1.0 test:vercel-output
+> node --test tests/vercel-build-output.test.mjs
+
+✔ the Storefront sitemap dependency imports in Node ESM (4.3675ms)
+✔ Build Output candidate isolates each API and preserves static/security routes (1847.6121ms)
+✔ Build Output refuses to replace its own static source (1.2971ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1946.6792
+
+RELEASE_STAGE_START build:storefront
+
+> k2-jimzon-prototype@0.1.0 prebuild:storefront
+> npm run prebuild
+
+
+> k2-jimzon-prototype@0.1.0 prebuild
+> npm run security:test-turnstile && npm run security:test && npm run security:test-admin-session && npm run security:test-env-contract && npm run security:test-k2-project && npm run security:test-live-readiness && npm run security:test-files && npm run security:files && npm run security:test-env-source && npm run security:env-source && npm run security:dependency-policy && npm run security:surfaces && npm run security:secrets && node scripts/check-imports.mjs && npm run security:test-customer-privacy
+
+
+> k2-jimzon-prototype@0.1.0 security:test-turnstile
+> node --test tests/turnstile-loader-recovery.test.mjs tests/turnstile-widget-lifecycle.test.mjs tests/git-guardrails.test.mjs && playwright test --config=playwright.api.config.js tests/turnstile-wiring-contract.spec.js tests/bot-challenge-contract.spec.js
+
+✔ commit guard refuses unstaged runtime inputs that could hide a staged regression (4.5525ms)
+✔ push guard requires committed runtime and test inputs but permits receipt-only edits (0.3791ms)
+✔ lint configuration is a verification input for commits and pushes (0.2795ms)
+✔ hook installation preserves an existing custom hooks directory (2.614ms)
+✔ push guard refuses outgoing commits other than the checked HEAD (0.5581ms)
+✔ failed Turnstile download releases the cached failure for the next attempt (6.8163ms)
+✔ a silent rendered challenge times out without ever granting a token (4.6664ms)
+✔ success is visible and cancels the pending deadline; expiry invalidates the token (0.4273ms)
+✔ provider errors are visible, bounded, and never bypass verification (0.3508ms)
+✔ unmount cancels deadlines and ignores all stale provider callbacks (0.3064ms)
+✔ an interactive challenge gets the provider interaction window instead of the background deadline (0.4024ms)
+✔ interactive cleanup after success cannot restart the pending deadline (0.3266ms)
+✔ a synchronous render failure becomes a retryable error (0.3039ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 121.9332
+
+Running 7 tests using 1 worker
+
+(node:1580) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\bot-challenge-contract.spec.js:19:1 › a missing secret fails closed without calling the provider (7ms)
+  ok 2 tests\bot-challenge-contract.spec.js:36:1 › an explicit unconfigured bypass is opt-in and auditable (1ms)
+  ok 3 tests\bot-challenge-contract.spec.js:51:1 › a token is single-use: its replay is rejected (2ms)
+  ok 4 tests\bot-challenge-contract.spec.js:64:1 › a token minted for another host is rejected (1ms)
+  ok 5 tests\bot-challenge-contract.spec.js:76:1 › every server call site binds its validated request hostname (6ms)
+  ok 6 tests\turnstile-wiring-contract.spec.js:20:1 › every TurnstileChallenge usage wires onTokenChange, never onVerify (139ms)
+  ok 7 tests\turnstile-wiring-contract.spec.js:38:1 › widget bot-check actions agree with the server expected actions (9ms)
+
+  7 passed (910ms)
+
+> k2-jimzon-prototype@0.1.0 security:test
+> node scripts/test-secret-scan.mjs
+
+Secret scanner tests passed (fabricated values only).
+
+> k2-jimzon-prototype@0.1.0 security:test-admin-session
+> node --test tests/admin-mfa-sdk-qr.test.mjs tests/admin-bff-refresh-token.test.mjs tests/admin-product-read-taxonomy.test.mjs tests/admin-product-stock-read.test.mjs tests/admin-reference-command.test.mjs tests/admin-reference-handler.test.mjs tests/admin-lot-snapshot-read.test.mjs tests/product-master-command-recovery.test.mjs tests/admin-product-master-recovery-client.test.mjs tests/admin-product-master-actor.test.mjs tests/website-assignment-recovery.test.mjs tests/admin-website-assignment-actor.test.mjs tests/admin-google-bff.test.mjs tests/turnstile-loader-recovery.test.mjs tests/photo-csv-batch.test.mjs tests/admin-photo-batch-actor.test.mjs
+
+✔ protocol-valid 12-character refresh token survives all Admin encrypted session boundaries (5.7767ms)
+✔ refresh lower/upper bounds and access-token lower bound still refuse malformed sessions (0.581ms)
+✔ actual Supabase SDK generates PKCE with encrypted browser-bound verifier and exact K2 return route (41.484ms)
+✔ Google callback rejects wrong-origin before provider exchange (9.3235ms)
+✔ Google callback rejects no-cookie before provider exchange (2.2717ms)
+✔ Google callback rejects altered-cookie before provider exchange (2.9601ms)
+✔ Google callback rejects wrong-state before provider exchange (2.5052ms)
+✔ Google callback rejects expired before provider exchange (2.2099ms)
+✔ Google callback rejects extra-fields before provider exchange (1.9258ms)
+✔ Google AAL1 session stays pending for the existing authenticator challenge without active session registration (3.181ms)
+✔ Google callback non-staff retains staff/AAL2/registry authority (2.4829ms)
+✔ Google callback unverified-email retains staff/AAL2/registry authority (2.2987ms)
+✔ Google callback enrollment retains staff/AAL2/registry authority (1.7049ms)
+✔ Google callback aal2 retains staff/AAL2/registry authority (3.2103ms)
+✔ Google callback registry-failed retains staff/AAL2/registry authority (2.172ms)
+✔ Google start fails closed for missing bot verification or unavailable durable budget (1.6732ms)
+✔ consolidated router advertises both Google routes with origin, PKCE/bot and durable budget guards (0.2462ms)
+✔ lot read derives physical and allocations from one coherent snapshot (3.0674ms)
+✔ complete empty snapshot is a verified empty lot read (0.3558ms)
+✔ partial, malformed, over-bound and refused snapshots cannot produce healthy totals (1.2586ms)
+✔ pending enrollment accepts the installed Supabase SDK QR format without cancelling the factor (41.1713ms)
+✔ pending enrollment bounds oversized SVG data and cancels only the new unverified factor (0.7722ms)
+✔ pending enrollment preserves an already verified authenticator without creating or deleting factors (0.3038ms)
+✔ pending enrollment still rejects a non-SVG QR response and cancels its unverified factor (0.3333ms)
+✔ installed SDK completes password, enrollment, challenge and AAL2 verification against the provider protocol fixture (22.2303ms)
+✔ photo upload and assignment actor mismatch refuse before Storage or command dispatch (102.3896ms)
+✔ existing and actor-bound assignment clients retain current staff command behavior (8.3693ms)
+✔ saved Product Master actor mismatch refuses before command RPC (88.8527ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (9.132ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (10.2958ms)
+✔ existing clients without actor header retain current authenticated actor behavior (7.0669ms)
+✔ approved merge uses the existing Admin AAL2 actor-bound signed Product Master RPC (8.1131ms)
+✔ approved group preview reads through read_admin_product_sku_merge_v1 (2.3707ms)
+✔ Product Master recovery has a literal-body actor-bound browser client (1.3306ms)
+✔ lost HTTP reply and later auth refusal preserve same literal request key and current CSRF (92.8238ms)
+✔ protected catalog preserves canonical assigned and nullable unassigned taxonomy (2.8465ms)
+✔ category filters can use the canonical name when no store label is assigned (0.2817ms)
+✔ stock failure preserves canonical taxonomy while reporting unknown stock (0.3494ms)
+✔ protected catalog retains every saved photo slot for reopening the photo manager (0.2672ms)
+✔ stock failure does not hide saved after-use or supporting photos (0.2816ms)
+✔ internal Draft receives canonical staff stock even when public offer is absent (2.2876ms)
+✔ a complete no-lot staff row proves zero without inferring it from an absent public offer (0.2724ms)
+✔ missing row preserves product discovery and explicit unknown stock (0.264ms)
+✔ unreadable taxonomy preserves product discovery and explicit unknown stock (0.227ms)
+✔ fractional quantity preserves product discovery and explicit unknown stock (0.2037ms)
+✔ duplicate row preserves product discovery and explicit unknown stock (0.172ms)
+✔ query failure preserves product discovery and explicit unknown stock (0.179ms)
+✔ creation preserves raw command strings and property order for saved retry identity (1.4145ms)
+✔ name bound counts Unicode characters after printable whitespace cleanup (0.8182ms)
+✔ endpoint refuses unsupported methods and missing command keys before dispatch (0.6666ms)
+✔ endpoint cannot be used on the storefront deployment (0.9231ms)
+✔ reference route advertises protected POST and a read-only GET (290.7655ms)
+✔ controls are refused before cleanup and malformed strings never reach SQL (0.2683ms)
+✔ creation rejects extra fields, coerced values and ambiguous category parent (0.457ms)
+✔ protected options retain category hierarchy and permit an empty catalog (0.4882ms)
+✔ partial, unavailable, over-limit or malformed options fail closed (0.511ms)
+✔ current Staff role cannot create even when cookie claims Admin (39.9027ms)
+✔ saved-request actor mismatch refuses before reference dispatch (6.249ms)
+✔ Admin and SuperAdmin send one correctly signed exact command (12.8227ms)
+✔ CSRF, current AAL2 and registry refusal prevent creation dispatch (11.6172ms)
+✔ historical receipt is shown separately from changed or missing current reference (18.2817ms)
+✔ committed receipt survives unavailable current readback (7019.2082ms)
+✔ unknown command failure hides provider details and retains retry classification (2.3904ms)
+✔ saved Website assignment actor mismatch refuses before command RPC (57.3838ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (6.6507ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (11.3907ms)
+✔ existing clients without actor header retain current authenticated actor behavior (3.1755ms)
+✔ bounded Website read distinguishes absent, paused and active existing rows (10.6275ms)
+✔ Website read refuses duplicate partial malformed failed or missing product evidence (7044.7161ms)
+✔ current Staff and invalid SKU refuse per-product read before data lookup; aggregate contract stays (5.831ms)
+✔ mapping resolves exact existing Draft and retains untouched photo slots (15.7882ms)
+✔ invalid identities, duplicate files/SKUs, missing files, existing slots and live targets refuse before upload (6.2557ms)
+✔ lost assignment reply survives reload and retries original payload/key without uploading twice (4.2609ms)
+✔ actor change, byte substitution and current-media drift stop before mutation (3.3225ms)
+✔ storage failure refuses dispatch and malformed recovery is retained (1.5747ms)
+✔ multi-product batch resumes at failed row and never replays completed rows (3.0127ms)
+✔ account changes after upload or media drift during upload refuse assignment (2.8627ms)
+✔ recovery refuses a changed literal command and a competing batch (1.053ms)
+✔ saved but unconfirmed command cannot overwrite later media or a non-Draft target (2.0159ms)
+✔ Product Master updates have durable actor-scoped recovery (1.734ms)
+✔ reload preserves literal bytes version reason and original key (1.5824ms)
+✔ changed key payload version or review decision cannot replace unknown request (0.9992ms)
+✔ actor and operation identity isolate reading and acknowledgement (0.2923ms)
+✔ corruption foreign actor secret field and oversize storage remain untouched (0.7998ms)
+✔ malformed or non-update commands cannot be held or sent (0.9126ms)
+✔ approved merge commands have durable actor-scoped recovery (0.346ms)
+✔ failed Turnstile download releases the cached failure for the next attempt (5.5662ms)
+✔ Website has its own durable actor-scoped original request recovery (0.804ms)
+✔ Website literal body and key survive reload and cannot be replaced (2.1701ms)
+✔ corrupt Website records remain untouched and invalid bodies never persist (0.8866ms)
+✔ existing unassigned Website listing keeps a real version; only absent row has null identity (0.3394ms)
+ℹ tests 91
+ℹ suites 0
+ℹ pass 91
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7966.138
+
+> k2-jimzon-prototype@0.1.0 security:test-env-contract
+> node scripts/verify-deployment-environment-contract.mjs --self-test
+
+Deployment environment contract self-test passed (5 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:test-k2-project
+> node --test tests/k2-supabase-project-identity.test.mjs
+
+✔ accepts the exact K2 URL only when the management token sees K2 (26.4097ms)
+✔ rejects a ScoutIT-only management token (0.8187ms)
+✔ rejects a ScoutIT URL before sending the token (0.2724ms)
+✔ rejects missing token and management access failure without logging secrets (0.4891ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 118.6069
+
+> k2-jimzon-prototype@0.1.0 security:test-live-readiness
+> node --test tests/k2-live-readiness-contract.test.mjs tests/k2-installed-readiness.test.mjs tests/admin-preauth-dependency-readiness.test.mjs
+
+✔ only the approved signed pre-auth rate RPC may extend the installed permission profile (14.337ms)
+✔ normal readiness blocks the completely missing login dependency (0.3268ms)
+✔ preparation mode cannot admit partial installation or grant/body drift (0.2937ms)
+✔ only exact installed rate authority and private forced RLS classify verified (0.2099ms)
+✔ incomplete metadata and invalid source hashes do not pass (0.1709ms)
+✔ exact installed source receipt and all required relations classify installed, never permission to reapply (1.1442ms)
+✔ empty legacy baseline is first apply only when every chain relation is absent (0.1945ms)
+✔ changed complete-source receipt, duplicate or old controlled receipt refuse (0.2836ms)
+✔ partial installed schema and malformed relation evidence refuse (0.2539ms)
+✔ approved family reader profile passes while every changed authority field refuses (15.1684ms)
+✔ installed permission classification names exact reviewed signatures and invoker trigger exceptions (0.3951ms)
+✔ extra overload or altered authority cannot hide behind a function name (1.5887ms)
+✔ extra PUBLIC execute and trigger SECURITY DEFINER drift refuse (0.6641ms)
+✔ two arbitrary triggers do not inherit the named PUBLIC exception (0.4304ms)
+✔ same-named private trigger cannot replace PUBLIC schema exception (0.8605ms)
+✔ approved order-chat adapter extends the exact installed catalog without admitting other grants (0.8027ms)
+✔ date-only migration version requires the exact restored version and all backup bindings (1.7384ms)
+✔ backup must match encrypted bytes/hash and actual restored current migration (0.2334ms)
+✔ missing proof and impossible/future creation or restoration evidence refuse (0.1635ms)
+✔ unknown backup creation metadata cannot be bypassed by a valid candidate (0.3028ms)
+✔ backup chronology requires real UTC ISO strings rather than Date.parse coercion (0.1852ms)
+✔ the gate keeps the read-only guard in front of every query (0.9565ms)
+✔ the production query is declared read_only (0.1806ms)
+✔ every SQL template literal is a SELECT with no write verb (0.7111ms)
+✔ the gate reports provider surfaces as blocked instead of assuming them (0.1486ms)
+✔ the gate refuses to send a query before identity passes (0.1387ms)
+✔ documented K2 gates load the owner-controlled local environment file (0.5607ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 133.135
+
+> k2-jimzon-prototype@0.1.0 security:test-files
+> node scripts/test-sensitive-file-policy.mjs
+
+Sensitive-file policy tests passed (13 blocked, 4 allowed, and the source inventory).
+
+> k2-jimzon-prototype@0.1.0 security:files
+> node scripts/verify-tracked-sensitive-files.mjs
+
+Sensitive-file policy passed in git mode (4137 files checked).
+
+> k2-jimzon-prototype@0.1.0 security:test-env-source
+> node scripts/test-environment-source-boundary.mjs
+
+Environment source-boundary tests passed (8 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:env-source
+> node scripts/verify-environment-source-boundary.mjs
+
+Environment source boundary passed (276 browser and 203 server/Edge files checked).
+
+> k2-jimzon-prototype@0.1.0 security:dependency-policy
+> node scripts/verify-dependency-policy.mjs
+
+Dependency policy passed (20 direct, 246 locked packages, 2 reviewed install scripts).
+Reviewed licenses: 0BSD=2, Apache-2.0=25, Apache-2.0 AND LGPL-3.0-or-later=3, Apache-2.0 AND LGPL-3.0-or-later AND MIT=1, BSD-2-Clause=1, BSD-3-Clause=2, ISC=7, LGPL-3.0-or-later=10, MIT=170, MPL-2.0=24, UNKNOWN=1
+
+> k2-jimzon-prototype@0.1.0 security:surfaces
+> node scripts/audit-security-surfaces.mjs --fail-on-gaps
+
+# MAP-020 Security Surface Inventory
+
+Generated: 2026-10-29T02:31:04.310Z
+
+- Prepared Admin routes: 105
+- Prepared Storefront routes: 24
+- Supabase Edge Functions: 2 (invite-staff, shopee-webhook)
+- api_request: 71 source operations
+- auth: 50 source operations
+- realtime: 12 source operations
+- rpc: 152 source operations
+- storage: 16 source operations
+- table: 141 source operations
+- SQL functionDefinitionOccurrences: 285
+- SQL uniqueFunctionSignatures: 221
+- SQL functionGrantEvents: 192
+- SQL functionRevokeEvents: 300
+- SQL functionSearchPathHardeningEvents: 6
+- SQL effectiveSecurityDefinerWithoutFixedSearchPath: 0
+- SQL effectiveFunctionsWithPublicExecute: 0
+- SQL effectiveFunctionsWithAnonExecute: 21
+- SQL effectiveFunctionsWithAuthenticatedExecute: 112
+- SQL effectiveFunctionsWithServiceRoleExecute: 16
+- SQL scheduledJobs: 0
+- SQL publicationChanges: 16
+- SQL policyDefinitions: 156
+- SQL storagePolicyDefinitions: 15
+- Dynamic operations requiring explicit review: 0
+- Exact expected anonymous function grants: 21
+- Unexpected PUBLIC function grants: 0
+- Unexpected anonymous function grants: 0
+- Missing expected anonymous function grants: 0
+- BFF route-control classification gaps: 0
+- Wildcard CORS production sources: 0
+
+This is a source inventory, not deployment or authorization evidence.
+
+> k2-jimzon-prototype@0.1.0 security:secrets
+> node scripts/scan-secrets.mjs
+
+Secret scan passed (4163 files checked; secret values are never printed).
+✓ Import-integrity check passed — all hooks and supabase usages are imported.
+
+> k2-jimzon-prototype@0.1.0 security:test-customer-privacy
+> node --test tests/customer-email-return.test.mjs tests/customer-portfolio-api.test.mjs tests/customer-privacy-api.test.mjs tests/customer-privacy-worker.test.mjs tests/customer-privacy-admin-api.test.mjs tests/customer-crm-metrics.test.mjs tests/customer-closure-authority-state.test.mjs tests/customer-closure-authority-journal.test.mjs tests/customer-closure-authority-sqlite.test.mjs tests/customer-closure-authority-protection.test.mjs tests/customer-privacy-authority-bounds.test.mjs tests/customer-privacy-hold-coordinator.test.mjs tests/local-worker-runtime.test.mjs tests/customer-address-book.test.mjs tests/customer-address-book-api.test.mjs
+
+✔ address book API verifies current account and permitted origin before native mutation (2.5815ms)
+✔ address book uses the existing signed settings action and preserves operation/revision (1.854ms)
+✔ address shape and UTF-8 request limits reject before any native call (0.7602ms)
+✔ address revision and operation conflicts are explicit recoverable outcomes (1.1098ms)
+✔ address commands normalize fulfillment contact without creating an Auth identity (2.3478ms)
+✔ address book refuses selectors, duplicate IDs, missing defaults and unbounded bodies (1.5361ms)
+✔ saved-address fields and geographic shape are closed and bounded (0.6517ms)
+✔ checkout applies a gift default as one recipient/contact/address/destination group (0.2876ms)
+✔ a manual delivery edit prevents every part of a late default being applied (1.854ms)
+✔ initialized empty address book never falls back to the deleted legacy projection (0.1896ms)
+✔ stable slow replay yields validated prefixes before the deadline and eventually completes (784.8931ms)
+✔ normal requests never bootstrap an absent head or bypass an unqualified proof (2.9861ms)
+✔ a reported decision has its exact marker and witness and returns no execution permit (12.6048ms)
+✔ concurrent cancellation and authorization have exactly one terminal winner (17.4888ms)
+✔ an unrelated CAS winner rebases the same immutable command rather than overwriting its attempt (12.0947ms)
+✔ lost commands acknowledgment reconciles an identical operation after restart (7.3202ms)
+✔ lost candidates acknowledgment reconciles an identical operation after restart (6.5438ms)
+✔ lost head acknowledgment reconciles an identical operation after restart (5.0504ms)
+✔ lost commits acknowledgment reconciles an identical operation after restart (6.9331ms)
+✔ lost witness acknowledgment reconciles an identical operation after restart (6.3806ms)
+✔ a negative read during an in-flight head write never reports a definitive failure (9.673ms)
+✔ a stalled read returns bounded uncertainty without bootstrapping or writing later (39.6637ms)
+✔ a stalled head write returns uncertainty, then the same operation reconciles its late commit (119.9493ms)
+✔ a conflicting commit marker or missing committed candidate refuses without overwriting evidence (10.1301ms)
+✔ rolled-back head is detected by both later immutable markers and independent witness (10.5665ms)
+✔ full paginated history rebuilds a lost derived index; incomplete budget never reports ready (17.919ms)
+✔ a legitimate head advance during pagination restarts rather than declaring corruption (16.5238ms)
+✔ generation fencing prevents a previously prepared old-generation head from winning later (21.6348ms)
+✔ unsealed head blocks a later command until its exact marker and witness can be persisted (12.8344ms)
+✔ cancel, expiry and authorization racing together produce one terminal receipt (21.4716ms)
+✔ different logical commands racing on the same operation ID preserve one immutable binding (5.4268ms)
+✔ an unresponsive proof verifier returns pending and creates no command or candidate (47.3758ms)
+✔ a coordinator abort stops a waiting proof before any later immutable write (17.7251ms)
+✔ an already aborted coordinator starts no journal I/O (2.1269ms)
+✔ event-limited passes resume without incomplete witness, seal or command writes (15.4293ms)
+✔ page-limited passes retain their cursor and a new coordinator starts from genesis (16.367ms)
+✔ head changes between passes reset checked progress and include the new terminal result (30.917ms)
+✔ a corrupt later record cannot turn an incomplete prefix into readiness (13.7647ms)
+✔ competing calls do not publish or overwrite another bounded scan pass (16.4192ms)
+✔ completion rechecks a witness changed after the first partial pass (15.3876ms)
+✔ a timed-out resumed pass cannot overwrite progress after its delayed I/O returns (190.9025ms)
+✔ a repeated pagination cursor refuses after resuming instead of looping or becoming ready (18.5435ms)
+✔ head-change retries share one event allowance for the reconciliation call (34.0912ms)
+✔ a protection with lost head acknowledgement survives exact retry and lost witness reconstruction (21.4307ms)
+✔ v1 head bytes are refused without mutation in a v2 namespace (0.7643ms)
+✔ independent protection and authorization coordinator calls commit only one applicable winner (17.8759ms)
+✔ v2 has a fresh namespace/state contract and refuses old v1 commands (10.2798ms)
+✔ customer-only protection precedes any registration and matches only its real customer (32.7528ms)
+✔ customer-only protection survives cancellation/replacement and neither race permits both winners (62.0656ms)
+✔ missing or mixed customer-only origin identities never claim an operation (1.6297ms)
+✔ accepted global protection survives cancellation and blocks a replacement request (31.3371ms)
+✔ protection matches original subject OR customer without blocking unrelated scopes (28.0879ms)
+✔ an old cancellation cannot authorize a protection after replacement processing wins (12.3912ms)
+✔ a fresh protection after cancellation blocks the new request until verified release (23.6659ms)
+✔ protection and authorization from one head have a single winner (11.6443ms)
+✔ initiator role, principal and exact native scope cannot be chosen through caller evidence (9.4746ms)
+✔ worker mirror requires a real committed hold and release requires its exact resolution (8.1648ms)
+✔ changed IDs and duplicate protection attempts cannot rewrite accepted protection (13.9286ms)
+✔ receipt replay preserves global protection even when an index is missing after restoration (17.7505ms)
+✔ the last independent protection still blocks after another protection is released (35.2251ms)
+✔ generation fencing retains active protection and refuses stale protection mutations (62.8431ms)
+✔ native SQLite witness persists complete exact state and receipt across a new connection (49.1645ms)
+✔ native transaction rollback cannot publish partial maps with a newer control head (44.9301ms)
+✔ native witness refuses forks, namespace changes and derived-state corruption; stale advance cannot roll back (32.6205ms)
+✔ a newer internally valid fork cannot replace the witnessed history (31.4911ms)
+✔ a corrupt existing witness is not silently replaced by a valid newer state (32.7056ms)
+✔ legitimate advancement during checkpoint validation returns pending without a false fork (53.0595ms)
+✔ native protection rows persist across reopen and roll back atomically with their head (49.986ms)
+✔ unqualified adapters deny commands even with caller-selected proof (15.3625ms)
+✔ strict namespace, fields, policy and scope reject before writing a logical command (2.0457ms)
+✔ canonical command identity ignores property order and preparation mutates no state (4.3787ms)
+✔ one actor has one open request and request IDs cannot bind a different actor (8.2768ms)
+✔ cancel and authorize candidates from the same parent cannot both commit (9.6573ms)
+✔ exact terminal retry returns its original receipt; changed logical bytes refuse (7.8511ms)
+✔ a prepared but uncommitted logical command cannot change its payload (1.8234ms)
+✔ an unrelated winner permits a new attempt for the same immutable logical command (10.7833ms)
+✔ historical authorization after fencing grants no current execution permission (18.3635ms)
+✔ activation binds the exact fenced head and retains original authorized identities (29.726ms)
+✔ expiry requires a native unverified-expiry decision; cancellation permits a fresh request (10.1711ms)
+✔ wrong proof principal, purpose, command hash or role never persists a logical command (3.6793ms)
+✔ authorization and activation fail closed without their qualified matching proofs (8.6836ms)
+✔ unknown logical-store acknowledgment stays pending and identical retry reconciles (2.5862ms)
+✔ tampered candidates and corrupt cached state cannot be replayed (3.0372ms)
+✔ the command is copied before the first await, so caller mutation cannot change its identity (1.3512ms)
+✔ a logical command refused by current state still cannot be changed on retry (5.872ms)
+✔ a self-checksummed checkpoint still requires valid association maps and exact genesis (8.4294ms)
+✔ customer totals distinguish unfinished charges from zero (4.6734ms)
+✔ email return captures the hash only in memory and scrubs credentials before SDK initialization (2.6509ms)
+✔ email return rejects duplicate, mixed, recovery and incomplete credentials (3.9709ms)
+✔ email return leaves unrelated account anchors, pages and PKCE codes untouched (1.5691ms)
+✔ email return fails closed if URL credentials cannot be cleared (0.4084ms)
+✔ portfolio requires current Auth identity and a permitted origin before reading (1.7155ms)
+✔ portfolio rejects customer selectors, unsupported commands and malformed pagination (0.5922ms)
+✔ portfolio signs a fixed scoped read and preserves all-record summary (2.2429ms)
+✔ privacy review accepts only exact bounded request/hold operations (2.2979ms)
+✔ a pre-request hold can only target an exact customer and allowed reason (0.264ms)
+✔ Staff cannot reach private customer privacy records or mutations (0.817ms)
+✔ Admin review uses CSRF authorization, exact shared signature action and original idempotency key (1.3563ms)
+✔ Admin read signs a bounded private read and exposes no capability fields (0.5021ms)
+✔ an action cannot be retried as a different signed-in Admin (0.2426ms)
+✔ every hold action refuses without native writes when the authority is absent (0.409ms)
+✔ request holds use the separate signed native boundary and expose only checked current outcome (3.1248ms)
+✔ historical resolved creation and authorization refusal never become a successful saved hold (1.0692ms)
+✔ customer-only holds use the same signed pipeline with real customer scope and checked outcome (0.9909ms)
+✔ existing holds without native intents remain an explicit non-writing reconciliation outcome (0.4175ms)
+✔ a lost native preparation reply retains its exact signed operation before coordinator retry (0.7596ms)
+✔ committed native resolution stays uncertain until its original protection release is verified (0.7413ms)
+✔ one deadline aborts native prepare and prevents late coordinator or fallback work (20.5802ms)
+✔ native preparation time remains inside the inherited coordinator deadline (30.8628ms)
+✔ privacy rejects selected identities/contact overrides before any provider or RPC (1.921ms)
+✔ OTP send persists delivery budget before provider call, uses verified contact, never creates users (2.92ms)
+✔ delivery failure does not confirm closure or leak provider errors (0.7813ms)
+✔ confirmation consumes attempt before exact-channel OTP check and refuses wrong returned identity (0.5593ms)
+✔ only a successful matching provider verification creates the signed confirmation (0.928ms)
+✔ fresh proof is committed before processing so a processing failure never requires a new confirmation (1.6327ms)
+✔ elapsed synchronous adapter time cannot permit another I/O before the timer runs (47.8981ms)
+✔ a microtask chain cannot defer the elapsed deadline until after later I/O (36.1949ms)
+✔ nested authority scopes inherit the original absolute deadline and expose checked remaining time (25.6989ms)
+✔ a fence during the post-submit native read prevents projection (51.3599ms)
+✔ missing native keys and caller-selected proof cannot enable a hold (2.2523ms)
+✔ native customer-only protection needs no origin request and preserves null scope through release/replay (92.5988ms)
+✔ a signed current fact cannot mix null origin with an invented actor or request (2.6749ms)
+✔ proof MAC, command bytes and closed fields reject before a native write (6.1975ms)
+✔ a fresh native challenge and exact current record are required (8.5847ms)
+✔ complete hold lifecycle retains cancellation and never reprojects after release and authorization (161.1478ms)
+✔ a committed native resolution resumes release without another Admin or contact confirmation (51.4105ms)
+✔ a delayed projected fact cannot report an active hold after a known release and authorization (69.126ms)
+✔ an authorization winner closes the still-unaccepted intent without creating a hold (21.4624ms)
+✔ lost native acknowledgement stays pending and reconciles the original fixed result (26.442ms)
+✔ an unsigned projection acknowledgement cannot report a saved hold (21.023ms)
+✔ a coordinator deadline stops later projection calls when a read finishes late (83.3864ms)
+✔ unconfigured non-hold proof remains denied rather than inheriting native hold authority (1.8698ms)
+✔ stable slow hold retries progress through complete initial, submit and fresh confirmation scans (3505.0213ms)
+✔ a resumed confirmation still rejects a fence after the first call expired (123.1388ms)
+✔ a lost native resolution resumes derived release under the same steady slow history (2259.8439ms)
+✔ worker rejects missing scheduler authority and any other project before constructing a client (1.6567ms)
+✔ worker obfuscates only leased original Auth UUID and acknowledges with that lease (1.1009ms)
+✔ a lost provider acknowledgement is recoverable without deleting a new account (0.3986ms)
+✔ failed startup still disposes its owned runtime and preserves the missing-port evidence (3.274ms)
+✔ hung startup is bounded and cannot prevent the disposal attempt or receipt (21.3935ms)
+✔ failed or hung disposal does not claim a successful stop (15.1761ms)
+✔ successful disposal requires an observed owned-loopback port and refusal probe (1.6016ms)
+✔ untrusted or invalid ready URLs cannot redirect the shutdown probe (0.5655ms)
+✔ a hung startup reaches owned disposal without entering its operation (46.686ms)
+✔ an operation failure still verifies owned shutdown and preserves the original error (0.8161ms)
+✔ hung fixture I/O reaches verified runtime cleanup without advancing the operation (17.3366ms)
+ℹ tests 146
+ℹ suites 0
+ℹ pass 146
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7179.8766
+
+> k2-jimzon-prototype@0.1.0 build:storefront
+> vite build --mode storefront --configLoader runner && node scripts/emit-static-404.mjs storefront && node scripts/emit-storefront-sitemap.mjs && node scripts/verify-build-boundary.mjs storefront && node scripts/verify-bundle-budgets.mjs storefront && node scripts/scan-secrets.mjs dist
+
+vite v8.3.5 building client environment for storefront...
+transforming...
+✓ 1164 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/k2-build-target.json                             0.02 kB │ gzip:   0.04 kB
+dist/manifest.json                                    0.73 kB │ gzip:   0.29 kB
+dist/index.html                                       3.39 kB │ gzip:   1.04 kB
+dist/.vite/manifest.json                             17.66 kB │ gzip:   2.14 kB
+dist/assets/StoreChatPanel-DeMF7Ywq.css               0.67 kB │ gzip:   0.30 kB
+dist/assets/Home-DDULE64m.css                         1.36 kB │ gzip:   0.62 kB
+dist/assets/InteractiveShop-DcNMJqeO.css             29.24 kB │ gzip:   6.34 kB
+dist/assets/index-DMXMZ32v.css                      199.36 kB │ gzip:  29.33 kB
+dist/assets/formatMoney-DcWy64el.js                   0.09 kB │ gzip:   0.11 kB
+dist/assets/is-html-element-DvgHo_1h.js               0.12 kB │ gzip:   0.12 kB
+dist/assets/productFamilyPresentation-BfDfEwQt.js     0.52 kB │ gzip:   0.33 kB
+dist/assets/supabaseClient-VSDIr968.js                0.53 kB │ gzip:   0.41 kB
+dist/assets/rolldown-runtime-XKyaHtl9.js              0.72 kB │ gzip:   0.42 kB
+dist/assets/useStorefrontDialog-DLiOGCzI.js           0.95 kB │ gzip:   0.54 kB
+dist/assets/NotFound-Bj7yvZFS.js                      0.95 kB │ gzip:   0.52 kB
+dist/assets/useProductKnowledgeVersion-D37ScTxI.js    0.96 kB │ gzip:   0.48 kB
+dist/assets/StorefrontChatButton-9GPnFr_8.js          1.42 kB │ gzip:   0.79 kB
+dist/assets/HeroVideo-CStvc6Hq.js                     1.70 kB │ gzip:   0.74 kB
+dist/assets/TurnstileChallenge-CVpodtZY.js            1.85 kB │ gzip:   0.95 kB
+dist/assets/storefrontAnalytics-D0QvHXSm.js           2.39 kB │ gzip:   1.15 kB
+dist/assets/productStructuredData-ClyDgf9V.js         2.64 kB │ gzip:   1.33 kB
+dist/assets/productFamilies-B6MF1UOS.js               2.66 kB │ gzip:   1.29 kB
+dist/assets/icons-Cz-dnZW0.js                         2.97 kB │ gzip:   1.31 kB
+dist/assets/site-C9Q7x5dw.js                          3.11 kB │ gzip:   1.56 kB
+dist/assets/StoreChatDrawer-DNWZqZDw.js               3.34 kB │ gzip:   1.50 kB
+dist/assets/InteractiveReveal-BdLFd3dS.js             3.54 kB │ gzip:   1.48 kB
+dist/assets/StorefrontAnalytics-D4E4aBJn.js           4.11 kB │ gzip:   1.66 kB
+dist/assets/StorefrontMetadata-CfidW6o-.js            6.22 kB │ gzip:   2.22 kB
+dist/assets/Footer-uP_hNif7.js                        6.29 kB │ gzip:   2.00 kB
+dist/assets/StorySection-D55QNnd7.js                  6.38 kB │ gzip:   2.62 kB
+dist/assets/FaqSection-DZXpFXFH.js                    6.50 kB │ gzip:   2.44 kB
+dist/assets/DeliveryAreaFields-jehI_LZN.js            6.51 kB │ gzip:   2.66 kB
+dist/assets/ProductVisual-CXCm2rQ9.js                 7.30 kB │ gzip:   4.12 kB
+dist/assets/CustomerAccountProvider-CLJGDNab.js       7.56 kB │ gzip:   2.45 kB
+dist/assets/CartDrawer-BFvGA1OE.js                    7.68 kB │ gzip:   2.60 kB
+dist/assets/ProductCard-KYnDBd0-.js                   7.89 kB │ gzip:   2.37 kB
+dist/assets/ExpressDeliveryApproval-kz6KEBsq.js       8.42 kB │ gzip:   3.36 kB
+dist/assets/Contact-BwCUu_bu.js                       9.49 kB │ gzip:   2.71 kB
+dist/assets/Catalog-DVR0g-nO.js                      10.11 kB │ gzip:   3.72 kB
+dist/assets/StoreChatPanel-H10OX9UH.js               10.21 kB │ gzip:   3.42 kB
+dist/assets/Policy-Oks6skEs.js                       10.53 kB │ gzip:   4.21 kB
+dist/assets/motion-DjovyMO9.js                       11.56 kB │ gzip:   4.78 kB
+dist/assets/Pasabuy-DLhjKDEi.js                      11.74 kB │ gzip:   3.87 kB
+dist/assets/GuestMessages-DvyaTFzB.js                11.96 kB │ gzip:   3.93 kB
+dist/assets/Confirmation-CTlgbRbe.js                 14.91 kB │ gzip:   4.95 kB
+dist/assets/Wholesale-qso7gzvB.js                    20.01 kB │ gzip:   5.49 kB
+dist/assets/Checkout-DCztBKOS.js                     22.38 kB │ gzip:   7.11 kB
+dist/assets/MasterProduct-BqEDm3Ze.js                30.01 kB │ gzip:   8.29 kB
+dist/assets/Home-CU4DiTVw.js                         30.93 kB │ gzip:   9.11 kB
+dist/assets/is-svg-component-BAHRpiy1.js             31.93 kB │ gzip:  11.57 kB
+dist/assets/InteractiveShop-BXlijXYt.js              43.68 kB │ gzip:  13.20 kB
+dist/assets/GlobeSection-C-B9hWq1.js                 43.84 kB │ gzip:  15.42 kB
+dist/assets/react-C5PqZUBQ.js                        47.80 kB │ gzip:  14.50 kB
+dist/assets/CustomerAccount-Bjp4tEVi.js              51.63 kB │ gzip:  12.89 kB
+dist/assets/ShelfScene3D-Cv7zQ1Y-.js                126.77 kB │ gzip:  38.16 kB
+dist/assets/index-B9Z7i1ga.js                       135.68 kB │ gzip:  47.08 kB
+dist/assets/vendor-supabase-Bwm3Z89P.js             214.38 kB │ gzip:  55.16 kB
+dist/assets/vendor-react-C2ZZQvfb.js                218.75 kB │ gzip:  68.27 kB
+dist/assets/react-three-fiber.esm-DO_wltZG.js       914.30 kB │ gzip: 242.70 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.40s
+Emitted storefront static 404 recovery page.
+[sitemap] dist/sitemap.xml written with 4 stable routes and 107 product URLs
+[metadata] 116 product pages prerendered
+[metadata] 9 marketing pages prerendered
+Verified storefront production boundary (52 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker).
+Storefront landing budget passed: JS 148.38 kB/150.50 kB gzip; CSS 29.82 kB/30.00 kB gzip.
+Secret scan passed (1069 files checked; secret values are never printed).
+
+RELEASE_STAGE_START build:admin
+
+> k2-jimzon-prototype@0.1.0 prebuild:admin
+> npm run prebuild
+
+
+> k2-jimzon-prototype@0.1.0 prebuild
+> npm run security:test-turnstile && npm run security:test && npm run security:test-admin-session && npm run security:test-env-contract && npm run security:test-k2-project && npm run security:test-live-readiness && npm run security:test-files && npm run security:files && npm run security:test-env-source && npm run security:env-source && npm run security:dependency-policy && npm run security:surfaces && npm run security:secrets && node scripts/check-imports.mjs && npm run security:test-customer-privacy
+
+
+> k2-jimzon-prototype@0.1.0 security:test-turnstile
+> node --test tests/turnstile-loader-recovery.test.mjs tests/turnstile-widget-lifecycle.test.mjs tests/git-guardrails.test.mjs && playwright test --config=playwright.api.config.js tests/turnstile-wiring-contract.spec.js tests/bot-challenge-contract.spec.js
+
+✔ commit guard refuses unstaged runtime inputs that could hide a staged regression (6.1101ms)
+✔ push guard requires committed runtime and test inputs but permits receipt-only edits (0.3686ms)
+✔ lint configuration is a verification input for commits and pushes (0.2672ms)
+✔ hook installation preserves an existing custom hooks directory (2.2917ms)
+✔ push guard refuses outgoing commits other than the checked HEAD (0.5598ms)
+✔ failed Turnstile download releases the cached failure for the next attempt (6.5979ms)
+✔ a silent rendered challenge times out without ever granting a token (6.5828ms)
+✔ success is visible and cancels the pending deadline; expiry invalidates the token (0.4177ms)
+✔ provider errors are visible, bounded, and never bypass verification (0.3526ms)
+✔ unmount cancels deadlines and ignores all stale provider callbacks (0.3126ms)
+✔ an interactive challenge gets the provider interaction window instead of the background deadline (0.4609ms)
+✔ interactive cleanup after success cannot restart the pending deadline (0.3637ms)
+✔ a synchronous render failure becomes a retryable error (0.3302ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 132.3951
+
+Running 7 tests using 1 worker
+
+(node:9316) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\bot-challenge-contract.spec.js:19:1 › a missing secret fails closed without calling the provider (6ms)
+  ok 2 tests\bot-challenge-contract.spec.js:36:1 › an explicit unconfigured bypass is opt-in and auditable (2ms)
+  ok 3 tests\bot-challenge-contract.spec.js:51:1 › a token is single-use: its replay is rejected (2ms)
+  ok 4 tests\bot-challenge-contract.spec.js:64:1 › a token minted for another host is rejected (1ms)
+  ok 5 tests\bot-challenge-contract.spec.js:76:1 › every server call site binds its validated request hostname (6ms)
+  ok 6 tests\turnstile-wiring-contract.spec.js:20:1 › every TurnstileChallenge usage wires onTokenChange, never onVerify (145ms)
+  ok 7 tests\turnstile-wiring-contract.spec.js:38:1 › widget bot-check actions agree with the server expected actions (10ms)
+
+  7 passed (874ms)
+
+> k2-jimzon-prototype@0.1.0 security:test
+> node scripts/test-secret-scan.mjs
+
+Secret scanner tests passed (fabricated values only).
+
+> k2-jimzon-prototype@0.1.0 security:test-admin-session
+> node --test tests/admin-mfa-sdk-qr.test.mjs tests/admin-bff-refresh-token.test.mjs tests/admin-product-read-taxonomy.test.mjs tests/admin-product-stock-read.test.mjs tests/admin-reference-command.test.mjs tests/admin-reference-handler.test.mjs tests/admin-lot-snapshot-read.test.mjs tests/product-master-command-recovery.test.mjs tests/admin-product-master-recovery-client.test.mjs tests/admin-product-master-actor.test.mjs tests/website-assignment-recovery.test.mjs tests/admin-website-assignment-actor.test.mjs tests/admin-google-bff.test.mjs tests/turnstile-loader-recovery.test.mjs tests/photo-csv-batch.test.mjs tests/admin-photo-batch-actor.test.mjs
+
+✔ protocol-valid 12-character refresh token survives all Admin encrypted session boundaries (5.7369ms)
+✔ refresh lower/upper bounds and access-token lower bound still refuse malformed sessions (0.6228ms)
+✔ actual Supabase SDK generates PKCE with encrypted browser-bound verifier and exact K2 return route (40.648ms)
+✔ Google callback rejects wrong-origin before provider exchange (10.8594ms)
+✔ Google callback rejects no-cookie before provider exchange (2.3813ms)
+✔ Google callback rejects altered-cookie before provider exchange (4.4266ms)
+✔ Google callback rejects wrong-state before provider exchange (3.2529ms)
+✔ Google callback rejects expired before provider exchange (3.3493ms)
+✔ Google callback rejects extra-fields before provider exchange (1.9529ms)
+✔ Google AAL1 session stays pending for the existing authenticator challenge without active session registration (3.1853ms)
+✔ Google callback non-staff retains staff/AAL2/registry authority (5.7389ms)
+✔ Google callback unverified-email retains staff/AAL2/registry authority (2.3716ms)
+✔ Google callback enrollment retains staff/AAL2/registry authority (4.5701ms)
+✔ Google callback aal2 retains staff/AAL2/registry authority (3.7135ms)
+✔ Google callback registry-failed retains staff/AAL2/registry authority (4.2931ms)
+✔ Google start fails closed for missing bot verification or unavailable durable budget (1.5886ms)
+✔ consolidated router advertises both Google routes with origin, PKCE/bot and durable budget guards (0.2367ms)
+✔ lot read derives physical and allocations from one coherent snapshot (2.5674ms)
+✔ complete empty snapshot is a verified empty lot read (0.3606ms)
+✔ partial, malformed, over-bound and refused snapshots cannot produce healthy totals (1.3242ms)
+✔ pending enrollment accepts the installed Supabase SDK QR format without cancelling the factor (41.0154ms)
+✔ pending enrollment bounds oversized SVG data and cancels only the new unverified factor (0.8016ms)
+✔ pending enrollment preserves an already verified authenticator without creating or deleting factors (0.3124ms)
+✔ pending enrollment still rejects a non-SVG QR response and cancels its unverified factor (0.3405ms)
+✔ installed SDK completes password, enrollment, challenge and AAL2 verification against the provider protocol fixture (6.5909ms)
+✔ photo upload and assignment actor mismatch refuse before Storage or command dispatch (62.8834ms)
+✔ existing and actor-bound assignment clients retain current staff command behavior (13.1095ms)
+✔ saved Product Master actor mismatch refuses before command RPC (74.5868ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (8.8101ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (13.9365ms)
+✔ existing clients without actor header retain current authenticated actor behavior (3.1598ms)
+✔ approved merge uses the existing Admin AAL2 actor-bound signed Product Master RPC (4.8816ms)
+✔ approved group preview reads through read_admin_product_sku_merge_v1 (2.5218ms)
+✔ Product Master recovery has a literal-body actor-bound browser client (0.9775ms)
+✔ lost HTTP reply and later auth refusal preserve same literal request key and current CSRF (75.4901ms)
+✔ protected catalog preserves canonical assigned and nullable unassigned taxonomy (2.9031ms)
+✔ category filters can use the canonical name when no store label is assigned (0.3448ms)
+✔ stock failure preserves canonical taxonomy while reporting unknown stock (0.3683ms)
+✔ protected catalog retains every saved photo slot for reopening the photo manager (0.2617ms)
+✔ stock failure does not hide saved after-use or supporting photos (0.2769ms)
+✔ internal Draft receives canonical staff stock even when public offer is absent (3.0016ms)
+✔ a complete no-lot staff row proves zero without inferring it from an absent public offer (0.3523ms)
+✔ missing row preserves product discovery and explicit unknown stock (0.2653ms)
+✔ unreadable taxonomy preserves product discovery and explicit unknown stock (0.2448ms)
+✔ fractional quantity preserves product discovery and explicit unknown stock (0.2051ms)
+✔ duplicate row preserves product discovery and explicit unknown stock (0.1698ms)
+✔ query failure preserves product discovery and explicit unknown stock (0.2336ms)
+✔ creation preserves raw command strings and property order for saved retry identity (1.3687ms)
+✔ name bound counts Unicode characters after printable whitespace cleanup (0.8484ms)
+✔ endpoint refuses unsupported methods and missing command keys before dispatch (0.6202ms)
+✔ endpoint cannot be used on the storefront deployment (0.7653ms)
+✔ reference route advertises protected POST and a read-only GET (266.7038ms)
+✔ controls are refused before cleanup and malformed strings never reach SQL (1.3304ms)
+✔ creation rejects extra fields, coerced values and ambiguous category parent (0.4047ms)
+✔ protected options retain category hierarchy and permit an empty catalog (0.4669ms)
+✔ partial, unavailable, over-limit or malformed options fail closed (0.4603ms)
+✔ current Staff role cannot create even when cookie claims Admin (47.995ms)
+✔ saved-request actor mismatch refuses before reference dispatch (4.0427ms)
+✔ Admin and SuperAdmin send one correctly signed exact command (8.4418ms)
+✔ CSRF, current AAL2 and registry refusal prevent creation dispatch (8.4642ms)
+✔ historical receipt is shown separately from changed or missing current reference (6.634ms)
+✔ committed receipt survives unavailable current readback (7029.6921ms)
+✔ unknown command failure hides provider details and retains retry classification (2.063ms)
+✔ saved Website assignment actor mismatch refuses before command RPC (46.562ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (7.8864ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (10.7064ms)
+✔ existing clients without actor header retain current authenticated actor behavior (3.1562ms)
+✔ bounded Website read distinguishes absent, paused and active existing rows (9.6197ms)
+✔ Website read refuses duplicate partial malformed failed or missing product evidence (7053.3879ms)
+✔ current Staff and invalid SKU refuse per-product read before data lookup; aggregate contract stays (4.8662ms)
+✔ mapping resolves exact existing Draft and retains untouched photo slots (11.8274ms)
+✔ invalid identities, duplicate files/SKUs, missing files, existing slots and live targets refuse before upload (2.792ms)
+✔ lost assignment reply survives reload and retries original payload/key without uploading twice (4.4257ms)
+✔ actor change, byte substitution and current-media drift stop before mutation (1.9229ms)
+✔ storage failure refuses dispatch and malformed recovery is retained (1.2104ms)
+✔ multi-product batch resumes at failed row and never replays completed rows (2.3664ms)
+✔ account changes after upload or media drift during upload refuse assignment (2.3439ms)
+✔ recovery refuses a changed literal command and a competing batch (1.0179ms)
+✔ saved but unconfirmed command cannot overwrite later media or a non-Draft target (1.9476ms)
+✔ Product Master updates have durable actor-scoped recovery (1.7369ms)
+✔ reload preserves literal bytes version reason and original key (1.7906ms)
+✔ changed key payload version or review decision cannot replace unknown request (1.1131ms)
+✔ actor and operation identity isolate reading and acknowledgement (0.6102ms)
+✔ corruption foreign actor secret field and oversize storage remain untouched (1.1459ms)
+✔ malformed or non-update commands cannot be held or sent (1.1972ms)
+✔ approved merge commands have durable actor-scoped recovery (0.6681ms)
+✔ failed Turnstile download releases the cached failure for the next attempt (6.6724ms)
+✔ Website has its own durable actor-scoped original request recovery (0.8619ms)
+✔ Website literal body and key survive reload and cannot be replaced (2.043ms)
+✔ corrupt Website records remain untouched and invalid bodies never persist (0.798ms)
+✔ existing unassigned Website listing keeps a real version; only absent row has null identity (0.286ms)
+ℹ tests 91
+ℹ suites 0
+ℹ pass 91
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7919.9126
+
+> k2-jimzon-prototype@0.1.0 security:test-env-contract
+> node scripts/verify-deployment-environment-contract.mjs --self-test
+
+Deployment environment contract self-test passed (5 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:test-k2-project
+> node --test tests/k2-supabase-project-identity.test.mjs
+
+✔ accepts the exact K2 URL only when the management token sees K2 (28.6645ms)
+✔ rejects a ScoutIT-only management token (0.8607ms)
+✔ rejects a ScoutIT URL before sending the token (0.2825ms)
+✔ rejects missing token and management access failure without logging secrets (0.4949ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 117.4873
+
+> k2-jimzon-prototype@0.1.0 security:test-live-readiness
+> node --test tests/k2-live-readiness-contract.test.mjs tests/k2-installed-readiness.test.mjs tests/admin-preauth-dependency-readiness.test.mjs
+
+✔ only the approved signed pre-auth rate RPC may extend the installed permission profile (14.3343ms)
+✔ normal readiness blocks the completely missing login dependency (0.3494ms)
+✔ preparation mode cannot admit partial installation or grant/body drift (0.2977ms)
+✔ only exact installed rate authority and private forced RLS classify verified (0.214ms)
+✔ incomplete metadata and invalid source hashes do not pass (0.1627ms)
+✔ exact installed source receipt and all required relations classify installed, never permission to reapply (1.1358ms)
+✔ empty legacy baseline is first apply only when every chain relation is absent (0.1708ms)
+✔ changed complete-source receipt, duplicate or old controlled receipt refuse (0.2383ms)
+✔ partial installed schema and malformed relation evidence refuse (0.2005ms)
+✔ approved family reader profile passes while every changed authority field refuses (15.2856ms)
+✔ installed permission classification names exact reviewed signatures and invoker trigger exceptions (0.3326ms)
+✔ extra overload or altered authority cannot hide behind a function name (1.6073ms)
+✔ extra PUBLIC execute and trigger SECURITY DEFINER drift refuse (0.5255ms)
+✔ two arbitrary triggers do not inherit the named PUBLIC exception (0.331ms)
+✔ same-named private trigger cannot replace PUBLIC schema exception (0.4014ms)
+✔ approved order-chat adapter extends the exact installed catalog without admitting other grants (0.3674ms)
+✔ date-only migration version requires the exact restored version and all backup bindings (1.4612ms)
+✔ backup must match encrypted bytes/hash and actual restored current migration (0.2281ms)
+✔ missing proof and impossible/future creation or restoration evidence refuse (0.1572ms)
+✔ unknown backup creation metadata cannot be bypassed by a valid candidate (0.316ms)
+✔ backup chronology requires real UTC ISO strings rather than Date.parse coercion (0.1945ms)
+✔ the gate keeps the read-only guard in front of every query (1.2183ms)
+✔ the production query is declared read_only (0.5276ms)
+✔ every SQL template literal is a SELECT with no write verb (0.8198ms)
+✔ the gate reports provider surfaces as blocked instead of assuming them (0.1602ms)
+✔ the gate refuses to send a query before identity passes (0.1446ms)
+✔ documented K2 gates load the owner-controlled local environment file (0.5968ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 134.0793
+
+> k2-jimzon-prototype@0.1.0 security:test-files
+> node scripts/test-sensitive-file-policy.mjs
+
+Sensitive-file policy tests passed (13 blocked, 4 allowed, and the source inventory).
+
+> k2-jimzon-prototype@0.1.0 security:files
+> node scripts/verify-tracked-sensitive-files.mjs
+
+Sensitive-file policy passed in git mode (4137 files checked).
+
+> k2-jimzon-prototype@0.1.0 security:test-env-source
+> node scripts/test-environment-source-boundary.mjs
+
+Environment source-boundary tests passed (8 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:env-source
+> node scripts/verify-environment-source-boundary.mjs
+
+Environment source boundary passed (276 browser and 203 server/Edge files checked).
+
+> k2-jimzon-prototype@0.1.0 security:dependency-policy
+> node scripts/verify-dependency-policy.mjs
+
+Dependency policy passed (20 direct, 246 locked packages, 2 reviewed install scripts).
+Reviewed licenses: 0BSD=2, Apache-2.0=25, Apache-2.0 AND LGPL-3.0-or-later=3, Apache-2.0 AND LGPL-3.0-or-later AND MIT=1, BSD-2-Clause=1, BSD-3-Clause=2, ISC=7, LGPL-3.0-or-later=10, MIT=170, MPL-2.0=24, UNKNOWN=1
+
+> k2-jimzon-prototype@0.1.0 security:surfaces
+> node scripts/audit-security-surfaces.mjs --fail-on-gaps
+
+# MAP-020 Security Surface Inventory
+
+Generated: 2026-10-29T02:31:44.883Z
+
+- Prepared Admin routes: 105
+- Prepared Storefront routes: 24
+- Supabase Edge Functions: 2 (invite-staff, shopee-webhook)
+- api_request: 71 source operations
+- auth: 50 source operations
+- realtime: 12 source operations
+- rpc: 152 source operations
+- storage: 16 source operations
+- table: 141 source operations
+- SQL functionDefinitionOccurrences: 285
+- SQL uniqueFunctionSignatures: 221
+- SQL functionGrantEvents: 192
+- SQL functionRevokeEvents: 300
+- SQL functionSearchPathHardeningEvents: 6
+- SQL effectiveSecurityDefinerWithoutFixedSearchPath: 0
+- SQL effectiveFunctionsWithPublicExecute: 0
+- SQL effectiveFunctionsWithAnonExecute: 21
+- SQL effectiveFunctionsWithAuthenticatedExecute: 112
+- SQL effectiveFunctionsWithServiceRoleExecute: 16
+- SQL scheduledJobs: 0
+- SQL publicationChanges: 16
+- SQL policyDefinitions: 156
+- SQL storagePolicyDefinitions: 15
+- Dynamic operations requiring explicit review: 0
+- Exact expected anonymous function grants: 21
+- Unexpected PUBLIC function grants: 0
+- Unexpected anonymous function grants: 0
+- Missing expected anonymous function grants: 0
+- BFF route-control classification gaps: 0
+- Wildcard CORS production sources: 0
+
+This is a source inventory, not deployment or authorization evidence.
+
+> k2-jimzon-prototype@0.1.0 security:secrets
+> node scripts/scan-secrets.mjs
+
+Secret scan passed (4163 files checked; secret values are never printed).
+✓ Import-integrity check passed — all hooks and supabase usages are imported.
+
+> k2-jimzon-prototype@0.1.0 security:test-customer-privacy
+> node --test tests/customer-email-return.test.mjs tests/customer-portfolio-api.test.mjs tests/customer-privacy-api.test.mjs tests/customer-privacy-worker.test.mjs tests/customer-privacy-admin-api.test.mjs tests/customer-crm-metrics.test.mjs tests/customer-closure-authority-state.test.mjs tests/customer-closure-authority-journal.test.mjs tests/customer-closure-authority-sqlite.test.mjs tests/customer-closure-authority-protection.test.mjs tests/customer-privacy-authority-bounds.test.mjs tests/customer-privacy-hold-coordinator.test.mjs tests/local-worker-runtime.test.mjs tests/customer-address-book.test.mjs tests/customer-address-book-api.test.mjs
+
+✔ address book API verifies current account and permitted origin before native mutation (2.4209ms)
+✔ address book uses the existing signed settings action and preserves operation/revision (1.8258ms)
+✔ address shape and UTF-8 request limits reject before any native call (0.607ms)
+✔ address revision and operation conflicts are explicit recoverable outcomes (1.0925ms)
+✔ address commands normalize fulfillment contact without creating an Auth identity (2.0801ms)
+✔ address book refuses selectors, duplicate IDs, missing defaults and unbounded bodies (1.5345ms)
+✔ saved-address fields and geographic shape are closed and bounded (0.7182ms)
+✔ checkout applies a gift default as one recipient/contact/address/destination group (1.1802ms)
+✔ a manual delivery edit prevents every part of a late default being applied (0.2753ms)
+✔ initialized empty address book never falls back to the deleted legacy projection (0.1908ms)
+✔ stable slow replay yields validated prefixes before the deadline and eventually completes (745.7229ms)
+✔ normal requests never bootstrap an absent head or bypass an unqualified proof (3.1669ms)
+✔ a reported decision has its exact marker and witness and returns no execution permit (8.833ms)
+✔ concurrent cancellation and authorization have exactly one terminal winner (17.2707ms)
+✔ an unrelated CAS winner rebases the same immutable command rather than overwriting its attempt (12.5096ms)
+✔ lost commands acknowledgment reconciles an identical operation after restart (14.9971ms)
+✔ lost candidates acknowledgment reconciles an identical operation after restart (14.5113ms)
+✔ lost head acknowledgment reconciles an identical operation after restart (8.5556ms)
+✔ lost commits acknowledgment reconciles an identical operation after restart (11.3464ms)
+✔ lost witness acknowledgment reconciles an identical operation after restart (11.2084ms)
+✔ a negative read during an in-flight head write never reports a definitive failure (10.5043ms)
+✔ a stalled read returns bounded uncertainty without bootstrapping or writing later (30.7551ms)
+✔ a stalled head write returns uncertainty, then the same operation reconciles its late commit (135.6308ms)
+✔ a conflicting commit marker or missing committed candidate refuses without overwriting evidence (10.1411ms)
+✔ rolled-back head is detected by both later immutable markers and independent witness (11.0733ms)
+✔ full paginated history rebuilds a lost derived index; incomplete budget never reports ready (17.7375ms)
+✔ a legitimate head advance during pagination restarts rather than declaring corruption (17.7875ms)
+✔ generation fencing prevents a previously prepared old-generation head from winning later (21.6253ms)
+✔ unsealed head blocks a later command until its exact marker and witness can be persisted (12.8261ms)
+✔ cancel, expiry and authorization racing together produce one terminal receipt (21.9806ms)
+✔ different logical commands racing on the same operation ID preserve one immutable binding (6.8144ms)
+✔ an unresponsive proof verifier returns pending and creates no command or candidate (43.3709ms)
+✔ a coordinator abort stops a waiting proof before any later immutable write (15.3285ms)
+✔ an already aborted coordinator starts no journal I/O (0.6392ms)
+✔ event-limited passes resume without incomplete witness, seal or command writes (17.5831ms)
+✔ page-limited passes retain their cursor and a new coordinator starts from genesis (19.429ms)
+✔ head changes between passes reset checked progress and include the new terminal result (32.6632ms)
+✔ a corrupt later record cannot turn an incomplete prefix into readiness (19.8184ms)
+✔ competing calls do not publish or overwrite another bounded scan pass (18.2084ms)
+✔ completion rechecks a witness changed after the first partial pass (16.538ms)
+✔ a timed-out resumed pass cannot overwrite progress after its delayed I/O returns (196.3549ms)
+✔ a repeated pagination cursor refuses after resuming instead of looping or becoming ready (14.1176ms)
+✔ head-change retries share one event allowance for the reconciliation call (32.8675ms)
+✔ a protection with lost head acknowledgement survives exact retry and lost witness reconstruction (22.4633ms)
+✔ v1 head bytes are refused without mutation in a v2 namespace (0.9143ms)
+✔ independent protection and authorization coordinator calls commit only one applicable winner (33.0159ms)
+✔ v2 has a fresh namespace/state contract and refuses old v1 commands (11.8591ms)
+✔ customer-only protection precedes any registration and matches only its real customer (33.7744ms)
+✔ customer-only protection survives cancellation/replacement and neither race permits both winners (41.1963ms)
+✔ missing or mixed customer-only origin identities never claim an operation (1.9073ms)
+✔ accepted global protection survives cancellation and blocks a replacement request (25.6881ms)
+✔ protection matches original subject OR customer without blocking unrelated scopes (16.7712ms)
+✔ an old cancellation cannot authorize a protection after replacement processing wins (15.8163ms)
+✔ a fresh protection after cancellation blocks the new request until verified release (25.0004ms)
+✔ protection and authorization from one head have a single winner (9.7555ms)
+✔ initiator role, principal and exact native scope cannot be chosen through caller evidence (7.604ms)
+✔ worker mirror requires a real committed hold and release requires its exact resolution (8.05ms)
+✔ changed IDs and duplicate protection attempts cannot rewrite accepted protection (16.612ms)
+✔ receipt replay preserves global protection even when an index is missing after restoration (11.7824ms)
+✔ the last independent protection still blocks after another protection is released (29.8352ms)
+✔ generation fencing retains active protection and refuses stale protection mutations (36.3262ms)
+✔ native SQLite witness persists complete exact state and receipt across a new connection (43.0486ms)
+✔ native transaction rollback cannot publish partial maps with a newer control head (48.3079ms)
+✔ native witness refuses forks, namespace changes and derived-state corruption; stale advance cannot roll back (32.6831ms)
+✔ a newer internally valid fork cannot replace the witnessed history (33.3507ms)
+✔ a corrupt existing witness is not silently replaced by a valid newer state (33.1762ms)
+✔ legitimate advancement during checkpoint validation returns pending without a false fork (53.851ms)
+✔ native protection rows persist across reopen and roll back atomically with their head (48.3853ms)
+✔ unqualified adapters deny commands even with caller-selected proof (14.2962ms)
+✔ strict namespace, fields, policy and scope reject before writing a logical command (1.5733ms)
+✔ canonical command identity ignores property order and preparation mutates no state (4.2338ms)
+✔ one actor has one open request and request IDs cannot bind a different actor (8.34ms)
+✔ cancel and authorize candidates from the same parent cannot both commit (11.7049ms)
+✔ exact terminal retry returns its original receipt; changed logical bytes refuse (7.8599ms)
+✔ a prepared but uncommitted logical command cannot change its payload (1.7433ms)
+✔ an unrelated winner permits a new attempt for the same immutable logical command (8.571ms)
+✔ historical authorization after fencing grants no current execution permission (14.9099ms)
+✔ activation binds the exact fenced head and retains original authorized identities (21.8099ms)
+✔ expiry requires a native unverified-expiry decision; cancellation permits a fresh request (25.2977ms)
+✔ wrong proof principal, purpose, command hash or role never persists a logical command (3.6898ms)
+✔ authorization and activation fail closed without their qualified matching proofs (6.7491ms)
+✔ unknown logical-store acknowledgment stays pending and identical retry reconciles (3.2552ms)
+✔ tampered candidates and corrupt cached state cannot be replayed (4.3272ms)
+✔ the command is copied before the first await, so caller mutation cannot change its identity (1.5287ms)
+✔ a logical command refused by current state still cannot be changed on retry (4.2766ms)
+✔ a self-checksummed checkpoint still requires valid association maps and exact genesis (5.7444ms)
+✔ customer totals distinguish unfinished charges from zero (2.6778ms)
+✔ email return captures the hash only in memory and scrubs credentials before SDK initialization (3.8137ms)
+✔ email return rejects duplicate, mixed, recovery and incomplete credentials (1.0884ms)
+✔ email return leaves unrelated account anchors, pages and PKCE codes untouched (1.2053ms)
+✔ email return fails closed if URL credentials cannot be cleared (0.4991ms)
+✔ portfolio requires current Auth identity and a permitted origin before reading (2.0822ms)
+✔ portfolio rejects customer selectors, unsupported commands and malformed pagination (0.7957ms)
+✔ portfolio signs a fixed scoped read and preserves all-record summary (2.4204ms)
+✔ privacy review accepts only exact bounded request/hold operations (2.465ms)
+✔ a pre-request hold can only target an exact customer and allowed reason (0.3501ms)
+✔ Staff cannot reach private customer privacy records or mutations (0.7816ms)
+✔ Admin review uses CSRF authorization, exact shared signature action and original idempotency key (1.3925ms)
+✔ Admin read signs a bounded private read and exposes no capability fields (0.4914ms)
+✔ an action cannot be retried as a different signed-in Admin (0.2911ms)
+✔ every hold action refuses without native writes when the authority is absent (0.5211ms)
+✔ request holds use the separate signed native boundary and expose only checked current outcome (3.8625ms)
+✔ historical resolved creation and authorization refusal never become a successful saved hold (1.2607ms)
+✔ customer-only holds use the same signed pipeline with real customer scope and checked outcome (1.322ms)
+✔ existing holds without native intents remain an explicit non-writing reconciliation outcome (0.5234ms)
+✔ a lost native preparation reply retains its exact signed operation before coordinator retry (0.8071ms)
+✔ committed native resolution stays uncertain until its original protection release is verified (1.707ms)
+✔ one deadline aborts native prepare and prevents late coordinator or fallback work (24.2974ms)
+✔ native preparation time remains inside the inherited coordinator deadline (30.8149ms)
+✔ privacy rejects selected identities/contact overrides before any provider or RPC (2.1022ms)
+✔ OTP send persists delivery budget before provider call, uses verified contact, never creates users (2.8263ms)
+✔ delivery failure does not confirm closure or leak provider errors (0.8486ms)
+✔ confirmation consumes attempt before exact-channel OTP check and refuses wrong returned identity (0.8381ms)
+✔ only a successful matching provider verification creates the signed confirmation (1.0387ms)
+✔ fresh proof is committed before processing so a processing failure never requires a new confirmation (0.9377ms)
+✔ elapsed synchronous adapter time cannot permit another I/O before the timer runs (47.6741ms)
+✔ a microtask chain cannot defer the elapsed deadline until after later I/O (35.6825ms)
+✔ nested authority scopes inherit the original absolute deadline and expose checked remaining time (25.6786ms)
+✔ a fence during the post-submit native read prevents projection (51.7654ms)
+✔ missing native keys and caller-selected proof cannot enable a hold (1.4612ms)
+✔ native customer-only protection needs no origin request and preserves null scope through release/replay (93.1898ms)
+✔ a signed current fact cannot mix null origin with an invented actor or request (2.8273ms)
+✔ proof MAC, command bytes and closed fields reject before a native write (5.7299ms)
+✔ a fresh native challenge and exact current record are required (9.6861ms)
+✔ complete hold lifecycle retains cancellation and never reprojects after release and authorization (195.0606ms)
+✔ a committed native resolution resumes release without another Admin or contact confirmation (54.8889ms)
+✔ a delayed projected fact cannot report an active hold after a known release and authorization (70.6886ms)
+✔ an authorization winner closes the still-unaccepted intent without creating a hold (23.9555ms)
+✔ lost native acknowledgement stays pending and reconciles the original fixed result (25.9092ms)
+✔ an unsigned projection acknowledgement cannot report a saved hold (22.1337ms)
+✔ a coordinator deadline stops later projection calls when a read finishes late (78.5517ms)
+✔ unconfigured non-hold proof remains denied rather than inheriting native hold authority (2.2373ms)
+✔ stable slow hold retries progress through complete initial, submit and fresh confirmation scans (3549.3028ms)
+✔ a resumed confirmation still rejects a fence after the first call expired (126.4116ms)
+✔ a lost native resolution resumes derived release under the same steady slow history (2392.5072ms)
+✔ worker rejects missing scheduler authority and any other project before constructing a client (1.7642ms)
+✔ worker obfuscates only leased original Auth UUID and acknowledges with that lease (1.1239ms)
+✔ a lost provider acknowledgement is recoverable without deleting a new account (0.4268ms)
+✔ failed startup still disposes its owned runtime and preserves the missing-port evidence (3.8936ms)
+✔ hung startup is bounded and cannot prevent the disposal attempt or receipt (21.3936ms)
+✔ failed or hung disposal does not claim a successful stop (15.7221ms)
+✔ successful disposal requires an observed owned-loopback port and refusal probe (1.2343ms)
+✔ untrusted or invalid ready URLs cannot redirect the shutdown probe (0.6436ms)
+✔ a hung startup reaches owned disposal without entering its operation (49.9821ms)
+✔ an operation failure still verifies owned shutdown and preserves the original error (0.78ms)
+✔ hung fixture I/O reaches verified runtime cleanup without advancing the operation (15.2331ms)
+ℹ tests 146
+ℹ suites 0
+ℹ pass 146
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7370.3889
+
+> k2-jimzon-prototype@0.1.0 build:admin
+> vite build --mode admin --configLoader runner && node scripts/emit-static-404.mjs admin && node scripts/emit-admin-head.mjs admin && node scripts/verify-build-boundary.mjs admin && node scripts/verify-bundle-budgets.mjs admin && node scripts/scan-secrets.mjs dist
+
+vite v8.3.5 building client environment for admin...
+transforming...
+✓ 725 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/k2-build-target.json                                0.02 kB │ gzip:   0.04 kB
+dist/admin-sw.js                                         0.41 kB
+dist/manifest.json                                       0.74 kB │ gzip:   0.30 kB
+dist/index.html                                          3.57 kB │ gzip:   1.08 kB
+dist/.vite/manifest.json                                18.31 kB │ gzip:   2.08 kB
+dist/assets/MasterWorkflowGraph-B4iZfrXt.css             0.81 kB │ gzip:   0.41 kB
+dist/assets/Admin-1W2E3zHB.css                           2.03 kB │ gzip:   0.69 kB
+dist/assets/index-DMXMZ32v.css                         199.36 kB │ gzip:  29.33 kB
+dist/assets/formatMoney-DcWy64el.js                      0.09 kB │ gzip:   0.11 kB
+dist/assets/imageFallback-CwRuSFqn.js                    0.19 kB │ gzip:   0.15 kB
+dist/assets/useBodyScrollLock-BOvfg3Wi.js                0.32 kB │ gzip:   0.22 kB
+dist/assets/supabaseClient-DnkYaoZs.js                   0.53 kB │ gzip:   0.41 kB
+dist/assets/orderChargeState-Clw0vEvX.js                 0.55 kB │ gzip:   0.33 kB
+dist/assets/rolldown-runtime-XKyaHtl9.js                 0.72 kB │ gzip:   0.42 kB
+dist/assets/overviewAvailability-BqmpDMaE.js             0.94 kB │ gzip:   0.52 kB
+dist/assets/channelMeta-0DXB9A7f.js                      1.12 kB │ gzip:   0.48 kB
+dist/assets/reportError-DrpEeSwJ.js                      1.36 kB │ gzip:   0.77 kB
+dist/assets/useRetainedFulfillmentCommand-BqqT3Rry.js    1.89 kB │ gzip:   1.00 kB
+dist/assets/WorkflowGuideModal-Crdsy5NQ.js               5.90 kB │ gzip:   2.18 kB
+dist/assets/FefoWorkflowDiagram-D_r4DzBj.js              6.02 kB │ gzip:   2.19 kB
+dist/assets/AdminWorkspaceUi-nktXo03Z.js                 6.03 kB │ gzip:   1.93 kB
+dist/assets/TourSelectionModal-DD8q8-xA.js               6.58 kB │ gzip:   2.30 kB
+dist/assets/FulfillmentWorkflowDiagram-mkZ5H8Tb.js       7.05 kB │ gzip:   2.71 kB
+dist/assets/CustodyWorkflowDiagram-CToVauS4.js           7.09 kB │ gzip:   2.64 kB
+dist/assets/FlightWorkflowDiagram-BpN_rJvB.js            7.32 kB │ gzip:   2.81 kB
+dist/assets/Kanban-Dvgg3QsE.js                           7.45 kB │ gzip:   2.35 kB
+dist/assets/PasabuyWorkflowDiagram-EwLKwEF3.js           7.78 kB │ gzip:   3.00 kB
+dist/assets/ReservationHolds-6cbFFaoR.js                 8.80 kB │ gzip:   3.44 kB
+dist/assets/productResearchContract-Brii40Gn.js         12.31 kB │ gzip:   3.73 kB
+dist/assets/Suppliers-C20IAe-Y.js                       12.58 kB │ gzip:   4.03 kB
+dist/assets/SpotlightTourOverlay-CJdVRwR7.js            13.45 kB │ gzip:   4.10 kB
+dist/assets/StoreAssetStudio-_0mrGNB9.js                17.00 kB │ gzip:   5.43 kB
+dist/assets/PasabuyManager-D1zB6pXH.js                  18.31 kB │ gzip:   6.28 kB
+dist/assets/CouponManager-4XcllgSm.js                   20.48 kB │ gzip:   5.84 kB
+dist/assets/Customers-BiHmbU8W.js                       34.38 kB │ gzip:   8.52 kB
+dist/assets/StaffPermissionManager-BYZ38b0d.js          34.61 kB │ gzip:   9.04 kB
+dist/assets/ConsignmentManager-BX0RXyhP.js              36.25 kB │ gzip:   9.59 kB
+dist/assets/tourData-CANGzczX.js                        36.47 kB │ gzip:  11.48 kB
+dist/assets/GlobeCms-BbT0s1vh.js                        39.78 kB │ gzip:  13.10 kB
+dist/assets/DeliveryRateControl-DkSl7yh9.js             40.46 kB │ gzip:  11.66 kB
+dist/assets/ChannelIntegrations-C85or_5D.js             41.12 kB │ gzip:  10.73 kB
+dist/assets/Overview-ZCu59Ans.js                        41.27 kB │ gzip:  11.29 kB
+dist/assets/index-GHXHuJmI.js                           47.83 kB │ gzip:  16.52 kB
+dist/assets/Inbox-D96KBqJx.js                           57.45 kB │ gzip:  14.25 kB
+dist/assets/BulkCsvImportModal-DTucs3xM.js              58.91 kB │ gzip:  19.11 kB
+dist/assets/adminBffService-Ca7ZipIf.js                 61.14 kB │ gzip:  17.19 kB
+dist/assets/OwnerCountClose-CgZfcuw7.js                 74.14 kB │ gzip:  18.37 kB
+dist/assets/Sheet-JIbaX3bs.js                           94.23 kB │ gzip:  20.17 kB
+dist/assets/InventoryGrid-jIY-msl3.js                  124.25 kB │ gzip:  30.16 kB
+dist/assets/OmniOperationsHub-CVm7ABaO.js              124.58 kB │ gzip:  28.26 kB
+dist/assets/vendor-motion-CJUFHmvU.js                  144.96 kB │ gzip:  48.04 kB
+dist/assets/MasterWorkflowGraph-B61XZc-G.js            176.58 kB │ gzip:  49.96 kB
+dist/assets/ProductIntakeSessionModal-CEZoHoM1.js      191.98 kB │ gzip:  51.06 kB
+dist/assets/vendor-react-BuCXCQla.js                   210.53 kB │ gzip:  65.70 kB
+dist/assets/vendor-supabase-Bwm3Z89P.js                214.38 kB │ gzip:  55.16 kB
+dist/assets/Admin-68U6yYnO.js                          227.44 kB │ gzip:  61.65 kB
+dist/assets/esm-4S8EBSDO.js                            368.43 kB │ gzip: 108.02 kB
+
+✓ built in 2.42s
+Emitted admin static 404 recovery page.
+emit-admin-head: Admin discovery tags written to dist/index.html.
+Verified admin production boundary (49 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker).
+Admin application budget passed: 227.44 kB/300.00 kB minified.
+Secret scan passed (941 files checked; secret values are never printed).

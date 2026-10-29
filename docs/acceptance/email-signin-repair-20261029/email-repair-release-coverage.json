@@ -1,0 +1,203 @@
+{
+  "mapItem": "MAP-019",
+  "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8",
+  "recordedAt": "2026-10-29T02:32:58.373Z",
+  "status": "qualified-with-reconciled-release-coverage",
+  "cleanAggregateExitZero": false,
+  "originalAggregateExit": 1,
+  "development": {
+    "exitCode": 0,
+    "privacyAddressParserChecks": 146
+  },
+  "baseBrowserPassed": 1122,
+  "crmSeparatePassed": 9,
+  "stages": [
+    {
+      "name": "security:test-turnstile",
+      "status": "passed",
+      "sourceCommit": "dcf3b82e96fe9cfd8ec7504a85fa945610ceb7c0",
+      "evidence": "initial complete release reached next group; no changes to these test inputs or exercised non-callback paths"
+    },
+    {
+      "name": "test:security-check-ui",
+      "status": "passed",
+      "sourceCommit": "dcf3b82e96fe9cfd8ec7504a85fa945610ceb7c0",
+      "evidence": "initial complete release reached next group; no changes to these test inputs or exercised non-callback paths"
+    },
+    {
+      "name": "test:product-sku-merge",
+      "status": "passed",
+      "sourceCommit": "dcf3b82e96fe9cfd8ec7504a85fa945610ceb7c0",
+      "evidence": "initial complete release reached next group; no changes to these test inputs or exercised non-callback paths"
+    },
+    {
+      "name": "test:product-families",
+      "status": "passed",
+      "sourceCommit": "dcf3b82e96fe9cfd8ec7504a85fa945610ceb7c0",
+      "evidence": "initial complete release reached next group; no changes to these test inputs or exercised non-callback paths"
+    },
+    {
+      "name": "test:store-categories",
+      "status": "passed",
+      "sourceCommit": "dcf3b82e96fe9cfd8ec7504a85fa945610ceb7c0",
+      "evidence": "initial complete release reached next group; no changes to these test inputs or exercised non-callback paths"
+    },
+    {
+      "name": "test:base",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:10:00.129Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:11:07.994Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:mobile-moderation",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:11:07.994Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:11:09.719Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:store-orientation",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:11:09.719Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:12:23.435Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:storefront-ui",
+      "status": "passed-by-reconciliation",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8",
+      "originalPassed": 47,
+      "focusedUnchangedPassed": 1
+    },
+    {
+      "name": "test:storefront-recovery",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:15:08.610Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:17:19.667Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:admin-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:17:19.668Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:18:57.644Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:payment-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:18:57.644Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:19:46.563Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:inbox-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:19:46.563Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:20:20.608Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:admin-product-master-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:20:20.608Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:21:53.707Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:admin-website-assignment-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:21:53.707Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:22:14.898Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:owner-count-close-ui",
+      "status": "passed-with-corrected-fixture-environment",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8",
+      "passed": 1
+    },
+    {
+      "name": "test:customer-account-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:24:41.965Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:26:01.471Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:selling-surfaces",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:26:01.471Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:29:35.164Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:order-receipt-direct",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:29:35.164Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:29:50.562Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:workflow-api",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:29:50.562Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:30:17.312Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:intake-ai-ui",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:30:17.312Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:30:43.777Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "test:vercel-output",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:30:43.778Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:30:46.284Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "build:storefront",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:30:46.284Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:31:26.956Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    },
+    {
+      "name": "build:admin",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:31:26.956Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:32:05.613Z",
+      "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8"
+    }
+  ],
+  "failuresPreserved": [
+    "Initial full release stopped at CRM default-off fixture incompatibility",
+    "CRM API-config probe lacked baseURL",
+    "Expanded base wrapper missed npm executable PATH; preceding Node constituents passed",
+    "Storefront logo320-dark observed one animation; unchanged focused assertion passed",
+    "Owner fixture inherited temporary fabricated URL; removed verified temporary file and unchanged focused owner workflow passed. One path-resolution mistake was corrected before final probe."
+  ],
+  "recovery": "Promote only this source; keep compatible callback while first-party email links remain valid. Provider email patch is separate and separately authorized. No SQL/signup replay or automated deletion activation."
+}

@@ -1,0 +1,14 @@
+{
+  "mapItem": "MAP-019",
+  "observedAt": "2026-10-29T02:45:00Z",
+  "readOnly": true,
+  "ownerReported": "Fresh branded email reaches Inbox; confirmation reports expired",
+  "freshEmailSentAt": "2026-10-29T02:41:38Z",
+  "freshK2SessionCreatedAt": "2026-10-29T02:41:57.989239Z",
+  "refreshTokenLength": 12,
+  "tokensOrLinksRetained": false,
+  "cause": "BFF and legacy callback parser incorrectly required at least16 characters",
+  "correction": "Accept the supported12-character provider refresh token; keep provider verification, rate checks, PKCE and session validation",
+  "evidence": "Five parser checks, six BFF boundary cases, six browser cases; failed-first parser/BFF then green; final development0/147",
+  "sourceStatus": "locally qualified; source promotion pending; no provider replay"
+}

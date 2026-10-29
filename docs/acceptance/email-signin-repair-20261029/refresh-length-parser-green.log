@@ -1,0 +1,13 @@
+✔ email return captures the hash only in memory and scrubs credentials before SDK initialization (1.8678ms)
+✔ email return rejects duplicate, mixed, recovery and incomplete credentials (0.5139ms)
+✔ email return leaves unrelated account anchors, pages and PKCE codes untouched (0.8513ms)
+✔ email return fails closed if URL credentials cannot be cleared (0.2515ms)
+✔ email return accepts the supported twelve-character provider refresh token and refuses shorter tokens (0.3523ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 91.4818

@@ -196,7 +196,7 @@ test('email hash confirmation uses the existing signed email budget before provi
   const calls = []
   const client = { auth: { async verifyOtp(body) {
     calls.push(['provider', body])
-    return { data: { session: { access_token: 'synthetic-access-token', refresh_token: 'synthetic-refresh-token' } }, error: null }
+    return { data: { session: { access_token: 'synthetic-access-token', refresh_token: 'abc123def456' } }, error: null }
   } } }
   const base = { createStorefrontServerSupabase: () => client }
   const denied = response()
@@ -212,7 +212,7 @@ test('email hash confirmation uses the existing signed email budget before provi
   } })(request({ tokenHash }), accepted)
   expect(accepted.statusCode).toBe(200)
   expect(calls).toEqual([['budget', 'customer_auth_email_request', tokenHash], ['provider', { token_hash: tokenHash, type: 'email' }]])
-  expect(JSON.parse(accepted.body)).toEqual({ ok: true, session: { accessToken: 'synthetic-access-token', refreshToken: 'synthetic-refresh-token' } })
+  expect(JSON.parse(accepted.body)).toEqual({ ok: true, session: { accessToken: 'synthetic-access-token', refreshToken: 'abc123def456' } })
   for (const body of [{ tokenHash, email: 'buyer@example.test' }, { tokenHash: 123 }, { tokenHash: 'short' }, { tokenHash, type: 'recovery' }]) {
     expect(() => auth.validateCustomerEmailVerification(body)).toThrow('CUSTOMER_AUTH_REQUEST_INVALID')
   }

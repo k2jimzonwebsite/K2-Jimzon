@@ -1,0 +1,1123 @@
+
+> k2-jimzon-prototype@0.1.0 verify:release
+> npm test && npm run test:vercel-output && npm run build:storefront && npm run build:admin
+
+
+> k2-jimzon-prototype@0.1.0 test
+> npm run security:test-turnstile && npm run test:security-check-ui && npm run test:product-sku-merge && npm run test:product-families && npm run test:store-categories && npm run test:base && npm run test:mobile-moderation && npm run test:store-orientation && npm run test:storefront-ui && npm run test:storefront-recovery && npm run test:admin-ui && npm run test:payment-ui && npm run test:inbox-ui && npm run test:admin-product-master-ui && npm run test:admin-website-assignment-ui && npm run test:owner-count-close-ui && npm run test:customer-account-ui && npm run test:selling-surfaces && npm run test:order-receipt-direct && npm run test:workflow-api && npm run test:intake-ai-ui
+
+
+> k2-jimzon-prototype@0.1.0 security:test-turnstile
+> node --test tests/turnstile-loader-recovery.test.mjs tests/turnstile-widget-lifecycle.test.mjs tests/git-guardrails.test.mjs && playwright test --config=playwright.api.config.js tests/turnstile-wiring-contract.spec.js tests/bot-challenge-contract.spec.js
+
+✔ commit guard refuses unstaged runtime inputs that could hide a staged regression (6.6458ms)
+✔ push guard requires committed runtime and test inputs but permits receipt-only edits (0.3516ms)
+✔ lint configuration is a verification input for commits and pushes (0.2297ms)
+✔ hook installation preserves an existing custom hooks directory (2.984ms)
+✔ push guard refuses outgoing commits other than the checked HEAD (0.5151ms)
+✔ failed Turnstile download releases the cached failure for the next attempt (6.363ms)
+✔ a silent rendered challenge times out without ever granting a token (21.9921ms)
+✔ success is visible and cancels the pending deadline; expiry invalidates the token (0.3979ms)
+✔ provider errors are visible, bounded, and never bypass verification (0.3417ms)
+✔ unmount cancels deadlines and ignores all stale provider callbacks (0.3032ms)
+✔ an interactive challenge gets the provider interaction window instead of the background deadline (0.3971ms)
+✔ interactive cleanup after success cannot restart the pending deadline (0.325ms)
+✔ a synchronous render failure becomes a retryable error (0.2989ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 139.5394
+
+Running 7 tests using 1 worker
+
+(node:21248) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\bot-challenge-contract.spec.js:19:1 › a missing secret fails closed without calling the provider (6ms)
+  ok 2 tests\bot-challenge-contract.spec.js:36:1 › an explicit unconfigured bypass is opt-in and auditable (1ms)
+  ok 3 tests\bot-challenge-contract.spec.js:51:1 › a token is single-use: its replay is rejected (2ms)
+  ok 4 tests\bot-challenge-contract.spec.js:64:1 › a token minted for another host is rejected (1ms)
+  ok 5 tests\bot-challenge-contract.spec.js:76:1 › every server call site binds its validated request hostname (32ms)
+  ok 6 tests\turnstile-wiring-contract.spec.js:20:1 › every TurnstileChallenge usage wires onTokenChange, never onVerify (1.2s)
+  ok 7 tests\turnstile-wiring-contract.spec.js:38:1 › widget bot-check actions agree with the server expected actions (14ms)
+
+  7 passed (3.6s)
+
+> k2-jimzon-prototype@0.1.0 test:security-check-ui
+> playwright test --config=playwright.security-check.config.js
+
+[WebServer] (node:14168) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3364) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:20784) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\security-check-recovery.spec.js:6:3 › admin_auth: a silent provider has visible progress, bounded retry and no unverified submission (1.1s)
+  ok 2 tests\security-check-recovery.spec.js:6:3 › customer_auth: a silent provider has visible progress, bounded retry and no unverified submission (1.2s)
+  ok 3 tests\security-check-recovery.spec.js:6:3 › guest_order: a silent provider has visible progress, bounded retry and no unverified submission (1.1s)
+  ok 4 tests\security-check-recovery.spec.js:6:3 › guest_start: a silent provider has visible progress, bounded retry and no unverified submission (1.2s)
+  ok 5 tests\security-check-recovery.spec.js:6:3 › guest_wholesale: a silent provider has visible progress, bounded retry and no unverified submission (1.2s)
+  ok 6 tests\security-check-recovery.spec.js:6:3 › guest_pasabuy: a silent provider has visible progress, bounded retry and no unverified submission (1.1s)
+  ok 7 tests\security-check-recovery.spec.js:40:1 › download refusal is recoverable and expiry clears a previously verified token (497ms)
+  ok 8 tests\security-check-recovery.spec.js:56:1 › provider geometry fits narrow containers and recovers across viewport changes (525ms)
+
+  8 passed (18.4s)
+
+> k2-jimzon-prototype@0.1.0 test:product-sku-merge
+> node --test tests/admin-product-sku-merge.test.mjs tests/admin-product-master-actor.test.mjs tests/product-master-command-recovery.test.mjs tests/admin-product-master-recovery-client.test.mjs tests/k2-installed-readiness.test.mjs
+
+✔ saved Product Master actor mismatch refuses before command RPC (52.8549ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (6.1828ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (9.3351ms)
+✔ existing clients without actor header retain current authenticated actor behavior (2.938ms)
+✔ approved merge uses the existing Admin AAL2 actor-bound signed Product Master RPC (3.5899ms)
+✔ approved group preview reads through read_admin_product_sku_merge_v1 (1.7427ms)
+✔ Product Master recovery has a literal-body actor-bound browser client (2.0312ms)
+✔ lost HTTP reply and later auth refusal preserve same literal request key and current CSRF (86.3859ms)
+✔ only the three approved groups enter the signed Product Master merge command (3.1398ms)
+✔ merge refuses arbitrary groups, missing snapshots and extra stock or SKU authority (0.7537ms)
+✔ exact installed source receipt and all required relations classify installed, never permission to reapply (1.4663ms)
+✔ empty legacy baseline is first apply only when every chain relation is absent (0.2489ms)
+✔ changed complete-source receipt, duplicate or old controlled receipt refuse (0.3055ms)
+✔ partial installed schema and malformed relation evidence refuse (0.2375ms)
+✔ approved family reader profile passes while every changed authority field refuses (17.0008ms)
+✔ installed permission classification names exact reviewed signatures and invoker trigger exceptions (0.3647ms)
+✔ extra overload or altered authority cannot hide behind a function name (1.7167ms)
+✔ extra PUBLIC execute and trigger SECURITY DEFINER drift refuse (0.5821ms)
+✔ two arbitrary triggers do not inherit the named PUBLIC exception (0.3611ms)
+✔ same-named private trigger cannot replace PUBLIC schema exception (0.4331ms)
+✔ approved order-chat adapter extends the exact installed catalog without admitting other grants (0.4131ms)
+✔ date-only migration version requires the exact restored version and all backup bindings (3.7876ms)
+✔ backup must match encrypted bytes/hash and actual restored current migration (0.4643ms)
+✔ missing proof and impossible/future creation or restoration evidence refuse (0.253ms)
+✔ unknown backup creation metadata cannot be bypassed by a valid candidate (1.4991ms)
+✔ backup chronology requires real UTC ISO strings rather than Date.parse coercion (0.2851ms)
+✔ Product Master updates have durable actor-scoped recovery (2.026ms)
+✔ reload preserves literal bytes version reason and original key (2.3764ms)
+✔ changed key payload version or review decision cannot replace unknown request (1.1657ms)
+✔ actor and operation identity isolate reading and acknowledgement (0.3644ms)
+✔ corruption foreign actor secret field and oversize storage remain untouched (0.9478ms)
+✔ malformed or non-update commands cannot be held or sent (1.0378ms)
+✔ approved merge commands have durable actor-scoped recovery (0.4259ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1105.8247
+
+> k2-jimzon-prototype@0.1.0 test:product-families
+> node --test tests/product-families.test.mjs tests/product-family-boundary.test.mjs tests/product-family-authorized-read.test.mjs && playwright test --config=playwright.product-families.config.js
+
+✔ shows only dimensions with multiple actual values, and supports another real dimension (4.5306ms)
+✔ single visible variant and ordinary products have no variation controls (0.3249ms)
+✔ metadata cannot introduce an unpublished or non-Website SKU (0.304ms)
+✔ sparse choices name changed dimensions before selecting a different flavour (0.3069ms)
+✔ search result grouping preserves the exact matching representative and complete family (0.3982ms)
+✔ malformed or duplicate family mappings fall back to separate existing products (0.3232ms)
+✔ canonical commands reject fake axes, duplicate combinations and visually duplicate labels (0.834ms)
+✔ joining families never changes SKU-specific facts, price or stock (0.2992ms)
+✔ authorized selected-SKU family GET enriches and returns current product state (37.2838ms)
+✔ authorized family-ID GET preserves an empty family for pending ungroup recovery (3.6499ms)
+✔ family endpoint refuses unsupported verbs and unsigned-key writes (1.2839ms)
+✔ family endpoint cannot operate on the storefront deployment (0.7623ms)
+✔ family route declares protected POST and read-only GET in the sole router (1040.8613ms)
+✔ family pending recovery binds literal payload and original actor without losing unknown outcomes (2.7782ms)
+✔ fresh grouping reads require complete, well-formed family members and selected SKUs (0.4625ms)
+✔ admin family reads include current per-SKU lifecycle and Website assignment state (0.7931ms)
+✔ admin family reads can return an identified empty family snapshot without SKU queries (0.2088ms)
+✔ migration source declares no PUBLIC execution and exactly one bounded anonymous reader (20.1314ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1251.5718
+[WebServer] (node:20848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:10156) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 27 tests using 1 worker
+
+(node:7772) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+[WebServer] 9:56:32 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\product-families-ui.spec.js:31:1 › other-channel variants do not contribute public choices even in a malformed grouping response (1.8s)
+[WebServer] 9:56:33 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\product-families-ui.spec.js:38:1 › a large real option set uses one compact native select (1.0s)
+[WebServer] 9:56:34 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\product-families-ui.spec.js:49:1 › a slow optional grouping read does not block SKU price and availability (871ms)
+[WebServer] 9:56:34 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 9:56:35 AM [vite] (client) Pre-transform error: Failed to resolve import "@k2-app-entry" from "src/main.jsx". Does the file exist?
+[WebServer]   Plugin: vite:import-analysis
+[WebServer]   File: C:/Users/jerze/K2 JImzon/.tools/map019-profile-release/clean-source-d2b728b7/src/main.jsx:7:16
+[WebServer]   5  |  // Vite resolves this alias to a target-specific application entry. Production
+[WebServer]   6  |  // builds contain either the storefront or the admin UI, never both.
+[WebServer]   7  |  import App from "@k2-app-entry";
+[WebServer]      |                   ^
+[WebServer]   8  |  import { installErrorReporting } from "./lib/reportError";
+[WebServer]   9  |  var _jsxFileName = "C:/Users/jerze/K2 JImzon/.tools/map019-profile-release/clean-source-d2b728b7/src/main.jsx";
+[WebServer] 9:56:35 AM [vite] (client) Pre-transform error: Failed to resolve import "@k2-app-entry" from "src/main.jsx". Does the file exist?
+[WebServer]   Plugin: vite:import-analysis
+[WebServer]   File: C:/Users/jerze/K2 JImzon/.tools/map019-profile-release/clean-source-d2b728b7/src/main.jsx:7:16
+[WebServer]   5  |  // Vite resolves this alias to a target-specific application entry. Production
+[WebServer]   6  |  // builds contain either the storefront or the admin UI, never both.
+[WebServer]   7  |  import App from "@k2-app-entry";
+[WebServer]      |                   ^
+[WebServer]   8  |  import { installErrorReporting } from "./lib/reportError";
+[WebServer]   9  |  var _jsxFileName = "C:/Users/jerze/K2 JImzon/.tools/map019-profile-release/clean-source-d2b728b7/src/main.jsx";
+[WebServer] 9:56:35 AM [vite] (client) Pre-transform error: Failed to resolve import "@k2-app-entry" from "src/main.jsx". Does the file exist?
+[WebServer]   Plugin: vite:import-analysis
+[WebServer]   File: C:/Users/jerze/K2 JImzon/.tools/map019-profile-release/clean-source-d2b728b7/src/main.jsx:7:16
+[WebServer]   5  |  // Vite resolves this alias to a target-specific application entry. Production
+[WebServer]   6  |  // builds contain either the storefront or the admin UI, never both.
+[WebServer]   7  |  import App from "@k2-app-entry";
+[WebServer]      |                   ^
+[WebServer]   8  |  import { installErrorReporting } from "./lib/reportError";
+[WebServer]   9  |  var _jsxFileName = "C:/Users/jerze/K2 JImzon/.tools/map019-profile-release/clean-source-d2b728b7/src/main.jsx";
+  ok  4 tests\product-families-ui.spec.js:60:1 › existing Montegrappa listings demonstrate Flavour only without invented weight options (1.5s)
+[WebServer] 9:56:36 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\product-families-ui.spec.js:86:1 › one mother card keeps complete choices after an exact-variant search (1.1s)
+[WebServer] 9:56:37 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\product-families-ui.spec.js:99:37 › SKU and option searches open their matching family member: b (931ms)
+[WebServer] 9:56:38 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\product-families-ui.spec.js:99:37 › SKU and option searches open their matching family member: 500 g (915ms)
+[WebServer] 9:56:39 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  8 tests\product-families-ui.spec.js:109:1 › size selection updates exact SKU facts and retains scroll and keyboard focus (986ms)
+[WebServer] 9:56:40 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  9 tests\product-families-ui.spec.js:127:1 › sparse choices explicitly label a flavour change and respect selected sold-out stock (904ms)
+[WebServer] 9:56:41 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 9:56:42 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\product-families-ui.spec.js:137:1 › unused selectors stay absent; a real additional type appears (1.4s)
+[WebServer] 9:56:42 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 11 tests\product-families-ui.spec.js:147:1 › a single-value family dimension stays visible as a product detail (936ms)
+[WebServer] 9:56:43 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 9:56:44 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\product-families-ui.spec.js:155:1 › a single eligible member has no selectors and missing grouping falls back to separate SKUs (1.5s)
+[WebServer] 9:56:45 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\product-families-ui.spec.js:173:34 › compact options fit 375px and preserve SKU-specific basket lines (2.2s)
+[WebServer] 9:56:47 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 14 tests\product-families-ui.spec.js:173:34 › compact options fit 1440px and preserve SKU-specific basket lines (2.6s)
+  ok 15 tests\product-families-ui.spec.js:225:1 › Admin asks before discarding an unsaved variation draft from Close or Escape (1.3s)
+  ok 16 tests\product-families-ui.spec.js:241:1 › Admin shows each family member’s current Live and Website status (1.1s)
+  ok 17 tests\product-families-ui.spec.js:255:1 › Admin preserves selected new members’ lifecycle and Website labels (1.1s)
+  ok 18 tests\product-families-ui.spec.js:267:1 › Admin confirms ungroup before saving an empty family membership (1.3s)
+  ok 19 tests\product-families-ui.spec.js:295:1 › Admin saves only explicit dimensions and existing SKU membership with no typed audit reason (1.9s)
+  ok 20 tests\product-families-ui.spec.js:316:1 › stale saved grouping after reload opens complete fresh membership before a new decision (1.2s)
+  ok 21 tests\product-families-ui.spec.js:330:1 › a first-save version conflict retains its request until complete latest membership is reviewed (2.0s)
+  ok 22 tests\product-families-ui.spec.js:373:1 › version-conflict recovery can review an ungrouped mother product and restore pending SKU candidates (1.1s)
+  ok 23 tests\product-families-ui.spec.js:401:1 › Admin lost reply survives reload and retries the exact original actor, body and key (1.9s)
+[WebServer] 9:57:03 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 24 tests\product-families-ui.spec.js:427:3 › recorded pack size remains visible without invented gram weight at 375px light (1.3s)
+[WebServer] 9:57:04 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 25 tests\product-families-ui.spec.js:427:3 › recorded pack size remains visible without invented gram weight at 1440px dark (968ms)
+[WebServer] 9:57:05 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 26 tests\product-families-ui.spec.js:427:3 › recorded pack size remains visible without invented gram weight at 375px dark (856ms)
+[WebServer] 9:57:06 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 27 tests\product-families-ui.spec.js:427:3 › recorded pack size remains visible without invented gram weight at 1440px light (1.1s)
+
+  27 passed (40.5s)
+
+> k2-jimzon-prototype@0.1.0 test:store-categories
+> node --test tests/store-categories.test.mjs && playwright test --config=playwright.store-categories.config.js
+
+✔ display categories preserve staff labels and fall back only to real taxonomy (2.201ms)
+✔ bulk updates are sequential, use current versions and send only the display field (0.7246ms)
+✔ uncertain write stops before later products and preserves unsent work (1.4487ms)
+✔ changed category, unreadable version and actor/unmount cancellation refuse further saves (0.7415ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 110.0322
+[WebServer] (node:20080) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20924) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 26 tests using 1 worker
+
+(node:11328) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+[WebServer] 9:57:13 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\store-categories-ui.spec.js:21:1 › Home, Catalog and Footer share actual shelves, preserving sold-out Fragrances and excluding Draft shelves (1.1s)
+[WebServer] 9:57:14 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\store-categories-ui.spec.js:36:1 › obsolete category URL returns to All without recreating an empty category (883ms)
+[WebServer] 9:57:14 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\store-categories-ui.spec.js:44:1 › an empty configured catalog never advertises demo or fixed categories (734ms)
+[WebServer] 9:57:16 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\store-categories-ui.spec.js:69:34 › staff apply one new store category to selected products at 375px (1.8s)
+[WebServer] 9:57:18 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\store-categories-ui.spec.js:69:34 › staff apply one new store category to selected products at 1440px (2.1s)
+  ok  6 tests\store-categories-ui.spec.js:95:1 › uncertain second save stops the batch, retains the original request and reports partial progress (1.5s)
+  ok  7 tests\store-categories-ui.spec.js:111:1 › invalid category names can be corrected before any batch begins (1.1s)
+  ok  8 tests\store-categories-ui.spec.js:125:1 › a category filter and Select visible restrict bulk work to matching SKUs (1.0s)
+[WebServer] 9:57:23 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  9 tests\store-categories-ui.spec.js:137:34 › inventory category shelves remain readable at 375px (915ms)
+[WebServer] 9:57:24 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\store-categories-ui.spec.js:137:34 › inventory category shelves remain readable at 1440px (1.3s)
+  ok 11 tests\store-categories-ui.spec.js:147:1 › a long category list stays visible without depending on a scroll-animation threshold (2.0s)
+[WebServer] 9:57:27 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\store-categories-ui.spec.js:161:1 › Cabinet shows two side-by-side cards and scrolls horizontally at 375px (842ms)
+[WebServer] 9:57:28 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\store-categories-ui.spec.js:185:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 320px light (1.1s)
+[WebServer] 9:57:29 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 14 tests\store-categories-ui.spec.js:185:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 320px dark (1.1s)
+[WebServer] 9:57:30 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 15 tests\store-categories-ui.spec.js:185:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 375px light (1.1s)
+[WebServer] 9:57:31 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 16 tests\store-categories-ui.spec.js:185:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 375px dark (1.1s)
+[WebServer] 9:57:32 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 17 tests\store-categories-ui.spec.js:185:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 768px light (1.1s)
+[WebServer] 9:57:33 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 18 tests\store-categories-ui.spec.js:185:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 768px dark (1.1s)
+[WebServer] 9:57:34 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 19 tests\store-categories-ui.spec.js:185:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 1440px light (1.3s)
+[WebServer] 9:57:36 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 20 tests\store-categories-ui.spec.js:185:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 1440px dark (1.2s)
+[WebServer] 9:57:37 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 21 tests\store-categories-ui.spec.js:210:3 › Cabinet interaction and responsive review › mouse drag never navigates, then a deliberate click opens the exact category (1.2s)
+[WebServer] 9:57:38 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 22 tests\store-categories-ui.spec.js:231:3 › Cabinet interaction and responsive review › native touch swipe browses horizontally and still permits vertical page scrolling (1.3s)
+[WebServer] 9:57:39 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 9:57:40 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 23 tests\store-categories-ui.spec.js:252:3 › Cabinet interaction and responsive review › empty and single-category rails have honest bounds and preserve Pasabuy navigation (1.3s)
+  ok 24 tests\store-categories-ui.spec.js:269:1 › Cabinet long names remain readable after smooth navigation and viewport resize (2.3s)
+[WebServer] 9:57:43 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 25 tests\store-categories-ui.spec.js:292:3 › Cabinet hybrid input recovery › Cabinet touch tap works after a mouse drag (1.2s)
+[WebServer] 9:57:44 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 26 tests\store-categories-ui.spec.js:309:1 › Cabinet blur stops an active mouse drag and allows the next gesture (1.1s)
+
+  26 passed (37.1s)
+
+> k2-jimzon-prototype@0.1.0 test:base
+> node --test tests/catalog-search.test.mjs && node tests/intake-calendar-generation.checks.mjs && node tests/intake-flight-cost.checks.mjs && node tests/intake-audit-compatibility.checks.mjs && node tests/intake-lifecycle.checks.mjs && node tests/intake-dependencies.checks.mjs && node tests/intake-publication-composition.checks.mjs && node tests/intake-candidate-bodies.checks.mjs && node tests/intake-policy-role-set.checks.mjs && node tests/intake-foundation-data.checks.mjs && node tests/intake-foundation-schema.checks.mjs && node tests/catalog-current-products.checks.mjs && node tests/catalog-current-chain.checks.mjs && node tests/catalog-completeness.checks.mjs && npm run test:release-current-chain && npm run test:release-exact-replay && npm run test:receiving-exact-controls && npm run test:rehearsal-archive-safety && npm run test:clearance-rehearsal && npm run test:receiving-purchase-rehearsal && npm run test:clearance-recount-rehearsal && playwright test --config=playwright.config.js
+
+✔ tokenizeQuery splits keywords and trims punctuation (2.7636ms)
+✔ tokenizeQuery handles empty and whitespace inputs gracefully (0.1415ms)
+✔ scoreProductRelevance ranks exact matches highest (0.3947ms)
+✔ partitionCatalogSearch separates direct matches from relevant recommendations (0.496ms)
+✔ partitionCatalogSearch provides recommendations when zero direct matches occur (anti-dead-end) (11.5069ms)
+✔ partitionCatalogSearch returns standard list without query (0.2206ms)
+✔ canonical subcategory is searchable independently of the parent category (0.193ms)
+✔ readable brand is searchable when the canonical brand ID is a UUID (0.2282ms)
+✔ missing readable brand never searches an internal reference ID (0.2078ms)
+✔ English and Italian pistachio searches find the same sold-out and available products (0.582ms)
+✔ pistachio aliases preserve literal ranking, category filtering and explicit price sorting (0.2985ms)
+✔ literal partial SKU searches remain supported while full SKU ranks highest (0.1733ms)
+✔ exact product name ranks above prefix matches when family options are present (0.1532ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.5874
+✔ calendar generator preserves the complete literal date regex without duplicated SQL body (87.1ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 92.6202
+✔ cost installation preserves all old values and permits only one declared nullable column (23.7576ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30.0282
+✔ 20260811_product_intake_and_sku_gate.sql retains canonical CRUD audit actions and explicit operation provenance (3.3539ms)
+✔ 20260812_admin_product_intake_bff_boundary.sql retains canonical CRUD audit actions and explicit operation provenance (1.9352ms)
+✔ 20260905_publication_transition_consistency.sql retains canonical CRUD audit actions and explicit operation provenance (2.0602ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13.4303
+✔ intake lifecycle preserves every existing row while allowing declared additions only (143.778ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 149.1988
+✔ whole dependency parser binds private signer and public candidate bodies (3.7869ms)
+✔ dependency data preserves old rows and refuses unknown/nonempty new tables (0.3901ms)
+✔ disabled AI seed accepts native JSON key order and refuses enabled or extra fields (0.2606ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11.1614
+✔ current intake composition includes complete latest publication after signed legacy closure (2.7151ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8.8223
+✔ whole genuine intake extracts all six candidates including actual compiled SKU body (1.7501ms)
+✔ whole 20260812_admin_product_intake_bff_boundary.sql extracts exact digit-suffixed candidates (1.633ms)
+✔ whole 20260822_catalog_spreadsheet_commit.sql extracts exact digit-suffixed candidates (2.0029ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12.1797
+✔ policy role OIDs are an unordered membership set (13.3716ms)
+✔ refuses different removed role (0.1668ms)
+✔ refuses different added role (0.1222ms)
+✔ refuses different predicate (0.1164ms)
+✔ refuses different mode (0.143ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21.0089
+✔ preserves every original field and permits only declared nullable additions/new empty intake (1.3166ms)
+✔ refuses product stock (0.2438ms)
+✔ refuses batch cost (0.1644ms)
+✔ refuses unexpected new field (0.1779ms)
+✔ refuses non-null new field (0.1793ms)
+✔ refuses new intake row (0.1469ms)
+✔ refuses unknown table (0.1281ms)
+✔ refuses storage object (0.8498ms)
+✔ refuses extra bucket (0.1987ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10.184
+✔ signed and ACL steps preserve exact definitions (1.4738ms)
+✔ intake refuses unrelated trigger (0.1988ms)
+✔ intake refuses unrelated policy (0.1488ms)
+✔ intake refuses unrelated constraint (0.1503ms)
+✔ intake refuses unrelated RLS (0.1749ms)
+✔ intake refuses unrelated grant (0.1374ms)
+✔ intake refuses unrelated index (0.1403ms)
+✔ intake refuses unrelated column (0.1627ms)
+✔ intake refuses unrelated unknown table (0.1975ms)
+✔ only named intake storage policies may be added (0.2832ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11.0142
+✔ valid product metadata delta (13.0248ms)
+✔ stock product metadata delta (0.208ms)
+✔ total product metadata delta (0.1578ms)
+✔ retail product metadata delta (0.1586ms)
+✔ identity product metadata delta (0.1517ms)
+✔ other product metadata delta (0.1636ms)
+✔ missing product metadata delta (0.1151ms)
+✔ version product metadata delta (0.1516ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21.6884
+✔ catalog current-chain refuses [] before writes (15.2327ms)
+✔ catalog current-chain refuses ["--release-races"] before writes (6.2511ms)
+✔ catalog current-chain refuses ["--release-eligibility"] before writes (6.9768ms)
+✔ valid catalog mode exclusively archives startup bytes and refuses reuse (15.1673ms)
+✔ intake foundation refuses absent catalog prerequisites [] (8.3099ms)
+✔ intake foundation refuses absent catalog prerequisites ["--release-races","--release-current-chain"] (6.1112ms)
+✔ intake foundation valid startup retains exclusive archive rules (13.9915ms)
+✔ signed intake lifecycle refuses incomplete foundation before filesystem writes (6.3862ms)
+✔ signed intake flight refuses absent native lifecycle before filesystem writes (6.8857ms)
+✔ intake calendar proof refuses missing native flight before filesystem writes (6.0635ms)
+✔ publication proof refuses missing canonical lifecycle before filesystem writes (6.6937ms)
+✔ cleanup proof refuses missing canonical lifecycle before filesystem writes (5.977ms)
+✔ cleanup baseline refuses absent cleanup proof before filesystem writes (5.9998ms)
+✔ disabled AI proof refuses missing native lifecycle before filesystem writes (8.257ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 127.3274
+✔ export complete (1.989ms)
+✔ preview complete (3.0424ms)
+✔ export empty (0.1598ms)
+✔ preview empty (0.4097ms)
+✔ export truncated (1.4041ms)
+✔ preview truncated (0.3808ms)
+✔ export missing count (0.1458ms)
+✔ preview missing count (0.3067ms)
+✔ export null count (0.1709ms)
+✔ preview null count (0.4383ms)
+✔ export null data (0.1772ms)
+✔ preview null data (0.2864ms)
+✔ export negative count (0.1195ms)
+✔ preview negative count (0.2196ms)
+✔ export fraction count (0.0825ms)
+✔ preview fraction count (0.2277ms)
+✔ export duplicate SKU (0.0897ms)
+✔ preview duplicate SKU (0.2494ms)
+✔ export duplicate catalog (0.1114ms)
+✔ preview duplicate catalog (0.2335ms)
+✔ export provider error (0.0817ms)
+✔ preview provider error (0.2113ms)
+✔ export over bound (0.0964ms)
+✔ preview over bound (0.1864ms)
+✔ commit capped refuses before payload creation (0.6943ms)
+✔ commit missing count refuses before payload creation (0.4149ms)
+✔ export full existing1000row bound (0.8554ms)
+✔ preview full existing1000row bound (1.2901ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22.6803
+
+> k2-jimzon-prototype@0.1.0 test:release-current-chain
+> node --test tests/release-current-chain.checks.mjs
+
+✔ current-chain flag refuses incompatible [] before writes (10.3852ms)
+✔ current-chain flag refuses incompatible ["--release-eligibility"] before writes (7.1271ms)
+✔ current-chain flag refuses incompatible ["--receiving-parity"] before writes (6.1537ms)
+✔ current-chain flag refuses incompatible ["--release-races","--release-witness-failure"] before writes (6.4888ms)
+✔ current-chain release exclusively claims a fresh bounded archive (14.694ms)
+✔ empty expiry isolation validates before any writes (1.0718ms)
+✔ registered nonempty expiry isolation validates before any writes (0.8659ms)
+✔ unregistered nonempty expiry isolation validates before any writes (0.6729ms)
+✔ mixed ownership expiry isolation validates before any writes (0.6836ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 140.517
+
+> k2-jimzon-prototype@0.1.0 test:release-exact-replay
+> node --test tests/release-exact-replay.checks.mjs
+
+✔ durable public result replay accepts only one-time grant omission (1.3568ms)
+✔ changed durable ok refuses (0.1795ms)
+✔ changed durable error_code refuses (0.107ms)
+✔ changed durable status refuses (0.7364ms)
+✔ changed durable subtotal refuses (0.1349ms)
+✔ changed durable total_amount refuses (0.127ms)
+✔ changed durable discount_amount refuses (0.1426ms)
+✔ changed durable created_at refuses (0.1225ms)
+✔ changed durable delivery_status refuses (0.1904ms)
+✔ changed durable public_reference refuses (0.207ms)
+✔ changed durable retry_after_seconds refuses (0.1038ms)
+✔ changed durable shipping_quote_status refuses (0.1441ms)
+✔ extra public result field refuses (0.0977ms)
+✔ missing public result field refuses (0.1142ms)
+✔ unexpected replay grant token refuses (0.1076ms)
+✔ exact guest controls helper must be present (0.0655ms)
+✔ own exact guest controls (0.7097ms)
+✔ wrong nonce guest controls (0.1259ms)
+✔ wrong action guest controls (0.1157ms)
+✔ ancient time guest controls (0.124ms)
+✔ wrong TTL guest controls (0.1327ms)
+✔ extra nonce metadata guest controls (0.1271ms)
+✔ extra zero-hit rate guest controls (0.1685ms)
+✔ unrelated timestamp guest controls (0.1598ms)
+✔ wrong IP guest controls (0.1283ms)
+✔ wrong contact guest controls (0.1418ms)
+✔ wrong bucket guest controls (0.1223ms)
+✔ wrong window guest controls (0.101ms)
+✔ wrong delta guest controls (0.1177ms)
+✔ extra rate metadata guest controls (0.1403ms)
+✔ signed guest builder exposes one exact call for both transaction and replay (1.0646ms)
+✔ guest replay business map retains Admin controls (0.7149ms)
+✔ own existing guest rate buckets accept exactly one hit and timestamp change (0.2065ms)
+✔ wrong signing time refuses (0.1181ms)
+✔ missing command refuses (0.0891ms)
+✔ recovered release replay archives both exact hash maps (1.0737ms)
+✔ identical durable result accepts SQL JSON field ordering differences (0.154ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 111.0723
+
+> k2-jimzon-prototype@0.1.0 test:receiving-exact-controls
+> node --test tests/receiving-exact-controls.checks.mjs
+
+✔ exact own signed retry accepts new rate buckets (1.6253ms)
+✔ exact own signed retry accepts existing rate buckets (0.2151ms)
+✔ wrong nonce UUID refuses (0.2003ms)
+✔ wrong nonce actor refuses (0.1768ms)
+✔ wrong nonce action refuses (0.2087ms)
+✔ ancient one-second nonce refuses (0.1803ms)
+✔ future nonce refuses (0.8081ms)
+✔ wrong TTL refuses (0.1901ms)
+✔ extra nonce metadata refuses (0.2074ms)
+✔ unrelated nonce mutation refuses (0.3106ms)
+✔ extra zero-hit rate refuses (0.2506ms)
+✔ unrelated rate metadata refuses (0.1712ms)
+✔ extra own rate metadata refuses (0.2441ms)
+✔ wrong bucket refuses (0.1476ms)
+✔ mismatched buckets refuses (0.1278ms)
+✔ wrong global subject refuses (0.1164ms)
+✔ wrong rate delta refuses (0.1113ms)
+✔ missing unrelated rate refuses (0.1485ms)
+✔ missing actual signed args refuses (0.1148ms)
+✔ wrong signed timestamp refuses (0.1033ms)
+✔ admin-only business map retains both guest control hashes (0.1498ms)
+✔ historical report captures the actual signed retry args (1.5827ms)
+✔ explicit report captures the actual signed retry args (0.8238ms)
+✔ recovery report captures the actual signed retry args (0.6936ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.0128
+
+> k2-jimzon-prototype@0.1.0 test:rehearsal-archive-safety
+> node --test tests/rehearsal-archive-safety.checks.mjs
+
+✔ --receiving-parity occupied archive refuses without replacing any bytes (16.7579ms)
+✔ --receiving-parity fresh named archive stores exact startup bytes and refuses reuse (15.6953ms)
+✔ --receiving-parity rejects invalid selector ["../escape"] before writes (7.8872ms)
+✔ --receiving-parity rejects invalid selector [""] before writes (6.9803ms)
+✔ --receiving-parity rejects invalid selector ["A"] before writes (7.5742ms)
+✔ --receiving-parity rejects invalid selector ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"] before writes (7.0147ms)
+✔ --receiving-parity rejects invalid selector ["good","other"] before writes (8.1154ms)
+✔ --release-races occupied archive refuses without replacing any bytes (11.2403ms)
+✔ --release-races fresh named archive stores exact startup bytes and refuses reuse (14.7963ms)
+✔ --release-races rejects invalid selector ["../escape"] before writes (7.8824ms)
+✔ --release-races rejects invalid selector [""] before writes (7.4133ms)
+✔ --release-races rejects invalid selector ["A"] before writes (7.0462ms)
+✔ --release-races rejects invalid selector ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"] before writes (7.1018ms)
+✔ --release-races rejects invalid selector ["good","other"] before writes (7.0883ms)
+✔ --release-eligibility occupied archive refuses without replacing any bytes (12.4478ms)
+✔ --release-eligibility fresh named archive stores exact startup bytes and refuses reuse (14.7717ms)
+✔ --release-eligibility rejects invalid selector ["../escape"] before writes (6.8536ms)
+✔ --release-eligibility rejects invalid selector [""] before writes (7.5407ms)
+✔ --release-eligibility rejects invalid selector ["A"] before writes (7.0241ms)
+✔ --release-eligibility rejects invalid selector ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"] before writes (7.0745ms)
+✔ --release-eligibility rejects invalid selector ["good","other"] before writes (7.0277ms)
+✔ receiving selector refuses unrelated mode before writes (7.4991ms)
+✔ release selector refuses unrelated mode before writes (6.8408ms)
+✔ incompatible receiving and release modes refuse before writes (5.8393ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 321.4329
+
+> k2-jimzon-prototype@0.1.0 test:clearance-rehearsal
+> node --test tests/clearance-evidence-safety.checks.mjs
+
+✔ an occupied original archive refuses before replacing executed source (14.3583ms)
+✔ a fresh named run archives the startup bytes in its own destination (12.4785ms)
+✔ a run destination cannot escape the clearance evidence directory (7.3676ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 136.4686
+
+> k2-jimzon-prototype@0.1.0 test:receiving-purchase-rehearsal
+> node --test tests/receiving-purchase-evidence.checks.mjs tests/receiving-purchase-controls.checks.mjs
+
+✔ exact guest control assertion accepts only its own nonce and two rate hits (1.5527ms)
+✔ unrelated existing rate timestamp mutation must refuse (1.1388ms)
+✔ an occupied original archive refuses before replacing executed source (21.8139ms)
+✔ a fresh named run archives the startup bytes in its own destination (16.2865ms)
+✔ a run destination cannot escape the purchase evidence directory (11.4089ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 161.2984
+
+> k2-jimzon-prototype@0.1.0 test:clearance-recount-rehearsal
+> node --test tests/clearance-recount-evidence.checks.mjs tests/clearance-notice.checks.mjs tests/clearance-edges-mode.checks.mjs
+
+✔ clearance edge mode refuses without its corrected-chain parent before any SQL (1.9516ms)
+✔ clearance edge mode refuses the old-body diagnostic before any SQL (1.5564ms)
+✔ corrected clearance edge mode is explicitly selected (0.9034ms)
+✔ a split PostgreSQL notice stays pending until its complete line arrives (1.7205ms)
+✔ a complete unrelated notice cannot substitute for the required verifier image (0.4933ms)
+✔ an occupied original archive refuses before replacing executed source (19.404ms)
+✔ a fresh named run archives the startup bytes in its own destination (12.9285ms)
+✔ a run destination cannot escape the clearance evidence directory (7.9368ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 166.9009
+[WebServer] (node:7804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1130 tests using 1 worker
+
+(node:21224) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok    1 [chromium] › tests\admin-assistance.spec.js:18:1 › admin shortcut registry exposes safe high-frequency operations (9ms)
+  ok    2 [chromium] › tests\admin-assistance.spec.js:25:1 › operations retrieval cites the rulebook and prefers the active context (18ms)
+  ok    3 [chromium] › tests\admin-assistance.spec.js:34:1 › adaptive product prompt requests only the strict final-content JSON (4ms)
+  ok    4 [chromium] › tests\admin-assistance.spec.js:51:1 › image project has unified primary rules and product-specific handoff prompts (2ms)
+  ok    5 [chromium] › tests\admin-assistance.spec.js:68:1 › v3 product content JSON validates and flattens uses and procedures for the current product draft (4ms)
+  ok    6 [chromium] › tests\admin-assistance.spec.js:121:1 › v3 content JSON rejects operational fields and malformed instruction steps (7ms)
+  ok    7 [chromium] › tests\admin-assistance.spec.js:154:1 › legacy product JSON is accepted only with an explicit compatibility warning (1ms)
+  ok    8 [chromium] › tests\admin-assistance.spec.js:160:1 › keyboard shortcuts do not bypass operational safeguards (4ms)
+  ok    9 [chromium] › tests\admin-bff-contract.spec.js:5:1 › manual express quote requires actual route package time availability and bounded cents (17ms)
+  ok   10 [chromium] › tests\admin-bff-contract.spec.js:135:1 › customer tariff boundary validates a complete integer matrix (7ms)
+  ok   11 [chromium] › tests\admin-bff-contract.spec.js:157:1 › cancellation command validates reviewed status timestamp reason and exact fields (8ms)
+  ok   12 [chromium] › tests\admin-bff-contract.spec.js:167:1 › cancellation staff route authenticates signs exact retries and bounds saved results (51ms)
+  ok   13 [chromium] › tests\admin-bff-contract.spec.js:224:1 › express staff endpoint authenticates reads and signs exact quotes without exposing extra fields (22ms)
+  ok   14 [chromium] › tests\admin-bff-contract.spec.js:279:1 › customer tariff boundary refuses methods keys and unauthenticated access (4ms)
+  ok   15 [chromium] › tests\admin-bff-contract.spec.js:317:1 › admin API fails closed on the storefront project and wrong origin (2ms)
+  ok   16 [chromium] › tests\admin-bff-contract.spec.js:331:1 › admin auth endpoints enforce method and pending/session boundaries (4ms)
+  ok   17 [chromium] › tests\admin-bff-contract.spec.js:354:1 › admin overview is fixed-schema, session-gated, and reports partial data safely (3ms)
+  ok   18 [chromium] › tests\admin-bff-contract.spec.js:397:1 › prepared admin client uses same-origin cookies and never receives Supabase tokens (4ms)
+  ok   19 [chromium] › tests\admin-bff-contract.spec.js:412:1 › secure Admin does not mount the shared direct-browser Globe Auth and data provider (4ms)
+  ok   20 [chromium] › tests\admin-bff-contract.spec.js:429:1 › staff password recovery is server-only, callback-bounded, and leaves provider tokens out of browser code (7ms)
+  ok   21 [chromium] › tests\admin-bff-contract.spec.js:456:1 › staff password recovery consumes a signed durable pre-auth budget without storing raw identifiers (3ms)
+  ok   22 [chromium] › tests\admin-bff-contract.spec.js:468:1 › staff recovery pre-auth signer hides identifiers and rejects malformed boundary results (10ms)
+  ok   23 [chromium] › tests\admin-bff-contract.spec.js:532:1 › durable staff recovery denial returns Retry-After before requesting provider email (3ms)
+  ok   24 [chromium] › tests\admin-bff-contract.spec.js:565:1 › durable staff login denial returns Retry-After before password-provider authentication (8ms)
+  ok   25 [chromium] › tests\admin-bff-contract.spec.js:617:1 › Admin login and recovery bot denials happen after durable budgets and before provider calls (4ms)
+  ok   26 [chromium] › tests\admin-bff-contract.spec.js:665:1 › durable pending MFA denial returns Retry-After before provider session restoration (8ms)
+  ok   27 [chromium] › tests\admin-bff-contract.spec.js:731:1 › durable recovery completion denial returns Retry-After before provider session restoration (6ms)
+  ok   28 [chromium] › tests\admin-bff-contract.spec.js:779:1 › durable recovery verification denial returns Retry-After before token verification (7ms)
+  ok   29 [chromium] › tests\admin-bff-contract.spec.js:812:1 › staff password recovery validates exact payloads, exact callback host, and short recovery cookies (8ms)
+  ok   30 [chromium] › tests\admin-bff-contract.spec.js:850:1 › staff password recovery handlers fail closed before provider activation (3ms)
+  ok   31 [chromium] › tests\admin-bff-contract.spec.js:888:1 › admin and storefront providers remain separate production runtimes (8ms)
+  ok   32 [chromium] › tests\admin-bff-contract.spec.js:902:1 › admin product projection is session-gated and derives stock without exposing full rows (8ms)
+  ok   33 [chromium] › tests\admin-bff-contract.spec.js:933:1 › admin products never turn missing or malformed stock projections into healthy totals (13ms)
+  ok   34 [chromium] › tests\admin-bff-contract.spec.js:957:1 › admin products preserve canonical zero and numeric-string stock totals (2ms)
+  ok   35 [chromium] › tests\admin-bff-contract.spec.js:979:1 › fulfillment BFF is session/CSRF/idempotency gated and validates fixed command schemas (2ms)
+  ok   36 [chromium] › tests\admin-bff-contract.spec.js:1002:1 › fulfillment data read enforces read limits and returns completeness metadata (2ms)
+  ok   37 [chromium] › tests\admin-bff-contract.spec.js:1046:1 › fulfillment data masks pending totals without dropping the order or accepted bill (2ms)
+  ok   38 [chromium] › tests\admin-bff-contract.spec.js:1064:1 › payment verdicts require the Admin role while warehouse commands stay with Staff (2ms)
+  ok   39 [chromium] › tests\admin-bff-contract.spec.js:1077:1 › operational payment evidence rejects non-text JSON values (2ms)
+  ok   40 [chromium] › tests\admin-bff-contract.spec.js:1090:1 › operational structured payment evidence validates method, amount, payer, reference, and currency (22ms)
+  ok   41 [chromium] › tests\admin-bff-contract.spec.js:1139:1 › operational delivery amounts require explicit numbers and preserve zero (4ms)
+  ok   42 [chromium] › tests\admin-bff-contract.spec.js:1147:1 › operational stock quantities reject coercion before signing (2ms)
+  ok   43 [chromium] › tests\admin-bff-contract.spec.js:1155:1 › operational receiving rejects impossible expiry dates and coerced declarations (13ms)
+  ok   44 [chromium] › tests\admin-bff-contract.spec.js:1165:1 › operational receiving scan codes must be text (2ms)
+  ok   45 [chromium] › tests\admin-bff-contract.spec.js:1172:1 › operational channel verification rejects fabricated reference and reason types (5ms)
+  ok   46 [chromium] › tests\admin-bff-contract.spec.js:1180:1 › fulfillment boundary is signed, replay-safe, and remains feature-gated (6ms)
+  ok   47 [chromium] › tests\admin-bff-contract.spec.js:1193:1 › universal inbox BFF preserves internal-note truth and rejects loose payloads (6ms)
+  ok   48 [chromium] › tests\admin-bff-contract.spec.js:1222:1 › prepared inbox boundary keeps internal notes private and website replies signed (10ms)
+  ok   49 [chromium] › tests\admin-bff-contract.spec.js:1247:1 › Pasabuy BFF is session/idempotency gated and bounds owner-selected pricing (6ms)
+  ok   50 [chromium] › tests\admin-bff-contract.spec.js:1274:1 › prepared Pasabuy boundary is signed, durable, rationale-audited, and feature-gated (6ms)
+  ok   51 [chromium] › tests\admin-bff-contract.spec.js:1296:1 › product-intake BFF is session/idempotency gated and rejects loose operational input (11ms)
+  ok   52 [chromium] › tests\admin-bff-contract.spec.js:1346:1 › prepared product-intake boundary is named, signed, receipt-backed, and upload-honest (4ms)
+  ok   53 [chromium] › tests\admin-bff-contract.spec.js:1361:1 › private intake evidence requires real single-image decoding and strips metadata (78ms)
+  ok   54 [chromium] › tests\admin-bff-contract.spec.js:1378:1 › pending Admin MFA enrollment is exact, bounded, stale-factor-safe, and returns verified session material only (8ms)
+  ok   55 [chromium] › tests\admin-bff-contract.spec.js:1423:1 › active Admin MFA replacement is reasoned, signed, exact-factor-safe, and separately gated (19ms)
+  ok   56 [chromium] › tests\admin-bff-contract.spec.js:1545:1 › public product media is session-gated and registered only after server byte verification (7ms)
+  ok   57 [chromium] › tests\admin-bff-contract.spec.js:1576:1 › product media assignment is signed, receipt-bound, reasoned, and removal-safe (15ms)
+  ok   58 [chromium] › tests\admin-bff-contract.spec.js:1634:1 › Globe and review claims are Admin-only, evidence-bound, reversible, and publicly least-privileged (12ms)
+  ok   59 [chromium] › tests\admin-bff-contract.spec.js:1673:1 › procurement reads are fixed and supplier creation is Admin-only, reasoned, and receipt-backed (9ms)
+  ok   60 [chromium] › tests\admin-bff-contract.spec.js:1691:1 › Website assignment accepts only a reviewed SKU, boolean, reason and exact prior version (6ms)
+  ok   61 [chromium] › tests\admin-bff-contract.spec.js:1710:1 › channel readiness is aggregated and internal verification is signed, reasoned, and Admin-only (7ms)
+  ok   62 [chromium] › tests\admin-bff-contract.spec.js:1728:1 › staff access reads are fixed and role/PIN changes are signed, reasoned, and Admin-only (11ms)
+  ok   63 [chromium] › tests\admin-bff-contract.spec.js:1751:1 › staff invitations cross one exact reason-bound BFF route without exposing the provider session (7ms)
+  ok   64 [chromium] › tests\admin-bff-contract.spec.js:1801:1 › system readiness is Admin-only, boolean-only, and never exposes raw diagnostics (8ms)
+  ok   65 [chromium] › tests\admin-bff-contract.spec.js:1816:1 › durable Admin sessions use exact owner-bound signed commands (5ms)
+  ok   66 [chromium] › tests\admin-bff-contract.spec.js:1857:1 › product-master commands are exact, reasoned, idempotent, and Admin-only (24ms)
+  ok   67 [chromium] › tests\admin-bff-contract.spec.js:1940:1 › prepared Admin session registry is private, AAL2-bound, and fail-closed (13ms)
+  ok   68 [chromium] › tests\admin-bff-contract.spec.js:1990:1 › single-function Admin router allowlists every prepared endpoint and rejects unknown paths (18ms)
+  ok   69 [chromium] › tests\admin-bff-contract.spec.js:2104:1 › deployable Admin entrypoint remains unavailable until its independent server switch is enabled (1ms)
+  ok   70 [chromium] › tests\admin-bff-contract.spec.js:2123:1 › failed intake evidence registration removes the unregistered private object (1ms)
+  ok   71 [chromium] › tests\admin-bff-contract.spec.js:2147:1 › failed intake evidence cleanup is durable, retryable, and never exposes its private path (2ms)
+  ok   72 [chromium] › tests\admin-bff-contract.spec.js:2194:1 › provider cleanup failure stays pending and is not falsely marked complete (1ms)
+  ok   73 [chromium] › tests\admin-bff-contract.spec.js:2223:1 › unexpected cleanup claim state cannot reach private evidence deletion (1ms)
+  ok   74 [chromium] › tests\admin-bff-contract.spec.js:2254:1 › cleanup stays pending without an exact completion receipt (1ms)
+  ok   75 [chromium] › tests\admin-bff-contract.spec.js:2285:1 › flight consignment BFF is session/idempotency gated and validates exact scan truth (3ms)
+  ok   76 [chromium] › tests\admin-bff-contract.spec.js:2310:1 › prepared flight boundary preserves unit scans, reasons, durable retry, and direct-RPC cutover (11ms)
+  ok   77 [chromium] › tests\admin-bff-contract.spec.js:2327:1 › customer BFF is session-gated and keeps canonical identities separate (2ms)
+  ok   78 [chromium] › tests\admin-bff-contract.spec.js:2351:1 › Wholesale inquiry projection is staff/AAL2-only, fixed, and has no commercial authority (54ms)
+  ok   79 [chromium] › tests\admin-bff-contract.spec.js:2372:1 › coupon BFF is session/idempotency gated and validates exact financial rules (6ms)
+  ok   80 [chromium] › tests\admin-bff-contract.spec.js:2398:1 › prepared coupon boundary is admin-only, reasoned, auditable, and feature-gated (6ms)
+  ok   81 [chromium] › tests\admin-bff-contract.spec.js:2416:1 › lot and expiry BFF is session/idempotency gated and rejects unsafe reconciliation input (7ms)
+  ok   82 [chromium] › tests\admin-bff-contract.spec.js:2447:1 › prepared lot boundary derives sellable stock, preserves reservations, and replaces prompt-based decisions (7ms)
+  ok   83 [chromium] › tests\admin-bff-contract.spec.js:2469:3 › fulfillment request deadline aborts SDK auth transport (58ms)
+  ok   84 [chromium] › tests\admin-bff-contract.spec.js:2469:3 › fulfillment request deadline aborts SDK profile transport (45ms)
+  ok   85 [chromium] › tests\admin-bff-contract.spec.js:2469:3 › fulfillment request deadline aborts SDK rpc transport (42ms)
+  ok   86 [chromium] › tests\admin-bff-contract.spec.js:2498:1 › fulfillment request deadline suppresses late cookies and results and prevents another transport (42ms)
+  ok   87 [chromium] › tests\admin-bff-contract.spec.js:2523:1 › fulfillment request deadline isolates concurrent requests and preserves ordinary results (44ms)
+  ok   88 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline valid (5ms)
+  ok   89 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline auth (125ms)
+  ok   90 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline profile (127ms)
+  ok   91 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline registry (136ms)
+  ok   92 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline rpc (129ms)
+  ok   93 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline read (130ms)
+  ok   94 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline telemetry (139ms)
+  ok   95 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline aal (2ms)
+  ok   96 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline body (2ms)
+  ok   97 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline retry (175ms)
+  ok   98 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline role-denied (2ms)
+  ok   99 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline session-revoked (3ms)
+  ok  100 [chromium] › tests\admin-bff-contract.spec.js:2665:3 › routed fulfillment deadline valid-read (4ms)
+  ok  101 [chromium] › tests\admin-bff-contract.spec.js:2668:3 › HTTP fulfillment deadline valid (20ms)
+  ok  102 [chromium] › tests\admin-bff-contract.spec.js:2668:3 › HTTP fulfillment deadline rpc (130ms)
+  ok  103 [chromium] › tests\admin-bff-contract.spec.js:2668:3 › HTTP fulfillment deadline retry (164ms)
+  ok  104 [chromium] › tests\admin-bff-contract.spec.js:2670:1 › HTTP fulfillment deadline client disconnect (133ms)
+  ok  105 [chromium] › tests\admin-bff-contract.spec.js:2671:1 › HTTP fulfillment deadline unscaled 30 second budget (30.0s)
+  ok  106 [chromium] › tests\admin-bff-contract.spec.js:2680:3 › routed fulfillment canonical delivery error ORDER_CHARGE_IMMUTABLE (7ms)
+  ok  107 [chromium] › tests\admin-bff-contract.spec.js:2680:3 › routed fulfillment canonical delivery error DELIVERY_ACCEPTANCE_REQUIRED (8ms)
+  ok  108 [chromium] › tests\admin-bff-contract.spec.js:2680:3 › routed fulfillment canonical delivery error DELIVERY_REVIEW_REQUIRED (5ms)
+  ok  109 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_VERSION_CONFLICT (5ms)
+  ok  110 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_ORDER_INELIGIBLE (9ms)
+  ok  111 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_STOCK_INELIGIBLE (6ms)
+  ok  112 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_TRANSITION_INVALID (7ms)
+  ok  113 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_EVIDENCE_REQUIRED (5ms)
+  ok  114 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_INDEPENDENT_REVIEW_REQUIRED (5ms)
+  ok  115 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_METHOD_INVALID (5ms)
+  ok  116 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_AMOUNT_INVALID (5ms)
+  ok  117 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_CURRENCY_INVALID (5ms)
+  ok  118 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_PAYER_INVALID (5ms)
+  ok  119 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_REFERENCE_INVALID (7ms)
+  ok  120 [chromium] › tests\admin-bff-contract.spec.js:2683:3 › routed fulfillment business error PAYMENT_PROOF_INVALID (6ms)
+  ok  121 [chromium] › tests\admin-bff-contract.spec.js:2688:3 › routed fulfillment business error PACKING_ALLOCATION_INVALID (5ms)
+  ok  122 [chromium] › tests\admin-bff-contract.spec.js:2688:3 › routed fulfillment business error PACKING_LOT_CONFIRMATION_REQUIRED (5ms)
+  ok  123 [chromium] › tests\admin-bff-contract.spec.js:2688:3 › routed fulfillment business error RESERVATION_RECONCILIATION_REQUIRED (5ms)
+  ok  124 [chromium] › tests\admin-bff-contract.spec.js:2696:3 › routed fulfillment business error RATE_LIMITED (10ms)
+  ok  125 [chromium] › tests\admin-bff-contract.spec.js:2696:3 › routed fulfillment business error COMMAND_IN_PROGRESS (10ms)
+  ok  126 [chromium] › tests\admin-bff-contract.spec.js:2696:3 › routed fulfillment business error FULFILLMENT_COMMAND_UNAVAILABLE (10ms)
+  ok  127 [chromium] › tests\admin-bff-contract.spec.js:2696:3 › routed fulfillment business error transport loss (10ms)
+  ok  128 [chromium] › tests\admin-bff-numeric-coercion.spec.js:18:1 › coupon financials reject coerced numerics (4ms)
+  ok  129 [chromium] › tests\admin-bff-numeric-coercion.spec.js:34:1 › pasabuy quote money fields reject coerced numerics (3ms)
+  ok  130 [chromium] › tests\admin-bff-numeric-coercion.spec.js:49:1 › lot reconciliation quantities reject coerced numerics (3ms)
+  ok  131 [chromium] › tests\admin-bff-numeric-coercion.spec.js:66:1 › supplier lead time rejects coerced numerics (2ms)
+  ok  132 [chromium] › tests\admin-bff-numeric-coercion.spec.js:74:1 › intake inventory rejects non-canonical numerics and null cost (2ms)
+  ok  133 [chromium] › tests\admin-bff-numeric-coercion.spec.js:85:1 › review stars and ordering reject coerced numerics (3ms)
+  ok  134 [chromium] › tests\admin-bff-numeric-coercion.spec.js:102:1 › marketplace order facts reject coerced quantities (19ms)
+  ok  135 [chromium] › tests\admin-bff-numeric-coercion.spec.js:112:1 › the shared validator keeps one rule with caller-owned error codes (13ms)
+  ok  136 [chromium] › tests\admin-client-cookie.spec.js:8:3 › invalid client cookie receives safe server denial: X-K2-CSRF (2ms)
+  ok  137 [chromium] › tests\admin-client-cookie.spec.js:8:3 › invalid client cookie receives safe server denial: X-K2-Recovery-CSRF (1ms)
+  ok  138 [chromium] › tests\admin-client-cookie.spec.js:30:1 › valid encoded CSRF cookie survives irregular cookie spacing (1ms)
+  ok  139 [chromium] › tests\admin-command-retry.spec.js:27:1 › a retained operation session replays one logical operation until it resolves (2ms)
+  ok  140 [chromium] › tests\admin-command-retry.spec.js:45:1 › different payloads stay separate operations and concurrent identical calls share one request (1ms)
+  ok  141 [chromium] › tests\admin-command-retry.spec.js:61:1 › a disposed session refuses new work and reports nothing unresolved (1ms)
+  ok  142 [chromium] › tests\admin-command-retry.spec.js:73:1 › stock holds retry as one operation and report unconfirmed outcomes distinctly (17ms)
+  ok  143 [chromium] › tests\admin-command-retry.spec.js:83:1 › delivery rate commands retry as one operation and report unconfirmed outcomes distinctly (11ms)
+  ok  144 [chromium] › tests\admin-command-retry.spec.js:92:1 › consignment commands keep the slot-bound identity they already had (2ms)
+  ok  145 [chromium] › tests\admin-cookie-recovery.spec.js:5:3 › malformed cookie is safely unauthenticated: unrelated=% (1ms)
+  ok  146 [chromium] › tests\admin-cookie-recovery.spec.js:5:3 › malformed cookie is safely unauthenticated: k2_admin_session=% (1ms)
+  ok  147 [chromium] › tests\admin-cookie-recovery.spec.js:5:3 › malformed cookie is safely unauthenticated: k2_admin_session=%E0%A4%A (1ms)
+  ok  148 [chromium] › tests\admin-cookie-recovery.spec.js:13:1 › malformed unrelated cookie does not interrupt CSRF denial (0ms)
+  ok  149 [chromium] › tests\admin-dialog-contract.spec.js:12:1 › every Admin modal uses the shared dialog primitive (41ms)
+  ok  150 [chromium] › tests\admin-dialog-contract.spec.js:29:1 › the obsolete modal shell cannot become a competing primitive (2ms)
+  ok  151 [chromium] › tests\admin-dialog-contract.spec.js:34:1 › the shared dialog owns the complete keyboard and focus lifecycle (3ms)
+  ok  152 [chromium] › tests\admin-dialog-contract.spec.js:49:1 › Admin operational text never falls below the 12px product-register floor (25ms)
+  ok  153 [chromium] › tests\admin-dialog-contract.spec.js:62:1 › Admin recovery flows never use blocking browser dialogs (3ms)
+  ok  154 [chromium] › tests\admin-dialog-contract.spec.js:78:1 › Admin owns one responsive page heading and a main workspace landmark (12ms)
+  ok  155 [chromium] › tests\admin-dialog-contract.spec.js:88:1 › inline Admin workflow dialogs adopt AdminDialog and lock dismissals during writes (14ms)
+  ok  156 [chromium] › tests\admin-globe-direct-transport.spec.js:4:1 › Globe Admin direct transport reads and writes through authenticated RPCs (147ms)
+  ok  157 [chromium] › tests\admin-globe-direct-transport.spec.js:23:1 › Globe Admin transport preserves the BFF path when enabled (1ms)
+  ok  158 [chromium] › tests\admin-globe-direct-transport.spec.js:35:1 › direct Globe command keeps database role, MFA, evidence, version and audit gates (8ms)
+  ok  159 [chromium] › tests\admin-guardrails-contract.spec.js:6:1 › transfer approval requires a second explicit confirm, not a single click (2ms)
+  ok  160 [chromium] › tests\admin-guardrails-contract.spec.js:12:1 › J&T tracking save surfaces a server refusal instead of closing silently (1ms)
+  ok  161 [chromium] › tests\admin-guardrails-contract.spec.js:17:1 › Milan instant draft writes on one tap and names the created SKU in the receipt (2ms)
+  ok  162 [chromium] › tests\admin-guardrails-contract.spec.js:25:1 › Manila finish requires confirmation when the count is short (1ms)
+  ok  163 [chromium] › tests\admin-hardening-followup-contract.spec.js:6:1 › packing slip prints only the slip, never the admin chrome (3ms)
+  ok  164 [chromium] › tests\admin-hardening-followup-contract.spec.js:14:1 › staff without an admin role see disabled privileged controls with a reason (1ms)
+  ok  165 [chromium] › tests\admin-hardening-followup-contract.spec.js:20:1 › staff sessions do not sign out merely because the Admin tab is idle (2ms)
+  ok  166 [chromium] › tests\admin-logic-regressions.spec.js:6:1 › expiry drawer changes business day at Manila midnight (3ms)
+  ok  167 [chromium] › tests\admin-logic-regressions.spec.js:16:1 › clearance success reloads the exact canonical lot rather than inventing approval facts (4ms)
+  ok  168 [chromium] › tests\admin-logic-regressions.spec.js:46:1 › overview periods use Manila midnight across UTC day and year boundaries (2ms)
+  ok  169 [chromium] › tests\admin-logic-regressions.spec.js:55:1 › overview completeness rejects capped result sets instead of reporting their subtotal as a total (8ms)
+  ok  170 [chromium] › tests\admin-logic-regressions.spec.js:74:1 › overview never fabricates inventory metrics when product data is empty or unavailable (2ms)
+  ok  171 [chromium] › tests\admin-logic-regressions.spec.js:82:1 › failed consignment finalization remains visible and keeps reconciliation open (3ms)
+  ok  172 [chromium] › tests\admin-logic-regressions.spec.js:95:1 › customer directory excludes staff accounts and never fabricates identity links (2ms)
+  ok  173 [chromium] › tests\admin-logic-regressions.spec.js:106:1 › globe CMS relies on the existing protected admin boundary (2ms)
+  ok  174 [chromium] › tests\admin-logic-regressions.spec.js:114:1 › product sheet rolls back failed edits and routes new rows through scan-first intake (3ms)
+  ok  175 [chromium] › tests\admin-logic-regressions.spec.js:126:1 › Smart Paste stays a review-only clipboard handoff in every Admin mode (2ms)
+  ok  176 [chromium] › tests\admin-logic-regressions.spec.js:136:1 › shared Admin navigation reuses authorized projections in secure mode (6ms)
+  ok  177 [chromium] › tests\admin-logic-regressions.spec.js:156:1 › purchase-order workspace uses the fixed procurement projection in secure mode (2ms)
+  ok  178 [chromium] › tests\admin-logic-regressions.spec.js:166:1 › inventory product editing routes every photo assignment through the dedicated media workflow (5ms)
+  ok  179 [chromium] › tests\admin-logic-regressions.spec.js:188:1 › permanent product deletion uses the signed secure command before the legacy flag-off path (2ms)
+  ok  180 [chromium] › tests\admin-logic-regressions.spec.js:199:1 › admin helpers never continue after inventory verification or save failure (4ms)
+  ok  181 [chromium] › tests\admin-logic-regressions.spec.js:216:1 › coupon administration uses safe projections and reasoned mobile actions (3ms)
+  ok  182 [chromium] › tests\admin-logic-regressions.spec.js:228:1 › lot editor separates physical, reserved, and sellable truth and blocks unsafe legacy saves (3ms)
+  ok  183 [chromium] › tests\admin-logic-regressions.spec.js:239:1 › inventory grid separates unknown stock from out-of-stock without zero coercion (4ms)
+  ok  184 [chromium] › tests\admin-quiet-workspace-contract.spec.js:6:1 › AdminWorkspaceUi exports a shared DetailBlock disclosure (2ms)
+  ok  185 [chromium] › tests\admin-quiet-workspace-contract.spec.js:13:1 › DetailBlock starts closed and toggles instantly (1ms)
+  ok  186 [chromium] › tests\admin-quiet-workspace-contract.spec.js:19:1 › inventory edit modal hides secondary sections behind DetailBlock (2ms)
+  ok  187 [chromium] › tests\admin-quiet-workspace-contract.spec.js:27:1 › inventory edit modal keeps primary sections immediately visible (2ms)
+  ok  188 [chromium] › tests\admin-quiet-workspace-contract.spec.js:34:1 › scan center uses plain words instead of guarded workflow (2ms)
+  ok  189 [chromium] › tests\admin-quiet-workspace-contract.spec.js:39:1 › Milan header drops POV jargon and ultra-fast marketing (2ms)
+  ok  190 [chromium] › tests\admin-quiet-workspace-contract.spec.js:45:1 › J&T dispatch drops booking-assistant marketing and Bulk Batch redundancy (2ms)
+  ok  191 [chromium] › tests\admin-quiet-workspace-contract.spec.js:51:1 › Manila finish drops Discrepancies jargon (1ms)
+  ok  192 [chromium] › tests\admin-quiet-workspace-contract.spec.js:56:1 › discrepancy rows never invent a product-name fallback (1ms)
+  ok  193 [chromium] › tests\admin-quiet-workspace-contract.spec.js:61:1 › sheet toolbar uses family icons instead of raw glyphs (2ms)
+  ok  194 [chromium] › tests\admin-quiet-workspace-contract.spec.js:69:1 › start-here guide carries no raw emoji and meets the touch floor (3ms)
+  ok  195 [chromium] › tests\admin-quiet-workspace-contract.spec.js:80:1 › overview money controls meet the touch floor and speak one accent (2ms)
+  ok  196 [chromium] › tests\admin-quiet-workspace-contract.spec.js:86:1 › hold extension chips meet the touch floor (1ms)
+  ok  197 [chromium] › tests\admin-quiet-workspace-contract.spec.js:91:1 › help panel floats above the phone tab bar (2ms)
+  ok  198 [chromium] › tests\admin-quiet-workspace-contract.spec.js:97:1 › help tooltip opens into the workspace without a doubled native title (2ms)
+  ok  199 [chromium] › tests\admin-quiet-workspace-contract.spec.js:106:1 › workspace sub-nav signals off-screen tabs (2ms)
+  ok  200 [chromium] › tests\admin-quiet-workspace-contract.spec.js:111:1 › sheet-mode switch keeps its look with a full-size touch target (1ms)
+  ok  201 [chromium] › tests\admin-quiet-workspace-contract.spec.js:117:1 › sub-tab counts stay honest while loading (3ms)
+  ok  202 [chromium] › tests\admin-quiet-workspace-contract.spec.js:123:1 › staff-facing status messages use plain words (4ms)
+  ok  203 [chromium] › tests\admin-quiet-workspace-contract.spec.js:143:1 › workflow entry points use one plain name (2ms)
+  ok  204 [chromium] › tests\admin-quiet-workspace-contract.spec.js:157:1 › quick tools calculator hoists button component and isolates mobile scroll container (3ms)
+  ok  205 [chromium] › tests\admin-quiet-workspace-contract.spec.js:167:1 › help tooltip coordinates single-active mobile tap-to-toggle and Escape dismissal (2ms)
+  ok  206 [chromium] › tests\admin-quiet-workspace-contract.spec.js:175:1 › workflow map and consignment header wrap safely on 375px mobile viewports with 44px touch targets (2ms)
+  ok  207 [chromium] › tests\admin-retained-command-gaps.spec.js:7:1 › coupon decisions carry a pre-click Admin blocker and a two-step archive (2ms)
+  ok  208 [chromium] › tests\admin-retained-command-gaps.spec.js:14:1 › photo discard and uncertain close cannot drop a protected operation (1ms)
+  ok  209 [chromium] › tests\admin-retained-command-gaps.spec.js:20:1 › fulfillment audit reasons meet the ten-character standard (2ms)
+  ok  210 [chromium] › tests\admin-retained-command-gaps.spec.js:25:1 › product deletion freezes an unconfirmed form and retries one identity (2ms)
+  ok  211 [chromium] › tests\admin-retained-command-gaps.spec.js:32:1 › owner-close retries reuse their attempt identity (2ms)
+  ok  212 [chromium] › tests\admin-retained-command-gaps.spec.js:40:1 › Sheet row action buttons and domain jumps meet 44px touch targets (2ms)
+  ok  213 [chromium] › tests\admin-retained-command-gaps.spec.js:46:1 › InventoryGrid search exception buttons and select-all meet 44px touch targets (2ms)
+  ok  214 [chromium] › tests\admin-retained-command-gaps.spec.js:51:1 › Admin sidebar and lock buttons meet 44px touch targets (1ms)
+  ok  215 [chromium] › tests\admin-retained-command-gaps.spec.js:57:1 › OmniOperationsHub packing queue provides responsive phone cards for <lg screens (1ms)
+  ok  216 [chromium] › tests\admin-retained-command-gaps.spec.js:62:1 › OmniOperationsHub and Suppliers dialogs accept and pass returnFocusRef (3ms)
+  ok  217 [chromium] › tests\admin-retained-command-gaps.spec.js:72:1 › adminBffService maps AAL2_REQUIRED and role errors explicitly without falling back to unavailable (2ms)
+  ok  218 [chromium] › tests\admin-sales-calculation.spec.js:16:1 › sales summary keeps submitted, verified, and fulfilled values separate (1ms)
+  ok  219 [chromium] › tests\admin-sales-calculation.spec.js:26:1 › payment-by-fulfillment reconciliation partitions every request and peso exactly once (1ms)
+  ok  220 [chromium] › tests\admin-sales-calculation.spec.js:45:1 › sales planner computes the complete bounded staff scenario (2ms)
+  ok  221 [chromium] › tests\admin-sales-calculation.spec.js:58:1 › sales planner rejects unsafe values and never returns NaN or Infinity (2ms)
+  ok  222 [chromium] › tests\admin-sales-calculation.spec.js:72:1 › target-price planner solves percentage fees and target gross margin exactly (1ms)
+  ok  223 [chromium] › tests\admin-sales-calculation.spec.js:86:1 › target-price planner rounds upward and denies impossible or unsafe targets (3ms)
+  ok  224 [chromium] › tests\admin-sales-calculation.spec.js:106:1 › maximum-discount planner rounds the safe allowance downward and preserves the target margin (1ms)
+  ok  225 [chromium] › tests\admin-sales-calculation.spec.js:123:1 › maximum-discount planner denies a price that misses the target at zero discount and unsafe inputs (3ms)
+  ok  226 [chromium] › tests\admin-sales-calculation.spec.js:140:1 › target-quantity planner rounds to the minimum whole units that reach planned profit (1ms)
+  ok  227 [chromium] › tests\admin-sales-calculation.spec.js:162:1 › target-quantity planner refuses non-contributing products and unsafe targets (3ms)
+  ok  228 [chromium] › tests\admin-sales-calculation.spec.js:179:1 › planning summaries preserve each valid mode assumptions and results without customer data (8ms)
+  ok  229 [chromium] › tests\admin-sales-calculation.spec.js:222:1 › sales record filters use exact canonical states and newest-first order (2ms)
+  ok  230 [chromium] › tests\admin-sales-calculation.spec.js:239:1 › sales CSV exports the exact filter without customer data or spreadsheet formulas (3ms)
+  ok  231 [chromium] › tests\admin-sales-calculation.spec.js:260:1 › the sales planner is mounted in the authenticated Admin shell (2ms)
+  ok  232 [chromium] › tests\admin-security-status-and-delete-pin.spec.js:8:3 › Admin access, MFA status, and permanent product deletion contracts › new Auth identities default to Customer and the Admin runtime accepts only canonical staff roles (6ms)
+  ok  233 [chromium] › tests\admin-security-status-and-delete-pin.spec.js:17:3 › Admin access, MFA status, and permanent product deletion contracts › MFA status is read from verified provider factors and remains visible after enrollment (2ms)
+  ok  234 [chromium] › tests\admin-security-status-and-delete-pin.spec.js:27:3 › Admin access, MFA status, and permanent product deletion contracts › Delete PIN secrets move to a private schema and every public function is Admin+AAL2 guarded (3ms)
+  ok  235 [chromium] › tests\admin-security-status-and-delete-pin.spec.js:39:3 › Admin access, MFA status, and permanent product deletion contracts › deletion is bounded, retry-safe, audited, throttled, and refuses operational history (6ms)
+  ok  236 [chromium] › tests\admin-session-seven-days.spec.js:24:1 › same-browser staff session survives idle time and expires seven days after sign-in (1ms)
+  ok  237 [chromium] › tests\admin-session-seven-days.spec.js:36:1 › another staff identity cannot inherit the previous browser clock (0ms)
+  ok  238 [chromium] › tests\admin-session-seven-days.spec.js:44:1 › prepared server cookie and signed registry command use seven days without idle expiry (3ms)
+  ok  239 [chromium] › tests\admin-workspace-subnav-contract.spec.js:6:1 › AdminWorkspaceUi exports a shared WorkspaceTabs sub-nav (2ms)
+  ok  240 [chromium] › tests\admin-workspace-subnav-contract.spec.js:14:1 › customer workspace splits directory and wholesale into sub-categories (2ms)
+  ok  241 [chromium] › tests\admin-workspace-subnav-contract.spec.js:22:1 › customer workspace keeps banners and review dialog outside the tab panels (1ms)
+  ok  242 [chromium] › tests\admin-workspace-subnav-contract.spec.js:28:1 › staff workspace splits people, security, and spending into sub-categories (2ms)
+  ok  243 [chromium] › tests\admin-workspace-subnav-contract.spec.js:36:1 › staff workspace keeps alerts and dialogs outside the tab panels (2ms)
+  ok  244 [chromium] › tests\admin-workspace-subnav-contract.spec.js:43:1 › supplier workspace splits directory and purchase orders into sub-categories (2ms)
+  ok  245 [chromium] › tests\admin-workspace-subnav-contract.spec.js:50:1 › supplier workspace keeps banners and the add dialog outside the tab panels (1ms)
+  ok  246 [chromium] › tests\admin-workspace-subnav-contract.spec.js:56:1 › command palette reaches every admin section with role gating intact (4ms)
+  ok  247 [chromium] › tests\admin-workspace-subnav-contract.spec.js:65:1 › admin shell passes the staff role into the palette (1ms)
+  ok  248 [chromium] › tests\anon-read-evidence.spec.js:27:1 › provider outage never passes a private boundary or claims an empty table (7ms)
+  ok  249 [chromium] › tests\anon-read-evidence.spec.js:34:1 › failed privileged baseline invalidates otherwise allowed or denied probes (2ms)
+  ok  250 [chromium] › tests\anon-read-evidence.spec.js:41:3 › unknown or malformed count is not security evidence: null (2ms)
+  ok  251 [chromium] › tests\anon-read-evidence.spec.js:41:3 › unknown or malformed count is not security evidence: 0-0/* (2ms)
+  ok  252 [chromium] › tests\anon-read-evidence.spec.js:41:3 › unknown or malformed count is not security evidence: 0-0/nope (2ms)
+  ok  253 [chromium] › tests\anon-read-evidence.spec.js:41:3 › unknown or malformed count is not security evidence: 0-0/ (2ms)
+  ok  254 [chromium] › tests\anon-read-evidence.spec.js:41:3 › unknown or malformed count is not security evidence: 0-0/-1 (2ms)
+  ok  255 [chromium] › tests\anon-read-evidence.spec.js:41:3 › unknown or malformed count is not security evidence: 0-0/1.5 (2ms)
+  ok  256 [chromium] › tests\anon-read-evidence.spec.js:48:1 › confirmed baseline plus explicit authorization denial passes (2ms)
+  ok  257 [chromium] › tests\anon-read-evidence.spec.js:52:1 › zero visible rows are qualified when the private source is empty (2ms)
+  ok  258 [chromium] › tests\anon-read-evidence.spec.js:58:1 › exposed private rows fail and missing routes are not authorization denial (4ms)
+  ok  259 [chromium] › tests\automated-delivery-quotation-contract.spec.js:6:3 › Automated delivery quotation contracts › migration file defines valid preflight, update, and postflight guards (4ms)
+  ok  260 [chromium] › tests\automated-delivery-quotation-contract.spec.js:16:3 › Automated delivery quotation contracts › rollback file safely restores baseline submit_guest_order_v1 (3ms)
+  ok  261 [chromium] › tests\automated-delivery-quotation-contract.spec.js:31:3 › Automated delivery quotation contracts › storefront order BFF rejects non-numeric or out-of-range shipping amounts (2ms)
+  ok  262 [chromium] › tests\barcode-catalog-lookup.spec.js:7:1 › looks up an exact package barcode and refuses an untrusted image origin (4ms)
+  ok  263 [chromium] › tests\barcode-catalog-lookup.spec.js:22:1 › returns only HTTPS Open Food Facts reference photos (2ms)
+  ok  264 [chromium] › tests\barcode-catalog-lookup.spec.js:31:1 › rejects non-barcode input before any public API call (2ms)
+  ok  265 [chromium] › tests\barcode-catalog-lookup.spec.js:39:1 › keeps not found, mismatched response and provider outage distinct (2ms)
+  ok  266 [chromium] › tests\bot-challenge-contract.spec.js:19:1 › a missing secret fails closed without calling the provider (1ms)
+  ok  267 [chromium] › tests\bot-challenge-contract.spec.js:36:1 › an explicit unconfigured bypass is opt-in and auditable (0ms)
+  ok  268 [chromium] › tests\bot-challenge-contract.spec.js:51:1 › a token is single-use: its replay is rejected (1ms)
+  ok  269 [chromium] › tests\bot-challenge-contract.spec.js:64:1 › a token minted for another host is rejected (0ms)
+  ok  270 [chromium] › tests\bot-challenge-contract.spec.js:76:1 › every server call site binds its validated request hostname (4ms)
+  ok  271 [chromium] › tests\browser-error-safety.spec.js:6:1 › browser error telemetry emits only stable safe fields (1ms)
+  ok  272 [chromium] › tests\browser-error-safety.spec.js:17:1 › global error UI and reporter do not expose raw browser diagnostics (4ms)
+  ok  273 [chromium] › tests\browser-error-safety.spec.js:35:1 › visible operation errors use allowlisted recovery copy and stable codes (1ms)
+  ok  274 [chromium] › tests\browser-error-safety.spec.js:48:1 › migrated operational surfaces do not render raw provider messages (25ms)
+  ok  275 [chromium] › tests\browser-error-safety.spec.js:81:1 › browser system readiness cannot read or render raw diagnostic rows (2ms)
+  ok  276 [chromium] › tests\cart-shipping-calculator.spec.js:11:3 › cartShippingCalculator › calculates item packed weight correctly from product attributes (2ms)
+  ok  277 [chromium] › tests\cart-shipping-calculator.spec.js:26:3 › cartShippingCalculator › calculates cart total packed weight across lines (1ms)
+  ok  278 [chromium] › tests\cart-shipping-calculator.spec.js:35:3 › cartShippingCalculator › formats weight human-readably (2ms)
+  ok  279 [chromium] › tests\cart-shipping-calculator.spec.js:42:3 › cartShippingCalculator › calculates delivery options for Metro Manila (NCR) (3ms)
+  ok  280 [chromium] › tests\cart-shipping-calculator.spec.js:64:3 › cartShippingCalculator › calculates overweight fees for packages > 3kg (1ms)
+  ok  281 [chromium] › tests\cart-shipping-calculator.spec.js:78:3 › cartShippingCalculator › calculates delivery options for Visayas and Mindanao (1ms)
+  ok  282 [chromium] › tests\cart-shipping-calculator.spec.js:87:3 › cartShippingCalculator › exports 4 valid Philippine regions (1ms)
+  ok  283 [chromium] › tests\catalog-freshness-contract.spec.js:9:1 › storefront catalog has a bounded visible-page freshness fallback (3ms)
+  ok  284 [chromium] › tests\catalog-freshness-contract.spec.js:30:1 › catalog refresh is overlap-safe and degrades safely without the stock projection (3ms)
+  ok  285 [chromium] › tests\catalog-freshness-contract.spec.js:52:1 › storefront catalog is gated on the staff publication flag, not status alone (1ms)
+  ok  286 [chromium] › tests\catalog-freshness-contract.spec.js:66:1 › an empty database renders an empty production catalog, never the local seed (3ms)
+  ok  287 [chromium] › tests\catalog-spreadsheet-contract.spec.js:22:1 › catalog export is fixed-schema, Excel-compatible, and formula-safe (5ms)
+  ok  288 [chromium] › tests\catalog-spreadsheet-contract.spec.js:34:1 › catalog preview classifies changes, stale rows, duplicates, and protected identity conflicts (3ms)
+  ok  289 [chromium] › tests\catalog-spreadsheet-contract.spec.js:45:1 › new catalog rows can only stage metadata drafts and formula-like input is invalid (1ms)
+  ok  290 [chromium] › tests\catalog-spreadsheet-contract.spec.js:56:1 › catalog endpoints have explicit route controls and prepared version support (4ms)
+  ok  291 [chromium] › tests\catalog-spreadsheet-contract.spec.js:71:1 › catalog commit payload rechecks the file and allows only explicit New or Changed rows (10ms)
+  ok  292 [chromium] › tests\catalog-spreadsheet-contract.spec.js:97:1 › existing catalog command reconstructs the same payload after its successful update (9ms)
+  ok  293 [chromium] › tests\catalog-spreadsheet-contract.spec.js:121:1 › prepared catalog commit is signed, atomic, receipt-backed, and revokes direct product writes (10ms)
+  ok  294 [chromium] › tests\catalog-spreadsheet-contract.spec.js:147:1 › catalog signed boundary allowlists the larger bounded import command (3ms)
+  ok  295 [chromium] › tests\catalog-spreadsheet-contract.spec.js:158:1 › catalog commit rejects non-numeric net weight before signing (1ms)
+  ok  296 [chromium] › tests\catalog-spreadsheet-contract.spec.js:172:1 › catalog PostgreSQL rehearsal runner refuses remote and ordinary databases (1ms)
+  ok  297 [chromium] › tests\catalog-stock-reconciliation-contract.spec.js:9:1 › catalog stock reconciliation migration adheres to transaction and security invariants (5ms)
+  ok  298 [chromium] › tests\catalog-stock-reconciliation-contract.spec.js:38:1 › rollback migration cleanly revokes grants and restores status checks (4ms)
+  ok  299 [chromium] › tests\chunk-recovery.spec.js:32:1 › persistent chunk failures do not reload away pending work or suppress the lazy-import error (3ms)
+  ok  300 [chromium] › tests\chunk-recovery.spec.js:37:1 › chunk recovery still reaches the error boundary when session storage is unavailable (2ms)
+  ok  301 [chromium] › tests\confirmation-commitment-contract.spec.js:8:1 › the commitment migration is additive and never rewrites history (3ms)
+  ok  302 [chromium] › tests\confirmation-commitment-contract.spec.js:15:1 › the commitment helper is internal-only with an exact cause allowlist (2ms)
+  ok  303 [chromium] › tests\confirmation-commitment-contract.spec.js:24:1 › confirmation deducts ownership without moving physical custody (2ms)
+  ok  304 [chromium] › tests\confirmation-commitment-contract.spec.js:38:1 › the sweep exempts committed allocations in both selection passes (1ms)
+  ok  305 [chromium] › tests\confirmation-commitment-contract.spec.js:44:1 › rollback restores prior bodies without erasing commitment audit facts (4ms)
+  ok  306 [chromium] › tests\confirmation-commitment-contract.spec.js:52:1 › the rehearsal applies the migration with replay before asserting (4ms)
+  ok  307 [chromium] › tests\confirmation-commitment-contract.spec.js:59:1 › deriveOwnedStock calculates owned stock from physical and committed allocations (3ms)
+  ok  308 [chromium] › tests\confirmation-commitment-contract.spec.js:98:1 › deriveOwnedStock flags legacy unattributed confirmed and verified allocations as unresolved (2ms)
+  ok  309 [chromium] › tests\confirmation-commitment-contract.spec.js:130:1 › deriveOwnedStock flags malformed commitment data as unresolved (2ms)
+  ok  310 [chromium] › tests\confirmation-commitment-contract.spec.js:157:1 › readLotData integrates derived stock and allocation visibility (3ms)
+  ok  311 [chromium] › tests\confirmation-commitment-contract.spec.js:184:1 › computeInventoryMetrics tracks unresolved allocations and flags reconciliation required (1ms)
+  ok  312 [chromium] › tests\consignment-calendar.spec.js:18:1 › add-line bounds advance at Manila midnight and year-end regardless of host timezone (1.5s)
+  ok  313 [chromium] › tests\consignment-calendar.spec.js:31:1 › add-line keeps the ten-year leap-day rollover ceiling and rejects impossible dates (158ms)
+  ok  314 [chromium] › tests\consignment-receiving.spec.js:4:1 › launch migration contains atomic receiving and controlled transitions (20ms)
+  ok  315 [chromium] › tests\consignment-receiving.spec.js:72:1 › product compatibility preflight supports both deployed schemas (6ms)
+  ok  316 [chromium] › tests\consignment-receiving.spec.js:83:1 › consignment preflight creates missing operational relations securely (4ms)
+  ok  317 [chromium] › tests\consignment-receiving.spec.js:94:1 › channel and admin preflight restores skipped late-stage relations (6ms)
+  ok  318 [chromium] › tests\consignment-receiving.spec.js:103:1 › continuous consignment scanners stay connected to server-enforced counts (11ms)
+  ok  319 [chromium] › tests\consignment-receiving.spec.js:128:1 › count-on-arrival truth is bounded by the Milan packed count (2ms)
+  ok  320 [chromium] › tests\consignment-receiving.spec.js:139:1 › coupon restoration is database-backed, private, limited, and auditable (6ms)
+  ok  321 [chromium] › tests\consignment-receiving.spec.js:158:1 › MAP-023 has a portable last-unit concurrency rehearsal (4ms)
+  ok  322 [chromium] › tests\consignment-receiving.spec.js:172:1 › MAP-023 rehearses an ambiguous confirmation retry without duplicate effects (2ms)
+  ok  323 [chromium] › tests\consignment-retry.spec.js:11:3 › actual authenticated handler forwards an exact receipt beyond the past lower bound (10ms)
+  ok  324 [chromium] › tests\consignment-retry.spec.js:11:3 › actual authenticated handler forwards an exact receipt beyond the receded upper bound (5ms)
+  ok  325 [chromium] › tests\consignment-retry.spec.js:29:1 › fresh signed SQL payload refusal becomes a safe HTTP400 (3ms)
+  ok  326 [chromium] › tests\consignment-retry.spec.js:37:1 › strict calendar and payload parsing rejects malformed retries before consignment RPC (8ms)
+  ok  327 [chromium] › tests\consignment-retry.spec.js:55:4 › CSRF refusal precedes any receiving retry (2ms)
+  ok  328 [chromium] › tests\consignment-retry.spec.js:55:4 › origin refusal precedes any receiving retry (1ms)
+  ok  329 [chromium] › tests\consignment-retry.spec.js:55:4 › missing cookie refusal precedes any receiving retry (1ms)
+  ok  330 [chromium] › tests\consignment-retry.spec.js:55:4 › MFA refusal precedes any receiving retry (2ms)
+  ok  331 [chromium] › tests\consignment-retry.spec.js:55:4 › staff role refusal precedes any receiving retry (2ms)
+  ok  332 [chromium] › tests\consignment-retry.spec.js:55:4 › revoked registry refusal precedes any receiving retry (2ms)
+  ok  333 [chromium] › tests\consignment-row-targeting.spec.js:24:1 › an exact item id addresses that lot, not the first matching SKU (1ms)
+  ok  334 [chromium] › tests\consignment-row-targeting.spec.js:29:1 › this is the defect: without an id, both boxes resolve to the same line (0ms)
+  ok  335 [chromium] › tests\consignment-row-targeting.spec.js:36:1 › a scanned barcode still resolves through the product to its SKU lines (0ms)
+  ok  336 [chromium] › tests\consignment-row-targeting.spec.js:42:1 › an unknown code selects nothing rather than guessing a line (1ms)
+  ok  337 [chromium] › tests\consignment-row-targeting.spec.js:48:1 › a full Milan line is refused by name instead of silently moving to another box (1ms)
+  ok  338 [chromium] › tests\consignment-row-targeting.spec.js:56:1 › Manila receiving cannot exceed what Milan actually packed (1ms)
+  ok  339 [chromium] › tests\consignment-row-targeting.spec.js:64:1 › a stale row cannot act on quantities that have already changed (0ms)
+  ok  340 [chromium] › tests\consignment-row-targeting.spec.js:72:1 › every manifest row action carries its exact item id (3ms)
+  ok  341 [chromium] › tests\consignment-row-targeting.spec.js:86:1 › the manifest component still compiles — a string contract cannot prove that (220ms)
+  ok  342 [chromium] › tests\customer-account-settings-contract.spec.js:5:1 › customer settings accept bounded profile data and reject extra fields (4ms)
+  ok  343 [chromium] › tests\customer-account-settings-contract.spec.js:16:1 › account settings and notifications require authenticated bounded server routes (2ms)
+  ok  344 [chromium] › tests\customer-account-settings-contract.spec.js:33:1 › private profile and notification SQL uses account ownership and canonical events (4ms)
+[WebServer] 9:58:48 AM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  x   345 [chromium] › tests\customer-crm-ui.spec.js:8:33 › hold outcomes show current facts and recovery without a false saved notice at 375px (30.0s)
+(node:19788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 9:59:18 AM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  x   346 [chromium] › tests\customer-crm-ui.spec.js:8:33 › hold outcomes show current facts and recovery without a false saved notice at 1440px (30.0s)
+(node:16420) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 9:59:49 AM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.

@@ -1,0 +1,48 @@
+{
+  "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8",
+  "initialAggregateExit": 1,
+  "baseNodeConstituentsPassed": true,
+  "priorResumptionFailure": "Direct expanded script lacked npm bin PATH at browser launch; all preceding Node constituents passed. Resume browser only.",
+  "retainedPreBaseSource": "dcf3b82e96fe9cfd8ec7504a85fa945610ceb7c0",
+  "retainedPreBaseGroups": [
+    "security:test-turnstile",
+    "test:security-check-ui",
+    "test:product-sku-merge",
+    "test:product-families",
+    "test:store-categories"
+  ],
+  "crmSeparatePassed": 9,
+  "fixtureAdjustment": "CRM requires Admin BFF; run separately with fabricated provider. Other base fixtures keep default-off flags.",
+  "startedAt": "2026-10-29T02:10:00.128Z",
+  "status": "failed-focused-followup-required",
+  "stages": [
+    {
+      "name": "test:base",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:10:00.129Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:11:07.994Z"
+    },
+    {
+      "name": "test:mobile-moderation",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:11:07.994Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:11:09.719Z"
+    },
+    {
+      "name": "test:store-orientation",
+      "status": "passed",
+      "startedAt": "2026-10-29T02:11:09.719Z",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T02:12:23.435Z"
+    },
+    {
+      "name": "test:storefront-ui",
+      "status": "failed",
+      "startedAt": "2026-10-29T02:12:23.435Z",
+      "exitCode": 1,
+      "completedAt": "2026-10-29T02:14:10.168Z"
+    }
+  ]
+}

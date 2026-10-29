@@ -1,0 +1,51 @@
+{
+  "mapItem": "MAP-019",
+  "project": "pixplcjqivlfflickobf",
+  "sourceCommit": "567dbcec15090ed476502b57daf70c4554e15da8",
+  "packetSha256": "b794e9371ccc2810b6a489fc251ce7265d0ad4f78618740433db297f6c7c9ef8",
+  "observedAt": "2026-10-29T02:39:13.393Z",
+  "status": "applied-and-readback-verified-customization-status-flags-reconciled",
+  "patchDispatchCount": 1,
+  "patchHttpStatus": 200,
+  "approvedFiveFieldsMatch": true,
+  "firstPostflightOtherDirectAuthFieldsUnchanged": true,
+  "customizationStatusFlags": {
+    "mailer_subjects_custom_contents": {
+      "MAILER_SUBJECTS_CONFIRMATION": true,
+      "MAILER_SUBJECTS_EMAIL_CHANGE": false,
+      "MAILER_SUBJECTS_INVITE": false,
+      "MAILER_SUBJECTS_MAGIC_LINK": true,
+      "MAILER_SUBJECTS_REAUTHENTICATION": false,
+      "MAILER_SUBJECTS_RECOVERY": false,
+      "MAILER_SUBJECTS_PASSWORD_CHANGED_NOTIFICATION": false,
+      "MAILER_SUBJECTS_EMAIL_CHANGED_NOTIFICATION": false,
+      "MAILER_SUBJECTS_PHONE_CHANGED_NOTIFICATION": false,
+      "MAILER_SUBJECTS_MFA_FACTOR_ENROLLED_NOTIFICATION": false,
+      "MAILER_SUBJECTS_MFA_FACTOR_UNENROLLED_NOTIFICATION": false,
+      "MAILER_SUBJECTS_IDENTITY_LINKED_NOTIFICATION": false,
+      "MAILER_SUBJECTS_IDENTITY_UNLINKED_NOTIFICATION": false
+    },
+    "mailer_templates_custom_contents": {
+      "MAILER_TEMPLATES_CONFIRMATION_CONTENT": true,
+      "MAILER_TEMPLATES_EMAIL_CHANGE_CONTENT": false,
+      "MAILER_TEMPLATES_INVITE_CONTENT": false,
+      "MAILER_TEMPLATES_MAGIC_LINK_CONTENT": true,
+      "MAILER_TEMPLATES_REAUTHENTICATION_CONTENT": false,
+      "MAILER_TEMPLATES_RECOVERY_CONTENT": false,
+      "MAILER_TEMPLATES_PASSWORD_CHANGED_NOTIFICATION_CONTENT": false,
+      "MAILER_TEMPLATES_EMAIL_CHANGED_NOTIFICATION_CONTENT": false,
+      "MAILER_TEMPLATES_PHONE_CHANGED_NOTIFICATION_CONTENT": false,
+      "MAILER_TEMPLATES_MFA_FACTOR_ENROLLED_NOTIFICATION_CONTENT": false,
+      "MAILER_TEMPLATES_MFA_FACTOR_UNENROLLED_NOTIFICATION_CONTENT": false,
+      "MAILER_TEMPLATES_IDENTITY_LINKED_NOTIFICATION_CONTENT": false,
+      "MAILER_TEMPLATES_IDENTITY_UNLINKED_NOTIFICATION_CONTENT": false
+    }
+  },
+  "interpretation": "Two boolean response maps mark exactly the approved confirmation/magic-link subjects/templates as customized; every other status flag is false. The original strict comparator proves every other direct Auth field unchanged at its independent postflight. This read-only reconciliation sends no PATCH.",
+  "emailConfirmationRequired": true,
+  "signupAllowed": true,
+  "phoneEnabled": false,
+  "googleAndSmtpCredentialsChanged": false,
+  "originalStrictReceipt": "email-repair-provider-result.json",
+  "realNewDeliveryAndLoginVerified": false
+}

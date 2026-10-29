@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+(node:1424) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\storefront-auth-boundary.spec.js:33:1 › customer Auth payloads and HMAC subjects are exact and never expose raw identifiers (257ms)
+  ok 2 tests\storefront-auth-boundary.spec.js:72:1 › durable customer Auth denials happen before every provider email, SMS, or verification call (7ms)
+  ok 3 tests\storefront-auth-boundary.spec.js:99:1 › customer Auth issuance bot denial happens after durable budget consumption and before provider delivery (4ms)
+  ok 4 tests\storefront-auth-boundary.spec.js:126:1 › customer Auth BFF preserves generic delivery truth and returns only a bounded SMS session (3ms)
+  ok 5 tests\storefront-auth-boundary.spec.js:167:1 › customer account browser service uses only fixed same-origin Auth routes (128ms)
+  ok 6 tests\storefront-auth-boundary.spec.js:193:1 › email hash confirmation uses the existing signed email budget before provider verification (9ms)
+
+  6 passed (1.2s)

@@ -1,0 +1,28 @@
+
+Running 1 test using 1 worker
+
+(node:3364) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\storefront-auth-boundary.spec.js:193:1 › email hash confirmation uses the existing signed email budget before provider verification (313ms)
+
+
+  1) tests\storefront-auth-boundary.spec.js:193:1 › email hash confirmation uses the existing signed email budget before provider verification 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      211 |     calls.push(['budget', action, subject]); return { allowed: true }
+      212 |   } })(request({ tokenHash }), accepted)
+    > 213 |   expect(accepted.statusCode).toBe(200)
+          |                               ^
+      214 |   expect(calls).toEqual([['budget', 'customer_auth_email_request', tokenHash], ['provider', { token_hash: tokenHash, type: 'email' }]])
+      215 |   expect(JSON.parse(accepted.body)).toEqual({ ok: true, session: { accessToken: 'synthetic-access-token', refreshToken: 'abc123def456' } })
+      216 |   for (const body of [{ tokenHash, email: 'buyer@example.test' }, { tokenHash: 123 }, { tokenHash: 'short' }, { tokenHash, type: 'recovery' }]) {
+        at C:\Users\jerze\K2 JImzon\tests\storefront-auth-boundary.spec.js:213:31
+
+    Error Context: test-results\storefront-auth-boundary-e-d192e-efore-provider-verification\error-context.md
+
+  1 failed
+    tests\storefront-auth-boundary.spec.js:193:1 › email hash confirmation uses the existing signed email budget before provider verification 
