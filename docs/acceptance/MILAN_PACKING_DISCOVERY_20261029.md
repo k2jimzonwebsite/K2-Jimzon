@@ -1,0 +1,76 @@
+# Milan box packing: correction and barcode-counting discovery
+
+Owner: MAP-023 / IDEA-20261029-06. Status: **source implemented and locally qualified; migration prepared, not applied; not deployed**. No production business record, stock, schema, provider setting or release changed. Existing dirty privacy/source/screenshots remain outside this slice.
+
+## Request and admission
+
+The owner does not understand the first Flight Consignments/Milan step, cannot remove a mistaken entry, and wants their cousin to count physical goods by scanning barcodes instead of selecting/clicking products one by one. ACCEPT/MERGE bounded discovery into existing MAP-023, preserving shipment/stock dependencies. This does not resume deferred SMS or suspended customer-deletion work. MAP-023 alone owns remaining actions; this receipt is evidence, not a second backlog.
+
+## Observed current surface
+
+The signed-in owner Chrome tab is `https://admin.k2jimzon.com/?section=consignment`. Read-only DOM inspection and `milan-packing-discovery-20261029/live-before.jpg` show Packing Italy selected, one existing manifest line, expected11/Milan1/Manila0, Start Milan scan, Add manifest SKU, per-row +1, and no remove/correct/cancel-shipment control. Existing entries and displayed totals were not changed. The screenshot is the incumbent UI, not a proposed or fixed screen.
+
+Operations rulebook section9 establishes flight → box → exact SKU/batch/expiry line → scan events → receipt. Milan counts packed units; Manila independently recounts them, and finalization creates accepted inventory exactly once. Packing must not silently establish sellable stock. A consumer barcode alone does not distinguish two boxes or expiry lots of the same SKU.
+
+## Source findings
+
+Inspected feature HEAD `4773bf97a738`; the named application files were clean before investigation. This is source evidence, distinct from actual camera/hardware or deployed-server behavior:
+
+- `src/views/admin/ConsignmentManager.jsx`: the actual surface uses `ConsignmentScannerModal`; adding a line requires selecting an existing product and supplying box/batch/expiry/expected quantity before it can be counted. Header says Consignment receiving even at Packing Italy. No delete/correction/cancel command is wired.
+- `src/views/admin/ConsignmentScannerModal.jsx:43`: reads while busy return null. Line45 applies the same 1200ms same-code cooldown to camera and typed/scanner input. A deliberate second identical hardware read can be ignored; camera frame debounce and separate physical scans are not distinguished. Actual scanner-speed/device qualification has not been performed.
+- `src/views/admin/consignmentScanTarget.js`: the no-selected-line fallback chooses the first matching incomplete line. Preserve exact box/lot identity rather than letting a faster workflow silently count another lot.
+- `server/admin-bff/consignments.js`: supported actions are create/add-line/scan/advance/finalize; next states are In_Transit/Arrived_Manila. There is no exposed removal, scan reversal or shipment cancellation contract. A visual delete button alone would not provide a protected operational action.
+- `MilanPackingScannerModal.jsx` is an unreferenced legacy module in the inspected source. Do not revive it or build a second competing packing authority.
+
+## UI review: requested outcome, not an accepted implementation
+
+| Before | After — requested outcome, not implemented | Why |
+| --- | --- | --- |
+| Receiving label appears during Italy packing. | Make the current packing task and next action understandable. | Owner cannot identify the first step's purpose. |
+| Lines need manual setup; row +1 controls are prominent. | Count physical units through continuous barcode scans. | Cousin should not repeatedly select/click a product. |
+| No correction/removal action; repeat/busy reads may be ignored. | Recover mistakes and preserve every intentional unit count. | A wrong entry or fast scan must not silently corrupt shipment counts. |
+
+## Confirmed understanding and approach
+
+The owner confirms Italy box packing for Philippines delivery; one physical item scan identifies the product and counts+1; box/batch/expiry are captured once per relevant batch rather than per unit; mistaken scans/packing lines are correctable/removable and unused shipments cancellable; dispatched/received history is protected; Manila independently recounts; existing permissions and K2 Admin identity remain. They add that missing SKU/descriptions must be visible to staff without stopping packing, and per-product +1/−1 must be equally available for manual counts.
+
+Confirmed initial assumptions: small staff team, phone camera or USB/Bluetooth scanner, online operation, safe literal retry without double counting, no production-record deletion during testing. The owner explicitly selects **Draft SKU + scanning and +1/−1** over holding unknown barcodes awaiting later SKU matching. Unknown barcodes get a stock-free unpublished Draft marked Details needed; names/descriptions can follow later. Removing a packing line preserves correction history and the catalog product; packing can be cancelled before dispatch. No specific existing record is authorized for removal by this design choice.
+
+The selected design and decision log are `docs/specs/MILAN_PACKING_WORKFLOW.md`, with sequential skeptic/constraints/user-advocate/arbiter review required before implementation because shipment counts/removal are consequential. Existing normal Draft creation requires accepted name and packaging/evidence review; do not bypass that gate with fake accepted fields/photos. The bounded packing entry must distinguish an unfinished canonical Draft from completed catalog review.
+
+Skills applied: using-superpowers; brainstorming and systematic-debugging; andrej-karpathy; all four UI skills ui-ux-pro-max/impeccable/design-taste-frontend/emil-design-eng; multi-agent-brainstorming for sequential design review; writing-plans/executing-plans within the sole MAP item; test-driven-development and verification-before-completion; requesting-code-review. Preserve Admin product styling and existing architecture. Existing per-session Impeccable context is reused without rerunning its launcher. No production activation follows from local qualification.
+
+## Verification, limits and recovery
+
+Sequential design review: Skeptic initially returned REVISE for historical retry after stage change, unbound closure consent and unclear Draft completion authority. All three were accepted/rechecked APPROVED. Constraint Guardian's pending-tail-loss objection was accepted as a 32-operation durable actor-scoped journal and rechecked APPROVED. User Advocate APPROVED; Integrator/Arbiter explicitly APPROVED the design with all objections accepted/resolved and none rejected. Reviewers performed no implementation or production actions.
+
+Initial read-only actual-host DOM/screenshot evidence established the gaps; the four named application files were clean before implementation. No live scan, create, update, delete, dispatch, arrival or finalization was submitted, and no actual camera permission was requested. One read-only K2 Management API query, after exact identity verification, captured only the current consignment wrapper, verifier and SKU allocator definitions; no secret values or business rows. See `current-function-observation.json` and `current-function-definitions.json` in the evidence folder. This is observed exact K2 source, not the full installed schema/ACL/trigger composition or provider-write acceptance.
+
+## Implemented source and prepared SQL
+
+- `ConsignmentManager.jsx` uses the current signed packing workspace for Packing Italy, removes misleading pre-arrival shortage styling and keeps independent Manila receiving. `ConsignmentPackingWorkspace.jsx` exposes once-per-lot context, barcode/SKU input, continuous camera entry, +1/−1, Details needed, review link, remove/restore and cancel/reopen/dispatch review. `InventoryGrid.jsx` accepts the exact packing SKU link into its existing protected Product Master editor. `prepared-api/admin/products.js` exposes the canonical human-review boolean so reviewed goods are not falsely flagged.
+- `consignmentPackingCommand.js` is the shared exact command validator. `consignmentPackingJournal.js` persists every accepted operation/key/body under its original actor, with a 32-operation limit. `useConsignmentPacking.js` serializes actor-scoped dispatch and journal mutations across tabs, keeps uncertain head/tail data, checks current staff identity and reloads canonical facts after historical acknowledgements. Explicit server refusals can be dismissed under the same dispatch lock; uncertainty cannot be discarded.
+- Existing `server/admin-bff/consignments.js`, router, client service and new `prepared-api/admin/consignments/packing.js` preserve session/AAL2/origin/CSRF/signature and actor checks. New command routes participate in the normal release test chain via `test:milan-packing`; disposable SQL has its own `rehearse:milan-packing` command.
+- `supabase/migrations/20261029_milan_packing_workflow.sql` is **prepared only**. It adds packing metadata and a private guard/helper, extends the exact existing signed wrapper/verifier and reuses canonical SKU allocation. Fresh Draft+line+first count and audit/receipt are transactional; no normal intake evidence is fabricated. Removed lines preserve their old snapshot/history and use zero active quantities; catalog products are retained. Dispatch/cancellation/removal reviews bind the shared current packing revision. New Italy count paths never copy quantities into Manila or establish stock. The exact observed verifier/wrapper definitions are SHA-256 guarded before first patch; unrelated receiving bodies/roles/secrets are retained.
+
+## Local evidence and honest limits
+
+| Command / evidence | Result and scope |
+| --- | --- |
+| `node --test tests/consignment-packing-command.test.mjs tests/consignment-packing-recovery.test.mjs tests/admin-product-read-taxonomy.test.mjs` | 17 pass: exact shapes/signing/permission refusal, ±1, bounded durable tail/head, corruption/storage refusal and canonical review read. Real BFF with intercepted provider replies; not hosted Auth/SQL. |
+| `npx playwright test --config=playwright.api.config.js tests/consignment-receiving.spec.js tests/consignment-row-targeting.spec.js tests/consignment-retry.spec.js tests/consignment-calendar.spec.js --reporter=line` | 30 pass; existing bounded receiving/calendar/row contracts preserved. Some are source contracts, not native receiving acceptance. |
+| `npx playwright test --config=playwright.product-master.config.js tests/milan-packing-ui.spec.js --timeout=25000 --max-failures=1` | 6 pass: rapid identical counts/manual ±1, actual two-tab refusal-versus-retry dismissal lock, five accepted head/tail entries across reload with original keys, changed actor refusal, 375/1440/reduced-motion/no-overflow/44px targets, remove/restore/cancel. Actual components and browser with synthetic network replies. |
+| `node scripts/rehearse-milan-packing.mjs` | Pass on owned portable PostgreSQL17.11. Final case `.tools/milan-packing-7149de76-cc29-4e82-aa20-540761f0eaa6`: current captured K2 verifier/wrapper/SKU allocator, real HMAC with known synthetic secret, behavioral DO checks plus concurrent count-versus-stale-dispatch refusal and same-barcode one-Draft/two-unit schedule. Minimal schema/other primitives remain synthetic; not full current provider composition or receipt/stock finalization acceptance. Started cluster stopped; retained evidence/data are disposable local fixtures. |
+| `npm run verify:development` | Exit0; final application development gate, 148 ending cases/0fail, 106 Admin routes/24 Storefront routes and zero classification gaps. Log `.tools/milan-packing-development-final.log`. Final run follows the last journal-size correction; earlier passing development evidence is retained separately. |
+| `npm --ignore-scripts run build:admin` | Exit0; explicit target build and boundary/budget/secrets checks, without rerunning the already-green prebuild. Admin227.46/300kB,49manifest modules,941-file artifact secret scan. Storefront build not required for this Admin-only local batch. Log `.tools/milan-packing-admin-build-final.log`. |
+| `node scripts/scan-secrets.mjs` and `git diff --check` | Final source scan4332files passes; scoped whitespace check passes. No secret values printed. |
+
+Initial tests caught the missing packing command and UI. The first rendered rapid-count test observed2instead of3 because an input-submit latch discarded an intentional event; removed that latch and kept unaccepted codes visible. Independent code review found a real cross-tab dismiss-versus-dispatch race; fixed shared lock order/exact head check, rendered schedule passes and bounded recheck APPROVED. Separate HMAC integration recheck APPROVED. Initial minimal-verifier fixture did not reveal the global action allowlist; actual existing verifier intentionally failed `K2_ADMIN_ACTION_INVALID`, then passed the bounded allowlist extension. Initial captured-source race fixture manually acquired a shipment lock before the real verifier and deadlocked against its rate-bucket lock; corrected the fixture to exercise actual verifier→shipment order rather than claiming that artificial ordering passed. Failed local cases and logs remain retained. A later failing queue-size test proved an oversized write could make prior saved scans unreadable; a pre-write UTF-8 bound now preserves the old journal,17focused checks pass and bounded recheck APPROVED. No remaining confirmed Critical/Important source-review finding.
+
+Visual initial375pass exposed narrow flex rows; one correction batch and confirmation capture resolve the input/product squeeze. Files `packing-375.png` and `packing-1440.png` show synthetic records, not real product/stock changes. Latest minor authority helper text is source-qualified; no physical phone/camera/USB/Bluetooth or production theme acceptance is claimed.
+
+## Recovery and remaining boundary
+
+No provider state is applied, so local source recovery is a scoped revert/removal of this exact feature slice; preserve unrelated dirty work and all pending journals. Do not clear a real pending queue merely to roll source back. The currently live edd115df artifacts and existing manifest/counts remain untouched.
+
+Production installation is not yet an approved operation. Before any apply, qualify the full current schema/ACL/trigger and normal independent receiving composition, retain the exact pre-change definitions/metadata and an immediate encrypted backup with isolated restoration proof, and agree data-preserving recovery. Once new count-only/removed/cancelled records exist, blindly restoring old artifacts/functions or dropping additive columns is unsafe; prefer retaining records and repairing forward. Exact current source pin drift must refuse and be reviewed, not bypassed. `docs/runbooks/MILAN_PACKING_RELEASE_RUNBOOK.md` describes the bounded operational release/recovery conditions; remaining queue/status stays only MAP-023. Full release/CI/both-artifact production verification and actual cousin-scanner acceptance remain unperformed. No production/main push is authorized by earlier unrelated release approvals.

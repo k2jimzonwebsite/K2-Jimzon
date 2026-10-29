@@ -475,6 +475,14 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
     setProductTaxonomyReview(result.taxonomyReview || null)
   }
 
+  const packingReviewOpened = useRef(false)
+  useEffect(() => {
+    const sku = new URLSearchParams(window.location.search).get('packingSku')
+    if (!sku || packingReviewOpened.current || loading || !canManageProducts) return
+    const product = products.find(item => item.sku === sku)
+    if (product) { packingReviewOpened.current = true; void openProductEditor(product) }
+  }, [loading, products, canManageProducts])
+
   const handleSave = async (e) => {
     e.preventDefault()
     setEditError('')

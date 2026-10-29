@@ -58,6 +58,7 @@ import consignmentAdvance from '../../prepared-api/admin/consignments/advance.js
 import consignmentCreate from '../../prepared-api/admin/consignments/create.js'
 import consignmentFinalize from '../../prepared-api/admin/consignments/finalize.js'
 import consignmentScan from '../../prepared-api/admin/consignments/scan.js'
+import consignmentPacking from '../../prepared-api/admin/consignments/packing.js'
 import lots from '../../prepared-api/admin/lots.js'
 import lotsClearance from '../../prepared-api/admin/lots/clearance.js'
 import lotsReconcile from '../../prepared-api/admin/lots/reconcile.js'
@@ -174,6 +175,7 @@ const ROUTES = new Map([
   ['consignments/create', consignmentCreate],
   ['consignments/finalize', consignmentFinalize],
   ['consignments/scan', consignmentScan],
+  ['consignments/packing', consignmentPacking],
   ['lots', lots],
   ['lots/clearance', lotsClearance],
   ['lots/reconcile', lotsReconcile],
@@ -241,7 +243,7 @@ const ADMIN_POST_ROUTES = new Set([
   'product-intake/draft', 'product-intake/evidence', 'product-intake/evidence-cleanup', 'product-intake/inventory',
   'product-intake/publication', 'product-intake/step',
   'consignments/add-line', 'consignments/advance', 'consignments/create',
-  'consignments/finalize', 'consignments/scan',
+  'consignments/finalize', 'consignments/scan', 'consignments/packing',
   'lots/clearance', 'lots/reconcile',
   'coupons/archive', 'coupons/create', 'coupons/state',
   'catalog-import/preview',

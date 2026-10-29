@@ -1,0 +1,21 @@
+{
+  "project": "pixplcjqivlfflickobf",
+  "url": "https://pixplcjqivlfflickobf.supabase.co",
+  "observedAt": "2026-10-29T09:35:06.651Z",
+  "readOnly": true,
+  "scope": "Function definitions only, not row data, secret values or full captured schema",
+  "functions": [
+    {
+      "identity": "execute_admin_consignment_command_v1(text,bigint,uuid,uuid,text,text)",
+      "sha256": "1e69741c4bbe36a6155213cf2e7c0ee0e9376fa50721cc169983aa7458898370"
+    },
+    {
+      "identity": "generate_k2_sku_internal()",
+      "sha256": "cb70c4aa6326c21cfe4f2748b2d56ff7876c27a8530556c5fe9cd8f8ef1db92c"
+    },
+    {
+      "identity": "k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)",
+      "sha256": "02375ce8b81857b78b96c8f467231fde4f4b7fc80b1bb2f8466235791f65e383"
+    }
+  ]
+}

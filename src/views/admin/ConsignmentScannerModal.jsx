@@ -19,7 +19,7 @@ function confirmScan(stage) {
   if (navigator.vibrate) navigator.vibrate(50)
 }
 
-export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, onClose, onDone }) {
+export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, onClose, onDone, acceptQueued = false, contextLabel = '' }) {
   const [manualCode, setManualCode] = useState('')
   const [lastScanned, setLastScanned] = useState(null)
   const [error, setError] = useState('')
@@ -38,16 +38,20 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
     scanned: items.reduce((sum, item) => sum + Number(isMilan ? item.italy_packed_qty : item.manila_scanned_qty || 0), 0),
   }), [items, isMilan])
 
-  const processScan = useCallback(async rawCode => {
+  const processScan = useCallback(async (rawCode, source = 'camera') => {
     const code = String(rawCode || '').trim()
     if (!code || busyRef.current) return null
     const now = Date.now()
-    if (lastReadRef.current.code === code && now - lastReadRef.current.at < 1200) return null
+    if (source === 'camera') {
+      const duplicate = lastReadRef.current.code === code && now - lastReadRef.current.at < 1200
+      // Keep observing stationary frames so an unmoved barcode never rearms.
+      lastReadRef.current = { code, at: now }
+      if (duplicate) return null
+    }
     busyRef.current = true; setProcessing(true); setError('')
     try {
       const updated = await onScan(code, activeItemId || null)
       if (!updated) throw new Error('The scan was not recorded. Try again.')
-      lastReadRef.current = { code, at: Date.now() }
       setLastScanned(updated)
       confirmScan(stage)
       return updated
@@ -89,7 +93,7 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
 
   const submitManual = async event => {
     event.preventDefault()
-    const recorded = await processScan(manualCode)
+    const recorded = await processScan(manualCode, 'keyboard')
     if (recorded) setManualCode('')
   }
 
@@ -98,7 +102,7 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
   const accentBorder = isMilan ? 'border-crimson/70' : 'border-forest/70'
   const accentPanelBorder = isMilan ? 'border-crimson/40' : 'border-forest/40'
   const title = isMilan ? 'Milan packing scan' : 'Manila arrival recount'
-  const description = isMilan
+  const description = acceptQueued ? `Current box and lot: ${contextLabel}. Move the barcode out of view between identical items. A beep means saved for confirmation; the packing screen shows confirmed counts.` : isMilan
     ? 'Scan every expected unit into its manifest line. Packing cannot close until the expected count is complete.'
     : 'Scan every physical unit again on arrival. Inventory changes only after discrepancy review and finalization.'
 
@@ -110,7 +114,7 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
     </header>
 
     <div className="grid shrink-0 grid-cols-[1fr_auto] items-center gap-4 border-b border-adm-line bg-adm-sunken px-4 py-3">
-      <div><p className="text-xs font-bold uppercase tracking-wider text-white/40">Count progress</p><p className="mt-0.5 font-mono text-lg font-bold"><span className={accentText}>{totals.scanned}</span> / {totals.target} units</p></div>
+      <div><p className="text-xs font-bold uppercase tracking-wider text-white/70">{acceptQueued ? 'Continuous box scanning' : 'Count progress'}</p><p className="mt-0.5 font-mono text-lg font-bold">{acceptQueued ? 'Return to packing for confirmed totals' : <><span className={accentText}>{totals.scanned}</span> / {totals.target} units</>}</p></div>
       <button onClick={onDone || onClose} disabled={processing} className={`min-h-11 rounded-adm-sm px-4 text-sm font-bold disabled:opacity-40 ${accentBg}`}>{isMilan ? 'Done scanning' : 'Review counts'}</button>
     </div>
 
@@ -118,7 +122,7 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
       <div id={readerId} className="h-full max-h-[440px] w-full max-w-2xl overflow-hidden rounded-adm border border-adm-line" />
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center"><div className={`flex h-44 w-72 items-end justify-center rounded-adm border-2 border-dashed p-3 ${accentBorder}`}><span className="rounded bg-black/75 px-2 py-1 text-xs font-bold uppercase tracking-wider text-white/70">Align one barcode</span></div></div>
       <p aria-live="polite" className="absolute left-4 top-4 rounded-adm-sm bg-black/75 px-2 py-1 text-xs text-white/60">{cameraNote}</p>
-      {lastScanned && <div className={`absolute inset-x-4 bottom-4 flex items-center justify-between gap-3 rounded-adm border bg-adm-surface/95 p-3 shadow-adm-float ${accentPanelBorder}`}><div className="flex min-w-0 items-center gap-2"><CheckIcon size={17} className={`shrink-0 ${accentText}`} /><div className="min-w-0"><p className="text-xs font-bold uppercase tracking-wider text-white/40">Recorded</p><p className="truncate text-sm font-semibold">{lastScanned.name || lastScanned.sku}</p></div></div><p className="shrink-0 font-mono text-sm font-bold">{isMilan ? lastScanned.italy_packed_qty : lastScanned.manila_scanned_qty} / {isMilan ? lastScanned.expected_qty : lastScanned.italy_packed_qty}</p></div>}
+      {lastScanned && <div className={`absolute inset-x-4 bottom-4 flex flex-wrap items-center justify-between gap-3 rounded-adm border bg-adm-surface/95 p-3 shadow-adm-float ${accentPanelBorder}`}><div className="flex min-w-0 items-center gap-2"><CheckIcon size={17} className={`shrink-0 ${accentText}`} /><div className="min-w-0"><p className="text-xs font-bold uppercase tracking-wider text-white/70">{acceptQueued ? 'Saved request' : 'Recorded'}</p><p className="truncate text-sm font-semibold">{lastScanned.name || lastScanned.sku}</p></div></div><p className="shrink-0 font-mono text-sm font-bold">{acceptQueued ? 'Check confirmed totals in packing' : <>{isMilan ? lastScanned.italy_packed_qty : lastScanned.manila_scanned_qty} / {isMilan ? lastScanned.expected_qty : lastScanned.italy_packed_qty}</>}</p></div>}
     </div>
 
     <footer className="shrink-0 space-y-3 border-t border-adm-line bg-adm-surface p-4">

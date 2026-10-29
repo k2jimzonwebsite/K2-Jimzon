@@ -14,7 +14,7 @@ const ADMIN_COMMAND_ROUTES = Object.freeze({
   pasabuy: new Set(['transition', 'quote']),
   'product-intake': new Set(['session', 'step', 'draft', 'inventory', 'publication']),
   'product-knowledge': new Set(['save']),
-  consignments: new Set(['create', 'add-line', 'scan', 'advance', 'finalize']),
+  consignments: new Set(['create', 'add-line', 'scan', 'advance', 'finalize', 'packing']),
   lots: new Set(['reconcile', 'clearance']),
   coupons: new Set(['create', 'state', 'archive']),
   delivery: new Set(['quote', 'courier', 'courier-state', 'locality', 'cost-publish', 'source-state', 'customer-rates', 'express-quote']),
@@ -35,6 +35,17 @@ const ERROR_MESSAGES = {
   INVALID_CREDENTIALS: 'Invalid email or password.',
   INVALID_CREDENTIAL_FORMAT: 'Enter a valid staff email and password.',
   MFA_CODE_INVALID: 'Enter the 6-digit code from your authenticator app.',
+  PACKING_REVIEW_STALE: 'Packing changed after you opened this review. Dismiss this refused attempt, review current counts and try again.',
+  PACKING_CLOSED: 'This shipment is cancelled or packing has closed. Review its current status; this fresh count was refused.',
+  PACKING_ITEM_REMOVED: 'This line was removed from packing. Restore it explicitly before counting more units.',
+  PACKING_COUNT_INVALID: 'The packed count cannot go below zero or exceed 100,000 units.',
+  PACKING_VARIANCE_REQUIRED: 'Review and acknowledge the difference from the planned quantity before dispatch.',
+  PACKING_IDENTITY_AMBIGUOUS: 'This barcode matches several products. Ask an administrator to resolve its identity before counting it.',
+  PACKING_BARCODE_REQUIRED: 'Use an actual barcode to create an unfinished Draft. An unknown internal SKU cannot identify a new product.',
+  PACKING_LOT_MISMATCH: 'The box, batch or expiry does not match this line. Review the correct physical lot before retrying.',
+  PACKING_DATE_INVALID: 'Enter the actual best-before date, from today through the next ten years.',
+  PACKING_EMPTY: 'Pack at least one physical unit before dispatching this shipment.',
+  STAFF_ACCOUNT_CHANGED: 'The staff account changed. Return to the original account to recover its saved packing requests.',
   MFA_VERIFICATION_FAILED: 'That authenticator code could not be verified.',
   MFA_ENROLLMENT_REQUIRED: 'This staff account must enroll an authenticator before it can sign in.',
   MFA_ALREADY_ENROLLED: 'An authenticator is already active. Return to sign-in and enter its code.',
@@ -716,6 +727,9 @@ export const addConsignmentLineBff = (payload, key) => consignmentCommand('add-l
 export const recordConsignmentScanBff = (payload, key) => consignmentCommand('scan', payload, key)
 export const advanceConsignmentBff = (payload, key) => consignmentCommand('advance', payload, key)
 export const finalizeConsignmentBff = (payload, key) => consignmentCommand('finalize', payload, key)
+export const commandConsignmentPackingBff = (payloadText, key, actorId) => adminRequest('/api/admin/consignments/packing', {
+  method: 'POST', bodyText: payloadText, expectedActorId: actorId, csrf: true, idempotencyKey: key,
+})
 
 export function getAdminLots(sku = '', signal) {
   return adminRequest(`/api/admin/lots?sku=${encodeURIComponent(sku)}`, { signal })

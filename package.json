@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "test:milan-packing": "node --test tests/consignment-packing-command.test.mjs tests/consignment-packing-recovery.test.mjs && playwright test --config=playwright.product-master.config.js tests/milan-packing-ui.spec.js",
+    "rehearse:milan-packing": "node scripts/rehearse-milan-packing.mjs",
     "test:product-families": "node --test tests/product-families.test.mjs tests/product-family-boundary.test.mjs tests/product-family-authorized-read.test.mjs && playwright test --config=playwright.product-families.config.js",
     "dev": "vite",
     "dev:admin": "vite --mode admin --port 5174",
@@ -103,7 +105,7 @@
     "verify:release": "npm test && npm run test:vercel-output && npm run build:storefront && npm run build:admin",
     "prebuild:storefront": "npm run prebuild",
     "prebuild:admin": "npm run prebuild",
-    "test": "npm run security:test-turnstile && npm run test:security-check-ui && npm run test:product-sku-merge && npm run test:product-families && npm run test:store-categories && npm run test:base && npm run test:mobile-moderation && npm run test:store-orientation && npm run test:storefront-ui && npm run test:storefront-recovery && npm run test:admin-ui && npm run test:payment-ui && npm run test:inbox-ui && npm run test:admin-product-master-ui && npm run test:admin-website-assignment-ui && npm run test:owner-count-close-ui && npm run test:customer-account-ui && npm run test:selling-surfaces && npm run test:order-receipt-direct && npm run test:workflow-api && npm run test:intake-ai-ui",
+    "test": "npm run security:test-turnstile && npm run test:security-check-ui && npm run test:product-sku-merge && npm run test:product-families && npm run test:store-categories && npm run test:milan-packing && npm run test:base && npm run test:mobile-moderation && npm run test:store-orientation && npm run test:storefront-ui && npm run test:storefront-recovery && npm run test:admin-ui && npm run test:payment-ui && npm run test:inbox-ui && npm run test:admin-product-master-ui && npm run test:admin-website-assignment-ui && npm run test:owner-count-close-ui && npm run test:customer-account-ui && npm run test:selling-surfaces && npm run test:order-receipt-direct && npm run test:workflow-api && npm run test:intake-ai-ui",
     "test:mobile-moderation": "playwright test --config=playwright.api.config.js tests/mobile-store-moderation-pwa-contract.spec.js",
     "test:storefront-recovery": "playwright test --config=playwright.storefront-recovery.config.js",
     "test:workflow-api": "playwright test --config=playwright.workflow.config.js && npm run test:workflow-map",

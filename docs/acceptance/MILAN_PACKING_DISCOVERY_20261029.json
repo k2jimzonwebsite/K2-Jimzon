@@ -1,0 +1,134 @@
+{
+  "owner": "MAP-023",
+  "idea": "IDEA-20261029-06",
+  "status": "locally implemented and qualified; SQL unapplied; not deployed",
+  "providerWrites": false,
+  "businessRecordWrites": false,
+  "liveRelease": false,
+  "verification": {
+    "nodeFocused": {
+      "passed": 17,
+      "failed": 0
+    },
+    "existingApiContracts": {
+      "passed": 30,
+      "failed": 0
+    },
+    "renderedFixture": {
+      "passed": 6,
+      "failed": 0
+    },
+    "developmentExit": 0,
+    "adminBuildExit": 0,
+    "adminBudgetKb": 227.46,
+    "adminBudgetLimitKb": 300,
+    "sourceSecretFilesChecked": 4332,
+    "sourceSecretScanPassed": true,
+    "nativeCase": ".tools\\milan-packing-7149de76-cc29-4e82-aa20-540761f0eaa6",
+    "nativePassed": true,
+    "nativeScope": "Current captured verifier/wrapper/SKU allocator with real HMAC/synthetic key on minimal PostgreSQL17.11 schema; not full provider composition",
+    "realDeviceAcceptance": false
+  },
+  "reviews": {
+    "sequentialDesign": "APPROVED",
+    "codeAfterDismissRaceFix": "APPROVED",
+    "hmacIntegration": "APPROVED",
+    "journalSizeGuard": "APPROVED"
+  },
+  "sources": [
+    {
+      "file": "src/lib/consignmentPackingCommand.js",
+      "sha256": "309b630e9e99f955dfc05c11845dfb4fcbcd788efcf361b29af3e8a85aba0e48"
+    },
+    {
+      "file": "src/lib/consignmentPackingJournal.js",
+      "sha256": "29e55b4946927f36e17f15052f960ea2160363348198710ecafee3c4278d3ff6"
+    },
+    {
+      "file": "src/hooks/useConsignmentPacking.js",
+      "sha256": "705ef4d132e967f3bec6bab8f997ce8c9f82ed9fd4b9e55008522061643a51e1"
+    },
+    {
+      "file": "src/views/admin/ConsignmentPackingWorkspace.jsx",
+      "sha256": "5f62a6775eeae0754ee7c6427d3bc849579b14c1e23d06a7c76c3f17defc8e9d"
+    },
+    {
+      "file": "src/views/admin/ConsignmentManager.jsx",
+      "sha256": "21312c33e910324ddf910fae57f1286e249c79af33a077c61ad991687e96cd23"
+    },
+    {
+      "file": "src/views/admin/ConsignmentScannerModal.jsx",
+      "sha256": "2a083e25c0104117379974c2c508ec9aa936024bef4502efbb282f40efe2d7f3"
+    },
+    {
+      "file": "src/views/admin/InventoryGrid.jsx",
+      "sha256": "1fe192d4aff0fcf91b5d98eeee67446c48173867bcedc00a02781cb242c3561c"
+    },
+    {
+      "file": "server/admin-bff/consignments.js",
+      "sha256": "f3b25a54f6cb34c8736f589b087b7a81b728588369adc942808ec11b0c0cef54"
+    },
+    {
+      "file": "server/admin-bff/router.js",
+      "sha256": "e24d8b1b62f6b078c68ef9be7cae67e01df97c1ce4867c526af900aac2f91d73"
+    },
+    {
+      "file": "prepared-api/admin/consignments/packing.js",
+      "sha256": "8dc45e82c74d3a3e33d48e02e57660fdb1ca9c845225349a33639dc20c48cd93"
+    },
+    {
+      "file": "prepared-api/admin/products.js",
+      "sha256": "1ac9a65479e3818999dff7f57f59e811a4bddb77f128900993d90b4168bdeca6"
+    },
+    {
+      "file": "src/services/adminBffService.js",
+      "sha256": "2169781b54786205cd3e987eeb357c237b4f3b95990d86ff5739e0ee305f1e7d"
+    },
+    {
+      "file": "supabase/migrations/20261029_milan_packing_workflow.sql",
+      "sha256": "377dc9b1cf1c6ffb4a7d838cac3d15d428c0639e36bfff7398b2b539cc57f4ca"
+    },
+    {
+      "file": "supabase/tests/milan_packing_bootstrap.sql",
+      "sha256": "545394e8ba6e774ed0d5d0296aa36466aaac27b8eee0b68b70c72a58a15aeab2"
+    },
+    {
+      "file": "supabase/tests/milan_packing_workflow.sql",
+      "sha256": "8676593d3c4df81d91199b3d6f6d480d4fb47a79eef5f9f7852bd37c6a51e1b9"
+    },
+    {
+      "file": "scripts/rehearse-milan-packing.mjs",
+      "sha256": "73a9960a91eb1df77ce485e981d42cf7839129d8ea0a2862f453e344f789e662"
+    },
+    {
+      "file": "tests/consignment-packing-command.test.mjs",
+      "sha256": "5519ad0efc8c4686251396342541d1cd41d8aae5dd0116eb037e673e9bd44348"
+    },
+    {
+      "file": "tests/consignment-packing-recovery.test.mjs",
+      "sha256": "19bb1ec1097cdb9dd04b5a81b296cf97d462ad151939c80efcd9c79da1a65555"
+    },
+    {
+      "file": "tests/milan-packing-ui.spec.js",
+      "sha256": "fb1a21623c8cf1356b44ce64beb25db7d1319f70d875705dec092ef509b54760"
+    },
+    {
+      "file": "tests/fixtures/milan-packing-harness.jsx",
+      "sha256": "b1148b38e6aebf853504bbbd7677ee60276a476b706cd3a48e24d478b0d3360a"
+    },
+    {
+      "file": "tests/fixtures/milan-packing-harness.html",
+      "sha256": "ed50acd7d096c3eaccc62de29bd2e2108c17214145d1efd01de8ceab5476a016"
+    },
+    {
+      "file": "tests/admin-product-read-taxonomy.test.mjs",
+      "sha256": "74eaef972fa45bc94f872c170817c7c4cb9e42416ed788d630c0569e9b56a6d0"
+    },
+    {
+      "file": "package.json",
+      "sha256": "ab9210e1a80d5986e9a8787dc3319995f48edd1e1b5c254d2bf745d15edd501d"
+    }
+  ],
+  "remaining": "Only MASTER_ACTION_PLAN.md MAP-023; release procedure docs/runbooks/MILAN_PACKING_RELEASE_RUNBOOK.md",
+  "recovery": "Scoped local source revert before activation, preserving all journals/unrelated work; after feature data exists prefer forward repair and exact separately authorized conservation/restore proof."
+}

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { readAdminProducts } from '../prepared-api/admin/products.js'
 
 const assigned = {
-  sku: 'synthetic-assigned', name: 'Synthetic assigned product', status: 'Draft',
+  sku: 'synthetic-assigned', name: 'Synthetic assigned product', status: 'Draft', is_human_reviewed: true,
   brand_id: '11111111-1111-4111-8111-111111111111',
   category_id: '22222222-2222-4222-8222-222222222222',
   categories: { name: 'Pasta' },
@@ -39,6 +39,12 @@ test('protected catalog preserves canonical assigned and nullable unassigned tax
   assert.deepEqual(result.products.map(row => ({ sku: row.sku, brand_id: row.brand_id, category_id: row.category_id })), [assigned, unassigned].map(({ sku, brand_id, category_id }) => ({ sku, brand_id, category_id })))
   assert.deepEqual(result.products.map(row => row.stock_available), [4, 0])
   assert.deepEqual(result.unavailable, [])
+})
+
+test('packing warnings use the canonical human-review flag instead of warning on every product', async () => {
+  const { products } = await readAdminProducts(client())
+  assert.equal(products[0].is_human_reviewed, true)
+  assert.equal(products[1].is_human_reviewed, false)
 })
 
 test('category filters can use the canonical name when no store label is assigned', async () => {

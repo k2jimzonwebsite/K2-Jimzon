@@ -1,0 +1,45 @@
+{
+  "project": "pixplcjqivlfflickobf",
+  "url": "https://pixplcjqivlfflickobf.supabase.co",
+  "observedAt": "2026-10-29T07:51:23.267Z",
+  "method": "GET",
+  "readOnly": true,
+  "config": {
+    "external_phone_enabled": false,
+    "sms_provider": "twilio",
+    "sms_autoconfirm": false,
+    "sms_max_frequency": 5,
+    "sms_otp_exp": 60,
+    "sms_otp_length": 6,
+    "hook_send_sms_enabled": false
+  },
+  "configuredCredentialFields": {
+    "sms_twilio_account_sid": false,
+    "sms_twilio_auth_token": false,
+    "sms_twilio_message_service_sid": false,
+    "sms_twilio_verify_account_sid": false,
+    "sms_twilio_verify_auth_token": false,
+    "sms_twilio_verify_message_service_sid": false,
+    "sms_messagebird_access_key": false,
+    "sms_vonage_api_key": false,
+    "sms_vonage_api_secret": false,
+    "sms_textlocal_api_key": false
+  },
+  "customSmsHookUriPresent": false,
+  "testPhoneOverridesPresent": false,
+  "localCredentialPresence": {
+    "TWILIO_ACCOUNT_SID": false,
+    "TWILIO_AUTH_TOKEN": false,
+    "TWILIO_API_KEY_SID": false,
+    "TWILIO_API_KEY_SECRET": false,
+    "TWILIO_VERIFY_SERVICE_SID": false,
+    "VONAGE_API_KEY": false,
+    "VONAGE_API_SECRET": false,
+    "MESSAGEBIRD_API_KEY": false,
+    "TEXTLOCAL_API_KEY": false
+  },
+  "smsSent": false,
+  "authChanged": false,
+  "secretsPrinted": false,
+  "limits": "Credential booleans and whitelisted non-secret fields only. No provider account, costs, deliverability, sender registration or actual SMS acceptance inspected."
+}

@@ -3,7 +3,7 @@ import { requireAdminProject, safeJson } from '../../server/admin-bff/security.j
 import { readAdminProductStock } from '../../server/admin-bff/product-stock.js'
 
 const PRODUCT_FIELDS = [
-  'sku', 'name', 'barcode', 'status', 'srp', 'wholesale_price', 'subcategory',
+  'sku', 'name', 'barcode', 'status', 'srp', 'wholesale_price', 'subcategory', 'is_human_reviewed',
   'primary_image_url', 'lifestyle_images', 'secondary_images', 'created_at', 'brand_id', 'category_id',
   'categories(name)',
 ].join(',')
@@ -19,6 +19,7 @@ export async function readAdminProducts(client) {
       name: product.name,
       barcode: product.barcode || null,
       status: product.status,
+      is_human_reviewed: product.is_human_reviewed === true,
       srp: Number(product.srp || 0),
       wholesale_price: Number(product.wholesale_price || 0),
       subcategory: product.subcategory || null,

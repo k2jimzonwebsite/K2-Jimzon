@@ -1,0 +1,12 @@
+{
+  "l": {
+    "code": 0,
+    "output": "10000000-0000-4000-8000-000000000001\r\nAdmin\r\n{\"aal\":\"aal2\"}\r\nBEGIN\r\n{\"sku\": \"K2-SKU-000002\", \"itemId\": \"9d936117-1d72-44e9-b802-cd82b81a4cc6\", \"status\": \"Packing_Italy\", \"operation\": \"count\", \"consignmentId\": \"20000000-0000-4000-8000-000000000003\", \"italyPackedQty\": 1, \"packingRevision\": 2, \"historicalReceipt\": true}\r\nLOCK_HELD\r\n\r\nCOMMIT\r\n",
+    "errors": ""
+  },
+  "r": {
+    "code": 0,
+    "output": "10000000-0000-4000-8000-000000000001\r\nAdmin\r\n{\"aal\":\"aal2\"}\r\n{\"sku\": \"K2-SKU-000002\", \"itemId\": \"02db8b11-3037-47bf-9a4f-1b6eaccb734b\", \"status\": \"Packing_Italy\", \"operation\": \"count\", \"consignmentId\": \"20000000-0000-4000-8000-000000000004\", \"italyPackedQty\": 1, \"packingRevision\": 2, \"historicalReceipt\": true}\r\n",
+    "errors": ""
+  }
+}

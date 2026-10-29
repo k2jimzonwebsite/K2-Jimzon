@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { validatePackingCommand } from '../../src/lib/consignmentPackingCommand.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const DATE = /^\d{4}-\d{2}-\d{2}$/
@@ -45,6 +46,7 @@ function date(value, deferDateWindowToReceipt) {
 }
 
 export function validateConsignmentCommand(action, body, { deferDateWindowToReceipt = false } = {}) {
+  if (action === 'consignment_packing') return validatePackingCommand(body)
   if (action === 'consignment_create') {
     exactObject(body, ['manifestCode', 'shipmentReference'])
     return {
@@ -100,7 +102,7 @@ export function validateConsignmentCommand(action, body, { deferDateWindowToRece
 
 export async function readConsignmentData(client) {
   const { data, error } = await client.from('consignments')
-    .select('id,manifest_code,flight_number,departure_city,destination_city,status,packed_at,arrived_at,created_at,consignment_items(id,consignment_id,sku,batch_code,box_code,best_before_date,expected_qty,italy_packed_qty,manila_scanned_qty,status,created_at)')
+    .select('id,manifest_code,flight_number,departure_city,destination_city,status,packing_revision,packing_cancelled_at,packed_at,arrived_at,created_at,consignment_items(id,consignment_id,sku,batch_code,box_code,best_before_date,expected_qty,packing_count_only,packing_removed_at,italy_packed_qty,manila_scanned_qty,status,created_at)')
     .order('created_at', { ascending: false }).limit(100)
   if (error) throw new Error('CONSIGNMENTS_UNAVAILABLE')
   const consignments = data || []
@@ -122,6 +124,9 @@ export async function handleConsignmentCommand(req, res, action) {
   if (!UUID.test(idempotencyKey)) return safeJson(res, 400, { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } })
   const authorized = await authorizeAdminRequest(req, res, { csrf: true })
   if (!authorized) return undefined
+  if (action === 'consignment_packing' && req.headers['x-k2-actor-id'] && req.headers['x-k2-actor-id'] !== authorized.identity.userId) {
+    return safeJson(res, 409, { error: { code: 'STAFF_ACCOUNT_CHANGED' } })
+  }
   try {
     // Only signed SQL can distinguish a historical exact receipt from fresh
     // input. Its receipt lookup precedes the current Manila date window.
@@ -135,6 +140,9 @@ export async function handleConsignmentCommand(req, res, action) {
       if (providerCode.includes('K2_ADMIN_PAYLOAD_INVALID')) return safeJson(res, 400, { error: { code: 'REQUEST_INVALID' } })
       if (providerCode.includes('K2_ADMIN_COMMAND_IN_PROGRESS')) return safeJson(res, 409, { error: { code: 'COMMAND_IN_PROGRESS' } }, { 'Retry-After': '1' })
       if (providerCode.includes('K2_SCAN_CODE_MISMATCH')) return safeJson(res, 409, { error: { code: 'SCAN_CODE_MISMATCH' } })
+      for (const code of ['PACKING_REVIEW_STALE', 'PACKING_CLOSED', 'PACKING_ITEM_REMOVED', 'PACKING_COUNT_INVALID', 'PACKING_VARIANCE_REQUIRED', 'PACKING_IDENTITY_AMBIGUOUS', 'PACKING_BARCODE_REQUIRED', 'PACKING_LOT_MISMATCH', 'PACKING_DATE_INVALID', 'PACKING_EMPTY']) {
+        if (providerCode.includes(`K2_${code}`)) return safeJson(res, 409, { error: { code } })
+      }
       return safeJson(res, 503, { error: { code: 'CONSIGNMENT_COMMAND_UNAVAILABLE' } })
     }
     return safeJson(res, 200, { ok: true, result: data })

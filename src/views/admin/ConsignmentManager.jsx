@@ -5,6 +5,7 @@ import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { AlertIcon, BarcodeIcon, CheckIcon, MapIcon, PlaneIcon } from '../../components/ui/icons'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import ConsignmentScannerModal from './ConsignmentScannerModal'
+import ConsignmentPackingWorkspace from './ConsignmentPackingWorkspace'
 import DiscrepancyReconciliationModal from './DiscrepancyReconciliationModal'
 import FlightWorkflowDiagram from '../../components/admin/guides/FlightWorkflowDiagram'
 import {
@@ -14,7 +15,7 @@ import {
 } from '../../services/adminBffService'
 
 export default function ConsignmentManager() {
-  const { products } = useStore()
+  const { products, user, refreshProducts } = useStore()
   const secureConsignments = adminBffEnabled()
   const [manifest, setManifest] = useState(null)
   const [manifests, setManifests] = useState([])
@@ -236,7 +237,7 @@ export default function ConsignmentManager() {
       </div>
       <div className="mt-2 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <h2 className="font-sans text-2xl font-bold">Consignment receiving</h2>
+          <h2 className="font-sans text-2xl font-bold">{manifest?.status === 'Packing_Italy' ? 'Italy packing → Philippines receiving' : 'Consignment receiving'}</h2>
           <p className="mt-1 max-w-[65ch] text-[15px] leading-relaxed text-white/75">Track every flight, box, batch, and unit scan from Milan packing through Manila arrival recount. Supplier buying prices stay on the purchase order.</p>
         </div>
         <button type="button" onClick={() => setShowCreate(true)} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create manifest</button>
@@ -255,9 +256,9 @@ export default function ConsignmentManager() {
     {!manifest ? <div className="rounded-adm border border-dashed border-adm-line bg-adm-surface p-12 text-center"><PlaneIcon size={28} className="mx-auto text-white/35" /><p className="mt-3 text-[15px] font-semibold text-white/85">No consignment manifests found</p><p className="mt-1 text-sm leading-relaxed text-white/65">Create a real manifest when the next packing cycle begins.</p></div> : <>
       <section data-tour="flight-manifest" className="rounded-adm border border-adm-line bg-adm-surface p-5">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start"><div><p className="font-mono text-xs font-bold text-white">{manifest.manifest_code}</p><h2 className="mt-1 font-sans text-xl font-bold">{manifest.flight_number}</h2><p className="mt-1 text-sm text-white/50">{manifest.departure_city} → {manifest.destination_city}</p></div><span className="w-fit rounded-full border border-blue/30 bg-blue/10 px-3 py-1.5 text-xs font-semibold text-blue">{manifest.status.replaceAll('_', ' ')}</span></div>
-        <div className="mt-5 grid gap-3 sm:grid-cols-3"><Metric label="Milan packed" value={packed} /><Metric label="Manila scanned" value={scanned} /><Metric label="Difference" value={missing} warn={missing > 0} /></div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3"><Metric label="Milan packed" value={packed} /><Metric label="Manila scanned" value={scanned} /><Metric label={manifest.status === 'Packing_Italy' ? 'Packing lines' : 'Difference'} value={manifest.status === 'Packing_Italy' ? items.filter(i=>!i.packing_removed_at).length : missing} warn={manifest.status !== 'Packing_Italy' && missing > 0} /></div>
         <div className="mt-5 flex flex-wrap gap-2 border-t border-adm-line pt-5">
-          {manifest.status === 'Packing_Italy' && <>
+          {manifest.status === 'Packing_Italy' && !secureConsignments && <>
             <button onClick={() => setShowLine(true)} className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-4 text-sm font-semibold">Add manifest SKU</button>
             <button data-tour="scan-consignment-btn" disabled={working || items.length === 0} onClick={() => setScannerStage('milan')} className="inline-flex min-h-11 items-center gap-2 rounded-adm-sm bg-crimson px-4 text-sm font-bold disabled:opacity-40"><BarcodeIcon size={16} /> Start Milan scan</button>
             <button disabled={working || items.length === 0} onClick={() => setAdvanceTarget('In_Transit')} className="min-h-11 rounded-adm-sm bg-blue px-4 text-sm font-bold active:scale-[0.98] disabled:opacity-40">Close packing and mark in transit</button>
@@ -270,11 +271,14 @@ export default function ConsignmentManager() {
         </div>
       </section>
 
-      <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
+      {manifest.status === 'Packing_Italy' && secureConsignments && <ConsignmentPackingWorkspace key={manifest.id} manifest={manifest} products={products || []} actorId={user?.id || user?.userId}
+        onRefresh={async () => { await load(); await refreshProducts?.() }} />}
+
+      {(manifest.status !== 'Packing_Italy' || !secureConsignments) && <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
         <div className="flex items-center justify-between border-b border-adm-line bg-adm-sunken px-4 py-3"><h3 className="text-sm font-semibold">Manifest box and lot lines</h3><span className="text-xs text-white/45">{items.length} lines</span></div>
         {items.length > 0 && <div className="flex gap-2 overflow-x-auto border-b border-adm-line px-4 py-3">{items.map(item => <div key={`box-${item.id}`} className="min-w-48 rounded-adm-sm border border-adm-line bg-white/[0.03] px-3 py-2"><p className="font-mono text-xs font-bold text-blue">{item.box_code}</p><p className="mt-1 text-xs text-white/50">{item.batch_code} · {item.sku}</p></div>)}</div>}
         {items.length === 0 ? <p className="p-8 text-center text-sm text-white/45">No SKUs on this manifest yet.</p> : <><div className="hidden overflow-x-auto lg:block"><table className="w-full min-w-[820px] text-left text-sm"><thead className="bg-white/[0.03] text-xs uppercase tracking-wider text-white/45"><tr><th className="px-4 py-3">SKU / product</th><th className="px-4 py-3">Box / batch</th><th className="px-4 py-3">Best before</th><th className="px-4 py-3 text-center">Expected</th><th className="px-4 py-3 text-center">Milan packed</th><th className="px-4 py-3 text-center">Manila received</th><th className="px-4 py-3 text-right">Record scan</th></tr></thead><tbody className="divide-y divide-adm-line">{items.map(item => <tr key={item.id}><td className="px-4 py-3"><p className="font-mono text-xs font-bold">{item.sku}</p><p className="mt-0.5 text-xs text-white/45">{bySku[item.sku]?.name || item.sku}</p></td><td className="px-4 py-3 font-mono text-xs text-white/60"><p className="font-bold text-white/80">{item.box_code}</p><p className="mt-0.5 text-white/50">{item.batch_code}</p></td><td className="px-4 py-3 text-white/60">{item.best_before_date}</td><td className="px-4 py-3 text-center font-semibold">{item.expected_qty}</td><td className="px-4 py-3 text-center font-semibold">{item.italy_packed_qty}</td><td className="px-4 py-3 text-center font-semibold text-forest">{item.manila_scanned_qty}</td><td className="px-4 py-3 text-right">{manifest.status === 'Packing_Italy' ? <button disabled={working || item.italy_packed_qty >= item.expected_qty} onClick={() => scan(item.sku, 'milan', item.id).catch(() => {})} className="min-h-11 rounded-adm-sm border border-blue/35 bg-blue/10 px-3 text-xs font-semibold text-blue disabled:opacity-35">+1 Milan packed</button> : manifest.status === 'Arrived_Manila' ? <button disabled={working || item.manila_scanned_qty >= item.italy_packed_qty} onClick={() => scan(item.sku, 'manila', item.id).catch(() => {})} className="min-h-11 rounded-adm-sm border border-forest/35 bg-forest/10 px-3 text-xs font-semibold text-forest disabled:opacity-35">+1 Manila received</button> : <span className="text-xs text-white/35">Scanning closed</span>}</td></tr>)}</tbody></table></div><ul className="divide-y divide-adm-line lg:hidden">{items.map(item => <li key={item.id} className="space-y-2 p-4"><div className="flex items-start justify-between gap-3"><div><p className="font-mono text-xs font-bold text-blue">{item.box_code}</p><p className="mt-0.5 font-mono text-xs font-bold">{item.sku}</p><p className="mt-0.5 text-xs text-white/45">{bySku[item.sku]?.name || item.sku}</p></div><div className="text-right text-xs text-white/55"><p>Lot <span className="font-mono text-white/75">{item.batch_code}</span></p><p className="mt-0.5">Best before {item.best_before_date}</p></div></div><dl className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-white/55"><div className="flex gap-1"><dt>Expected</dt><dd className="font-semibold text-white">{item.expected_qty}</dd></div><div className="flex gap-1"><dt>Milan packed</dt><dd className="font-semibold text-white">{item.italy_packed_qty}</dd></div><div className="flex gap-1"><dt>Manila received</dt><dd className="font-semibold text-forest">{item.manila_scanned_qty}</dd></div></dl>{manifest.status === 'Packing_Italy' ? <button disabled={working || item.italy_packed_qty >= item.expected_qty} onClick={() => scan(item.sku, 'milan', item.id).catch(() => {})} className="min-h-11 w-full rounded-adm-sm border border-blue/35 bg-blue/10 px-3 text-xs font-semibold text-blue disabled:opacity-35">+1 Milan packed · {item.box_code}</button> : manifest.status === 'Arrived_Manila' ? <button disabled={working || item.manila_scanned_qty >= item.italy_packed_qty} onClick={() => scan(item.sku, 'manila', item.id).catch(() => {})} className="min-h-11 w-full rounded-adm-sm border border-forest/35 bg-forest/10 px-3 text-xs font-semibold text-forest disabled:opacity-35">+1 Manila received · {item.box_code}</button> : <span className="text-xs text-white/35">Scanning closed</span>}</li>)}</ul></>}
-      </section>
+      </section>}
     </>}
 
     <ConsignmentScannerModal

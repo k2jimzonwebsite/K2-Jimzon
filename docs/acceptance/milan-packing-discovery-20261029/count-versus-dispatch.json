@@ -1,0 +1,13 @@
+{
+  "scope": "Disposable minimal schema with actual existing HMAC verifier; not full provider composition",
+  "a": {
+    "code": 0,
+    "output": "10000000-0000-4000-8000-000000000001\r\nAdmin\r\n{\"aal\":\"aal2\"}\r\nBEGIN\r\n{\"sku\": \"K2-SKU-000001\", \"itemId\": \"1da0278b-a346-43d1-a48d-4890186ac4dc\", \"status\": \"Packing_Italy\", \"operation\": \"count\", \"consignmentId\": \"20000000-0000-4000-8000-000000000002\", \"italyPackedQty\": 2, \"packingRevision\": 3, \"historicalReceipt\": true}\r\nLOCK_HELD\r\n\r\nCOMMIT\r\n",
+    "errors": ""
+  },
+  "b": {
+    "code": 3,
+    "output": "10000000-0000-4000-8000-000000000001\r\nAdmin\r\n{\"aal\":\"aal2\"}\r\n",
+    "errors": "ERROR:  K2_PACKING_REVIEW_STALE\r\nCONTEXT:  PL/pgSQL function k2_private.apply_consignment_packing_v1(uuid,jsonb) line 15 at RAISE\r\nPL/pgSQL function public.execute_admin_consignment_command_v1(text,bigint,uuid,uuid,text,text) line 71 at assignment\r\nPL/pgSQL function test_pack(jsonb,uuid) line 6 at assignment\r\n"
+  }
+}
