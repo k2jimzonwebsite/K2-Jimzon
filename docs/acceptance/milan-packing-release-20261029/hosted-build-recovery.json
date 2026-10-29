@@ -1,0 +1,137 @@
+{
+  "commit": "b796c088ad31d7b9482bacd7be6fd32c62c75a85",
+  "adminFirstFailure": {
+    "id": "dpl_FW7dag4KPnjP6iFkSRkHhsGpzhZ4",
+    "name": "k2-jimzon-admin",
+    "url": "k2-jimzon-admin-8ouhp85yj-k2-jimzon.vercel.app",
+    "type": "LAMBDAS",
+    "state": "ERROR",
+    "createdAt": 1793274562832,
+    "creator": {
+      "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+      "username": "k2jimzonwebsite"
+    },
+    "project": {
+      "id": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "name": "k2-jimzon-admin",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "main",
+      "githubCommitSha": "b796c088ad31d7b9482bacd7be6fd32c62c75a85",
+      "githubCommitMessage": "docs(release): Qualify Milan packing production promotion\n\nRecord the exact K2 migration, conserved data, backup restoration and complete release coverage. Correct the Admin route count for the new packing command. Keep source promotion and real scanner acceptance distinct.\n\nRefs MAP-023 / IDEA-2...",
+      "githubRepo": "K2-Jimzon",
+      "githubOrg": "k2jimzonwebsite"
+    },
+    "alias": [
+      "k2-jimzon-admin-k2-jimzon.vercel.app",
+      "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1793274629894,
+    "ready": 1793274705755,
+    "readyState": "ERROR",
+    "source": "git",
+    "errorCode": "BUILD_UTILS_SPAWN_1",
+    "errorMessage": "Command \"npm run build:vercel-output:admin\" exited with 1",
+    "errorStep": "buildStep"
+  },
+  "storefront": {
+    "id": "dpl_n5dpea6UeHnYXuWTGWMUt2YaeH6B",
+    "name": "k2-jimzon",
+    "url": "k2-jimzon-ahaviz2fj-k2-jimzon.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1793274562803,
+    "creator": {
+      "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+      "username": "k2jimzonwebsite"
+    },
+    "project": {
+      "id": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "name": "k2-jimzon",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "main",
+      "githubCommitSha": "b796c088ad31d7b9482bacd7be6fd32c62c75a85",
+      "githubCommitMessage": "docs(release): Qualify Milan packing production promotion\n\nRecord the exact K2 migration, conserved data, backup restoration and complete release coverage. Correct the Admin route count for the new packing command. Keep source promotion and real scanner acceptance distinct.\n\nRefs MAP-023 / IDEA-2...",
+      "githubRepo": "K2-Jimzon",
+      "githubOrg": "k2jimzonwebsite"
+    },
+    "alias": [
+      "www.k2jimzon.com",
+      "k2-jimzon-vert.vercel.app",
+      "k2jimzon.com",
+      "k2-jimzon-k2-jimzon.vercel.app",
+      "k2-jimzon-git-main-k2-jimzon.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1793274563884,
+    "ready": 1793274628528,
+    "readyState": "READY",
+    "source": "git",
+    "aliasError": null
+  },
+  "adminRetry": {
+    "id": "dpl_AKg9Muja4mdWy9rvMME2W93iWpoF",
+    "name": "k2-jimzon-admin",
+    "url": "k2-jimzon-admin-4p67s8a8h-k2-jimzon.vercel.app",
+    "type": "LAMBDAS",
+    "state": "INITIALIZING",
+    "createdAt": 1793274812616,
+    "creator": {
+      "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+      "username": "k2jimzonwebsite"
+    },
+    "project": {
+      "id": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "name": "k2-jimzon-admin",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "main",
+      "githubCommitSha": "b796c088ad31d7b9482bacd7be6fd32c62c75a85",
+      "githubCommitMessage": "docs(release): Qualify Milan packing production promotion\n\nRecord the exact K2 migration, conserved data, backup restoration and complete release coverage. Correct the Admin route count for the new packing command. Keep source promotion and real scanner acceptance distinct.\n\nRefs MAP-023 / IDEA-2...",
+      "githubRepo": "K2-Jimzon",
+      "githubOrg": "k2jimzonwebsite"
+    },
+    "alias": [
+      "k2-jimzon-admin-k2-jimzon.vercel.app",
+      "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1793274812616,
+    "readyState": "INITIALIZING",
+    "source": "redeploy"
+  },
+  "reason": {
+    "test": "stable slow hold retries progress through complete initial, submit and fresh confirmation scans",
+    "file": "tests/customer-privacy-hold-coordinator.test.mjs:245",
+    "error": "AUTHORITY_PENDING",
+    "hostedFirstBuild": {
+      "passed": 147,
+      "failed": 1
+    },
+    "focusedUnchangedRerun": {
+      "passed": 1,
+      "failed": 0
+    },
+    "sourceOrAssertionChanged": false
+  },
+  "freshRetryReadiness": {
+    "verified": 8,
+    "owner": 2,
+    "connector": 3,
+    "failed": 0
+  }
+}

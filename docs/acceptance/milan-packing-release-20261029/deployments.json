@@ -1,0 +1,81 @@
+{
+  "admin": {
+    "id": "dpl_AKg9Muja4mdWy9rvMME2W93iWpoF",
+    "name": "k2-jimzon-admin",
+    "url": "k2-jimzon-admin-4p67s8a8h-k2-jimzon.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1793274812616,
+    "creator": {
+      "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+      "username": "k2jimzonwebsite"
+    },
+    "project": {
+      "id": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "name": "k2-jimzon-admin",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "main",
+      "githubCommitSha": "b796c088ad31d7b9482bacd7be6fd32c62c75a85",
+      "githubCommitMessage": "docs(release): Qualify Milan packing production promotion\n\nRecord the exact K2 migration, conserved data, backup restoration and complete release coverage. Correct the Admin route count for the new packing command. Keep source promotion and real scanner acceptance distinct.\n\nRefs MAP-023 / IDEA-2...",
+      "githubRepo": "K2-Jimzon",
+      "githubOrg": "k2jimzonwebsite"
+    },
+    "alias": [
+      "admin.k2jimzon.com",
+      "k2-jimzon-admin-seven.vercel.app",
+      "k2-jimzon-admin-k2-jimzon.vercel.app",
+      "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1793274842001,
+    "ready": 1793274906573,
+    "readyState": "READY",
+    "source": "redeploy",
+    "aliasError": null
+  },
+  "storefront": {
+    "id": "dpl_n5dpea6UeHnYXuWTGWMUt2YaeH6B",
+    "name": "k2-jimzon",
+    "url": "k2-jimzon-ahaviz2fj-k2-jimzon.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1793274562803,
+    "creator": {
+      "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+      "username": "k2jimzonwebsite"
+    },
+    "project": {
+      "id": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "name": "k2-jimzon",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "main",
+      "githubCommitSha": "b796c088ad31d7b9482bacd7be6fd32c62c75a85",
+      "githubCommitMessage": "docs(release): Qualify Milan packing production promotion\n\nRecord the exact K2 migration, conserved data, backup restoration and complete release coverage. Correct the Admin route count for the new packing command. Keep source promotion and real scanner acceptance distinct.\n\nRefs MAP-023 / IDEA-2...",
+      "githubRepo": "K2-Jimzon",
+      "githubOrg": "k2jimzonwebsite"
+    },
+    "alias": [
+      "www.k2jimzon.com",
+      "k2-jimzon-vert.vercel.app",
+      "k2jimzon.com",
+      "k2-jimzon-k2-jimzon.vercel.app",
+      "k2-jimzon-git-main-k2-jimzon.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1793274563884,
+    "ready": 1793274628528,
+    "readyState": "READY",
+    "source": "git",
+    "aliasError": null
+  }
+}

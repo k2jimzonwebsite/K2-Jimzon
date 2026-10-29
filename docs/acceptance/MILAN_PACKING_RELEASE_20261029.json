@@ -2,7 +2,7 @@
   "mapItem": "MAP-023",
   "ideaId": "IDEA-20261029-06",
   "runtimeCommit": "15de3db7c0c5d4da86b3c9bf5a0470481f1fc1bb",
-  "status": "exact-K2-migration-applied-full-release-coverage-passed-source-promotion-pending",
+  "status": "published-both-exact-K2-artifacts-host-verified-CI-green-physical-acceptance-open",
   "ownerReleaseRequest": "verify things and commit and push to live guthub and vercel. ensure you are pushing properly this account is a developer to that project which is k2jimzon.",
   "scope": "Publish the confirmed Milan packing feature, including its necessary exact additive packing migration on K2 only. No business fact, Auth, credential, paid SMS or deletion activation.",
   "github": {
@@ -43,7 +43,7 @@
     "boundedIndependentReview": "APPROVED"
   },
   "providerWrites": true,
-  "deployed": false,
+  "deployed": true,
   "realPhysicalScannerVerified": false,
   "preparedAt": "2026-10-29T10:11:12.698Z",
   "databaseApplication": {
@@ -109,8 +109,16 @@
       "sha256": "8a190da6bd0fc2ac30dd572332d6559bbcd35f27e0d262fbd12656006da5ea24"
     },
     {
+      "path": "docs/acceptance/milan-packing-release-20261029/ci-final.json",
+      "sha256": "71ada1e4697dfdafd780f67b3b8787173dd8405b8e34ae618a0188b05803cda1"
+    },
+    {
       "path": "docs/acceptance/milan-packing-release-20261029/conserved-table-digests.json",
       "sha256": "c55bc131ee815893a01584c8f7ffd7a4ea2c79c8d051d8f8c807b3f8857f4a28"
+    },
+    {
+      "path": "docs/acceptance/milan-packing-release-20261029/deployments.json",
+      "sha256": "0a7a871a913f10b891ddcd77da896c5e1fec3247159c509f2ec0aa8499eef88f"
     },
     {
       "path": "docs/acceptance/milan-packing-release-20261029/exact-packet-recovery-first-failure.json",
@@ -133,12 +141,24 @@
       "sha256": "21b818c593429f494ab54cceb65deb2baed09c8feccc78fd4cc1b6b499b28e3c"
     },
     {
+      "path": "docs/acceptance/milan-packing-release-20261029/focused-hosted-hold-timing.log",
+      "sha256": "8f4356b312180157b61785415604d27bd42ba20e70a69851de0708e145f2c5e8"
+    },
+    {
       "path": "docs/acceptance/milan-packing-release-20261029/focused-route-docs.log",
       "sha256": "160eddde0b93a13298ee1bb6740b55055fc0a122a5fddb09e1bfcc5f172f3057"
     },
     {
+      "path": "docs/acceptance/milan-packing-release-20261029/hosted-build-recovery.json",
+      "sha256": "e4aed96d0d13559cd8f2cdfb526fc1fd4c8a570451cf16f0fdcbcd04704e24f0"
+    },
+    {
       "path": "docs/acceptance/milan-packing-release-20261029/live-before.json",
       "sha256": "2128718d56303ef49ce123dee23b136331ac9f5d27d22d52256a22c9fa4c399a"
+    },
+    {
+      "path": "docs/acceptance/milan-packing-release-20261029/live-hosts.json",
+      "sha256": "35ebb6aa15d837da8ddb06cc192aa637e5f8b477be8cdbdd68d2fe232a453bb4"
     },
     {
       "path": "docs/acceptance/milan-packing-release-20261029/packet.json",
@@ -209,6 +229,10 @@
       "sha256": "e075334c9db5c3aa0b169cfa0e9146cd26ad3006e718088b43c182487885cb04"
     },
     {
+      "path": "docs/acceptance/milan-packing-release-20261029/restored-plaintext-cleanup.json",
+      "sha256": "00319fdb61b41a1e8a305b05c5092e2911a5d3aae20ff4c4a6678683b8026818"
+    },
+    {
       "path": "docs/acceptance/milan-packing-release-20261029/selling-remaining.log",
       "sha256": "e5b05245c5d31356feb66e13ff069ab078aa059957e16eceeb5190fb714bc90f"
     },
@@ -230,5 +254,133 @@
     "failed": 0,
     "connectorObservedSeparately": "Exact Vercel K2 projects successfully read after account switch"
   },
-  "evidenceNormalization": "Raw logs remain in ignored .tools; tracked copies normalize trailing whitespace/line endings. Conserved digest map is JSON-pretty-printed; semantic table/row/hash values retained."
+  "evidenceNormalization": "Raw logs remain in ignored .tools; tracked copies normalize trailing whitespace/line endings. Conserved digest map is JSON-pretty-printed; semantic table/row/hash values retained.",
+  "liveReleaseCommit": "b796c088ad31d7b9482bacd7be6fd32c62c75a85",
+  "deployments": {
+    "admin": {
+      "id": "dpl_AKg9Muja4mdWy9rvMME2W93iWpoF",
+      "name": "k2-jimzon-admin",
+      "url": "k2-jimzon-admin-4p67s8a8h-k2-jimzon.vercel.app",
+      "type": "LAMBDAS",
+      "state": "READY",
+      "createdAt": 1793274812616,
+      "creator": {
+        "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+        "username": "k2jimzonwebsite"
+      },
+      "project": {
+        "id": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+        "name": "k2-jimzon-admin",
+        "framework": null
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "b796c088ad31d7b9482bacd7be6fd32c62c75a85",
+        "githubCommitMessage": "docs(release): Qualify Milan packing production promotion\n\nRecord the exact K2 migration, conserved data, backup restoration and complete release coverage. Correct the Admin route count for the new packing command. Keep source promotion and real scanner acceptance distinct.\n\nRefs MAP-023 / IDEA-2...",
+        "githubRepo": "K2-Jimzon",
+        "githubOrg": "k2jimzonwebsite"
+      },
+      "alias": [
+        "admin.k2jimzon.com",
+        "k2-jimzon-admin-seven.vercel.app",
+        "k2-jimzon-admin-k2-jimzon.vercel.app",
+        "k2-jimzon-admin-git-main-k2-jimzon.vercel.app"
+      ],
+      "target": "production",
+      "regions": [
+        "iad1"
+      ],
+      "buildingAt": 1793274842001,
+      "ready": 1793274906573,
+      "readyState": "READY",
+      "source": "redeploy",
+      "aliasError": null
+    },
+    "storefront": {
+      "id": "dpl_n5dpea6UeHnYXuWTGWMUt2YaeH6B",
+      "name": "k2-jimzon",
+      "url": "k2-jimzon-ahaviz2fj-k2-jimzon.vercel.app",
+      "type": "LAMBDAS",
+      "state": "READY",
+      "createdAt": 1793274562803,
+      "creator": {
+        "uid": "1LoWsj7SnXbFUlIDBgazTrj7",
+        "username": "k2jimzonwebsite"
+      },
+      "project": {
+        "id": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+        "name": "k2-jimzon",
+        "framework": null
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "b796c088ad31d7b9482bacd7be6fd32c62c75a85",
+        "githubCommitMessage": "docs(release): Qualify Milan packing production promotion\n\nRecord the exact K2 migration, conserved data, backup restoration and complete release coverage. Correct the Admin route count for the new packing command. Keep source promotion and real scanner acceptance distinct.\n\nRefs MAP-023 / IDEA-2...",
+        "githubRepo": "K2-Jimzon",
+        "githubOrg": "k2jimzonwebsite"
+      },
+      "alias": [
+        "www.k2jimzon.com",
+        "k2-jimzon-vert.vercel.app",
+        "k2jimzon.com",
+        "k2-jimzon-k2-jimzon.vercel.app",
+        "k2-jimzon-git-main-k2-jimzon.vercel.app"
+      ],
+      "target": "production",
+      "regions": [
+        "iad1"
+      ],
+      "buildingAt": 1793274563884,
+      "ready": 1793274628528,
+      "readyState": "READY",
+      "source": "git",
+      "aliasError": null
+    }
+  },
+  "hostVerification": {
+    "observedAt": "2026-10-29T11:56:18.880Z",
+    "storefrontHttp": 200,
+    "adminHttp": 200,
+    "targetsSeparate": true,
+    "adminPackingBundlePresent": true,
+    "anonymousAdminSessionStatus": 401
+  },
+  "ci": {
+    "runId": 40868342217,
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40868342217",
+    "jobs": [
+      {
+        "name": "critical-sql-behavior",
+        "conclusion": "success",
+        "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40868342217/job/123428690778"
+      },
+      {
+        "name": "security-check-regression",
+        "conclusion": "success",
+        "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40868342217/job/123428691162"
+      },
+      {
+        "name": "build-and-smoke",
+        "conclusion": "success",
+        "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40868342217/job/123428691204"
+      }
+    ]
+  },
+  "operationalAcceptance": {
+    "authenticatedHostPacking": false,
+    "actualCousinScanner": false,
+    "realDispatchAndIndependentManilaReceipt": false,
+    "noProductionTestRecordsCreated": true
+  },
+  "hostedBuildRecovery": {
+    "firstAdminDeployment": "dpl_FW7dag4KPnjP6iFkSRkHhsGpzhZ4",
+    "status": "ERROR",
+    "failure": "Existing privacy hold coordinator timing test AUTHORITY_PENDING;147pass/1fail",
+    "focusedUnchangedRerun": "1pass/0fail",
+    "retry": "dpl_AKg9Muja4mdWy9rvMME2W93iWpoF",
+    "retryState": "READY",
+    "sourceAndAssertionsUnchanged": true
+  }
 }
