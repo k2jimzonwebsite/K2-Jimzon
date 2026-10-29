@@ -1,5 +1,8 @@
 # MAP-019 profile and saved-address release
 
+**29 October owner acceptance:** Fresh email sign-in and refresh persistence are confirmed on productione4ece97d. Screenshot shows verified Auth/account settings and a separate expired guest-record claim. Email/login repair is complete; profile/address save/readback/default checkout remain. Evidence: email-signin-repair-20261029/owner-signin-acceptance.json. No application/provider change or deployment is required for this receipt.
+
+
 **29 October email repair follow-up:** **29 October VERIFIED LIVE / fresh-login acceptance pending:** Production main `e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887` is Ready on both canonical artifacts: Storefront `dpl_ETk6P3gMbuj8ypMFTZpWbooCHMgz`, Admin `dpl_5yZqQezm1aLGBEZp5hi4AX6LWUer`. Public target markers and deliberate email confirmation are browser-verified. Packetb794e937 was applied ONCE; direct fields and customization-status metadata are readback/reconciled. Owner confirms Inbox delivery. Their last click created a valid12-character provider refresh token which the previous BFF incorrectly rejected; sourcee4ece97d corrects both BFF and legacy-parser bounds. Failed-first regressions,5parser/6Auth-boundary/6email-browser, finaldevelopment0/147 and both builds pass. Prior24-stage release evidence is retained for unchanged inputs. A new successful email confirmation/session reload and real profile/address/default-checkout acceptance remain unverified. No further provider activation or unrelated suite is required. Full evidence, original failures and recovery: `email-signin-repair-20261029/live-repair-verification.json`.
 
 

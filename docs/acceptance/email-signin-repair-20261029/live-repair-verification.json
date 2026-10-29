@@ -2,7 +2,7 @@
   "mapItem": "MAP-019",
   "recordedAt": "2026-10-29T02:57:01.237038+00:00",
   "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
-  "status": "source-and-email-provider-repair-live-fresh-login-acceptance-pending",
+  "status": "source-email-and-owner-login-refresh-verified-profile-address-acceptance-pending",
   "deployments": [
     {
       "id": "dpl_ETk6P3gMbuj8ypMFTZpWbooCHMgz",
@@ -104,11 +104,6 @@
     "placement": "Inbox",
     "scope": "One owner-reported message, not an Inbox guarantee"
   },
-  "lastRealAttempt": {
-    "sessionCreatedAt": "2026-10-29T02:41:57.989239Z",
-    "refreshTokenLength": 12,
-    "result": "Provider created session; old BFF rejected its supported token length"
-  },
   "correction": {
     "runtimeDelta": "Two lower-bound changes from16 to12 in existing BFF/parser; no provider write",
     "failedFirst": [
@@ -124,11 +119,47 @@
     },
     "unaffectedReleaseEvidence": "email-repair-release-coverage.json;24 stages retained without rerun"
   },
-  "realFreshSuccessfulLoginVerified": false,
+  "realFreshSuccessfulLoginVerified": true,
   "remaining": [
-    "One new email confirmation and session persistence after correction",
-    "Real profile/settings/address save/readback/default checkout using owner data, without submitting an order",
-    "Automated deletion remains suspended in MAP-019"
+    "Real profile/settings and saved-address save/readback",
+    "Default saved-address checkout prefill without submitting an order",
+    "If old guest history is required, scoped staff recovery for expired guest access; no automatic merge or grant reset",
+    "Automated deletion stays suspended"
   ],
-  "recovery": "Retain compatible first-party callback and12-character token support while issued emails remain valid. Any source/provider recovery is a scoped reviewed action; do not replay SQL/signup/email activation, revoke users, reset roles or restore old data. Restore-previous-templates.json is a separately authorized inverse only."
+  "recovery": "Retain compatible first-party callback and12-character token support while issued emails remain valid. Any source/provider recovery is a scoped reviewed action; do not replay SQL/signup/email activation, revoke users, reset roles or restore old data. Restore-previous-templates.json is a separately authorized inverse only.",
+  "ownerLoginAcceptance": {
+    "mapItem": "MAP-019",
+    "recordedAt": "2026-10-29T03:18:16.022907+00:00",
+    "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+    "evidenceKind": "Owner-reported real production acceptance and owner-supplied screenshot",
+    "ownerReply": "Signed in; refresh works",
+    "realSignInConfirmed": true,
+    "persistsAfterRefreshConfirmed": true,
+    "screenshotSha256": "d487c1c47edbbefcd5fec9c89ba5a5b41ba4d46a4f372a438e527e8282938654",
+    "screenshotPublication": "Full screenshot retained only in ignored private workspace because it contains unrelated browser tabs; raw image is not published",
+    "screenshotObserved": [
+      "Verified sign-in",
+      "Owner-selected email",
+      "Your account settings",
+      "Guest-record linking reports expired guest access"
+    ],
+    "guestWarningInterpretation": "Optional guest-claim authorization failure; separate from verified Auth session. Current UI continues rendering account settings for signed-in users. No proof of past guest records or their ownership is inferred.",
+    "sourceTrace": [
+      "prepared-api/storefront/account/claim.js",
+      "src/services/customerAccountService.js",
+      "src/views/CustomerAccount.jsx"
+    ],
+    "remaining": [
+      "Real profile/settings and saved-address save/readback",
+      "Default saved-address checkout prefill without submitting an order",
+      "If old guest history is required, scoped staff recovery for expired guest access; no automatic merge or grant reset",
+      "Automated deletion stays suspended"
+    ],
+    "noApplicationOrProviderChange": true
+  },
+  "priorFailedRealAttempt": {
+    "sessionCreatedAt": "2026-10-29T02:41:57.989239Z",
+    "refreshTokenLength": 12,
+    "result": "Provider created session; old BFF rejected its supported token length"
+  }
 }

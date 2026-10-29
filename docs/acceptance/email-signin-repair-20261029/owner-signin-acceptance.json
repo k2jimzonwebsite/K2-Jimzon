@@ -1,0 +1,30 @@
+{
+  "mapItem": "MAP-019",
+  "recordedAt": "2026-10-29T03:18:16.022907+00:00",
+  "sourceCommit": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+  "evidenceKind": "Owner-reported real production acceptance and owner-supplied screenshot",
+  "ownerReply": "Signed in; refresh works",
+  "realSignInConfirmed": true,
+  "persistsAfterRefreshConfirmed": true,
+  "screenshotSha256": "d487c1c47edbbefcd5fec9c89ba5a5b41ba4d46a4f372a438e527e8282938654",
+  "screenshotPublication": "Full screenshot retained only in ignored private workspace because it contains unrelated browser tabs; raw image is not published",
+  "screenshotObserved": [
+    "Verified sign-in",
+    "Owner-selected email",
+    "Your account settings",
+    "Guest-record linking reports expired guest access"
+  ],
+  "guestWarningInterpretation": "Optional guest-claim authorization failure; separate from verified Auth session. Current UI continues rendering account settings for signed-in users. No proof of past guest records or their ownership is inferred.",
+  "sourceTrace": [
+    "prepared-api/storefront/account/claim.js",
+    "src/services/customerAccountService.js",
+    "src/views/CustomerAccount.jsx"
+  ],
+  "remaining": [
+    "Real profile/settings and saved-address save/readback",
+    "Default saved-address checkout prefill without submitting an order",
+    "If old guest history is required, scoped staff recovery for expired guest access; no automatic merge or grant reset",
+    "Automated deletion stays suspended"
+  ],
+  "noApplicationOrProviderChange": true
+}
