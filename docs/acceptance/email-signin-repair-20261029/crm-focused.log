@@ -1,0 +1,20 @@
+[WebServer] (node:18384) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 9 tests using 1 worker
+
+(node:16740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chromium] › tests\customer-crm-ui.spec.js:8:33 › hold outcomes show current facts and recovery without a false saved notice at 375px (5.9s)
+  ok 2 [chromium] › tests\customer-crm-ui.spec.js:8:33 › hold outcomes show current facts and recovery without a false saved notice at 1440px (1.2s)
+  ok 3 [chromium] › tests\customer-crm-ui.spec.js:41:1 › directory search and privacy hold review preserve a lost response retry (1.3s)
+  ok 4 [chromium] › tests\customer-crm-ui.spec.js:90:1 › a failed directory read is unavailable rather than an empty result (1.3s)
+  ok 5 [chromium] › tests\customer-crm-ui.spec.js:100:1 › Admin can reconcile a lost reply in read-only closed history after reload (1.5s)
+  ok 6 [chromium] › tests\customer-crm-ui.spec.js:130:1 › customer hold reconciliation refusal preserves details without a false recorded notice (993ms)
+  ok 7 [chromium] › tests\customer-crm-ui.spec.js:152:1 › customer-only hold creation and resolution use checked current results and retain an outage retry (1.4s)
+  ok 8 [chromium] › tests\customer-crm-ui.spec.js:198:1 › customer hold reads retry and ignore late results for an earlier selection (878ms)
+  ok 9 [chromium] › tests\customer-crm-ui.spec.js:230:1 › a delayed outcome response cannot overwrite the current privacy queue (691ms)
+
+  9 passed (19.7s)

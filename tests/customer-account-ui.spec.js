@@ -31,11 +31,12 @@ const expressStorageKey = `k2-express-acceptance-v1:${expressReference}`
 test('email sign-in return waits for confirmation and keeps PKCE before establishing the session', async ({ page }) => {
   let verifies = 0
   const tokenHash = 'a'.repeat(64)
-  await page.route('https://fixture.supabase.co/auth/v1/verify', route => {
+  await page.route('**/api/storefront/account/auth/verify', route => {
     verifies++
-    expect(route.request().postDataJSON()).toMatchObject({ token_hash: tokenHash, type: 'email' })
-    return route.fulfill({ json: { access_token: fakeJwt(expressActor), refresh_token: 'synthetic-email-refresh-token', token_type: 'bearer', expires_in: 3600, user: accountUser(expressActor) } })
+    expect(route.request().postDataJSON()).toEqual({ tokenHash })
+    return route.fulfill({ json: { ok: true, session: { accessToken: fakeJwt(expressActor), refreshToken: 'synthetic-email-refresh-token' } } })
   })
+  await page.route('https://fixture.supabase.co/auth/v1/user', route => route.fulfill({ json: accountUser(expressActor) }))
   await page.route('**/api/storefront/account/history', route => route.fulfill({ status: 409, json: { error: { code: 'ACCOUNT_NOT_LINKED' } } }))
   await page.route('**/api/storefront/account/settings', route => route.fulfill({ json: { ok: true, settings: { displayName: '', notifyInApp: true }, notifications: [] } }))
   await page.goto(`/account#token_hash=${tokenHash}&type=email`)

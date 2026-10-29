@@ -49,6 +49,11 @@ export function validateCustomerPhoneVerification(body) {
   return { phone, code }
 }
 
+export function validateCustomerEmailVerification(body) {
+  if (!exactKeys(body, ['tokenHash']) || !/^[a-zA-Z0-9_-]{40,256}$/.test(body.tokenHash)) throw new Error('CUSTOMER_AUTH_REQUEST_INVALID')
+  return { tokenHash: body.tokenHash }
+}
+
 function handlerFactory({ action, validate, execute, bot = false }, overrides = {}) {
   const createClient = overrides.createStorefrontServerSupabase || createStorefrontServerSupabase
   const consumeRate = overrides.consumeStorefrontPreauthRate || consumeStorefrontPreauthRate
@@ -62,8 +67,9 @@ function handlerFactory({ action, validate, execute, bot = false }, overrides = 
     try {
       const payload = validate(await readJson(req))
       const client = createClient()
-      const subject = payload.email || payload.phone
-      const attempt = await consumeRate(client, req, action, subject)
+      const subject = payload.email || payload.phone || payload.tokenHash
+      const actionName = typeof action === 'function' ? action(payload) : action
+      const attempt = await consumeRate(client, req, actionName, subject)
       if (!attempt.allowed) {
         return safeJson(res, 429, {
           error: { code: 'RATE_LIMITED', retryAfter: attempt.retryAfter },
@@ -113,10 +119,14 @@ export function createCustomerPhoneAuthHandler(overrides = {}) {
 
 export function createCustomerPhoneVerifyHandler(overrides = {}) {
   return handlerFactory({
-    action: 'customer_auth_sms_verify',
-    validate: validateCustomerPhoneVerification,
+    // Email confirmation shares the existing signed email budget. Both email
+    // steps consume its IP limit; the high-entropy hash is HMACed as subject.
+    action: payload => payload.tokenHash ? 'customer_auth_email_request' : 'customer_auth_sms_verify',
+    validate: body => Object.hasOwn(body || {}, 'tokenHash') ? validateCustomerEmailVerification(body) : validateCustomerPhoneVerification(body),
     execute: async ({ client, payload, res }) => {
-      const { data, error } = await client.auth.verifyOtp({
+      const { data, error } = await client.auth.verifyOtp(payload.tokenHash ? {
+        token_hash: payload.tokenHash, type: 'email',
+      } : {
         phone: payload.phone, token: payload.code, type: 'sms',
       })
       const accessToken = data?.session?.access_token

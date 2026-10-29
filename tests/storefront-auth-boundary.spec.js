@@ -189,3 +189,31 @@ test('customer account browser service uses only fixed same-origin Auth routes',
   expect(service).toContain("accountAuthRequest('account/auth/verify'")
   expect(service).toContain('client.auth.setSession')
 })
+
+test('email hash confirmation uses the existing signed email budget before provider verification', async () => {
+  const auth = await import('../server/storefront-bff/customer-auth.js')
+  const tokenHash = 'a'.repeat(64)
+  const calls = []
+  const client = { auth: { async verifyOtp(body) {
+    calls.push(['provider', body])
+    return { data: { session: { access_token: 'synthetic-access-token', refresh_token: 'synthetic-refresh-token' } }, error: null }
+  } } }
+  const base = { createStorefrontServerSupabase: () => client }
+  const denied = response()
+  await auth.createCustomerPhoneVerifyHandler({ ...base, consumeStorefrontPreauthRate: async (_, __, action, subject) => {
+    calls.push(['budget', action, subject]); return { allowed: false, retryAfter: 60 }
+  } })(request({ tokenHash }), denied)
+  expect(denied.statusCode).toBe(429)
+  expect(calls).toEqual([['budget', 'customer_auth_email_request', tokenHash]])
+  calls.length = 0
+  const accepted = response()
+  await auth.createCustomerPhoneVerifyHandler({ ...base, consumeStorefrontPreauthRate: async (_, __, action, subject) => {
+    calls.push(['budget', action, subject]); return { allowed: true }
+  } })(request({ tokenHash }), accepted)
+  expect(accepted.statusCode).toBe(200)
+  expect(calls).toEqual([['budget', 'customer_auth_email_request', tokenHash], ['provider', { token_hash: tokenHash, type: 'email' }]])
+  expect(JSON.parse(accepted.body)).toEqual({ ok: true, session: { accessToken: 'synthetic-access-token', refreshToken: 'synthetic-refresh-token' } })
+  for (const body of [{ tokenHash, email: 'buyer@example.test' }, { tokenHash: 123 }, { tokenHash: 'short' }, { tokenHash, type: 'recovery' }]) {
+    expect(() => auth.validateCustomerEmailVerification(body)).toThrow('CUSTOMER_AUTH_REQUEST_INVALID')
+  }
+})

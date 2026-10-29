@@ -16,9 +16,14 @@ export async function completeCustomerEmailReturn() {
   try {
     const client = await customerAuthClient()
     if (!client) return { ok: false, error: 'Customer account access is not active yet.' }
-    const result = returned.kind === 'hash'
-      ? await client.auth.verifyOtp({ token_hash: returned.tokenHash, type: 'email' })
-      : await client.auth.setSession({ access_token: returned.accessToken, refresh_token: returned.refreshToken })
+    let session = { access_token: returned.accessToken, refresh_token: returned.refreshToken }
+    if (returned.kind === 'hash') {
+      const verified = await accountAuthRequest('account/auth/verify', { tokenHash: returned.tokenHash })
+      if (!verified.ok) return { ok: false, error: ['RATE_LIMITED', 'REQUEST_TIMEOUT'].includes(verified.code)
+        ? ACCOUNT_ERRORS[verified.code] : 'This sign-in link has expired or was already used. Request a new link.' }
+      session = { access_token: verified.data.session.accessToken, refresh_token: verified.data.session.refreshToken }
+    }
+    const result = await client.auth.setSession(session)
     if (result.error || !result.data?.session) return { ok: false, error: 'This sign-in link has expired or was already used. Request a new link.' }
     return { ok: true }
   } catch { return { ok: false, error: 'Sign-in could not be confirmed. Check your connection and try again.' } }
