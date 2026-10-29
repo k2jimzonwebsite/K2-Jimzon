@@ -1,0 +1,34 @@
+{
+  "expectedSourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "observedAt": "2026-10-29T06:52:50.502Z",
+  "origin": "https://www.k2jimzon.com",
+  "viewports": [
+    {
+      "width": 375,
+      "categoryCount": 15,
+      "noHorizontalOverflow": true,
+      "allLinksAtLeast44pxAndWrapped": true,
+      "screenshot": "live-footer-375.png"
+    },
+    {
+      "width": 1440,
+      "categoryCount": 15,
+      "noHorizontalOverflow": true,
+      "allLinksAtLeast44pxAndWrapped": true,
+      "screenshot": "live-footer-1440.png"
+    }
+  ],
+  "blockedMutations": [],
+  "customerDataEntered": false,
+  "customerSaveVerified": false,
+  "staffWriteVerified": false,
+  "orderSubmitted": false,
+  "nativeCategoryNavigation": {
+    "name": "Beverages",
+    "href": "/catalog?category=Beverages",
+    "resultingUrl": "https://www.k2jimzon.com/catalog?category=Beverages",
+    "selectedFilterVerified": true,
+    "productCount": 2
+  },
+  "accountSignedOut": false
+}

@@ -1,0 +1,119 @@
+{
+  "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "startedAt": "2026-10-29T06:29:00.612Z",
+  "previous": "exact-release-gate.log: first eight npm test groups completed before interruption during test:storefront-ui. Initial caller public production flags were inappropriate for inactive/optional fixture assertions. No application source changed.",
+  "stages": [
+    {
+      "step": "test:storefront-ui",
+      "startedAt": "2026-10-29T06:29:00.613Z",
+      "log": "release-test-storefront-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:30:58.877Z"
+    },
+    {
+      "step": "test:storefront-recovery",
+      "startedAt": "2026-10-29T06:30:58.877Z",
+      "log": "release-test-storefront-recovery.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:33:14.370Z"
+    },
+    {
+      "step": "test:admin-ui",
+      "startedAt": "2026-10-29T06:33:14.370Z",
+      "log": "release-test-admin-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:34:54.717Z"
+    },
+    {
+      "step": "test:payment-ui",
+      "startedAt": "2026-10-29T06:34:54.718Z",
+      "log": "release-test-payment-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:35:47.188Z"
+    },
+    {
+      "step": "test:inbox-ui",
+      "startedAt": "2026-10-29T06:35:47.189Z",
+      "log": "release-test-inbox-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:36:14.968Z"
+    },
+    {
+      "step": "test:admin-product-master-ui",
+      "startedAt": "2026-10-29T06:36:14.969Z",
+      "log": "release-test-admin-product-master-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:37:51.274Z"
+    },
+    {
+      "step": "test:admin-website-assignment-ui",
+      "startedAt": "2026-10-29T06:37:51.275Z",
+      "log": "release-test-admin-website-assignment-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:38:12.973Z"
+    },
+    {
+      "step": "test:owner-count-close-ui",
+      "startedAt": "2026-10-29T06:38:12.974Z",
+      "log": "release-test-owner-count-close-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:38:30.174Z"
+    },
+    {
+      "step": "test:customer-account-ui",
+      "startedAt": "2026-10-29T06:38:30.174Z",
+      "log": "release-test-customer-account-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:39:53.637Z"
+    },
+    {
+      "step": "test:selling-surfaces",
+      "startedAt": "2026-10-29T06:39:53.637Z",
+      "log": "release-test-selling-surfaces.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:43:42.477Z"
+    },
+    {
+      "step": "test:order-receipt-direct",
+      "startedAt": "2026-10-29T06:43:42.477Z",
+      "log": "release-test-order-receipt-direct.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:43:57.887Z"
+    },
+    {
+      "step": "test:workflow-api",
+      "startedAt": "2026-10-29T06:43:57.888Z",
+      "log": "release-test-workflow-api.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:44:18.511Z"
+    },
+    {
+      "step": "test:intake-ai-ui",
+      "startedAt": "2026-10-29T06:44:18.512Z",
+      "log": "release-test-intake-ai-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:44:42.902Z"
+    },
+    {
+      "step": "test:vercel-output",
+      "startedAt": "2026-10-29T06:44:42.903Z",
+      "log": "release-test-vercel-output.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:44:44.828Z"
+    },
+    {
+      "step": "build:storefront",
+      "startedAt": "2026-10-29T06:44:44.829Z",
+      "log": "release-build-storefront.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:45:18.460Z"
+    },
+    {
+      "step": "build:admin",
+      "startedAt": "2026-10-29T06:45:18.460Z",
+      "log": "release-build-admin.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:45:50.197Z"
+    }
+  ]
+}

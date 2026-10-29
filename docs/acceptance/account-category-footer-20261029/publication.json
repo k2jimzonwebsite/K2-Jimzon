@@ -1,0 +1,14 @@
+{
+  "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "atomicPush": true,
+  "featureBranch": "codex/customer-privacy-owner-decisions",
+  "mainBranch": "main",
+  "bothRemoteRefsReadBack": true,
+  "normalHooksPassed": true,
+  "ci": {
+    "id": 40831331901,
+    "status": "in_progress",
+    "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40831331901"
+  },
+  "recordedAt": "2026-10-29T06:48:12.166Z"
+}

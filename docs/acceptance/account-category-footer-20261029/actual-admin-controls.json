@@ -1,0 +1,18 @@
+{
+  "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "observedAt": "2026-10-29T06:56:12.400Z",
+  "origin": "https://admin.k2jimzon.com",
+  "actualAuthenticatedStaffWorkspace": true,
+  "gridCreateControlVisible": true,
+  "gridCreateDialogOpened": true,
+  "sheetModeOpened": true,
+  "sheetStoreCategoryColumnVisible": true,
+  "sheetCreateDialogOpened": true,
+  "sheetCandidateProducts": 196,
+  "applyWithZeroSelectionDisabled": true,
+  "selectedProducts": 0,
+  "categoryNameEntered": false,
+  "productWriteSubmitted": false,
+  "originalGridViewRestored": true,
+  "limitation": "Actual protected staff save and new public category propagation are not exercised with production business records."
+}

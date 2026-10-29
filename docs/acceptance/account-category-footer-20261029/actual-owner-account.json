@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "observedAt": "2026-10-29T06:51:38.780Z",
+  "url": "https://www.k2jimzon.com/account",
+  "actualSignedInOwnerSession": true,
+  "mobileDirectlyVisibleAfterReloadWithoutAddClick": true,
+  "mobileEmpty": true,
+  "mobileRequired": true,
+  "mobileAutocomplete": "shipping tel",
+  "mobileHeight": 44,
+  "recipientAndStreetVisible": true,
+  "noHorizontalOverflow": true,
+  "footerCategoryNavigationPresent": true,
+  "cartItemsPreserved": 4,
+  "personalDetailsEntered": false,
+  "savedProfileOrAddress": false,
+  "orderSubmitted": false,
+  "limitation": "Actual address save/reload and default checkout prefill still require owner-entered real details; no contact values or authentication state exported."
+}

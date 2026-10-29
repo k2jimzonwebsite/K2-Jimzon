@@ -1,0 +1,18 @@
+{
+  "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "root": "C:\\Users\\jerze\\K2 JImzon\\.tools\\account-category-footer-20261029\\release-source-edd115df",
+  "startedAt": "2026-10-29T05:39:03.783Z",
+  "command": "npm run verify:release",
+  "publicBuildKeys": [
+    "K2_ACCEPTANCE_NO_WATCH",
+    "VITE_ADMIN_BFF_ENABLED",
+    "VITE_CUSTOMER_ACCOUNT_ENABLED",
+    "VITE_CUSTOMER_PRIVACY_ENABLED",
+    "VITE_GUEST_BFF_ENABLED",
+    "VITE_IS_ADMIN_DEPLOYMENT",
+    "VITE_STOREFRONT_URL",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
+  ],
+  "exitCode": null
+}

@@ -1,6 +1,6 @@
 # Account mobile, category controls and footer
 
-Owner: MAP-019 / IDEA-20261029-02, -03 and -04. Status: locally prepared and verified; no new source publication or deployment. Production remains at `cabace48`. The owner confirmed this exact design scope; the older approval to release `cabace48` and receipt-only feature pushes does not approve this new runtime slice.
+Owner: MAP-019 / IDEA-20261029-02, -03 and -04. Status: **verified live source and UI** on `edd115df7aa421e612aa5f8b2e7a7261d71d23ca`; real owner save/default checkout and staff-save propagation remain separate operational acceptance. Explicit owner approval supersedes the earlier prepared-only status for this exact release.
 
 The reported account defect was discoverability: the owner's actual signed-in Chrome account showed an empty address book and **Add delivery address** opened the existing phone field. No personal details were entered or saved. A read-only exact-K2 metadata check matched the installed settings/address helper and writer hashes. No database, Auth, SMS or privacy activation was needed.
 
@@ -34,6 +34,24 @@ One bounded combined visual pass inspected account 375/1440, Sheet category dial
 
 ## Remaining action and recovery
 
-MAP-019 owns exact source publication/main release authorization, the release gate immediately before an approved promotion, both separate production artifacts, canonical-host checks and the owner's actual address save/reload/default-checkout acceptance without order submission. No new SQL/provider or customer/category record was written. Existing customer-deletion work remains suspended. Preserve the owner's signed-in Chrome tab and cart.
+MAP-019 retains the owner's actual address save/reload/default-checkout acceptance without order submission, staff category save/refresh acceptance and terminal CI receipt. Source publication, exact release qualification and both production artifact/host checks are complete and removed from active execution. No new SQL/provider or customer/category record was written. Existing customer-deletion work remains suspended. Preserve the owner's signed-in Chrome tab and cart.
 
-Before publication, revert only the six application files and scoped tests/records in this slice. After a future release, restore each artifact to the separately recorded `cabace48` production deployment by a scoped release decision; never restore the database or replay business operations. Existing pending requests must survive. If staff later change category labels, correct those through fresh normal Admin decisions; a source rollback does not revert stored assignments.
+Recovery after release: restore Storefront to `dpl_7wopG266HJo1A3U2czxEWHwMR51g` and Admin to `dpl_GEHQr9hiAc3r4y3qj9udEBo4stkj` (`cabace48`) by a scoped release decision; never restore the database or replay business operations. Existing pending requests must survive. If staff later change category labels, correct those through fresh normal Admin decisions; a source rollback does not revert stored assignments.
+
+
+## Owner-approved production receipt
+
+The owner answered **Approve feature pushes and live release** for exact `edd115df`, existing GitHub feature/main and both separate production projects. Normal-hook atomic push succeeded; both remote refs were read back at that commit. The single initial release aggregate completed eight chained groups, then was interrupted during storefront-ui with inappropriate production caller flags. Its uncompleted parent has no terminal exit code. The affected and remaining 16 stages passed sequentially with fixture defaults and public-only flags for builds. All 11 approved source pins match the export and Git. This qualifies all 24 stages by composition; it is not a clean aggregate-exit-zero claim. Exact builds pass boundary/secret/budget gates: Storefront JS148.37/150.50kB gzip, CSS29.82/30; Admin227.46/300kB. Read-only preflight confirms exact K2; readiness8verified/2owner/3script-unreachedconnector/0failed. No SQL or provider mutation was performed.
+
+| Artifact | Observed deployment | Environment/source | Canonical alias |
+| --- | --- | --- | --- |
+| Storefront | [Cnj9t3nwshwtmCJ5abFohbF5sLtV](https://vercel.com/k2-jimzon/k2-jimzon/Cnj9t3nwshwtmCJ5abFohbF5sLtV) | Ready / Production / Latest, edd115df | www.k2jimzon.com |
+| Admin | [496mB5oWgxx4usrgAEYNvKYCqEfA](https://vercel.com/k2-jimzon/k2-jimzon-admin/496mB5oWgxx4usrgAEYNvKYCqEfA) | Ready / Production / Latest, edd115df | admin.k2jimzon.com |
+
+Authenticated dashboard details directly show source/environment/aliases. Both public artifact markers, HTTP200 pages/assets and DENY framing headers pass. Compiled account mobile, footer region, manual privacy, Sheet category assignment and shared recovery pass. The Vercel connector was previously403for this exact team; authenticated dashboard fallback observes these deployments. Script-classified connector/edge/advisor gates remain separately unreached. No duplicate deployment, plan upgrade or provider activation was created. Existing Git integration queued production behind approved feature builds; no queue or billing setting changed.
+
+Actual owner Chrome account reload directly exposes the blank Mobile number field without clicking Add: required, shipping tel,44px, recipient/street visible and no document overflow. Verified session/settings and four cart items remain. No personal data was entered or saved. Actual authenticated staff Grid and Sheet both open Create store category; Sheet has the Store category column and196product choices. Apply to0 stays disabled. No category name/checkbox/save was submitted; dialogs closed and Grid restored.
+
+Isolated real-host footer checks show15native category links at375/1440, all at least44px with wrapping and no horizontal overflow. Beverages href/current selected filter are verified and the settled catalog has2products; Browse all clears the category URL. No business POST or order attempt occurred. The first probe counted exiting cards before settlement; the corrected read-only probe waits for the selected filter and displayed/card counts. The first asset probe omitted the separate Footer chunk; corrected bounded traversal passes. Both probe attempts are retained and no application source changed. Live screenshots are in account-category-footer-20261029/live-footer-375.png and live-footer-1440.png.
+
+CI [40831331901](https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40831331901) is last observed **in progress**: critical-sql-behavior and security-check-regression succeed, build-and-smoke is running. Report live promotion immediately; do not wait on or rerun application qualification for this documentation receipt. Actual real details/save/reload/default checkout and a staff category write remain unverified in MAP-019. Deletion remains suspended.

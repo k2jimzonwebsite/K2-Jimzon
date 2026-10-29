@@ -1,0 +1,106 @@
+
+> k2-jimzon-prototype@0.1.0 test:admin-ui
+> playwright test --config=playwright.admin.config.js tests/admin.spec.js tests/admin-dashboard-redesign.spec.js && playwright test --config=playwright.shop-stock.config.js && playwright test --config=playwright.auth-recovery.config.js
+
+[WebServer] (node:10492) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:7396) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 42 tests using 1 worker
+
+(node:20736) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › tests\admin-dashboard-redesign.spec.js:182:3 › admin command center redesign › keeps shared Admin help tips keyboard-readable and inside a 375px viewport (1.3s)
+  ok  2 [chromium] › tests\admin-dashboard-redesign.spec.js:244:3 › admin command center redesign › quick tools calculator preserves button DOM identity, scroll position, and 44px touch targets on a 375px phone (1.4s)
+  ok  3 [chromium] › tests\admin-dashboard-redesign.spec.js:340:3 › admin command center redesign › groups phone navigation around the active staff workspace (1.1s)
+  ok  4 [chromium] › tests\admin-dashboard-redesign.spec.js:364:3 › admin command center redesign › keeps the phone inventory action visible without a hidden toolbar (1.6s)
+  ok  5 [chromium] › tests\admin-dashboard-redesign.spec.js:381:3 › admin command center redesign › keeps every Admin workspace within a phone viewport (6.9s)
+  ok  6 [chromium] › tests\admin-dashboard-redesign.spec.js:404:3 › admin command center redesign › left-panel widgets show one workspace and preserve every dashboard destination (1.7s)
+  ok  7 [chromium] › tests\admin-dashboard-redesign.spec.js:423:3 › admin command center redesign › uses short staff language for channel and payment context (1.1s)
+  ok  8 [chromium] › tests\admin-dashboard-redesign.spec.js:435:3 › admin command center redesign › widget source failures stay unavailable and recover without inventing zero totals (1.8s)
+  ok  9 [chromium] › tests\admin-dashboard-redesign.spec.js:457:3 › admin command center redesign › unknown channels remain separate and empty records are not marketplace analytics (936ms)
+  ok 10 [chromium] › tests\admin-dashboard-redesign.spec.js:468:3 › admin command center redesign › phone metrics and navigation stay readable and incomplete totals cannot be exported (1.4s)
+  ok 11 [chromium] › tests\admin-dashboard-redesign.spec.js:503:3 › admin command center redesign › task guide teaches intake and opens inline guidance without claiming saved work (2.5s)
+  ok 12 [chromium] › tests\admin-dashboard-redesign.spec.js:547:3 › admin command center redesign › widget help is optional, contextual and keyboard recoverable on phone (1.7s)
+[WebServer] 2:33:44 PM [vite] (client) [Unhandled rejection] TypeError: (productResult.data || []).map is not a function
+[WebServer]  > loadProducts src/context/AdminStoreContext.jsx:56:45
+[WebServer]     54 |      if (!productResult.error) {
+[WebServer]     55 |        const stockBySku = Object.fromEntries((stockResult.data || []).map((row) => [row.sku, row.stock_from_batches]))
+[WebServer]     56 |        setProducts((productResult.data || []).map((product) => ({
+[WebServer]        |                                               ^
+[WebServer]     57 |          ...product,
+[WebServer]     58 |          id: product.sku,
+[WebServer]
+[WebServer] 2:33:44 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "unhandled-rejection", pathname: "/admin-portal-k2-secure" } TypeError: (productResult.data || []).map is not a function
+[WebServer]     at loadProducts (http://localhost:5180/src/context/AdminStoreContext.jsx:57:43)
+  ok 13 [chromium] › tests\admin-dashboard-redesign.spec.js:580:3 › admin command center redesign › malformed stock source stays unavailable and new stock reflects on visibility refresh (1.3s)
+  ok 14 [chromium] › tests\admin-dashboard-redesign.spec.js:608:3 › admin command center redesign › failed period refresh preserves and labels the prior snapshot and export period (1.4s)
+  ok 15 [chromium] › tests\admin-dashboard-redesign.spec.js:625:3 › admin command center redesign › renders multichannel analytics without desktop overflow (2.5s)
+  ok 16 [chromium] › tests\admin-dashboard-redesign.spec.js:718:3 › admin command center redesign › quick tools expose useful shortcuts, safe expiry guidance and keyboard recovery (1.8s)
+  ok 17 [chromium] › tests\admin-dashboard-redesign.spec.js:761:3 › admin command center redesign › computes a bounded sales plan without presenting it as recorded finance truth (2.9s)
+  ok 18 [chromium] › tests\admin-dashboard-redesign.spec.js:904:3 › admin command center redesign › collapses safely for mobile operations (1.6s)
+  ok 19 [chromium] › tests\admin-dashboard-redesign.spec.js:929:3 › admin command center redesign › keeps Wholesale inquiry triage honest and usable at 375px (1.0s)
+  ok 20 [chromium] › tests\admin-dashboard-redesign.spec.js:966:3 › admin command center redesign › keeps Globe review evidence and publication controls usable at 375px (1.1s)
+  ok 21 [chromium] › tests\admin-dashboard-redesign.spec.js:1012:3 › admin command center redesign › keeps supplier evidence and unavailable procurement powers clear at 375px (1.4s)
+  ok 22 [chromium] › tests\admin-dashboard-redesign.spec.js:1040:3 › admin command center redesign › keeps signed channel evidence and connector truth usable at 375px (1.5s)
+  ok 23 [chromium] › tests\admin-dashboard-redesign.spec.js:1081:3 › admin command center redesign › keeps staff privilege changes reasoned and recoverable at 375px (964ms)
+  ok 24 [chromium] › tests\admin-dashboard-redesign.spec.js:1128:3 › admin command center redesign › lets an invited staff account enroll an authenticator through the secure pending session at 375px (994ms)
+[WebServer] 2:34:03 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 25 [chromium] › tests\admin-dashboard-redesign.spec.js:1180:3 › admin command center redesign › requests and completes staff password recovery without account enumeration at 375px (1.1s)
+[WebServer] 2:34:04 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 26 [chromium] › tests\admin-dashboard-redesign.spec.js:1238:3 › admin command center redesign › replaces an active Admin authenticator with a reason and keeps recovery honest at 375px (1.0s)
+  ok 27 [chromium] › tests\admin-dashboard-redesign.spec.js:1295:3 › admin command center redesign › keeps protected system readiness boolean-only and recoverable at 375px (703ms)
+  ok 28 [chromium] › tests\admin-dashboard-redesign.spec.js:1324:3 › admin command center redesign › keeps product-media validation and recovery usable at 375px (1.4s)
+  ok 29 [chromium] › tests\admin-dashboard-redesign.spec.js:1398:3 › admin command center redesign › keeps phone product intake usable, truthful, and recoverable at 375px (1.4s)
+  ok 30 [chromium] › tests\admin-dashboard-redesign.spec.js:1507:3 › admin command center redesign › keeps the five operational workspaces readable and overflow-safe (4.8s)
+  ok 31 [chromium] › tests\admin-dashboard-redesign.spec.js:1529:3 › admin command center redesign › the store asset queue mounts and offers a real publish path (1.4s)
+  ok 32 [chromium] › tests\admin-dashboard-redesign.spec.js:1547:3 › admin command center redesign › the workflow map exposes the channels section and names what is not connected (2.0s)
+  ok 33 [chromium] › tests\admin-dashboard-redesign.spec.js:1563:3 › admin command center redesign › keeps high-frequency workspace controls usable on mobile (3.4s)
+  ok 34 [chromium] › tests\admin-dashboard-redesign.spec.js:1597:3 › admin command center redesign › renders the complete connected workflow graph with traceable routes (2.9s)
+  ok 35 [chromium] › tests\admin-dashboard-redesign.spec.js:1649:3 › admin command center redesign › shows the complete paid-API blocker and manual fallback in the phone guide (702ms)
+  ok 36 [chromium] › tests\admin-dashboard-redesign.spec.js:1677:3 › admin command center redesign › synchronizes work context with URL, deep links directly, and supports browser back and forward (1.9s)
+  ok 37 [chromium] › tests\admin.spec.js:8:1 › Google admin OAuth returns to the guarded admin route (5ms)
+  ok 38 [chromium] › tests\admin.spec.js:26:1 › Google callback exposes the authenticator step instead of returning to login (3ms)
+  ok 39 [chromium] › tests\admin.spec.js:45:1 › OAuth credentials are removed from the Admin callback URL (2ms)
+  ok 40 [chromium] › tests\admin.spec.js:80:3 › admin access boundary › guarded path works and requires real Supabase authentication (673ms)
+  ok 41 [chromium] › tests\admin.spec.js:89:3 › admin access boundary › legacy localStorage flag cannot bypass the auth gate (676ms)
+  ok 42 [chromium] › tests\admin.spec.js:96:3 › admin access boundary › backend-not-configured sign-in fails clearly (802ms)
+
+  42 passed (1.2m)
+[WebServer] (node:22952) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3148) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:15536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\shop-stock-ui.spec.js:46:1 › protected shop stock never uses the direct database path (1.7s)
+  ok 2 tests\shop-stock-ui.spec.js:56:3 › successful inventory_balances read refuses incomplete or missing count 3 (390ms)
+  ok 3 tests\shop-stock-ui.spec.js:56:3 › successful inventory_transfer_requests read refuses incomplete or missing count 26 (404ms)
+  ok 4 tests\shop-stock-ui.spec.js:56:3 › successful channel_shops read refuses incomplete or missing count null (412ms)
+  ok 5 tests\shop-stock-ui.spec.js:65:1 › empty canonical shop reads do not create six operating shops (424ms)
+  ok 6 tests\shop-stock-ui.spec.js:73:1 › missing warehouse balance never borrows display stock or reports coverage (441ms)
+  ok 7 tests\shop-stock-ui.spec.js:83:1 › missing saved allocation is Needs review even when aggregate stock exists (405ms)
+  ok 8 tests\shop-stock-ui.spec.js:94:1 › failed reads hide operating totals and actions, then Refresh recovers exact saved rows (8.2s)
+
+  8 passed (15.4s)
+[WebServer] (node:312) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20020) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:17700) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\admin-auth-recovery.spec.js:8:1 › secure Admin keeps Google available and routes the verified token through its BFF (1.3s)
+  ok 2 tests\admin-auth-recovery.spec.js:27:1 › a failed challenge script can be retried without reloading the login form (848ms)
+  ok 3 tests\admin-auth-recovery.spec.js:45:3 › Google return handles MFA_REQUIRED without a browser provider session (730ms)
+  ok 4 tests\admin-auth-recovery.spec.js:45:3 › Google return handles MFA_ENROLLMENT_REQUIRED without a browser provider session (846ms)
+  ok 5 tests\admin-auth-recovery.spec.js:45:3 › Google return handles OAUTH_RETURN_INVALID without a browser provider session (781ms)
+  ok 6 tests\admin-auth-recovery.spec.js:81:1 › the visible provider widget fits the actual Admin form at phone and desktop widths (1.5s)
+
+  6 passed (10.3s)

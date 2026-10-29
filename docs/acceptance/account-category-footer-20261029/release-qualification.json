@@ -1,0 +1,224 @@
+{
+  "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "qualifiedAt": "2026-10-29T06:46:33.675Z",
+  "status": "all-required-release-stages-verified-by-composition",
+  "cleanAggregateExitZero": false,
+  "interruption": "Initial aggregate interrupted during storefront-ui and had inappropriate production caller flags in fixture tests. Exact source remains unchanged. Passing prefix is retained; the affected and remaining stages all pass with fixture defaults, public flags only for builds.",
+  "sourcePinsVerified": 11,
+  "firstStages": [
+    {
+      "step": "security:test-turnstile",
+      "status": "completed-before-next-chained-stage",
+      "evidence": "exact-release-gate.log",
+      "passedGroups": [
+        "13",
+        "7 passed (6.4s)"
+      ]
+    },
+    {
+      "step": "test:security-check-ui",
+      "status": "completed-before-next-chained-stage",
+      "evidence": "exact-release-gate.log",
+      "passedGroups": [
+        "8 passed (12.4s)"
+      ]
+    },
+    {
+      "step": "test:product-sku-merge",
+      "status": "completed-before-next-chained-stage",
+      "evidence": "exact-release-gate.log",
+      "passedGroups": [
+        "33"
+      ]
+    },
+    {
+      "step": "test:product-families",
+      "status": "completed-before-next-chained-stage",
+      "evidence": "exact-release-gate.log",
+      "passedGroups": [
+        "18",
+        "27 passed (38.9s)"
+      ]
+    },
+    {
+      "step": "test:store-categories",
+      "status": "completed-before-next-chained-stage",
+      "evidence": "exact-release-gate.log",
+      "passedGroups": [
+        "4",
+        "35 passed (55.8s)"
+      ]
+    },
+    {
+      "step": "test:base",
+      "status": "completed-before-next-chained-stage",
+      "evidence": "exact-release-gate.log",
+      "passedGroups": [
+        "13",
+        "1",
+        "1",
+        "3",
+        "1",
+        "3",
+        "1",
+        "3",
+        "5",
+        "9",
+        "10",
+        "8",
+        "14",
+        "28",
+        "9",
+        "37",
+        "24",
+        "24",
+        "3",
+        "5",
+        "8",
+        "1122 passed (1.2m)"
+      ]
+    },
+    {
+      "step": "test:mobile-moderation",
+      "status": "completed-before-next-chained-stage",
+      "evidence": "exact-release-gate.log",
+      "passedGroups": [
+        "4 passed (672ms)"
+      ]
+    },
+    {
+      "step": "test:store-orientation",
+      "status": "completed-before-next-chained-stage",
+      "evidence": "exact-release-gate.log",
+      "passedGroups": [
+        "12 passed (1.2m)"
+      ]
+    }
+  ],
+  "resumedStages": [
+    {
+      "step": "test:storefront-ui",
+      "startedAt": "2026-10-29T06:29:00.613Z",
+      "log": "release-test-storefront-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:30:58.877Z"
+    },
+    {
+      "step": "test:storefront-recovery",
+      "startedAt": "2026-10-29T06:30:58.877Z",
+      "log": "release-test-storefront-recovery.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:33:14.370Z"
+    },
+    {
+      "step": "test:admin-ui",
+      "startedAt": "2026-10-29T06:33:14.370Z",
+      "log": "release-test-admin-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:34:54.717Z"
+    },
+    {
+      "step": "test:payment-ui",
+      "startedAt": "2026-10-29T06:34:54.718Z",
+      "log": "release-test-payment-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:35:47.188Z"
+    },
+    {
+      "step": "test:inbox-ui",
+      "startedAt": "2026-10-29T06:35:47.189Z",
+      "log": "release-test-inbox-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:36:14.968Z"
+    },
+    {
+      "step": "test:admin-product-master-ui",
+      "startedAt": "2026-10-29T06:36:14.969Z",
+      "log": "release-test-admin-product-master-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:37:51.274Z"
+    },
+    {
+      "step": "test:admin-website-assignment-ui",
+      "startedAt": "2026-10-29T06:37:51.275Z",
+      "log": "release-test-admin-website-assignment-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:38:12.973Z"
+    },
+    {
+      "step": "test:owner-count-close-ui",
+      "startedAt": "2026-10-29T06:38:12.974Z",
+      "log": "release-test-owner-count-close-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:38:30.174Z"
+    },
+    {
+      "step": "test:customer-account-ui",
+      "startedAt": "2026-10-29T06:38:30.174Z",
+      "log": "release-test-customer-account-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:39:53.637Z"
+    },
+    {
+      "step": "test:selling-surfaces",
+      "startedAt": "2026-10-29T06:39:53.637Z",
+      "log": "release-test-selling-surfaces.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:43:42.477Z"
+    },
+    {
+      "step": "test:order-receipt-direct",
+      "startedAt": "2026-10-29T06:43:42.477Z",
+      "log": "release-test-order-receipt-direct.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:43:57.887Z"
+    },
+    {
+      "step": "test:workflow-api",
+      "startedAt": "2026-10-29T06:43:57.888Z",
+      "log": "release-test-workflow-api.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:44:18.511Z"
+    },
+    {
+      "step": "test:intake-ai-ui",
+      "startedAt": "2026-10-29T06:44:18.512Z",
+      "log": "release-test-intake-ai-ui.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:44:42.902Z"
+    },
+    {
+      "step": "test:vercel-output",
+      "startedAt": "2026-10-29T06:44:42.903Z",
+      "log": "release-test-vercel-output.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:44:44.828Z"
+    },
+    {
+      "step": "build:storefront",
+      "startedAt": "2026-10-29T06:44:44.829Z",
+      "log": "release-build-storefront.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:45:18.460Z"
+    },
+    {
+      "step": "build:admin",
+      "startedAt": "2026-10-29T06:45:18.460Z",
+      "log": "release-build-admin.log",
+      "exitCode": 0,
+      "finishedAt": "2026-10-29T06:45:50.197Z"
+    }
+  ],
+  "readiness": {
+    "projectRef": "pixplcjqivlfflickobf",
+    "counts": {
+      "verified": 8,
+      "owner": 2,
+      "connector": 3,
+      "failed": 0,
+      "blocked": 0
+    }
+  },
+  "runtimeChangedAfterApproval": false,
+  "providerWrites": false
+}

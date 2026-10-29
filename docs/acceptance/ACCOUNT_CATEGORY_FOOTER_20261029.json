@@ -5,16 +5,16 @@
     "IDEA-20261029-03",
     "IDEA-20261029-04"
   ],
-  "recordedAt": "2026-10-29T05:26:40.160Z",
-  "status": "locally-verified-feature-source-not-published",
+  "recordedAt": "2026-10-29T06:58:30.136Z",
+  "status": "verified-live-source-and-ui-owner-save-acceptance-pending",
   "baseCommit": "82e48ffbb2d5729daeb44c7a4e087180e1d148b8",
-  "productionSource": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+  "productionSource": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
   "featureBranch": "codex/customer-privacy-owner-decisions",
   "ownerDecision": {
     "confirmed": true,
     "answer": "Yes, use this scope",
     "scope": "Direct existing first account name/mobile/address editor; category creation and assignment in Sheet and Grid; bottom footer uses the same public category list; categories public when containing a storefront-listed product. Preserve permissions, stock, prices, orders and K2 styling.",
-    "releaseAuthorization": "Prior exact cabace48 and receipt-only pushes do not approve this new runtime source."
+    "releaseAuthorization": "Explicit owner answer: Approve feature pushes and live release, for exact edd115df to existing feature/main and separate K2 artifacts. Owner approval is retained in owner-release-approval.json."
   },
   "providerChanges": false,
   "productionCustomerOrProductWrites": false,
@@ -71,17 +71,34 @@
     },
     "buildQualification": "Current owner environment builds, not a committed-source archive; --ignore-scripts retains the single passing development lifecycle.",
     "review": "Independent read-only scoped diff review: no Critical, Important or confirmed Minor findings; diff whitespace check passed.",
-    "visual": "One combined bounded review: account and Sheet 375/1440; footer light/dark 375/1440, wrapping, 44px targets, no horizontal overflow. No visual-fix loop."
+    "visual": "One combined bounded review: account and Sheet 375/1440; footer light/dark 375/1440, wrapping, 44px targets, no horizontal overflow. No visual-fix loop.",
+    "exactReleaseBuilds": {
+      "storefront": {
+        "boundary": "passed",
+        "secrets": "passed",
+        "landingJsGzipKB": 148.37,
+        "limitKB": 150.5,
+        "cssGzipKB": 29.82,
+        "cssLimitKB": 30
+      },
+      "admin": {
+        "boundary": "passed",
+        "secrets": "passed",
+        "minifiedKB": 227.46,
+        "limitKB": 300
+      }
+    }
   },
   "limitations": [
-    "No new source published or deployed; no real customer save or Admin category write.",
-    "Full release gate remains immediately before an approved promotion.",
-    "First category fixture red had a module-load error and is not behavioral evidence; corrected released-source comparison proves the intended four failures.",
-    "Sheet boundary first launch used an occupied account test port and ran no cases; sequential rerun passed.",
-    "Two disabled-closure account cases are intentionally skipped; customer deletion remains suspended."
+    "Full release qualification is composed from the original passing eight stages plus 16 resumed stages, with the initial interruption/fixture-flag failures retained; no clean aggregate exit-zero claim.",
+    "Actual signed-in account shows the blank required mobile/name/address form after reload; real owner data save/reload/default-checkout remains unverified.",
+    "Actual authenticated Admin Grid/Sheet controls and zero-selection guard pass; no production category assignment was submitted.",
+    "CI 40831331901 is still in progress: critical-sql-behavior and security-check-regression successful, build-and-smoke running.",
+    "No SQL, Auth, SMS, deletion, stock, price, order or customer record mutation was performed.",
+    "First asset scan omitted the separate Footer chunk; corrected read-only traversal passes. First rendered probe captured exiting cards before settlement; confirmed selected filter and settled count now show two Beverages products. Application source unchanged."
   ],
-  "nextAction": "MAP-019: authorize exact new feature/main publication, qualify the release gate, verify both separate production artifacts/canonical hosts, then owner address save/reload and default-checkout prefill without submitting an order.",
-  "rollback": "Scoped source revert before publication; after release restore each separate artifact to its recorded cabace48 deployment by scoped decision. Preserve all data and pending requests; no database restore or business replay. Subsequent category corrections use fresh normal Admin versions.",
+  "nextAction": "MAP-019: owner enters/saves a real delivery address, then verify reload and default checkout prefill without submitting an order; record terminal CI without rerunning local suites. Actual staff category save/new public label propagation remains operational acceptance. Deletion stays suspended.",
+  "rollback": "By scoped release decision, restore Storefront to dpl_7wopG266HJo1A3U2czxEWHwMR51g and Admin to dpl_GEHQr9hiAc3r4y3qj9udEBo4stkj (cabace48). Preserve all provider data and pending requests; no database restore or replay. Subsequent labels are corrected by fresh normal Admin versions.",
   "sourceSha256": {
     "src/components/Footer.jsx": "fd78bbb1b54e5e5277d30352bc464e84038c38fadbca42ae5d282430804849e2",
     "src/components/account/CustomerDeliveryAddresses.jsx": "83f57ace767c53ae089f39bc1e1c70b5de69ac24cc6e437cc5237cd3eae3b4b0",
@@ -109,8 +126,499 @@
     "docs/acceptance/account-category-footer-20261029/sheet-boundary-rerun.log": "949ee4327f23abd8ce87b33c9e5ca71eb67669f339481dbbc3f3f9bf0ed2741f",
     "docs/acceptance/account-category-footer-20261029/development-final.log": "f4bceed4bd327f2b8aa3dcf6bd4148cce35e8be3eaa26414e3a0f5717e1129b1",
     "docs/acceptance/account-category-footer-20261029/build-storefront.log": "d8a64a3cd5cc370e8111b8477b5954f94ffcbe36a7ea30f68a3427a8419aff36",
-    "docs/acceptance/account-category-footer-20261029/build-admin.log": "2e28f700a81120a97534950fc655c94189f8b3cf08d40adb61fd98731ed51e3b"
+    "docs/acceptance/account-category-footer-20261029/build-admin.log": "2e28f700a81120a97534950fc655c94189f8b3cf08d40adb61fd98731ed51e3b",
+    "docs/acceptance/account-category-footer-20261029/exact-release-gate.log": "34bc485ec3b22dc85860314206b77b8117b0fb6c7af7e4804a9c1db2d7efb6d8",
+    "docs/acceptance/account-category-footer-20261029/exact-release-gate.json": "b482c360b26b840dc454435afb9ac9f9135897e2d3d5e4754700e69dbcd02ba3",
+    "docs/acceptance/account-category-footer-20261029/resumed-release.log": "3836cba1bf6b58c0af1965f123d1bf67ddc7c72f22da1f1e70d5f95ff8b941ca",
+    "docs/acceptance/account-category-footer-20261029/resumed-release-gate.json": "f25e0ec2a6901520771af7f057de81a63eab0bc3a125b5c42cc3bb438e3f2169",
+    "docs/acceptance/account-category-footer-20261029/release-qualification.json": "fc931625df94799a9ea0b6b8ba8e6127fad17be78181320d58d32ade88365406",
+    "docs/acceptance/account-category-footer-20261029/preflight-before-release.log": "863b38bfdd924891810fade78cab2e60db566af04a7e03cbcf22880289d83d17",
+    "docs/acceptance/account-category-footer-20261029/readiness-before-release.log": "7b0863a977e4031c12286e290735f70365489aac395a7f33681d441fd059ab2d",
+    "docs/acceptance/account-category-footer-20261029/production-push.log": "21bf856d97d45517428ee74e67d359eb3e96051b8eec8f370096a23624fb0b3d",
+    "docs/acceptance/account-category-footer-20261029/publication.json": "9d6d996672c92edc7021942605d2280dc94885596bd5ecb3bccb81d495eff774",
+    "docs/acceptance/account-category-footer-20261029/live-deployments.json": "e2ff7f3c1fdd9fe42b5df6047fc506fce4cd348358cb161a78819fcff12c19e3",
+    "docs/acceptance/account-category-footer-20261029/public-release-proof.json": "b2ab8a6a3b1bc0117f51164d405f712cb3dfca9eefbee01d478042134c296640",
+    "docs/acceptance/account-category-footer-20261029/public-release.log": "b2ab8a6a3b1bc0117f51164d405f712cb3dfca9eefbee01d478042134c296640",
+    "docs/acceptance/account-category-footer-20261029/public-release-incomplete-asset-scan.log": "e78d92c4f66fe8715444a36ff42abc479b5f67216ae725e01d02caa9d43c63c4",
+    "docs/acceptance/account-category-footer-20261029/rendered-release-proof.json": "53e36da6c2f4d3cb9ec502f4471a6c229c7fa18923ba46b5019a16fa42e3176c",
+    "docs/acceptance/account-category-footer-20261029/rendered-release.log": "53e36da6c2f4d3cb9ec502f4471a6c229c7fa18923ba46b5019a16fa42e3176c",
+    "docs/acceptance/account-category-footer-20261029/rendered-before-settlement.json": "ae17a345a5e2866d5560ac6454a34c049633c15509e24b348c11a3ef6deffa1b",
+    "docs/acceptance/account-category-footer-20261029/actual-owner-account.json": "e6130ef4dbccf5bef5974cf4698807ada53b65831af8bbbc8c26ce95b577f6f7",
+    "docs/acceptance/account-category-footer-20261029/actual-admin-controls.json": "dd5cf447d91f8be384657393be1d6c9ba54c79e3cb20d65d62dbad34bc39eb22",
+    "docs/acceptance/account-category-footer-20261029/ci-receipt.json": "7305490808b5883d0094c99d0f4aba642a5f6e27d02a8ec6f750442de10d4112",
+    "docs/acceptance/account-category-footer-20261029/release-test-storefront-ui.log": "0633186ccf6508eee1d51e9a3d3ce4ed6ccbf257788c226ecfa49f516fc9f821",
+    "docs/acceptance/account-category-footer-20261029/release-test-storefront-recovery.log": "f4c674b479677d7da56156196e7e4c9325050f6e0cb7e955ea048de6312c5fa3",
+    "docs/acceptance/account-category-footer-20261029/release-test-admin-ui.log": "90ce3a95172f46b07e0c0dc34439aee8f68cdc631b8d24f3c7fa5e5d894706fc",
+    "docs/acceptance/account-category-footer-20261029/release-test-payment-ui.log": "e1f8c5039d6055ca2c23c2d21c0519dd9af5b225c813cf21606a255b995d2c7a",
+    "docs/acceptance/account-category-footer-20261029/release-test-inbox-ui.log": "df34a7ae06ab87ebcc3efaaca9ac5b95b86add28bf82ec6f8320607e9beb55d0",
+    "docs/acceptance/account-category-footer-20261029/release-test-admin-product-master-ui.log": "0f1bd4caab181901b1e969194a5472a0bea99f730224c402e2fd5c8ed210ed84",
+    "docs/acceptance/account-category-footer-20261029/release-test-admin-website-assignment-ui.log": "3da85bfdf7b9f91f35de512bbe2f6f3e1dce17302b1866470bb82819008e9f3d",
+    "docs/acceptance/account-category-footer-20261029/release-test-owner-count-close-ui.log": "65f0988eff25c10a787cef144055af216072817615445fcdc01c9083155b752f",
+    "docs/acceptance/account-category-footer-20261029/release-test-customer-account-ui.log": "11392f9346efdf3fc58149c1daefd382ee5ac5c7e93756bc79bc7e721687f468",
+    "docs/acceptance/account-category-footer-20261029/release-test-selling-surfaces.log": "3a07e4dce8a3f7804fbb950667566e4efbf2e69eaba1e2319c5eb057e7d99da3",
+    "docs/acceptance/account-category-footer-20261029/release-test-order-receipt-direct.log": "bfea54c34662b5b61e2297452b4b9366e42019c73911ebd656335f0c489eaf2d",
+    "docs/acceptance/account-category-footer-20261029/release-test-workflow-api.log": "13cb61c5180033e3b53e609c87bee30d44a9b1f1847fd4648d3a25d01f488589",
+    "docs/acceptance/account-category-footer-20261029/release-test-intake-ai-ui.log": "83f0a84b0c3e2892f8c4b4ba2416a0e134296a76bb8ac2539e017fb27e6a7fb9",
+    "docs/acceptance/account-category-footer-20261029/release-test-vercel-output.log": "5e78d5c2daa55663b60a7533903b6ae0ddafcdfb7cc26cbda25d6c5ce4f0c953",
+    "docs/acceptance/account-category-footer-20261029/release-build-storefront.log": "75477630bf99bc78b379d02d1219c3d9800b187e09de5a03ac256ce816270e2f",
+    "docs/acceptance/account-category-footer-20261029/release-build-admin.log": "31307d03a0b6c5f300cf80e075fa54857d995dd77fe4cce4b7fd239c8d52ecda",
+    "docs/acceptance/account-category-footer-20261029/live-footer-375.png": "edc8d8e95be9be6835acad66964f23b5d977a54df950ccbe801e201a3889329a",
+    "docs/acceptance/account-category-footer-20261029/live-footer-1440.png": "bfc41dab7737f1bfaaadf907064b09251fd44369a13fa321a50cb31733d9185c"
   },
   "sourceHashNormalization": "UTF-8 CRLF normalized to LF, matching Git source blobs",
-  "evidenceNormalization": "UTF-8 LF; trailing whitespace and terminal blank lines removed; original raw logs retained privately under .tools/account-category-footer-20261029"
+  "evidenceNormalization": "UTF-8 LF; trailing whitespace and terminal blank lines removed; original raw logs retained privately under .tools/account-category-footer-20261029",
+  "releaseQualification": {
+    "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+    "qualifiedAt": "2026-10-29T06:46:33.675Z",
+    "status": "all-required-release-stages-verified-by-composition",
+    "cleanAggregateExitZero": false,
+    "interruption": "Initial aggregate interrupted during storefront-ui and had inappropriate production caller flags in fixture tests. Exact source remains unchanged. Passing prefix is retained; the affected and remaining stages all pass with fixture defaults, public flags only for builds.",
+    "sourcePinsVerified": 11,
+    "firstStages": [
+      {
+        "step": "security:test-turnstile",
+        "status": "completed-before-next-chained-stage",
+        "evidence": "exact-release-gate.log",
+        "passedGroups": [
+          "13",
+          "7 passed (6.4s)"
+        ]
+      },
+      {
+        "step": "test:security-check-ui",
+        "status": "completed-before-next-chained-stage",
+        "evidence": "exact-release-gate.log",
+        "passedGroups": [
+          "8 passed (12.4s)"
+        ]
+      },
+      {
+        "step": "test:product-sku-merge",
+        "status": "completed-before-next-chained-stage",
+        "evidence": "exact-release-gate.log",
+        "passedGroups": [
+          "33"
+        ]
+      },
+      {
+        "step": "test:product-families",
+        "status": "completed-before-next-chained-stage",
+        "evidence": "exact-release-gate.log",
+        "passedGroups": [
+          "18",
+          "27 passed (38.9s)"
+        ]
+      },
+      {
+        "step": "test:store-categories",
+        "status": "completed-before-next-chained-stage",
+        "evidence": "exact-release-gate.log",
+        "passedGroups": [
+          "4",
+          "35 passed (55.8s)"
+        ]
+      },
+      {
+        "step": "test:base",
+        "status": "completed-before-next-chained-stage",
+        "evidence": "exact-release-gate.log",
+        "passedGroups": [
+          "13",
+          "1",
+          "1",
+          "3",
+          "1",
+          "3",
+          "1",
+          "3",
+          "5",
+          "9",
+          "10",
+          "8",
+          "14",
+          "28",
+          "9",
+          "37",
+          "24",
+          "24",
+          "3",
+          "5",
+          "8",
+          "1122 passed (1.2m)"
+        ]
+      },
+      {
+        "step": "test:mobile-moderation",
+        "status": "completed-before-next-chained-stage",
+        "evidence": "exact-release-gate.log",
+        "passedGroups": [
+          "4 passed (672ms)"
+        ]
+      },
+      {
+        "step": "test:store-orientation",
+        "status": "completed-before-next-chained-stage",
+        "evidence": "exact-release-gate.log",
+        "passedGroups": [
+          "12 passed (1.2m)"
+        ]
+      }
+    ],
+    "resumedStages": [
+      {
+        "step": "test:storefront-ui",
+        "startedAt": "2026-10-29T06:29:00.613Z",
+        "log": "release-test-storefront-ui.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:30:58.877Z"
+      },
+      {
+        "step": "test:storefront-recovery",
+        "startedAt": "2026-10-29T06:30:58.877Z",
+        "log": "release-test-storefront-recovery.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:33:14.370Z"
+      },
+      {
+        "step": "test:admin-ui",
+        "startedAt": "2026-10-29T06:33:14.370Z",
+        "log": "release-test-admin-ui.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:34:54.717Z"
+      },
+      {
+        "step": "test:payment-ui",
+        "startedAt": "2026-10-29T06:34:54.718Z",
+        "log": "release-test-payment-ui.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:35:47.188Z"
+      },
+      {
+        "step": "test:inbox-ui",
+        "startedAt": "2026-10-29T06:35:47.189Z",
+        "log": "release-test-inbox-ui.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:36:14.968Z"
+      },
+      {
+        "step": "test:admin-product-master-ui",
+        "startedAt": "2026-10-29T06:36:14.969Z",
+        "log": "release-test-admin-product-master-ui.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:37:51.274Z"
+      },
+      {
+        "step": "test:admin-website-assignment-ui",
+        "startedAt": "2026-10-29T06:37:51.275Z",
+        "log": "release-test-admin-website-assignment-ui.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:38:12.973Z"
+      },
+      {
+        "step": "test:owner-count-close-ui",
+        "startedAt": "2026-10-29T06:38:12.974Z",
+        "log": "release-test-owner-count-close-ui.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:38:30.174Z"
+      },
+      {
+        "step": "test:customer-account-ui",
+        "startedAt": "2026-10-29T06:38:30.174Z",
+        "log": "release-test-customer-account-ui.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:39:53.637Z"
+      },
+      {
+        "step": "test:selling-surfaces",
+        "startedAt": "2026-10-29T06:39:53.637Z",
+        "log": "release-test-selling-surfaces.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:43:42.477Z"
+      },
+      {
+        "step": "test:order-receipt-direct",
+        "startedAt": "2026-10-29T06:43:42.477Z",
+        "log": "release-test-order-receipt-direct.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:43:57.887Z"
+      },
+      {
+        "step": "test:workflow-api",
+        "startedAt": "2026-10-29T06:43:57.888Z",
+        "log": "release-test-workflow-api.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:44:18.511Z"
+      },
+      {
+        "step": "test:intake-ai-ui",
+        "startedAt": "2026-10-29T06:44:18.512Z",
+        "log": "release-test-intake-ai-ui.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:44:42.902Z"
+      },
+      {
+        "step": "test:vercel-output",
+        "startedAt": "2026-10-29T06:44:42.903Z",
+        "log": "release-test-vercel-output.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:44:44.828Z"
+      },
+      {
+        "step": "build:storefront",
+        "startedAt": "2026-10-29T06:44:44.829Z",
+        "log": "release-build-storefront.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:45:18.460Z"
+      },
+      {
+        "step": "build:admin",
+        "startedAt": "2026-10-29T06:45:18.460Z",
+        "log": "release-build-admin.log",
+        "exitCode": 0,
+        "finishedAt": "2026-10-29T06:45:50.197Z"
+      }
+    ],
+    "readiness": {
+      "projectRef": "pixplcjqivlfflickobf",
+      "counts": {
+        "verified": 8,
+        "owner": 2,
+        "connector": 3,
+        "failed": 0,
+        "blocked": 0
+      }
+    },
+    "runtimeChangedAfterApproval": false,
+    "providerWrites": false
+  },
+  "publication": {
+    "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+    "atomicPush": true,
+    "featureBranch": "codex/customer-privacy-owner-decisions",
+    "mainBranch": "main",
+    "bothRemoteRefsReadBack": true,
+    "normalHooksPassed": true,
+    "ci": {
+      "conclusion": "",
+      "headSha": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+      "jobs": [
+        {
+          "conclusion": "",
+          "name": "build-and-smoke",
+          "status": "in_progress"
+        },
+        {
+          "conclusion": "success",
+          "name": "critical-sql-behavior",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "security-check-regression",
+          "status": "completed"
+        }
+      ],
+      "status": "in_progress",
+      "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40831331901"
+    },
+    "recordedAt": "2026-10-29T06:48:12.166Z",
+    "deployments": [
+      {
+        "id": "dpl_Cnj9t3nwshwtmCJ5abFohbF5sLtV",
+        "project": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+        "name": "k2-jimzon",
+        "dashboard": "https://vercel.com/k2-jimzon/k2-jimzon/Cnj9t3nwshwtmCJ5abFohbF5sLtV",
+        "url": "https://k2-jimzon-r79oj5co5-k2-jimzon.vercel.app",
+        "environment": "Production",
+        "state": "Ready",
+        "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+        "canonicalAlias": "www.k2jimzon.com",
+        "latest": true,
+        "canonicalAliasDirectlyObserved": true
+      },
+      {
+        "id": "dpl_496mB5oWgxx4usrgAEYNvKYCqEfA",
+        "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+        "name": "k2-jimzon-admin",
+        "dashboard": "https://vercel.com/k2-jimzon/k2-jimzon-admin/496mB5oWgxx4usrgAEYNvKYCqEfA",
+        "url": "https://k2-jimzon-admin-g1gl12d06-k2-jimzon.vercel.app",
+        "environment": "Production",
+        "state": "Ready",
+        "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+        "canonicalAlias": "admin.k2jimzon.com",
+        "latest": true,
+        "canonicalAliasDirectlyObserved": true
+      }
+    ]
+  },
+  "hostedPublic": {
+    "expectedSourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+    "observedAt": "2026-10-29T06:53:52.199Z",
+    "artifacts": [
+      {
+        "target": "storefront",
+        "url": "https://www.k2jimzon.com/k2-build-target.json",
+        "status": 200,
+        "sha256": "67c95840cf8372ce3b2620c4aeccec9468f08835ac9a94279e87ce93b12fdd69"
+      },
+      {
+        "target": "storefront",
+        "url": "https://www.k2jimzon.com/account",
+        "status": 200,
+        "sha256": "66d1a13112f6791cbc5d2af25c5dc4c7dc33d247dc53a192cc07dc6fccc9b4ab"
+      },
+      {
+        "target": "storefront",
+        "url": "https://www.k2jimzon.com/theme-init.js",
+        "status": 200,
+        "sha256": "2db29b68cfbb15fde83533588ba9ff76dc9377b690def1b09cbe853505cd9753"
+      },
+      {
+        "target": "storefront",
+        "url": "https://www.k2jimzon.com/assets/index-CKaozoqU.js",
+        "status": 200,
+        "sha256": "1c73abecfca0642a7f244c8a551b08f15b40b288c03f57cb99d454245cfbe64a"
+      },
+      {
+        "target": "storefront",
+        "url": "https://www.k2jimzon.com/assets/CustomerAccount-BxOnUMQX.js",
+        "status": 200,
+        "sha256": "5ab9792292ca0431eb9559323331cfabe3c5066ca87723d7f4154eeb2de086a6"
+      },
+      {
+        "target": "storefront",
+        "url": "https://www.k2jimzon.com/assets/Footer-BBlECW-R.js",
+        "status": 200,
+        "sha256": "bbd658b936836007f21d5e0a9864a360cf7d25fdc267c0cfd5a9f9d5f1f2b334"
+      },
+      {
+        "target": "admin",
+        "url": "https://admin.k2jimzon.com/k2-build-target.json",
+        "status": 200,
+        "sha256": "2a0633acaf66a0e290dcc667782d5901bb0fff1771c0263634af7f25acfedd7a"
+      },
+      {
+        "target": "admin",
+        "url": "https://admin.k2jimzon.com/admin-portal-k2-secure",
+        "status": 200,
+        "sha256": "93267b34b4a42d2da4acb9e6f8c360652fc7290aae9342e081aaf9cc7e36b70a"
+      },
+      {
+        "target": "admin",
+        "url": "https://admin.k2jimzon.com/theme-init.js",
+        "status": 200,
+        "sha256": "2db29b68cfbb15fde83533588ba9ff76dc9377b690def1b09cbe853505cd9753"
+      },
+      {
+        "target": "admin",
+        "url": "https://admin.k2jimzon.com/assets/index-L1Gp111l.js",
+        "status": 200,
+        "sha256": "f201dd0108bd1b648939331f4828595d1717d7729cc89c49d2c51241071c514e"
+      },
+      {
+        "target": "admin",
+        "url": "https://admin.k2jimzon.com/assets/Admin-ftE6KKrg.js",
+        "status": 200,
+        "sha256": "36c6a6b8ae1ec9f49a70ca9b74ac45063f886a2b28716dbbf8868a29adbc01d6"
+      },
+      {
+        "target": "admin",
+        "url": "https://admin.k2jimzon.com/assets/Sheet-rY30tZci.js",
+        "status": 200,
+        "sha256": "782df865cce6c993551039409dd2d1577aaae657713b9f12d49211f546b9be14"
+      },
+      {
+        "target": "admin",
+        "url": "https://admin.k2jimzon.com/assets/BulkStoreCategoryDialog-Dl71e1EE.js",
+        "status": 200,
+        "sha256": "8f6f5a68347acb1e0c7d3a1f830b03eb1b5be9a8ac73b0f7e4b4050d064791f4"
+      },
+      {
+        "target": "admin",
+        "url": "https://admin.k2jimzon.com/assets/InventoryGrid-PlElRofW.js",
+        "status": 200,
+        "sha256": "e578ed88f1d7e63a1139ddee57bf07d1c6bcd0f403e5213501f3db3764a2613e"
+      }
+    ],
+    "features": {
+      "footerCategoryRegion": true,
+      "accountMobileLabel": true,
+      "manualPrivacyPreserved": true,
+      "categoryCreation": true,
+      "sheetCategoryAssignment": true,
+      "sharedRecovery": true
+    },
+    "limits": "Source commit binding is verified separately in the authenticated Vercel dashboard. This probe performs only public GET requests; it does not establish customer saves or staff writes."
+  },
+  "hostedRendered": {
+    "expectedSourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+    "observedAt": "2026-10-29T06:52:50.502Z",
+    "origin": "https://www.k2jimzon.com",
+    "viewports": [
+      {
+        "width": 375,
+        "categoryCount": 15,
+        "noHorizontalOverflow": true,
+        "allLinksAtLeast44pxAndWrapped": true,
+        "screenshot": "live-footer-375.png"
+      },
+      {
+        "width": 1440,
+        "categoryCount": 15,
+        "noHorizontalOverflow": true,
+        "allLinksAtLeast44pxAndWrapped": true,
+        "screenshot": "live-footer-1440.png"
+      }
+    ],
+    "blockedMutations": [],
+    "customerDataEntered": false,
+    "customerSaveVerified": false,
+    "staffWriteVerified": false,
+    "orderSubmitted": false,
+    "nativeCategoryNavigation": {
+      "name": "Beverages",
+      "href": "/catalog?category=Beverages",
+      "resultingUrl": "https://www.k2jimzon.com/catalog?category=Beverages",
+      "selectedFilterVerified": true,
+      "productCount": 2
+    },
+    "accountSignedOut": false
+  },
+  "actualOwnerAccount": {
+    "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+    "observedAt": "2026-10-29T06:51:38.780Z",
+    "url": "https://www.k2jimzon.com/account",
+    "actualSignedInOwnerSession": true,
+    "mobileDirectlyVisibleAfterReloadWithoutAddClick": true,
+    "mobileEmpty": true,
+    "mobileRequired": true,
+    "mobileAutocomplete": "shipping tel",
+    "mobileHeight": 44,
+    "recipientAndStreetVisible": true,
+    "noHorizontalOverflow": true,
+    "footerCategoryNavigationPresent": true,
+    "cartItemsPreserved": 4,
+    "personalDetailsEntered": false,
+    "savedProfileOrAddress": false,
+    "orderSubmitted": false,
+    "limitation": "Actual address save/reload and default checkout prefill still require owner-entered real details; no contact values or authentication state exported."
+  },
+  "actualAdminControls": {
+    "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+    "observedAt": "2026-10-29T06:56:12.400Z",
+    "origin": "https://admin.k2jimzon.com",
+    "actualAuthenticatedStaffWorkspace": true,
+    "gridCreateControlVisible": true,
+    "gridCreateDialogOpened": true,
+    "sheetModeOpened": true,
+    "sheetStoreCategoryColumnVisible": true,
+    "sheetCreateDialogOpened": true,
+    "sheetCandidateProducts": 196,
+    "applyWithZeroSelectionDisabled": true,
+    "selectedProducts": 0,
+    "categoryNameEntered": false,
+    "productWriteSubmitted": false,
+    "originalGridViewRestored": true,
+    "limitation": "Actual protected staff save and new public category propagation are not exercised with production business records."
+  }
 }

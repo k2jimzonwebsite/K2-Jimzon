@@ -1,0 +1,99 @@
+{
+  "expectedSourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "observedAt": "2026-10-29T06:53:52.199Z",
+  "artifacts": [
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com/k2-build-target.json",
+      "status": 200,
+      "sha256": "67c95840cf8372ce3b2620c4aeccec9468f08835ac9a94279e87ce93b12fdd69"
+    },
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com/account",
+      "status": 200,
+      "sha256": "66d1a13112f6791cbc5d2af25c5dc4c7dc33d247dc53a192cc07dc6fccc9b4ab"
+    },
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com/theme-init.js",
+      "status": 200,
+      "sha256": "2db29b68cfbb15fde83533588ba9ff76dc9377b690def1b09cbe853505cd9753"
+    },
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com/assets/index-CKaozoqU.js",
+      "status": 200,
+      "sha256": "1c73abecfca0642a7f244c8a551b08f15b40b288c03f57cb99d454245cfbe64a"
+    },
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com/assets/CustomerAccount-BxOnUMQX.js",
+      "status": 200,
+      "sha256": "5ab9792292ca0431eb9559323331cfabe3c5066ca87723d7f4154eeb2de086a6"
+    },
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com/assets/Footer-BBlECW-R.js",
+      "status": 200,
+      "sha256": "bbd658b936836007f21d5e0a9864a360cf7d25fdc267c0cfd5a9f9d5f1f2b334"
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/k2-build-target.json",
+      "status": 200,
+      "sha256": "2a0633acaf66a0e290dcc667782d5901bb0fff1771c0263634af7f25acfedd7a"
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/admin-portal-k2-secure",
+      "status": 200,
+      "sha256": "93267b34b4a42d2da4acb9e6f8c360652fc7290aae9342e081aaf9cc7e36b70a"
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/theme-init.js",
+      "status": 200,
+      "sha256": "2db29b68cfbb15fde83533588ba9ff76dc9377b690def1b09cbe853505cd9753"
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/assets/index-L1Gp111l.js",
+      "status": 200,
+      "sha256": "f201dd0108bd1b648939331f4828595d1717d7729cc89c49d2c51241071c514e"
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/assets/Admin-ftE6KKrg.js",
+      "status": 200,
+      "sha256": "36c6a6b8ae1ec9f49a70ca9b74ac45063f886a2b28716dbbf8868a29adbc01d6"
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/assets/Sheet-rY30tZci.js",
+      "status": 200,
+      "sha256": "782df865cce6c993551039409dd2d1577aaae657713b9f12d49211f546b9be14"
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/assets/BulkStoreCategoryDialog-Dl71e1EE.js",
+      "status": 200,
+      "sha256": "8f6f5a68347acb1e0c7d3a1f830b03eb1b5be9a8ac73b0f7e4b4050d064791f4"
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/assets/InventoryGrid-PlElRofW.js",
+      "status": 200,
+      "sha256": "e578ed88f1d7e63a1139ddee57bf07d1c6bcd0f403e5213501f3db3764a2613e"
+    }
+  ],
+  "features": {
+    "footerCategoryRegion": true,
+    "accountMobileLabel": true,
+    "manualPrivacyPreserved": true,
+    "categoryCreation": true,
+    "sheetCategoryAssignment": true,
+    "sharedRecovery": true
+  },
+  "limits": "Source commit binding is verified separately in the authenticated Vercel dashboard. This probe performs only public GET requests; it does not establish customer saves or staff writes."
+}

@@ -1,0 +1,39 @@
+{
+  "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "observedAt": "2026-10-29T06:53:15.435Z",
+  "deployments": [
+    {
+      "id": "dpl_Cnj9t3nwshwtmCJ5abFohbF5sLtV",
+      "project": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "name": "k2-jimzon",
+      "dashboard": "https://vercel.com/k2-jimzon/k2-jimzon/Cnj9t3nwshwtmCJ5abFohbF5sLtV",
+      "url": "https://k2-jimzon-r79oj5co5-k2-jimzon.vercel.app",
+      "environment": "Production",
+      "state": "Ready",
+      "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+      "canonicalAlias": "www.k2jimzon.com",
+      "latest": true,
+      "canonicalAliasDirectlyObserved": true
+    },
+    {
+      "id": "dpl_496mB5oWgxx4usrgAEYNvKYCqEfA",
+      "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "name": "k2-jimzon-admin",
+      "dashboard": "https://vercel.com/k2-jimzon/k2-jimzon-admin/496mB5oWgxx4usrgAEYNvKYCqEfA",
+      "url": "https://k2-jimzon-admin-g1gl12d06-k2-jimzon.vercel.app",
+      "environment": "Production",
+      "state": "Ready",
+      "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+      "canonicalAlias": "admin.k2jimzon.com",
+      "latest": true,
+      "canonicalAliasDirectlyObserved": true
+    }
+  ],
+  "ownerSession": {
+    "signedIn": true,
+    "settingsVisible": true,
+    "cartItems": 4,
+    "dataEntered": false,
+    "sourceStillOld": false
+  }
+}

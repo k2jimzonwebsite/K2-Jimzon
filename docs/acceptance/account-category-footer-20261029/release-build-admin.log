@@ -1,0 +1,521 @@
+
+> k2-jimzon-prototype@0.1.0 prebuild:admin
+> npm run prebuild
+
+
+> k2-jimzon-prototype@0.1.0 prebuild
+> npm run security:test-turnstile && npm run security:test && npm run security:test-admin-session && npm run security:test-env-contract && npm run security:test-k2-project && npm run security:test-live-readiness && npm run security:test-files && npm run security:files && npm run security:test-env-source && npm run security:env-source && npm run security:dependency-policy && npm run security:surfaces && npm run security:secrets && node scripts/check-imports.mjs && npm run security:test-customer-privacy
+
+
+> k2-jimzon-prototype@0.1.0 security:test-turnstile
+> node --test tests/turnstile-loader-recovery.test.mjs tests/turnstile-widget-lifecycle.test.mjs tests/git-guardrails.test.mjs && playwright test --config=playwright.api.config.js tests/turnstile-wiring-contract.spec.js tests/bot-challenge-contract.spec.js
+
+✔ commit guard refuses unstaged runtime inputs that could hide a staged regression (5.2569ms)
+✔ push guard requires committed runtime and test inputs but permits receipt-only edits (0.3781ms)
+✔ lint configuration is a verification input for commits and pushes (0.2677ms)
+✔ hook installation preserves an existing custom hooks directory (2.3598ms)
+✔ push guard refuses outgoing commits other than the checked HEAD (0.609ms)
+✔ failed Turnstile download releases the cached failure for the next attempt (6.4792ms)
+✔ a silent rendered challenge times out without ever granting a token (5.2491ms)
+✔ success is visible and cancels the pending deadline; expiry invalidates the token (0.4391ms)
+✔ provider errors are visible, bounded, and never bypass verification (0.3739ms)
+✔ unmount cancels deadlines and ignores all stale provider callbacks (0.3368ms)
+✔ an interactive challenge gets the provider interaction window instead of the background deadline (0.4211ms)
+✔ interactive cleanup after success cannot restart the pending deadline (0.3642ms)
+✔ a synchronous render failure becomes a retryable error (0.3669ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 140.5012
+
+Running 7 tests using 1 worker
+
+(node:5656) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\bot-challenge-contract.spec.js:19:1 › a missing secret fails closed without calling the provider (7ms)
+  ok 2 tests\bot-challenge-contract.spec.js:36:1 › an explicit unconfigured bypass is opt-in and auditable (2ms)
+  ok 3 tests\bot-challenge-contract.spec.js:51:1 › a token is single-use: its replay is rejected (2ms)
+  ok 4 tests\bot-challenge-contract.spec.js:64:1 › a token minted for another host is rejected (1ms)
+  ok 5 tests\bot-challenge-contract.spec.js:76:1 › every server call site binds its validated request hostname (6ms)
+  ok 6 tests\turnstile-wiring-contract.spec.js:20:1 › every TurnstileChallenge usage wires onTokenChange, never onVerify (160ms)
+  ok 7 tests\turnstile-wiring-contract.spec.js:38:1 › widget bot-check actions agree with the server expected actions (10ms)
+
+  7 passed (941ms)
+
+> k2-jimzon-prototype@0.1.0 security:test
+> node scripts/test-secret-scan.mjs
+
+Secret scanner tests passed (fabricated values only).
+
+> k2-jimzon-prototype@0.1.0 security:test-admin-session
+> node --test tests/admin-mfa-sdk-qr.test.mjs tests/admin-bff-refresh-token.test.mjs tests/admin-product-read-taxonomy.test.mjs tests/admin-product-stock-read.test.mjs tests/admin-reference-command.test.mjs tests/admin-reference-handler.test.mjs tests/admin-lot-snapshot-read.test.mjs tests/product-master-command-recovery.test.mjs tests/admin-product-master-recovery-client.test.mjs tests/admin-product-master-actor.test.mjs tests/website-assignment-recovery.test.mjs tests/admin-website-assignment-actor.test.mjs tests/admin-google-bff.test.mjs tests/turnstile-loader-recovery.test.mjs tests/photo-csv-batch.test.mjs tests/admin-photo-batch-actor.test.mjs
+
+✔ protocol-valid 12-character refresh token survives all Admin encrypted session boundaries (5.9292ms)
+✔ refresh lower/upper bounds and access-token lower bound still refuse malformed sessions (0.7043ms)
+✔ actual Supabase SDK generates PKCE with encrypted browser-bound verifier and exact K2 return route (36.5716ms)
+✔ Google callback rejects wrong-origin before provider exchange (7.2ms)
+✔ Google callback rejects no-cookie before provider exchange (2.1883ms)
+✔ Google callback rejects altered-cookie before provider exchange (2.0552ms)
+✔ Google callback rejects wrong-state before provider exchange (2.5166ms)
+✔ Google callback rejects expired before provider exchange (2.323ms)
+✔ Google callback rejects extra-fields before provider exchange (1.9341ms)
+✔ Google AAL1 session stays pending for the existing authenticator challenge without active session registration (2.8303ms)
+✔ Google callback non-staff retains staff/AAL2/registry authority (2.3303ms)
+✔ Google callback unverified-email retains staff/AAL2/registry authority (2.0259ms)
+✔ Google callback enrollment retains staff/AAL2/registry authority (1.5424ms)
+✔ Google callback aal2 retains staff/AAL2/registry authority (3.163ms)
+✔ Google callback registry-failed retains staff/AAL2/registry authority (2.6422ms)
+✔ Google start fails closed for missing bot verification or unavailable durable budget (1.4598ms)
+✔ consolidated router advertises both Google routes with origin, PKCE/bot and durable budget guards (0.2308ms)
+✔ lot read derives physical and allocations from one coherent snapshot (2.7352ms)
+✔ complete empty snapshot is a verified empty lot read (0.3562ms)
+✔ partial, malformed, over-bound and refused snapshots cannot produce healthy totals (1.4708ms)
+✔ pending enrollment accepts the installed Supabase SDK QR format without cancelling the factor (57.1925ms)
+✔ pending enrollment bounds oversized SVG data and cancels only the new unverified factor (0.8909ms)
+✔ pending enrollment preserves an already verified authenticator without creating or deleting factors (0.3108ms)
+✔ pending enrollment still rejects a non-SVG QR response and cancels its unverified factor (0.3527ms)
+✔ installed SDK completes password, enrollment, challenge and AAL2 verification against the provider protocol fixture (12.2344ms)
+✔ photo upload and assignment actor mismatch refuse before Storage or command dispatch (78.5488ms)
+✔ existing and actor-bound assignment clients retain current staff command behavior (9.1046ms)
+✔ saved Product Master actor mismatch refuses before command RPC (64.139ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (7.3946ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (12.8734ms)
+✔ existing clients without actor header retain current authenticated actor behavior (8.141ms)
+✔ approved merge uses the existing Admin AAL2 actor-bound signed Product Master RPC (5.0256ms)
+✔ approved group preview reads through read_admin_product_sku_merge_v1 (2.6631ms)
+✔ Product Master recovery has a literal-body actor-bound browser client (0.9472ms)
+✔ lost HTTP reply and later auth refusal preserve same literal request key and current CSRF (90.5165ms)
+✔ protected catalog preserves canonical assigned and nullable unassigned taxonomy (2.4033ms)
+✔ category filters can use the canonical name when no store label is assigned (0.2938ms)
+✔ stock failure preserves canonical taxonomy while reporting unknown stock (0.4098ms)
+✔ protected catalog retains every saved photo slot for reopening the photo manager (0.3292ms)
+✔ stock failure does not hide saved after-use or supporting photos (0.343ms)
+✔ internal Draft receives canonical staff stock even when public offer is absent (3.2188ms)
+✔ a complete no-lot staff row proves zero without inferring it from an absent public offer (0.3046ms)
+✔ missing row preserves product discovery and explicit unknown stock (0.462ms)
+✔ unreadable taxonomy preserves product discovery and explicit unknown stock (0.2512ms)
+✔ fractional quantity preserves product discovery and explicit unknown stock (0.3307ms)
+✔ duplicate row preserves product discovery and explicit unknown stock (0.1873ms)
+✔ query failure preserves product discovery and explicit unknown stock (0.5059ms)
+✔ creation preserves raw command strings and property order for saved retry identity (1.4484ms)
+✔ name bound counts Unicode characters after printable whitespace cleanup (0.8651ms)
+✔ endpoint refuses unsupported methods and missing command keys before dispatch (0.5892ms)
+✔ endpoint cannot be used on the storefront deployment (0.8349ms)
+✔ reference route advertises protected POST and a read-only GET (297.4882ms)
+✔ controls are refused before cleanup and malformed strings never reach SQL (0.2252ms)
+✔ creation rejects extra fields, coerced values and ambiguous category parent (0.4123ms)
+✔ protected options retain category hierarchy and permit an empty catalog (0.4604ms)
+✔ partial, unavailable, over-limit or malformed options fail closed (0.4313ms)
+✔ current Staff role cannot create even when cookie claims Admin (45.6808ms)
+✔ saved-request actor mismatch refuses before reference dispatch (9.1317ms)
+✔ Admin and SuperAdmin send one correctly signed exact command (15.4242ms)
+✔ CSRF, current AAL2 and registry refusal prevent creation dispatch (11.0864ms)
+✔ historical receipt is shown separately from changed or missing current reference (11.2247ms)
+✔ committed receipt survives unavailable current readback (7028.6216ms)
+✔ unknown command failure hides provider details and retains retry classification (2.3041ms)
+✔ saved Website assignment actor mismatch refuses before command RPC (49.4537ms)
+✔ matching Admin and SuperAdmin send exactly one correctly signed original-actor update (9.5485ms)
+✔ current Staff, CSRF, AAL2 and registry still refuse before update dispatch (10.0214ms)
+✔ existing clients without actor header retain current authenticated actor behavior (4.5241ms)
+✔ bounded Website read distinguishes absent, paused and active existing rows (10.6516ms)
+✔ Website read refuses duplicate partial malformed failed or missing product evidence (7051.7493ms)
+✔ current Staff and invalid SKU refuse per-product read before data lookup; aggregate contract stays (5.5774ms)
+✔ mapping resolves exact existing Draft and retains untouched photo slots (18.0023ms)
+✔ invalid identities, duplicate files/SKUs, missing files, existing slots and live targets refuse before upload (3.0923ms)
+✔ lost assignment reply survives reload and retries original payload/key without uploading twice (7.3682ms)
+✔ actor change, byte substitution and current-media drift stop before mutation (3.4053ms)
+✔ storage failure refuses dispatch and malformed recovery is retained (1.8151ms)
+✔ multi-product batch resumes at failed row and never replays completed rows (3.055ms)
+✔ account changes after upload or media drift during upload refuse assignment (3.6775ms)
+✔ recovery refuses a changed literal command and a competing batch (1.8911ms)
+✔ saved but unconfirmed command cannot overwrite later media or a non-Draft target (2.8443ms)
+✔ Product Master updates have durable actor-scoped recovery (0.9701ms)
+✔ reload preserves literal bytes version reason and original key (1.7136ms)
+✔ changed key payload version or review decision cannot replace unknown request (1.0251ms)
+✔ actor and operation identity isolate reading and acknowledgement (0.312ms)
+✔ corruption foreign actor secret field and oversize storage remain untouched (0.8765ms)
+✔ malformed or non-update commands cannot be held or sent (1.2114ms)
+✔ approved merge commands have durable actor-scoped recovery (0.5342ms)
+✔ failed Turnstile download releases the cached failure for the next attempt (5.7247ms)
+✔ Website has its own durable actor-scoped original request recovery (0.8479ms)
+✔ Website literal body and key survive reload and cannot be replaced (1.9152ms)
+✔ corrupt Website records remain untouched and invalid bodies never persist (0.9137ms)
+✔ existing unassigned Website listing keeps a real version; only absent row has null identity (0.3761ms)
+ℹ tests 91
+ℹ suites 0
+ℹ pass 91
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7967.7566
+
+> k2-jimzon-prototype@0.1.0 security:test-env-contract
+> node scripts/verify-deployment-environment-contract.mjs --self-test
+
+Deployment environment contract self-test passed (5 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:test-k2-project
+> node --test tests/k2-supabase-project-identity.test.mjs
+
+✔ accepts the exact K2 URL only when the management token sees K2 (28.3073ms)
+✔ rejects a ScoutIT-only management token (0.9077ms)
+✔ rejects a ScoutIT URL before sending the token (0.3022ms)
+✔ rejects missing token and management access failure without logging secrets (0.5209ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 125.0007
+
+> k2-jimzon-prototype@0.1.0 security:test-live-readiness
+> node --test tests/k2-live-readiness-contract.test.mjs tests/k2-installed-readiness.test.mjs tests/admin-preauth-dependency-readiness.test.mjs
+
+✔ only the approved signed pre-auth rate RPC may extend the installed permission profile (15.3694ms)
+✔ normal readiness blocks the completely missing login dependency (0.3623ms)
+✔ preparation mode cannot admit partial installation or grant/body drift (0.3096ms)
+✔ only exact installed rate authority and private forced RLS classify verified (0.2225ms)
+✔ incomplete metadata and invalid source hashes do not pass (0.2269ms)
+✔ exact installed source receipt and all required relations classify installed, never permission to reapply (1.1971ms)
+✔ empty legacy baseline is first apply only when every chain relation is absent (0.1911ms)
+✔ changed complete-source receipt, duplicate or old controlled receipt refuse (0.2522ms)
+✔ partial installed schema and malformed relation evidence refuse (0.2104ms)
+✔ approved family reader profile passes while every changed authority field refuses (17.2265ms)
+✔ installed permission classification names exact reviewed signatures and invoker trigger exceptions (0.3533ms)
+✔ extra overload or altered authority cannot hide behind a function name (1.8353ms)
+✔ extra PUBLIC execute and trigger SECURITY DEFINER drift refuse (0.7261ms)
+✔ two arbitrary triggers do not inherit the named PUBLIC exception (0.3996ms)
+✔ same-named private trigger cannot replace PUBLIC schema exception (0.5224ms)
+✔ approved order-chat adapter extends the exact installed catalog without admitting other grants (0.5307ms)
+✔ date-only migration version requires the exact restored version and all backup bindings (1.7431ms)
+✔ backup must match encrypted bytes/hash and actual restored current migration (0.2869ms)
+✔ missing proof and impossible/future creation or restoration evidence refuse (0.1911ms)
+✔ unknown backup creation metadata cannot be bypassed by a valid candidate (0.2965ms)
+✔ backup chronology requires real UTC ISO strings rather than Date.parse coercion (0.1871ms)
+✔ the gate keeps the read-only guard in front of every query (1.0041ms)
+✔ the production query is declared read_only (0.2326ms)
+✔ every SQL template literal is a SELECT with no write verb (0.742ms)
+✔ the gate reports provider surfaces as blocked instead of assuming them (0.1516ms)
+✔ the gate refuses to send a query before identity passes (0.1559ms)
+✔ documented K2 gates load the owner-controlled local environment file (0.6147ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 146.0811
+
+> k2-jimzon-prototype@0.1.0 security:test-files
+> node scripts/test-sensitive-file-policy.mjs
+
+Sensitive-file policy tests passed (13 blocked, 4 allowed, and the source inventory).
+
+> k2-jimzon-prototype@0.1.0 security:files
+> node scripts/verify-tracked-sensitive-files.mjs
+
+No git repository found; falling back to deployment-source inventory.
+Sensitive-file policy passed in source mode (5402 files checked).
+
+> k2-jimzon-prototype@0.1.0 security:test-env-source
+> node scripts/test-environment-source-boundary.mjs
+
+Environment source-boundary tests passed (8 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:env-source
+> node scripts/verify-environment-source-boundary.mjs
+
+Environment source boundary passed (276 browser and 203 server/Edge files checked).
+
+> k2-jimzon-prototype@0.1.0 security:dependency-policy
+> node scripts/verify-dependency-policy.mjs
+
+Dependency policy passed (20 direct, 246 locked packages, 2 reviewed install scripts).
+Reviewed licenses: 0BSD=2, Apache-2.0=25, Apache-2.0 AND LGPL-3.0-or-later=3, Apache-2.0 AND LGPL-3.0-or-later AND MIT=1, BSD-2-Clause=1, BSD-3-Clause=2, ISC=7, LGPL-3.0-or-later=10, MIT=170, MPL-2.0=24, UNKNOWN=1
+
+> k2-jimzon-prototype@0.1.0 security:surfaces
+> node scripts/audit-security-surfaces.mjs --fail-on-gaps
+
+# MAP-020 Security Surface Inventory
+
+Generated: 2026-10-29T06:45:36.965Z
+
+- Prepared Admin routes: 105
+- Prepared Storefront routes: 24
+- Supabase Edge Functions: 2 (invite-staff, shopee-webhook)
+- api_request: 71 source operations
+- auth: 50 source operations
+- realtime: 12 source operations
+- rpc: 152 source operations
+- storage: 16 source operations
+- table: 141 source operations
+- SQL functionDefinitionOccurrences: 285
+- SQL uniqueFunctionSignatures: 221
+- SQL functionGrantEvents: 192
+- SQL functionRevokeEvents: 300
+- SQL functionSearchPathHardeningEvents: 6
+- SQL effectiveSecurityDefinerWithoutFixedSearchPath: 0
+- SQL effectiveFunctionsWithPublicExecute: 0
+- SQL effectiveFunctionsWithAnonExecute: 21
+- SQL effectiveFunctionsWithAuthenticatedExecute: 112
+- SQL effectiveFunctionsWithServiceRoleExecute: 16
+- SQL scheduledJobs: 0
+- SQL publicationChanges: 16
+- SQL policyDefinitions: 156
+- SQL storagePolicyDefinitions: 15
+- Dynamic operations requiring explicit review: 0
+- Exact expected anonymous function grants: 21
+- Unexpected PUBLIC function grants: 0
+- Unexpected anonymous function grants: 0
+- Missing expected anonymous function grants: 0
+- BFF route-control classification gaps: 0
+- Wildcard CORS production sources: 0
+
+This is a source inventory, not deployment or authorization evidence.
+
+> k2-jimzon-prototype@0.1.0 security:secrets
+> node scripts/scan-secrets.mjs
+
+Secret scan passed (0 files checked; secret values are never printed).
+✓ Import-integrity check passed — all hooks and supabase usages are imported.
+
+> k2-jimzon-prototype@0.1.0 security:test-customer-privacy
+> node --test tests/customer-email-return.test.mjs tests/customer-portfolio-api.test.mjs tests/customer-privacy-api.test.mjs tests/customer-privacy-worker.test.mjs tests/customer-privacy-admin-api.test.mjs tests/customer-crm-metrics.test.mjs tests/customer-closure-authority-state.test.mjs tests/customer-closure-authority-journal.test.mjs tests/customer-closure-authority-sqlite.test.mjs tests/customer-closure-authority-protection.test.mjs tests/customer-privacy-authority-bounds.test.mjs tests/customer-privacy-hold-coordinator.test.mjs tests/local-worker-runtime.test.mjs tests/customer-address-book.test.mjs tests/customer-address-book-api.test.mjs
+
+✔ address book API verifies current account and permitted origin before native mutation (2.462ms)
+✔ address book uses the existing signed settings action and preserves operation/revision (2.0166ms)
+✔ address shape and UTF-8 request limits reject before any native call (0.7348ms)
+✔ address revision and operation conflicts are explicit recoverable outcomes (1.0173ms)
+✔ delivery mobile validation is shared by saved addresses and fresh checkout (1.5599ms)
+✔ address commands normalize fulfillment contact without creating an Auth identity (1.2552ms)
+✔ address book refuses selectors, duplicate IDs, missing defaults and unbounded bodies (1.8879ms)
+✔ saved-address fields and geographic shape are closed and bounded (1.6115ms)
+✔ checkout applies a gift default as one recipient/contact/address/destination group (0.3325ms)
+✔ a manual delivery edit prevents every part of a late default being applied (0.1665ms)
+✔ initialized empty address book never falls back to the deleted legacy projection (0.1531ms)
+✔ stable slow replay yields validated prefixes before the deadline and eventually completes (759.9142ms)
+✔ normal requests never bootstrap an absent head or bypass an unqualified proof (2.6642ms)
+✔ a reported decision has its exact marker and witness and returns no execution permit (8.5848ms)
+✔ concurrent cancellation and authorization have exactly one terminal winner (17.3346ms)
+✔ an unrelated CAS winner rebases the same immutable command rather than overwriting its attempt (11.8559ms)
+✔ lost commands acknowledgment reconciles an identical operation after restart (6.3178ms)
+✔ lost candidates acknowledgment reconciles an identical operation after restart (10.7077ms)
+✔ lost head acknowledgment reconciles an identical operation after restart (4.804ms)
+✔ lost commits acknowledgment reconciles an identical operation after restart (7.6555ms)
+✔ lost witness acknowledgment reconciles an identical operation after restart (7.2869ms)
+✔ a negative read during an in-flight head write never reports a definitive failure (7.924ms)
+✔ a stalled read returns bounded uncertainty without bootstrapping or writing later (40.7224ms)
+✔ a stalled head write returns uncertainty, then the same operation reconciles its late commit (119.4469ms)
+✔ a conflicting commit marker or missing committed candidate refuses without overwriting evidence (10.6594ms)
+✔ rolled-back head is detected by both later immutable markers and independent witness (10.6921ms)
+✔ full paginated history rebuilds a lost derived index; incomplete budget never reports ready (18.1001ms)
+✔ a legitimate head advance during pagination restarts rather than declaring corruption (17.5867ms)
+✔ generation fencing prevents a previously prepared old-generation head from winning later (20.8175ms)
+✔ unsealed head blocks a later command until its exact marker and witness can be persisted (12.9924ms)
+✔ cancel, expiry and authorization racing together produce one terminal receipt (22.4195ms)
+✔ different logical commands racing on the same operation ID preserve one immutable binding (5.9282ms)
+✔ an unresponsive proof verifier returns pending and creates no command or candidate (46.4856ms)
+✔ a coordinator abort stops a waiting proof before any later immutable write (16.6128ms)
+✔ an already aborted coordinator starts no journal I/O (0.582ms)
+✔ event-limited passes resume without incomplete witness, seal or command writes (16.01ms)
+✔ page-limited passes retain their cursor and a new coordinator starts from genesis (16.0869ms)
+✔ head changes between passes reset checked progress and include the new terminal result (31.9017ms)
+✔ a corrupt later record cannot turn an incomplete prefix into readiness (13.1848ms)
+✔ competing calls do not publish or overwrite another bounded scan pass (16.5543ms)
+✔ completion rechecks a witness changed after the first partial pass (17.5959ms)
+✔ a timed-out resumed pass cannot overwrite progress after its delayed I/O returns (191.1657ms)
+✔ a repeated pagination cursor refuses after resuming instead of looping or becoming ready (14.4123ms)
+✔ head-change retries share one event allowance for the reconciliation call (30.5234ms)
+✔ a protection with lost head acknowledgement survives exact retry and lost witness reconstruction (20.4376ms)
+✔ v1 head bytes are refused without mutation in a v2 namespace (0.7704ms)
+✔ independent protection and authorization coordinator calls commit only one applicable winner (16.5578ms)
+✔ v2 has a fresh namespace/state contract and refuses old v1 commands (14.4843ms)
+✔ customer-only protection precedes any registration and matches only its real customer (32.8121ms)
+✔ customer-only protection survives cancellation/replacement and neither race permits both winners (48.6299ms)
+✔ missing or mixed customer-only origin identities never claim an operation (1.5551ms)
+✔ accepted global protection survives cancellation and blocks a replacement request (23.7343ms)
+✔ protection matches original subject OR customer without blocking unrelated scopes (22.6858ms)
+✔ an old cancellation cannot authorize a protection after replacement processing wins (17.5015ms)
+✔ a fresh protection after cancellation blocks the new request until verified release (32.9719ms)
+✔ protection and authorization from one head have a single winner (14.3737ms)
+✔ initiator role, principal and exact native scope cannot be chosen through caller evidence (7.4758ms)
+✔ worker mirror requires a real committed hold and release requires its exact resolution (8.4684ms)
+✔ changed IDs and duplicate protection attempts cannot rewrite accepted protection (18.6123ms)
+✔ receipt replay preserves global protection even when an index is missing after restoration (8.9031ms)
+✔ the last independent protection still blocks after another protection is released (29.1779ms)
+✔ generation fencing retains active protection and refuses stale protection mutations (35.3567ms)
+✔ native SQLite witness persists complete exact state and receipt across a new connection (40.5866ms)
+✔ native transaction rollback cannot publish partial maps with a newer control head (43.7013ms)
+✔ native witness refuses forks, namespace changes and derived-state corruption; stale advance cannot roll back (32.3002ms)
+✔ a newer internally valid fork cannot replace the witnessed history (33.8126ms)
+✔ a corrupt existing witness is not silently replaced by a valid newer state (28.6134ms)
+✔ legitimate advancement during checkpoint validation returns pending without a false fork (49.7372ms)
+✔ native protection rows persist across reopen and roll back atomically with their head (51.8719ms)
+✔ unqualified adapters deny commands even with caller-selected proof (13.2536ms)
+✔ strict namespace, fields, policy and scope reject before writing a logical command (1.6544ms)
+✔ canonical command identity ignores property order and preparation mutates no state (3.7336ms)
+✔ one actor has one open request and request IDs cannot bind a different actor (21.1742ms)
+✔ cancel and authorize candidates from the same parent cannot both commit (14.9286ms)
+✔ exact terminal retry returns its original receipt; changed logical bytes refuse (7.7016ms)
+✔ a prepared but uncommitted logical command cannot change its payload (1.9532ms)
+✔ an unrelated winner permits a new attempt for the same immutable logical command (9.5061ms)
+✔ historical authorization after fencing grants no current execution permission (15.426ms)
+✔ activation binds the exact fenced head and retains original authorized identities (25.8584ms)
+✔ expiry requires a native unverified-expiry decision; cancellation permits a fresh request (13.7367ms)
+✔ wrong proof principal, purpose, command hash or role never persists a logical command (2.9076ms)
+✔ authorization and activation fail closed without their qualified matching proofs (8.7864ms)
+✔ unknown logical-store acknowledgment stays pending and identical retry reconciles (2.481ms)
+✔ tampered candidates and corrupt cached state cannot be replayed (2.75ms)
+✔ the command is copied before the first await, so caller mutation cannot change its identity (1.2651ms)
+✔ a logical command refused by current state still cannot be changed on retry (3.9463ms)
+✔ a self-checksummed checkpoint still requires valid association maps and exact genesis (7.2505ms)
+✔ customer totals distinguish unfinished charges from zero (4.7002ms)
+✔ email return captures the hash only in memory and scrubs credentials before SDK initialization (2.7933ms)
+✔ email return rejects duplicate, mixed, recovery and incomplete credentials (1.4863ms)
+✔ email return leaves unrelated account anchors, pages and PKCE codes untouched (0.31ms)
+✔ email return fails closed if URL credentials cannot be cleared (0.2637ms)
+✔ email return accepts the supported twelve-character provider refresh token and refuses shorter tokens (0.6097ms)
+✔ portfolio requires current Auth identity and a permitted origin before reading (1.5904ms)
+✔ portfolio rejects customer selectors, unsupported commands and malformed pagination (0.6064ms)
+✔ portfolio signs a fixed scoped read and preserves all-record summary (2.172ms)
+✔ privacy review accepts only exact bounded request/hold operations (2.1412ms)
+✔ a pre-request hold can only target an exact customer and allowed reason (0.2315ms)
+✔ Staff cannot reach private customer privacy records or mutations (0.7786ms)
+✔ Admin review uses CSRF authorization, exact shared signature action and original idempotency key (1.3247ms)
+✔ Admin read signs a bounded private read and exposes no capability fields (0.4749ms)
+✔ an action cannot be retried as a different signed-in Admin (0.2293ms)
+✔ every hold action refuses without native writes when the authority is absent (0.4525ms)
+✔ request holds use the separate signed native boundary and expose only checked current outcome (3.3101ms)
+✔ historical resolved creation and authorization refusal never become a successful saved hold (1.0759ms)
+✔ customer-only holds use the same signed pipeline with real customer scope and checked outcome (1.2344ms)
+✔ existing holds without native intents remain an explicit non-writing reconciliation outcome (0.5404ms)
+✔ a lost native preparation reply retains its exact signed operation before coordinator retry (0.9623ms)
+✔ committed native resolution stays uncertain until its original protection release is verified (0.893ms)
+✔ one deadline aborts native prepare and prevents late coordinator or fallback work (20.4284ms)
+✔ native preparation time remains inside the inherited coordinator deadline (30.7906ms)
+✔ privacy rejects selected identities/contact overrides before any provider or RPC (1.8957ms)
+✔ OTP send persists delivery budget before provider call, uses verified contact, never creates users (2.6956ms)
+✔ delivery failure does not confirm closure or leak provider errors (0.4934ms)
+✔ confirmation consumes attempt before exact-channel OTP check and refuses wrong returned identity (0.4921ms)
+✔ only a successful matching provider verification creates the signed confirmation (1.0902ms)
+✔ fresh proof is committed before processing so a processing failure never requires a new confirmation (0.733ms)
+✔ elapsed synchronous adapter time cannot permit another I/O before the timer runs (48.6248ms)
+✔ a microtask chain cannot defer the elapsed deadline until after later I/O (37.0749ms)
+✔ nested authority scopes inherit the original absolute deadline and expose checked remaining time (25.7212ms)
+✔ a fence during the post-submit native read prevents projection (47.2889ms)
+✔ missing native keys and caller-selected proof cannot enable a hold (1.3299ms)
+✔ native customer-only protection needs no origin request and preserves null scope through release/replay (87.4636ms)
+✔ a signed current fact cannot mix null origin with an invented actor or request (2.5017ms)
+✔ proof MAC, command bytes and closed fields reject before a native write (6.0109ms)
+✔ a fresh native challenge and exact current record are required (9.9343ms)
+✔ complete hold lifecycle retains cancellation and never reprojects after release and authorization (152.4635ms)
+✔ a committed native resolution resumes release without another Admin or contact confirmation (51.943ms)
+✔ a delayed projected fact cannot report an active hold after a known release and authorization (70.0859ms)
+✔ an authorization winner closes the still-unaccepted intent without creating a hold (21.6556ms)
+✔ lost native acknowledgement stays pending and reconciles the original fixed result (26.3438ms)
+✔ an unsigned projection acknowledgement cannot report a saved hold (22.2156ms)
+✔ a coordinator deadline stops later projection calls when a read finishes late (83.6566ms)
+✔ unconfigured non-hold proof remains denied rather than inheriting native hold authority (2.2356ms)
+✔ stable slow hold retries progress through complete initial, submit and fresh confirmation scans (3552.0335ms)
+✔ a resumed confirmation still rejects a fence after the first call expired (123.96ms)
+✔ a lost native resolution resumes derived release under the same steady slow history (2310.6805ms)
+✔ worker rejects missing scheduler authority and any other project before constructing a client (1.7088ms)
+✔ worker obfuscates only leased original Auth UUID and acknowledges with that lease (1.1069ms)
+✔ a lost provider acknowledgement is recoverable without deleting a new account (0.4024ms)
+✔ failed startup still disposes its owned runtime and preserves the missing-port evidence (3.627ms)
+✔ hung startup is bounded and cannot prevent the disposal attempt or receipt (28.9769ms)
+✔ failed or hung disposal does not claim a successful stop (18.006ms)
+✔ successful disposal requires an observed owned-loopback port and refusal probe (1.4073ms)
+✔ untrusted or invalid ready URLs cannot redirect the shutdown probe (0.4848ms)
+✔ a hung startup reaches owned disposal without entering its operation (46.4722ms)
+✔ an operation failure still verifies owned shutdown and preserves the original error (0.8607ms)
+✔ hung fixture I/O reaches verified runtime cleanup without advancing the operation (16.9772ms)
+ℹ tests 148
+ℹ suites 0
+ℹ pass 148
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7263.4791
+
+> k2-jimzon-prototype@0.1.0 build:admin
+> vite build --mode admin --configLoader runner && node scripts/emit-static-404.mjs admin && node scripts/emit-admin-head.mjs admin && node scripts/verify-build-boundary.mjs admin && node scripts/verify-bundle-budgets.mjs admin && node scripts/scan-secrets.mjs dist
+
+vite v8.3.5 building client environment for admin...
+transforming...
+✓ 725 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/k2-build-target.json                                0.02 kB │ gzip:   0.04 kB
+dist/admin-sw.js                                         0.41 kB
+dist/manifest.json                                       0.74 kB │ gzip:   0.30 kB
+dist/index.html                                          3.57 kB │ gzip:   1.07 kB
+dist/.vite/manifest.json                                18.38 kB │ gzip:   2.10 kB
+dist/assets/MasterWorkflowGraph-B4iZfrXt.css             0.81 kB │ gzip:   0.41 kB
+dist/assets/Admin-1W2E3zHB.css                           2.03 kB │ gzip:   0.69 kB
+dist/assets/index-BtG_iRtD.css                         199.35 kB │ gzip:  29.33 kB
+dist/assets/formatMoney-DcWy64el.js                      0.09 kB │ gzip:   0.11 kB
+dist/assets/imageFallback-CwRuSFqn.js                    0.19 kB │ gzip:   0.15 kB
+dist/assets/useBodyScrollLock-BOvfg3Wi.js                0.32 kB │ gzip:   0.22 kB
+dist/assets/supabaseClient-DnkYaoZs.js                   0.53 kB │ gzip:   0.41 kB
+dist/assets/orderChargeState-Clw0vEvX.js                 0.55 kB │ gzip:   0.33 kB
+dist/assets/rolldown-runtime-XKyaHtl9.js                 0.72 kB │ gzip:   0.42 kB
+dist/assets/overviewAvailability-BqmpDMaE.js             0.94 kB │ gzip:   0.52 kB
+dist/assets/channelMeta-0DXB9A7f.js                      1.12 kB │ gzip:   0.48 kB
+dist/assets/reportError-DrpEeSwJ.js                      1.36 kB │ gzip:   0.77 kB
+dist/assets/useRetainedFulfillmentCommand-BqqT3Rry.js    1.89 kB │ gzip:   1.00 kB
+dist/assets/WorkflowGuideModal-ChskFYfF.js               5.90 kB │ gzip:   2.18 kB
+dist/assets/FefoWorkflowDiagram-D_r4DzBj.js              6.02 kB │ gzip:   2.19 kB
+dist/assets/AdminWorkspaceUi-B58KG4dD.js                 6.03 kB │ gzip:   1.93 kB
+dist/assets/TourSelectionModal-BHmPjgvZ.js               6.58 kB │ gzip:   2.30 kB
+dist/assets/FulfillmentWorkflowDiagram-mkZ5H8Tb.js       7.05 kB │ gzip:   2.71 kB
+dist/assets/CustodyWorkflowDiagram-CToVauS4.js           7.09 kB │ gzip:   2.64 kB
+dist/assets/FlightWorkflowDiagram-BpN_rJvB.js            7.32 kB │ gzip:   2.81 kB
+dist/assets/Kanban-n1xAAAoE.js                           7.45 kB │ gzip:   2.35 kB
+dist/assets/PasabuyWorkflowDiagram-EwLKwEF3.js           7.78 kB │ gzip:   3.00 kB
+dist/assets/ReservationHolds-C642T-AC.js                 8.80 kB │ gzip:   3.44 kB
+dist/assets/productResearchContract-Brii40Gn.js         12.31 kB │ gzip:   3.73 kB
+dist/assets/Suppliers-BuUrE5if.js                       12.58 kB │ gzip:   4.03 kB
+dist/assets/SpotlightTourOverlay-CCZORlsP.js            13.45 kB │ gzip:   4.10 kB
+dist/assets/StoreAssetStudio-BmpXzCc9.js                17.00 kB │ gzip:   5.43 kB
+dist/assets/PasabuyManager-cmTv3zVP.js                  18.31 kB │ gzip:   6.28 kB
+dist/assets/CouponManager-CHSZU6EL.js                   20.48 kB │ gzip:   5.84 kB
+dist/assets/Customers-D8b0V3Kk.js                       34.38 kB │ gzip:   8.52 kB
+dist/assets/StaffPermissionManager-B5Iai_Ez.js          34.61 kB │ gzip:   9.04 kB
+dist/assets/ConsignmentManager-BZH00sXC.js              36.25 kB │ gzip:   9.59 kB
+dist/assets/tourData-CANGzczX.js                        36.47 kB │ gzip:  11.48 kB
+dist/assets/GlobeCms-Dn6Sqc-F.js                        39.78 kB │ gzip:  13.10 kB
+dist/assets/DeliveryRateControl-DjdQaoZa.js             40.46 kB │ gzip:  11.66 kB
+dist/assets/ChannelIntegrations-B-lEYTnH.js             41.12 kB │ gzip:  10.73 kB
+dist/assets/Overview-B_T5vfld.js                        41.27 kB │ gzip:  11.29 kB
+dist/assets/index-BQlj4zqj.js                           47.83 kB │ gzip:  16.52 kB
+dist/assets/Inbox-BbDwyy4r.js                           57.45 kB │ gzip:  14.25 kB
+dist/assets/BulkCsvImportModal-CrPG7bv6.js              58.91 kB │ gzip:  19.11 kB
+dist/assets/adminBffService-Ca7ZipIf.js                 61.14 kB │ gzip:  17.19 kB
+dist/assets/OwnerCountClose-BrOjSRIB.js                 74.14 kB │ gzip:  18.37 kB
+dist/assets/Sheet-XRYKELNF.js                           95.88 kB │ gzip:  20.59 kB
+dist/assets/InventoryGrid-DMsVWW1b.js                  106.39 kB │ gzip:  26.38 kB
+dist/assets/OmniOperationsHub-B2ZCm1_D.js              124.58 kB │ gzip:  28.26 kB
+dist/assets/vendor-motion-CJUFHmvU.js                  144.96 kB │ gzip:  48.04 kB
+dist/assets/MasterWorkflowGraph-Z-j4yIs-.js            176.58 kB │ gzip:  49.96 kB
+dist/assets/vendor-react-BuCXCQla.js                   210.53 kB │ gzip:  65.70 kB
+dist/assets/BulkStoreCategoryDialog-DpDPL2UG.js        212.07 kB │ gzip:  56.66 kB
+dist/assets/vendor-supabase-Bwm3Z89P.js                214.38 kB │ gzip:  55.16 kB
+dist/assets/Admin-CLq0EcFS.js                          227.45 kB │ gzip:  61.66 kB
+dist/assets/esm-4S8EBSDO.js                            368.43 kB │ gzip: 108.02 kB
+
+✓ built in 1.95s
+Emitted admin static 404 recovery page.
+emit-admin-head: Admin discovery tags written to dist/index.html.
+Verified admin production boundary (49 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker).
+Admin application budget passed: 227.46 kB/300.00 kB minified.
+Secret scan passed (941 files checked; secret values are never printed).

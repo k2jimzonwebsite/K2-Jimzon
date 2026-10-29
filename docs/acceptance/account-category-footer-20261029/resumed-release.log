@@ -1,0 +1,32 @@
+Starting test:storefront-ui
+test:storefront-ui: exit 0
+Starting test:storefront-recovery
+test:storefront-recovery: exit 0
+Starting test:admin-ui
+test:admin-ui: exit 0
+Starting test:payment-ui
+test:payment-ui: exit 0
+Starting test:inbox-ui
+test:inbox-ui: exit 0
+Starting test:admin-product-master-ui
+test:admin-product-master-ui: exit 0
+Starting test:admin-website-assignment-ui
+test:admin-website-assignment-ui: exit 0
+Starting test:owner-count-close-ui
+test:owner-count-close-ui: exit 0
+Starting test:customer-account-ui
+test:customer-account-ui: exit 0
+Starting test:selling-surfaces
+test:selling-surfaces: exit 0
+Starting test:order-receipt-direct
+test:order-receipt-direct: exit 0
+Starting test:workflow-api
+test:workflow-api: exit 0
+Starting test:intake-ai-ui
+test:intake-ai-ui: exit 0
+Starting test:vercel-output
+test:vercel-output: exit 0
+Starting build:storefront
+build:storefront: exit 0
+Starting build:admin
+build:admin: exit 0

@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "answer": "Approve feature pushes and live release",
+  "repository": "https://github.com/k2jimzonwebsite/K2-Jimzon",
+  "refs": [
+    "codex/customer-privacy-owner-decisions",
+    "main"
+  ],
+  "artifacts": [
+    "K2 Storefront",
+    "K2 Admin"
+  ],
+  "excluded": [
+    "database writes",
+    "Auth changes",
+    "deletion activation"
+  ],
+  "recordedAt": "2026-10-29T05:38:55.184Z"
+}
