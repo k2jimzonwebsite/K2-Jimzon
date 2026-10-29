@@ -2,8 +2,27 @@ import { getSupabaseClient } from '../lib/lazySupabaseClient'
 import { guestBffEnabled } from './guestCommerceService'
 import { guestBffEndpoint } from './guestCommerceRoutes'
 import { fetchWithTimeout, isRequestTimeoutError } from '../lib/fetchWithTimeout'
+import { captureCustomerEmailReturn } from '../lib/customerEmailReturn'
 
 const ACCOUNT_ENABLED = import.meta.env.VITE_CUSTOMER_ACCOUNT_ENABLED === 'true'
+let emailReturn = ACCOUNT_ENABLED && guestBffEnabled() ? captureCustomerEmailReturn() : null
+
+export function customerEmailReturn() { return emailReturn }
+export function clearCustomerEmailReturn() { emailReturn = null }
+
+export async function completeCustomerEmailReturn() {
+  const returned = emailReturn
+  if (!returned || returned.kind === 'error') return { ok: false, error: returned?.message || 'Request a new sign-in link.' }
+  try {
+    const client = await customerAuthClient()
+    if (!client) return { ok: false, error: 'Customer account access is not active yet.' }
+    const result = returned.kind === 'hash'
+      ? await client.auth.verifyOtp({ token_hash: returned.tokenHash, type: 'email' })
+      : await client.auth.setSession({ access_token: returned.accessToken, refresh_token: returned.refreshToken })
+    if (result.error || !result.data?.session) return { ok: false, error: 'This sign-in link has expired or was already used. Request a new link.' }
+    return { ok: true }
+  } catch { return { ok: false, error: 'Sign-in could not be confirmed. Check your connection and try again.' } }
+}
 
 const ACCOUNT_ERRORS = {
   ACCOUNT_AUTH_REQUIRED: 'Your account session has expired. Sign in again.',

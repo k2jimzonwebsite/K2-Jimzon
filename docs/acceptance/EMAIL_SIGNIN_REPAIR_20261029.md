@@ -1,0 +1,37 @@
+# MAP-019 email sign-in repair
+
+29 October: owner reports the real email landing in Spam and the clicked link returning to signup/sign-in. This repairs accepted IDEA-20261027-02 in existing MAP-019; automated deletion remains suspended.
+
+**Named owner authorization received:** Owner explicitly answers **Approve K2 email repair** for packet `b794e9371ccc2810b6a489fc251ce7265d0ad4f78618740433db297f6c7c9ef8` on exact K2 `pixplcjqivlfflickobf`. The five-field provider request is authorized, but remains unapplied until the repaired source is qualified and deployed. This supersedes approval-pending language below for this exact packet only.
+
+## Diagnosis
+
+The Storefront BFF requests an implicit Supabase magic link. The shared browser singleton uses PKCE. Installed `@supabase/auth-js` explicitly rejects an implicit callback in PKCE mode. The old account view also ignores callback errors, presenting the form again. Two failed-first browser regressions reproduce missing confirmation and missing expired-link recovery. Google OAuth configuration is a separate flow; changing Google Console is not the repair for this email return.
+
+The currently connected Gmail account is the K2 sender mailbox. Its sent message proves delivery was attempted to the owner-selected identity using custom `smtp.gmail.com`, with sender display `K2 Jimzon Admin`, a generic subject and a direct Supabase verification link. It does not expose the recipient's Spam classification or receiving SPF/DKIM/DMARC verdict. No missing DNS record, email-authentication failure or inbox-delivery guarantee is inferred. No unrelated mailbox content is part of this receipt; live tokens/message content are not committed.
+
+References: [Supabase implicit flow](https://supabase.com/docs/guides/auth/sessions/implicit-flow), [PKCE flow](https://supabase.com/docs/guides/auth/sessions/pkce-flow), [email template/prefetch guidance](https://supabase.com/docs/guides/auth/auth-email-templates), [SMTP delivery practices](https://supabase.com/docs/guides/auth/auth-smtp), [Gmail sender guidelines](https://support.google.com/mail/answer/81126).
+
+## Local repair
+
+`src/lib/customerEmailReturn.js` captures only email returns on root/account routes, immediately removes secret fragment fields and moves to `/account`. It retains credentials in memory, rejects duplicate/mixed/recovery/malformed credentials and refuses if URL cleanup fails. It leaves PKCE codes and unrelated routes/anchors untouched. The account service can verify a first-party token hash or validate an older implicit session through the existing SDK. It never changes shared PKCE, Admin Auth, roles, sign-out safeguards, issuance bot/rate gates or closure flags.
+
+The account view presents **Complete sign-in** before verification. A plain page fetch or email preview does not spend the token. Expired/used links show a clear error and **Request a new link**; provider diagnostics never appear in the UI. The existing account canvas, type, controls and keyboard behavior are retained. No credential is persisted by the callback helper; the existing SDK retains only a successfully validated session using its established storage rules.
+
+Evidence: two expected missing-control/error regressions before implementation; four parser checks; six browser cases covering first-party verification, old implicit callback/reload, expired recovery, pending sign-out and 375/1440 layout. Initial legacy assertion regenerated its synthetic JWT a second later and was corrected to use one fixed fixture token; the product was not weakened. Five cases plus the corrected focused legacy case pass. Final `npm run verify:development` exits0, with146 privacy/address/parser cases passing. Phone/desktop captures in `email-signin-repair-20261029/confirmation-*.png` were inspected together: no overflow,44px controls, visible primary/recovery action and keyboard focus. All provider calls in these tests are intercepted synthetic fixtures; they are not real delivery/login evidence.
+
+## Exact provider packet — prepared only
+
+Target `pixplcjqivlfflickobf`, `https://pixplcjqivlfflickobf.supabase.co`, `PATCH /v1/projects/pixplcjqivlfflickobf/config/auth`.
+
+[activate.json](email-signin-repair-20261029/activate.json), SHA-256 `b794e9371ccc2810b6a489fc251ce7265d0ad4f78618740433db297f6c7c9ef8`, changes exactly five fields: sender display name, confirmation/magic-link subjects and their two HTML templates. Emails are branded K2 Jimzon and link to `{{ .SiteURL }}/account#token_hash={{ .TokenHash }}&type=email`. The fragment is not sent in HTTP requests; the app scrubs it and waits for the deliberate confirmation. SMTP sender email/credentials, required email confirmation, signup setting, Google/phone providers, roles and deletion settings are unchanged. An email client that strips fragments may still require a new link; genuine delivery/login remains to be observed.
+
+Current five-field inverse [restore-previous-templates.json](email-signin-repair-20261029/restore-previous-templates.json), SHA-256 `063c9762676ba9cdecc173c2f79eaadecf2fdaa30e5ae8515e797dd52c98c744`, is saved without SMTP credentials. Actual restoration needs its own scoped owner decision. Old source must not replace the repaired callback while newly sent first-party links remain valid. Keep the repaired backward-compatible callback available during any template recovery.
+
+The repository requires named approval for this production Auth packet, separate from prior SQL/signup approval. Apply only after repaired source is deployed, fresh exact-K2 identity/zero-failed readiness, exact current five-field comparison, one dispatch and independent readback with every other returned configuration field unchanged. Preserve an unknown response and read back before any retry. Do not replay any SQL or signup activation.
+
+## Remaining work and recovery
+
+Owning backlog: MAP-019 only. Complete one current-source release qualification and authorized source promotion, then apply the separately approved template packet once. Verify a fresh real email, first-party confirmation, sign-in persistence and profile/address save/default checkout using owner-controlled data. Spam placement remains unverified from the connected sender mailbox; branding and first-party URLs improve consistency but do not guarantee Inbox placement. Further DNS/SMTP-service changes require actual receiving evidence and a reviewable scoped change; no account, subscription, credential, Google Console or DNS setting was changed here.
+
+Current live production remains4e37d748 until this repair is promoted. Prior deployed artifact/source recovery references are in the profile/address release receipt. Preserve unfinished deletion sources and owner images. Revert only this repair's source or separately restore its exact email fields as appropriate; never reset staff permissions, delete users/addresses or restore an old database over later data. Logs and remaining execution stay in MAP-019; receipt-only edits require no repeated application gates.

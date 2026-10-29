@@ -3,6 +3,7 @@ import {
   claimGuestCustomer, customerAccountEnabled, customerAuthClient,
   loadCustomerHistory, loadCustomerSettings, markCustomerNotificationRead,
   replyAsCustomerAccount, saveCustomerSettings, saveCustomerAddressBook,
+  customerEmailReturn, clearCustomerEmailReturn, completeCustomerEmailReturn,
 } from '../services/customerAccountService'
 
 const initialState = { ready: false, session: null, history: null, historyState: 'idle', error: '', code: '' }
@@ -26,6 +27,7 @@ function storeSignOutGate(present) {
 
 export function useCustomerAccount() {
   const enabled = customerAccountEnabled()
+  const [emailReturn, setEmailReturn] = useState(customerEmailReturn)
   const [state, setState] = useState(() => ({ ...initialState, ready: !enabled }))
   const [settingsState, setSettingsState] = useState({ status: 'idle', settings: null, notifications: [], error: '' })
   const [signOutNotice, setSignOutNotice] = useState(() => signOutNoticeStored() ? 'unconfirmed' : null)
@@ -284,5 +286,16 @@ export function useCustomerAccount() {
     storeSignOutNotice(false)
   }, [])
 
-  return { enabled, ...state, settingsState, signOutNotice, signOutBlocked, dismissSignOutNotice, refreshHistory, refreshSettings, saveSettings, saveAddressBook, markNotificationRead, claim, reply, signOut }
+  const dismissEmailReturn = useCallback(() => {
+    clearCustomerEmailReturn()
+    setEmailReturn(null)
+  }, [])
+  const confirmEmailReturn = useCallback(async () => {
+    if (signOutBlockedRef.current) return { ok: false, error: 'Retry sign-out before using this sign-in link.' }
+    const result = await completeCustomerEmailReturn()
+    if (result.ok) dismissEmailReturn()
+    return result
+  }, [dismissEmailReturn])
+
+  return { enabled, ...state, emailReturn, confirmEmailReturn, dismissEmailReturn, settingsState, signOutNotice, signOutBlocked, dismissSignOutNotice, refreshHistory, refreshSettings, saveSettings, saveAddressBook, markNotificationRead, claim, reply, signOut }
 }

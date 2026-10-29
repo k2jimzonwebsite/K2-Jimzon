@@ -98,6 +98,33 @@ function SignInForm({ offline }) {
   </section>
 }
 
+function EmailSignInReturn({ account, offline }) {
+  const [pending, setPending] = useState(false)
+  const [error, setError] = useState(account.emailReturn.kind === 'error' ? account.emailReturn.message : '')
+  const inFlight = useRef(false)
+  const confirm = async () => {
+    if (inFlight.current) return
+    if (offline) return setError('Reconnect before completing sign-in.')
+    inFlight.current = true
+    setPending(true)
+    setError('')
+    const result = await account.confirmEmailReturn()
+    if (!result.ok) setError(result.error)
+    inFlight.current = false
+    setPending(false)
+  }
+  return <main className="store-atmosphere min-h-[70vh] px-4 py-10 sm:py-16">
+    <section aria-labelledby="email-return-title" className="mx-auto max-w-xl rounded-2xl border border-line bg-paper p-5 sm:p-7">
+      <h1 id="email-return-title" className="font-serif text-3xl font-semibold text-navy">Finish signing in to K2</h1>
+      <p className="mt-3 text-sm leading-6 text-navy-soft">Complete sign-in only if you requested this email. Opening the link alone does not sign you in.</p>
+      <SignOutNotice account={account} />
+      {error && <p role="alert" className="mt-5 rounded-xl border border-crimson/30 bg-crimson/10 p-3 text-sm font-semibold leading-6 text-crimson">{error}</p>}
+      {account.emailReturn.kind !== 'error' && <button type="button" className={`${primary} mt-6 w-full`} disabled={pending || offline || account.signOutBlocked} onClick={confirm}>{pending ? 'Completing sign-in…' : 'Complete sign-in'}<ArrowIcon size={17} /></button>}
+      <button type="button" className={`${secondary} mt-3 w-full`} disabled={pending} onClick={account.dismissEmailReturn}>Request a new link</button>
+    </section>
+  </main>
+}
+
 function Conversation({ conversation, onReply, pending, offline }) {
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -252,6 +279,7 @@ export default function CustomerAccount() {
   useEffect(() => { if (!account.ready) return; const url=new URL(window.location.href); if (url.searchParams.has('account') || url.searchParams.has('code')) { url.searchParams.delete('account'); url.searchParams.delete('code'); window.history.replaceState({},'',`${url.pathname}${url.search}${url.hash}`) } }, [account.ready])
 
   if (!account.enabled) return <main className="store-atmosphere min-h-[70vh] px-4 py-16"><div className="mx-auto max-w-3xl border-y border-line py-12 text-center"><ShieldIcon size={30} className="mx-auto text-navy-soft" /><h1 className="mt-4 font-serif text-4xl font-semibold text-navy">Customer accounts are not active yet.</h1><p className="mx-auto mt-3 max-w-[58ch] leading-7 text-navy-soft">You can still shop, submit Pasabuy requests, and message K2 without registering.</p><button className={`${primary} mt-6`} onClick={() => go('contact')}>Contact K2</button></div></main>
+  if (account.emailReturn) return <EmailSignInReturn account={account} offline={offline} />
   if (!account.ready) return <AccountLoading />
   if (account.session && (account.historyState === 'ready' || (['loading', 'error'].includes(account.historyState) && account.history))) return <LinkedAccount key={account.session.user.id} account={account} offline={offline} settingsDraft={settingsDraft} setSettingsDraft={setSettingsDraft} />
 

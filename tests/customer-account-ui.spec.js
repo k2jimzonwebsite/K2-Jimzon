@@ -28,6 +28,81 @@ const expressActor = '10000000-0000-4000-8000-000000000001'
 const expressReference = 'WEB-ACCOUNTEXPRESS01'
 const expressStorageKey = `k2-express-acceptance-v1:${expressReference}`
 
+test('email sign-in return waits for confirmation and keeps PKCE before establishing the session', async ({ page }) => {
+  let verifies = 0
+  const tokenHash = 'a'.repeat(64)
+  await page.route('https://fixture.supabase.co/auth/v1/verify', route => {
+    verifies++
+    expect(route.request().postDataJSON()).toMatchObject({ token_hash: tokenHash, type: 'email' })
+    return route.fulfill({ json: { access_token: fakeJwt(expressActor), refresh_token: 'synthetic-email-refresh-token', token_type: 'bearer', expires_in: 3600, user: accountUser(expressActor) } })
+  })
+  await page.route('**/api/storefront/account/history', route => route.fulfill({ status: 409, json: { error: { code: 'ACCOUNT_NOT_LINKED' } } }))
+  await page.route('**/api/storefront/account/settings', route => route.fulfill({ json: { ok: true, settings: { displayName: '', notifyInApp: true }, notifications: [] } }))
+  await page.goto(`/account#token_hash=${tokenHash}&type=email`)
+  await expect(page.getByRole('button', { name: 'Complete sign-in', exact: true })).toBeVisible()
+  expect(new URL(page.url()).hash).toBe('')
+  expect(verifies).toBe(0)
+  await expect(page.getByRole('button', { name: 'Send sign-in link', exact: true })).toHaveCount(0)
+  const clientFlow = await page.evaluate(async () => (await (await import('/src/services/customerAccountService.js')).customerAuthClient()).auth.flowType)
+  expect(clientFlow).toBe('pkce')
+  await page.getByRole('button', { name: 'Complete sign-in', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Save settings', exact: true })).toBeVisible()
+  expect(verifies).toBe(1)
+})
+
+test('email sign-in return explains an expired link without sending another email or exposing provider text', async ({ page }) => {
+  await page.goto('/?account=continue#error=access_denied&error_code=otp_expired&error_description=PRIVATE_PROVIDER_DETAIL')
+  await expect(page.getByRole('alert').filter({ hasText: 'This sign-in link has expired or was already used.' })).toBeVisible()
+  expect(page.url()).not.toContain('PRIVATE_PROVIDER_DETAIL')
+  await expect(page.getByText('PRIVATE_PROVIDER_DETAIL', { exact: true })).toHaveCount(0)
+  await page.getByRole('button', { name: 'Request a new link', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Send sign-in link', exact: true })).toBeVisible()
+})
+
+test('email sign-in return accepts an older implicit email link without changing the PKCE client', async ({ page }) => {
+  let userChecks = 0
+  const accessToken = fakeJwt(expressActor)
+  await page.route('https://fixture.supabase.co/auth/v1/user', route => {
+    userChecks++
+    expect(route.request().headers().authorization).toBe(`Bearer ${accessToken}`)
+    return route.fulfill({ json: accountUser(expressActor) })
+  })
+  await page.route('**/api/storefront/account/history', route => route.fulfill({ status: 409, json: { error: { code: 'ACCOUNT_NOT_LINKED' } } }))
+  await page.route('**/api/storefront/account/settings', route => route.fulfill({ json: { ok: true, settings: { displayName: '', notifyInApp: true }, notifications: [] } }))
+  await page.goto(`/?account=continue#access_token=${accessToken}&refresh_token=synthetic-email-refresh-token&type=magiclink&token_type=bearer&expires_in=3600`)
+  await expect(page.getByRole('button', { name: 'Complete sign-in', exact: true })).toBeVisible()
+  expect(new URL(page.url()).hash).toBe('')
+  expect(userChecks).toBe(0)
+  await page.getByRole('button', { name: 'Complete sign-in', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Save settings', exact: true })).toBeVisible()
+  expect(userChecks).toBeGreaterThan(0)
+  await page.reload()
+  await expect(page.getByRole('button', { name: 'Save settings', exact: true })).toBeVisible()
+})
+
+test('email sign-in return preserves the pending sign-out safeguard', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('k2-account-signout-local-pending-v1', '1'))
+  await seedExpressAccount(page, fakeJwt(expressActor))
+  await page.goto(`/account#token_hash=${'b'.repeat(64)}&type=email`)
+  await expect(page.getByRole('button', { name: 'Complete sign-in', exact: true })).toBeDisabled()
+  await expect(page.getByRole('button', { name: 'Retry sign-out', exact: true })).toBeVisible()
+})
+
+for (const width of [375, 1440]) test(`email sign-in return fits existing account design at ${width}`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto(`/account#token_hash=${'c'.repeat(64)}&type=email`)
+  const button = page.getByRole('button', { name: 'Complete sign-in', exact: true })
+  await expect(button).toBeVisible()
+  const decline = page.getByRole('button', { name: 'Decline', exact: true })
+  if (await decline.isVisible()) await decline.click()
+  await button.focus()
+  await expect(button).toBeFocused()
+  expect((await button.boundingBox()).height).toBeGreaterThanOrEqual(44)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  await page.screenshot({ path: test.info().outputPath(`email-return-${width}.png`), fullPage: true })
+})
+
 for (const width of [375, 1440]) test(`disabled account closure keeps settings available at ${width}`, async ({ page }) => {
   test.skip(process.env.VITE_CUSTOMER_PRIVACY_ENABLED !== 'false', 'Runs against the disabled production capability.')
   await page.setViewportSize({ width, height: 900 })

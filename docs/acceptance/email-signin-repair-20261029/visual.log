@@ -1,0 +1,9 @@
+
+Running 2 tests using 1 worker
+
+(node:20236) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\customer-account-ui.spec.js:91:34 › email sign-in return fits existing account design at 375 (1.8s)
+  ok 2 tests\customer-account-ui.spec.js:91:34 › email sign-in return fits existing account design at 1440 (1.9s)
+
+  2 passed (4.5s)
