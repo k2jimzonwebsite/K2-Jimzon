@@ -15,13 +15,17 @@ export function editableDeliveryAddress(address) {
   return Object.fromEntries(['id', 'label', 'recipientName', 'phone', 'street', 'postalCode', 'landmark', 'destination']
     .map(key => [key, address[key]]))
 }
-export function validateDeliveryAddress(address) {
-  exact(address, ['id', 'label', 'recipientName', 'phone', 'street', 'postalCode', 'landmark', 'destination'], 'address')
-  if (!UUID.test(address.id || '')) invalid('id')
-  let phone = text(address.phone, 40, 'phone', true).replace(/[\s()-]/g, '')
+export function normalizeDeliveryPhone(value) {
+  let phone = text(value, 40, 'phone', true).replace(/[\s()-]/g, '')
   if (/^09\d{9}$/.test(phone)) phone = `+63${phone.slice(1)}`
   else if (/^639\d{9}$/.test(phone)) phone = `+${phone}`
   if (!/^\+[1-9]\d{7,14}$/.test(phone)) invalid('phone')
+  return phone
+}
+export function validateDeliveryAddress(address) {
+  exact(address, ['id', 'label', 'recipientName', 'phone', 'street', 'postalCode', 'landmark', 'destination'], 'address')
+  if (!UUID.test(address.id || '')) invalid('id')
+  const phone = normalizeDeliveryPhone(address.phone)
   const postalCode = text(address.postalCode, 4, 'postalCode')
   if (postalCode && !/^\d{4}$/.test(postalCode)) invalid('postalCode')
   const destination = address.destination

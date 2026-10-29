@@ -123,7 +123,7 @@
     "test:guest-order-conversation-native": "node scripts/test-guest-order-conversation.mjs",
     "test:admin-ui": "playwright test --config=playwright.admin.config.js tests/admin.spec.js tests/admin-dashboard-redesign.spec.js && playwright test --config=playwright.shop-stock.config.js && playwright test --config=playwright.auth-recovery.config.js",
     "test:admin-product-master-ui": "playwright test --config=playwright.product-master.config.js tests/admin-product-master-ui.spec.js tests/admin-human-review-editor.spec.js tests/admin-initial-taxonomy-choice.spec.js tests/admin-inventory-batch-read-ui.spec.js tests/admin-reference-workflow.spec.js tests/admin-product-master-recovery.spec.js tests/admin-sku-merge-ui.spec.js && playwright test --config=playwright.sheet-reference.config.js tests/admin-secure-sheet-reference.spec.js",
-    "test:owner-count-close-ui": "playwright test --config=playwright.owner-close.config.js tests/owner-count-close-ui.spec.js",
+    "test:owner-count-close-ui": "playwright test --config=playwright.owner-close.config.js tests/owner-count-close-ui.spec.js tests/customer-crm-ui.spec.js",
     "test:marketplace-coverage": "playwright test --config=playwright.api.config.js tests/marketplace-coverage-contract.spec.js",
     "test:marketplace-orders": "playwright test --config=playwright.api.config.js tests/marketplace-order-contract.spec.js",
     "test:marketplace-fees": "playwright test --config=playwright.api.config.js tests/marketplace-fee-estimate-contract.spec.js",

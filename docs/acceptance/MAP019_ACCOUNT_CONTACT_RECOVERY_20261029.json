@@ -1,0 +1,67 @@
+{
+  "mapItem": "MAP-019",
+  "ideaId": "IDEA-20261029-01",
+  "status": "locally-qualified-builds-and-promotion-pending",
+  "recordedAt": "2026-10-29T04:18:36.426040+00:00",
+  "scope": "Actionable guest-claim recovery and required new-checkout fulfillment mobile; no automatic name suggestions.",
+  "tests": {
+    "shared": 7,
+    "accountWholesale": {
+      "passed": 56,
+      "skipped": 2
+    },
+    "ownerCrm": 10,
+    "recovery": {
+      "passedOriginal": 39,
+      "staleExpectationFailures": 1,
+      "correctedFocusedPassed": 1,
+      "reconciledCases": 40
+    },
+    "selling": 94,
+    "development": {
+      "exitCode": 0,
+      "privacyAddressCases": 148
+    },
+    "visualRecoveryFocused": 2,
+    "visualCheckoutFocused": 1
+  },
+  "failedAttempts": [
+    "Local sandbox fetch fails EACCES; account server startup refused and CRM observation interrupted.",
+    "Original recovery assertion expected removed email-or-mobile alert; new required-mobile browser validity proves transport remains blocked."
+  ],
+  "review": {
+    "review": "Independent code review",
+    "status": "No Critical or Important findings",
+    "scope": [
+      "shared/customer-address-book.js",
+      "src/views/Checkout.jsx",
+      "src/views/CustomerAccount.jsx",
+      "scoped tests and routing"
+    ],
+    "limits": "Static review and diff checks; browser/hosted evidence is recorded separately.",
+    "heldRetry": "Disabled held fields and pendingCheckout validation exemption preserve literal historical commands.",
+    "guestRecovery": "Failures are scoped to captured ownerId; no Auth/guest grant mutation."
+  },
+  "releaseCoverage": "Reuse existing 24-stage email-repair-release-coverage.json for unaffected groups; affected groups rerun above. No clean aggregate release claim.",
+  "providerChanges": false,
+  "deletionActivation": false,
+  "realProfileAddressAcceptance": false,
+  "remaining": [
+    "Exact candidate separate builds and packaging",
+    "Authorized source promotion and canonical host proof",
+    "Owner-data profile/address save/readback and default checkout prefill without order submission"
+  ],
+  "recovery": "Revert only this source slice; preserve existing email-return support, users/addresses, guest ownership checks and unknown operation identities.",
+  "sourceHashes": {
+    "package.json": "d2f42a03cb47a8da331547289f7c81bf899f54da6cd7c625218da95124cedcbb",
+    "playwright.config.js": "7094600a7e1881e54fe950b8df34d6631c7470b2c017c491e406270f4fd40442",
+    "playwright.owner-close.config.js": "95f1cde0972d824a36bba83f851244e1af7dcad6dd1a90c48a248e9c4beddac9",
+    "shared/customer-address-book.js": "2984be0cf637e1f6b627a9c8489ea1eede8e2d30b9f63546ad6cde6e3007cb86",
+    "src/views/Checkout.jsx": "77c110351eb2cc4b4d35c8a46446334b0b7b5428a75a79f408f319df60f026e3",
+    "src/views/CustomerAccount.jsx": "160603afef9c65bd5d88b47cdf6b5a55d9583578526b0c5e06289b9d19fbca37",
+    "tests/customer-account-ui.spec.js": "ef7419cd269bc523364352a8f86556993a4d8ad10fd065aa6b3788463c16ab1c",
+    "tests/customer-address-book.test.mjs": "9b733e89e08cf16cbd848f0d4f8a22b6db7d829de7ff97982540fcaef1d44595",
+    "tests/storefront-recovery-ui.spec.js": "89b8bcd3404f78d42462565df2fa88926f307ffa7da8931fdbff275fc2bc4a5f",
+    "tests/storefront-selling-surfaces.spec.js": "5ef5e8a69da017039e4bb30844b79bed98a11db72fb2692ed3f0258a8775c631"
+  }
+}

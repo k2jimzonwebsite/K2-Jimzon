@@ -1,0 +1,62 @@
+✖ delivery mobile validation is shared by saved addresses and fresh checkout (1.9113ms)
+✖ an available profile name is only a suggestion and never replaces a saved recipient or a manual edit (0.2999ms)
+✔ address commands normalize fulfillment contact without creating an Auth identity (1.2041ms)
+✔ address book refuses selectors, duplicate IDs, missing defaults and unbounded bodies (1.4195ms)
+✔ saved-address fields and geographic shape are closed and bounded (1.4138ms)
+✔ checkout applies a gift default as one recipient/contact/address/destination group (0.295ms)
+✔ a manual delivery edit prevents every part of a late default being applied (0.1629ms)
+✔ initialized empty address book never falls back to the deleted legacy projection (0.1427ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 6
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 106.1506
+
+✖ failing tests:
+
+test at tests\customer-address-book.test.mjs:15:1
+✖ delivery mobile validation is shared by saved addresses and fresh checkout (1.9113ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'undefined'
+  - 'function'
+
+      at TestContext.<anonymous> (file:///C:/Users/jerze/K2%20JImzon/tests/customer-address-book.test.mjs:16:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.start (node:internal/test_runner/test:1177:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\customer-address-book.test.mjs:21:1
+✖ an available profile name is only a suggestion and never replaces a saved recipient or a manual edit (0.2999ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'undefined'
+  - 'function'
+
+      at TestContext.<anonymous> (file:///C:/Users/jerze/K2%20JImzon/tests/customer-address-book.test.mjs:22:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

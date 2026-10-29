@@ -1,0 +1,42 @@
+[WebServer] (node:20876) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:17400) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:17092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 11:31:10 AM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  x  1 tests\storefront-recovery-ui.spec.js:3:1 › fresh checkout requires delivery mobile and supports browser shipping autofill without SMS sign-in (6.8s)
+
+
+  1) tests\storefront-recovery-ui.spec.js:3:1 › fresh checkout requires delivery mobile and supports browser shipping autofill without SMS sign-in
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByLabel('Mobile number', { exact: true })
+    Expected: ""
+    Received: serializes to the same string
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" getByLabel('Mobile number', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Mobile number', { exact: true })
+        10 × locator resolved to <input value="" type="tel" autocomplete="tel" class="store-field w-full px-4 py-3 text-base mt-1.5"/>
+           - unexpected value "null"
+
+
+      10 |   await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /checkout|review|request/i }).last().click()
+      11 |   const phone = page.getByLabel('Mobile number', { exact: true })
+    > 12 |   await expect(phone).toHaveAttribute('required', '')
+         |                       ^
+      13 |   await expect(phone).toHaveAttribute('autocomplete', 'shipping tel')
+      14 |   await expect(page.getByLabel('Delivery address', { exact: true })).toHaveAttribute('autocomplete', 'shipping street-address')
+      15 |   await page.getByLabel('Full name', { exact: true }).fill('Giulia Romano')
+        at C:\Users\jerze\K2 JImzon\tests\storefront-recovery-ui.spec.js:12:23
+
+    Error Context: test-results\storefront-recovery-ui-fre-dfce8-utofill-without-SMS-sign-in\error-context.md
+
+  1 failed
+    tests\storefront-recovery-ui.spec.js:3:1 › fresh checkout requires delivery mobile and supports browser shipping autofill without SMS sign-in

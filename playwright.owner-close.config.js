@@ -17,7 +17,8 @@ export default defineConfig({
   },
   webServer: {
     command: 'npx vite --mode combined --host 127.0.0.1 --port 5183 --configLoader runner',
-    env: { VITE_ADMIN_BFF_ENABLED: 'true', VITE_TURNSTILE_SITE_KEY: '1x00000000000000000000AA' },
+    env: { K2_ACCEPTANCE_NO_WATCH: 'true', VITE_ADMIN_BFF_ENABLED: 'true', VITE_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
+      VITE_SUPABASE_URL: '', VITE_SUPABASE_PUBLISHABLE_KEY: '', VITE_SUPABASE_PUBLIC_KEY: '' },
     url: 'http://127.0.0.1:5183',
     reuseExistingServer: false,
     timeout: 120000,

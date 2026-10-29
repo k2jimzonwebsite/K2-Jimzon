@@ -1,0 +1,24 @@
+{
+  "publishedCopies": "UTF-8/newlines/trailing whitespace normalized; original private .tools logs retained",
+  "originalCopySha256": {
+    "account-full-local.log": "fb378e3b430899faeae41ac03d61790dc0a2dcabaaea7f289874954e1b199a71",
+    "account-full.log": "a3b7f58f9c0fb21c73d973c290804ffc18ca5e64355a9df5b86e1e057ce337cf",
+    "account-green.log": "e9b0b1597eae688fcd9a9673346c47c0f30c3583f9b97ea9ab850c63eceade3a",
+    "account-red.log": "4a9a7db673f6bd231aa5cd5aa6e58513d5475f424ba0f0ff2a95128b4d31f5db",
+    "checkout-green.log": "b0536f573b525e32dd2e58263b8b56d1a340848e11ed233e2173c7ef4cf35a54",
+    "checkout-red.log": "42d9f76f9a34c390dea9a755e7bb74b04110d129acf2451fb659a1140ec018c4",
+    "checkout-visual-settled.log": "a8a332f2906cda71cbaa2fa03832c43f5edb7817be8b80897f4c0f1cf3aaf1bb",
+    "crm-local.log": "59f31b04355ef7c89d235b3c29ea52884da17c4c2df5c396e80cc50653d37516",
+    "crm-no-watch.log": "b650130ada16a54fa166dce985538c37deb956a4564b0b118b6394cfc3559f68",
+    "development-final.log": "fb2e712e25da92a7cd8895dcfa879b54ddd07e23475f9dc829c37c112530bce3",
+    "development.log": "ae35b238925c89b930bf4ef8d2e661ddfb61ddf8fb429e31c4004b36d8d924c7",
+    "owner-crm-full.log": "d8a69977f8b0a6d069eee5228eff8f77626d1f1ea9c6f1583c7e5bdaea9d90b6",
+    "recovery-contact-final.log": "30ad39189fde42cdab77c47b73029c0f0ac6f02bec78567fe84d5bbbc5bcf297",
+    "recovery-full.log": "bc9b63d305c53dab6b19b7384cb3cccc5032bebb6c79465ec79d33f66f73333a",
+    "selling-full.log": "cb116a1e2527bc1a1c4cb3ec06c97764ad89b166b6725581566dca9e8f6022c6",
+    "shared-final.log": "af46207e180f5b93e6ceef292eee2ca4bc8469acbaf6e9c748d18e144b0c31be",
+    "shared-green.log": "50e8d645a954aa2c8d1c17bea49241b203ae3139fc95f3cb38a28692ed708f47",
+    "shared-red.log": "fb2b9ecc8ed7154b9ceec92caa12cd81ae3851dc8c188f89d7647259d5e2b2f7",
+    "visual-settled.log": "cd10c7d4f9314c2fae858ead04e71cb7df237bae80cdfd561ec37ea3cbc70415"
+  }
+}

@@ -10,6 +10,7 @@ export default defineConfig({
   // with the shared combined server. `npm test` runs each one through its
   // dedicated config after this base suite completes.
   testIgnore: [
+    'customer-crm-ui.spec.js',
     'security-check-recovery.spec.js',
     'checkout-chat-ui.spec.js',
     'product-families-ui.spec.js',

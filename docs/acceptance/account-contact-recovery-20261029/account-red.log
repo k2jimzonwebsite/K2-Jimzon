@@ -1,0 +1,95 @@
+
+Running 3 tests using 1 worker
+
+(node:8760) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_EXPIRED (6.7s)
+(node:17900) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_REQUIRED (5.8s)
+(node:20080) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\customer-account-ui.spec.js:52:1 › an available Google profile name remains an editable suggestion for account and delivery details (5.4s)
+
+
+  1) tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_EXPIRED
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Your account is still signed in.', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Your account is still signed in.', { exact: true }) with timeout 5000ms
+      - waiting for getByText('Your account is still signed in.', { exact: true })
+
+
+      38 |   await page.goto('/account')
+      39 |   await page.getByRole('button', { name: 'Link verified guest records', exact: true }).click()
+    > 40 |   await expect(page.getByText('Your account is still signed in.', { exact: true })).toBeVisible()
+         |                                                                                     ^
+      41 |   await expect(page.getByRole('button', { name: 'Link verified guest records', exact: true })).toHaveCount(0)
+      42 |   const contact = page.getByRole('link', { name: 'Contact K2 about a past record', exact: true })
+      43 |   await expect(contact).toHaveAttribute('href', '/contact')
+        at C:\Users\jerze\K2 JImzon\tests\customer-account-ui.spec.js:40:85
+
+    Error Context: test-results\customer-account-ui-guest--9b5e8-ep-for-GUEST-ACCESS-EXPIRED\error-context.md
+
+  2) tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_REQUIRED
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Your account is still signed in.', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Your account is still signed in.', { exact: true }) with timeout 5000ms
+      - waiting for getByText('Your account is still signed in.', { exact: true })
+
+
+      38 |   await page.goto('/account')
+      39 |   await page.getByRole('button', { name: 'Link verified guest records', exact: true }).click()
+    > 40 |   await expect(page.getByText('Your account is still signed in.', { exact: true })).toBeVisible()
+         |                                                                                     ^
+      41 |   await expect(page.getByRole('button', { name: 'Link verified guest records', exact: true })).toHaveCount(0)
+      42 |   const contact = page.getByRole('link', { name: 'Contact K2 about a past record', exact: true })
+      43 |   await expect(contact).toHaveAttribute('href', '/contact')
+        at C:\Users\jerze\K2 JImzon\tests\customer-account-ui.spec.js:40:85
+
+    Error Context: test-results\customer-account-ui-guest--233fb-p-for-GUEST-ACCESS-REQUIRED\error-context.md
+
+  3) tests\customer-account-ui.spec.js:52:1 › an available Google profile name remains an editable suggestion for account and delivery details
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Your name', { exact: true })
+    Expected: "Giulia Romano"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Your name', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Your name', { exact: true })
+        10 × locator resolved to <input value="" required="" maxlength="140" autocomplete="name" id="account-profile-name" class="store-field mt-2 min-h-12 w-full px-4 text-base"/>
+           - unexpected value ""
+
+
+      60 |     addressBook: { initialized: true, revision: 0, addresses: [], defaultAddressId: null } }, notifications: [] } }))
+      61 |   await page.goto('/account')
+    > 62 |   await expect(page.getByLabel('Your name', { exact: true })).toHaveValue('Giulia Romano')
+         |                                                               ^
+      63 |   await page.getByRole('button', { name: 'Add delivery address', exact: true }).click()
+      64 |   await expect(page.getByLabel('Recipient full name', { exact: true })).toHaveValue('Giulia Romano')
+      65 |   await expect(page.getByLabel('Delivery contact number', { exact: true })).toHaveAttribute('autocomplete', 'shipping tel')
+        at C:\Users\jerze\K2 JImzon\tests\customer-account-ui.spec.js:62:63
+
+    Error Context: test-results\customer-account-ui-an-ava-431ec-ccount-and-delivery-details\error-context.md
+
+  3 failed
+    tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_EXPIRED
+    tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_REQUIRED
+    tests\customer-account-ui.spec.js:52:1 › an available Google profile name remains an editable suggestion for account and delivery details

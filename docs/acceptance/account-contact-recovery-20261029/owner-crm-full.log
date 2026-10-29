@@ -1,0 +1,36 @@
+
+> k2-jimzon-prototype@0.1.0 test:owner-count-close-ui
+> playwright test --config=playwright.owner-close.config.js tests/owner-count-close-ui.spec.js tests/customer-crm-ui.spec.js
+
+[WebServer] (node:13852) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24408) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 1 worker
+
+(node:5624) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 12:10:27 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  1 tests\customer-crm-ui.spec.js:8:33 › hold outcomes show current facts and recovery without a false saved notice at 375px (1.7s)
+[WebServer] 12:10:28 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  2 tests\customer-crm-ui.spec.js:8:33 › hold outcomes show current facts and recovery without a false saved notice at 1440px (1.7s)
+[WebServer] 12:10:30 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  3 tests\customer-crm-ui.spec.js:41:1 › directory search and privacy hold review preserve a lost response retry (1.9s)
+[WebServer] 12:10:32 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  4 tests\customer-crm-ui.spec.js:90:1 › a failed directory read is unavailable rather than an empty result (1.4s)
+[WebServer] 12:10:33 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+[WebServer] 12:10:34 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  5 tests\customer-crm-ui.spec.js:100:1 › Admin can reconcile a lost reply in read-only closed history after reload (1.8s)
+[WebServer] 12:10:35 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  6 tests\customer-crm-ui.spec.js:130:1 › customer hold reconciliation refusal preserves details without a false recorded notice (1.1s)
+[WebServer] 12:10:36 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  7 tests\customer-crm-ui.spec.js:152:1 › customer-only hold creation and resolution use checked current results and retain an outage retry (1.8s)
+[WebServer] 12:10:38 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  8 tests\customer-crm-ui.spec.js:198:1 › customer hold reads retry and ignore late results for an earlier selection (830ms)
+[WebServer] 12:10:39 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  9 tests\customer-crm-ui.spec.js:230:1 › a delayed outcome response cannot overwrite the current privacy queue (839ms)
+[WebServer] 12:10:39 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 10 tests\owner-count-close-ui.spec.js:12:1 › phone Owner Count & Close reaches a sealed customer-free handoff (5.1s)
+
+  10 passed (27.1s)

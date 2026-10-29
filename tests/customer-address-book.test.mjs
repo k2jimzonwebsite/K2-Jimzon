@@ -12,6 +12,12 @@ const address = (patch = {}) => ({ id: randomUUID(), label: 'Home', recipientNam
 const command = (addresses, patch = {}) => ({ operation: 'addresses', operationId: randomUUID(), expectedRevision: 0,
   displayName: 'Elena Villanueva', addresses, defaultAddressId: addresses[0]?.id || null, ...patch })
 
+test('delivery mobile validation is shared by saved addresses and fresh checkout', () => {
+  assert.equal(typeof helpers.normalizeDeliveryPhone, 'function')
+  assert.equal(helpers.normalizeDeliveryPhone('0917 854 6329'), '+639178546329')
+  for (const value of ['', 'call me', '+00', '0917x8546329']) assert.throws(() => helpers.normalizeDeliveryPhone(value))
+})
+
 test('address commands normalize fulfillment contact without creating an Auth identity', () => {
   assert.ok(helpers, 'the shared address-book contract is not implemented')
   const a = address(), result = helpers.validateAddressBookCommand(command([a]))

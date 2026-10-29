@@ -12,6 +12,7 @@ import { guestBffEnabled } from '../services/guestCommerceService'
 import DeliveryEstimate from '../components/DeliveryEstimate'
 import StorefrontChatButton from '../components/shop/StorefrontChatButton'
 import { useCheckoutDetails } from '../hooks/useCheckoutDetails'
+import { normalizeDeliveryPhone } from '../../shared/customer-address-book.js'
 
 const DELIVERY_OPTIONS = [
   { id: 'standard', methodName: 'Standard Courier Delivery', hint: 'Delivery charge calculated for your basket and area.' },
@@ -105,15 +106,9 @@ export default function Checkout() {
       return
     }
 
-    if (!form.email.trim() && !form.phone.trim()) {
-      setError('Please enter an email address or mobile number so we can confirm your order.')
-      return
-    }
-
-    const cleanPhone = form.phone.replace(/\D/g, '')
-    if (form.phone.trim() && cleanPhone.length < 10) {
-      setError('Please enter a valid 11-digit Philippine mobile number (e.g. 09171234567).')
-      return
+    if (!pendingCheckout) {
+      try { normalizeDeliveryPhone(form.phone) }
+      catch { setError('Please enter a valid mobile number for delivery or pickup coordination.'); return }
     }
 
     if (!isPickup && !form.address.trim()) {
@@ -300,7 +295,7 @@ export default function Checkout() {
                 </select>
               </label>}
               <label className="block text-sm font-semibold">Full name
-                <input className={`${fieldClass} mt-1.5`} value={form.name} onChange={update('name')} autoComplete="name" required />
+                <input id="checkout-recipient-name" name="recipientName" className={`${fieldClass} mt-1.5`} value={form.name} onChange={update('name')} autoComplete="shipping name" required />
               </label>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -308,9 +303,10 @@ export default function Checkout() {
                   <input className={`${fieldClass} mt-1.5`} type="email" value={form.email} onChange={update('email')} autoComplete="email" />
                 </label>
                 <label className="block text-sm font-semibold">Mobile number
-                  <input className={`${fieldClass} mt-1.5`} type="tel" value={form.phone} onChange={update('phone')} autoComplete="tel" />
+                  <input id="checkout-delivery-mobile" name="deliveryMobile" className={`${fieldClass} mt-1.5`} type="tel" inputMode="tel" maxLength={40} value={form.phone} onChange={update('phone')} autoComplete="shipping tel" aria-describedby="checkout-mobile-help" required />
                 </label>
               </div>
+              <p id="checkout-mobile-help" className="text-sm leading-6 text-navy-soft">A mobile number is required for delivery or pickup coordination. It does not change your sign-in contact.</p>
 
               <div>
                 <label className="block text-sm font-semibold">Delivery address
@@ -318,7 +314,9 @@ export default function Checkout() {
                     className={`${fieldClass} mt-1.5 min-h-20 resize-y`}
                     value={form.address}
                     onChange={update('address')}
-                    autoComplete="street-address"
+                    id="checkout-delivery-address"
+                    name="deliveryAddress"
+                    autoComplete="shipping street-address"
                     placeholder="House/Unit #, Street, Barangay, City, Postal Code"
                     required={!isPickup}
                     disabled={isPickup}

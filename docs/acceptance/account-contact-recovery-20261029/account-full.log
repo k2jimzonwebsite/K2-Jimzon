@@ -1,0 +1,13 @@
+
+> k2-jimzon-prototype@0.1.0 test:customer-account-ui
+> node scripts/test-customer-account-ui.mjs
+
+file:///C:/Users/jerze/K2%20JImzon/scripts/test-customer-account-ui.mjs:46
+      if (attempts >= 80) reject(new Error('Customer-account test server did not start.'))
+                                 ^
+
+Error: Customer-account test server did not start.
+    at Timeout.probe [as _onTimeout] (file:///C:/Users/jerze/K2%20JImzon/scripts/test-customer-account-ui.mjs:46:34)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.16.0

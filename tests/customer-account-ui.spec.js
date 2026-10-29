@@ -28,6 +28,33 @@ const expressActor = '10000000-0000-4000-8000-000000000001'
 const expressReference = 'WEB-ACCOUNTEXPRESS01'
 const expressStorageKey = `k2-express-acceptance-v1:${expressReference}`
 
+for (const [code, width] of [['GUEST_ACCESS_EXPIRED', 375], ['GUEST_ACCESS_REQUIRED', 1440]]) test(`guest linking recovery keeps Auth and offers a usable next step for ${code}`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.addInitScript(theme => {
+    localStorage.setItem('theme', theme)
+    localStorage.setItem('k2-analytics-consent-v1', JSON.stringify({ choice: 'denied', expires: Date.now() + 60000 }))
+  }, width === 375 ? 'dark' : 'light')
+  const token = fakeJwt(expressActor)
+  await seedExpressAccount(page, token)
+  await page.route('**/api/storefront/account/history', route => route.fulfill({ status: 409, json: { error: { code: 'ACCOUNT_NOT_LINKED' } } }))
+  let claims = 0
+  await page.route('**/api/storefront/account/claim', route => { claims++; return route.fulfill({ status: 401, json: { error: { code } } }) })
+  await page.goto('/account')
+  await page.getByRole('button', { name: 'Link verified guest records', exact: true }).click()
+  await expect(page.getByText('Your account is still signed in.', { exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Link verified guest records', exact: true })).toHaveCount(0)
+  const contact = page.getByRole('link', { name: 'Contact K2 about a past record', exact: true })
+  await expect(contact).toHaveAttribute('href', '/contact')
+  await page.getByRole('link', { name: 'Continue to account settings', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Your account settings', exact: true })).toBeFocused()
+  expect(JSON.parse(await page.evaluate(key => localStorage.getItem(key), AUTH_STORAGE_KEY)).access_token).toBe(token)
+  expect(claims).toBe(1)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  await page.screenshot({ path: `docs/acceptance/account-contact-recovery-20261029/guest-link-recovery-${width}.png`, fullPage: true, animations: 'disabled' })
+  await page.getByRole('alert').filter({ hasText: 'Your account is still signed in.' }).screenshot({ path: `docs/acceptance/account-contact-recovery-20261029/guest-link-actions-${width}.png`, animations: 'disabled' })
+})
+
 test('email sign-in return waits for confirmation and keeps PKCE before establishing the session', async ({ page }) => {
   let verifies = 0
   const tokenHash = 'a'.repeat(64)

@@ -1,0 +1,9 @@
+
+Running 2 tests using 1 worker
+
+(node:23364) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_EXPIRED (2.0s)
+  ok 2 tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_REQUIRED (2.1s)
+
+  2 passed (5.2s)

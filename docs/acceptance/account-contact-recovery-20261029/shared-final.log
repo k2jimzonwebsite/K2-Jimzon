@@ -1,0 +1,15 @@
+✔ delivery mobile validation is shared by saved addresses and fresh checkout (1.7626ms)
+✔ address commands normalize fulfillment contact without creating an Auth identity (1.3052ms)
+✔ address book refuses selectors, duplicate IDs, missing defaults and unbounded bodies (1.563ms)
+✔ saved-address fields and geographic shape are closed and bounded (1.9487ms)
+✔ checkout applies a gift default as one recipient/contact/address/destination group (0.4477ms)
+✔ a manual delivery edit prevents every part of a late default being applied (0.1813ms)
+✔ initialized empty address book never falls back to the deleted legacy projection (0.1629ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 215.9487

@@ -252,6 +252,7 @@ test(`recorded pickup instructions show the matching ${method.label} QR`, async 
   await expect(page.locator('main')).not.toContainText('Your delivery charge above is final')
   await page.getByLabel('Full name').fill('Ariane Cruz')
   await page.getByLabel('Email address').fill('ariane@example.test')
+  await page.getByLabel('Mobile number', { exact: true }).fill('09178546329')
   await expect(page.getByLabel('Delivery address')).toBeDisabled()
   await page.waitForFunction(() => window.__orderTurnstileRendered === true)
   await page.getByRole('button', { name: 'Submit order request' }).click()
