@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { editableDeliveryAddress, validateAddressBookCommand, validateDeliveryAddress } from '../../../shared/customer-address-book.js'
 import { useDeliveryArea } from '../../hooks/useDeliveryArea'
 import DeliveryAreaFields from '../DeliveryAreaFields'
@@ -46,7 +46,7 @@ function AddressEditor({ initial, profileName, onSave, onCancel, locked, offline
         {input('label', 'Address label', { maxLength: 40, autoComplete: 'off', required: true })}
         {input('recipientName', 'Recipient full name', { maxLength: 140, autoComplete: 'shipping name', required: true })}
       </div>
-      {input('phone', 'Delivery contact number', { type: 'tel', inputMode: 'tel', maxLength: 40, autoComplete: 'shipping tel', required: true })}
+      {input('phone', 'Mobile number', { type: 'tel', inputMode: 'tel', maxLength: 40, autoComplete: 'shipping tel', required: true })}
       <p className="text-sm leading-6 text-navy-soft">For the recipient or courier to use. This does not change your verified sign-in contact.</p>
       <label htmlFor="address-street" className="block text-sm font-semibold text-navy">House, unit and street
         <textarea id="address-street" className={`${field} min-h-24 resize-y`} value={draft.street} onChange={update('street')}
@@ -76,6 +76,12 @@ export default function CustomerDeliveryAddresses({ account, offline, profileNam
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const addresses = book?.addresses || []
+  const firstAddressOffered = useRef(false)
+  useEffect(() => {
+    if (!book || settingsState.status !== 'ready' || firstAddressOffered.current) return
+    firstAddressOffered.current = true
+    if (book.addresses.length === 0) setEditor({ mode: 'add' })
+  }, [book, settingsState.status])
   const owner = account.session.user.id
   const activeOwner = useRef(owner)
   activeOwner.current = owner

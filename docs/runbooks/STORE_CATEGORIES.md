@@ -1,5 +1,7 @@
 # Store categories
 
+29 October refinement: MAP-019 / IDEA-20261029-03/-04 owns the locally verified Grid/Sheet creation and native-footer update. This is prepared source, not a new deployment; the earlier live workflow below remains the deployed reference until promotion. Evidence/limits/recovery: `docs/acceptance/ACCOUNT_CATEGORY_FOOTER_20261029.md` and JSON.
+
 Owner: MAP-023 / IDEA-20261022-01. Source 297b0ef is verified live on the separate Admin and storefront production hosts. Navigation and authenticated filter/select/preview passed. Actual staff category saves and recovery remain separate operational acceptance; no production label assignment was made for release testing.
 
 The store category is the customer-facing shelf saved on each product as `subcategory`. If blank, the storefront uses the canonical category name. Canonical `category_id` remains the authority for operational category policy and family eligibility. A store category edit never changes that ID, stock, lots, pricing, human review, lifecycle, Website assignment or publication.
@@ -7,6 +9,8 @@ The store category is the customer-facing shelf saved on each product as `subcat
 Home, Catalog and Footer use one shared category/count list derived from the current Website-listed products. Sold-out listings remain discoverable for Pasabuy. Drafts, other-channel products and empty category names do not create public shelves. A successfully refreshed catalog clears obsolete category URL filters to All; failed or stale reads do not decide that a shelf has disappeared. A configured empty database never falls back to demo products, even during local development.
 
 ## Staff workflow
+
+Prepared workflow in both modes: choose the visible **Create store category**, type a new name or reuse a suggestion, search and explicitly select products, then **Apply to N products**. At least one product is required; there is no separate empty-category registry. Grid's existing Select visible → Set store category remains. Sheet's **Store category** cell opens the same command for that SKU. Brand/operational categories remain separate protected Grid Edit references. Staff without product-management permission cannot initiate or resolve writes. Sheet and Grid expose the same pending-product recovery; retry the original saved request after an unconfirmed result. The public catalog/footer adopts eligible assigned labels after its existing successful refresh, without another source edit or deployment per category.
 
 1. Open Inventory and use search, stock filters or **Store category filter**. **No custom store category** shows products without an explicit shelf label; a canonical default can still exist.
 2. Select individual products or **Select visible**. Selections from earlier filters remain selected until cleared; check the total and review the product list before applying.

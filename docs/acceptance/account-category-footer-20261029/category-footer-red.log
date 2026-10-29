@@ -1,0 +1,146 @@
+[WebServer] (node:11884) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21184) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:16084) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+[WebServer] 1:10:12 PM [vite] (client) [Unhandled error] SyntaxError: The requested module '/node_modules/papaparse/papaparse.min.js?v=8594e04f' does not provide an export named 'default'
+[WebServer]
+  x  1 tests\store-categories-ui.spec.js:331:43 › new store category can be created and assigned from admin without hidden bulk selection (30.0s)
+(node:21528) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 1:10:43 PM [vite] (client) [Unhandled error] SyntaxError: The requested module '/node_modules/papaparse/papaparse.min.js?v=8594e04f' does not provide an export named 'default'
+[WebServer]
+  x  2 tests\store-categories-ui.spec.js:331:43 › new store category can be created and assigned from sheet without hidden bulk selection (30.0s)
+(node:17160) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 1:11:13 PM [vite] (client) [Unhandled error] SyntaxError: The requested module '/node_modules/papaparse/papaparse.min.js?v=8594e04f' does not provide an export named 'default'
+[WebServer]
+  x  3 tests\store-categories-ui.spec.js:348:1 › footer category destinations stay native and update with the current published inventory (5.5s)
+(node:12040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 1:11:19 PM [vite] (client) [Unhandled error] SyntaxError: The requested module '/node_modules/papaparse/papaparse.min.js?v=8594e04f' does not provide an export named 'default'
+[WebServer]
+  x  4 tests\store-categories-ui.spec.js:372:1 › empty footer keeps a useful catalog destination (5.5s)
+
+
+  1) tests\store-categories-ui.spec.js:331:43 › new store category can be created and assigned from admin without hidden bulk selection
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Create store category', exact: true })
+
+
+      331 | for (const surface of ['admin', 'sheet']) test(`new store category can be created and assigned from ${surface} without hidden bulk selection`, async ({ page }) => {
+      332 |   const { rows, writes } = await admin(page, { surface })
+    > 333 |   await page.getByRole('button', { name: 'Create store category', exact: true }).click()
+          |                                                                                  ^
+      334 |   const dialog = page.getByRole('dialog', { name: 'Create store category', exact: true })
+      335 |   await expect(dialog.getByRole('button', { name: 'Apply to 0 products', exact: true })).toBeDisabled()
+      336 |   await dialog.getByLabel('Store category', { exact: true }).fill('Italian pantry')
+        at C:\Users\jerze\K2 JImzon\tests\store-categories-ui.spec.js:333:82
+
+    Error Context: .tools\store-categories-ui-results\store-categories-ui-new-st-1c834-thout-hidden-bulk-selection\error-context.md
+
+  2) tests\store-categories-ui.spec.js:331:43 › new store category can be created and assigned from sheet without hidden bulk selection
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Create store category', exact: true })
+
+
+      331 | for (const surface of ['admin', 'sheet']) test(`new store category can be created and assigned from ${surface} without hidden bulk selection`, async ({ page }) => {
+      332 |   const { rows, writes } = await admin(page, { surface })
+    > 333 |   await page.getByRole('button', { name: 'Create store category', exact: true }).click()
+          |                                                                                  ^
+      334 |   const dialog = page.getByRole('dialog', { name: 'Create store category', exact: true })
+      335 |   await expect(dialog.getByRole('button', { name: 'Apply to 0 products', exact: true })).toBeDisabled()
+      336 |   await dialog.getByLabel('Store category', { exact: true }).fill('Italian pantry')
+        at C:\Users\jerze\K2 JImzon\tests\store-categories-ui.spec.js:333:82
+
+    Error Context: .tools\store-categories-ui-results\store-categories-ui-new-st-3455f-thout-hidden-bulk-selection\error-context.md
+
+  3) tests\store-categories-ui.spec.js:348:1 › footer category destinations stay native and update with the current published inventory
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByRole('navigation', { name: 'Shop by category', exact: true }).getByRole('link', { name: 'Pasta', exact: true })
+    Expected: "/catalog?category=Pasta"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" getByRole('navigation', { name: 'Shop by category', exact: true }).getByRole('link', { name: 'Pasta', exact: true }) with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Shop by category', exact: true }).getByRole('link', { name: 'Pasta', exact: true })
+
+
+      356 |   await page.goto('/catalog')
+      357 |   const footer = page.getByRole('navigation', { name: 'Shop by category', exact: true })
+    > 358 |   await expect(footer.getByRole('link', { name: 'Pasta', exact: true })).toHaveAttribute('href', '/catalog?category=Pasta')
+          |                                                                          ^
+      359 |   rows[0].subcategory = 'Italian pantry'
+      360 |   await page.reload()
+      361 |   const category = footer.getByRole('link', { name: 'Italian pantry', exact: true })
+        at C:\Users\jerze\K2 JImzon\tests\store-categories-ui.spec.js:358:74
+
+    Error Context: .tools\store-categories-ui-results\store-categories-ui-footer-786cb-current-published-inventory\error-context.md
+
+  4) tests\store-categories-ui.spec.js:372:1 › empty footer keeps a useful catalog destination ─────
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByRole('navigation', { name: 'Shop by category', exact: true }).getByRole('link', { name: 'Browse all products', exact: true })
+    Expected: "/catalog"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" getByRole('navigation', { name: 'Shop by category', exact: true }).getByRole('link', { name: 'Browse all products', exact: true }) with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Shop by category', exact: true }).getByRole('link', { name: 'Browse all products', exact: true })
+
+
+      373 |   await store(page, [])
+      374 |   await page.goto('/catalog')
+    > 375 |   await expect(page.getByRole('navigation', { name: 'Shop by category', exact: true }).getByRole('link', { name: 'Browse all products', exact: true })).toHaveAttribute('href', '/catalog')
+          |                                                                                                                                                         ^
+      376 | })
+      377 |
+        at C:\Users\jerze\K2 JImzon\tests\store-categories-ui.spec.js:375:153
+
+    Error Context: .tools\store-categories-ui-results\store-categories-ui-empty--d220b--useful-catalog-destination\error-context.md
+
+  4 failed
+    tests\store-categories-ui.spec.js:331:43 › new store category can be created and assigned from admin without hidden bulk selection
+    tests\store-categories-ui.spec.js:331:43 › new store category can be created and assigned from sheet without hidden bulk selection
+    tests\store-categories-ui.spec.js:348:1 › footer category destinations stay native and update with the current published inventory
+    tests\store-categories-ui.spec.js:372:1 › empty footer keeps a useful catalog destination ──────

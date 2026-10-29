@@ -1,0 +1,102 @@
+
+> k2-jimzon-prototype@0.1.0 test:customer-account-ui
+> node scripts/test-customer-account-ui.mjs
+
+
+Running 60 tests using 1 worker
+
+(node:1932) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_EXPIRED (2.3s)
+  ok  2 tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_REQUIRED (2.6s)
+  ok  3 tests\customer-account-ui.spec.js:58:1 › email sign-in return waits for confirmation and keeps PKCE before establishing the session (1.6s)
+  ok  4 tests\customer-account-ui.spec.js:81:1 › email sign-in return explains an expired link without sending another email or exposing provider text (1.5s)
+  ok  5 tests\customer-account-ui.spec.js:90:1 › email sign-in return accepts an older implicit email link without changing the PKCE client (2.6s)
+  ok  6 tests\customer-account-ui.spec.js:111:1 › email sign-in return preserves the pending sign-out safeguard (880ms)
+  ok  7 tests\customer-account-ui.spec.js:119:34 › email sign-in return fits existing account design at 375 (1.2s)
+  ok  8 tests\customer-account-ui.spec.js:119:34 › email sign-in return fits existing account design at 1440 (1.5s)
+  -   9 tests\customer-account-ui.spec.js:134:34 › disabled account closure keeps settings available at 375
+  -  10 tests\customer-account-ui.spec.js:134:34 › disabled account closure keeps settings available at 1440
+  ok 11 tests\customer-account-ui.spec.js:218:34 › new account shows its delivery mobile form directly at 375px (1.5s)
+  ok 12 tests\customer-account-ui.spec.js:218:34 › new account shows its delivery mobile form directly at 1440px (2.9s)
+  ok 13 tests\customer-account-ui.spec.js:250:1 › saved delivery addresses retain one exact change through a lost save reply (2.8s)
+  ok 14 tests\customer-account-ui.spec.js:288:1 › saved delivery default restores gift recipient and location without requiring another entry (2.0s)
+  ok 15 tests\customer-account-ui.spec.js:303:1 › saved delivery editor accepts a name added in the profile form while it is open (1.7s)
+  ok 16 tests\customer-account-ui.spec.js:333:1 › saved delivery lost reply reconciles a JSONB destination with reordered keys (1.5s)
+  ok 17 tests\customer-account-ui.spec.js:362:1 › saved delivery default never mixes into a manually entered recipient or street (2.0s)
+  x  18 tests\customer-account-ui.spec.js:385:1 › saved delivery addresses change defaults and remove the final destination without resurrection (6.9s)
+(node:13328) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 19 tests\customer-account-ui.spec.js:414:1 › saved delivery work keeps guest checkout available without an account (1.9s)
+  ok 20 tests\customer-account-ui.spec.js:429:1 › saved delivery checkout clears the previous customer on an account switch and sign-out (2.5s)
+  ok 21 tests\customer-account-ui.spec.js:459:1 › saved delivery default cannot replace an existing held order snapshot (1.1s)
+  ok 22 tests\customer-account-ui.spec.js:480:1 › saved delivery edit removed in another tab remains a draft instead of a false save (2.6s)
+  ok 23 tests\customer-account-ui.spec.js:506:1 › saved delivery address editor stays readable on mobile and desktop in both themes (4.2s)
+  ok 24 tests\customer-account-ui.spec.js:533:1 › account purchase overview uses complete linked totals and has private order/proof downloads (3.7s)
+  ok 25 tests\customer-account-ui.spec.js:579:99 › closure states remain usable at 375 in light (2.9s)
+  ok 26 tests\customer-account-ui.spec.js:579:99 › closure states remain usable at 1440 in dark (3.1s)
+  ok 27 tests\customer-account-ui.spec.js:619:1 › closure survives a lost confirmation response and can be recovered without repeating confirmation (1.9s)
+  ok 28 tests\customer-account-ui.spec.js:665:1 › legacy account history keeps recorded payment and messages without final bill or approval (906ms)
+  ok 29 tests\customer-account-ui.spec.js:683:1 › authenticated express approval recovers an already accepted lost reply after reload (2.4s)
+  ok 30 tests\customer-account-ui.spec.js:713:1 › authenticated express late receipt stays with the original account and accepts an explicit zero fee (1.6s)
+  ok 31 tests\customer-account-ui.spec.js:755:1 › account switch discards a late previous-customer history response (895ms)
+  ok 32 tests\customer-account-ui.spec.js:803:1 › unconfirmed provider sign-out clears the local view and remains visible after reload (2.4s)
+  ok 33 tests\customer-account-ui.spec.js:827:1 › reloading during an unfinished sign-out does not restore the private account view (1.2s)
+  ok 34 tests\customer-account-ui.spec.js:856:1 › a new tab cannot restore a private session while sign-out is unfinished (1.4s)
+  ok 35 tests\customer-account-ui.spec.js:887:1 › sign-out closes an already-open account view in another tab (1.7s)
+  ok 36 tests\customer-account-ui.spec.js:918:1 › sign-out reports failure without hiding the account when its shared guard cannot be saved (1.6s)
+  ok 37 tests\customer-account-ui.spec.js:939:1 › a blocked sign-out keeps its retry when browser storage fails (1.2s)
+  ok 38 tests\customer-account-ui.spec.js:969:1 › a new accepted session clears the previous local sign-out success (794ms)
+  ok 39 tests\customer-account-ui.spec.js:988:1 › sign-out does not claim success when the saved session has disappeared (861ms)
+  ok 40 tests\customer-account-ui.spec.js:1002:1 › an SDK-ignored provider refusal does not claim remote sign-out was verified (795ms)
+  ok 41 tests\customer-account-ui.spec.js:1013:1 › an SDK-accepted sign-out with a cleared local session does not report an error (791ms)
+  ok 42 tests\customer-account-ui.spec.js:1025:1 › a late settings read cannot overwrite a newer saved profile (985ms)
+  ok 43 tests\customer-account-ui.spec.js:1063:1 › a settings read started during a save cannot undo its successful result (1.1s)
+  ok 44 tests\customer-account-ui.spec.js:1109:1 › a save from an earlier sign-in cannot replace newer settings after signing in again (1.6s)
+  ok 45 tests\customer-account-ui.spec.js:1152:1 › a delayed save reply cannot replace a newer settings read (983ms)
+  ok 46 tests\customer-account-ui.spec.js:1190:1 › a stale settings read cannot make a marked notification unread again (1.0s)
+  ok 47 tests\customer-account-ui.spec.js:1232:1 › a delayed save cannot report success on a different customer account (952ms)
+  ok 48 tests\customer-account-ui.spec.js:1268:41 › superseded save reconciliation respects a newer successful read (1.2s)
+  ok 49 tests\customer-account-ui.spec.js:1268:41 › superseded save reconciliation respects a newer failed read (1.3s)
+  ok 50 tests\customer-account-ui.spec.js:1322:1 › marking a notification read preserves unsaved profile edits (952ms)
+  ok 51 tests\customer-account-ui.spec.js:1340:1 › a same-account refresh preserves unsaved profile edits (678ms)
+  ok 52 tests\customer-account-ui.spec.js:1362:1 › refreshing a linked account preserves an unsaved settings draft (792ms)
+  ok 53 tests\customer-account-ui.spec.js:1389:1 › a transient linked-history refresh error keeps the unsaved settings draft (930ms)
+  ok 54 tests\customer-account-ui.spec.js:1407:1 › a late same-account history response cannot replace a newer history result (981ms)
+  ok 55 tests\customer-account-ui.spec.js:1439:1 › linking guest records preserves an unsaved settings draft (966ms)
+  ok 56 tests\customer-account-ui.spec.js:1456:1 › settings fields cannot be changed while their save is pending (884ms)
+  ok 57 tests\customer-account-ui.spec.js:1478:1 › a verified new customer can save profile settings and read a scoped notification before ordering (924ms)
+  ok 58 tests\customer-account-ui.spec.js:1520:1 › customer account entry is phone-safe, passwordless, recoverable, and keeps primary mobile navigation at five (2.9s)
+  ok 59 tests\customer-account-ui.spec.js:1557:1 › verified account claims once, loads only customer-visible history, and sends an authenticated bounded reply (1.4s)
+  ok 60 tests\wholesale-inquiry-ui.spec.js:3:1 › secure wholesale inquiry returns only a server receipt and no commercial authority (2.3s)
+
+
+  1) tests\customer-account-ui.spec.js:385:1 › saved delivery addresses change defaults and remove the final destination without resurrection
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('region', { name: 'Delivery addresses', exact: true }).getByText(/No delivery addresses saved yet/)
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('region', { name: 'Delivery addresses', exact: true }).getByText(/No delivery addresses saved yet/) with timeout 5000ms
+      - waiting for getByRole('region', { name: 'Delivery addresses', exact: true }).getByText(/No delivery addresses saved yet/)
+
+
+      408 |  await expect(section.getByText(/No delivery addresses saved yet/)).toBeVisible()
+      409 |  expect(settings.deliveryAddress).toBe('');expect(settings.addressBook.defaultAddressId).toBeNull()
+    > 410 |  await page.reload();await expect(section.getByText(/No delivery addresses saved yet/)).toBeVisible()
+          |                                                                                         ^
+      411 |  await expect(page.getByLabel('Saved delivery address',{exact:true})).toHaveCount(0)
+      412 | })
+      413 |
+        at C:\Users\jerze\K2 JImzon\tests\customer-account-ui.spec.js:410:89
+
+    Error Context: test-results\customer-account-ui-saved--319a1-nation-without-resurrection\error-context.md
+
+  1 failed
+    tests\customer-account-ui.spec.js:385:1 › saved delivery addresses change defaults and remove the final destination without resurrection
+  2 skipped
+  57 passed (1.7m)

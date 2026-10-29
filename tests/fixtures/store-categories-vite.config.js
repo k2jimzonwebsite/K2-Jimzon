@@ -17,5 +17,5 @@ export default defineConfig({
     'import.meta.env.VITE_GUEST_BFF_ENABLED': JSON.stringify('true'),
     'import.meta.env.VITE_ADMIN_BFF_ENABLED': JSON.stringify('true'),
   },
-  optimizeDeps: { noDiscovery: true, entries: ['tests/fixtures/store-categories.html'], include: ['react', 'react-dom/client', '@supabase/supabase-js', 'motion/react'] },
+  optimizeDeps: { noDiscovery: true, entries: ['tests/fixtures/store-categories.html'], include: ['react', 'react-dom/client', '@supabase/supabase-js', 'motion/react', 'papaparse', 'react-barcode'] },
 })

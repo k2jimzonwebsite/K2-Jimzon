@@ -297,8 +297,14 @@
     "ci": {
       "runId": 40818981304,
       "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40818981304",
-      "lastObservedStatus": "in_progress",
-      "conclusion": null
+      "lastObservedStatus": "completed",
+      "conclusion": "success",
+      "jobs": [
+        "critical-sql-behavior: success",
+        "security-check-regression: success",
+        "build-and-smoke: success"
+      ],
+      "observedAt": "2026-10-29T05:26:40.160Z"
     },
     "noDatabaseAuthDeletionChange": true,
     "remaining": [
@@ -310,6 +316,13 @@
       "previousStorefrontDeployment": "dpl_ETk6P3gMbuj8ypMFTZpWbooCHMgz",
       "previousAdminDeployment": "dpl_5yZqQezm1aLGBEZp5hi4AX6LWUer",
       "rule": "Scoped source/per-project rollback only by recovery decision. Preserve customer data, callback compatibility and original operation identities; no SQL/signup/template replay or database restore."
+    },
+    "receiptFeature": {
+      "commit": "82e48ffbb2d5729daeb44c7a4e087180e1d148b8",
+      "publishedAndReadBack": true,
+      "ownerAnswer": "Approve receipt-only feature pushes",
+      "mainRemains": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+      "newRuntimeSliceNotAuthorized": true
     }
   }
 }

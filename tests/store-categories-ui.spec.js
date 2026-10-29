@@ -29,8 +29,8 @@ test('Home, Catalog and Footer share actual shelves, preserving sold-out Fragran
   await home.getByRole('button', { name: /Fragrances/ }).click()
   await expect(page.getByTestId('product-card')).toHaveCount(1)
   await expect(page.getByTestId('product-card')).toContainText('Inventory perfume')
-  await expect(page.locator('footer').getByRole('button', { name: 'Fragrances', exact: true })).toBeVisible()
-  await expect(page.locator('footer').getByRole('button', { name: 'Skin care', exact: true })).toHaveCount(0)
+  await expect(page.locator('footer').getByRole('link', { name: 'Fragrances', exact: true })).toBeVisible()
+  await expect(page.locator('footer').getByRole('link', { name: 'Skin care', exact: true })).toHaveCount(0)
 })
 
 test('obsolete category URL returns to All without recreating an empty category', async ({ page }) => {
@@ -48,8 +48,10 @@ test('an empty configured catalog never advertises demo or fixed categories', as
   await expect(page.getByRole('button', { name: /Snack & Sweets|Beverages|Skin Care|Caffè & Bevande/ })).toHaveCount(0)
 })
 
-async function admin(page, { failSku } = {}) {
+async function admin(page, { failSku, surface = 'admin', readOnly = false } = {}) {
   const rows = structuredClone(products), writes = []
+  await page.route('https://fixture.supabase.co/**', route => route.fulfill({ json: [] }))
+  await page.route('**/api/admin/**', route => route.fulfill({ status: 404, json: { error: { code: 'NOT_FOUND' } } }))
   await page.context().addCookies([{ name: 'k2_admin_csrf', value: 'synthetic-category-csrf', url: 'http://127.0.0.1:5221' }])
   await page.route('**/api/admin/session', r => r.fulfill({ json: { ok: true, user: { userId: actor, role: 'Admin' } } }))
   await page.route('**/api/admin/products', r => r.fulfill({ json: { ok: true, products: rows } }))
@@ -62,7 +64,7 @@ async function admin(page, { failSku } = {}) {
     Object.assign(row, body.payload.patch, { updated_at: '2026-10-22T01:00:00Z' })
     return r.fulfill({ json: { ok: true, result: { sku: row.sku, status: row.status, updatedAt: row.updated_at } } })
   })
-  await page.goto('/tests/fixtures/store-categories.html?surface=admin')
+  await page.goto(`/tests/fixtures/store-categories.html?surface=${surface}${readOnly ? '&readOnly=1' : ''}`)
   return { rows, writes }
 }
 
@@ -88,7 +90,7 @@ for (const width of [375, 1440]) test(`staff apply one new store category to sel
   await store(page, rows)
   await page.goto('/catalog')
   await expect(page.getByRole('region', { name: 'The Italian Cabinet' }).getByRole('button', { name: /Italian favourites/ })).toBeVisible()
-  await expect(page.locator('footer').getByRole('button', { name: 'Italian favourites', exact: true })).toBeVisible()
+  await expect(page.locator('footer').getByRole('link', { name: 'Italian favourites', exact: true })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Fragrances', exact: true })).toHaveCount(0)
 })
 
@@ -323,4 +325,102 @@ test('Cabinet blur stops an active mouse drag and allows the next gesture', asyn
   await page.mouse.up()
   await page.getByRole('region', { name: 'The Italian Cabinet' }).getByRole('button', { name: /^Beverages/ }).click()
   await expect(page.getByTestId('product-card')).toHaveCount(1)
+})
+
+
+for (const surface of ['admin', 'sheet']) test(`new store category can be created and assigned from ${surface} without hidden bulk selection`, async ({ page }) => {
+  const { rows, writes } = await admin(page, { surface })
+  await page.getByRole('button', { name: 'Create store category', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: 'Create store category', exact: true })
+  await expect(dialog.getByRole('button', { name: 'Apply to 0 products', exact: true })).toBeDisabled()
+  await dialog.getByLabel('Store category', { exact: true }).fill('Italian pantry')
+  await dialog.getByRole('checkbox', { name: 'Assign Inventory pasta (pasta)', exact: true }).check()
+  await dialog.getByRole('button', { name: 'Apply to 1 product', exact: true }).click()
+  await expect(dialog.getByRole('status')).toContainText('1 saved')
+  expect(writes).toHaveLength(1)
+  expect(writes[0].payload.patch).toEqual({ subcategory: 'Italian pantry' })
+  expect(rows[0]).toMatchObject({ published: true, status: 'Live', srp: 100, stock_available: 2 })
+  expect(rows[1].subcategory).toBe('Fragrances')
+  await dialog.getByRole('button', { name: 'Close', exact: true }).click()
+  if (surface === 'sheet') await expect(page.getByRole('columnheader', { name: 'Store category', exact: true })).toBeVisible()
+})
+
+test('footer category destinations stay native and update with the current published inventory', async ({ page }) => {
+  let rows = structuredClone(products)
+  await page.route('**/rest/v1/**', route => {
+    const table = new URL(route.request().url()).pathname.split('/').pop()
+    return route.fulfill({ json: table === 'products' ? rows.filter(p => p.published)
+      : table === 'v_storefront_visible_skus' ? rows.filter(p => p.published).map(p => ({ sku: p.sku }))
+      : table === 'v_product_stock_from_batches' ? rows.map(p => ({ sku: p.sku, stock_from_batches: p.stock_available })) : [] })
+  })
+  await page.goto('/catalog')
+  const footer = page.getByRole('navigation', { name: 'Shop by category', exact: true })
+  await expect(footer.getByRole('link', { name: 'Pasta', exact: true })).toHaveAttribute('href', '/catalog?category=Pasta')
+  rows[0].subcategory = 'Italian pantry'
+  await page.reload()
+  const category = footer.getByRole('link', { name: 'Italian pantry', exact: true })
+  await expect(category).toHaveAttribute('href', '/catalog?category=Italian+pantry')
+  await expect(footer.getByRole('link', { name: 'Pasta', exact: true })).toHaveCount(0)
+  await category.click()
+  await expect(page).toHaveURL(/category=Italian\+pantry/)
+  await expect(page.getByTestId('product-card')).toHaveCount(1)
+  await expect(page.getByTestId('product-card')).toContainText('Inventory pasta')
+  await footer.getByRole('link', { name: 'Browse all products', exact: true }).click()
+  await expect(page.getByTestId('product-card')).toHaveCount(2)
+})
+
+test('empty footer keeps a useful catalog destination', async ({ page }) => {
+  await store(page, [])
+  await page.goto('/catalog')
+  await expect(page.getByRole('navigation', { name: 'Shop by category', exact: true }).getByRole('link', { name: 'Browse all products', exact: true })).toHaveAttribute('href', '/catalog')
+})
+
+for (const surface of ['admin', 'sheet']) test(`store category actions respect read-only access in ${surface}`, async ({ page }) => {
+  const { writes } = await admin(page, { surface, readOnly: true })
+  await expect(page.getByRole('button', { name: 'Create store category', exact: true })).toHaveCount(0)
+  if (surface === 'sheet') await expect(page.getByRole('button', { name: 'Set store category for pasta', exact: true })).toBeDisabled()
+  expect(writes).toHaveLength(0)
+})
+
+test('Sheet category cell uses the same saved decision and retains an uncertain save across reload', async ({ page }) => {
+  const { writes } = await admin(page, { surface: 'sheet', failSku: 'scent' })
+  await page.getByRole('button', { name: 'Set store category for scent', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: 'Set store category', exact: true })
+  await dialog.getByLabel('Store category', { exact: true }).fill('Perfumes')
+  await dialog.getByRole('button', { name: 'Apply to 1 product', exact: true }).click()
+  await expect(dialog.getByRole('alert')).toBeVisible()
+  const original = structuredClone(writes[0])
+  await page.reload()
+  await expect(page.getByRole('button', { name: 'Create store category', exact: true })).toBeDisabled()
+  await page.getByRole('button', { name: 'Review pending product decision scent', exact: true }).click()
+  await page.getByRole('button', { name: 'Retry saved decision', exact: true }).click()
+  await expect.poll(() => writes.length).toBe(2)
+  expect(writes[1]).toEqual(original)
+})
+
+for (const width of [375, 1440]) test(`category creation and the dynamic footer fit the K2 surfaces at ${width}px`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 950 })
+  fs.mkdirSync('docs/design-checkpoints/20261029-account-category-footer', { recursive: true })
+  await admin(page, { surface: 'sheet' })
+  await expect(page.getByRole('button', { name: 'Create store category', exact: true })).toBeInViewport()
+  await page.getByRole('button', { name: 'Create store category', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: 'Create store category', exact: true })
+  await dialog.getByLabel('Store category', { exact: true }).fill('Italian pantry')
+  await dialog.getByRole('searchbox', { name: 'Find products to assign', exact: true }).fill('pasta')
+  await dialog.getByRole('checkbox', { name: 'Assign Inventory pasta (pasta)', exact: true }).check()
+  await page.screenshot({ path: `docs/design-checkpoints/20261029-account-category-footer/sheet-${width}.png` })
+  expect(await dialog.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true)
+  const longName = 'Special Italian delicacies and seasonal favourites for sharing'
+  await store(page, [...cabinetRows, { ...products[0], sku: 'long', subcategory: longName }])
+  await page.goto('/catalog')
+  const footer = page.locator('footer')
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(theme => document.documentElement.classList.toggle('dark', theme === 'dark'), theme)
+    const link = footer.getByRole('link', { name: longName, exact: true })
+    await expect(link).toBeVisible()
+    expect(await link.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true)
+    expect((await link.boundingBox()).height).toBeGreaterThanOrEqual(44)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await footer.screenshot({ path: `docs/design-checkpoints/20261029-account-category-footer/footer-${width}-${theme}.png` })
+  }
 })

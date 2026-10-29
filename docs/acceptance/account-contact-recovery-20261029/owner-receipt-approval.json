@@ -1,0 +1,9 @@
+{
+  "recordedAt": "2026-10-29T04:51:51.250481+00:00",
+  "ownerAnswer": "Approve receipt-only feature pushes",
+  "scope": "Publish82e48ffb and necessary release-receipt follow-ups to the existing feature branch",
+  "destination": "github.com/k2jimzonwebsite/K2-Jimzon",
+  "featureBranch": "codex/customer-privacy-owner-decisions",
+  "mainMustRemain": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+  "noAdditionalApplicationChange": true
+}

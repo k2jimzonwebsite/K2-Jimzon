@@ -12,6 +12,11 @@ import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerMo
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 import DeleteProductsModal from './DeleteProductsModal'
 import ProductIntakeSessionModal from './ProductIntakeSessionModal'
+import BulkStoreCategoryDialog from './BulkStoreCategoryDialog'
+import ProductMasterRecovery, { PendingProductDecision } from './ProductMasterRecovery'
+import useProductMasterRecovery from '../../hooks/useProductMasterRecovery'
+import { getStoreCategory } from '../../lib/storeCategories'
+import { secondaryButton } from './AdminWorkspaceUi'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import Barcode from 'react-barcode'
 import { EyeIcon, BarcodeIcon, SparkleIcon, XIcon } from '../../components/ui/icons'
@@ -26,7 +31,7 @@ import {
 } from './sheetShopLensFixture'
 
 const DOMAINS = [
-  { name: 'Product', cols: ['SKU', 'Barcode', 'Product Name', 'Brand', 'Category', 'Subcategory', 'Origin', 'Net Weight', 'Package Type'] },
+  { name: 'Product', cols: ['SKU', 'Barcode', 'Product Name', 'Brand', 'Category', 'Store category', 'Origin', 'Net Weight', 'Package Type'] },
   { name: 'Content', cols: ['Description', 'Why Buy', 'Usage', 'Storage', 'Ingredients', 'Allergens', 'Finished Product'] },
   { name: 'Pricing', cols: ['Cost ₱', 'SRP ₱', 'Wholesale ₱', 'Dealer ₱'] },
   { name: 'Inventory', cols: ['Available', 'Reorder Level', 'Expiry Date', 'Supplier', 'Warehouse'] },
@@ -40,7 +45,7 @@ const ALL_COLS = DOMAINS.flatMap(d => d.cols)
 const FIELD_MAP = {
   // Product
   'SKU': 'sku', 'Barcode': 'barcode', 'Product Name': 'name', 
-  'Brand': 'brand_id', 'Category': 'category_id', 'Subcategory': 'subcategory',
+  'Brand': 'brand_id', 'Category': 'category_id', 'Store category': 'subcategory',
   'Origin': 'country_of_origin', 'Net Weight': 'net_weight', 'Package Type': 'package_type',
   
   // Content
@@ -64,10 +69,13 @@ const FIELD_MAP = {
   'Status': 'status', 'Internal Notes': 'internal_notes'
 }
 
-export default function Sheet({ canManageProducts = false }) {
+export default function Sheet({ actorId, canManageProducts = false }) {
   const { openProduct, isDark } = useStore()
   const secureCatalog = adminBffEnabled()
   const [rows, setRows] = useState([])
+  const recovery = useProductMasterRecovery({ actorId, enabled: secureCatalog, canManageProducts })
+  const [storeCategoryProducts, setStoreCategoryProducts] = useState(null)
+  const [showProductRecovery, setShowProductRecovery] = useState(false)
   const { referenceState, createOption } = useReferenceOptions()
   // Which cell currently holds the caret, as {sku, field}. A ref rather than
   // state because only the realtime merge reads it, and re-rendering the sheet
@@ -387,7 +395,16 @@ export default function Sheet({ canManageProducts = false }) {
 
   return (
     <div className="flex flex-col h-full bg-adm-sunken">
-      {secureCatalog && <p className="shrink-0 border-b border-adm-line px-3 py-3 text-sm text-white/80 lg:px-6">Brands and categories are read-only here. Switch to Grid, then Edit a product to review or create references.</p>}
+      {secureCatalog && <div className="flex shrink-0 flex-col gap-3 border-b border-adm-line px-3 py-3 sm:flex-row sm:items-center sm:justify-between lg:px-6">
+        <p className="text-sm text-white/80">Create or assign store categories here. For brands and operational categories, switch to Grid, then Edit a product to review or create references.</p>
+        {canManageProducts && <button type="button" className={`${secondaryButton} shrink-0 self-start`} disabled={!actorId || loading || recovery.working || !!recovery.pending || recovery.storageBlocked} onClick={() => setStoreCategoryProducts([])}>Create store category</button>}
+      </div>}
+      {secureCatalog && <PendingProductDecision recovery={recovery} onReview={() => setShowProductRecovery(true)} />}
+      {secureCatalog && storeCategoryProducts && <BulkStoreCategoryDialog key={actorId} products={storeCategoryProducts} allProducts={rows} recovery={recovery} actorId={actorId} canManageProducts={canManageProducts} onClose={() => setStoreCategoryProducts(null)} onSaved={() => { void fetchProducts({ background: true }) }} />}
+      {secureCatalog && showProductRecovery && <ProductMasterRecovery recovery={recovery} canManageProducts={canManageProducts}
+        onClose={() => setShowProductRecovery(false)}
+        onNotApplied={product => { setShowProductRecovery(false); setStoreCategoryProducts([product]); void fetchProducts({ background: true }) }}
+        onRecorded={() => { setShowProductRecovery(false); void fetchProducts({ background: true }) }} />}
       <div className="shrink-0 border-b border-adm-line bg-adm-surface">
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none px-3 py-2 lg:px-6 lg:py-3">
           <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-adm-sm bg-blue text-white px-3.5 min-h-[44px] text-sm font-bold transition hover:bg-blue-deep">
@@ -570,6 +587,12 @@ export default function Sheet({ canManageProducts = false }) {
                       const isBool = ['is_ai_generated', 'is_human_reviewed', 'is_featured', 'published'].includes(field)
                       const isArray = Array.isArray(val)
                       const displayVal = isArray ? val.join(', ') : (val ?? '')
+
+                      if (secureCatalog && field === 'subcategory') {
+                        return <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="min-w-[170px] p-0">
+                          <button type="button" className="min-h-11 w-full px-2.5 py-2 text-left text-sm text-white hover:bg-white/5 disabled:opacity-60" aria-label={`Set store category for ${r.sku}`} disabled={!actorId || !canManageProducts || recovery.working || !!recovery.pending || recovery.storageBlocked} onClick={() => setStoreCategoryProducts([r])}>{getStoreCategory(r)}</button>
+                        </Cell>
+                      }
                       
                       if (field === 'status') {
                         return (

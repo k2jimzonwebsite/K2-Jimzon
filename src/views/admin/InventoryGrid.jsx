@@ -254,7 +254,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   }, [launchTool, onLaunchToolHandled, secure])
   const [enrichProduct, setEnrichProduct] = useState(null)
   const [selected, setSelected] = useState(() => new Set())
-  const [showStoreCategories, setShowStoreCategories] = useState(false)
+  const [storeCategoryProducts, setStoreCategoryProducts] = useState(null)
   const [categoryFilter, setCategoryFilter] = useState('All')
   const [showFamilyEditor, setShowFamilyEditor] = useState(false)
   const [showSkuMerge, setShowSkuMerge] = useState(false)
@@ -276,7 +276,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
   const [showProductRecovery, setShowProductRecovery] = useState(false)
   const editIdentity = useRef(null)
   if (editIdentity.current?.actorId !== actorId || editIdentity.current?.canManageProducts !== canManageProducts) editIdentity.current = { actorId, canManageProducts }
-  useEffect(() => { setEditingProduct(null); setShowProductRecovery(false);setWebsiteSku(null); setSaving(false); setEditError(''); setStatusDecision(null); setStatusBusy(null); setShowStoreCategories(false) }, [actorId, canManageProducts])
+  useEffect(() => { setEditingProduct(null); setShowProductRecovery(false);setWebsiteSku(null); setSaving(false); setEditError(''); setStatusDecision(null); setStatusBusy(null); setStoreCategoryProducts(null) }, [actorId, canManageProducts])
   const [notice, setNotice] = useState(null)
   const [search, setSearch] = useState('')
   const [stockFilter, setStockFilter] = useState('all')
@@ -765,6 +765,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
             {inventoryCategories.map(({ name, count }) => <option key={name} value={name}>{name} ({count})</option>)}
           </select>
         </label>
+        {secure && canManageProducts && <button type="button" className={secondaryButton} disabled={!actorId || recovery.working || !!recovery.pending || recovery.storageBlocked} onClick={() => setStoreCategoryProducts([])}>Create store category</button>}
       </section>
 
 
@@ -776,7 +777,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
       {secure&&<PendingWebsiteDecision recovery={websiteRecovery} onReview={setWebsiteSku}/>}
       {secure && <PendingProductFamilyDecision recovery={familyRecovery} onReview={() => setShowFamilyEditor(true)} />}
       {secure && showFamilyEditor && <ProductFamilyEditor key={actorId} selectedSkus={[...selected]} actorId={actorId} canManageProducts={canManageProducts} recovery={familyRecovery} onClose={() => setShowFamilyEditor(false)} onSaved={() => { flash('Product variations recorded.'); void fetchProducts() }} />}
-      {secure && showStoreCategories && <BulkStoreCategoryDialog key={actorId} products={selectedProducts} allProducts={products} recovery={recovery} actorId={actorId} canManageProducts={canManageProducts} onClose={() => setShowStoreCategories(false)} onSaved={() => { void fetchProducts() }} />}
+      {secure && storeCategoryProducts && <BulkStoreCategoryDialog key={actorId} products={storeCategoryProducts} allProducts={products} recovery={recovery} actorId={actorId} canManageProducts={canManageProducts} onClose={() => setStoreCategoryProducts(null)} onSaved={() => { void fetchProducts() }} />}
       {secure&&websiteSku&&<WebsiteAssignmentDialog key={`${actorId}:${websiteSku}:${canManageProducts}`} sku={websiteSku} actorId={actorId} canManageProducts={canManageProducts} recovery={websiteRecovery} onClose={()=>setWebsiteSku(null)}/>}
       {secure && showProductRecovery && <ProductMasterRecovery recovery={recovery} canManageProducts={canManageProducts}
         onNotApplied={(product, taxonomyReview) => {
@@ -804,7 +805,7 @@ export default function InventoryGrid({ actorId, launchTool, onLaunchToolHandled
           </label>
           {selected.size > 0 && (
             <>
-            {secure && canManageProducts && <button type="button" className={secondaryButton} disabled={recovery.working || !!recovery.pending || recovery.storageBlocked} onClick={() => setShowStoreCategories(true)}>Set store category</button>}
+            {secure && canManageProducts && <button type="button" className={secondaryButton} disabled={recovery.working || !!recovery.pending || recovery.storageBlocked} onClick={() => setStoreCategoryProducts(selectedProducts)}>Set store category</button>}
             {secure && canManageProducts && <button type="button" className={secondaryButton} disabled={selected.size > 100 || familyRecovery.working || !!familyRecovery.pending || familyRecovery.storageBlocked} onClick={() => setShowFamilyEditor(true)}>Manage variations</button>}
             <button onClick={clearSelection} className="ml-auto text-xs font-semibold text-white/50 hover:text-white transition-colors min-h-11 px-2">
               Clear

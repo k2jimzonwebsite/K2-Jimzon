@@ -1,0 +1,112 @@
+
+> k2-jimzon-prototype@0.1.0 test:store-categories
+> node --test tests/store-categories.test.mjs && playwright test --config=playwright.store-categories.config.js
+
+✔ display categories preserve staff labels and fall back only to real taxonomy (2.1097ms)
+✔ bulk updates are sequential, use current versions and send only the display field (0.5907ms)
+✔ uncertain write stops before later products and preserves unsent work (0.4258ms)
+✔ changed category, unreadable version and actor/unmount cancellation refuse further saves (0.4667ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 115.4705
+[WebServer] (node:20388) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:6152) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 35 tests using 1 worker
+
+(node:7376) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+[WebServer] 1:18:24 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\store-categories-ui.spec.js:21:1 › Home, Catalog and Footer share actual shelves, preserving sold-out Fragrances and excluding Draft shelves (2.1s)
+[WebServer] 1:18:26 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\store-categories-ui.spec.js:36:1 › obsolete category URL returns to All without recreating an empty category (1.4s)
+[WebServer] 1:18:27 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\store-categories-ui.spec.js:44:1 › an empty configured catalog never advertises demo or fixed categories (1.4s)
+[WebServer] 1:18:30 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\store-categories-ui.spec.js:71:34 › staff apply one new store category to selected products at 375px (2.4s)
+[WebServer] 1:18:33 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\store-categories-ui.spec.js:71:34 › staff apply one new store category to selected products at 1440px (3.0s)
+  ok  6 tests\store-categories-ui.spec.js:97:1 › uncertain second save stops the batch, retains the original request and reports partial progress (2.4s)
+  ok  7 tests\store-categories-ui.spec.js:113:1 › invalid category names can be corrected before any batch begins (1.8s)
+  ok  8 tests\store-categories-ui.spec.js:127:1 › a category filter and Select visible restrict bulk work to matching SKUs (1.6s)
+[WebServer] 1:18:40 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  9 tests\store-categories-ui.spec.js:139:34 › inventory category shelves remain readable at 375px (1.6s)
+[WebServer] 1:18:41 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\store-categories-ui.spec.js:139:34 › inventory category shelves remain readable at 1440px (1.9s)
+  ok 11 tests\store-categories-ui.spec.js:149:1 › a long category list stays visible without depending on a scroll-animation threshold (2.5s)
+[WebServer] 1:18:46 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\store-categories-ui.spec.js:163:1 › Cabinet shows two side-by-side cards and scrolls horizontally at 375px (1.2s)
+[WebServer] 1:18:47 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\store-categories-ui.spec.js:187:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 320px light (1.4s)
+[WebServer] 1:18:48 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 14 tests\store-categories-ui.spec.js:187:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 320px dark (1.3s)
+[WebServer] 1:18:50 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 15 tests\store-categories-ui.spec.js:187:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 375px light (1.4s)
+[WebServer] 1:18:51 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 16 tests\store-categories-ui.spec.js:187:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 375px dark (1.5s)
+[WebServer] 1:18:52 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 17 tests\store-categories-ui.spec.js:187:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 768px light (1.3s)
+[WebServer] 1:18:54 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 18 tests\store-categories-ui.spec.js:187:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 768px dark (1.3s)
+[WebServer] 1:18:55 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 19 tests\store-categories-ui.spec.js:187:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 1440px light (1.4s)
+[WebServer] 1:18:56 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 20 tests\store-categories-ui.spec.js:187:5 › Cabinet interaction and responsive review › Cabinet readable two-card layout at 1440px dark (1.5s)
+[WebServer] 1:18:58 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 21 tests\store-categories-ui.spec.js:212:3 › Cabinet interaction and responsive review › mouse drag never navigates, then a deliberate click opens the exact category (1.8s)
+[WebServer] 1:19:00 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 22 tests\store-categories-ui.spec.js:233:3 › Cabinet interaction and responsive review › native touch swipe browses horizontally and still permits vertical page scrolling (2.0s)
+[WebServer] 1:19:02 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 1:19:03 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 23 tests\store-categories-ui.spec.js:254:3 › Cabinet interaction and responsive review › empty and single-category rails have honest bounds and preserve Pasabuy navigation (2.3s)
+  ok 24 tests\store-categories-ui.spec.js:271:1 › Cabinet long names remain readable after smooth navigation and viewport resize (3.0s)
+[WebServer] 1:19:07 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 25 tests\store-categories-ui.spec.js:294:3 › Cabinet hybrid input recovery › Cabinet touch tap works after a mouse drag (1.5s)
+[WebServer] 1:19:09 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 26 tests\store-categories-ui.spec.js:311:1 › Cabinet blur stops an active mouse drag and allows the next gesture (1.6s)
+  ok 27 tests\store-categories-ui.spec.js:331:43 › new store category can be created and assigned from admin without hidden bulk selection (1.5s)
+  ok 28 tests\store-categories-ui.spec.js:331:43 › new store category can be created and assigned from sheet without hidden bulk selection (1.6s)
+[WebServer] 1:19:13 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 1:19:14 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 29 tests\store-categories-ui.spec.js:348:1 › footer category destinations stay native and update with the current published inventory (2.3s)
+[WebServer] 1:19:16 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 30 tests\store-categories-ui.spec.js:372:1 › empty footer keeps a useful catalog destination (979ms)
+  ok 31 tests\store-categories-ui.spec.js:378:43 › store category actions respect read-only access in admin (905ms)
+  ok 32 tests\store-categories-ui.spec.js:378:43 › store category actions respect read-only access in sheet (914ms)
+  ok 33 tests\store-categories-ui.spec.js:385:1 › Sheet category cell uses the same saved decision and retains an uncertain save across reload (2.2s)
+[WebServer] 1:19:22 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 34 tests\store-categories-ui.spec.js:401:34 › category creation and the dynamic footer fit the K2 surfaces at 375px (2.6s)
+[WebServer] 1:19:25 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 35 tests\store-categories-ui.spec.js:401:34 › category creation and the dynamic footer fit the K2 surfaces at 1440px (3.8s)
+
+  35 passed (1.1m)

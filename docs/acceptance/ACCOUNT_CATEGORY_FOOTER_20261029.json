@@ -1,0 +1,116 @@
+{
+  "mapItem": "MAP-019",
+  "ideaIds": [
+    "IDEA-20261029-02",
+    "IDEA-20261029-03",
+    "IDEA-20261029-04"
+  ],
+  "recordedAt": "2026-10-29T05:26:40.160Z",
+  "status": "locally-verified-feature-source-not-published",
+  "baseCommit": "82e48ffbb2d5729daeb44c7a4e087180e1d148b8",
+  "productionSource": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+  "featureBranch": "codex/customer-privacy-owner-decisions",
+  "ownerDecision": {
+    "confirmed": true,
+    "answer": "Yes, use this scope",
+    "scope": "Direct existing first account name/mobile/address editor; category creation and assignment in Sheet and Grid; bottom footer uses the same public category list; categories public when containing a storefront-listed product. Preserve permissions, stock, prices, orders and K2 styling.",
+    "releaseAuthorization": "Prior exact cabace48 and receipt-only pushes do not approve this new runtime source."
+  },
+  "providerChanges": false,
+  "productionCustomerOrProductWrites": false,
+  "liveDiscovery": {
+    "actualSignedInChrome": "Empty address book with existing mobile field behind Add delivery address; no details entered/saved; owner tab/cart preserved",
+    "exactK2ReadOnlyMetadata": "Installed settings helper/read/address/profile writer hashes matched the prior approved packet. No SQL/Auth/SMS/deletion activation needed."
+  },
+  "verification": {
+    "accountBaselineFailures": 2,
+    "accountFocusedPassed": 4,
+    "accountFull": {
+      "passed": 57,
+      "skipped": 2,
+      "obsoleteExpectationFailures": 1
+    },
+    "correctedRemovalFocusedPassed": 1,
+    "accountReconciled": {
+      "passed": 58,
+      "skipped": 2
+    },
+    "categoryReleasedSourceBaseline": {
+      "expectedFailures": 4,
+      "runtimeModuleErrors": 0,
+      "substitutedModules": [
+        "src/components/Footer.jsx",
+        "src/views/admin/BulkStoreCategoryDialog.jsx",
+        "src/views/admin/InventoryGrid.jsx",
+        "src/views/admin/Sheet.jsx"
+      ]
+    },
+    "categoryPurePassed": 4,
+    "categoryBrowserPassed": 35,
+    "protectedSheetBrowserPassed": 2,
+    "development": {
+      "exitCode": 0,
+      "privacyAddressPassed": 148,
+      "repetitions": 1
+    },
+    "storefrontBuild": {
+      "exitCode": 0,
+      "boundary": "passed",
+      "secrets": "passed",
+      "landingJsGzipKB": 147.64,
+      "landingJsLimitKB": 150.5,
+      "cssGzipKB": 29.82,
+      "cssLimitKB": 30
+    },
+    "adminBuild": {
+      "exitCode": 0,
+      "boundary": "passed",
+      "secrets": "passed",
+      "applicationMinifiedKB": 227.46,
+      "limitKB": 300
+    },
+    "buildQualification": "Current owner environment builds, not a committed-source archive; --ignore-scripts retains the single passing development lifecycle.",
+    "review": "Independent read-only scoped diff review: no Critical, Important or confirmed Minor findings; diff whitespace check passed.",
+    "visual": "One combined bounded review: account and Sheet 375/1440; footer light/dark 375/1440, wrapping, 44px targets, no horizontal overflow. No visual-fix loop."
+  },
+  "limitations": [
+    "No new source published or deployed; no real customer save or Admin category write.",
+    "Full release gate remains immediately before an approved promotion.",
+    "First category fixture red had a module-load error and is not behavioral evidence; corrected released-source comparison proves the intended four failures.",
+    "Sheet boundary first launch used an occupied account test port and ran no cases; sequential rerun passed.",
+    "Two disabled-closure account cases are intentionally skipped; customer deletion remains suspended."
+  ],
+  "nextAction": "MAP-019: authorize exact new feature/main publication, qualify the release gate, verify both separate production artifacts/canonical hosts, then owner address save/reload and default-checkout prefill without submitting an order.",
+  "rollback": "Scoped source revert before publication; after release restore each separate artifact to its recorded cabace48 deployment by scoped decision. Preserve all data and pending requests; no database restore or business replay. Subsequent category corrections use fresh normal Admin versions.",
+  "sourceSha256": {
+    "src/components/Footer.jsx": "fd78bbb1b54e5e5277d30352bc464e84038c38fadbca42ae5d282430804849e2",
+    "src/components/account/CustomerDeliveryAddresses.jsx": "83f57ace767c53ae089f39bc1e1c70b5de69ac24cc6e437cc5237cd3eae3b4b0",
+    "src/views/admin/Admin.jsx": "781237e3facaf2471870a9147d323a3fd9c1e703e6de9e31395dfc93f0e83493",
+    "src/views/admin/BulkStoreCategoryDialog.jsx": "cfe0feaf54e380dd5ad6c1f81cba7ab42f35b49030bc44820af5df61614a5951",
+    "src/views/admin/InventoryGrid.jsx": "cd51981d21e33c4738e05fa9a2d302d832fe49b9f9f58e8a287f42a4ac4331c2",
+    "src/views/admin/Sheet.jsx": "5be4adbde2154bafba319db52fbbdebdf2f04b76a1c28dd5e8c93032ca1e4254",
+    "tests/admin-secure-sheet-reference.spec.js": "02fe55bd249166ed3c02544fea1b02ee5fcc015db556c05924c450236cac1e4d",
+    "tests/customer-account-ui.spec.js": "a4fbc1d37550b02dda779e6f3563e70989c75e51ada2133adff2febc4c9f61a8",
+    "tests/store-categories-ui.spec.js": "4fda407aa34168ce8d8922bcb140a06c9b84b4ff27bfbfeaced1755f86107a6c",
+    "tests/fixtures/store-categories-vite.config.js": "8539c6b0727028eecf86b58c4557191bd8e511ef47703c57df1b7d5255d26ea8",
+    "tests/fixtures/store-categories.jsx": "30566b322e7f327e6d37f423b1819f9d089f8ae68111eb7f44c13fe917b8369e"
+  },
+  "evidenceSha256": {
+    "docs/acceptance/account-category-footer-20261029/account-visible-red.log": "e99f01fbc9d0b0fa259866b175f8fc81819f2fc4f7253bd944e7cdc8bf72c70b",
+    "docs/acceptance/account-category-footer-20261029/account-visible-green.log": "5ec26108dc5025bed698599886d2f89e95f53f16bd8dd5af524d117b20ea3855",
+    "docs/acceptance/account-category-footer-20261029/account-final.log": "7c61deba98d50ed5ee9b4e70a4b22b12f73e948cc763d01e8a1ecbe8205ff735",
+    "docs/acceptance/account-category-footer-20261029/account-removal-corrected.log": "61d27be4636d69b8f4509a182a594eb8f049c17ff2b6503d46956ff0d98a39c8",
+    "docs/acceptance/account-category-footer-20261029/category-footer-red.log": "2cd5b369d78d7a6fb3735095fd8ba9b5dc88618fb20bd81b8f99dea47960f9e0",
+    "docs/acceptance/account-category-footer-20261029/category-footer-green.log": "d75114a7ef60604c7d50d94db4208f8656a1a7efd36bd17ec8148b26bf317237",
+    "docs/acceptance/account-category-footer-20261029/category-footer-focused.log": "5dd0337bc2bf5fdb14940be88078e9fe054dc93832ce628ff94ecaa26e3c9eca",
+    "docs/acceptance/account-category-footer-20261029/category-baseline-reproduced.log": "903b352c80a18bc7aa4bc6510b128568482e5b8eac25b3cd865e74d5974fc2ea",
+    "docs/acceptance/account-category-footer-20261029/categories-final.log": "91cb2142276fde71c8e9a2d1ec116276547c01caee866ffd2b3573742ffaf561",
+    "docs/acceptance/account-category-footer-20261029/sheet-boundary-final.log": "3ba42f21925522467dea5a2dff789a4d35e44e7be45c248bf2a410a92fd3a1f8",
+    "docs/acceptance/account-category-footer-20261029/sheet-boundary-rerun.log": "949ee4327f23abd8ce87b33c9e5ca71eb67669f339481dbbc3f3f9bf0ed2741f",
+    "docs/acceptance/account-category-footer-20261029/development-final.log": "f4bceed4bd327f2b8aa3dcf6bd4148cce35e8be3eaa26414e3a0f5717e1129b1",
+    "docs/acceptance/account-category-footer-20261029/build-storefront.log": "d8a64a3cd5cc370e8111b8477b5954f94ffcbe36a7ea30f68a3427a8419aff36",
+    "docs/acceptance/account-category-footer-20261029/build-admin.log": "2e28f700a81120a97534950fc655c94189f8b3cf08d40adb61fd98731ed51e3b"
+  },
+  "sourceHashNormalization": "UTF-8 CRLF normalized to LF, matching Git source blobs",
+  "evidenceNormalization": "UTF-8 LF; trailing whitespace and terminal blank lines removed; original raw logs retained privately under .tools/account-category-footer-20261029"
+}

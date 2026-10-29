@@ -1,5 +1,7 @@
 # Customer profile and saved delivery details
 
+29 October / IDEA-20261029-02: prepared discoverability correction opens the existing first-address editor once per account-keyed mount when a ready book is empty; its fulfillment field is labeled **Mobile number**. Cancel/reopen remains explicit, same-account refresh preserves drafts, and no automatic save or separate phone store is introduced. Existing saved-address list/edit/default, pending literal commands and account ownership stay authoritative. Local browser evidence passes; actual owner save/reload/default checkout remains MAP-019. Evidence/recovery: `docs/acceptance/ACCOUNT_CATEGORY_FOOTER_20261029.md` and JSON.
+
 IDEA-20261028-01, accepted into MAP-019. The owner requests reusable name,
 contact, location and shipping details and explicitly selects multiple saved
 addresses with one default. Guest ordering remains available. This is a design

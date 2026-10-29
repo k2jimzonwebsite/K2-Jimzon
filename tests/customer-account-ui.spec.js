@@ -215,6 +215,38 @@ async function addressCheckoutBase(page,authenticated=true){
  return quotes
 }
 
+for (const width of [375, 1440]) test(`new account shows its delivery mobile form directly at ${width}px`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 })
+  await seedExpressAccount(page, fakeJwt(expressActor))
+  await addressReferenceRoutes(page)
+  await page.route('**/api/storefront/account/history', route => route.fulfill({ json: { error: { code: 'ACCOUNT_NOT_LINKED' } }, status: 409 }))
+  let writes = 0
+  await page.route('**/api/storefront/account/settings', route => {
+    if (Object.keys(route.request().postDataJSON()).length) writes++
+    return route.fulfill({ json: { ok: true, settings: { displayName: '', deliveryAddress: '', notifyInApp: true,
+      addressBook: { initialized: false, addresses: [], defaultAddressId: null, revision: 0 } }, notifications: [] } })
+  })
+  await page.goto('/account')
+  const addresses = page.getByRole('region', { name: 'Delivery addresses', exact: true })
+  const mobile = addresses.getByRole('textbox', { name: 'Mobile number', exact: true })
+  await expect(mobile).toBeVisible()
+  await expect(mobile).toHaveAttribute('autocomplete', 'shipping tel')
+  await expect(mobile).toHaveAttribute('required', '')
+  await expect(addresses.getByLabel('Recipient full name', { exact: true })).toBeVisible()
+  await expect(addresses.getByLabel('House, unit and street', { exact: true })).toBeVisible()
+  await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), width === 375)
+  await page.screenshot({ path: `docs/design-checkpoints/20261029-account-category-footer/account-${width}.png`, fullPage: true })
+  await mobile.fill('09178546329')
+  await page.getByRole('button', { name: 'Check existing link', exact: true }).click()
+  await expect(mobile).toHaveValue('09178546329')
+  expect(writes).toBe(0)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  await addresses.getByRole('button', { name: 'Cancel', exact: true }).click()
+  await expect(mobile).toHaveCount(0)
+  await addresses.getByRole('button', { name: 'Add delivery address', exact: true }).click()
+  await expect(mobile).toBeVisible()
+})
+
 test('saved delivery addresses retain one exact change through a lost save reply',async({page})=>{
  await seedExpressAccount(page,fakeJwt(expressActor));await addressReferenceRoutes(page)
  await page.route('**/api/storefront/account/history',route=>route.fulfill({json:accountExpressHistory()}))
@@ -235,10 +267,9 @@ test('saved delivery addresses retain one exact change through a lost save reply
  await page.goto('/account')
  const section=page.getByRole('region',{name:'Delivery addresses',exact:true})
  await expect(section).toBeVisible({timeout:5000})
- await section.getByRole('button',{name:'Add delivery address',exact:true}).click()
  await section.getByLabel('Address label',{exact:true}).fill('Home')
  await section.getByLabel('Recipient full name',{exact:true}).fill('Teresa Abella')
- await section.getByLabel('Delivery contact number',{exact:true}).fill('09276143852')
+ await section.getByLabel('Mobile number',{exact:true}).fill('09276143852')
  await section.getByLabel('House, unit and street',{exact:true}).fill('42 Mabini Street')
  for(let i=0;i<addressPlaces.length;i++)await section.locator(`#account-address-area-${i}`).selectOption(addressPlaces[i].code)
  await section.getByLabel('Postal code (optional)',{exact:true}).fill('1600')
@@ -285,14 +316,13 @@ test('saved delivery editor accepts a name added in the profile form while it is
   return route.fulfill({json:{ok:true,settings,notifications:[]}})
  })
  await page.goto('/account');const section=page.getByRole('region',{name:'Delivery addresses',exact:true})
- await section.getByRole('button',{name:'Add delivery address',exact:true}).click()
  await expect(section.locator('#address-profile-name')).toBeVisible()
  await page.locator('#account-profile-name').fill('Elena Villanueva')
  await page.getByRole('button',{name:'Save settings',exact:true}).click()
  await expect(page.getByText('Settings saved.',{exact:true})).toBeVisible()
  await expect(section.locator('#address-profile-name')).toHaveCount(0)
  await section.getByLabel('Recipient full name',{exact:true}).fill('Teresa Abella')
- await section.getByLabel('Delivery contact number',{exact:true}).fill('09276143852')
+ await section.getByLabel('Mobile number',{exact:true}).fill('09276143852')
  await section.getByLabel('House, unit and street',{exact:true}).fill('42 Mabini Street')
  for(let i=0;i<addressPlaces.length;i++)await section.locator(`#account-address-area-${i}`).selectOption(addressPlaces[i].code)
  await section.getByRole('button',{name:'Save address',exact:true}).click()
@@ -377,7 +407,10 @@ test('saved delivery addresses change defaults and remove the final destination 
  await section.getByRole('button',{name:'Confirm removal',exact:true}).click()
  await expect(section.getByText(/No delivery addresses saved yet/)).toBeVisible()
  expect(settings.deliveryAddress).toBe('');expect(settings.addressBook.defaultAddressId).toBeNull()
- await page.reload();await expect(section.getByText(/No delivery addresses saved yet/)).toBeVisible()
+ await page.reload()
+ await expect(section.getByRole('textbox',{name:'Mobile number',exact:true})).toBeVisible()
+ await expect(section.getByRole('textbox',{name:'Mobile number',exact:true})).toHaveValue('')
+ await expect(section.getByRole('article')).toHaveCount(0)
  await expect(page.getByLabel('Saved delivery address',{exact:true})).toHaveCount(0)
 })
 

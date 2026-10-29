@@ -34,17 +34,13 @@ export default function Footer() {
   return (
     <footer className="border-t border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] pb-28 pt-14 text-navy md:pb-12 md:pt-16">
       <div className="store-section">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.45fr_0.8fr_0.8fr_1fr]">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.45fr_0.8fr_1fr]">
           <div className="sm:col-span-2 lg:col-span-1">
             <BrandMark variant="globe" />
             <Wordmark mark={false} />
             <p className="mt-5 max-w-sm text-sm leading-7 text-navy-soft">Italian goods for homes and businesses in the Philippines. Shop what is in stock or ask us to source something from Italy.</p>
             <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-crimson">Website · Shopee · TikTok Shop · Lazada · Pasabuy</p>
           </div>
-
-          <FooterColumn title="Shop">
-            {storeCategories.map(({ name }) => <FooterButton key={name} onClick={() => jump(name)}>{name}</FooterButton>)}
-          </FooterColumn>
 
           <FooterColumn title="Services">
             <FooterButton href="/pasabuy" onClick={() => go('pasabuy')}>Request from Italy</FooterButton>
@@ -92,6 +88,16 @@ export default function Footer() {
           </FooterColumn>
         </div>
 
+        <nav className="mt-10 border-t border-[var(--store-surface-border)] pt-8" aria-labelledby="footer-shop-title">
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+            <h3 id="footer-shop-title" className="text-base font-semibold text-navy">Shop by category</h3>
+            <ActionElement href="/catalog" onClick={() => jump('All')} className="footer-link font-semibold">Browse all products<ArrowIcon size={13} className="shrink-0" /></ActionElement>
+          </div>
+          <ul className="mt-3 grid grid-cols-2 gap-x-5 sm:grid-cols-3 lg:grid-cols-4">
+            {storeCategories.map(({ name }) => <FooterButton key={name} href={`/catalog?${new URLSearchParams({ category: name })}`} onClick={() => jump(name)}>{name}</FooterButton>)}
+          </ul>
+        </nav>
+
         <section className="mt-10 border-t border-[var(--store-surface-border)] pt-8" aria-labelledby="footer-marketplaces-title">
           <h3 id="footer-marketplaces-title" className="text-base font-semibold text-navy">Find our shops</h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-navy-soft">These links open our marketplace shops. Stock and messages there stay in each marketplace until a connector is approved.</p>
@@ -135,5 +141,5 @@ function FooterColumn({ title, children }) {
 }
 
 function FooterButton({ children, onClick, href }) {
-  return <li><ActionElement href={href} onClick={onClick} className="footer-link">{children}</ActionElement></li>
+  return <li className="min-w-0"><ActionElement href={href} onClick={onClick} className="footer-link min-h-11 min-w-0 break-words">{children}</ActionElement></li>
 }

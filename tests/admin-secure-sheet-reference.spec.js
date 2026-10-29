@@ -26,7 +26,7 @@ test('secure Sheet taxonomy is readable with protected Grid Edit guidance and no
   expect(taxonomy).toEqual([])
   for(const width of [375,1440]){
     await page.setViewportSize({width,height:900})
-    const guidance=page.getByText('Brands and categories are read-only here. Switch to Grid, then Edit a product to review or create references.',{exact:true})
+    const guidance=page.getByText('Create or assign store categories here. For brands and operational categories, switch to Grid, then Edit a product to review or create references.',{exact:true})
     await expect(guidance).toBeVisible()
     expect(await guidance.evaluate(el=>el.scrollWidth-el.clientWidth)).toBeLessThanOrEqual(1)
     await unassigned.getByText('Not assigned',{exact:true}).first().scrollIntoViewIfNeeded()
