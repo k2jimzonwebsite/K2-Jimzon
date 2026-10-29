@@ -1,0 +1,47 @@
+{
+  "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+  "observedAt": "2026-10-29T04:44:43.552Z",
+  "origin": "https://www.k2jimzon.com",
+  "productSku": "K2-SKU-001017",
+  "syntheticCustomerDataEntered": false,
+  "orderSubmitted": false,
+  "orderPostAttempts": 0,
+  "viewports": [
+    {
+      "width": 375,
+      "mobileRequired": true,
+      "emptyMobile": true,
+      "nativeMissingValue": true,
+      "shippingAutocomplete": true,
+      "fieldHeight": 50,
+      "noHorizontalOverflow": true,
+      "screenshot": "hosted-checkout-375.png"
+    },
+    {
+      "width": 1440,
+      "mobileRequired": true,
+      "emptyMobile": true,
+      "nativeMissingValue": true,
+      "shippingAutocomplete": true,
+      "fieldHeight": 50,
+      "noHorizontalOverflow": true,
+      "screenshot": "hosted-checkout-1440.png"
+    }
+  ],
+  "nonGetPaths": [
+    {
+      "method": "POST",
+      "path": "/rest/v1/rpc/read_storefront_product_families_v1"
+    },
+    {
+      "method": "POST",
+      "path": "/cdn-cgi/challenge-platform/[opaque challenge path omitted]"
+    },
+    {
+      "method": "POST",
+      "path": "/cdn-cgi/challenge-platform/[opaque challenge path omitted]"
+    }
+  ],
+  "realProfileAddressSaveVerified": false,
+  "transportNote": "The product-family RPC is a read; automatic Cloudflare challenge traffic is separate. No customer details were entered and no order POST was attempted."
+}

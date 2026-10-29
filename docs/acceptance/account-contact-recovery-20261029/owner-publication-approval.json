@@ -1,0 +1,16 @@
+{
+  "recordedAt": "2026-10-29T04:39:39.230745+00:00",
+  "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+  "ownerAnswer": "Approve both branch pushes and live release",
+  "destination": "github.com/k2jimzonwebsite/K2-Jimzon",
+  "branches": [
+    "codex/customer-privacy-owner-decisions",
+    "main"
+  ],
+  "productionProjects": {
+    "storefront": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+    "admin": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x"
+  },
+  "scope": "Guest-link recovery and required fresh-checkout mobile; no database/Auth/deletion changes",
+  "ownerSteering": "Commit and push the mobile update first; real customer data acceptance follows."
+}

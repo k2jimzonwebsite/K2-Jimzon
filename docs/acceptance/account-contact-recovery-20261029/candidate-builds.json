@@ -1,0 +1,51 @@
+{
+  "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+  "observedAt": "2026-10-29T04:23:50.966011+00:00",
+  "candidate": "Exact git archive of sourceCommit with junction to existing locked dependencies",
+  "buildPublicFlags": {
+    "customerAccount": true,
+    "customerPrivacy": false,
+    "guestBff": true,
+    "adminBff": true
+  },
+  "packaging": {
+    "passed": 3,
+    "exitCode": 0
+  },
+  "sourcePolicy": {
+    "exitCode": 0,
+    "files": 4216
+  },
+  "storefront": {
+    "exitCode": 0,
+    "modules": 52,
+    "landingJsGzipKb": 148.37,
+    "landingCssGzipKb": 29.82,
+    "boundary": true,
+    "secretScan": true
+  },
+  "admin": {
+    "exitCode": 0,
+    "modules": 49,
+    "applicationKb": 227.44,
+    "boundary": true,
+    "secretScan": true
+  },
+  "exportSetupCorrection": "Initial build prehook source-policy refused public .env.local. Moved outside source; source policy then passed. Both actual complete build scripts ran with npm --ignore-scripts after final development had passed; no application/test gate altered. Original refusal retained.",
+  "readiness": {
+    "verified": 8,
+    "owner": 2,
+    "scriptConnectorUnreached": 3,
+    "failed": 0
+  },
+  "releaseCoverage": "Earlier full 24-stage evidence retained for unaffected groups; current 200 affected browser cases, final development and candidate builds supplement it. Not a new clean aggregate verify:release claim.",
+  "logSha256": {
+    "packaging-final.log": "a153cc707812b5c8e7b25fb3abd75203c8ffc07bee0fc4c1611f734f7a307ee4",
+    "candidate-source-policy.log": "f889bd7afa153a489b9c5dd13c371db14fe1582b666a306e9fbdc0c2c25a795e",
+    "build-storefront-env-refusal.log": "0851d65490eac74c3cb83623139bbb7200dad164413ed304f038e2d730da62fb",
+    "build-storefront-final.log": "02301628277d85b62f6bfafb687137d66a40a70d3e8186142ae32c02346954e3",
+    "build-admin-final.log": "a5a8d1789bb06bcf5097590ecf85a779ce0a7ace3c977a668c7f2805c9af6f9d",
+    "preflight-before-release.log": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6",
+    "readiness-before-release.log": "018e00899781bdd8d43c68a5d12de31807730408591ba6a43f02debd40c78e5f"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+  "observedAt": "2026-10-29T04:41:20.251Z",
+  "artifacts": [
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com/k2-build-target.json",
+      "status": 200
+    },
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com/account",
+      "status": 200,
+      "frameOptions": "DENY",
+      "reportOnlyCspPresent": true
+    },
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com/theme-init.js",
+      "status": 200,
+      "sha256": "2db29b68cfbb15fde83533588ba9ff76dc9377b690def1b09cbe853505cd9753"
+    },
+    {
+      "target": "storefront",
+      "url": "https://www.k2jimzon.com/assets/index-BchUkcSN.js",
+      "status": 200,
+      "sha256": "726087fc279626af75ad441dc5fb7b3d1b63fafe347ba43177392b81b6b0b94c"
+    },
+    {
+      "url": "https://www.k2jimzon.com/assets/Checkout-MWOs-1Ku.js",
+      "status": 200,
+      "sha256": "2d6e8fd101efe30eda5f267bc98248d61df6da99367a139dd47b827a43233641",
+      "mobileField": false
+    },
+    {
+      "url": "https://www.k2jimzon.com/assets/CustomerAccount-BIuFAXcK.js",
+      "status": 200,
+      "sha256": "090b0955248395035c13afc2b2c611cc00050dbdcf47bb980eef4652197fd5e3",
+      "guestRecovery": false,
+      "manualPrivacy": true
+    },
+    {
+      "url": "https://www.k2jimzon.com/assets/CustomerAccountProvider-D8Tnf1-T.js",
+      "status": 200,
+      "sha256": "d4e36f09061f8f98cb02ad2de71624a9c9d55508576b9896cae62a23bac3d037",
+      "guestRecovery": false,
+      "manualPrivacy": false
+    },
+    {
+      "url": "https://www.k2jimzon.com/assets/Checkout-MWOs-1Ku.js",
+      "status": 200,
+      "sha256": "2d6e8fd101efe30eda5f267bc98248d61df6da99367a139dd47b827a43233641",
+      "mobileField": false
+    },
+    {
+      "url": "https://www.k2jimzon.com/assets/CustomerAccount-BIuFAXcK.js",
+      "status": 200,
+      "sha256": "090b0955248395035c13afc2b2c611cc00050dbdcf47bb980eef4652197fd5e3",
+      "guestRecovery": false,
+      "manualPrivacy": true
+    },
+    {
+      "url": "https://www.k2jimzon.com/assets/CustomerAccountProvider-D8Tnf1-T.js",
+      "status": 200,
+      "sha256": "d4e36f09061f8f98cb02ad2de71624a9c9d55508576b9896cae62a23bac3d037",
+      "guestRecovery": false,
+      "manualPrivacy": false
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/k2-build-target.json",
+      "status": 200
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/admin-portal-k2-secure",
+      "status": 200,
+      "frameOptions": "DENY",
+      "reportOnlyCspPresent": true
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/theme-init.js",
+      "status": 200,
+      "sha256": "2db29b68cfbb15fde83533588ba9ff76dc9377b690def1b09cbe853505cd9753"
+    },
+    {
+      "target": "admin",
+      "url": "https://admin.k2jimzon.com/assets/index-Bjha6pxN.js",
+      "status": 200,
+      "sha256": "e78b997e692eafd1d53c639c427fa7c8b907195635d1197879113569a944f8ae"
+    }
+  ],
+  "accountRecoveryPresent": false,
+  "checkoutMobilePresent": false,
+  "providerWrites": 0,
+  "orderSubmitted": false,
+  "realProfileAddressSaveVerified": false,
+  "manualPrivacyPreserved": false,
+  "allRequiredPublicFeaturesPresent": false
+}

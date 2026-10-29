@@ -1,0 +1,26 @@
+{
+  "recordedAt": "2026-10-29T04:25:22.484654+00:00",
+  "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+  "actions": [
+    {
+      "action": "Atomic feature/main push triggering existing K2 production artifacts",
+      "executed": false,
+      "reason": "Automatic approval review requires trusted explicit owner authorization for this exact main-branch publication."
+    },
+    {
+      "action": "Feature-only push to github.com/k2jimzonwebsite/K2-Jimzon codex/customer-privacy-owner-decisions",
+      "executed": false,
+      "reason": "Automatic approval review treats private-source publication as sensitive code egress and requires trusted explicit destination/commit approval."
+    }
+  ],
+  "remoteFeatureUnchanged": "64130fec6dac05f25608ca080d4d63ab73cda1bb",
+  "remoteMainUnchanged": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+  "nextAction": "Obtain explicit exact-commit GitHub feature/main and two-artifact production approval. No alternative writer or indirect push; no repeated application gates for receipt-only edits.",
+  "goalAudit": {
+    "status": "blocked",
+    "consecutiveGoalTurns": 3,
+    "checkedAt": "2026-10-29T04:27:05.016287+00:00",
+    "sourceAndQualifiedReceiptsUnchanged": true,
+    "approvalReceived": false
+  }
+}

@@ -1,7 +1,7 @@
 {
   "mapItem": "MAP-019",
   "ideaId": "IDEA-20261029-01",
-  "status": "locally-qualified-builds-and-promotion-pending",
+  "status": "verified-live-source-release-owner-data-acceptance-pending",
   "recordedAt": "2026-10-29T04:18:36.426040+00:00",
   "scope": "Actionable guest-claim recovery and required new-checkout fulfillment mobile; no automatic name suggestions.",
   "tests": {
@@ -47,9 +47,8 @@
   "deletionActivation": false,
   "realProfileAddressAcceptance": false,
   "remaining": [
-    "Exact candidate separate builds and packaging",
-    "Authorized source promotion and canonical host proof",
-    "Owner-data profile/address save/readback and default checkout prefill without order submission"
+    "Owner-data profile/settings/address save/readback/default checkout without order submission",
+    "Exact-source CI terminal receipt"
   ],
   "recovery": "Revert only this source slice; preserve existing email-return support, users/addresses, guest ownership checks and unknown operation identities.",
   "sourceHashes": {
@@ -63,5 +62,254 @@
     "tests/customer-address-book.test.mjs": "9b733e89e08cf16cbd848f0d4f8a22b6db7d829de7ff97982540fcaef1d44595",
     "tests/storefront-recovery-ui.spec.js": "89b8bcd3404f78d42462565df2fa88926f307ffa7da8931fdbff275fc2bc4a5f",
     "tests/storefront-selling-surfaces.spec.js": "5ef5e8a69da017039e4bb30844b79bed98a11db72fb2692ed3f0258a8775c631"
+  },
+  "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+  "candidateBuilds": {
+    "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+    "observedAt": "2026-10-29T04:23:50.966011+00:00",
+    "candidate": "Exact git archive of sourceCommit with junction to existing locked dependencies",
+    "buildPublicFlags": {
+      "customerAccount": true,
+      "customerPrivacy": false,
+      "guestBff": true,
+      "adminBff": true
+    },
+    "packaging": {
+      "passed": 3,
+      "exitCode": 0
+    },
+    "sourcePolicy": {
+      "exitCode": 0,
+      "files": 4216
+    },
+    "storefront": {
+      "exitCode": 0,
+      "modules": 52,
+      "landingJsGzipKb": 148.37,
+      "landingCssGzipKb": 29.82,
+      "boundary": true,
+      "secretScan": true
+    },
+    "admin": {
+      "exitCode": 0,
+      "modules": 49,
+      "applicationKb": 227.44,
+      "boundary": true,
+      "secretScan": true
+    },
+    "exportSetupCorrection": "Initial build prehook source-policy refused public .env.local. Moved outside source; source policy then passed. Both actual complete build scripts ran with npm --ignore-scripts after final development had passed; no application/test gate altered. Original refusal retained.",
+    "readiness": {
+      "verified": 8,
+      "owner": 2,
+      "scriptConnectorUnreached": 3,
+      "failed": 0
+    },
+    "releaseCoverage": "Earlier full 24-stage evidence retained for unaffected groups; current 200 affected browser cases, final development and candidate builds supplement it. Not a new clean aggregate verify:release claim.",
+    "logSha256": {
+      "packaging-final.log": "a153cc707812b5c8e7b25fb3abd75203c8ffc07bee0fc4c1611f734f7a307ee4",
+      "candidate-source-policy.log": "f889bd7afa153a489b9c5dd13c371db14fe1582b666a306e9fbdc0c2c25a795e",
+      "build-storefront-env-refusal.log": "0851d65490eac74c3cb83623139bbb7200dad164413ed304f038e2d730da62fb",
+      "build-storefront-final.log": "02301628277d85b62f6bfafb687137d66a40a70d3e8186142ae32c02346954e3",
+      "build-admin-final.log": "a5a8d1789bb06bcf5097590ecf85a779ce0a7ace3c977a668c7f2805c9af6f9d",
+      "preflight-before-release.log": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6",
+      "readiness-before-release.log": "018e00899781bdd8d43c68a5d12de31807730408591ba6a43f02debd40c78e5f"
+    }
+  },
+  "publication": {
+    "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+    "featureBranch": "codex/customer-privacy-owner-decisions",
+    "mainBranch": "main",
+    "bothRemoteRefsVerified": true,
+    "normalPushHooks": "13Node+7contract+imports+8rendered security checks passed",
+    "atomicPush": true,
+    "liveVerification": {
+      "deployments": [
+        {
+          "id": "dpl_7wopG266HJo1A3U2czxEWHwMR51g",
+          "project": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+          "name": "k2-jimzon",
+          "url": "https://k2-jimzon-1qzhzmee3-k2-jimzon.vercel.app",
+          "dashboard": "https://vercel.com/k2-jimzon/k2-jimzon/7wopG266HJo1A3U2czxEWHwMR51g",
+          "state": "READY",
+          "target": "production",
+          "current": true,
+          "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+          "canonicalAlias": "www.k2jimzon.com"
+        },
+        {
+          "id": "dpl_GEHQr9hiAc3r4y3qj9udEBo4stkj",
+          "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+          "name": "k2-jimzon-admin",
+          "url": "https://k2-jimzon-admin-l2rjwj0za-k2-jimzon.vercel.app",
+          "dashboard": "https://vercel.com/k2-jimzon/k2-jimzon-admin/GEHQr9hiAc3r4y3qj9udEBo4stkj",
+          "state": "READY",
+          "target": "production",
+          "current": true,
+          "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+          "canonicalAlias": "admin.k2jimzon.com"
+        }
+      ],
+      "publicHosts": {
+        "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+        "observedAt": "2026-10-29T04:41:47.988Z",
+        "artifacts": [
+          {
+            "target": "storefront",
+            "url": "https://www.k2jimzon.com/k2-build-target.json",
+            "status": 200
+          },
+          {
+            "target": "storefront",
+            "url": "https://www.k2jimzon.com/account",
+            "status": 200,
+            "frameOptions": "DENY",
+            "reportOnlyCspPresent": true
+          },
+          {
+            "target": "storefront",
+            "url": "https://www.k2jimzon.com/theme-init.js",
+            "status": 200,
+            "sha256": "2db29b68cfbb15fde83533588ba9ff76dc9377b690def1b09cbe853505cd9753"
+          },
+          {
+            "target": "storefront",
+            "url": "https://www.k2jimzon.com/assets/index-BMvhow7w.js",
+            "status": 200,
+            "sha256": "2753ad829865145e881b1e2c156d199c49ae5acea3c283fc8717df64a750bf4d"
+          },
+          {
+            "url": "https://www.k2jimzon.com/assets/Checkout-URZwR4tA.js",
+            "status": 200,
+            "sha256": "673744b3239965f6a762a6df9a5c49ed34e6a97c35edc96bbf60d0ebcede338b",
+            "mobileField": true
+          },
+          {
+            "url": "https://www.k2jimzon.com/assets/CustomerAccount-CB_K-doK.js",
+            "status": 200,
+            "sha256": "e00bdaa1ba2c8708bd2d5efa4214f95e00e7365a8ef87749fdace10425a9e47d",
+            "guestRecovery": true,
+            "manualPrivacy": true
+          },
+          {
+            "url": "https://www.k2jimzon.com/assets/CustomerAccountProvider-CEOBNfsQ.js",
+            "status": 200,
+            "sha256": "3487a0501a66e7c9c352c9005dc34810523b6dd5d462cff4f4159c70dee26c65"
+          },
+          {
+            "url": "https://www.k2jimzon.com/assets/Checkout-URZwR4tA.js",
+            "status": 200,
+            "sha256": "673744b3239965f6a762a6df9a5c49ed34e6a97c35edc96bbf60d0ebcede338b",
+            "mobileField": true
+          },
+          {
+            "url": "https://www.k2jimzon.com/assets/CustomerAccount-CB_K-doK.js",
+            "status": 200,
+            "sha256": "e00bdaa1ba2c8708bd2d5efa4214f95e00e7365a8ef87749fdace10425a9e47d",
+            "guestRecovery": true,
+            "manualPrivacy": true
+          },
+          {
+            "url": "https://www.k2jimzon.com/assets/CustomerAccountProvider-CEOBNfsQ.js",
+            "status": 200,
+            "sha256": "3487a0501a66e7c9c352c9005dc34810523b6dd5d462cff4f4159c70dee26c65"
+          },
+          {
+            "target": "admin",
+            "url": "https://admin.k2jimzon.com/k2-build-target.json",
+            "status": 200
+          },
+          {
+            "target": "admin",
+            "url": "https://admin.k2jimzon.com/admin-portal-k2-secure",
+            "status": 200,
+            "frameOptions": "DENY",
+            "reportOnlyCspPresent": true
+          },
+          {
+            "target": "admin",
+            "url": "https://admin.k2jimzon.com/theme-init.js",
+            "status": 200,
+            "sha256": "2db29b68cfbb15fde83533588ba9ff76dc9377b690def1b09cbe853505cd9753"
+          },
+          {
+            "target": "admin",
+            "url": "https://admin.k2jimzon.com/assets/index-Bjha6pxN.js",
+            "status": 200,
+            "sha256": "e78b997e692eafd1d53c639c427fa7c8b907195635d1197879113569a944f8ae"
+          }
+        ],
+        "accountRecoveryPresent": true,
+        "checkoutMobilePresent": true,
+        "providerWrites": 0,
+        "orderSubmitted": false,
+        "realProfileAddressSaveVerified": false,
+        "manualPrivacyPreserved": true,
+        "allRequiredPublicFeaturesPresent": true
+      },
+      "renderedCheckout": {
+        "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+        "observedAt": "2026-10-29T04:44:43.552Z",
+        "origin": "https://www.k2jimzon.com",
+        "productSku": "K2-SKU-001017",
+        "syntheticCustomerDataEntered": false,
+        "orderSubmitted": false,
+        "orderPostAttempts": 0,
+        "viewports": [
+          {
+            "width": 375,
+            "mobileRequired": true,
+            "emptyMobile": true,
+            "nativeMissingValue": true,
+            "shippingAutocomplete": true,
+            "fieldHeight": 50,
+            "noHorizontalOverflow": true,
+            "screenshot": "hosted-checkout-375.png"
+          },
+          {
+            "width": 1440,
+            "mobileRequired": true,
+            "emptyMobile": true,
+            "nativeMissingValue": true,
+            "shippingAutocomplete": true,
+            "fieldHeight": 50,
+            "noHorizontalOverflow": true,
+            "screenshot": "hosted-checkout-1440.png"
+          }
+        ],
+        "nonGetPaths": [
+          {
+            "method": "POST",
+            "path": "/rest/v1/rpc/read_storefront_product_families_v1"
+          },
+          {
+            "method": "POST",
+            "path": "/cdn-cgi/challenge-platform/[opaque challenge path omitted]"
+          },
+          {
+            "method": "POST",
+            "path": "/cdn-cgi/challenge-platform/[opaque challenge path omitted]"
+          }
+        ],
+        "realProfileAddressSaveVerified": false,
+        "transportNote": "The product-family RPC is a read; automatic Cloudflare challenge traffic is separate. No customer details were entered and no order POST was attempted."
+      }
+    },
+    "ci": {
+      "runId": 40818981304,
+      "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40818981304",
+      "lastObservedStatus": "in_progress",
+      "conclusion": null
+    },
+    "noDatabaseAuthDeletionChange": true,
+    "remaining": [
+      "Owner-data profile/settings/address save/readback/default checkout without order submission",
+      "Exact-source CI terminal receipt"
+    ],
+    "recovery": {
+      "previousSource": "e4ece97da62e6a39ebe7d0f7f51b1fb27ea8a887",
+      "previousStorefrontDeployment": "dpl_ETk6P3gMbuj8ypMFTZpWbooCHMgz",
+      "previousAdminDeployment": "dpl_5yZqQezm1aLGBEZp5hi4AX6LWUer",
+      "rule": "Scoped source/per-project rollback only by recovery decision. Preserve customer data, callback compatibility and original operation identities; no SQL/signup/template replay or database restore."
+    }
   }
 }

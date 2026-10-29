@@ -1,0 +1,30 @@
+{
+  "observedAt": "2026-10-29T04:46:46.024886+00:00",
+  "observationSurface": "Signed-in existing K2 Vercel deployment dashboards; connector remains403/unobserved",
+  "deployments": [
+    {
+      "id": "dpl_7wopG266HJo1A3U2czxEWHwMR51g",
+      "project": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+      "name": "k2-jimzon",
+      "url": "https://k2-jimzon-1qzhzmee3-k2-jimzon.vercel.app",
+      "dashboard": "https://vercel.com/k2-jimzon/k2-jimzon/7wopG266HJo1A3U2czxEWHwMR51g",
+      "state": "READY",
+      "target": "production",
+      "current": true,
+      "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+      "canonicalAlias": "www.k2jimzon.com"
+    },
+    {
+      "id": "dpl_GEHQr9hiAc3r4y3qj9udEBo4stkj",
+      "project": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+      "name": "k2-jimzon-admin",
+      "url": "https://k2-jimzon-admin-l2rjwj0za-k2-jimzon.vercel.app",
+      "dashboard": "https://vercel.com/k2-jimzon/k2-jimzon-admin/GEHQr9hiAc3r4y3qj9udEBo4stkj",
+      "state": "READY",
+      "target": "production",
+      "current": true,
+      "sourceCommit": "cabace48f8f8d5e22d1ca12adfa12d870e0af945",
+      "canonicalAlias": "admin.k2jimzon.com"
+    }
+  ]
+}
