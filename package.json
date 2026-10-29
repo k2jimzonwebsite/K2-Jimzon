@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "test:milan-packing": "node --test tests/consignment-packing-command.test.mjs tests/consignment-packing-recovery.test.mjs && playwright test --config=playwright.product-master.config.js tests/milan-packing-ui.spec.js",
+    "test:milan-packing": "node --test tests/consignment-packing-command.test.mjs tests/consignment-packing-recovery.test.mjs && playwright test --config=playwright.product-master.config.js tests/milan-packing-ui.spec.js tests/consignment-manager-ui.spec.js",
     "rehearse:milan-packing": "node scripts/rehearse-milan-packing.mjs",
     "test:product-families": "node --test tests/product-families.test.mjs tests/product-family-boundary.test.mjs tests/product-family-authorized-read.test.mjs && playwright test --config=playwright.product-families.config.js",
     "dev": "vite",

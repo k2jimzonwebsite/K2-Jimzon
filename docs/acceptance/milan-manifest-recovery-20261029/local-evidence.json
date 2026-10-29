@@ -1,0 +1,436 @@
+{
+  "idea": "IDEA-20261029-07",
+  "map": "MAP-023",
+  "state": "LOCAL_VERIFIED_RELEASE_PENDING",
+  "sourceBase": "9fd595767ccbb27d0562ad318bea320f3df627cf",
+  "files": [
+    {
+      "path": "server/admin-bff/consignments.js",
+      "sha256": "857734866373c735f4ea8954b7903eaa629f085a65b37b35a1f96a982a80a6e9"
+    },
+    {
+      "path": "src/services/adminBffService.js",
+      "sha256": "7ce519f2abe1549b598f5a6c863b90246bcc6cc80c27bef72e1b11a687130f29"
+    },
+    {
+      "path": "src/views/admin/ConsignmentManager.jsx",
+      "sha256": "d86b7d51bc83e6810bd213d1a7fd15d4117ea52159c8029a375d46b0de985a5d"
+    },
+    {
+      "path": "src/hooks/useConsignmentPacking.js",
+      "sha256": "7df544986e2fa953a768845b77e23da41dbfc85aefaf2000c3a910d0d4f04843"
+    },
+    {
+      "path": "src/views/admin/ConsignmentPackingWorkspace.jsx",
+      "sha256": "7832e6ace7a5cd1b517a4579a6811be8f180c3f5796cc0f13d30af1475104e03"
+    },
+    {
+      "path": "tests/fixtures/consignment-handler-harness.mjs",
+      "sha256": "a4ea46bed13c3cd98303061054fda55789ad772d808f0888c1a9e7f926850778"
+    },
+    {
+      "path": "tests/consignment-create-recovery.spec.js",
+      "sha256": "ec7147b4f5017caa610c01be7c73c178741cc9b5041c515b591a5d2aa5ae547b"
+    },
+    {
+      "path": "tests/consignment-manager-ui.spec.js",
+      "sha256": "625f1100881627747b9bdf014dc7a7795c318f1136ecd94c18fdd5a4a7913302"
+    },
+    {
+      "path": "tests/fixtures/consignment-manager-harness.html",
+      "sha256": "949dd2ed16e0078be21810677754e97c86a9f294d9333ebf0b3e1f6afd35f5d9"
+    },
+    {
+      "path": "tests/fixtures/consignment-manager-harness.jsx",
+      "sha256": "dd83117e64210cb5897178683eee2ae2869b01ad1d0ef56a4e227b42cda33b56"
+    },
+    {
+      "path": "tests/milan-packing-ui.spec.js",
+      "sha256": "55fb0f0e590c3b9a33b38d0b42f0b512b00d16d485d17df58714306b1440622a"
+    },
+    {
+      "path": "package.json",
+      "sha256": "0aa05abaa80c9df090ae01deef16c2adb1dfefd7c6482e913498bed8eee50a19"
+    },
+    {
+      "path": "playwright.config.js",
+      "sha256": "03455f60be2f70a620f346e4c3936dab7da68425da2b1f3fab8b0df06fb223a0"
+    }
+  ],
+  "evidence": [
+    {
+      "name": "milan-create-api-red",
+      "sha256": "202db88bef84df840bc6fd09c8584832c916ffb4d267321606a177b2bfac97b3",
+      "bytes": 2093,
+      "results": [
+        "Running 2 tests using 1 worker",
+        "    Error: expect(received).toBe(expected) // Object.is equality",
+        "    Expected: 409",
+        "    Received: 503",
+        "  1 failed",
+        "  1 passed (1.9s)"
+      ]
+    },
+    {
+      "name": "milan-create-ui-red-corrected",
+      "sha256": "2877222add57029967f67c4140805b96dab5f31cf814f4de73703488aafccd5d",
+      "bytes": 10487,
+      "results": [
+        "Running 3 tests using 1 worker",
+        "    Error: expect(locator).toHaveValue(expected) failed",
+        "    Expected: \"K2-2026-10-001\"",
+        "    Received: \"K2-2026-10\"",
+        "    Error: expect(received).toBe(expected) // Object.is equality",
+        "    Expected: 5",
+        "    Received: 1",
+        "    Error: expect(received).toBe(expected) // Object.is equality",
+        "    Expected: 1",
+        "    Received: 2",
+        "  3 failed"
+      ]
+    },
+    {
+      "name": "milan-create-noncount-red",
+      "sha256": "2bc2a16bcaf3b23cc4e45bf480b95bb180e44ad8344e73338d3c15e93c18a718",
+      "bytes": 6908,
+      "results": [
+        "    Error: expect(locator).toBeVisible() failed",
+        "    Expected: visible",
+        "    Error: element(s) not found",
+        "  1 failed"
+      ]
+    },
+    {
+      "name": "milan-create-api-green",
+      "sha256": "cf81f035ccc44314bfd198ad388bc4af02bdac5c41556751c928b39d880dcf58",
+      "bytes": 1668,
+      "results": [
+        "Running 12 tests using 1 worker",
+        "  12 passed (1.1s)"
+      ]
+    },
+    {
+      "name": "milan-create-ui-green-final",
+      "sha256": "cb1b541e26d61fac01f12a010e6ee9c39f80deb1b46ee22336531551bf270356",
+      "bytes": 8542,
+      "results": [
+        "Running 9 tests using 1 worker",
+        "    Error: expect(locator).toContainText(expected) failed",
+        "  1 failed",
+        "  5 passed (14.4s)"
+      ]
+    },
+    {
+      "name": "milan-create-burst-check",
+      "sha256": "f2549876d8e6d44629eb133d3cd50a5c6092edba62606d6be155cc74049c1c7c",
+      "bytes": 5628,
+      "results": [
+        "  1 passed (4.4s)"
+      ]
+    },
+    {
+      "name": "milan-create-ui-qualified",
+      "sha256": "e823cdcbb9d2b58c04d22c20f484b61d04b79b0c21b93c5cf659e66a204c175e",
+      "bytes": 6826,
+      "results": [
+        "Running 9 tests using 1 worker",
+        "  9 passed (12.8s)"
+      ]
+    },
+    {
+      "name": "milan-create-burst-stress",
+      "sha256": "ddde12af3bfa23e0a146b1893f8741cef97d6daa161628c0ac3b9e48309ee7be",
+      "bytes": 6825,
+      "results": [
+        "Running 5 tests using 1 worker",
+        "  5 passed (12.5s)"
+      ]
+    },
+    {
+      "name": "milan-create-development",
+      "sha256": "9fc1c068d76f7bf9226d28a19790b7307a06d2624383df7a58bc6c64395afe8b",
+      "bytes": 34209,
+      "results": [
+        "✔ failed Turnstile download releases the cached failure for the next attempt (6.3884ms)",
+        "ℹ tests 13",
+        "ℹ pass 13",
+        "ℹ fail 0",
+        "Running 7 tests using 1 worker",
+        "  7 passed (930ms)",
+        "Secret scanner tests passed (fabricated values only).",
+        "✔ Google callback registry-failed retains staff/AAL2/registry authority (2.6598ms)",
+        "✔ partial, unavailable, over-limit or malformed options fail closed (0.5237ms)",
+        "✔ Website read refuses duplicate partial malformed failed or missing product evidence (7050.5585ms)",
+        "✔ multi-product batch resumes at failed row and never replays completed rows (6.4139ms)",
+        "✔ failed Turnstile download releases the cached failure for the next attempt (5.9837ms)",
+        "ℹ tests 92",
+        "ℹ pass 92",
+        "ℹ fail 0",
+        "Deployment environment contract self-test passed (5 fixtures).",
+        "ℹ tests 4",
+        "ℹ pass 4",
+        "ℹ fail 0",
+        "✔ incomplete metadata and invalid source hashes do not pass (0.1629ms)",
+        "ℹ tests 27",
+        "ℹ pass 27",
+        "ℹ fail 0",
+        "Sensitive-file policy tests passed (13 blocked, 4 allowed, and the source inventory).",
+        "Sensitive-file policy passed in git mode (4361 files checked).",
+        "Environment source-boundary tests passed (8 fixtures).",
+        "Environment source boundary passed (280 browser and 204 server/Edge files checked).",
+        "Dependency policy passed (20 direct, 246 locked packages, 2 reviewed install scripts).",
+        "Secret scan passed (4365 files checked; secret values are never printed).",
+        "✓ Import-integrity check passed — all hooks and supabase usages are imported.",
+        "✔ competing calls do not publish or overwrite another bounded scan pass (19.5842ms)",
+        "✔ completion rechecks a witness changed after the first partial pass (16.7514ms)",
+        "✔ a timed-out resumed pass cannot overwrite progress after its delayed I/O returns (190.4186ms)",
+        "✔ authorization and activation fail closed without their qualified matching proofs (8.2419ms)",
+        "✔ failed startup still disposes its owned runtime and preserves the missing-port evidence (3.26ms)",
+        "✔ failed or hung disposal does not claim a successful stop (17.4151ms)",
+        "ℹ tests 148",
+        "ℹ pass 148",
+        "ℹ fail 0"
+      ]
+    },
+    {
+      "name": "milan-create-visual",
+      "sha256": "dff027af1306d9e3aeb776d13faf5d39a1ec4cc5535fc1517e12053b6a859d20",
+      "bytes": 5656,
+      "results": [
+        "  1 passed (4.4s)"
+      ]
+    },
+    {
+      "name": "milan-create-release",
+      "sha256": "afbb03039288eeca7e14486b9f6b2b0d0ffbb98ec67058d549a1a90c07391e11",
+      "bytes": 55748,
+      "results": [
+        "✔ failed Turnstile download releases the cached failure for the next attempt (6.7851ms)",
+        "ℹ tests 13",
+        "ℹ pass 13",
+        "ℹ fail 0",
+        "Running 7 tests using 1 worker",
+        "  7 passed (930ms)",
+        "Running 8 tests using 1 worker",
+        "  8 passed (10.9s)",
+        "ℹ tests 33",
+        "ℹ pass 33",
+        "ℹ fail 0",
+        "ℹ tests 18",
+        "ℹ pass 18",
+        "ℹ fail 0",
+        "Running 27 tests using 1 worker",
+        "  27 passed (36.5s)",
+        "ℹ tests 4",
+        "ℹ pass 4",
+        "ℹ fail 0",
+        "Running 35 tests using 1 worker",
+        "  35 passed (50.3s)",
+        "ℹ tests 11",
+        "ℹ pass 11",
+        "ℹ fail 0",
+        "Running 9 tests using 1 worker",
+        "    Error: expect(locator).toHaveText(expected) failed",
+        "    Expected: \"3\"",
+        "    Received: \"2\"",
+        "  1 failed",
+        "  8 passed (18.0s)"
+      ]
+    },
+    {
+      "name": "milan-create-append-window-red",
+      "sha256": "c3bb2469c0f1d8ccbde1d52a88d259e20b36e6efcfd10b82a5ab32c7abdbeb77",
+      "bytes": 7093,
+      "results": [
+        "    Error: expect(locator).toHaveText(expected) failed",
+        "    Expected: \"2\"",
+        "    Received: \"1\"",
+        "  1 failed"
+      ]
+    },
+    {
+      "name": "milan-create-append-window-green",
+      "sha256": "8b0d782f0180f9f8f5e243f30c56b814817bb5c2e164181439dfcce16cbcb79f",
+      "bytes": 8962,
+      "results": [
+        "Running 10 tests using 1 worker",
+        "    Error: expect(locator).toHaveText(expected) failed",
+        "    Expected: \"3\"",
+        "    Received: \"2\"",
+        "  1 failed",
+        "  9 passed (19.4s)"
+      ]
+    },
+    {
+      "name": "milan-create-input-window-red",
+      "sha256": "6bdffb00e162f016f6814746cbf0235e8ab981d96feb366e2504824b20cf4a5d",
+      "bytes": 6516,
+      "results": [
+        "    Error: expect(received).toBe(expected) // Object.is equality",
+        "    Expected: \"\"",
+        "    Received: \"8001234567890\"",
+        "  1 failed"
+      ]
+    },
+    {
+      "name": "milan-create-input-window-green",
+      "sha256": "2bf189ec9f1601d791126297c89bf2d3b3736ff76b6df72e8393c1f42d44b041",
+      "bytes": 9323,
+      "results": [
+        "Running 11 tests using 1 worker",
+        "    Error: expect(locator).toContainText(expected) failed",
+        "  1 failed",
+        "  10 passed (19.2s)"
+      ]
+    },
+    {
+      "name": "milan-create-buffer-green",
+      "sha256": "cff61b81edfc71193f75483d56f9339fbb2143fdf6ddb27109a14c32bcd13677",
+      "bytes": 7139,
+      "results": [
+        "Running 11 tests using 1 worker",
+        "  11 passed (14.0s)"
+      ]
+    },
+    {
+      "name": "milan-create-buffer-stress",
+      "sha256": "9c597a2718b6dd9b3d9e31cf9090132efeb12c9d57be7ba399f54fb648e363af",
+      "bytes": 9357,
+      "results": [
+        "Running 10 tests using 1 worker",
+        "    Error: expect(locator).toContainText(expected) failed",
+        "  1 failed",
+        "  9 passed (23.1s)"
+      ]
+    },
+    {
+      "name": "milan-create-scan-diagnostic",
+      "sha256": "b1a35afb4f0a3f66af735e6eeab5d334c517b665065bb69461a5cda3b8a35060",
+      "bytes": 11965,
+      "results": [
+        "Running 20 tests using 1 worker",
+        "  20 passed (37.0s)"
+      ]
+    },
+    {
+      "name": "milan-create-burst-diagnostic",
+      "sha256": "5ab82abd860be8091c893559ed9ea87318562b9c2ef9d194223e32c6bbeee893",
+      "bytes": 11504,
+      "results": [
+        "Running 20 tests using 1 worker",
+        "  20 passed (43.0s)"
+      ]
+    },
+    {
+      "name": "milan-create-burst-init-diagnostic",
+      "sha256": "f099ef72a2ed98f904fe4bdc82c03c38318cb277e0666f227cecb3cedf8b6c3b",
+      "bytes": 9565,
+      "results": [
+        "Running 24 tests using 1 worker",
+        "  24 passed (27.6s)"
+      ]
+    },
+    {
+      "name": "milan-create-scanner-final",
+      "sha256": "6b20ca35d189ac2787fa62bc18515356939fe7632c4ac25fdee57b128dba02e3",
+      "bytes": 7138,
+      "results": [
+        "Running 11 tests using 1 worker",
+        "  11 passed (14.7s)"
+      ]
+    },
+    {
+      "name": "milan-create-scanner-stress",
+      "sha256": "a068cd6fda01fb0464f1ef482480bdc6e112ebf181b889d5f998ebbe3df4591e",
+      "bytes": 7630,
+      "results": [
+        "Running 10 tests using 1 worker",
+        "  10 passed (18.6s)"
+      ]
+    },
+    {
+      "name": "milan-create-development-final",
+      "sha256": "676fff99b0d022d3e07d347f37a231556fe0094e82fc42e81c55a10cf81c5e85",
+      "bytes": 34223,
+      "results": [
+        "✔ failed Turnstile download releases the cached failure for the next attempt (6.0991ms)",
+        "ℹ tests 13",
+        "ℹ pass 13",
+        "ℹ fail 0",
+        "Running 7 tests using 1 worker",
+        "  7 passed (970ms)",
+        "Secret scanner tests passed (fabricated values only).",
+        "✔ Google callback registry-failed retains staff/AAL2/registry authority (2.6914ms)",
+        "✔ partial, unavailable, over-limit or malformed options fail closed (0.4379ms)",
+        "✔ Website read refuses duplicate partial malformed failed or missing product evidence (7037.6226ms)",
+        "✔ multi-product batch resumes at failed row and never replays completed rows (5.0634ms)",
+        "✔ failed Turnstile download releases the cached failure for the next attempt (5.7474ms)",
+        "ℹ tests 92",
+        "ℹ pass 92",
+        "ℹ fail 0",
+        "Deployment environment contract self-test passed (5 fixtures).",
+        "ℹ tests 4",
+        "ℹ pass 4",
+        "ℹ fail 0",
+        "✔ incomplete metadata and invalid source hashes do not pass (0.1554ms)",
+        "ℹ tests 27",
+        "ℹ pass 27",
+        "ℹ fail 0",
+        "Sensitive-file policy tests passed (13 blocked, 4 allowed, and the source inventory).",
+        "Sensitive-file policy passed in git mode (4361 files checked).",
+        "Environment source-boundary tests passed (8 fixtures).",
+        "Environment source boundary passed (280 browser and 204 server/Edge files checked).",
+        "Dependency policy passed (20 direct, 246 locked packages, 2 reviewed install scripts).",
+        "Secret scan passed (4371 files checked; secret values are never printed).",
+        "✓ Import-integrity check passed — all hooks and supabase usages are imported.",
+        "✔ competing calls do not publish or overwrite another bounded scan pass (17.8687ms)",
+        "✔ completion rechecks a witness changed after the first partial pass (13.928ms)",
+        "✔ a timed-out resumed pass cannot overwrite progress after its delayed I/O returns (189.4067ms)",
+        "✔ authorization and activation fail closed without their qualified matching proofs (9.4435ms)",
+        "✔ failed startup still disposes its owned runtime and preserves the missing-port evidence (4.1258ms)",
+        "✔ failed or hung disposal does not claim a successful stop (16.1613ms)",
+        "ℹ tests 148",
+        "ℹ pass 148",
+        "ℹ fail 0"
+      ]
+    }
+  ],
+  "review": {
+    "result": "APPROVED",
+    "scope": "Source inspection only; no confirmed Critical or Important defect",
+    "reviewer": "milan_code_review"
+  },
+  "measurements": {
+    "context": "Actual manager with synthetic routes and deliberately held canonical read",
+    "writesWhileReadHeld": {
+      "before": 1,
+      "after": 5,
+      "total": 5
+    },
+    "catalogueRereadsPerKnownSkuCount": {
+      "before": 1,
+      "after": 0
+    }
+  },
+  "limits": [
+    "Not real network timing",
+    "Not authenticated real-host packing",
+    "Not physical camera or hardware scanner acceptance",
+    "No production count or business write"
+  ],
+  "readOnlyDiscovery": {
+    "project": "pixplcjqivlfflickobf",
+    "readOnly": true,
+    "observedAt": "2026-10-29T12:26:15.876Z",
+    "manifestCount": 1,
+    "recentCreates": 0,
+    "createFunction": "CREATE OR REPLACE FUNCTION public.create_consignment_manifest(p_manifest_code text, p_shipment_reference text)\n RETURNS consignments\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\r\ndeclare v_manifest public.consignments;\r\nbegin\r\n  if not public.is_staff() then raise exception 'Staff access required'; end if;\r\n  if nullif(trim(coalesce(p_manifest_code, '')), '') is null then\r\n    raise exception 'Manifest code is required';\r\n  end if;\r\n  insert into public.consignments (\r\n    manifest_code, flight_number, departure_city, destination_city, status\r\n  ) values (\r\n    trim(p_manifest_code),\r\n    coalesce(nullif(trim(p_shipment_reference), ''), 'Schedule not recorded'),\r\n    'Milan, Italy', 'Manila, Philippines', 'Packing_Italy'\r\n  ) returning * into v_manifest;\r\n  return v_manifest;\r\nend;\r\n$function$\n",
+    "createReceipts": 0,
+    "packingReceipts": 1,
+    "defaultMonthCode": "K2-2026-10",
+    "defaultMonthCodeExists": true,
+    "uniqueManifestConstraint": [
+      "UNIQUE (manifest_code)"
+    ]
+  }
+}

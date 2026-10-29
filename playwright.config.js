@@ -15,6 +15,8 @@ export default defineConfig({
     'checkout-chat-ui.spec.js',
     'product-families-ui.spec.js',
     'store-categories-ui.spec.js',
+    'milan-packing-ui.spec.js',
+    'consignment-manager-ui.spec.js',
     'storefront-recovery-ui.spec.js',
     'store-orientation-ui.spec.js',
     'store-readability-ui.spec.js',

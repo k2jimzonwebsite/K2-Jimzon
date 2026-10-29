@@ -42,7 +42,7 @@ export async function withConsignmentHandler(options,work) {
     if(url.pathname==='/rest/v1/rpc/record_security_event_v1')return json({recorded:true})
     if(url.pathname==='/rest/v1/rpc/execute_admin_consignment_command_v1') {
       const result=await options.command(body,actor)
-      return result.error?json({code:'P0001',message:result.error,details:null,hint:null},400):json(result.data)
+      return result.error?json({code:result.code||'P0001',message:result.error,details:null,hint:null},400):json(result.data)
     }
     throw Error('Unexpected provider path '+url.pathname)
   }

@@ -1,0 +1,111 @@
+{
+  "projectRef": "pixplcjqivlfflickobf",
+  "readOnly": true,
+  "observedAt": "2026-10-29T13:10:07.006Z",
+  "gates": [
+    {
+      "id": "project-identity",
+      "owner": "none",
+      "state": "verified",
+      "detail": "K2 pixplcjqivlfflickobf"
+    },
+    {
+      "id": "migration-ledger",
+      "owner": "none",
+      "state": "verified",
+      "detail": "14 entries, latest 20261029180000"
+    },
+    {
+      "id": "canonical-installation",
+      "owner": "none",
+      "state": "verified",
+      "detail": "Exact phased complete-source receipt and canonical relations installed; installer must not be repeated"
+    },
+    {
+      "id": "installed-permission-catalog",
+      "owner": "none",
+      "state": "verified",
+      "detail": "Exact reviewed27 explicit anonymous grants and2 invoker trigger ACLs; hosted caller/legacy-route acceptance remains separate"
+    },
+    {
+      "id": "hosted-caller-acceptance",
+      "owner": "owner",
+      "state": "owner",
+      "detail": "Installed signatures match only; authenticated staff/customer and legacy-route acceptance remain unverified"
+    },
+    {
+      "id": "admin-preauth-dependency",
+      "owner": "owner",
+      "state": "verified",
+      "detail": "Exact signed Admin pre-auth function, limited execute and private forced-RLS rate tables verified; genuine hosted login remains separate"
+    },
+    {
+      "id": "stock-facts",
+      "owner": "owner",
+      "state": "owner",
+      "detail": "196 products (126 live), 49 lots; physical count unproven"
+    },
+    {
+      "id": "backup-freshness",
+      "owner": "none",
+      "state": "verified",
+      "detail": "milan-packing-applied-20261029.k2backup: Encrypted file hash/bytes, K2 backup identity and isolated restored current migration verified; managed provider recovery remains excluded"
+    },
+    {
+      "id": "backup-restore-proof",
+      "owner": "owner",
+      "state": "verified",
+      "detail": "Encrypted file hash/bytes, K2 backup identity and isolated restored current migration verified; managed provider recovery remains excluded"
+    },
+    {
+      "id": "vercel-preview",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "no Vercel API token or CLI in this harness"
+    },
+    {
+      "id": "vercel-edge-gate",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "Admin Vercel edge routing rule state not readable from this script"
+    },
+    {
+      "id": "provider-advisor",
+      "owner": "connector",
+      "state": "connector",
+      "detail": "Supabase advisor findings need a signed-in session"
+    },
+    {
+      "id": "release-branch",
+      "owner": "none",
+      "state": "verified",
+      "detail": "## codex/customer-privacy-owner-decisions...origin/codex/customer-privacy-owner-decisions"
+    }
+  ],
+  "logHashes": [
+    {
+      "path": "milan-manifest-preflight.log",
+      "sha256": "6bcc805e76bd23b2ef34038d503bb3538c05c3bff2933d08f366dcd0395a01a6"
+    },
+    {
+      "path": "milan-manifest-readiness.log",
+      "sha256": "72c8bbcd1634eca2eef1a14dda4c70cf30a850a4cfcecfc7fb621931a316f038"
+    },
+    {
+      "path": "milan-manifest-readiness-corrected.log",
+      "sha256": "916a6e6d23d84328d98653da9d77bf88de9a52beecb650e9fbebe4f48c24e100"
+    }
+  ],
+  "outputPathCorrection": "Initial readiness execution could not save its receipt because the supplied filename repeated the evidence folder. Correct filename-only invocation exited0. No provider setting or database write.",
+  "constraint": {
+    "project": "pixplcjqivlfflickobf",
+    "readOnly": true,
+    "observedAt": "2026-10-29T13:07:26.012Z",
+    "constraints": [
+      {
+        "conname": "consignments_manifest_code_key",
+        "definition": "UNIQUE (manifest_code)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+# Manifest recovery and packing responsiveness — 29 October 2026
+
+MAP-023 / IDEA-20261029-07. Current state: **complete local release coverage passes; exact-K2 readiness has zero failed gates; source promotion pending**. The owner requested continuing verification and publication to the existing K2 GitHub and separate Vercel projects, then reported the generic Create manifest error and excessive staff waiting. They confirmed entering the suggested `K2-2026-10`.
+
+Read-only K2 discovery confirms that code already exists under `UNIQUE (manifest_code)`, with no recent create receipt. The form reused the monthly default; the BFF turned its uniqueness refusal into generic503. The repair suggests an available `-001` suffix, checks already-loaded duplicates and maps only the exact manifest-code23505 constraint to safe409. A concurrent duplicate stays inside the form with the reference preserved. The database constraint and create authority remain unchanged.
+
+Packing previously awaited both canonical shipment reload and the entire product catalogue after every command. The existing durable dispatcher now continues independently of one coalesced canonical refresh per actor scope. Later acknowledgements retain a follow-up read. Null-SKU cancel/reopen receipts also refresh. Known-SKU counts skip catalogue reads; a new Draft SKU still requests catalogue refresh. Confirmed totals remain server-derived. Remove/restore/cancel/dispatch wait until pending commands and refresh finish. Original actor/session/AAL2 checks, locks, literal bodies/keys, historical receipts and independent Manila recount are retained.
+
+| Local proof | Before | After |
+| --- | --- | --- |
+| Saved count writes reaching the synthetic server while its canonical read is deliberately held | 1 of5 | 5 of5 |
+| Full catalogue rereads per known-SKU count | 1 | 0 |
+
+This measures removed client-side waits in the actual rendered manager. It does not establish real mobile/network latency or performance of unrelated Admin pages.
+
+Verification:
+
+- Actual authorized create-handler duplicate/unrelated-error and existing retry cases:12pass.
+- Final actual manager3 and packing8 browser cases:11pass. This covers duplicate recovery, held refresh, catalogue reads, scanner-style input, saved requests, actor switch and history-preserving corrections.
+- The complete gate first stopped at rapid scans2/3. Deterministic failing-first regressions then exposed a newly appended queue briefly rendered as paused, and a native submission reading stale React text. Set runnable state with successful append; snapshot/clear the DOM-owned barcode buffer synchronously and handle Enter explicitly, retaining journal admission. Both deterministic cases now pass.
+- Intermediate replace-all `fill()` bursts remained intermittent4/5 even after these corrections. Native instrumentation passed20rapid,20burst and24full-packing cases without capturing another failure; that does not prove the original intermittent mechanism eliminated. Final scanner tests emit actual character keys plus Enter, with zero configured delay and no acknowledgement waits. All original count/key/reload assertions remain. Final11case run and10bounded repetitions pass. Physical scanner acceptance remains open; no claim is made that every programmatic replace-all interleaving is resolved.
+- A preliminary refresh experiment skipped null-SKU shipment receipts; the strengthened fixture exposed it. Final acknowledgement tracking fixes it, with cancel/reopen recovery passing.
+- `npm run verify:development`: final exit0 after the input correction and scanner test edit (earlier passing development evidence is also retained). Bounded independent code review APPROVED, no confirmed Critical or Important defect. Review inspected source and tests, without rerunning suites or accessing providers.
+- One375/1440 visual review passes: inline error visible, entered reference retained, established K2 styles and no horizontal overflow. Screenshots are synthetic fixtures.
+- Complete release coverage passes through the original invocation, focused successors of its failed packing stage and every unrun stage in order, including both isolated builds. Final runtime/test source pins are unchanged. Exact-K2 read-only preflight and readiness8verified/2owner/3script-unreachedconnector/0failed pass. A receipt output-path error was corrected without any provider write. GitHub source promotion, hosted CI and both existing production artifacts remain pending at this checkpoint. See [release coverage](milan-manifest-recovery-20261029/release-qualification.json) and [readiness](milan-manifest-recovery-20261029/preflight-readiness.json).
+
+Machine-readable local source hashes, original log hashes, failing/passing outcomes and screenshots: [evidence](milan-manifest-recovery-20261029/local-evidence.json). Logs remain under ignored `.tools/milan-create-*.log`; original failures are preserved. API/UI fixtures run through their existing dedicated configurations; the shared base excludes the two UI files so release runs them once. The new create API regression remains in the base suite.
+
+No new SQL, Auth, provider configuration, credential, product, count, order or payment mutation is part of this repair. The installed Milan migration/ledger20261029180000 must not be replayed. Real authenticated staff-device scanning, factual dispatch and Manila receipt remain unverified under MAP-023.
+
+Recovery: revert only this repair's source delta against base9fd595767ccbb27d0562ad318bea320f3df627cf, preserving the installed migration and all packing history/original pending journal keys. If either production artifact fails, retain its prior independently verified deployment until a qualified successor is ready. Never roll back business data or downgrade to pre-Milan source. Earlier worktree-only generated material is recoverable from stash efc335bac0562a59919a242edae28e3122bd568f; unrelated primary privacy work remains untouched. Exact next actions are maintained only in MAP-023.

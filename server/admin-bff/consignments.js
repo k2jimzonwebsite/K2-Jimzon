@@ -135,6 +135,9 @@ export async function handleConsignmentCommand(req, res, action) {
     const { data, error } = await authorized.client.rpc('execute_admin_consignment_command_v1', signed)
     if (error) {
       const providerCode = String(error.message || '')
+      if (action === 'consignment_create' && error.code === '23505' && providerCode.includes('consignments_manifest_code_key')) {
+        return safeJson(res, 409, { error: { code: 'MANIFEST_CODE_EXISTS' } })
+      }
       if (providerCode.includes('K2_ADMIN_RATE_LIMITED')) return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': '60' })
       if (providerCode.includes('K2_ADMIN_IDEMPOTENCY_CONFLICT')) return safeJson(res, 409, { error: { code: 'IDEMPOTENCY_CONFLICT' } })
       if (providerCode.includes('K2_ADMIN_PAYLOAD_INVALID')) return safeJson(res, 400, { error: { code: 'REQUEST_INVALID' } })

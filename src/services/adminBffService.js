@@ -217,6 +217,7 @@ const ERROR_MESSAGES = {
   SYSTEM_READINESS_ADMIN_REQUIRED: 'Only an administrator can review system readiness.',
   CONSIGNMENTS_UNAVAILABLE: 'Flight and consignment records are temporarily unavailable.',
   CONSIGNMENT_COMMAND_UNAVAILABLE: 'That consignment operation could not be completed safely. Refresh and try again.',
+  MANIFEST_CODE_EXISTS: 'A manifest with this code already exists. Choose it under Current manifest, or enter a different code.',
   SCAN_CODE_MISMATCH: 'That barcode does not belong to the selected manifest line. No unit was counted.',
   LOTS_UNAVAILABLE: 'Inventory lots and expiry records are temporarily unavailable.',
   LOT_COMMAND_UNAVAILABLE: 'That inventory change could not be completed safely. Refresh and try again.',

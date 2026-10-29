@@ -24,6 +24,7 @@ export default function ConsignmentManager() {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [showCreate, setShowCreate] = useState(false)
+  const [createIssue, setCreateIssue] = useState('')
   const [showLine, setShowLine] = useState(false)
   const [showGuide, setShowGuide] = useState(false)
   const [scannerStage, setScannerStage] = useState(null)
@@ -87,8 +88,13 @@ export default function ConsignmentManager() {
   const displayItems = useMemo(() => items.map(item => ({ ...item, name: bySku[item.sku]?.name || item.sku })), [items, bySku])
 
   const createManifest = async (event) => {
-    event.preventDefault(); setWorking(true); setError(''); setNotice('')
+    event.preventDefault(); setCreateIssue(''); setError(''); setNotice('')
     const payload = { manifestCode: create.manifestCode.trim(), shipmentReference: create.flightNumber.trim() }
+    if (manifests.some(item => item.manifest_code === payload.manifestCode)) {
+      setCreateIssue('A manifest with this code already exists. Choose it under Current manifest, or enter a different code.')
+      return
+    }
+    setWorking(true)
     const fingerprint = JSON.stringify(payload)
     const slot = 'create'
     const result = secureConsignments
@@ -98,7 +104,7 @@ export default function ConsignmentManager() {
         })
     setWorking(false)
     const createError = secureConsignments ? (!result.ok ? result.error : '') : result.error
-    if (createError) { setError(secureConsignments ? createError : 'The manifest could not be created.'); return }
+    if (createError) { setCreateIssue(secureConsignments ? createError : 'The manifest could not be created.'); return }
     completeOperation(slot)
     const saved = secureConsignments ? result.result : (Array.isArray(result.data) ? result.data[0] : result.data)
     const savedId = saved?.consignmentId || saved?.id
@@ -216,6 +222,17 @@ export default function ConsignmentManager() {
     setShowCreate(false); setShowLine(false); setAdvanceTarget(''); setAdvanceReason('')
   }
 
+  const openCreate = () => {
+    const prefix = `K2-${new Date().toISOString().slice(0, 7)}`
+    const used = new Set(manifests.map(item => item.manifest_code))
+    if (used.has(create.manifestCode.trim())) {
+      let candidate = prefix, suffix = 1
+      while (used.has(candidate)) candidate = `${prefix}-${String(suffix++).padStart(3, '0')}`
+      setCreate(current => ({ ...current, manifestCode: candidate }))
+    }
+    setCreateIssue(''); setShowCreate(true)
+  }
+
   const input = 'min-h-11 w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue'
 
   if (loading) return <div className="rounded-adm border border-adm-line bg-adm-surface p-10 text-center text-sm text-white/55">Loading latest consignment…</div>
@@ -240,7 +257,7 @@ export default function ConsignmentManager() {
           <h2 className="font-sans text-2xl font-bold">{manifest?.status === 'Packing_Italy' ? 'Italy packing → Philippines receiving' : 'Consignment receiving'}</h2>
           <p className="mt-1 max-w-[65ch] text-[15px] leading-relaxed text-white/75">Track every flight, box, batch, and unit scan from Milan packing through Manila arrival recount. Supplier buying prices stay on the purchase order.</p>
         </div>
-        <button type="button" onClick={() => setShowCreate(true)} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create manifest</button>
+        <button type="button" onClick={openCreate} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create manifest</button>
       </div>
       {manifests.length > 0 && <label className="mt-4 block max-w-md text-xs font-semibold text-white/55">Current manifest<select className={`${input} mt-1.5`} value={selectedManifestId} onChange={event => { const id = event.target.value; setSelectedManifestId(id); setManifest(manifests.find(item => item.id === id) || null) }}>{manifests.map(item => <option key={item.id} value={item.id}>{item.manifest_code} · {item.status.replaceAll('_', ' ')}</option>)}</select></label>}
     </div>
@@ -272,7 +289,11 @@ export default function ConsignmentManager() {
       </section>
 
       {manifest.status === 'Packing_Italy' && secureConsignments && <ConsignmentPackingWorkspace key={manifest.id} manifest={manifest} products={products || []} actorId={user?.id || user?.userId}
-        onRefresh={async () => { await load(); await refreshProducts?.() }} />}
+        onRefresh={async ({ skus = [] } = {}) => {
+          const reads = [load()]
+          if (skus.some(sku => !bySku[sku])) reads.push(refreshProducts?.())
+          await Promise.all(reads)
+        }} />}
 
       {(manifest.status !== 'Packing_Italy' || !secureConsignments) && <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
         <div className="flex items-center justify-between border-b border-adm-line bg-adm-sunken px-4 py-3"><h3 className="text-sm font-semibold">Manifest box and lot lines</h3><span className="text-xs text-white/45">{items.length} lines</span></div>
@@ -311,7 +332,8 @@ export default function ConsignmentManager() {
               <p className="text-sm leading-relaxed text-white/55">{advanceTarget === 'In_Transit' ? 'This closes Milan scanning. Every expected unit must already be scan-packed.' : 'This opens the independent Manila recount. Milan counts will not be copied as received.'}</p>
               <Field label={<span>Custody / state-change reason <span className="font-normal text-white/40">(optional)</span></span>}><textarea maxLength={500} className={`${input} min-h-24 resize-y`} value={advanceReason} onChange={event => setAdvanceReason(event.target.value)} placeholder="Record who confirmed the handoff or arrival (optional)" /></Field>
             </> : showCreate ? <>
-              <Field label="Manifest code"><input className={input} value={create.manifestCode} onChange={e => setCreate(current => ({ ...current, manifestCode: e.target.value }))} minLength={3} maxLength={80} required /></Field>
+              <Field label="Manifest code"><input className={input} value={create.manifestCode} onChange={e => { setCreateIssue(''); setCreate(current => ({ ...current, manifestCode: e.target.value })) }} aria-describedby={createIssue ? 'manifest-create-issue' : undefined} minLength={3} maxLength={80} required /></Field>
+              {createIssue && <p id="manifest-create-issue" role="alert" className="text-sm leading-relaxed text-white">{createIssue}</p>}
               <Field label="Flight or shipment reference"><input className={input} value={create.flightNumber} onChange={e => setCreate(current => ({ ...current, flightNumber: e.target.value }))} maxLength={120} placeholder="Record only confirmed details" /></Field>
             </> : <>
               <Field label="Product SKU"><select className={input} value={line.sku} onChange={e => setLine(current => ({ ...current, sku: e.target.value }))} required><option value="">Select a product</option>{(products || []).map(product => <option key={product.sku} value={product.sku}>{product.sku} · {product.name}</option>)}</select></Field>

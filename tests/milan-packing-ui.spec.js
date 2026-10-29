@@ -19,7 +19,8 @@ async function setup(page,{pause=false,block=false}={}){
    if(p.operation==='restore')removed=false
    if(p.operation==='cancel')cancelled=true
    if(p.operation==='reopen')cancelled=false
-   revision++;receipts.set(key,{consignmentId:shipment,operation:p.operation,itemId:item,sku:'K2-SKU-009999',packingRevision:revision,status:'Packing_Italy',historicalReceipt:true})
+   const lineOperation=['count','remove','restore'].includes(p.operation)
+   revision++;receipts.set(key,{consignmentId:shipment,operation:p.operation,itemId:lineOperation?item:null,sku:lineOperation?'K2-SKU-009999':null,packingRevision:revision,status:'Packing_Italy',historicalReceipt:true})
   }
   await r.fulfill({json:{ok:true,result:receipts.get(key)}})
  })
@@ -27,7 +28,12 @@ async function setup(page,{pause=false,block=false}={}){
  return {commands,release:()=>{hold=false;unblock?.()},count:()=>count}
 }
 async function context(page){await page.getByLabel('Physical box code',{exact:true}).fill('BOX-A');await page.getByLabel('Batch / lot code',{exact:true}).fill('LOT-A');await page.getByLabel('Best-before date',{exact:true}).fill('2027-10-01')}
-async function scan(page,code='8001234567890'){const input=page.getByLabel('Barcode or SKU',{exact:true});await input.fill(code);await input.press('Enter')}
+async function scan(page,code='8001234567890'){
+ const input=page.getByLabel('Barcode or SKU',{exact:true})
+ // Hardware scanners emit characters then Enter; keep the burst independent
+ // of server acknowledgement and avoid replace-all text injection.
+ await input.focus();await input.pressSequentially(code,{delay:0});await input.press('Enter')
+}
 test('packing accepts rapid identical scans and offers manual ±1 without catalog completion',async({page})=>{
  const h=await setup(page);await context(page)
  await scan(page);await scan(page);await scan(page)
@@ -38,6 +44,39 @@ test('packing accepts rapid identical scans and offers manual ±1 without catalo
  await page.getByRole('button',{name:'Remove one K2-SKU-009999',exact:true}).click()
  await expect(page.getByLabel('Packed quantity K2-SKU-009999')).toHaveText('3')
  expect(new Set(h.commands.map(c=>c.key)).size).toBe(5)
+})
+
+test('native scan submission reads and clears the physical input before another render',async({page})=>{
+ await setup(page);await context(page)
+ const remaining=await page.getByLabel('Barcode or SKU',{exact:true}).evaluate(input=>{
+  Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'8001234567890')
+  input.dispatchEvent(new Event('input',{bubbles:true}))
+  input.form.requestSubmit()
+  return input.value
+ })
+ expect(remaining).toBe('')
+ await expect(page.getByLabel('Packed quantity K2-SKU-009999')).toHaveText('1')
+})
+
+test('another Enter scan is accepted while the first saved append is completing',async({page})=>{
+ await setup(page);await context(page)
+ await page.evaluate(actor=>{
+  const request=navigator.locks.request.bind(navigator.locks)
+  let delayed=false
+  navigator.locks.request=(name,callback)=>request(name,async lock=>{
+   const result=await callback(lock)
+   if(name==='k2:packing:pending:v1:'+actor&&!delayed){
+    delayed=true;window.appendHeld=true
+    await new Promise(resolve=>{window.releaseAppend=resolve})
+   }
+   return result
+  })
+ },actor)
+ await scan(page)
+ await expect.poll(()=>page.evaluate(()=>window.appendHeld)).toBe(true)
+ await scan(page)
+ await page.evaluate(()=>window.releaseAppend())
+ await expect(page.getByLabel('Packed quantity K2-SKU-009999')).toHaveText('2')
 })
 test('another tab cannot dismiss a refused request while its exact retry is in flight',async({page})=>{
  await setup(page)

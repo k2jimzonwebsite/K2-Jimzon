@@ -1,0 +1,23 @@
+{
+  "idea": "IDEA-20261029-07",
+  "map": "MAP-023",
+  "state": "LOCAL_RELEASE_QUALIFIED_NOT_PROMOTED",
+  "sourceBase": "9fd595767ccbb27d0562ad318bea320f3df627cf",
+  "localEvidence": "milan-manifest-recovery-20261029/local-evidence.json",
+  "releaseGate": {
+    "command": "npm run verify:release",
+    "status": "PASS_RECONCILED",
+    "evidence": "docs/acceptance/milan-manifest-recovery-20261029/release-qualification.json"
+  },
+  "providerWrites": false,
+  "productionBusinessWrites": false,
+  "deployed": false,
+  "remainingAuthority": "MASTER_ACTION_PLAN.md / MAP-023",
+  "readiness": {
+    "project": "pixplcjqivlfflickobf",
+    "verified": 8,
+    "owner": 2,
+    "connector": 3,
+    "failed": 0
+  }
+}
