@@ -5,8 +5,8 @@
     "IDEA-20261029-03",
     "IDEA-20261029-04"
   ],
-  "recordedAt": "2026-10-29T06:58:30.136Z",
-  "status": "verified-live-source-and-ui-owner-save-acceptance-pending",
+  "recordedAt": "2026-10-29T07:31:35.635Z",
+  "status": "verified-live-source-ui-and-owner-authorized-synthetic-address-acceptance",
   "baseCommit": "82e48ffbb2d5729daeb44c7a4e087180e1d148b8",
   "productionSource": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
   "featureBranch": "codex/customer-privacy-owner-decisions",
@@ -91,13 +91,13 @@
   },
   "limitations": [
     "Full release qualification is composed from the original passing eight stages plus 16 resumed stages, with the initial interruption/fixture-flag failures retained; no clean aggregate exit-zero claim.",
-    "Actual signed-in account shows the blank required mobile/name/address form after reload; real owner data save/reload/default-checkout remains unverified.",
     "Actual authenticated Admin Grid/Sheet controls and zero-selection guard pass; no production category assignment was submitted.",
-    "CI 40831331901 is still in progress: critical-sql-behavior and security-check-regression successful, build-and-smoke running.",
     "No SQL, Auth, SMS, deletion, stock, price, order or customer record mutation was performed.",
-    "First asset scan omitted the separate Footer chunk; corrected read-only traversal passes. First rendered probe captured exiting cards before settlement; confirmed selected filter and settled count now show two Beverages products. Application source unchanged."
+    "First asset scan omitted the separate Footer chunk; corrected read-only traversal passes. First rendered probe captured exiting cards before settlement; confirmed selected filter and settled count now show two Beverages products. Application source unchanged.",
+    "Owner explicitly chose dummy data. One synthetic default address and dummy profile name are retained in the actual account. No real personal-details acceptance claim.",
+    "Checkout mobile is populated but its exact rendered value is masked by browser automation; stored mobile equality, recipient/address and complete PSGC restoration are verified."
   ],
-  "nextAction": "MAP-019: owner enters/saves a real delivery address, then verify reload and default checkout prefill without submitting an order; record terminal CI without rerunning local suites. Actual staff category save/new public label propagation remains operational acceptance. Deletion stays suspended.",
+  "nextAction": "MAP-019 retains only actual protected staff category-save/new public label propagation acceptance and suspended privacy/deletion work; do not repeat completed source, CI or synthetic address proof. Real personal details are owner setup, not a newly required engineering gate.",
   "rollback": "By scoped release decision, restore Storefront to dpl_7wopG266HJo1A3U2czxEWHwMR51g and Admin to dpl_GEHQr9hiAc3r4y3qj9udEBo4stkj (cabace48). Preserve all provider data and pending requests; no database restore or replay. Subsequent labels are corrected by fresh normal Admin versions.",
   "sourceSha256": {
     "src/components/Footer.jsx": "fd78bbb1b54e5e5277d30352bc464e84038c38fadbca42ae5d282430804849e2",
@@ -163,7 +163,13 @@
     "docs/acceptance/account-category-footer-20261029/release-build-storefront.log": "75477630bf99bc78b379d02d1219c3d9800b187e09de5a03ac256ce816270e2f",
     "docs/acceptance/account-category-footer-20261029/release-build-admin.log": "31307d03a0b6c5f300cf80e075fa54857d995dd77fe4cce4b7fd239c8d52ecda",
     "docs/acceptance/account-category-footer-20261029/live-footer-375.png": "edc8d8e95be9be6835acad66964f23b5d977a54df950ccbe801e201a3889329a",
-    "docs/acceptance/account-category-footer-20261029/live-footer-1440.png": "bfc41dab7737f1bfaaadf907064b09251fd44369a13fa321a50cb31733d9185c"
+    "docs/acceptance/account-category-footer-20261029/live-footer-1440.png": "bfc41dab7737f1bfaaadf907064b09251fd44369a13fa321a50cb31733d9185c",
+    "docs/acceptance/account-category-footer-20261029/hosted-address-acceptance.json": "5730d7d4530a6dd861693dd94efbf16464df5e8641cb48ab3fae2cb43a3b50fd",
+    "docs/acceptance/account-category-footer-20261029/owner-dummy-address-authorization.json": "872162f8a2dee4f5f2bab17aca898cd25b770b61eab6eb2cb6320a32b97cc0b9",
+    "docs/acceptance/account-category-footer-20261029/preflight-before-dummy-address.log": "863b38bfdd924891810fade78cab2e60db566af04a7e03cbcf22880289d83d17",
+    "docs/acceptance/account-category-footer-20261029/readiness-before-dummy-address.log": "3f86ed46f7c3525fb7c6ae9a878d9bfa4db6b7882301e942045c083b561733be",
+    "docs/acceptance/account-category-footer-20261029/ci-final-observation.json": "9381ab521a6ad83013dd88030ad93315eb703fca532b0a6c3afd609a7128fa82",
+    "docs/acceptance/account-category-footer-20261029/saved-test-address.jpg": "a0144ce953db386472dfd50d4fcbfa80c2550fbe4f2e4654da10a94395641b9c"
   },
   "sourceHashNormalization": "UTF-8 CRLF normalized to LF, matching Git source blobs",
   "evidenceNormalization": "UTF-8 LF; trailing whitespace and terminal blank lines removed; original raw logs retained privately under .tools/account-category-footer-20261029",
@@ -399,13 +405,13 @@
     "bothRemoteRefsReadBack": true,
     "normalHooksPassed": true,
     "ci": {
-      "conclusion": "",
+      "conclusion": "success",
       "headSha": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
       "jobs": [
         {
-          "conclusion": "",
+          "conclusion": "success",
           "name": "build-and-smoke",
-          "status": "in_progress"
+          "status": "completed"
         },
         {
           "conclusion": "success",
@@ -418,7 +424,7 @@
           "status": "completed"
         }
       ],
-      "status": "in_progress",
+      "status": "completed",
       "url": "https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40831331901"
     },
     "recordedAt": "2026-10-29T06:48:12.166Z",
@@ -620,5 +626,102 @@
     "productWriteSubmitted": false,
     "originalGridViewRestored": true,
     "limitation": "Actual protected staff save and new public category propagation are not exercised with production business records."
+  },
+  "hostedAddressAcceptance": {
+    "mapItem": "MAP-019",
+    "ideaId": "IDEA-20261029-02",
+    "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+    "observedAt": "2026-10-29T07:31:35.635Z",
+    "status": "owner-authorized-synthetic-data-hosted-save-reload-and-default-prefill-verified",
+    "authorization": {
+      "ownerAnswers": [
+        "can you do it your selves?",
+        "just use dummy data"
+      ],
+      "destination": "https://www.k2jimzon.com/account",
+      "scope": "Normal account UI synthetic default address, reload and checkout prefill; no order submission"
+    },
+    "priorObservation": {
+      "ownerReportedSaved": true,
+      "firstAccountAfterReloadCards": 0,
+      "secondUserTabCards": 0,
+      "profileNameBlank": true,
+      "addressSaveAcknowledgementObserved": false,
+      "noPendingSaveOrError": true,
+      "conclusion": "No prior save acceptance or lost-data diagnosis was established."
+    },
+    "syntheticFields": {
+      "profileName": "K2 Test User",
+      "label": "Test address",
+      "recipientName": "K2 Test Recipient",
+      "mobile": "+639000000000",
+      "street": "1 Test Street, Test Unit (verification only)",
+      "landmark": "Test data - not a delivery instruction",
+      "destinationLabels": [
+        "National Capital Region (NCR)",
+        "City of Manila",
+        "Ermita",
+        "Barangay 659"
+      ],
+      "destinationCodes": [
+        "1300000000",
+        "1380600000",
+        "1380608000",
+        "1380608001"
+      ],
+      "postalCode": ""
+    },
+    "save": {
+      "ordinarySignedInAccountUi": true,
+      "saveButtonClickedOnce": true,
+      "acknowledgement": "Address saved.",
+      "addressCards": 1,
+      "default": true,
+      "saveError": false,
+      "profileNameSavedAsPartOfExistingAddressCommand": true
+    },
+    "reload": {
+      "performed": true,
+      "identicalAddressCard": true,
+      "profileNamePersisted": true,
+      "storedMobileExactlyMatchesDummy": true,
+      "recipientExactlyMatchesDummy": true,
+      "defaultPreserved": true,
+      "addressCards": 1
+    },
+    "checkout": {
+      "usedExistingCart": true,
+      "cartItemsBefore": 4,
+      "cartItemsAfter": 4,
+      "defaultTestAddressSelected": true,
+      "recipientMatches": true,
+      "streetMatches": true,
+      "allFourPsgcSelectionsRestored": true,
+      "mobilePopulated": true,
+      "mobileExactRenderedComparison": "unobserved: browser automation masks nonempty mobile inputs as <redacted>; do not treat the mask as an application mismatch",
+      "heldOrderVisible": false,
+      "submitButtonPresent": true,
+      "submitButtonClicked": false,
+      "orderSubmitted": false,
+      "noDocumentOverflow": true
+    },
+    "finalState": {
+      "returnedToAccount": true,
+      "testAddressRetainedAsDefault": true,
+      "profileNameRetained": "K2 Test User",
+      "cartItems": 4,
+      "personalCustomerValuesEntered": false,
+      "normalAccountSettingsWriteOnly": true,
+      "authSmsProviderSchemaDirectSqlChanges": false,
+      "staffCategoryWrite": false
+    },
+    "limitations": [
+      "Synthetic data only, not real personal contact/address acceptance.",
+      "Exact rendered checkout mobile value is masked; its populated state is observed and the stored phone matches exactly.",
+      "No order submission, payment, fulfillment, stock movement or staff category assignment was exercised.",
+      "Cropped CDP screenshot timed out; native full-viewport successor succeeded and visually contains only fabricated account/address fields."
+    ],
+    "screenshot": "saved-test-address.jpg",
+    "recovery": "Owner may edit Test address and the dummy profile name to desired real values through normal account controls. No automated deletion, provider rollback, database restore or order replay is required or performed."
   }
 }

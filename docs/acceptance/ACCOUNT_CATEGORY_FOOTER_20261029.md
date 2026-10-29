@@ -1,6 +1,6 @@
 # Account mobile, category controls and footer
 
-Owner: MAP-019 / IDEA-20261029-02, -03 and -04. Status: **verified live source and UI** on `edd115df7aa421e612aa5f8b2e7a7261d71d23ca`; real owner save/default checkout and staff-save propagation remain separate operational acceptance. Explicit owner approval supersedes the earlier prepared-only status for this exact release.
+Owner: MAP-019 / IDEA-20261029-02, -03 and -04. Status: **verified live source and UI** on `edd115df7aa421e612aa5f8b2e7a7261d71d23ca`; owner-authorized synthetic save/reload/default checkout is verified below; actual staff-save propagation remains separate operational acceptance. Explicit owner approval supersedes the earlier prepared-only status for this exact release.
 
 The reported account defect was discoverability: the owner's actual signed-in Chrome account showed an empty address book and **Add delivery address** opened the existing phone field. No personal details were entered or saved. A read-only exact-K2 metadata check matched the installed settings/address helper and writer hashes. No database, Auth, SMS or privacy activation was needed.
 
@@ -34,7 +34,7 @@ One bounded combined visual pass inspected account 375/1440, Sheet category dial
 
 ## Remaining action and recovery
 
-MAP-019 retains the owner's actual address save/reload/default-checkout acceptance without order submission, staff category save/refresh acceptance and terminal CI receipt. Source publication, exact release qualification and both production artifact/host checks are complete and removed from active execution. No new SQL/provider or customer/category record was written. Existing customer-deletion work remains suspended. Preserve the owner's signed-in Chrome tab and cart.
+MAP-019 retains actual staff category save/refresh acceptance and separately suspended privacy work. The owner-selected synthetic address proof and terminal CI receipt are complete below. Source publication, exact release qualification and both production artifact/host checks are complete and removed from active execution. No new SQL/provider or customer/category record was written. Existing customer-deletion work remains suspended. Preserve the owner's signed-in Chrome tab and cart.
 
 Recovery after release: restore Storefront to `dpl_7wopG266HJo1A3U2czxEWHwMR51g` and Admin to `dpl_GEHQr9hiAc3r4y3qj9udEBo4stkj` (`cabace48`) by a scoped release decision; never restore the database or replay business operations. Existing pending requests must survive. If staff later change category labels, correct those through fresh normal Admin decisions; a source rollback does not revert stored assignments.
 
@@ -54,4 +54,15 @@ Actual owner Chrome account reload directly exposes the blank Mobile number fiel
 
 Isolated real-host footer checks show15native category links at375/1440, all at least44px with wrapping and no horizontal overflow. Beverages href/current selected filter are verified and the settled catalog has2products; Browse all clears the category URL. No business POST or order attempt occurred. The first probe counted exiting cards before settlement; the corrected read-only probe waits for the selected filter and displayed/card counts. The first asset probe omitted the separate Footer chunk; corrected bounded traversal passes. Both probe attempts are retained and no application source changed. Live screenshots are in account-category-footer-20261029/live-footer-375.png and live-footer-1440.png.
 
-CI [40831331901](https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40831331901) is last observed **in progress**: critical-sql-behavior and security-check-regression succeed, build-and-smoke is running. Report live promotion immediately; do not wait on or rerun application qualification for this documentation receipt. Actual real details/save/reload/default checkout and a staff category write remain unverified in MAP-019. Deletion remains suspended.
+CI [40831331901](https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/40831331901) is now directly observed **completed / success**, with build-and-smoke, critical-sql-behavior and security-check-regression all successful. This terminal receipt requires no new application tests or deployment. Owner-selected synthetic save/reload/default checkout is verified below; actual staff category write remains MAP-019 and deletion stays suspended.
+
+
+## Owner-authorized synthetic address acceptance
+
+The owner first reported Saved. Read-only reload and the second open account tab both showed zero address cards, a blank profile name and no save acknowledgement/pending/error; this did not establish a successful prior save or a data-loss defect. The owner then asked the agent to enter the details and explicitly answered **just use dummy data**. The scoped authorization is retained; no real contact values were supplied or invented as genuine.
+
+After fresh exact-K2 read-only preflight and zero-failed readiness, the normal signed-in UI saved exactly one **Test address**. Fields are explicitly fabricated: profile K2 Test User, recipient K2 Test Recipient, mobile +639000000000, street 1 Test Street, Test Unit (verification only), landmark Test data - not a delivery instruction. Actual PSGC dropdown choices are NCR → City of Manila → Ermita → Barangay659. This normal account action also saves the required dummy profile name. The resulting Address saved acknowledgement, one Default card and absence of an error pass. Reload returns the identical card/default and profile name; saved recipient and mobile match exactly.
+
+The existing four-item basket was opened without changing any quantities. Review order request opens checkout with Test address selected as default, the correct recipient/formatted street and all four selected PSGC levels. The mobile field is populated. Browser automation masks nonempty mobile input values as <redacted>; its exact checkout value is therefore unobserved, not an application mismatch. Stored phone equality and the populated state are independently observed. No submit button, payment, stock, fulfillment or category-save action was used. This is UI action evidence, not a network-trace claim. The cart remains four items and the agent returned to Account.
+
+The dummy profile name/address remain saved, with Test address the default. They can be replaced through normal account editing; no test-data deletion or provider rollback was requested or performed. Personal customer-details acceptance is not claimed. The cropped screenshot attempt timed out; the native full-viewport successor passes and visibly contains only fabricated fields, saved as account-category-footer-20261029/saved-test-address.jpg.

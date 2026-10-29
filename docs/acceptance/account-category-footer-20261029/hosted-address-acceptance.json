@@ -1,0 +1,97 @@
+{
+  "mapItem": "MAP-019",
+  "ideaId": "IDEA-20261029-02",
+  "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "observedAt": "2026-10-29T07:31:35.635Z",
+  "status": "owner-authorized-synthetic-data-hosted-save-reload-and-default-prefill-verified",
+  "authorization": {
+    "ownerAnswers": [
+      "can you do it your selves?",
+      "just use dummy data"
+    ],
+    "destination": "https://www.k2jimzon.com/account",
+    "scope": "Normal account UI synthetic default address, reload and checkout prefill; no order submission"
+  },
+  "priorObservation": {
+    "ownerReportedSaved": true,
+    "firstAccountAfterReloadCards": 0,
+    "secondUserTabCards": 0,
+    "profileNameBlank": true,
+    "addressSaveAcknowledgementObserved": false,
+    "noPendingSaveOrError": true,
+    "conclusion": "No prior save acceptance or lost-data diagnosis was established."
+  },
+  "syntheticFields": {
+    "profileName": "K2 Test User",
+    "label": "Test address",
+    "recipientName": "K2 Test Recipient",
+    "mobile": "+639000000000",
+    "street": "1 Test Street, Test Unit (verification only)",
+    "landmark": "Test data - not a delivery instruction",
+    "destinationLabels": [
+      "National Capital Region (NCR)",
+      "City of Manila",
+      "Ermita",
+      "Barangay 659"
+    ],
+    "destinationCodes": [
+      "1300000000",
+      "1380600000",
+      "1380608000",
+      "1380608001"
+    ],
+    "postalCode": ""
+  },
+  "save": {
+    "ordinarySignedInAccountUi": true,
+    "saveButtonClickedOnce": true,
+    "acknowledgement": "Address saved.",
+    "addressCards": 1,
+    "default": true,
+    "saveError": false,
+    "profileNameSavedAsPartOfExistingAddressCommand": true
+  },
+  "reload": {
+    "performed": true,
+    "identicalAddressCard": true,
+    "profileNamePersisted": true,
+    "storedMobileExactlyMatchesDummy": true,
+    "recipientExactlyMatchesDummy": true,
+    "defaultPreserved": true,
+    "addressCards": 1
+  },
+  "checkout": {
+    "usedExistingCart": true,
+    "cartItemsBefore": 4,
+    "cartItemsAfter": 4,
+    "defaultTestAddressSelected": true,
+    "recipientMatches": true,
+    "streetMatches": true,
+    "allFourPsgcSelectionsRestored": true,
+    "mobilePopulated": true,
+    "mobileExactRenderedComparison": "unobserved: browser automation masks nonempty mobile inputs as <redacted>; do not treat the mask as an application mismatch",
+    "heldOrderVisible": false,
+    "submitButtonPresent": true,
+    "submitButtonClicked": false,
+    "orderSubmitted": false,
+    "noDocumentOverflow": true
+  },
+  "finalState": {
+    "returnedToAccount": true,
+    "testAddressRetainedAsDefault": true,
+    "profileNameRetained": "K2 Test User",
+    "cartItems": 4,
+    "personalCustomerValuesEntered": false,
+    "normalAccountSettingsWriteOnly": true,
+    "authSmsProviderSchemaDirectSqlChanges": false,
+    "staffCategoryWrite": false
+  },
+  "limitations": [
+    "Synthetic data only, not real personal contact/address acceptance.",
+    "Exact rendered checkout mobile value is masked; its populated state is observed and the stored phone matches exactly.",
+    "No order submission, payment, fulfillment, stock movement or staff category assignment was exercised.",
+    "Cropped CDP screenshot timed out; native full-viewport successor succeeded and visually contains only fabricated account/address fields."
+  ],
+  "screenshot": "saved-test-address.jpg",
+  "recovery": "Owner may edit Test address and the dummy profile name to desired real values through normal account controls. No automated deletion, provider rollback, database restore or order replay is required or performed."
+}

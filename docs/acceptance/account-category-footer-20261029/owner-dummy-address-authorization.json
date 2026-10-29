@@ -1,0 +1,13 @@
+{
+  "mapItem": "MAP-019",
+  "sourceCommit": "edd115df7aa421e612aa5f8b2e7a7261d71d23ca",
+  "ownerAnswers": [
+    "can you do it your selves?",
+    "just use dummy data"
+  ],
+  "destination": "https://www.k2jimzon.com/account",
+  "authorizedAction": "Save a clearly labeled synthetic default delivery address using the normal account UI, verify reload and checkout prefill without order submission",
+  "priorObservedAddressCards": 0,
+  "personalDataProvided": false,
+  "recordedAt": "2026-10-29T07:19:17.103Z"
+}
