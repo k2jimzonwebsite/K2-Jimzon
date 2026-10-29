@@ -1,0 +1,1050 @@
+{
+  "ledger": [
+    {
+      "name": "map019_profile_addresses_only",
+      "version": "20261028140000"
+    }
+  ],
+  "functions": [
+    {
+      "acl": "{postgres=X/postgres,service_role=X/postgres}",
+      "owner": "postgres",
+      "config": [
+        "search_path=public"
+      ],
+      "definer": true,
+      "identity": "add_consignment_item_v2(uuid,text,text,text,date,integer)",
+      "definition": "CREATE OR REPLACE FUNCTION public.add_consignment_item_v2(p_consignment_id uuid, p_sku text, p_batch_code text, p_box_code text, p_best_before_date date, p_expected_qty integer)\n RETURNS consignment_items\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\r\ndeclare v_manifest public.consignments; v_item public.consignment_items;\r\nbegin\r\n  if not public.is_staff() then raise exception 'Staff access required'; end if;\r\n  if coalesce(p_expected_qty, 0) < 1 then raise exception 'Expected quantity must be positive'; end if;\r\n  if nullif(trim(coalesce(p_batch_code, '')), '') is null then raise exception 'Batch code is required'; end if;\r\n  if nullif(trim(coalesce(p_box_code, '')), '') is null then raise exception 'Box code is required'; end if;\r\n  if p_best_before_date is null then raise exception 'Best-before date is required'; end if;\r\n  select * into v_manifest from public.consignments where id = p_consignment_id for update;\r\n  if not found then raise exception 'Consignment not found'; end if;\r\n  if v_manifest.status <> 'Packing_Italy' then raise exception 'Manifest packing is closed'; end if;\r\n  insert into public.consignment_items (\r\n    consignment_id, sku, batch_code, box_code, best_before_date,\r\n    expected_qty, italy_packed_qty, manila_scanned_qty\r\n  ) values (\r\n    p_consignment_id, p_sku, trim(p_batch_code), trim(p_box_code), p_best_before_date,\r\n    p_expected_qty, 0, 0\r\n  ) returning * into v_item;\r\n  return v_item;\r\nend;\r\n$function$\n"
+    },
+    {
+      "acl": "{postgres=X/postgres,service_role=X/postgres}",
+      "owner": "postgres",
+      "config": [
+        "search_path=public"
+      ],
+      "definer": true,
+      "identity": "advance_consignment(uuid,text)",
+      "definition": "CREATE OR REPLACE FUNCTION public.advance_consignment(p_consignment_id uuid, p_to_status text)\n RETURNS consignments\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\r\ndeclare v_manifest public.consignments;\r\nbegin\r\n  if not public.is_staff() then raise exception 'Staff access required'; end if;\r\n  select * into v_manifest from public.consignments where id = p_consignment_id for update;\r\n  if not found then raise exception 'Consignment not found'; end if;\r\n  if not (\r\n    (v_manifest.status = 'Packing_Italy' and p_to_status = 'In_Transit') or\r\n    (v_manifest.status = 'In_Transit' and p_to_status = 'Arrived_Manila')\r\n  ) then raise exception 'Invalid consignment transition'; end if;\r\n  if p_to_status = 'In_Transit' and exists (\r\n    select 1 from public.consignment_items\r\n    where consignment_id = p_consignment_id\r\n      and italy_packed_qty <> expected_qty\r\n  ) then raise exception 'Every expected unit must be scan-packed before transit'; end if;\r\n  update public.consignments\r\n  set status = p_to_status,\r\n      arrived_at = case when p_to_status = 'Arrived_Manila' then now() else arrived_at end\r\n  where id = p_consignment_id returning * into v_manifest;\r\n  return v_manifest;\r\nend;\r\n$function$\n"
+    },
+    {
+      "acl": "{postgres=X/postgres,service_role=X/postgres}",
+      "owner": "postgres",
+      "config": [
+        "search_path=public"
+      ],
+      "definer": true,
+      "identity": "create_consignment_manifest(text,text)",
+      "definition": "CREATE OR REPLACE FUNCTION public.create_consignment_manifest(p_manifest_code text, p_shipment_reference text)\n RETURNS consignments\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\r\ndeclare v_manifest public.consignments;\r\nbegin\r\n  if not public.is_staff() then raise exception 'Staff access required'; end if;\r\n  if nullif(trim(coalesce(p_manifest_code, '')), '') is null then\r\n    raise exception 'Manifest code is required';\r\n  end if;\r\n  insert into public.consignments (\r\n    manifest_code, flight_number, departure_city, destination_city, status\r\n  ) values (\r\n    trim(p_manifest_code),\r\n    coalesce(nullif(trim(p_shipment_reference), ''), 'Schedule not recorded'),\r\n    'Milan, Italy', 'Manila, Philippines', 'Packing_Italy'\r\n  ) returning * into v_manifest;\r\n  return v_manifest;\r\nend;\r\n$function$\n"
+    },
+    {
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "owner": "postgres",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "identity": "execute_admin_consignment_command_v1(text,bigint,uuid,uuid,text,text)",
+      "definition": "CREATE OR REPLACE FUNCTION public.execute_admin_consignment_command_v1(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)\n RETURNS jsonb\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare\n  v_actor uuid := auth.uid();\n  v_payload jsonb;\n  v_payload_hash text;\n  v_existing k2_private.admin_command_receipts;\n  v_manifest public.consignments;\n  v_item public.consignment_items;\n  v_result jsonb;\n  v_count integer;\n  v_inserted integer;\n  v_limit integer;\n  v_before jsonb;\n  v_today date := (transaction_timestamp() at time zone 'Asia/Manila')::date;\n  v_latest date := make_date(extract(year from v_today)::integer+10,\n    extract(month from v_today)::integer,1)+extract(day from v_today)::integer-1;\nbegin\n  if not k2_private.verify_admin_bff_request(\n    p_action,p_timestamp,p_nonce,p_idempotency_key,p_payload_text,p_signature\n  ) then\n    raise exception using errcode='28000',message='K2_ADMIN_REQUEST_REPLAYED';\n  end if;\n  if p_action not in (\n    'consignment_create','consignment_add_line','consignment_scan',\n    'consignment_advance','consignment_finalize','consignment_packing'\n  ) then\n    raise exception using errcode='22023',message='K2_ADMIN_ACTION_INVALID';\n  end if;\n\n  v_payload := p_payload_text::jsonb;\n  if jsonb_typeof(v_payload)<>'object' then\n    raise exception using errcode='22023',message='K2_ADMIN_PAYLOAD_INVALID';\n  end if;\n  v_payload_hash := encode(extensions.digest(convert_to(p_payload_text,'UTF8'),'sha256'),'hex');\n\n  select * into v_existing from k2_private.admin_command_receipts\n  where actor_id=v_actor and action=p_action and idempotency_key=p_idempotency_key;\n  if found then\n    if v_existing.payload_hash<>v_payload_hash then\n      raise exception using errcode='22023',message='K2_ADMIN_IDEMPOTENCY_CONFLICT';\n    end if;\n    if v_existing.result is null then\n      raise exception using errcode='55000',message='K2_ADMIN_COMMAND_IN_PROGRESS';\n    end if;\n    return v_existing.result;\n  end if;\n\n  v_limit := case when p_action in ('consignment_scan','consignment_packing') then 300 else 30 end;\n  select count(*)::integer into v_count from k2_private.admin_command_receipts\n  where actor_id=v_actor and action=p_action and created_at>now()-interval '1 minute';\n  if v_count>=v_limit then\n    raise exception using errcode='54000',message='K2_ADMIN_RATE_LIMITED';\n  end if;\n\n  insert into k2_private.admin_command_receipts(actor_id,action,idempotency_key,payload_hash)\n  values(v_actor,p_action,p_idempotency_key,v_payload_hash) on conflict do nothing;\n  get diagnostics v_inserted=row_count;\n  if v_inserted=0 then\n    select * into v_existing from k2_private.admin_command_receipts\n    where actor_id=v_actor and action=p_action and idempotency_key=p_idempotency_key;\n    if v_existing.payload_hash<>v_payload_hash then\n      raise exception using errcode='22023',message='K2_ADMIN_IDEMPOTENCY_CONFLICT';\n    end if;\n    if v_existing.result is null then\n      raise exception using errcode='55000',message='K2_ADMIN_COMMAND_IN_PROGRESS';\n    end if;\n    return v_existing.result;\n  end if;\n\n  if p_action='consignment_packing' then\n    v_result:=k2_private.apply_consignment_packing_v1(v_actor,v_payload);\n    update k2_private.admin_command_receipts set result=v_result,completed_at=now()\n      where actor_id=v_actor and action=p_action and idempotency_key=p_idempotency_key;\n    return v_result;\n  end if;\n  -- Historical receipts above remain replayable. Fresh dispatch must bind review.\n  if p_action='consignment_advance' and v_payload->>'toStatus'='In_Transit' then\n    raise exception 'K2_PACKING_REVIEW_STALE';\n  end if;\n  if p_action='consignment_create' then\n    if (v_payload-array['manifestCode','shipmentReference'])<>'{}'::jsonb\n       or length(trim(coalesce(v_payload->>'manifestCode',''))) not between 3 and 80\n       or length(trim(coalesce(v_payload->>'shipmentReference',''))) > 120 then\n      raise exception using errcode='22023',message='K2_ADMIN_PAYLOAD_INVALID';\n    end if;\n    select * into v_manifest from public.create_consignment_manifest(\n      trim(v_payload->>'manifestCode'),nullif(trim(v_payload->>'shipmentReference'),'')\n    );\n    insert into public.audit_logs(table_name,record_id,action,new_data,user_id)\n    values('consignments',v_manifest.id::text,'INSERT',jsonb_build_object(\n      'manifest_code',v_manifest.manifest_code,'shipment_reference',v_manifest.flight_number,\n      'status',v_manifest.status,'source','admin_bff'\n    ),v_actor);\n    v_result:=jsonb_build_object(\n      'consignmentId',v_manifest.id,'manifestCode',v_manifest.manifest_code,'status',v_manifest.status\n    );\n\n  elsif p_action='consignment_add_line' then\n    if (v_payload-array['consignmentId','sku','batchCode','boxCode','bestBeforeDate','expectedQty'])<>'{}'::jsonb\n       or coalesce(v_payload->>'consignmentId','') !~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'\n       or length(trim(coalesce(v_payload->>'sku',''))) not between 1 and 120\n       or length(trim(coalesce(v_payload->>'batchCode',''))) not between 1 and 120\n       or length(trim(coalesce(v_payload->>'boxCode',''))) not between 1 and 120\n       or coalesce(v_payload->>'bestBeforeDate','') !~ '^\\d{4}-\\d{2}-\\d{2}$'\n       or (v_payload->>'bestBeforeDate')::date < v_today\n       or (v_payload->>'bestBeforeDate')::date > v_latest\n       or jsonb_typeof(v_payload->'expectedQty')<>'number'\n       or (v_payload->>'expectedQty')::numeric<>trunc((v_payload->>'expectedQty')::numeric)\n       or (v_payload->>'expectedQty')::integer not between 1 and 100000\n       or not exists(select 1 from public.products p where p.sku=trim(v_payload->>'sku')) then\n      raise exception using errcode='22023',message='K2_ADMIN_PAYLOAD_INVALID';\n    end if;\n    select * into v_item from public.add_consignment_item_v2(\n      (v_payload->>'consignmentId')::uuid,trim(v_payload->>'sku'),\n      trim(v_payload->>'batchCode'),trim(v_payload->>'boxCode'),\n      (v_payload->>'bestBeforeDate')::date,(v_payload->>'expectedQty')::integer\n    );\n    insert into public.audit_logs(table_name,record_id,action,new_data,user_id)\n    values('consignment_items',v_item.id::text,'INSERT',jsonb_build_object(\n      'consignment_id',v_item.consignment_id,'sku',v_item.sku,'batch_code',v_item.batch_code,\n      'box_code',v_item.box_code,'best_before_date',v_item.best_before_date,\n      'expected_qty',v_item.expected_qty,'source','admin_bff'\n    ),v_actor);\n    v_result:=jsonb_build_object(\n      'itemId',v_item.id,'consignmentId',v_item.consignment_id,'sku',v_item.sku,\n      'expectedQty',v_item.expected_qty\n    );\n\n  elsif p_action='consignment_scan' then\n    if (v_payload-array['consignmentId','itemId','stage','scannedCode'])<>'{}'::jsonb\n       or coalesce(v_payload->>'consignmentId','') !~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'\n       or coalesce(v_payload->>'itemId','') !~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'\n       or coalesce(v_payload->>'stage','') not in ('milan','manila')\n       or length(trim(coalesce(v_payload->>'scannedCode',''))) not between 1 and 120 then\n      raise exception using errcode='22023',message='K2_ADMIN_PAYLOAD_INVALID';\n    end if;\n    select * into v_item from public.consignment_items\n    where id=(v_payload->>'itemId')::uuid and consignment_id=(v_payload->>'consignmentId')::uuid;\n    if not found then\n      raise exception using errcode='22023',message='K2_ADMIN_PAYLOAD_INVALID';\n    end if;\n    if lower(trim(v_payload->>'scannedCode'))<>lower(v_item.sku)\n       and not exists(\n         select 1 from public.products p where p.sku=v_item.sku\n         and nullif(trim(p.barcode),'') is not null\n         and lower(trim(p.barcode))=lower(trim(v_payload->>'scannedCode'))\n       ) then\n      raise exception using errcode='22023',message='K2_SCAN_CODE_MISMATCH';\n    end if;\n    select * into v_item from public.record_consignment_item_scan(\n      v_item.consignment_id,v_item.id,v_payload->>'stage'\n    );\n    v_result:=jsonb_build_object(\n      'itemId',v_item.id,'consignmentId',v_item.consignment_id,'sku',v_item.sku,\n      'stage',v_payload->>'stage','expectedQty',v_item.expected_qty,\n      'italyPackedQty',v_item.italy_packed_qty,'manilaScannedQty',v_item.manila_scanned_qty,\n      'status',v_item.status\n    );\n\n  elsif p_action='consignment_advance' then\n    if (v_payload-array['consignmentId','toStatus','reason'])<>'{}'::jsonb\n       or coalesce(v_payload->>'consignmentId','') !~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'\n       or coalesce(v_payload->>'toStatus','') not in ('In_Transit','Arrived_Manila')\n       or length(trim(coalesce(v_payload->>'reason',''))) not between 10 and 500 then\n      raise exception using errcode='22023',message='K2_ADMIN_PAYLOAD_INVALID';\n    end if;\n    select to_jsonb(c) into v_before from public.consignments c\n    where c.id=(v_payload->>'consignmentId')::uuid;\n    select * into v_manifest from public.advance_consignment(\n      (v_payload->>'consignmentId')::uuid,v_payload->>'toStatus'\n    );\n    insert into public.audit_logs(table_name,record_id,action,old_data,new_data,user_id)\n    values('consignments',v_manifest.id::text,'UPDATE',v_before,jsonb_build_object(\n      'status',v_manifest.status,'reason',trim(v_payload->>'reason'),'source','admin_bff'\n    ),v_actor);\n    v_result:=jsonb_build_object(\n      'consignmentId',v_manifest.id,'status',v_manifest.status,'reasonRecorded',true\n    );\n\n  else\n    if (v_payload-array['consignmentId','notes','hub','custodian'])<>'{}'::jsonb\n       or jsonb_typeof(v_payload->'notes') is distinct from 'string'\n       or jsonb_typeof(v_payload->'hub') is distinct from 'string'\n       or jsonb_typeof(v_payload->'custodian') is distinct from 'string'\n       or length(trim(coalesce(v_payload->>'hub',''))) not between 1 and 120\n       or length(trim(coalesce(v_payload->>'custodian',''))) not between 1 and 120\n       or coalesce(v_payload->>'consignmentId','') !~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'\n       or length(trim(coalesce(v_payload->>'notes',''))) not between 10 and 1000 then\n      raise exception using errcode='22023',message='K2_ADMIN_PAYLOAD_INVALID';\n    end if;\n    select to_jsonb(c) into v_before from public.consignments c\n    where c.id=(v_payload->>'consignmentId')::uuid;\n    select * into v_manifest from k2_private.finalize_consignment_receipt_v1(\n      (v_payload->>'consignmentId')::uuid,trim(v_payload->>'notes'),trim(v_payload->>'hub'),trim(v_payload->>'custodian')\n    );\n    insert into public.audit_logs(table_name,record_id,action,old_data,new_data,user_id)\n    values('consignments',v_manifest.id::text,'UPDATE',v_before,jsonb_build_object(\n      'status',v_manifest.status,'receipt_notes',trim(v_payload->>'notes'),'hub',trim(v_payload->>'hub'),'custodian',trim(v_payload->>'custodian'),'source','admin_bff'\n    ),v_actor);\n    v_result:=jsonb_build_object(\n      'consignmentId',v_manifest.id,'status',v_manifest.status,'inventoryFinalized',true\n    );\n  end if;\n\n  update k2_private.admin_command_receipts set result=v_result,completed_at=now()\n  where actor_id=v_actor and action=p_action and idempotency_key=p_idempotency_key;\n  return v_result;\nend;\n$function$\n"
+    },
+    {
+      "acl": "{postgres=X/postgres}",
+      "owner": "postgres",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "identity": "generate_k2_sku_internal()",
+      "definition": "CREATE OR REPLACE FUNCTION public.generate_k2_sku_internal()\n RETURNS text\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare\n  v_sku text;\nbegin\n  loop\n    v_sku := 'K2-SKU-' || lpad(nextval('public.k2_sku_seq'::regclass)::text, 6, '0');\n    exit when not exists (\n      select 1 from public.products where upper(sku) = upper(v_sku)\n    );\n  end loop;\n  return v_sku;\nend;\n$function$\n"
+    },
+    {
+      "acl": "{postgres=X/postgres}",
+      "owner": "postgres",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "identity": "k2_private.apply_consignment_packing_v1(uuid,jsonb)",
+      "definition": "CREATE OR REPLACE FUNCTION k2_private.apply_consignment_packing_v1(p_actor uuid, p jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare c public.consignments; i public.consignment_items; product public.products;\n op text:=p->>'operation'; before_row jsonb; code text:=trim(p->>'code'); matches integer;\n delta integer; expiry date; sku text; removed jsonb; stamp date:=(clock_timestamp() at time zone 'Asia/Manila')::date;\nbegin\n if p_actor is distinct from auth.uid() or public.is_staff() is distinct from true\n   or coalesce(auth.jwt()->>'aal','')<>'aal2' then raise exception using errcode='42501',message='K2_STAFF_REQUIRED'; end if;\n select * into c from public.consignments where id=(p->>'consignmentId')::uuid for update;\n if not found or c.status<>'Packing_Italy' then raise exception 'K2_PACKING_CLOSED'; end if;\n if op='reopen' then\n  if c.packing_cancelled_at is null then raise exception 'K2_PACKING_CLOSED'; end if;\n elsif c.packing_cancelled_at is not null then raise exception 'K2_PACKING_CLOSED'; end if;\n if op<>'count' then\n  if jsonb_typeof(p->'packingRevision') is distinct from 'number'\n    or (p->>'packingRevision')::numeric<>c.packing_revision then raise exception 'K2_PACKING_REVIEW_STALE'; end if;\n  if length(trim(coalesce(p->>'reason',''))) not between 1 and 500 then raise exception 'K2_ADMIN_PAYLOAD_INVALID'; end if;\n end if;\n if op='count' then\n  if (p-array['operation','consignmentId','itemId','code','boxCode','batchCode','bestBeforeDate','delta','source'])<>'{}'\n    or p->>'source' not in ('barcode','counter') or jsonb_typeof(p->'delta') is distinct from 'number'\n    or (p->>'delta')::numeric not in (-1,1) or length(coalesce(code,'')) not between 1 and 120\n    or length(trim(coalesce(p->>'boxCode',''))) not between 1 and 120\n    or length(trim(coalesce(p->>'batchCode',''))) not between 1 and 120 then raise exception 'K2_ADMIN_PAYLOAD_INVALID'; end if;\n  delta:=(p->>'delta')::integer;\n  expiry:=(p->>'bestBeforeDate')::date;\n  if expiry is null or expiry<stamp or expiry>(stamp+interval '10 years')::date then raise exception 'K2_PACKING_DATE_INVALID'; end if;\n  if p->>'itemId' is not null then\n   select * into i from public.consignment_items where id=(p->>'itemId')::uuid and consignment_id=c.id for update;\n   if not found then raise exception 'K2_PACKING_LOT_MISMATCH'; end if;\n   if i.packing_removed_at is not null then raise exception 'K2_PACKING_ITEM_REMOVED'; end if;\n   if row(i.box_code,i.batch_code,i.best_before_date) is distinct from row(trim(p->>'boxCode'),trim(p->>'batchCode'),expiry)\n     then raise exception 'K2_PACKING_LOT_MISMATCH'; end if;\n   select * into product from public.products where products.sku=i.sku;\n   if lower(code)<>lower(i.sku) and lower(code) is distinct from lower(trim(product.barcode)) then raise exception 'K2_SCAN_CODE_MISMATCH'; end if;\n  else\n   if delta<>1 or p->>'source'<>'barcode' then raise exception 'K2_ADMIN_PAYLOAD_INVALID'; end if;\n   -- Cooperate with the canonical Draft and Product Master barcode admission lock.\n   perform pg_advisory_xact_lock(hashtextextended('k2.draft.barcode:'||lower(code),0));\n   select count(*) into matches from public.products where lower(trim(products.barcode))=lower(code) or lower(products.sku)=lower(code);\n   if matches>1 then raise exception 'K2_PACKING_IDENTITY_AMBIGUOUS'; end if;\n   select * into product from public.products where lower(trim(products.barcode))=lower(code) or lower(products.sku)=lower(code);\n   if not found then\n    if length(code)>32 or code !~ '^[A-Za-z0-9][A-Za-z0-9._-]{2,31}$' or lower(code) like 'k2-sku-%' then raise exception 'K2_PACKING_BARCODE_REQUIRED'; end if;\n    sku:=public.generate_k2_sku_internal();\n    insert into public.products(sku,barcode,name,status,published,is_human_reviewed,slug,internal_notes)\n    values(sku,code,'Unreviewed item '||code,'Draft',false,false,lower(sku),\n      'Unfinished packing Draft. Barcode observed during Italy packing; product details require human review.') returning * into product;\n    insert into public.audit_logs(table_name,record_id,action,new_data,user_id)\n    values('products',product.id::text,'INSERT',jsonb_build_object('source','milan_packing','sku',product.sku,'barcode',code,'is_human_reviewed',false),p_actor);\n   end if;\n   select * into i from public.consignment_items where consignment_id=c.id and consignment_items.sku=product.sku\n     and box_code=trim(p->>'boxCode') and batch_code=trim(p->>'batchCode') for update;\n   if found then\n    if i.packing_removed_at is not null then raise exception 'K2_PACKING_ITEM_REMOVED'; end if;\n    if i.best_before_date<>expiry then raise exception 'K2_PACKING_LOT_MISMATCH'; end if;\n   else\n    insert into public.consignment_items(consignment_id,sku,batch_code,box_code,best_before_date,expected_qty,packing_count_only)\n      values(c.id,product.sku,trim(p->>'batchCode'),trim(p->>'boxCode'),expiry,0,true) returning * into i;\n   end if;\n  end if;\n  if i.italy_packed_qty+delta not between 0 and 100000 then raise exception 'K2_PACKING_COUNT_INVALID'; end if;\n  before_row:=to_jsonb(i);\n  update public.consignment_items set italy_packed_qty=italy_packed_qty+delta where id=i.id returning * into i;\n elsif op in ('remove','restore') then\n  if (p-array['operation','consignmentId','itemId','packingRevision','reason'])<>'{}' then raise exception 'K2_ADMIN_PAYLOAD_INVALID'; end if;\n  select * into i from public.consignment_items where id=(p->>'itemId')::uuid and consignment_id=c.id for update;\n  if not found or i.manila_scanned_qty<>0 then raise exception 'K2_PACKING_LOT_MISMATCH'; end if;\n  before_row:=to_jsonb(i);\n  if op='remove' then\n   if i.packing_removed_at is not null then raise exception 'K2_PACKING_ITEM_REMOVED'; end if;\n   update public.consignment_items set packing_removed_snapshot=before_row,packing_removed_at=clock_timestamp(),\n      expected_qty=0,italy_packed_qty=0 where id=i.id returning * into i;\n  else\n   removed:=i.packing_removed_snapshot;\n   if i.packing_removed_at is null or removed is null then raise exception 'K2_PACKING_LOT_MISMATCH'; end if;\n   update public.consignment_items set expected_qty=(removed->>'expected_qty')::integer,\n     italy_packed_qty=(removed->>'italy_packed_qty')::integer,packing_removed_at=null,packing_removed_snapshot=null where id=i.id returning * into i;\n  end if;\n elsif op in ('cancel','reopen','dispatch') then\n  if (p-array['operation','consignmentId','packingRevision','reason','acknowledgeVariance'])<>'{}' then raise exception 'K2_ADMIN_PAYLOAD_INVALID'; end if;\n  before_row:=to_jsonb(c);\n  if op='dispatch' then\n   if not exists(select 1 from public.consignment_items where consignment_id=c.id and packing_removed_at is null and italy_packed_qty>0)\n      then raise exception 'K2_PACKING_EMPTY'; end if;\n   if exists(select 1 from public.consignment_items where consignment_id=c.id and packing_removed_at is null\n     and not packing_count_only and expected_qty<>italy_packed_qty) and coalesce(p->'acknowledgeVariance','false'::jsonb)<>'true'::jsonb\n      then raise exception 'K2_PACKING_VARIANCE_REQUIRED'; end if;\n   update public.consignments set status='In_Transit',packed_at=clock_timestamp(),packing_revision=packing_revision+1 where id=c.id;\n  else\n   update public.consignments set packing_cancelled_at=case when op='cancel' then clock_timestamp() else null end,\n     packing_revision=packing_revision+1 where id=c.id;\n  end if;\n else raise exception 'K2_ADMIN_PAYLOAD_INVALID';\n end if;\n if i.id is not null then\n  insert into public.audit_logs(table_name,record_id,action,old_data,new_data,user_id)\n   values('consignment_items',i.id::text,'UPDATE',before_row,to_jsonb(i)||jsonb_build_object('packing_operation',op,'source',p->>'source','reason',p->>'reason'),p_actor);\n else\n  insert into public.audit_logs(table_name,record_id,action,old_data,new_data,user_id)\n   select 'consignments',c.id::text,'UPDATE',before_row,to_jsonb(x)||jsonb_build_object('packing_operation',op,'reason',p->>'reason'),p_actor from public.consignments x where id=c.id;\n end if;\n select * into c from public.consignments where id=c.id;\n return jsonb_build_object('consignmentId',c.id,'operation',op,'itemId',i.id,'sku',i.sku,\n  'italyPackedQty',i.italy_packed_qty,'packingRevision',c.packing_revision,'status',c.status,'historicalReceipt',true);\nend $function$\n"
+    },
+    {
+      "acl": "{postgres=X/postgres}",
+      "owner": "postgres",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "identity": "k2_private.finalize_consignment_receipt_v1(uuid,text,text,text)",
+      "definition": "CREATE OR REPLACE FUNCTION k2_private.finalize_consignment_receipt_v1(p_consignment_id uuid, p_notes text, p_hub text, p_custodian text)\n RETURNS consignments\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare v_manifest public.consignments; v_item public.consignment_items; v_balance public.inventory_balances; v_missing integer; v_status text;\n  v_saved public.product_batches; v_before_balance public.inventory_balances;\n  v_sku text; v_sellable integer;\n  v_today date; v_instant timestamptz; v_depth integer; v_minimum integer; v_days numeric;\nbegin\n  if not public.is_staff() then raise exception 'Staff access required'; end if;\n  perform k2_private.lock_category_policy_v1(false);\n  select maximum_depth into v_depth from k2_private.category_policy_command_config where singleton;\n  if v_depth is null or v_depth<1 then\n    raise exception using errcode='55000',message='K2_CATEGORY_POLICY_NOT_CONFIGURED';\n  end if;\n  if not exists(select 1 from public.hubs h join public.custodians c on c.hub_id=h.id\n    where h.id=p_hub and h.id='HUB-MNL-CENTRAL' and h.country='PH' and c.id=p_custodian) then\n    raise exception 'K2_RECEIVING_CUSTODY_INVALID'; end if;\n  select * into v_manifest from public.consignments where id = p_consignment_id for update;\n  if not found then raise exception 'Consignment not found'; end if;\n  if v_manifest.status = 'Completed' then raise exception 'K2_RECEIVING_ALREADY_COMPLETED'; end if;\n  if v_manifest.status <> 'Arrived_Manila' then raise exception 'Consignment must be in Arrived Manila state'; end if;\n  if not exists (select 1 from public.consignment_items where consignment_id = p_consignment_id) then raise exception 'Cannot finalize an empty manifest'; end if;\n\n  -- Acquire every common SKU balance before product/lot work, in SKU order.\n  for v_sku in select distinct sku from public.consignment_items where consignment_id=p_consignment_id order by sku\n  loop\n    insert into public.inventory_balances(sku,location_code,on_hand,reserved)\n    select v_sku,'MANILA_MAIN',coalesce(sum(b.quantity),0)::integer,coalesce(sum(b.reserved_quantity),0)::integer\n    from public.product_batches b where b.sku=v_sku\n    on conflict(sku,location_code) do nothing;\n    perform 1 from public.inventory_balances where sku=v_sku and location_code='MANILA_MAIN' for update;\n  end loop;\n  perform 1 from public.products where sku in (select sku from public.consignment_items where consignment_id=p_consignment_id)\n    order by sku for update;\n  perform 1 from public.consignment_items where consignment_id=p_consignment_id order by sku,id for update;\n  perform 1 from public.product_batches where sku in (\n    select sku from public.consignment_items where consignment_id=p_consignment_id\n  ) order by sku,id for update;\n  -- One internal server instant after every existing affected resource lock.\n  v_instant:=k2_private.start_category_lot_context_v1(v_depth);\n  v_today:=(v_instant at time zone 'Asia/Manila')::date;\n  for v_item in select * from public.consignment_items where consignment_id = p_consignment_id order by sku,id for update\n  loop\n    select * into v_before_balance from public.inventory_balances where sku=v_item.sku and location_code='MANILA_MAIN';\n    if v_item.manila_scanned_qty > 0 then\n      select k2_private.effective_category_minimum_v1(p.category_id,v_depth) into v_minimum\n      from public.products p where p.sku=v_item.sku;\n      if v_minimum is null then\n        raise exception using errcode='23514',message='K2_CATEGORY_POLICY_TAXONOMY_INVALID';\n      end if;\n      v_days:=null;\n      if v_item.best_before_date is not null and pg_catalog.isfinite(v_item.best_before_date) then\n        v_days:=(v_item.best_before_date-date '2000-01-01')::numeric-(v_today-date '2000-01-01')::numeric;\n      end if;\n      v_status := case when v_days>=v_minimum then 'available' else 'quarantine' end;\n      insert into public.product_batches (\n        sku, box_code, batch_code, quantity, quantity_available, reserved_quantity,\n        expiry_date, best_before_date, landed_date, hub, custodian, arrival_flight,\n        inventory_status, source_consignment_item_id, unit_cost, updated_at\n      ) values (\n        v_item.sku, v_item.box_code, v_item.batch_code,\n        v_item.manila_scanned_qty, v_item.manila_scanned_qty, 0,\n        v_item.best_before_date, v_item.best_before_date, v_today,\n        p_hub, p_custodian, v_manifest.manifest_code, v_status, v_item.id, v_item.unit_cost, now()\n      ) returning * into v_saved;\n      insert into public.inventory_balances (sku, location_code, on_hand)\n      values (v_item.sku, 'MANILA_MAIN', v_item.manila_scanned_qty)\n      on conflict (sku, location_code) do update set on_hand = inventory_balances.on_hand + excluded.on_hand, updated_at = now();\n      select * into v_balance from public.inventory_balances where sku = v_item.sku and location_code = 'MANILA_MAIN';\n      perform set_config('k2.allow_stock_write', 'on', true);\n      select coalesce(sum(greatest(b.quantity-b.reserved_quantity,0)),0)::integer into v_sellable\n      from public.product_batches b where b.sku=v_item.sku and k2_private.lot_is_eligible_for_category_v1(b,v_depth,v_instant);\n      update public.products set stock_available=v_sellable,total_stock=v_sellable where sku=v_item.sku;\n      insert into public.inventory_events (sku, location_code, event_type, quantity, reference_type, reference_id, reason, actor_id, metadata)\n      values (v_item.sku, 'MANILA_MAIN', 'received', v_item.manila_scanned_qty, 'consignment', v_manifest.id,\n        p_notes, auth.uid(), jsonb_build_object('manifest', v_manifest.manifest_code, 'batch_code', v_item.batch_code,\n        'box_code', v_item.box_code, 'inventory_status', v_saved.inventory_status,\n        'batch_id',v_saved.id,'source_consignment_item_id',v_item.id,'hub',v_saved.hub,'custodian',v_saved.custodian,\n        'quantity_available',v_saved.quantity_available,'batch_after',to_jsonb(v_saved),\n        'balance_before',to_jsonb(v_before_balance),'balance_after',to_jsonb(v_balance)));\n    end if;\n    v_missing := v_item.italy_packed_qty - v_item.manila_scanned_qty;\n    if v_missing > 0 then\n      insert into public.inventory_events (sku, location_code, event_type, quantity, reference_type, reference_id, reason, actor_id, metadata)\n      values (v_item.sku, 'MANILA_MAIN', 'reconciled', v_missing, 'consignment', v_manifest.id,\n        p_notes, auth.uid(), jsonb_build_object('result', 'missing_on_arrival', 'manifest', v_manifest.manifest_code,\n        'batch_code', v_item.batch_code, 'box_code', v_item.box_code,\n        'source_consignment_item_id',v_item.id,'hub',p_hub,'custodian',p_custodian,\n        'expected_qty',v_item.expected_qty,'italy_packed_qty',v_item.italy_packed_qty,'manila_scanned_qty',v_item.manila_scanned_qty));\n    end if;\n  end loop;\n  update public.consignments set status = 'Completed', arrived_at = coalesce(arrived_at, now())\n  where id = p_consignment_id returning * into v_manifest;\n  perform k2_private.clear_category_lot_context_v1();\n  return v_manifest;\nend;\n$function$\n"
+    },
+    {
+      "acl": "{postgres=X/postgres}",
+      "owner": "postgres",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "identity": "k2_private.guard_consignment_packing_line_v1()",
+      "definition": "CREATE OR REPLACE FUNCTION k2_private.guard_consignment_packing_line_v1()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare c public.consignments;\nbegin\n if tg_op='DELETE' then raise exception 'K2_PACKING_HISTORY_PROTECTED'; end if;\n if tg_op='UPDATE' and new.consignment_id is distinct from old.consignment_id then raise exception 'K2_PACKING_LOT_MISMATCH'; end if;\n select * into c from public.consignments where id=new.consignment_id for update;\n if not found then raise exception 'K2_PACKING_LOT_MISMATCH'; end if;\n if tg_op='INSERT' or row(new.sku,new.batch_code,new.box_code,new.best_before_date,new.expected_qty,new.italy_packed_qty,\n   new.packing_count_only,new.packing_removed_at,new.packing_removed_snapshot)\n   is distinct from row(old.sku,old.batch_code,old.box_code,old.best_before_date,old.expected_qty,old.italy_packed_qty,\n   old.packing_count_only,old.packing_removed_at,old.packing_removed_snapshot) then\n  if c.status<>'Packing_Italy' or c.packing_cancelled_at is not null then raise exception 'K2_PACKING_CLOSED'; end if;\n  update public.consignments set packing_revision=packing_revision+1 where id=c.id;\n end if;\n return new;\nend $function$\n"
+    },
+    {
+      "acl": "{postgres=X/postgres}",
+      "owner": "postgres",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "identity": "k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)",
+      "definition": "CREATE OR REPLACE FUNCTION k2_private.verify_admin_bff_request(p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text)\n RETURNS boolean\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare\n  v_actor uuid := auth.uid();\n  v_secret bytea;\n  v_payload_hash text;\n  v_expected text;\n  v_message text;\n  v_bucket_start timestamptz;\n  v_actor_hits integer;\n  v_global_hits integer;\nbegin\n  if v_actor is null or not public.is_staff() then\n    raise exception using errcode='42501',message='K2_ADMIN_ACCESS_REQUIRED';\n  end if;\n  if coalesce(auth.jwt()->>'aal','')<>'aal2' then\n    raise exception using errcode='42501',message='K2_ADMIN_AAL2_REQUIRED';\n  end if;\n  if p_action is null or p_timestamp is null or p_nonce is null\n     or p_idempotency_key is null or p_payload_text is null or p_signature is null then\n    raise exception using errcode='22023',message='K2_ADMIN_REQUEST_INVALID';\n  end if;\n  if p_action not in ('reference_create','cancel_order','delivery_express_quote','delivery_customer_rates_publish',\n    'confirm_order', 'packing_scan', 'payment_status', 'delivery_details',\n    'fulfill_order', 'transfer_lot', 'assign_box',\n    'inbox_internal_note', 'inbox_mark_read', 'inbox_workflow',\n    'pasabuy_transition', 'pasabuy_quote',\n    'intake_session_create', 'intake_session_step', 'intake_draft',\n    'intake_inventory', 'intake_publication', 'intake_evidence_register',\n    'consignment_create', 'consignment_add_line', 'consignment_scan',\n    'consignment_advance', 'consignment_finalize','consignment_packing',\n    'lots_reconcile', 'lot_clearance',\n    'coupon_create', 'coupon_state', 'coupon_archive',\n    'admin_session_register', 'admin_session_validate',\n    'admin_session_revoke_current', 'admin_session_revoke_one', 'admin_session_revoke_all',\n    'admin_session_list',\n    'catalog_import_chunk',\n    'wholesale_inquiry_review',\n    'admin_mfa_replacement_requested', 'admin_mfa_replacement_completed',\n    'product_media_upload', 'product_media_assign', 'product_media_cleanup_complete',\n    'product_media_orphan_cleanup', 'product_media_orphan_cleanup_complete',\n    'globe_config_update', 'review_create', 'review_update', 'review_publish', 'review_withdraw',\n    'supplier_create',\n    'channel_internal_event_verify', 'website_listing_set',\n    'staff_role_change', 'admin_delete_pin_set',\n    'product_sku_merge', 'product_master_update', 'product_master_status', 'product_master_delete',\n    'category_policy_set', 'category_policy_clear',\n    'inbox_send_reply', 'product_knowledge_save', 'product_family_save',\n    'ai_spend_controls_update'\n  ) then\n    raise exception using errcode='22023',message='K2_ADMIN_ACTION_INVALID';\n  end if;\n  if p_payload_text is null or octet_length(convert_to(p_payload_text, 'UTF8')) >\n       (case when p_action='catalog_import_chunk' then 1048576 else 16384 end)\n     or p_signature !~ '^[0-9a-f]{64}$' then\n    raise exception using errcode='22023',message='K2_ADMIN_REQUEST_INVALID';\n  end if;\n  if abs(extract(epoch from clock_timestamp())::bigint - p_timestamp)>300 then\n    raise exception using errcode='28000',message='K2_ADMIN_SIGNATURE_EXPIRED';\n  end if;\n  select request_secret into v_secret\n  from k2_private.admin_bff_secrets where singleton = true;\n  if v_secret is null then\n    raise exception using errcode='55000', message='K2_ADMIN_BOUNDARY_NOT_CONFIGURED';\n  end if;\n\n  v_payload_hash := encode(extensions.digest(convert_to(p_payload_text, 'UTF8'), 'sha256'), 'hex');\n  v_message := p_action || E'\\n' || p_timestamp::text || E'\\n' || p_nonce::text\n    || E'\\n' || v_actor::text || E'\\n' || p_idempotency_key::text || E'\\n' || v_payload_hash;\n  v_expected := encode(extensions.hmac(convert_to(v_message, 'UTF8'), v_secret, 'sha256'), 'hex');\n  if extensions.digest(convert_to(v_expected, 'UTF8'), 'sha256')\n     <> extensions.digest(convert_to(p_signature, 'UTF8'), 'sha256') then\n    raise exception using errcode='28000', message='K2_ADMIN_SIGNATURE_INVALID';\n  end if;\n\n  v_bucket_start := date_trunc('minute', clock_timestamp());\n  delete from k2_private.admin_request_rate_buckets\n  where bucket_start < v_bucket_start - interval '1 day';\n  insert into k2_private.admin_request_rate_buckets(scope, subject, bucket_start, hit_count)\n  values ('actor', v_actor::text, v_bucket_start, 1)\n  on conflict (scope, subject, bucket_start) do update\n    set hit_count = k2_private.admin_request_rate_buckets.hit_count + 1\n  returning hit_count into v_actor_hits;\n  if v_actor_hits > 360 then\n    raise exception using errcode='54000', message='K2_ADMIN_RATE_LIMITED';\n  end if;\n  insert into k2_private.admin_request_rate_buckets(scope, subject, bucket_start, hit_count)\n  values ('global', 'all_admin_requests', v_bucket_start, 1)\n  on conflict (scope, subject, bucket_start) do update\n    set hit_count = k2_private.admin_request_rate_buckets.hit_count + 1\n  returning hit_count into v_global_hits;\n  if v_global_hits > 6000 then\n    raise exception using errcode='54000', message='K2_ADMIN_RATE_LIMITED';\n  end if;\n\n  delete from k2_private.admin_request_nonces where expires_at<=now();\n  insert into k2_private.admin_request_nonces(actor_id,action,nonce,expires_at,verified_backend_pid,verified_transaction_id)\n  values(v_actor,p_action,p_nonce,now()+interval '10 minutes',pg_backend_pid(),pg_current_xact_id()) on conflict do nothing;\n  return found;\nend;\n$function$\n"
+    },
+    {
+      "acl": "{postgres=X/postgres,service_role=X/postgres}",
+      "owner": "postgres",
+      "config": [
+        "search_path=public"
+      ],
+      "definer": true,
+      "identity": "record_consignment_item_scan(uuid,uuid,text)",
+      "definition": "CREATE OR REPLACE FUNCTION public.record_consignment_item_scan(p_consignment_id uuid, p_consignment_item_id uuid, p_stage text)\n RETURNS consignment_items\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\r\ndeclare v_manifest public.consignments; v_item public.consignment_items; v_result integer;\r\nbegin\r\n  if not public.is_staff() then raise exception 'Staff access required'; end if;\r\n  select * into v_manifest from public.consignments where id = p_consignment_id for update;\r\n  if not found then raise exception 'Consignment not found'; end if;\r\n  select * into v_item from public.consignment_items\r\n  where id = p_consignment_item_id and consignment_id = p_consignment_id for update;\r\n  if not found then raise exception 'Manifest line not found'; end if;\r\n  if p_stage = 'milan' then\r\n    if v_manifest.status <> 'Packing_Italy' then raise exception 'Milan packing is closed'; end if;\r\n    if v_item.italy_packed_qty >= v_item.expected_qty then raise exception 'Packed scans cannot exceed expected quantity'; end if;\n    update public.consignment_items set italy_packed_qty = italy_packed_qty + 1\r\n    where id = v_item.id returning * into v_item;\r\n    v_result := v_item.italy_packed_qty;\r\n  elsif p_stage = 'manila' then\r\n    if v_manifest.status <> 'Arrived_Manila' then raise exception 'Consignment is not ready for Manila receiving'; end if;\r\n    if v_item.manila_scanned_qty >= v_item.italy_packed_qty then raise exception 'Received scans cannot exceed Milan packed quantity'; end if;\r\n    update public.consignment_items set manila_scanned_qty = manila_scanned_qty + 1,\r\n      status = case when manila_scanned_qty + 1 = italy_packed_qty then 'Matched' else 'Discrepancy' end\r\n    where id = v_item.id returning * into v_item;\r\n    v_result := v_item.manila_scanned_qty;\r\n  else raise exception 'Stage must be milan or manila';\r\n  end if;\r\n  insert into public.consignment_scan_events (\r\n    consignment_id, consignment_item_id, sku, stage, resulting_qty, actor_id\r\n  ) values (v_manifest.id, v_item.id, v_item.sku, p_stage, v_result, auth.uid());\r\n  return v_item;\r\nend;\r\n$function$\n"
+    }
+  ],
+  "relations": [
+    {
+      "acl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres,authenticated=r/postgres}",
+      "rls": true,
+      "name": "consignment_items",
+      "owner": "postgres",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notNull": true
+        },
+        {
+          "name": "consignment_id",
+          "type": "uuid",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "sku",
+          "type": "text",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "batch_code",
+          "type": "text",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "best_before_date",
+          "type": "date",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "expected_qty",
+          "type": "integer",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "italy_packed_qty",
+          "type": "integer",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "manila_scanned_qty",
+          "type": "integer",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "default": "'Pending'::text",
+          "notNull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notNull": true
+        },
+        {
+          "name": "box_code",
+          "type": "text",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "unit_cost",
+          "type": "numeric",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "packing_count_only",
+          "type": "boolean",
+          "default": "false",
+          "notNull": true
+        },
+        {
+          "name": "packing_removed_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "packing_removed_snapshot",
+          "type": "jsonb",
+          "default": null,
+          "notNull": false
+        }
+      ],
+      "forceRls": false,
+      "triggers": [
+        "CREATE TRIGGER k2_packing_line_guard BEFORE INSERT OR DELETE OR UPDATE ON public.consignment_items FOR EACH ROW EXECUTE FUNCTION k2_private.guard_consignment_packing_line_v1()"
+      ],
+      "constraints": [
+        "FOREIGN KEY (consignment_id) REFERENCES consignments(id) ON DELETE CASCADE",
+        "CHECK ((expected_qty >= 0))",
+        "CHECK ((italy_packed_qty >= 0))",
+        "CHECK ((manila_scanned_qty >= 0))",
+        "PRIMARY KEY (id)",
+        "FOREIGN KEY (sku) REFERENCES products(sku) ON DELETE RESTRICT",
+        "CHECK ((status = ANY (ARRAY['Pending'::text, 'Matched'::text, 'Discrepancy'::text])))",
+        "CHECK (((unit_cost >= (0)::numeric) AND (unit_cost <= (10000000)::numeric)))"
+      ]
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres,authenticated=r/postgres}",
+      "rls": true,
+      "name": "consignments",
+      "owner": "postgres",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notNull": true
+        },
+        {
+          "name": "manifest_code",
+          "type": "text",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "flight_number",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "departure_city",
+          "type": "text",
+          "default": "'Milan, Italy'::text",
+          "notNull": true
+        },
+        {
+          "name": "destination_city",
+          "type": "text",
+          "default": "'Manila, Philippines'::text",
+          "notNull": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "default": "'Packing_Italy'::text",
+          "notNull": true
+        },
+        {
+          "name": "packed_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notNull": false
+        },
+        {
+          "name": "arrived_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notNull": true
+        },
+        {
+          "name": "packing_revision",
+          "type": "bigint",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "packing_cancelled_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notNull": false
+        }
+      ],
+      "forceRls": false,
+      "triggers": null,
+      "constraints": [
+        "UNIQUE (manifest_code)",
+        "CHECK ((packing_revision >= 0))",
+        "PRIMARY KEY (id)",
+        "CHECK ((status = ANY (ARRAY['Packing_Italy'::text, 'In_Transit'::text, 'Arrived_Manila'::text, 'Completed'::text])))"
+      ]
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres,authenticated=r/postgres}",
+      "rls": true,
+      "name": "inventory_balances",
+      "owner": "postgres",
+      "columns": [
+        {
+          "name": "sku",
+          "type": "text",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "location_code",
+          "type": "text",
+          "default": "'MANILA_MAIN'::text",
+          "notNull": true
+        },
+        {
+          "name": "on_hand",
+          "type": "integer",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "reserved",
+          "type": "integer",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "in_transit",
+          "type": "integer",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "damaged",
+          "type": "integer",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "expired",
+          "type": "integer",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "unaccounted",
+          "type": "integer",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "available",
+          "type": "integer",
+          "default": "GREATEST(((((on_hand - reserved) - damaged) - expired) - unaccounted), 0)",
+          "notNull": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notNull": true
+        }
+      ],
+      "forceRls": false,
+      "triggers": null,
+      "constraints": [
+        "CHECK ((damaged >= 0))",
+        "CHECK ((expired >= 0))",
+        "CHECK ((in_transit >= 0))",
+        "CHECK ((on_hand >= 0))",
+        "PRIMARY KEY (sku, location_code)",
+        "CHECK ((reserved >= 0))",
+        "FOREIGN KEY (sku) REFERENCES products(sku) ON DELETE CASCADE",
+        "CHECK ((unaccounted >= 0))",
+        "CHECK (((((reserved + damaged) + expired) + unaccounted) <= on_hand))"
+      ]
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres,authenticated=r/postgres}",
+      "rls": true,
+      "name": "inventory_events",
+      "owner": "postgres",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notNull": true
+        },
+        {
+          "name": "sku",
+          "type": "text",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "location_code",
+          "type": "text",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "event_type",
+          "type": "text",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "quantity",
+          "type": "integer",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "reference_type",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "reference_id",
+          "type": "uuid",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "actor_id",
+          "type": "uuid",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "metadata",
+          "type": "jsonb",
+          "default": "'{}'::jsonb",
+          "notNull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notNull": true
+        }
+      ],
+      "forceRls": false,
+      "triggers": [
+        "CREATE TRIGGER trg_inventory_events_immutable BEFORE DELETE OR UPDATE ON public.inventory_events FOR EACH ROW EXECUTE FUNCTION reject_event_mutation()"
+      ],
+      "constraints": [
+        "FOREIGN KEY (actor_id) REFERENCES auth.users(id) ON DELETE SET NULL",
+        "CHECK ((event_type = ANY (ARRAY['received'::text, 'reserved'::text, 'reservation_released'::text, 'fulfilled'::text, 'damaged'::text, 'expired'::text, 'reconciled'::text, 'transferred'::text, 'stock_committed'::text])))",
+        "PRIMARY KEY (id)",
+        "CHECK ((quantity > 0))",
+        "FOREIGN KEY (sku) REFERENCES products(sku) ON DELETE RESTRICT"
+      ]
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres,authenticated=r/postgres}",
+      "rls": true,
+      "name": "product_batches",
+      "owner": "postgres",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notNull": true
+        },
+        {
+          "name": "sku",
+          "type": "text",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "box_code",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "quantity",
+          "type": "integer",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "expiry_date",
+          "type": "date",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "landed_date",
+          "type": "date",
+          "default": "CURRENT_DATE",
+          "notNull": false
+        },
+        {
+          "name": "hub",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "custodian",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "is_pinned",
+          "type": "boolean",
+          "default": "false",
+          "notNull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notNull": true
+        },
+        {
+          "name": "channel",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "batch_code",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "quantity_available",
+          "type": "integer",
+          "default": "0",
+          "notNull": false
+        },
+        {
+          "name": "best_before_date",
+          "type": "date",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "arrival_flight",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "inventory_status",
+          "type": "text",
+          "default": "'available'::text",
+          "notNull": true
+        },
+        {
+          "name": "reserved_quantity",
+          "type": "integer",
+          "default": "0",
+          "notNull": true
+        },
+        {
+          "name": "clearance_approved_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "clearance_approved_by",
+          "type": "uuid",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "source_consignment_item_id",
+          "type": "uuid",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "parent_batch_id",
+          "type": "uuid",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notNull": true
+        },
+        {
+          "name": "unit_cost",
+          "type": "numeric",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "owner_code",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "source_type",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        }
+      ],
+      "forceRls": false,
+      "triggers": [
+        "CREATE TRIGGER trg_sync_product_batch_compat_columns BEFORE INSERT OR UPDATE ON public.product_batches FOR EACH ROW EXECUTE FUNCTION sync_product_batch_compat_columns()"
+      ],
+      "constraints": [
+        "FOREIGN KEY (clearance_approved_by) REFERENCES auth.users(id) ON DELETE SET NULL",
+        "CHECK ((inventory_status = ANY (ARRAY['available'::text, 'quarantine'::text, 'damaged'::text, 'expired'::text, 'unaccounted'::text, 'depleted'::text])))",
+        "FOREIGN KEY (parent_batch_id) REFERENCES product_batches(id) ON DELETE RESTRICT",
+        "PRIMARY KEY (id)",
+        "CHECK (((quantity_available >= 0) AND (quantity_available <= GREATEST((quantity - reserved_quantity), 0))))",
+        "CHECK ((quantity >= 0))",
+        "CHECK (((reserved_quantity >= 0) AND (reserved_quantity <= quantity)))",
+        "FOREIGN KEY (sku) REFERENCES products(sku) ON DELETE CASCADE",
+        "FOREIGN KEY (source_consignment_item_id) REFERENCES consignment_items(id) ON DELETE SET NULL",
+        "CHECK (((source_type IS NULL) OR (source_type = ANY (ARRAY['consignment'::text, 'supplier_receipt'::text, 'opening_balance'::text, 'legacy'::text]))))",
+        "CHECK (((unit_cost IS NULL) OR (unit_cost >= (0)::numeric)))"
+      ]
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres,anon=r/postgres,authenticated=r/postgres}",
+      "rls": true,
+      "name": "products",
+      "owner": "postgres",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notNull": true
+        },
+        {
+          "name": "sku",
+          "type": "character varying",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "barcode",
+          "type": "character varying",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "name",
+          "type": "character varying",
+          "default": null,
+          "notNull": true
+        },
+        {
+          "name": "short_name",
+          "type": "character varying",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "brand_id",
+          "type": "uuid",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "category_id",
+          "type": "uuid",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "net_weight",
+          "type": "numeric",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "unit_of_measure",
+          "type": "character varying",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "status",
+          "type": "character varying",
+          "default": "'Draft'::character varying",
+          "notNull": true
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "short_description",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "why_buy",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "usage_instructions",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "ingredients",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "allergens",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "seo_keywords",
+          "type": "text[]",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "srp",
+          "type": "numeric",
+          "default": "0",
+          "notNull": false
+        },
+        {
+          "name": "wholesale_price",
+          "type": "numeric",
+          "default": "0",
+          "notNull": false
+        },
+        {
+          "name": "cost_price",
+          "type": "numeric",
+          "default": "0",
+          "notNull": false
+        },
+        {
+          "name": "currency",
+          "type": "character varying",
+          "default": "'PHP'::character varying",
+          "notNull": false
+        },
+        {
+          "name": "stock_available",
+          "type": "integer",
+          "default": "0",
+          "notNull": false
+        },
+        {
+          "name": "stock_reserved",
+          "type": "integer",
+          "default": "0",
+          "notNull": false
+        },
+        {
+          "name": "stock_incoming",
+          "type": "integer",
+          "default": "0",
+          "notNull": false
+        },
+        {
+          "name": "reorder_level",
+          "type": "integer",
+          "default": "0",
+          "notNull": false
+        },
+        {
+          "name": "warehouse_id",
+          "type": "uuid",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "primary_image_url",
+          "type": "character varying",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "secondary_images",
+          "type": "text[]",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "ai_prompt_primary",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "ai_prompt_lifestyle",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "is_ai_generated",
+          "type": "boolean",
+          "default": "false",
+          "notNull": false
+        },
+        {
+          "name": "is_human_reviewed",
+          "type": "boolean",
+          "default": "false",
+          "notNull": false
+        },
+        {
+          "name": "ai_confidence",
+          "type": "numeric",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "last_ai_update",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notNull": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notNull": false
+        },
+        {
+          "name": "internal_notes",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "subcategory",
+          "type": "character varying",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "package_type",
+          "type": "character varying",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "country_of_origin",
+          "type": "character varying",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "storage_instructions",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "finished_product_details",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "dealer_price",
+          "type": "numeric(10,2)",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "supplier_id",
+          "type": "uuid",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "slug",
+          "type": "character varying",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "is_featured",
+          "type": "boolean",
+          "default": "false",
+          "notNull": false
+        },
+        {
+          "name": "published",
+          "type": "boolean",
+          "default": "false",
+          "notNull": false
+        },
+        {
+          "name": "lifestyle_images",
+          "type": "text[]",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "product_video_url",
+          "type": "character varying",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "short",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "size",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "why_rare",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "pairings",
+          "type": "text[]",
+          "default": "'{}'::text[]",
+          "notNull": false
+        },
+        {
+          "name": "origin",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "expiry_date",
+          "type": "date",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "retail_price",
+          "type": "numeric",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "vip_price",
+          "type": "numeric",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "total_stock",
+          "type": "integer",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "image_url",
+          "type": "text",
+          "default": null,
+          "notNull": false
+        },
+        {
+          "name": "catalog_id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notNull": true
+        },
+        {
+          "name": "catalog_record_version",
+          "type": "bigint",
+          "default": "1",
+          "notNull": true
+        },
+        {
+          "name": "shipping_weight_g",
+          "type": "integer",
+          "default": null,
+          "notNull": false
+        }
+      ],
+      "forceRls": false,
+      "triggers": [
+        "CREATE TRIGGER products_catalog_record_version_trigger BEFORE UPDATE ON public.products FOR EACH ROW EXECUTE FUNCTION bump_product_catalog_record_version()",
+        "CREATE TRIGGER trg_sync_product_compat_columns BEFORE INSERT OR UPDATE ON public.products FOR EACH ROW EXECUTE FUNCTION sync_product_compat_columns()",
+        "CREATE TRIGGER trg_sync_product_publication_status BEFORE INSERT OR UPDATE OF status, published ON public.products FOR EACH ROW EXECUTE FUNCTION sync_product_publication_status()"
+      ],
+      "constraints": [
+        "FOREIGN KEY (brand_id) REFERENCES brands(id)",
+        "FOREIGN KEY (category_id) REFERENCES categories(id)",
+        "PRIMARY KEY (id)",
+        "CHECK (((shipping_weight_g IS NULL) OR ((shipping_weight_g >= 1) AND (shipping_weight_g <= 100000))))",
+        "UNIQUE (sku)",
+        "UNIQUE (slug)",
+        "CHECK (((status)::text = ANY (ARRAY['Live'::text, 'Active'::text, 'Under Review'::text, 'Unlisted'::text, 'Draft'::text, 'Discontinued'::text])))",
+        "FOREIGN KEY (warehouse_id) REFERENCES warehouses(id)"
+      ]
+    }
+  ],
+  "featureReceipts": 0
+}

@@ -1,0 +1,29 @@
+{
+  "mapItem": "MAP-023",
+  "project": "pixplcjqivlfflickobf",
+  "startedAt": "2026-10-29T10:00:03.922Z",
+  "backup": "C:\\Users\\jerze\\K2 JImzon\\.tools\\current-production-backups\\milan-packing-before-20261029.k2backup",
+  "productionChanged": false,
+  "status": "passed",
+  "work": "C:\\Users\\jerze\\K2 JImzon\\.tools\\milan-release\\restore-d0695ea5-5a44-4a2e-90c0-efbd11a172d8",
+  "database": "k2_current_restore_milan_9f7a3e49ef214fd191ee98a4427b63f2",
+  "port": 63336,
+  "restore": {
+    "backupId": "current-pixplcjqivlfflickobf-2026-10-29T095535624Z-d1456b89ddec",
+    "verifiedAt": "2026-10-29T09:57:01.380Z",
+    "restoreVerified": true,
+    "publicRelations": 75,
+    "latestMigrationVersion": "20261028140000",
+    "excludedManagedEntries": 10,
+    "evidenceBoundary": "Application database in isolated PostgreSQL; managed Vault, Storage objects and provider settings are excluded."
+  },
+  "aclsRestored": true,
+  "wrapperBefore": "1e69741c4bbe36a6155213cf2e7c0ee0e9376fa50721cc169983aa7458898370",
+  "migrationSha256": "377dc9b1cf1c6ffb4a7d838cac3d15d428c0639e36bfff7398b2b539cc57f4ca",
+  "migrationInstalled": true,
+  "migrationRowConservation": true,
+  "integrationOutput": "t\r\nt\r\nRESTORED_MILAN_FULL_INTEGRATION_OK",
+  "integrationConservation": true,
+  "clusterStopped": true,
+  "completedAt": "2026-10-29T10:00:09.603Z"
+}

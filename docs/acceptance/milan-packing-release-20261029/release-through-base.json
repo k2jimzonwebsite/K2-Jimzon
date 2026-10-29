@@ -1,0 +1,24 @@
+{
+  "source": "15de3db7c0c5d4da86b3c9bf5a0470481f1fc1bb",
+  "initialGate": "verify-release.log",
+  "focusedRecovery": "focused-grouping.log",
+  "startedAt": "2026-10-29T10:04:17.237Z",
+  "stages": [
+    {
+      "stage": "test:store-categories",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:05:11.059Z"
+    },
+    {
+      "stage": "test:milan-packing",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:05:25.001Z"
+    },
+    {
+      "stage": "test:base",
+      "exitCode": 1,
+      "completedAt": "2026-10-29T10:06:54.901Z"
+    }
+  ],
+  "complete": false
+}

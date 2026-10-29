@@ -1,0 +1,52 @@
+{
+  "source": "15de3db7c0c5d4da86b3c9bf5a0470481f1fc1bb",
+  "initialGate": "verify-release.log",
+  "focusedRecovery": [
+    "focused-grouping.log",
+    "focused-route-docs.log"
+  ],
+  "continuedAfter": "test:storefront-ui",
+  "startedAt": "2026-10-29T10:18:48.700Z",
+  "stages": [
+    {
+      "stage": "test:storefront-recovery",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:21:05.142Z"
+    },
+    {
+      "stage": "test:admin-ui",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:22:49.113Z"
+    },
+    {
+      "stage": "test:payment-ui",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:23:39.662Z"
+    },
+    {
+      "stage": "test:inbox-ui",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:24:15.117Z"
+    },
+    {
+      "stage": "test:admin-product-master-ui",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:25:51.953Z"
+    },
+    {
+      "stage": "test:admin-website-assignment-ui",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:26:14.444Z"
+    },
+    {
+      "stage": "test:owner-count-close-ui",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:26:38.247Z"
+    },
+    {
+      "stage": "test:customer-account-ui",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:28:05.339Z"
+    }
+  ]
+}

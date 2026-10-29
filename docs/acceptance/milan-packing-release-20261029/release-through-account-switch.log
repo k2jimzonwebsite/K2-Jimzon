@@ -1,0 +1,941 @@
+RELEASE_STAGE test:storefront-recovery 2026-10-29T10:18:48.701Z
+
+> k2-jimzon-prototype@0.1.0 test:storefront-recovery
+> playwright test --config=playwright.storefront-recovery.config.js
+
+[WebServer] (node:19696) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19464) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 40 tests using 1 worker
+
+(node:5700) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 6:18:54 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 320px light (3.3s)
+[WebServer] 6:18:57 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 320px dark (2.6s)
+[WebServer] 6:19:00 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 390px light (2.5s)
+[WebServer] 6:19:02 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 390px dark (2.5s)
+[WebServer] 6:19:05 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 430px light (2.5s)
+[WebServer] 6:19:07 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 430px dark (2.5s)
+[WebServer] 6:19:10 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 1440px light (3.1s)
+[WebServer] 6:19:13 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  8 tests\checkout-chat-ui.spec.js:18:3 › checkout chat leaves submission clear at 1440px dark (2.4s)
+  ok  9 tests\checkout-chat-ui.spec.js:53:1 › empty checkout retains accessible chat help (1.2s)
+[WebServer] 6:19:16 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\checkout-chat-ui.spec.js:63:1 › English pistachio finds the Italian listing in the rendered catalog (717ms)
+[WebServer] 6:19:17 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 11 tests\storefront-recovery-ui.spec.js:3:1 › fresh checkout requires delivery mobile and supports browser shipping autofill without SMS sign-in (3.2s)
+[WebServer] 6:19:20 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\storefront-recovery-ui.spec.js:36:1 › legacy charge review withholds cached payment and survives failed or late refresh (4.6s)
+[WebServer] 6:19:25 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\storefront-recovery-ui.spec.js:94:1 › express buyer approval keeps exact unknown request through reload and accepted refresh (3.0s)
+[WebServer] 6:19:28 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 14 tests\storefront-recovery-ui.spec.js:135:1 › express buyer malformed recovery refuses before sending approval (1.5s)
+[WebServer] 6:19:29 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 15 tests\storefront-recovery-ui.spec.js:201:50 › activated commerce hides a published product with missing Website membership (546ms)
+[WebServer] 6:19:30 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 16 tests\storefront-recovery-ui.spec.js:201:50 › activated commerce hides a published product with unassigned Website membership (704ms)
+[WebServer] 6:19:31 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 17 tests\storefront-recovery-ui.spec.js:214:1 › a failed batch-stock read keeps the product visible but hides the stale row count (1.8s)
+[WebServer] 6:19:32 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 18 tests\storefront-recovery-ui.spec.js:246:1 › reviewed delivery still requires contact before any order transport (3.3s)
+[WebServer] 6:19:36 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 19 tests\storefront-recovery-ui.spec.js:262:1 › uncertain checkout freezes details and retries the same payload with a fresh challenge (4.0s)
+[WebServer] 6:19:40 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 20 tests\storefront-recovery-ui.spec.js:299:1 › definite server rejection unlocks form and submits with fresh idempotency key (5.1s)
+[WebServer] 6:19:45 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 21 tests\storefront-recovery-ui.spec.js:340:1 › uncertain checkout contact navigation preserves original request identity (6.0s)
+[WebServer] 6:19:51 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 22 tests\storefront-recovery-ui.spec.js:373:1 › server rejection on retry unlocks form for editing with fresh idempotency key (5.3s)
+[WebServer] 6:19:56 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 23 tests\storefront-recovery-ui.spec.js:417:1 › held checkout blocks cart changes and retries the same basket and key (4.9s)
+[WebServer] 6:20:01 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 24 tests\storefront-recovery-ui.spec.js:448:3 › pasabuy renews its challenge after a failed submission (1.6s)
+[WebServer] 6:20:03 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 25 tests\storefront-recovery-ui.spec.js:448:3 › messages renews its challenge after a failed submission (1.5s)
+[WebServer] 6:20:04 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 26 tests\storefront-recovery-ui.spec.js:473:1 › product facts and availability remain honest when canonical fields are missing (670ms)
+[WebServer] 6:20:05 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 27 tests\storefront-recovery-ui.spec.js:484:1 › phone product identity precedes supporting content and controls have usable targets (1.4s)
+[WebServer] 6:20:06 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 28 tests\storefront-recovery-ui.spec.js:502:1 › gallery shrinking during refresh preserves the product and its buying context (953ms)
+[WebServer] 6:20:07 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:20:09 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:20:10 PM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 6:20:10 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+  ok 29 tests\storefront-recovery-ui.spec.js:513:3 › review globe does not fabricate feedback when the review source is empty (3.8s)
+[WebServer] 6:20:11 PM [vite] (client) [Unhandled error] TypeError: Cannot assign to read only property 'position' of object '#<Mesh>'
+[WebServer]  > applyProps ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:519:11
+[WebServer]  > handleContainerEffects ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16684:2
+[WebServer]  > handleContainerEffects ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16716:46
+[WebServer]  > appendChild ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16735:2
+[WebServer]  > appendChildToContainer ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:17031:4
+[WebServer]  > Cu ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:67
+[WebServer]  > Cu ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:273
+[WebServer]
+[WebServer] 6:20:11 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "window-error", pathname: "/" } TypeError: Cannot assign to read only property 'position' of object '#<Mesh>'
+[WebServer]     at applyProps (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:53463:14)
+[WebServer]     at handleContainerEffects (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:62290:2)
+[WebServer]     at handleContainerEffects (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:62311:46)
+[WebServer]     at appendChild (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:62322:2)
+[WebServer]     at appendChildToContainer (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:62529:3)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:58876:64)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:58877:183)
+[WebServer] 6:20:11 PM [vite] (client) [Unhandled error] TypeError: Cannot convert undefined or null to object
+[WebServer]  > removeChild ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16800:15
+[WebServer]  > removeChild ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16795:4
+[WebServer]  > removeChildFromContainer ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:17036:4
+[WebServer]  > B ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:9173:59
+[WebServer]  > En ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12925:16
+[WebServer]  > ln ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer]  > En ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12945:46
+[WebServer]  > ln ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer]  > En ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12954:55
+[WebServer]  > ln ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer]
+[WebServer] 6:20:11 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:11 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:11 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:11 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:11 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:11 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:11 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:11 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:11 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:20:12 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:20:13 PM [vite] (client) [console.warn] THREE.WARNING: Multiple instances of Three.js being imported.
+[WebServer] 6:20:20 PM [vite] (client) [console.warn] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+  ok 30 tests\storefront-recovery-ui.spec.js:513:3 › review globe does not fabricate feedback when the review source is unavailable (9.9s)
+[WebServer] 6:20:21 PM [vite] (client) [Unhandled error] TypeError: Cannot assign to read only property 'position' of object '#<Mesh>'
+[WebServer]  > applyProps ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:519:11
+[WebServer]  > handleContainerEffects ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16684:2
+[WebServer]  > handleContainerEffects ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16716:46
+[WebServer]  > appendChild ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16735:2
+[WebServer]  > appendChildToContainer ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:17031:4
+[WebServer]  > Cu ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:67
+[WebServer]  > Cu ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:229
+[WebServer]  > Cu ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12457:273
+[WebServer]
+[WebServer] 6:20:21 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "window-error", pathname: "/" } TypeError: Cannot assign to read only property 'position' of object '#<Mesh>'
+[WebServer]     at applyProps (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:53463:14)
+[WebServer]     at handleContainerEffects (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:62290:2)
+[WebServer]     at handleContainerEffects (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:62311:46)
+[WebServer]     at appendChild (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:62322:2)
+[WebServer]     at appendChildToContainer (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:62529:3)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:58876:64)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:58877:139)
+[WebServer]     at Cu (http://127.0.0.1:5207/node_modules/.vite-storefront-recovery-fixture/deps/react-three-fiber.esm-D-fRbREM.js?v=bb50bfcb:58877:183)
+[WebServer] 6:20:21 PM [vite] (client) [Unhandled error] TypeError: Cannot convert undefined or null to object
+[WebServer]  > removeChild ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16800:15
+[WebServer]  > removeChild ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:16795:4
+[WebServer]  > removeChildFromContainer ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:17036:4
+[WebServer]  > B ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:9173:59
+[WebServer]  > En ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12925:16
+[WebServer]  > ln ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer]  > En ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12945:46
+[WebServer]  > ln ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer]  > En ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12954:55
+[WebServer]  > ln ../../../../K2 JImzon/node_modules/@react-three/fiber/dist/events-e51d7528.esm.js:12894:39
+[WebServer]
+[WebServer] 6:20:21 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:21 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:21 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:21 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:21 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:21 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:21 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:21 PM [vite] (client) [console.warn] Failed to load image for lotus-biscoff
+[WebServer] 6:20:21 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 31 tests\storefront-recovery-ui.spec.js:532:1 › private guest journeys stay noindex while public browsing stays indexable (3.3s)
+[WebServer] 6:20:24 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 32 tests\storefront-recovery-ui.spec.js:542:1 › the wholesale alias publishes the established trade canonical (1.1s)
+[WebServer] 6:20:25 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 33 tests\storefront-recovery-ui.spec.js:550:1 › canonical express stays unpriced through submission and confirmation with no payment QR (4.6s)
+[WebServer] 6:20:30 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 34 tests\storefront-recovery-ui.spec.js:582:1 › canonical pickup needs acceptance and no delivery address or browser price (3.8s)
+[WebServer] 6:20:34 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 35 tests\storefront-recovery-ui.spec.js:604:1 › canonical changed address removes accepted quote until the new quote is reviewed (5.5s)
+[WebServer] 6:20:39 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 36 tests\storefront-recovery-ui.spec.js:621:1 › lost order response then pre-receipt rate refusal preserves exact retry identity (4.2s)
+[WebServer] 6:20:44 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:20:47 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 37 tests\storefront-recovery-ui.spec.js:659:1 › restart recovery refresh and reopened tabs retry one identity and consume terminal receipt (6.6s)
+[WebServer] 6:20:50 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 38 tests\storefront-recovery-ui.spec.js:702:1 › restart recovery queued retry consumes a receipt already reconciled by its tab (3.7s)
+[WebServer] 6:20:54 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 39 tests\storefront-recovery-ui.spec.js:729:1 › restart recovery refuses unavailable or corrupt persistence before HTTP (6.9s)
+[WebServer] 6:21:01 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 40 tests\storefront-recovery-ui.spec.js:766:1 › restart recovery terminal write failure retains pending request and excludes receipt secrets (4.0s)
+
+  40 passed (2.3m)
+RELEASE_STAGE test:admin-ui 2026-10-29T10:21:05.143Z
+
+> k2-jimzon-prototype@0.1.0 test:admin-ui
+> playwright test --config=playwright.admin.config.js tests/admin.spec.js tests/admin-dashboard-redesign.spec.js && playwright test --config=playwright.shop-stock.config.js && playwright test --config=playwright.auth-recovery.config.js
+
+[WebServer] (node:3180) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:18364) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 42 tests using 1 worker
+
+(node:17656) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › tests\admin-dashboard-redesign.spec.js:182:3 › admin command center redesign › keeps shared Admin help tips keyboard-readable and inside a 375px viewport (1.2s)
+  ok  2 [chromium] › tests\admin-dashboard-redesign.spec.js:244:3 › admin command center redesign › quick tools calculator preserves button DOM identity, scroll position, and 44px touch targets on a 375px phone (1.2s)
+  ok  3 [chromium] › tests\admin-dashboard-redesign.spec.js:340:3 › admin command center redesign › groups phone navigation around the active staff workspace (1.3s)
+  ok  4 [chromium] › tests\admin-dashboard-redesign.spec.js:364:3 › admin command center redesign › keeps the phone inventory action visible without a hidden toolbar (3.4s)
+  ok  5 [chromium] › tests\admin-dashboard-redesign.spec.js:381:3 › admin command center redesign › keeps every Admin workspace within a phone viewport (6.9s)
+  ok  6 [chromium] › tests\admin-dashboard-redesign.spec.js:404:3 › admin command center redesign › left-panel widgets show one workspace and preserve every dashboard destination (1.7s)
+  ok  7 [chromium] › tests\admin-dashboard-redesign.spec.js:423:3 › admin command center redesign › uses short staff language for channel and payment context (1.1s)
+  ok  8 [chromium] › tests\admin-dashboard-redesign.spec.js:435:3 › admin command center redesign › widget source failures stay unavailable and recover without inventing zero totals (1.4s)
+  ok  9 [chromium] › tests\admin-dashboard-redesign.spec.js:457:3 › admin command center redesign › unknown channels remain separate and empty records are not marketplace analytics (905ms)
+  ok 10 [chromium] › tests\admin-dashboard-redesign.spec.js:468:3 › admin command center redesign › phone metrics and navigation stay readable and incomplete totals cannot be exported (2.0s)
+  ok 11 [chromium] › tests\admin-dashboard-redesign.spec.js:503:3 › admin command center redesign › task guide teaches intake and opens inline guidance without claiming saved work (2.6s)
+  ok 12 [chromium] › tests\admin-dashboard-redesign.spec.js:547:3 › admin command center redesign › widget help is optional, contextual and keyboard recoverable on phone (1.7s)
+[WebServer] 6:21:36 PM [vite] (client) [Unhandled rejection] TypeError: (productResult.data || []).map is not a function
+[WebServer]  > loadProducts src/context/AdminStoreContext.jsx:56:45
+[WebServer]     54 |      if (!productResult.error) {
+[WebServer]     55 |        const stockBySku = Object.fromEntries((stockResult.data || []).map((row) => [row.sku, row.stock_from_batches]))
+[WebServer]     56 |        setProducts((productResult.data || []).map((product) => ({
+[WebServer]        |                                               ^
+[WebServer]     57 |          ...product,
+[WebServer]     58 |          id: product.sku,
+[WebServer]
+[WebServer] 6:21:36 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "unhandled-rejection", pathname: "/admin-portal-k2-secure" } TypeError: (productResult.data || []).map is not a function
+[WebServer]     at loadProducts (http://localhost:5180/src/context/AdminStoreContext.jsx:57:43)
+  ok 13 [chromium] › tests\admin-dashboard-redesign.spec.js:580:3 › admin command center redesign › malformed stock source stays unavailable and new stock reflects on visibility refresh (1.2s)
+  ok 14 [chromium] › tests\admin-dashboard-redesign.spec.js:608:3 › admin command center redesign › failed period refresh preserves and labels the prior snapshot and export period (1.9s)
+  ok 15 [chromium] › tests\admin-dashboard-redesign.spec.js:625:3 › admin command center redesign › renders multichannel analytics without desktop overflow (2.7s)
+  ok 16 [chromium] › tests\admin-dashboard-redesign.spec.js:718:3 › admin command center redesign › quick tools expose useful shortcuts, safe expiry guidance and keyboard recovery (2.2s)
+  ok 17 [chromium] › tests\admin-dashboard-redesign.spec.js:761:3 › admin command center redesign › computes a bounded sales plan without presenting it as recorded finance truth (2.6s)
+  ok 18 [chromium] › tests\admin-dashboard-redesign.spec.js:904:3 › admin command center redesign › collapses safely for mobile operations (1.6s)
+  ok 19 [chromium] › tests\admin-dashboard-redesign.spec.js:929:3 › admin command center redesign › keeps Wholesale inquiry triage honest and usable at 375px (1.0s)
+  ok 20 [chromium] › tests\admin-dashboard-redesign.spec.js:966:3 › admin command center redesign › keeps Globe review evidence and publication controls usable at 375px (1.2s)
+  ok 21 [chromium] › tests\admin-dashboard-redesign.spec.js:1012:3 › admin command center redesign › keeps supplier evidence and unavailable procurement powers clear at 375px (1.5s)
+  ok 22 [chromium] › tests\admin-dashboard-redesign.spec.js:1040:3 › admin command center redesign › keeps signed channel evidence and connector truth usable at 375px (1.1s)
+  ok 23 [chromium] › tests\admin-dashboard-redesign.spec.js:1081:3 › admin command center redesign › keeps staff privilege changes reasoned and recoverable at 375px (942ms)
+  ok 24 [chromium] › tests\admin-dashboard-redesign.spec.js:1128:3 › admin command center redesign › lets an invited staff account enroll an authenticator through the secure pending session at 375px (1.1s)
+[WebServer] 6:21:56 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 25 [chromium] › tests\admin-dashboard-redesign.spec.js:1180:3 › admin command center redesign › requests and completes staff password recovery without account enumeration at 375px (1.1s)
+[WebServer] 6:21:57 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 26 [chromium] › tests\admin-dashboard-redesign.spec.js:1238:3 › admin command center redesign › replaces an active Admin authenticator with a reason and keeps recovery honest at 375px (993ms)
+  ok 27 [chromium] › tests\admin-dashboard-redesign.spec.js:1295:3 › admin command center redesign › keeps protected system readiness boolean-only and recoverable at 375px (690ms)
+  ok 28 [chromium] › tests\admin-dashboard-redesign.spec.js:1324:3 › admin command center redesign › keeps product-media validation and recovery usable at 375px (1.4s)
+  ok 29 [chromium] › tests\admin-dashboard-redesign.spec.js:1398:3 › admin command center redesign › keeps phone product intake usable, truthful, and recoverable at 375px (1.5s)
+  ok 30 [chromium] › tests\admin-dashboard-redesign.spec.js:1507:3 › admin command center redesign › keeps the five operational workspaces readable and overflow-safe (4.5s)
+  ok 31 [chromium] › tests\admin-dashboard-redesign.spec.js:1529:3 › admin command center redesign › the store asset queue mounts and offers a real publish path (1.3s)
+  ok 32 [chromium] › tests\admin-dashboard-redesign.spec.js:1547:3 › admin command center redesign › the workflow map exposes the channels section and names what is not connected (1.5s)
+  ok 33 [chromium] › tests\admin-dashboard-redesign.spec.js:1563:3 › admin command center redesign › keeps high-frequency workspace controls usable on mobile (3.8s)
+  ok 34 [chromium] › tests\admin-dashboard-redesign.spec.js:1597:3 › admin command center redesign › renders the complete connected workflow graph with traceable routes (3.3s)
+  ok 35 [chromium] › tests\admin-dashboard-redesign.spec.js:1649:3 › admin command center redesign › shows the complete paid-API blocker and manual fallback in the phone guide (694ms)
+  ok 36 [chromium] › tests\admin-dashboard-redesign.spec.js:1677:3 › admin command center redesign › synchronizes work context with URL, deep links directly, and supports browser back and forward (1.9s)
+  ok 37 [chromium] › tests\admin.spec.js:8:1 › Google admin OAuth returns to the guarded admin route (3ms)
+  ok 38 [chromium] › tests\admin.spec.js:26:1 › Google callback exposes the authenticator step instead of returning to login (4ms)
+  ok 39 [chromium] › tests\admin.spec.js:45:1 › OAuth credentials are removed from the Admin callback URL (2ms)
+  ok 40 [chromium] › tests\admin.spec.js:80:3 › admin access boundary › guarded path works and requires real Supabase authentication (712ms)
+  ok 41 [chromium] › tests\admin.spec.js:89:3 › admin access boundary › legacy localStorage flag cannot bypass the auth gate (684ms)
+  ok 42 [chromium] › tests\admin.spec.js:96:3 › admin access boundary › backend-not-configured sign-in fails clearly (837ms)
+
+  42 passed (1.2m)
+[WebServer] (node:16668) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:7904) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:6356) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\shop-stock-ui.spec.js:46:1 › protected shop stock never uses the direct database path (2.2s)
+  ok 2 tests\shop-stock-ui.spec.js:56:3 › successful inventory_balances read refuses incomplete or missing count 3 (541ms)
+  ok 3 tests\shop-stock-ui.spec.js:56:3 › successful inventory_transfer_requests read refuses incomplete or missing count 26 (432ms)
+  ok 4 tests\shop-stock-ui.spec.js:56:3 › successful channel_shops read refuses incomplete or missing count null (474ms)
+  ok 5 tests\shop-stock-ui.spec.js:65:1 › empty canonical shop reads do not create six operating shops (439ms)
+  ok 6 tests\shop-stock-ui.spec.js:73:1 › missing warehouse balance never borrows display stock or reports coverage (440ms)
+  ok 7 tests\shop-stock-ui.spec.js:83:1 › missing saved allocation is Needs review even when aggregate stock exists (486ms)
+  ok 8 tests\shop-stock-ui.spec.js:94:1 › failed reads hide operating totals and actions, then Refresh recovers exact saved rows (8.2s)
+
+  8 passed (16.3s)
+[WebServer] (node:10584) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:8764) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:14016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\admin-auth-recovery.spec.js:8:1 › secure Admin keeps Google available and routes the verified token through its BFF (1.5s)
+  ok 2 tests\admin-auth-recovery.spec.js:27:1 › a failed challenge script can be retried without reloading the login form (885ms)
+  ok 3 tests\admin-auth-recovery.spec.js:45:3 › Google return handles MFA_REQUIRED without a browser provider session (838ms)
+  ok 4 tests\admin-auth-recovery.spec.js:45:3 › Google return handles MFA_ENROLLMENT_REQUIRED without a browser provider session (919ms)
+  ok 5 tests\admin-auth-recovery.spec.js:45:3 › Google return handles OAUTH_RETURN_INVALID without a browser provider session (894ms)
+  ok 6 tests\admin-auth-recovery.spec.js:81:1 › the visible provider widget fits the actual Admin form at phone and desktop widths (1.2s)
+
+  6 passed (10.3s)
+RELEASE_STAGE test:payment-ui 2026-10-29T10:22:49.114Z
+
+> k2-jimzon-prototype@0.1.0 test:payment-ui
+> playwright test --config=playwright.payment.config.js && playwright test --config=playwright.catalog-legacy.config.js
+
+[WebServer] (node:10392) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 48 tests using 1 worker
+
+(node:17768) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\catalog-import-recovery-ui.spec.js:16:1 › uncertain catalog commit freezes review and retries the exact chunk identity (2.3s)
+  ok  2 tests\catalog-import-recovery-ui.spec.js:77:1 › catalog commit response from a disposed staff view cannot refresh the next actor (1.1s)
+  ok  3 tests\catalog-import-recovery-ui.spec.js:118:1 › definitive catalog rejection reopens correction with a new operation identity (1.3s)
+  ok  4 tests\coupon-recovery-ui.spec.js:8:3 › create retains the frozen coupon command after a lost response (974ms)
+  ok  5 tests\coupon-recovery-ui.spec.js:8:3 › activate retains the frozen coupon command after a lost response (784ms)
+  ok  6 tests\coupon-recovery-ui.spec.js:8:3 › pause retains the frozen coupon command after a lost response (872ms)
+  ok  7 tests\coupon-recovery-ui.spec.js:8:3 › archive retains the frozen coupon command after a lost response (862ms)
+  ok  8 tests\coupon-recovery-ui.spec.js:77:1 › coupon rejection permits a corrected command with a different identity (1.1s)
+  ok  9 tests\coupon-recovery-ui.spec.js:104:1 › coupon dialogs restore the keyboard trigger after cancellation on a short viewport (687ms)
+  ok 10 tests\coupon-recovery-ui.spec.js:125:1 › coupon actor change discards late completion and the old form (816ms)
+  ok 11 tests\coupon-recovery-ui.spec.js:149:1 › archive requires a second deliberate confirmation (948ms)
+  ok 12 tests\media-recovery-ui.spec.js:12:44 › media lost freezes pending details and retains the assignment key (709ms)
+  ok 13 tests\media-recovery-ui.spec.js:12:44 › media cleanup freezes pending details and retains the assignment key (700ms)
+  ok 14 tests\media-recovery-ui.spec.js:44:1 › media rejection reopens correction with a new assignment key (1.1s)
+  ok 15 tests\media-recovery-ui.spec.js:62:1 › media assignment waits for an in-flight upload (782ms)
+  ok 16 tests\media-recovery-ui.spec.js:77:1 › media actor change discards late save completion (664ms)
+  ok 17 tests\payment-recovery-ui.spec.js:7:3 › pending final charge blocks positive payment steps: quote=pending (512ms)
+  ok 18 tests\payment-recovery-ui.spec.js:7:3 › pending final charge blocks positive payment steps: quote=quoted (618ms)
+  ok 19 tests\payment-recovery-ui.spec.js:7:3 › pending final charge blocks positive payment steps: quote=unrecognized (731ms)
+  ok 20 tests\payment-recovery-ui.spec.js:7:3 › pending final charge blocks positive payment steps: nullTotal=1 (504ms)
+  ok 21 tests\payment-recovery-ui.spec.js:20:1 › pending final charge still permits refund recovery (586ms)
+  ok 22 tests\payment-recovery-ui.spec.js:28:3 › correct rejected evidence safely at 375x812 (575ms)
+  ok 23 tests\payment-recovery-ui.spec.js:28:3 › correct rejected evidence safely at 844x390 (557ms)
+  ok 24 tests\payment-recovery-ui.spec.js:28:3 › correct rejected evidence safely at 1280x900 (703ms)
+  ok 25 tests\payment-recovery-ui.spec.js:47:1 › legacy failure stays blocked until the protected recovery boundary is active (596ms)
+  ok 26 tests\payment-recovery-ui.spec.js:53:1 › uncertain outcome keeps evidence and shows reconciliation feedback (687ms)
+  ok 27 tests\payment-recovery-ui.spec.js:63:1 › submits structured payment evidence with method, amount, payer and reference (729ms)
+  ok 28 tests\payment-recovery-ui.spec.js:86:1 › independent verification displays submitted evidence and enforces merchant receipt confirmation (844ms)
+  ok 29 tests\payment-recovery-ui.spec.js:105:1 › authorized staff can retrieve the buyer e-receipt from the order payment review (715ms)
+  ok 30 tests\payment-recovery-ui.spec.js:124:1 › physical lot selection resets confirmation and blocks missing identity on phone (489ms)
+  ok 31 tests\payment-recovery-ui.spec.js:141:3 › handover freezes pending details and retries the same uncertain command (584ms)
+  ok 32 tests\payment-recovery-ui.spec.js:141:3 › delivery freezes pending details and retries the same uncertain command (642ms)
+  ok 33 tests\payment-recovery-ui.spec.js:141:3 › custody freezes pending details and retries the same uncertain command (583ms)
+  ok 34 tests\payment-recovery-ui.spec.js:141:3 › supplier freezes pending details and retries the same uncertain command (573ms)
+  ok 35 tests\payment-recovery-ui.spec.js:185:1 › handover denial permits correction and actor change discards late completion (710ms)
+  ok 36 tests\payment-recovery-ui.spec.js:208:3 › handover legacy uncertainty requires reconciliation on a short viewport (647ms)
+  ok 37 tests\payment-recovery-ui.spec.js:208:3 › delivery legacy uncertainty requires reconciliation on a short viewport (628ms)
+  ok 38 tests\payment-recovery-ui.spec.js:232:1 › blank custody audit note records a default and retains the exact uncertain command (927ms)
+  ok 39 tests\photo-csv-ui.spec.js:39:34 › photo CSV previews and saves missing slot at 375px (868ms)
+  ok 40 tests\photo-csv-ui.spec.js:39:34 › photo CSV previews and saves missing slot at 1440px (1.1s)
+  ok 41 tests\photo-csv-ui.spec.js:56:1 › photo CSV lost reply restores original command across reload without repeat upload (1.6s)
+  ok 42 tests\photo-csv-ui.spec.js:70:1 › photo CSV changed actor stops before any file upload (906ms)
+  ok 43 tests\photo-csv-ui.spec.js:78:1 › competing tab lock refuses dispatch, then the same reviewed batch can proceed (1.2s)
+  ok 44 tests\wholesale-recovery-ui.spec.js:24:67 › wholesale lost retains the original review command (789ms)
+  ok 45 tests\wholesale-recovery-ui.spec.js:24:67 › wholesale unavailable retains the original review command (809ms)
+  ok 46 tests\wholesale-recovery-ui.spec.js:24:67 › wholesale missing receipt retains the original review command (815ms)
+  ok 47 tests\wholesale-recovery-ui.spec.js:62:1 › wholesale rejection permits correction and uses a new identity (847ms)
+  ok 48 tests\wholesale-recovery-ui.spec.js:81:1 › wholesale actor change prevents an old response closing the new review (946ms)
+
+  48 passed (43.9s)
+[WebServer] (node:23248) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20488) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:3844) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\catalog-import-legacy-ui.spec.js:3:1 › legacy CSV upload stages a synthetic unpublished Draft without stock writes (1.9s)
+
+  1 passed (4.9s)
+RELEASE_STAGE test:inbox-ui 2026-10-29T10:23:39.663Z
+
+> k2-jimzon-prototype@0.1.0 test:inbox-ui
+> playwright test --config=playwright.inbox.config.js
+
+[WebServer] (node:4580) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19488) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 41 tests using 1 worker
+
+(node:17068) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\inbox-categorization-viewport.spec.js:11:3 › Inbox Categorization Logic › accurately classifies inquiries by purpose and intent (9ms)
+  ok  2 tests\inbox-categorization-viewport.spec.js:48:3 › Inbox Categorization Logic › accurately identifies channel origins (3ms)
+  ok  3 tests\inbox-categorization-viewport.spec.js:59:3 › Inbox Categorization Logic › returns direct portal deep-links and reply instructions for external channels (4ms)
+[WebServer] 6:23:50 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  4 tests\inbox-categorization-viewport.spec.js:93:3 › Inbox Viewport & UI Interactions › displays category tabs, badges, and filters conversations (5.4s)
+[WebServer] 6:23:51 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  5 tests\inbox-categorization-viewport.spec.js:119:3 › Inbox Viewport & UI Interactions › enlarge workspace maximizes reading height and collapses metric rail (924ms)
+[WebServer] 6:23:52 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  6 tests\inbox-categorization-viewport.spec.js:139:3 › Inbox Viewport & UI Interactions › message actions & deletion modal provides copyable SQL and moderation status (1.1s)
+[WebServer] 6:23:53 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  7 tests\inbox-categorization-viewport.spec.js:161:3 › Inbox Viewport & UI Interactions › collapsible workflow sidebar expands reading width (1.0s)
+[WebServer] 6:23:54 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  8 tests\inbox-categorization-viewport.spec.js:179:3 › Inbox Viewport & UI Interactions › staff can delete an errant or fooling message directly from the conversation stream (1.1s)
+[WebServer] 6:23:55 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  9 tests\inbox-categorization-viewport.spec.js:216:3 › Inbox Viewport & UI Interactions › staff can 1-click archive and remove a thread from active view (852ms)
+[WebServer] 6:23:56 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 10 tests\inbox-phase2.spec.js:5:1 › drafts remain bound to the customer when switching channels (759ms)
+[WebServer] 6:23:57 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 11 tests\inbox-phase2.spec.js:15:1 › pending note save preserves edits made after submission (1.6s)
+[WebServer] 6:23:59 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 12 tests\inbox-phase2.spec.js:25:1 › late note completion cannot clear another customer draft or show its success there (1.7s)
+[WebServer] 6:24:00 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 13 tests\inbox-phase2.spec.js:38:1 › workflow reason retains keyboard focus through multiple characters (1.3s)
+[WebServer] 6:24:01 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 14 tests\inbox-phase2.spec.js:48:1 › staff switching discards the prior actor draft and late notice (1.7s)
+[WebServer] 6:24:03 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 15 tests\inbox-phase2.spec.js:62:3 › delayed history cannot replace the current customer (701ms)
+[WebServer] 6:24:04 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 16 tests\inbox-phase2.spec.js:62:3 › delayed history cannot replace the current return visit (745ms)
+[WebServer] 6:24:05 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 17 tests\inbox-phase2.spec.js:80:1 › delayed website reply preserves newer text (1.6s)
+[WebServer] 6:24:06 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 18 tests\inbox-phase2.spec.js:91:1 › phone navigation preserves each customer draft (743ms)
+  ok 19 tests\inbox-phase2.spec.js:106:3 › Phase 2 unified inbox contract › migration models workflow, delivery truth, and immutable events (7ms)
+  ok 20 tests\inbox-phase2.spec.js:125:3 › Phase 2 unified inbox contract › admin inbox runtime normalizes snake_case and camelCase unread state independently from status (6ms)
+  ok 21 tests\inbox-phase2.spec.js:162:3 › Phase 2 unified inbox contract › admin inbox labels internal notes and disconnected delivery truthfully (3ms)
+[WebServer] 6:24:07 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 22 tests\inbox-phase2.spec.js:176:3 › Phase 2 inbox interactions › desktop queue saves internal notes and controlled workflow changes (832ms)
+[WebServer] 6:24:08 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 23 tests\inbox-phase2.spec.js:200:3 › Phase 2 inbox interactions › mobile queue opens one conversation at a time with a usable back action (597ms)
+[WebServer] 6:24:08 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 24 tests\inbox-phase2.spec.js:218:3 › Phase 2 inbox interactions › virtual-store website chat is unmistakable and sends a customer-visible reply (768ms)
+  ok 25 tests\inbox-phase2.spec.js:236:3 › Inbox polling ownership and canonical unread › background polling yields to hidden tabs, in-flight reads, and disabled sessions (144ms)
+  ok 26 tests\inbox-phase2.spec.js:245:3 › Inbox polling ownership and canonical unread › a superseded read response can never repopulate the queue (1ms)
+  ok 27 tests\inbox-phase2.spec.js:253:3 › Inbox polling ownership and canonical unread › a failed background poll keeps the loaded queue and marks it stale (1ms)
+  ok 28 tests\inbox-phase2.spec.js:264:3 › Inbox polling ownership and canonical unread › a replayed read receipt cannot clear a message that arrived after it (1ms)
+[WebServer] 6:24:09 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 29 tests\inbox-phase2.spec.js:278:3 › Inbox polling ownership and canonical unread › the Inbox tells staff when the visible queue is stale rather than live (492ms)
+  ok 30 tests\inbox-phase2.spec.js:284:3 › Inbox polling ownership and canonical unread › the inbox runtime owns its polling instead of resetting the queue every interval (2ms)
+[WebServer] 6:24:10 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 31 tests\inbox-phase2.spec.js:298:3 › Inbox event history parity and failure states › a failed history read is distinguishable from an empty one and can be retried (645ms)
+[WebServer] 6:24:11 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 32 tests\inbox-phase2.spec.js:308:3 › Inbox event history parity and failure states › event history is reachable on a phone, not only on wide desktops (519ms)
+  ok 33 tests\inbox-phase2.spec.js:318:3 › Inbox event history parity and failure states › the runtime reports a failed history read instead of an empty timeline (1ms)
+[WebServer] 6:24:11 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 34 tests\inbox-phase2.spec.js:326:3 › Inbox ambiguous command reconciliation › an unconfirmed command is shown as unknown, not as a clean failure (725ms)
+  ok 35 tests\inbox-phase2.spec.js:338:3 › Inbox ambiguous command reconciliation › the runtime distinguishes an unconfirmed command from a rejected one (1ms)
+  ok 36 tests\inbox-phase2.spec.js:344:3 › Inbox ambiguous command reconciliation › leaving the page with an unresolved command is guarded, because a reload discards its identity (2ms)
+[WebServer] 6:24:12 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 37 tests\inbox-phase2.spec.js:353:3 › Inbox truncated-window honesty and safe recovery › metric counts say they cover the visible page when the queue is truncated (569ms)
+[WebServer] 6:24:12 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 38 tests\inbox-phase2.spec.js:359:3 › Inbox truncated-window honesty and safe recovery › a template asks before replacing a typed draft (716ms)
+[WebServer] 6:24:13 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 39 tests\inbox-phase2.spec.js:371:3 › Inbox truncated-window honesty and safe recovery › an unconfirmed command offers the same-command retry (775ms)
+[WebServer] 6:24:14 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 40 tests\inbox-phase2.spec.js:382:3 › Inbox truncated-window honesty and safe recovery › history events name the staff actor instead of omitting it (547ms)
+  ok 41 tests\inbox-phase2.spec.js:389:3 › Inbox truncated-window honesty and safe recovery › the uncertain retry resolves the same retained command instead of minting a new one (2ms)
+
+  41 passed (34.4s)
+RELEASE_STAGE test:admin-product-master-ui 2026-10-29T10:24:15.118Z
+
+> k2-jimzon-prototype@0.1.0 test:admin-product-master-ui
+> playwright test --config=playwright.product-master.config.js tests/admin-product-master-ui.spec.js tests/admin-human-review-editor.spec.js tests/admin-initial-taxonomy-choice.spec.js tests/admin-inventory-batch-read-ui.spec.js tests/admin-reference-workflow.spec.js tests/admin-product-master-recovery.spec.js tests/admin-sku-merge-ui.spec.js && playwright test --config=playwright.sheet-reference.config.js tests/admin-secure-sheet-reference.spec.js
+
+[WebServer] (node:18200) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:4916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 63 tests using 1 worker
+
+(node:20412) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+  ok  1 [chromium] › tests\admin-human-review-editor.spec.js:16:1 › status saving defaults to immediate execution with an audit note and no dialog (1.6s)
+  ok  2 [chromium] › tests\admin-human-review-editor.spec.js:38:1 › optional status notes wait for explicit save and preserve the entered note (953ms)
+  ok  3 [chromium] › tests\admin-human-review-editor.spec.js:55:1 › immediate status refusal preserves current status and explicitly retries the identical command (866ms)
+  ok  4 [chromium] › tests\admin-human-review-editor.spec.js:75:1 › status saving locks all status controls while one command is in flight (795ms)
+  ok  5 [chromium] › tests\admin-human-review-editor.spec.js:93:1 › listing suggestions open safely, preserve field choices and reuse the matching product cache (1.6s)
+  ok  6 [chromium] › tests\admin-human-review-editor.spec.js:157:1 › human review is explicit, reasoned, saved and reversible independently of publication (2.2s)
+  ok  7 [chromium] › tests\admin-human-review-editor.spec.js:201:1 › failed human-review save preserves the unsaved decision and exact unchanged retry (1.4s)
+  ok  8 [chromium] › tests\admin-human-review-editor.spec.js:230:1 › initial explicit version rejection permits cancelling and a fresh canonical read (1.3s)
+  ok  9 [chromium] › tests\admin-human-review-editor.spec.js:243:1 › existing human review survives an unrelated detail save (999ms)
+  ok 10 [chromium] › tests\admin-initial-taxonomy-choice.spec.js:12:3 › initial taxonomy draft choices remain correctable; saved neither (978ms)
+  ok 11 [chromium] › tests\admin-initial-taxonomy-choice.spec.js:12:3 › initial taxonomy draft choices remain correctable; saved brand (928ms)
+  ok 12 [chromium] › tests\admin-initial-taxonomy-choice.spec.js:12:3 › initial taxonomy draft choices remain correctable; saved category (909ms)
+  ok 13 [chromium] › tests\admin-inventory-batch-read-ui.spec.js:8:1 › secure inventory loads complete batches, rejects failures and recovers on retry (2.0s)
+  ok 14 [chromium] › tests\admin-inventory-batch-read-ui.spec.js:47:1 › older secure batch response cannot overwrite a later refresh (671ms)
+  ok 15 [chromium] › tests\admin-product-master-recovery.spec.js:26:1 › proven non-applied decision opens fresh details only after explicit reconciliation (1.9s)
+  ok 16 [chromium] › tests\admin-product-master-recovery.spec.js:86:4 › non-applied reconciliation preserves saved evidence on unavailable current read (2.4s)
+  ok 17 [chromium] › tests\admin-product-master-recovery.spec.js:86:4 › non-applied reconciliation preserves saved evidence on wrong SKU current read (1.4s)
+  ok 18 [chromium] › tests\admin-product-master-recovery.spec.js:86:4 › non-applied reconciliation preserves saved evidence on invalid version current read (1.3s)
+  ok 19 [chromium] › tests\admin-product-master-recovery.spec.js:95:1 › reconciliation preserves request when current cookie actor changes during latest read (1.3s)
+  ok 20 [chromium] › tests\admin-product-master-recovery.spec.js:104:1 › role downgrade during reconciliation read retains original saved request (1.3s)
+  ok 21 [chromium] › tests\admin-product-master-recovery.spec.js:113:1 › actor switch away and back cannot consume pending evidence from a held latest read (1.4s)
+  ok 22 [chromium] › tests\admin-product-master-recovery.spec.js:127:1 › only canonical version refusal permits latest-review action (1.3s)
+  ok 23 [chromium] › tests\admin-product-master-recovery.spec.js:137:1 › storage remove and restore invalidates already admitted reconciliation (1.3s)
+  ok 24 [chromium] › tests\admin-product-master-recovery.spec.js:153:1 › historical receipt during explicit reconciliation confirms history instead of opening replacement (1.3s)
+  ok 25 [chromium] › tests\admin-product-master-recovery.spec.js:163:1 › reload forgets non-applied observation while retaining the exact pending request (1.7s)
+  ok 26 [chromium] › tests\admin-product-master-recovery.spec.js:169:1 › lost reply survives close reload missing product and refusal before exact retry confirms (1.9s)
+  ok 27 [chromium] › tests\admin-product-master-recovery.spec.js:201:1 › queued retry cannot become a fresh save after another tab resolves it (1.2s)
+  ok 28 [chromium] › tests\admin-product-master-recovery.spec.js:215:1 › late reply after actor switch preserves original request for original account (1.1s)
+  ok 29 [chromium] › tests\admin-product-master-recovery.spec.js:224:1 › changed cookie actor refuses retry before HTTP and retains request (1.2s)
+  ok 30 [chromium] › tests\admin-product-master-recovery.spec.js:232:1 › unusable storage or malformed saved command refuses before a fresh POST (1.8s)
+  ok 31 [chromium] › tests\admin-product-master-recovery.spec.js:240:1 › invalid successful reply cannot erase pending decision (1.0s)
+  ok 32 [chromium] › tests\admin-product-master-recovery.spec.js:247:1 › two tabs cannot submit different new decisions under one actor lock (1.7s)
+  ok 33 [chromium] › tests\admin-product-master-recovery.spec.js:269:1 › current role downgrade refuses before retry and retains the request (1.2s)
+  ok 34 [chromium] › tests\admin-product-master-recovery.spec.js:278:1 › changed session after a valid receipt cannot acknowledge the original request (1.0s)
+  ok 35 [chromium] › tests\admin-product-master-recovery.spec.js:286:1 › retained editor survives actor switch back while the old reply is still held (1.6s)
+  ok 36 [chromium] › tests\admin-product-master-ui.spec.js:20:1 › cancellation recovery survives lost reply and missing queue, permission refusal and actor switch (1.6s)
+  ok 37 [chromium] › tests\admin-product-master-ui.spec.js:55:1 › cancellation queued retry never becomes a fresh command after another tab resolves it (784ms)
+  ok 38 [chromium] › tests\admin-product-master-ui.spec.js:73:1 › cancellation late receipt resolves only its original staff record (970ms)
+  ok 39 [chromium] › tests\admin-product-master-ui.spec.js:87:1 › cancellation stale version requires refreshed order and explicit new review (887ms)
+  ok 40 [chromium] › tests\admin-product-master-ui.spec.js:104:1 › cancellation malformed success receipts retain the exact command until a valid confirmation (1.1s)
+  ok 41 [chromium] › tests\admin-product-master-ui.spec.js:127:1 › cancellation malformed recovery is preserved and refuses a new write (621ms)
+  ok 42 [chromium] › tests\admin-product-master-ui.spec.js:162:1 › express staff quotation retains the exact lost-response command through reload and permission refusal (1.8s)
+  ok 43 [chromium] › tests\admin-product-master-ui.spec.js:197:1 › express staff stale quote requires refresh and renewed review (931ms)
+  ok 44 [chromium] › tests\admin-product-master-ui.spec.js:216:1 › express staff identity switch keeps the previous unknown command isolated (977ms)
+  ok 45 [chromium] › tests\admin-product-master-ui.spec.js:241:1 › express staff corrupt saved quotation refuses before HTTP (1.0s)
+  ok 46 [chromium] › tests\admin-product-master-ui.spec.js:271:1 › customer rates Staff editor retains one publication across reload permission denial and retry (1.8s)
+  ok 47 [chromium] › tests\admin-product-master-ui.spec.js:310:1 › customer rates stale version requires refresh and fresh review before another publication (1.9s)
+  ok 48 [chromium] › tests\admin-product-master-ui.spec.js:338:1 › customer rates empty matrix and unavailable persistence never publish invented values (988ms)
+  ok 49 [chromium] › tests\admin-product-master-ui.spec.js:364:1 › customer rates queued retry stops after another tab resolved the publication (845ms)
+  ok 50 [chromium] › tests\admin-product-master-ui.spec.js:387:1 › customer rates changed actor cannot consume a late receipt or the previous pending change (883ms)
+  ok 51 [chromium] › tests\admin-product-master-ui.spec.js:438:1 › keeps secure Product Master edit, lifecycle, and delete decisions usable at 375px (3.3s)
+  ok 52 [chromium] › tests\admin-product-master-ui.spec.js:557:1 › an unconfirmed deletion freezes the form and retries the same identity (989ms)
+  ok 53 [chromium] › tests\admin-reference-workflow.spec.js:24:1 › confirmed creation fills only an unsaved choice and failed paired Save keeps it (2.4s)
+  ok 54 [chromium] › tests\admin-reference-workflow.spec.js:41:1 › lost reply survives close reload and retry uses exact saved request and actor (1.8s)
+  ok 55 [chromium] › tests\admin-reference-workflow.spec.js:57:1 › reference changed after confirmation is reviewed before unsaved selection (1.2s)
+  ok 56 [chromium] › tests\admin-reference-workflow.spec.js:69:1 › approved U+FEFF reference name remains readable and acknowledgeable (1.0s)
+  ok 57 [chromium] › tests\admin-reference-workflow.spec.js:83:1 › current permissions and actor guard retry without replacing the held request (1.2s)
+  ok 58 [chromium] › tests\admin-reference-workflow.spec.js:100:1 › switching actor hides the original actor recovery and switching back restores it (1.2s)
+  ok 59 [chromium] › tests\admin-reference-workflow.spec.js:113:1 › a queued retry refuses a request acknowledged in another tab (1.7s)
+  ok 60 [chromium] › tests\admin-reference-workflow.spec.js:132:1 › category creation preserves its parent and selects only the unsaved category (1.0s)
+  ok 61 [chromium] › tests\admin-sku-merge-ui.spec.js:22:1 › merge preview and exact lost-reply retry survive reload at mobile and desktop widths (1.9s)
+  ok 62 [chromium] › tests\admin-sku-merge-ui.spec.js:40:1 › stale saved merge reconciles against group preview before a new decision (1.1s)
+  ok 63 [chromium] › tests\admin-sku-merge-ui.spec.js:55:1 › dependency refusal disables confirmation without a write (751ms)
+
+  63 passed (1.5m)
+[WebServer] (node:20292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:1948) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+  ok 1 [chromium] › tests\admin-secure-sheet-reference.spec.js:15:1 › secure Sheet taxonomy is readable with protected Grid Edit guidance and no anonymous taxonomy access (1.6s)
+  ok 2 [chromium] › tests\admin-secure-sheet-reference.spec.js:36:1 › secure reference hook refuses explicit reload and create calls without taxonomy transport (730ms)
+
+  2 passed (5.6s)
+RELEASE_STAGE test:admin-website-assignment-ui 2026-10-29T10:25:51.954Z
+
+> k2-jimzon-prototype@0.1.0 test:admin-website-assignment-ui
+> playwright test --config=playwright.product-master.config.js tests/admin-website-assignment.spec.js
+
+[WebServer] (node:18896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19196) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 14 tests using 1 worker
+
+(node:16440) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/index.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/index.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/core.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/core.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/state-manager.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/state-manager.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/html5-qrcode-scanner.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/html5-qrcode-scanner.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/utils.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/utils.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/strings.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/strings.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/image-assets.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/image-assets.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/storage.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/storage.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/base.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/base.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/permissions.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/permissions.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/code-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/code-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/factories.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/factories.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/torch-button.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/torch-button.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/scan-type-selector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/scan-type-selector.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/retriever.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/retriever.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/file-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/file-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-zoom-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-zoom-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/ui/scanner/camera-selection-ui.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/ui/scanner/camera-selection-ui.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/camera/core-impl.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/camera/core-impl.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/zxing-html5-qrcode-decoder.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/zxing-html5-qrcode-decoder.ts"
+[WebServer] Sourcemap for "C:/Users/jerze/K2 JImzon/node_modules/html5-qrcode/esm/native-bar-code-detector.js" points to a source file outside its package: "C:/Users/jerze/K2 JImzon/node_modules/src/native-bar-code-detector.ts"
+  ok  1 [chromium] › tests\admin-website-assignment.spec.js:19:1 › separate reasoned Website assign and remove preserve current row version without Product Master writes (1.9s)
+  ok  2 [chromium] › tests\admin-website-assignment.spec.js:34:1 › lost Website reply survives reload missing product and Staff refusal; historical receipt is separate from current state (1.8s)
+  ok  3 [chromium] › tests\admin-website-assignment.spec.js:46:1 › Website stale saved request releases only after explicit exact recheck and valid fresh read (1.3s)
+  ok  4 [chromium] › tests\admin-website-assignment.spec.js:57:69 › Website reconciliation preserves evidence on unavailable read (2.0s)
+  ok  5 [chromium] › tests\admin-website-assignment.spec.js:57:69 › Website reconciliation preserves evidence on wrong SKU read (1.1s)
+  ok  6 [chromium] › tests\admin-website-assignment.spec.js:57:69 › Website reconciliation preserves evidence on missing version read (1.1s)
+  ok  7 [chromium] › tests\admin-website-assignment.spec.js:64:1 › malformed successful Website receipt cannot erase pending evidence (897ms)
+  ok  8 [chromium] › tests\admin-website-assignment.spec.js:68:1 › corrupt Website storage blocks fresh controls and remains untouched (680ms)
+  ok  9 [chromium] › tests\admin-website-assignment.spec.js:74:1 › Website actor switch away and back cannot acknowledge held original receipt (969ms)
+  ok 10 [chromium] › tests\admin-website-assignment.spec.js:80:1 › Website two tabs cannot replace a held request with another decision (1.5s)
+  ok 11 [chromium] › tests\admin-website-assignment.spec.js:87:1 › Website current account change during latest read retains request (1.1s)
+  ok 12 [chromium] › tests\admin-website-assignment.spec.js:95:1 › Website storage remove and restore invalidates held reconciliation (1.1s)
+  ok 13 [chromium] › tests\admin-website-assignment.spec.js:105:1 › Website in-progress refusal never enables replacement (1.0s)
+  ok 14 [chromium] › tests\admin-website-assignment.spec.js:110:1 › delayed Website lock completion cannot leave stale handoff for a later saved decision (1.5s)
+
+  14 passed (21.4s)
+RELEASE_STAGE test:owner-count-close-ui 2026-10-29T10:26:14.445Z
+
+> k2-jimzon-prototype@0.1.0 test:owner-count-close-ui
+> playwright test --config=playwright.owner-close.config.js tests/owner-count-close-ui.spec.js tests/customer-crm-ui.spec.js
+
+[WebServer] (node:24496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:9808) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 1 worker
+
+(node:21968) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 6:26:21 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  1 tests\customer-crm-ui.spec.js:8:33 › hold outcomes show current facts and recovery without a false saved notice at 375px (1.2s)
+[WebServer] 6:26:22 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  2 tests\customer-crm-ui.spec.js:8:33 › hold outcomes show current facts and recovery without a false saved notice at 1440px (2.3s)
+[WebServer] 6:26:24 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  3 tests\customer-crm-ui.spec.js:41:1 › directory search and privacy hold review preserve a lost response retry (1.6s)
+[WebServer] 6:26:26 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  4 tests\customer-crm-ui.spec.js:90:1 › a failed directory read is unavailable rather than an empty result (1.4s)
+[WebServer] 6:26:27 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+[WebServer] 6:26:28 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  5 tests\customer-crm-ui.spec.js:100:1 › Admin can reconcile a lost reply in read-only closed history after reload (1.2s)
+[WebServer] 6:26:28 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  6 tests\customer-crm-ui.spec.js:130:1 › customer hold reconciliation refusal preserves details without a false recorded notice (899ms)
+[WebServer] 6:26:29 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  7 tests\customer-crm-ui.spec.js:152:1 › customer-only hold creation and resolution use checked current results and retain an outage retry (1.3s)
+[WebServer] 6:26:31 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  8 tests\customer-crm-ui.spec.js:198:1 › customer hold reads retry and ignore late results for an earlier selection (633ms)
+[WebServer] 6:26:31 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok  9 tests\customer-crm-ui.spec.js:230:1 › a delayed outcome response cannot overwrite the current privacy queue (658ms)
+[WebServer] 6:26:32 PM [vite] (client) [console.warn] [K2 Security Guard] Missing required production configuration: VITE_SUPABASE_URL (MISSING), Supabase publishable key (present). Development mode fallback active.
+  ok 10 tests\owner-count-close-ui.spec.js:12:1 › phone Owner Count & Close reaches a sealed customer-free handoff (5.6s)
+
+  10 passed (22.6s)
+RELEASE_STAGE test:customer-account-ui 2026-10-29T10:26:38.247Z
+
+> k2-jimzon-prototype@0.1.0 test:customer-account-ui
+> node scripts/test-customer-account-ui.mjs
+
+
+Running 60 tests using 1 worker
+
+(node:24404) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_EXPIRED (2.2s)
+  ok  2 tests\customer-account-ui.spec.js:31:95 › guest linking recovery keeps Auth and offers a usable next step for GUEST_ACCESS_REQUIRED (2.5s)
+  ok  3 tests\customer-account-ui.spec.js:58:1 › email sign-in return waits for confirmation and keeps PKCE before establishing the session (1.6s)
+  ok  4 tests\customer-account-ui.spec.js:81:1 › email sign-in return explains an expired link without sending another email or exposing provider text (762ms)
+  ok  5 tests\customer-account-ui.spec.js:90:1 › email sign-in return accepts an older implicit email link without changing the PKCE client (1.4s)
+  ok  6 tests\customer-account-ui.spec.js:111:1 › email sign-in return preserves the pending sign-out safeguard (571ms)
+  ok  7 tests\customer-account-ui.spec.js:119:34 › email sign-in return fits existing account design at 375 (810ms)
+  ok  8 tests\customer-account-ui.spec.js:119:34 › email sign-in return fits existing account design at 1440 (1.6s)
+  -   9 tests\customer-account-ui.spec.js:134:34 › disabled account closure keeps settings available at 375
+  -  10 tests\customer-account-ui.spec.js:134:34 › disabled account closure keeps settings available at 1440
+  ok 11 tests\customer-account-ui.spec.js:218:34 › new account shows its delivery mobile form directly at 375px (995ms)
+  ok 12 tests\customer-account-ui.spec.js:218:34 › new account shows its delivery mobile form directly at 1440px (1.6s)
+  ok 13 tests\customer-account-ui.spec.js:250:1 › saved delivery addresses retain one exact change through a lost save reply (1.7s)
+  ok 14 tests\customer-account-ui.spec.js:288:1 › saved delivery default restores gift recipient and location without requiring another entry (1.5s)
+  ok 15 tests\customer-account-ui.spec.js:303:1 › saved delivery editor accepts a name added in the profile form while it is open (1.3s)
+  ok 16 tests\customer-account-ui.spec.js:333:1 › saved delivery lost reply reconciles a JSONB destination with reordered keys (1.3s)
+  ok 17 tests\customer-account-ui.spec.js:362:1 › saved delivery default never mixes into a manually entered recipient or street (1.6s)
+  ok 18 tests\customer-account-ui.spec.js:385:1 › saved delivery addresses change defaults and remove the final destination without resurrection (1.8s)
+  ok 19 tests\customer-account-ui.spec.js:417:1 › saved delivery work keeps guest checkout available without an account (1.7s)
+  ok 20 tests\customer-account-ui.spec.js:432:1 › saved delivery checkout clears the previous customer on an account switch and sign-out (2.3s)
+  ok 21 tests\customer-account-ui.spec.js:462:1 › saved delivery default cannot replace an existing held order snapshot (582ms)
+  ok 22 tests\customer-account-ui.spec.js:483:1 › saved delivery edit removed in another tab remains a draft instead of a false save (1.3s)
+  ok 23 tests\customer-account-ui.spec.js:509:1 › saved delivery address editor stays readable on mobile and desktop in both themes (3.1s)
+  ok 24 tests\customer-account-ui.spec.js:536:1 › account purchase overview uses complete linked totals and has private order/proof downloads (2.9s)
+  ok 25 tests\customer-account-ui.spec.js:582:99 › closure states remain usable at 375 in light (2.3s)
+  ok 26 tests\customer-account-ui.spec.js:582:99 › closure states remain usable at 1440 in dark (2.7s)
+  ok 27 tests\customer-account-ui.spec.js:622:1 › closure survives a lost confirmation response and can be recovered without repeating confirmation (1.5s)
+  ok 28 tests\customer-account-ui.spec.js:668:1 › legacy account history keeps recorded payment and messages without final bill or approval (594ms)
+  ok 29 tests\customer-account-ui.spec.js:686:1 › authenticated express approval recovers an already accepted lost reply after reload (1.7s)
+  ok 30 tests\customer-account-ui.spec.js:716:1 › authenticated express late receipt stays with the original account and accepts an explicit zero fee (1.1s)
+  ok 31 tests\customer-account-ui.spec.js:758:1 › account switch discards a late previous-customer history response (783ms)
+  ok 32 tests\customer-account-ui.spec.js:806:1 › unconfirmed provider sign-out clears the local view and remains visible after reload (2.2s)
+  ok 33 tests\customer-account-ui.spec.js:830:1 › reloading during an unfinished sign-out does not restore the private account view (1.3s)
+  ok 34 tests\customer-account-ui.spec.js:859:1 › a new tab cannot restore a private session while sign-out is unfinished (1.4s)
+  ok 35 tests\customer-account-ui.spec.js:890:1 › sign-out closes an already-open account view in another tab (1.5s)
+  ok 36 tests\customer-account-ui.spec.js:921:1 › sign-out reports failure without hiding the account when its shared guard cannot be saved (1.6s)
+  ok 37 tests\customer-account-ui.spec.js:942:1 › a blocked sign-out keeps its retry when browser storage fails (1.1s)
+  ok 38 tests\customer-account-ui.spec.js:972:1 › a new accepted session clears the previous local sign-out success (810ms)
+  ok 39 tests\customer-account-ui.spec.js:991:1 › sign-out does not claim success when the saved session has disappeared (772ms)
+  ok 40 tests\customer-account-ui.spec.js:1005:1 › an SDK-ignored provider refusal does not claim remote sign-out was verified (766ms)
+  ok 41 tests\customer-account-ui.spec.js:1016:1 › an SDK-accepted sign-out with a cleared local session does not report an error (775ms)
+  ok 42 tests\customer-account-ui.spec.js:1028:1 › a late settings read cannot overwrite a newer saved profile (983ms)
+  ok 43 tests\customer-account-ui.spec.js:1066:1 › a settings read started during a save cannot undo its successful result (1.1s)
+  ok 44 tests\customer-account-ui.spec.js:1112:1 › a save from an earlier sign-in cannot replace newer settings after signing in again (1.7s)
+  ok 45 tests\customer-account-ui.spec.js:1155:1 › a delayed save reply cannot replace a newer settings read (947ms)
+  ok 46 tests\customer-account-ui.spec.js:1193:1 › a stale settings read cannot make a marked notification unread again (971ms)
+  ok 47 tests\customer-account-ui.spec.js:1235:1 › a delayed save cannot report success on a different customer account (1.0s)
+  ok 48 tests\customer-account-ui.spec.js:1271:41 › superseded save reconciliation respects a newer successful read (1.1s)
+  ok 49 tests\customer-account-ui.spec.js:1271:41 › superseded save reconciliation respects a newer failed read (1.2s)
+  ok 50 tests\customer-account-ui.spec.js:1325:1 › marking a notification read preserves unsaved profile edits (932ms)
+  ok 51 tests\customer-account-ui.spec.js:1343:1 › a same-account refresh preserves unsaved profile edits (683ms)
+  ok 52 tests\customer-account-ui.spec.js:1365:1 › refreshing a linked account preserves an unsaved settings draft (750ms)
+  ok 53 tests\customer-account-ui.spec.js:1392:1 › a transient linked-history refresh error keeps the unsaved settings draft (915ms)
+  ok 54 tests\customer-account-ui.spec.js:1410:1 › a late same-account history response cannot replace a newer history result (954ms)
+  ok 55 tests\customer-account-ui.spec.js:1442:1 › linking guest records preserves an unsaved settings draft (991ms)
+  ok 56 tests\customer-account-ui.spec.js:1459:1 › settings fields cannot be changed while their save is pending (903ms)
+  ok 57 tests\customer-account-ui.spec.js:1481:1 › a verified new customer can save profile settings and read a scoped notification before ordering (984ms)
+  ok 58 tests\customer-account-ui.spec.js:1523:1 › customer account entry is phone-safe, passwordless, recoverable, and keeps primary mobile navigation at five (2.8s)
+  ok 59 tests\customer-account-ui.spec.js:1560:1 › verified account claims once, loads only customer-visible history, and sends an authenticated bounded reply (1.4s)
+  ok 60 tests\wholesale-inquiry-ui.spec.js:3:1 › secure wholesale inquiry returns only a server receipt and no commercial authority (2.3s)
+
+  2 skipped
+  58 passed (1.4m)
+RELEASE_STAGE test:selling-surfaces 2026-10-29T10:28:05.340Z
+
+> k2-jimzon-prototype@0.1.0 test:selling-surfaces
+> playwright test --config=playwright.selling.config.js tests/storefront-selling-surfaces.spec.js tests/hero-enhancement.spec.js tests/storefront-readiness-ui.spec.js tests/product-comparison-containment.spec.js tests/homepage-mobile-fixes.spec.js tests/storefront-mobile-audit.spec.js tests/search-visibility-ui.spec.js
+
+[WebServer] (node:22204) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21560) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 94 tests using 1 worker
+
+(node:13848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 6:28:16 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  1 tests\hero-enhancement.spec.js:21:1 › additive hero preserves the original content and supports keyboard shopping (6.7s)
+[WebServer] 6:28:22 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  2 tests\hero-enhancement.spec.js:67:1 › unavailable product images fall back without losing the product link (810ms)
+[WebServer] 6:28:23 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:28:24 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  3 tests\hero-enhancement.spec.js:78:1 › loading and empty collection keep both original shopping routes available (1.7s)
+[WebServer] 6:28:25 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  4 tests\homepage-mobile-fixes.spec.js:16:3 › 320 light: homepage shopping stays readable and reachable (1.2s)
+[WebServer] 6:28:26 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  5 tests\homepage-mobile-fixes.spec.js:16:3 › 320 dark: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 6:28:28 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  6 tests\homepage-mobile-fixes.spec.js:16:3 › 375 light: homepage shopping stays readable and reachable (1.1s)
+[WebServer] 6:28:29 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  7 tests\homepage-mobile-fixes.spec.js:16:3 › 375 dark: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 6:28:30 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  8 tests\homepage-mobile-fixes.spec.js:16:3 › 430 light: homepage shopping stays readable and reachable (1.2s)
+[WebServer] 6:28:32 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok  9 tests\homepage-mobile-fixes.spec.js:16:3 › 430 dark: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 6:28:33 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 10 tests\homepage-mobile-fixes.spec.js:16:3 › 768 light: homepage shopping stays readable and reachable (1.3s)
+[WebServer] 6:28:35 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 11 tests\homepage-mobile-fixes.spec.js:16:3 › 768 dark: homepage shopping stays readable and reachable (1.4s)
+[WebServer] 6:28:36 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 12 tests\homepage-mobile-fixes.spec.js:16:3 › 1440 light: homepage shopping stays readable and reachable (1.5s)
+[WebServer] 6:28:38 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 13 tests\homepage-mobile-fixes.spec.js:16:3 › 1440 dark: homepage shopping stays readable and reachable (2.0s)
+  ok 14 tests\homepage-mobile-fixes.spec.js:71:1 › mobile homepage preserves layout with 200% text and ordinary motion (1.2s)
+[WebServer] 6:28:41 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 15 tests\homepage-mobile-fixes.spec.js:92:3 › 320 light: featured browsing controls reveal every product and preserve full photos (1.2s)
+[WebServer] 6:28:42 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 16 tests\homepage-mobile-fixes.spec.js:92:3 › 320 dark: featured browsing controls reveal every product and preserve full photos (1.4s)
+[WebServer] 6:28:43 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 17 tests\homepage-mobile-fixes.spec.js:92:3 › 375 light: featured browsing controls reveal every product and preserve full photos (1.3s)
+[WebServer] 6:28:45 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 18 tests\homepage-mobile-fixes.spec.js:92:3 › 375 dark: featured browsing controls reveal every product and preserve full photos (1.4s)
+[WebServer] 6:28:46 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 19 tests\homepage-mobile-fixes.spec.js:92:3 › 430 light: featured browsing controls reveal every product and preserve full photos (1.6s)
+[WebServer] 6:28:48 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 20 tests\homepage-mobile-fixes.spec.js:92:3 › 430 dark: featured browsing controls reveal every product and preserve full photos (1.4s)
+  ok 21 tests\product-comparison-containment.spec.js:6:7 › 390 light portrait: complete primary stays inside comparison well (502ms)
+  ok 22 tests\product-comparison-containment.spec.js:6:7 › 390 light square: complete primary stays inside comparison well (347ms)
+  ok 23 tests\product-comparison-containment.spec.js:33:5 › 390 light: failed primary retains a contained fallback (305ms)
+  ok 24 tests\product-comparison-containment.spec.js:6:7 › 390 dark portrait: complete primary stays inside comparison well (352ms)
+  ok 25 tests\product-comparison-containment.spec.js:6:7 › 390 dark square: complete primary stays inside comparison well (301ms)
+  ok 26 tests\product-comparison-containment.spec.js:33:5 › 390 dark: failed primary retains a contained fallback (292ms)
+  ok 27 tests\product-comparison-containment.spec.js:6:7 › 1280 light portrait: complete primary stays inside comparison well (657ms)
+  ok 28 tests\product-comparison-containment.spec.js:6:7 › 1280 light square: complete primary stays inside comparison well (464ms)
+  ok 29 tests\product-comparison-containment.spec.js:33:5 › 1280 light: failed primary retains a contained fallback (379ms)
+  ok 30 tests\product-comparison-containment.spec.js:6:7 › 1280 dark portrait: complete primary stays inside comparison well (344ms)
+  ok 31 tests\product-comparison-containment.spec.js:6:7 › 1280 dark square: complete primary stays inside comparison well (292ms)
+  ok 32 tests\product-comparison-containment.spec.js:33:5 › 1280 dark: failed primary retains a contained fallback (272ms)
+[WebServer] 6:28:54 PM [vite] (client) [console.error] TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/Footer.jsx
+[WebServer]
+[WebServer] The above error occurred in one of your React components.
+[WebServer]
+[WebServer] React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+[WebServer]
+[WebServer] 6:28:54 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "react-boundary", pathname: "/pasabuy" } TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/Footer.jsx
+  ok 33 tests\search-visibility-ui.spec.js:19:1 › a failed Footer module cannot replace the Pasabuy page (722ms)
+[WebServer] 6:28:54 PM [vite] (client) [console.error] TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/StorefrontAnalytics.jsx
+[WebServer]
+[WebServer] The above error occurred in one of your React components.
+[WebServer]
+[WebServer] React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+[WebServer]
+[WebServer] 6:28:54 PM [vite] (client) [console.error] [K2 browser error] { code: "UI_SECTION_UNAVAILABLE", kind: "react-boundary", pathname: "/catalog" } TypeError: Failed to fetch dynamically imported module: http://localhost:5191/src/components/StorefrontAnalytics.jsx
+  ok 34 tests\search-visibility-ui.spec.js:27:1 › a failed optional Analytics module cannot replace the shopping page (1.2s)
+  ok 35 tests\search-visibility-ui.spec.js:35:1 › product names provide real links and preserve client navigation (1.7s)
+[WebServer] 6:28:58 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 36 tests\search-visibility-ui.spec.js:45:1 › the immersive store defers the optional prompt without granting consent (1.8s)
+  ok 37 tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 375 (982ms)
+  ok 38 tests\search-visibility-ui.spec.js:59:3 › public navigation exposes canonical links and preserves client navigation at 1440 (1.2s)
+  ok 39 tests\search-visibility-ui.spec.js:76:1 › contact and policy pages identify their own public content (2.2s)
+  ok 40 tests\search-visibility-ui.spec.js:84:1 › brand fonts load locally and the first-view poster is prioritized (709ms)
+  ok 41 tests\search-visibility-ui.spec.js:91:1 › the featured product rail uses a bounded delivery copy of its approved image (788ms)
+  ok 42 tests\search-visibility-ui.spec.js:103:1 › public merchant identity uses verified details and clears on a private route (759ms)
+  ok 43 tests\search-visibility-ui.spec.js:117:1 › product facts and markup resolve the catalog brand relationship (757ms)
+  ok 44 tests\search-visibility-ui.spec.js:131:1 › analytics requires consent, strips URLs, avoids duplicate/private views and can be withdrawn (2.5s)
+  ok 45 tests\search-visibility-ui.spec.js:163:1 › browser privacy signals refuse analytics even if a previous visit allowed it (650ms)
+  ok 46 tests\search-visibility-ui.spec.js:176:1 › keyboard reopening focuses the consent choices and Escape restores the opener (617ms)
+  ok 47 tests\search-visibility-ui.spec.js:187:1 › consent expiry disables measurement in a tab that remains open (2.6s)
+  ok 48 tests\search-visibility-ui.spec.js:198:1 › enlarged text keeps consent reachable and closing does not grant analytics (1.2s)
+[WebServer] 6:29:14 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 49 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: mobile-320 (715ms)
+[WebServer] 6:29:15 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 50 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: mobile (752ms)
+[WebServer] 6:29:16 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 51 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: mobile-dark (709ms)
+[WebServer] 6:29:17 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 52 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: desktop (1.3s)
+[WebServer] 6:29:18 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 53 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: desktop-dark (755ms)
+[WebServer] 6:29:19 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 54 tests\search-visibility-ui.spec.js:219:3 › consent controls remain readable and clear navigation: user-777 (1.1s)
+[WebServer] 6:29:20 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:29:21 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:29:22 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 55 tests\storefront-mobile-audit.spec.js:35:3 › 320 light: every storefront route reflows without runtime errors (11.2s)
+[WebServer] 6:29:31 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:29:32 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:29:32 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 56 tests\storefront-mobile-audit.spec.js:35:3 › 320 dark: every storefront route reflows without runtime errors (8.1s)
+[WebServer] 6:29:39 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:29:40 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:29:40 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 57 tests\storefront-mobile-audit.spec.js:35:3 › 375 light: every storefront route reflows without runtime errors (7.3s)
+[WebServer] 6:29:46 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:29:47 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:29:47 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 58 tests\storefront-mobile-audit.spec.js:35:3 › 375 dark: every storefront route reflows without runtime errors (6.7s)
+[WebServer] 6:29:53 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:29:54 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:29:54 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 59 tests\storefront-mobile-audit.spec.js:35:3 › 430 light: every storefront route reflows without runtime errors (9.9s)
+[WebServer] 6:30:05 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:30:06 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:30:06 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 60 tests\storefront-mobile-audit.spec.js:35:3 › 430 dark: every storefront route reflows without runtime errors (9.0s)
+[WebServer] 6:30:12 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:30:13 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:30:14 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 61 tests\storefront-mobile-audit.spec.js:35:3 › 768 light: every storefront route reflows without runtime errors (9.7s)
+[WebServer] 6:30:22 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:30:22 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:30:23 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 62 tests\storefront-mobile-audit.spec.js:35:3 › 768 dark: every storefront route reflows without runtime errors (7.8s)
+[WebServer] 6:30:30 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:30:31 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:30:32 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 63 tests\storefront-mobile-audit.spec.js:35:3 › 1440 light: every storefront route reflows without runtime errors (23.3s)
+[WebServer] 6:30:54 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:30:55 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:30:57 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 64 tests\storefront-mobile-audit.spec.js:35:3 › 1440 dark: every storefront route reflows without runtime errors (28.3s)
+  ok 65 tests\storefront-mobile-audit.spec.js:53:3 › light: checkout retains complete names and contains coupon controls (1.8s)
+[WebServer] 6:31:23 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 66 tests\storefront-mobile-audit.spec.js:67:3 › light: FAQ controls remain readable, sized and recover from no results (2.1s)
+  ok 67 tests\storefront-mobile-audit.spec.js:86:3 › light: policy navigation exposes current page and works with keyboard (1.2s)
+  ok 68 tests\storefront-mobile-audit.spec.js:99:3 › light: unavailable receiving-account warning has readable contrast (2.7s)
+  ok 69 tests\storefront-mobile-audit.spec.js:53:3 › dark: checkout retains complete names and contains coupon controls (1.9s)
+[WebServer] 6:31:31 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 70 tests\storefront-mobile-audit.spec.js:67:3 › dark: FAQ controls remain readable, sized and recover from no results (1.9s)
+  ok 71 tests\storefront-mobile-audit.spec.js:86:3 › dark: policy navigation exposes current page and works with keyboard (792ms)
+  ok 72 tests\storefront-mobile-audit.spec.js:99:3 › dark: unavailable receiving-account warning has readable contrast (1.0s)
+[WebServer] 6:31:35 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 73 tests\storefront-mobile-audit.spec.js:113:3 › cart: modal keyboard focus stays in panel and returns to opener (1.3s)
+[WebServer] 6:31:36 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 74 tests\storefront-mobile-audit.spec.js:113:3 › chat: modal keyboard focus stays in panel and returns to opener (1.5s)
+[WebServer] 6:31:38 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 75 tests\storefront-mobile-audit.spec.js:135:1 › home-indicator spacing keeps mobile chat clear of navigation (1.1s)
+[WebServer] 6:31:39 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 76 tests\storefront-mobile-audit.spec.js:147:1 › cart checkout action focuses the new route heading (1.9s)
+[WebServer] 6:31:41 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 77 tests\storefront-mobile-audit.spec.js:160:34 › 320: chat returns focus after browser Back changes its trigger (2.8s)
+[WebServer] 6:31:44 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 78 tests\storefront-mobile-audit.spec.js:160:34 › 1440: chat returns focus after browser Back changes its trigger (2.7s)
+[WebServer] 6:31:46 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 79 tests\storefront-mobile-audit.spec.js:174:1 › enlarged mobile text preserves every header control without trapping the viewport (874ms)
+  ok 80 tests\storefront-mobile-audit.spec.js:187:34 › 768: tablet has navigation and chat clears it (958ms)
+  ok 81 tests\storefront-mobile-audit.spec.js:187:34 › 1023: tablet has navigation and chat clears it (919ms)
+  ok 82 tests\storefront-mobile-audit.spec.js:199:40 › light: QR payment guidance follows the current final-total and funds status (2.5s)
+  ok 83 tests\storefront-mobile-audit.spec.js:199:40 › dark: QR payment guidance follows the current final-total and funds status (2.4s)
+[WebServer] 6:31:54 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:31:55 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:31:56 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 84 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 390px light (8.3s)
+[WebServer] 6:32:02 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:32:02 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+[WebServer] 6:32:03 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+  ok 85 tests\storefront-readiness-ui.spec.js:19:3 › customer pages readable at 390px dark (6.3s)
+[WebServer] 6:32:08 PM [vite] (client) [console.warn] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled

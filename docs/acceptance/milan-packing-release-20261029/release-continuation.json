@@ -1,0 +1,43 @@
+{
+  "source": "15de3db7c0c5d4da86b3c9bf5a0470481f1fc1bb",
+  "initialGate": "verify-release.log",
+  "focusedRecovery": [
+    "focused-grouping.log",
+    "focused-route-docs.log"
+  ],
+  "continuedAfter": "test:selling-surfaces",
+  "startedAt": "2026-10-29T11:42:43.264Z",
+  "stages": [
+    {
+      "stage": "test:order-receipt-direct",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T11:42:59.085Z"
+    },
+    {
+      "stage": "test:workflow-api",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T11:43:41.232Z"
+    },
+    {
+      "stage": "test:intake-ai-ui",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T11:44:10.833Z"
+    },
+    {
+      "stage": "test:vercel-output",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T11:44:13.232Z"
+    },
+    {
+      "stage": "build:storefront",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T11:44:55.272Z"
+    },
+    {
+      "stage": "build:admin",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T11:45:33.937Z"
+    }
+  ],
+  "complete": true
+}

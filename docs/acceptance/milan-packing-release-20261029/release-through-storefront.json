@@ -1,0 +1,28 @@
+{
+  "source": "15de3db7c0c5d4da86b3c9bf5a0470481f1fc1bb",
+  "initialGate": "verify-release.log",
+  "focusedRecovery": [
+    "focused-grouping.log",
+    "focused-route-docs.log"
+  ],
+  "continuedAfter": "test:base",
+  "startedAt": "2026-10-29T10:09:36.035Z",
+  "stages": [
+    {
+      "stage": "test:mobile-moderation",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:09:37.696Z"
+    },
+    {
+      "stage": "test:store-orientation",
+      "exitCode": 0,
+      "completedAt": "2026-10-29T10:11:08.531Z"
+    },
+    {
+      "stage": "test:storefront-ui",
+      "exitCode": 1,
+      "completedAt": "2026-10-29T10:12:57.149Z"
+    }
+  ],
+  "complete": false
+}

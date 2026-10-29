@@ -1,0 +1,13 @@
+{
+  "mapItem": "MAP-023",
+  "ideaId": "IDEA-20261029-06",
+  "project": "pixplcjqivlfflickobf",
+  "sourceCommit": "15de3db7c0c5d4da86b3c9bf5a0470481f1fc1bb",
+  "migrationSha256": "377dc9b1cf1c6ffb4a7d838cac3d15d428c0639e36bfff7398b2b539cc57f4ca",
+  "packetSha256": "0db96b83701e81090bfa99af3deb7de7fa7cab3fa2d4a6fd0fe575e1c5be981b",
+  "preDataRecoverySha256": "06ddd7f7044e9723006fce8a8f3e3e8f10663b08cc4db0dd90ecbb7fdc39aa3d",
+  "expectedMetadataSha256": "99047ee2489495562fd0be080f151657d3ccb7827e5150f68cc0f95ed17644f7",
+  "afterDataRecoveryRefusal": true,
+  "preparedAt": "2026-10-29T10:08:37.424Z",
+  "productionChanged": false
+}

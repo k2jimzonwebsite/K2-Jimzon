@@ -1,0 +1,13 @@
+{
+  "productionChanged": false,
+  "startedAt": "2026-10-29T10:07:19.252Z",
+  "database": "k2_current_restore_packet_4eef434c8bb74e3e8de2c409b59b64be",
+  "currentSchemaAndAclsRestored": true,
+  "exactPacketApplied": true,
+  "packetSha256": "0db96b83701e81090bfa99af3deb7de7fa7cab3fa2d4a6fd0fe575e1c5be981b",
+  "ledgerReadback": true,
+  "status": "failed",
+  "failure": "psql: ERROR:  syntax error at or near \"CREATE\"\r\nLINE 205: CREATE OR REPLACE FUNCTION k2_private.verify_admin_bff_reque...\r\n          ^\r\n",
+  "clusterStopped": true,
+  "completedAt": "2026-10-29T10:07:28.201Z"
+}

@@ -1,0 +1,11 @@
+{
+  "scope": "Current restored K2 application schema with restored ACLs and unchanged receiving functions; disposable loopback database only",
+  "productionChanged": false,
+  "startedAt": "2026-10-29T10:02:53.288Z",
+  "countVersusStaleDispatch": true,
+  "concurrentBarcodeOneDraftTwoUnits": true,
+  "oldArtifactDowngradeRefusedAfterFeatureData": true,
+  "status": "passed",
+  "clusterStopped": true,
+  "completedAt": "2026-10-29T10:02:55.713Z"
+}

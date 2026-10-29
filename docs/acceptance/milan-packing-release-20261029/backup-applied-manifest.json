@@ -1,0 +1,17 @@
+{
+  "formatVersion": 1,
+  "projectRef": "pixplcjqivlfflickobf",
+  "purpose": "current-schema-pre-account-guest-permission-cutover",
+  "createdAt": "2026-10-29T11:46:32.823Z",
+  "dumpFormat": "PostgreSQL custom",
+  "dumpBytes": 4056102,
+  "dumpSha256": "71c3b191e9c6f7dbeaf523a6cd55087abef6565fb8d1e381ac8362c5138fa0f8",
+  "productsOldArchive": {
+    "rowCount": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "restoreVerification": "Pending",
+  "encryptedBytes": 4056166,
+  "encryptedSha256": "038f69bb8022a31ffa8aab3d6580d1e6b4eb6930adb195c34e1682533138dca1",
+  "backupId": "current-pixplcjqivlfflickobf-2026-10-29T114632823Z-038f69bb8022"
+}

@@ -1,3 +1,5 @@
+29 October applied checkpoint: ledger20261029180000 / packet0db96b83 is installed once on exactK2. Do not execute activation again. Current source promotion and physical acceptance state: docs/acceptance/MILAN_PACKING_RELEASE_20261029.md/json and MAP-023.
+
 # Milan packing release and recovery boundary
 
 MAP-023 / IDEA-20261029-06. Prepared local feature only; this document is not authorization or another execution backlog. Current evidence and remaining action are in `MASTER_ACTION_PLAN.md` and `docs/acceptance/MILAN_PACKING_DISCOVERY_20261029.md`.
