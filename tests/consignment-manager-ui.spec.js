@@ -28,7 +28,7 @@ async function setup(page,{holdRefresh=false}={}){
  await expect(page.getByRole('article').getByText('Known packing item',{exact:true})).toBeVisible()
  return {prefix,writes,creates,release,productReads:()=>productReads}
 }
-async function context(page){await page.getByLabel('Physical box code',{exact:true}).fill('BOX-A');await page.getByLabel('Batch / lot code',{exact:true}).fill('LOT-A');await page.getByLabel('Best-before date',{exact:true}).fill('2027-10-01')}
+async function context(page){await page.getByLabel('Box label',{exact:true}).fill('BOX-A')}
 
 test('Create manifest suggests an unused code and explains duplicate races inside the form',async({page})=>{
  const h=await setup(page);await page.getByRole('button',{name:'Create manifest',exact:true}).click()

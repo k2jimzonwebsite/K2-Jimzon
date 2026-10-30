@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test'
+import {mkdirSync} from 'node:fs'
 const actor='11111111-1111-4111-8111-111111111111',shipment='33333333-3333-4333-8333-333333333333',item='44444444-4444-4444-8444-444444444444'
 async function setup(page,{pause=false,block=false}={}){
  let count=0,revision=0,removed=false,cancelled=false,hold=pause;const commands=[],receipts=new Map();let unblock
@@ -27,13 +28,26 @@ async function setup(page,{pause=false,block=false}={}){
  await page.goto('/tests/fixtures/milan-packing-harness.html')
  return {commands,release:()=>{hold=false;unblock?.()},count:()=>count}
 }
-async function context(page){await page.getByLabel('Physical box code',{exact:true}).fill('BOX-A');await page.getByLabel('Batch / lot code',{exact:true}).fill('LOT-A');await page.getByLabel('Best-before date',{exact:true}).fill('2027-10-01')}
+async function context(page){await page.getByLabel('Box label',{exact:true}).fill('BOX-A')}
 async function scan(page,code='8001234567890'){
  const input=page.getByLabel('Barcode or SKU',{exact:true})
  // Hardware scanners emit characters then Enter; keep the burst independent
  // of server acknowledgement and avoid replace-all text injection.
  await input.focus();await input.pressSequentially(code,{delay:0});await input.press('Enter')
 }
+test('camera entry is available with a box label and no invented product lot',async({page})=>{
+ const h=await setup(page)
+ await expect(page.getByLabel('Box label',{exact:true})).toHaveValue('BOX-1')
+ await expect(page.getByRole('button',{name:'Use camera scanner'})).toBeEnabled()
+ await page.getByLabel('Box label',{exact:true}).fill('')
+ await page.getByRole('button',{name:'Use camera scanner'}).click()
+ await expect(page.getByRole('alert')).toContainText('label written on this physical box')
+ await expect(page.getByLabel('Box label',{exact:true})).toBeFocused()
+ await page.getByLabel('Box label',{exact:true}).fill('BOX-1')
+ await scan(page)
+ await expect.poll(()=>h.commands.length).toBe(1)
+ expect(h.commands[0].p).toMatchObject({boxCode:'BOX-1',batchCode:null,bestBeforeDate:null})
+})
 test('packing accepts rapid identical scans and offers manual ±1 without catalog completion',async({page})=>{
  const h=await setup(page);await context(page)
  await scan(page);await scan(page);await scan(page)
@@ -124,11 +138,12 @@ test('packing layout, focus and targets remain usable at phone and desktop width
  await setup(page);await context(page);await scan(page)
  await expect(page.getByLabel('Packed quantity K2-SKU-009999')).toHaveText('1')
  await page.emulateMedia({reducedMotion:'reduce'})
+ mkdirSync('docs/acceptance/italy-box-scanner-20261030',{recursive:true})
  for(const width of [375,1440]){
   await page.setViewportSize({width,height:900})
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true)
   for(const btn of await page.getByRole('button',{name:/^(Add one|Remove one)/}).all())expect((await btn.boundingBox()).height).toBeGreaterThanOrEqual(44)
-  await page.screenshot({path:`docs/acceptance/milan-packing-discovery-20261029/packing-${width}.png`,fullPage:true})
+  await page.screenshot({path:`docs/acceptance/italy-box-scanner-20261030/packing-${width}.png`,fullPage:true})
  }
 })
 test('remove preserves a restore action; cancellation can be reopened before dispatch',async({page})=>{

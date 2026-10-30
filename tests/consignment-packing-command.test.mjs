@@ -16,6 +16,11 @@ test('packing accepts an unknown barcode without catalog descriptions or an expe
   assert.deepEqual(validate(body), body)
 })
 
+test('Italy box count accepts unknown product lot and date without inventing either', () => {
+  const body = count({ batchCode: null, bestBeforeDate: null })
+  assert.deepEqual(validate(body), body)
+})
+
 test('manual counters bind ±1 to an exact existing line and physical lot', () => {
   const body = count({ itemId: randomUUID(), code: 'K2-SKU-001184', source: 'counter', delta: -1 })
   assert.deepEqual(validate(body), body)
@@ -24,9 +29,10 @@ test('manual counters bind ±1 to an exact existing line and physical lot', () =
   }
 })
 
-test('packing rejects invented fields, missing lot context and invalid dates', () => {
-  for (const patch of [{ srp: 750 }, { is_human_reviewed: true }, { boxCode: '' }, { batchCode: '' },
-    { bestBeforeDate: '2027-02-30' }, { bestBeforeDate: null }, { consignmentId: 'another-manifest' }]) {
+test('packing rejects invented fields, missing box and invalid supplied dates', () => {
+  for (const patch of [{ srp: 750 }, { is_human_reviewed: true }, { boxCode: '' },
+    { bestBeforeDate: '2027-02-30' }, { batchCode: null }, { bestBeforeDate: null },
+    { consignmentId: 'another-manifest' }]) {
     assert.throws(() => validate(count(patch)), /REQUEST_INVALID/)
   }
 })

@@ -23,7 +23,13 @@ create table public.consignment_items(id uuid primary key default gen_random_uui
  sku text references public.products(sku),batch_code text not null,box_code text not null,best_before_date date not null,
  expected_qty integer not null default 0 check(expected_qty>=0),italy_packed_qty integer not null default 0 check(italy_packed_qty>=0),
  manila_scanned_qty integer not null default 0 check(manila_scanned_qty>=0),status text default 'Pending',created_at timestamptz default now(),
- unique(consignment_id,sku,batch_code,box_code));
+ check (italy_packed_qty>=0));
+create unique index consignment_items_manifest_lot_box_uniq
+ on public.consignment_items(consignment_id,sku,batch_code,box_code);
+-- Row types needed to compile the captured, non-executed receiving function.
+create table public.inventory_balances(sku text,location_code text,on_hand integer);
+create table public.product_batches(id uuid,sku text,box_code text,batch_code text,
+ quantity_available integer,inventory_status text,hub text,custodian text);
 create table public.audit_logs(id uuid primary key default gen_random_uuid(),table_name text,record_id text,action text,old_data jsonb,new_data jsonb,user_id uuid);
 create table public.consignment_scan_events(id uuid primary key default gen_random_uuid(),consignment_id uuid,consignment_item_id uuid,
  sku text,stage text,resulting_qty integer,actor_id uuid,created_at timestamptz default now());

@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { spawnSync, spawn } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
-const root=process.cwd(), bin=path.join(root,'.tools/postgresql-17.11/runtime/pgsql/bin')
+const root=process.cwd(), bin=process.env.K2_LOCAL_PG_BIN||path.join(root,'.tools/postgresql-17.11/runtime/pgsql/bin')
 const owned=path.join(root,'.tools','milan-packing-'+randomUUID()),data=path.join(owned,'data')
 fs.mkdirSync(owned,{recursive:true})
 const env={...process.env,PGHOST:'127.0.0.1',PGPORT:'54379',PGUSER:'postgres',PGDATABASE:'k2_milan_packing_rehearsal'}
@@ -28,8 +28,14 @@ try {
  sql(`create table k2_private.admin_request_rate_buckets(scope text,subject text,bucket_start timestamptz,hit_count integer,primary key(scope,subject,bucket_start));
  alter table k2_private.admin_request_nonces add column verified_backend_pid integer,add column verified_transaction_id xid8;`)
  for(const captured of current)sql(captured.definition)
+ const before=JSON.parse(fs.readFileSync('docs/acceptance/milan-packing-release-20261029/live-before.json','utf8'))
+ sql(before.functions.find(row=>row.identity==='k2_private.finalize_consignment_receipt_v1(uuid,text,text,text)').definition)
  if(!process.argv.includes('--red'))file('supabase/migrations/20261029_milan_packing_workflow.sql')
  file('supabase/tests/milan_packing_workflow.sql')
+ if(!process.argv.includes('--red')) {
+  if(!process.argv.includes('--red-unknown-lot'))file('supabase/migrations/20261030_italy_box_scan_without_lot.sql')
+  file('supabase/tests/italy_box_scan_without_lot.sql')
+ }
  if(!process.argv.includes('--red')) {
   const actor="select set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000001',false);select set_config('request.jwt.claim.role','Admin',false);select set_config('request.jwt.claims','{\"aal\":\"aal2\"}',false);"
   const shipment='20000000-0000-4000-8000-000000000002'

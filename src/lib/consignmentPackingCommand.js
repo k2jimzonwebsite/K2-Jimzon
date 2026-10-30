@@ -17,12 +17,14 @@ export function validatePackingCommand(body) {
   if (operation === 'count') {
     if (![1, -1].includes(body.delta) || !['barcode', 'counter'].includes(body.source)) invalid()
     if ((body.delta === -1 || body.source === 'counter') && !body.itemId) invalid()
-    const expiry = text(body.bestBeforeDate, 10)
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(expiry) || expiry.startsWith('0000-')
+    const expiry = body.bestBeforeDate === null ? null : text(body.bestBeforeDate, 10)
+    if (expiry !== null && (!/^\d{4}-\d{2}-\d{2}$/.test(expiry) || expiry.startsWith('0000-')
       || Number.isNaN(Date.parse(expiry + 'T00:00:00Z'))
-      || new Date(expiry + 'T00:00:00Z').toISOString().slice(0, 10) !== expiry) invalid()
+      || new Date(expiry + 'T00:00:00Z').toISOString().slice(0, 10) !== expiry)) invalid()
+    if (body.batchCode !== null && (typeof body.batchCode !== 'string' || !body.batchCode.trim() || body.batchCode.trim().length > 120)) invalid()
+    if ((body.batchCode === null) !== (expiry === null)) invalid()
     return { ...result, itemId: body.itemId === null ? null : id(body.itemId), code: text(body.code, 120),
-      boxCode: text(body.boxCode, 120), batchCode: text(body.batchCode, 120), bestBeforeDate: expiry,
+      boxCode: text(body.boxCode, 120), batchCode: body.batchCode === null ? null : body.batchCode.trim(), bestBeforeDate: expiry,
       delta: body.delta, source: body.source }
   }
   if (!['remove', 'restore', 'cancel', 'reopen', 'dispatch'].includes(operation)
