@@ -98,7 +98,15 @@
       "nextRequestOnAnotherShipment": true,
       "resumed": false,
       "dismissed": false,
-      "cancelled": false
+      "cancelled": false,
+      "realManifest": {
+        "code": "K2-2026-10",
+        "confirmedPackedUnits": 2,
+        "packingLines": 1,
+        "queueHeadOnThisManifest": true,
+        "queueHeadBoxCode": "123",
+        "inspection": "read-only selector change"
+      }
     },
     "limits": [
       "saved journal origins and outcomes unverified",
