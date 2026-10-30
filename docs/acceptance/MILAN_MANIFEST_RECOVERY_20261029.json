@@ -59,5 +59,60 @@
     "adminStatus": 200,
     "adminAnonymousSessionStatus": 401,
     "physicalStaffAcceptance": "unverified"
+  },
+  "selectionRelease": {
+    "idea": "IDEA-20261029-08",
+    "map": "MAP-023",
+    "commit": "9e95817b2f1a1f81b5f69ade738dfe09d9bc6b43",
+    "state": "LIVE_SOURCE_STAFF_ACCEPTANCE_AND_JOURNAL_RECONCILIATION_PENDING",
+    "production": {
+      "teamId": "team_C3Wf3dVUBjUqGQ4rndMTCchz",
+      "storefront": {
+        "projectId": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+        "deploymentId": "dpl_H8JvMuVGdjppC5tXKP8UuVCfWFyk",
+        "state": "READY",
+        "alias": "www.k2jimzon.com"
+      },
+      "admin": {
+        "projectId": "prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x",
+        "deploymentId": "dpl_GLT34SFVUmghSPiwwcME2nFqrgfE",
+        "state": "READY",
+        "alias": "admin.k2jimzon.com"
+      }
+    },
+    "ci": {
+      "runId": 40904135951,
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        "build-and-smoke",
+        "security-check-regression",
+        "critical-sql-behavior"
+      ]
+    },
+    "liveAdminRead": {
+      "selectedManifestCode": "TEST-CODEX-20261029-01",
+      "confirmedUnits": 0,
+      "packingLines": 0,
+      "unresolvedSavedRequests": 16,
+      "nextRequestOnAnotherShipment": true,
+      "resumed": false,
+      "dismissed": false,
+      "cancelled": false
+    },
+    "limits": [
+      "saved journal origins and outcomes unverified",
+      "physical scanner, factual dispatch and Manila receiving unverified"
+    ],
+    "recovery": "Reconcile original actor, literal request bodies and keys, receipts and canonical records before any resume/dismiss. Revert only IDEA-08 source against 0cba36aa if required; preserve installed migration, business data and all journal history.",
+    "liveStorefrontRead": {
+      "url": "https://www.k2jimzon.com/",
+      "title": "K2 Jimzon — Italian imports, direct to the Philippines",
+      "rendered": true,
+      "observed": [
+        "catalog navigation",
+        "home collection"
+      ]
+    }
   }
 }
